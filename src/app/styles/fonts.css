@@ -1,0 +1,66 @@
+@import url(https://fonts.bunny.net/css?family=inter:200,400,600|roboto-slab:200,400,600);
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/MaterialIconsRound-Regular.otf')
+}
+
+.mdi {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.titular {
+    font-family: 'Inter', sans-serif;
+}
+
+.thin {
+    font-weight: 200;
+}
+
+.normal {
+    font-weight: 400;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.big {
+    font-size: 20pt;
+}
+
+.medium {
+    font-size: 15pt;
+}
+
+.small {
+    font-size: 11pt;
+}
+
+.tiny {
+    font-size: 9pt;
+}
+
+.descriptive {
+    font-family: 'Roboto Slab', serif;
+}
