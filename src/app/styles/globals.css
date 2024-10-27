@@ -1,7 +1,6 @@
 @import url('./fonts.css');
-@import url('./layout.module.css');
-@import url('./colors.module.css');
-@import url('./components/components.module.css');
+@import url('./layout.css');
+@import url('./colors.css');
 
 /* Main body / html */
 
