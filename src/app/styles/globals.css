@@ -3,6 +3,8 @@
 @import url('./colors.module.css');
 @import url('./components/components.module.css');
 
+/* Main body / html */
+
 html,
 body {
   max-width: 100vw;
@@ -21,6 +23,11 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+html > body > div.page-wrapper {
+  position: relative;
+  min-height: 100vh;
 }
 
 a {
