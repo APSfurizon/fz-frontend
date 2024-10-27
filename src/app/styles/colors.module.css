@@ -1,0 +1,23 @@
+:root {
+    --body-bg: #11191F;
+    --foreground: #fff;
+    --footer-bg: #211A28;
+    --text-subtitle: #9a9a9a;
+    --text-link: #2395D6;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+      --background: #11191F;
+      --foreground: #ededed;
+      --footer-bg: #211A28;
+    }
+  }
+
+.color-subtitle {
+  color: var(--text-subtitle);
+}
+
+.color-link {
+  color: var(--text-link);
+}

@@ -1,14 +1,7 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@import url('./fonts.css');
+@import url('./layout.module.css');
+@import url('./colors.module.css');
+@import url('./components/components.module.css');
 
 html,
 body {
