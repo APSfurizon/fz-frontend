@@ -14,10 +14,26 @@
 
 .flex-center { justify-content: center; }
 
-.flex-align-center { align-items: center; }
+.flex-vertical-center { align-items: center; }
 
 .center { text-align: center; }
 
 .left { text-align: left; }
 
 .right { text-align: right; }
+
+.rounded-s { border-radius: 1mm; }
+
+.rounded-m { border-radius: 2mm; }
+
+.rounded-l { border-radius: 3mm; }
+
+.form {
+    padding: 1.25em;
+    margin: 0 auto 8mm auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625em;
+    width: fit-content;
+    box-shadow: 0px 3px 20px 1px #0000003F;
+}

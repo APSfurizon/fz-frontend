@@ -20,6 +20,8 @@
     white-space: nowrap;
     direction: ltr;
 
+    vertical-align: text-top;
+
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: antialiased;
     /* Support for Safari and Chrome. */
@@ -45,7 +47,15 @@
     font-weight: 600;
 }
 
-.big {
+.xx-large {
+    font-size: 30pt;
+}
+
+.x-large {
+    font-size: 25pt;
+}
+
+.large {
     font-size: 20pt;
 }
 

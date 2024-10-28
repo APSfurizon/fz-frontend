@@ -4,6 +4,7 @@
     --footer-bg: #211A28;
     --text-subtitle: #9a9a9a;
     --text-link: #2395D6;
+    --form-background: #141E26;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -11,6 +12,7 @@
       --background: #11191F;
       --foreground: #ededed;
       --footer-bg: #211A28;
+      --form-background: #141E26;
     }
   }
 
@@ -20,4 +22,8 @@
 
 .color-link {
   color: var(--text-link);
+}
+
+.form {
+  background-color: var(--form-background);
 }
