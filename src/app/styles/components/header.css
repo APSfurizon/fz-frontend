@@ -1,0 +1,7 @@
+@import url('../colors.css');
+
+.header {
+    width: 100vw;
+    background-color: var(--header-bg);
+    
+}

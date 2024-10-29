@@ -5,6 +5,7 @@ import {notFound} from 'next/navigation';
 import type { Metadata } from "next";
 import Footer from "../_components/footer"
 import "../styles/globals.css";
+import Header from '../_components/header';
 
 export const metadata: Metadata = {
   title: "Furpanel",
@@ -28,10 +29,11 @@ export default async function LocalizedLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-        <div className="page-wrapper">
-          {children}
-          <Footer></Footer>
-        </div>
+          <Header></Header>
+          <div className="page-wrapper">
+            {children}
+            <Footer></Footer>
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>

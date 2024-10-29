@@ -1,10 +1,23 @@
 :root {
     --body-bg: #11191F;
     --foreground: #fff;
-    --footer-bg: #211A28;
+    
     --text-subtitle: #9a9a9a;
     --text-link: #2395D6;
     --form-background: #141E26;
+    
+    /* Footer */
+    --footer-bg: #211A28;
+    /* Header */
+    --header-bg: #141E26;
+
+    /* Button */
+    --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
+    --button-bg-hover: linear-gradient(0deg, #A573D6 0%, #915DC4 100%);
+    --button-bg-down: linear-gradient(0deg, #7634B8 0%, #53287E 100%);
+    --button-border-normal: #FFFFFF4C;
+    --button-border-down: #FFFFFFCC;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +25,7 @@
       --background: #11191F;
       --foreground: #ededed;
       --footer-bg: #211A28;
+      --header-bg: #141E26;
       --form-background: #141E26;
     }
   }

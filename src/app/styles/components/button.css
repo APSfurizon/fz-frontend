@@ -1,0 +1,19 @@
+@import url('../colors.css');
+
+button.button {
+    background: var(--button-bg-normal);
+    border: 1px solid var(--button-border-normal);
+    min-height: 1.625em;
+    padding: 0.375em 0.4375em;
+    display: flex;
+    gap: 0.5em;
+}
+
+button.button:hover {
+    background: var(--button-bg-hover);
+}
+
+button.button:active {
+    background: var(--button-bg-down);
+    border: 1px solid var(--button-border-down);
+}
