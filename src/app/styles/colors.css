@@ -15,6 +15,11 @@
     --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
     --button-bg-hover: linear-gradient(0deg, #A573D6 0%, #915DC4 100%);
     --button-bg-down: linear-gradient(0deg, #7634B8 0%, #53287E 100%);
+
+    --button-danger-bg-normal: linear-gradient(0deg, #CD5454 0%, #A43D3D 100%);
+    --button-danger-bg-hover: linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%);
+    --button-danger-bg-down: linear-gradient(0deg, #a24343 0%, #833232 100%);
+
     --button-border-normal: #FFFFFF4C;
     --button-border-down: #FFFFFFCC;
 

@@ -9,11 +9,27 @@ button.button {
     gap: 0.5em;
 }
 
-button.button:hover {
+button:disabled {
+    color: var(--foreground);
+}
+
+button.button:hover:not(:disabled) {
     background: var(--button-bg-hover);
 }
 
-button.button:active {
+button.button:active:not(:disabled) {
     background: var(--button-bg-down);
     border: 1px solid var(--button-border-down);
+}
+
+button.danger {
+    background: var(--button-danger-bg-normal);
+}
+
+button.danger:hover:not(:disabled) {
+    background: var(--button-danger-bg-hover);
+}
+
+button.danger:active:not(:disabled) {
+    background: var(--button-danger-bg-down);
 }
