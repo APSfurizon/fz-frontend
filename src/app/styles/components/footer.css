@@ -5,7 +5,4 @@
     background-color: var(--footer-bg);
     display: flex;
     padding: 10mm 2mm 5mm 2mm;
-    position: absolute;
-    bottom: 0%;
-    left: 0%;
 }

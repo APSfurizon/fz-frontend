@@ -27,13 +27,12 @@ export default async function LocalizedLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="vertical-list">
         <NextIntlClientProvider messages={messages}>
           <Header></Header>
-          <div className="page-wrapper">
-            {children}
-            <Footer></Footer>
-          </div>
+          {children}
+          <div className="spacer"></div>
+          <Footer></Footer>
         </NextIntlClientProvider>
       </body>
     </html>

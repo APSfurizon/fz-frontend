@@ -6,6 +6,10 @@
             "contact_us": "Contattaci",
             "society_name": "Associazione di Promozione Sociale FURIZON",
             "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italia"
+        },
+        "header": {
+            "home": "Home",
+            "alt_logo": "Logo di furizon"
         }
     }
 }

@@ -8,7 +8,7 @@ export default function Footer () {
   return (
       <footer className={"footer vertical-list flex-center"}>
         <div className={"vertical-list flex-center gap-4mm"}>
-          <div className="logo-container center">
+          <div className="center">
             <Image className="footer-logo" src="/images/logo-dark.png" alt="Furizon logo" width={256} height={60}></Image>
           </div>
           <div className="horizontal-list gap-4mm normal title flex-center">

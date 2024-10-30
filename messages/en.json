@@ -8,7 +8,8 @@
             "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italy"
         },
         "header": {
-            "home": "Home"
+            "home": "Home",
+            "alt_logo": "Furizon logo"
         }
     }
 }

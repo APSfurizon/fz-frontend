@@ -4,6 +4,8 @@
 
 .horizontal-list { flex-direction: row; }
 
+.spacer { flex-grow: 1; }
+
 .gap-2mm { gap: 2mm; }
 
 .gap-4mm { gap: 4mm; }
