@@ -1,5 +1,6 @@
 {
     "common": {
+        "loading": "Loading...",
         "footer": {
             "code_of_conduct": "Code of Conduct",
             "volunteers": "Volunteers",
@@ -9,7 +10,19 @@
         },
         "header": {
             "home": "Home",
-            "alt_logo": "Furizon logo"
+            "nose_count": "Nose count",
+            "information": "About",
+            "archive": "Archive",
+            "login": "Login",
+            "logout": "Logout",
+            "alt_logo": "Furizon logo",
+            "alt_profile_picture": "Profile picture"
         }
-    }
+    },
+    "furpanel": {
+            "badge": "Badge",
+            "room": "Room",
+            "upload_area": "Upload area",
+            "user": "User"
+        }
 }

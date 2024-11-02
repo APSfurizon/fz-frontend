@@ -1,0 +1,38 @@
+.user-picture-container .image-container{
+    padding: 0.2em;
+    margin: 0px 0px 0px 0px;
+    background-color: var(--profile-picture-border-normal);
+}
+
+.user-picture-container .profile-picture {
+    overflow: hidden;
+    display: block;
+}
+
+.user-picture-container .image-container.sponsor-1, .image-container.sponsor-2 {
+    animation: sponsor-animation 1s ease 0ms infinite;
+}
+
+.user-picture-container
+.image-container.sponsor-1 {
+    background: var(--profile-picture-border-sponsor);
+    background-size: 400% 400%;
+    background-repeat: repeat;
+}
+
+.user-picture-container
+.image-container.sponsor-2 {
+    background: var(--profile-picture-border-super-sponsor);
+    background-size: 400% 400%;
+    background-repeat: repeat;
+}
+
+@keyframes sponsor-animation {
+    0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+.user-picture-container span.flag {
+    margin-left: 0.3125em;
+}

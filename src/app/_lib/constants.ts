@@ -1,0 +1,1 @@
+export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";

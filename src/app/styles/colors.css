@@ -1,6 +1,7 @@
 :root {
     --body-bg: #11191F;
     --foreground: #fff;
+    --highlight: #ECA02F;
     
     --text-subtitle: #9a9a9a;
     --text-link: #2395D6;
@@ -23,6 +24,22 @@
     --button-border-normal: #FFFFFF4C;
     --button-border-down: #FFFFFFCC;
 
+    /* Tool link */
+    --tool-link-bg-normal: #242C38;
+    --tool-link-bg-hover: #4D5D75;
+    --tool-link-bg-down: #384457;
+    --tool-link-bg-active: var(--button-bg-down);
+    --tool-link-border-normal: #FFFFFF4C;
+    --tool-link-border-down: #FFFFFFCC;
+
+    /* User profile picture */
+    --profile-picture-border-normal: #E9E9E9;
+    --profile-picture-border-sponsor: linear-gradient(45deg, #6124AB 20%, #AB248F 40%, #8E24AA 60%, #3524AB 80%, #AB243E 100%);
+    --profile-picture-border-super-sponsor: linear-gradient(45deg, #FA5E00 20%, #FAAA00 40%, #FB8C00 60%, #FA3200 80%, #FAC800 100%);
+
+    /* User dropdown */
+    --user-dropdown-hover-bg: #4D5D75;
+    --user-dropdown-selected-bg: #242C38;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,6 +58,10 @@
 
 .color-link {
   color: var(--text-link);
+}
+
+.highlight {
+  color: var(--highlight);
 }
 
 .form {

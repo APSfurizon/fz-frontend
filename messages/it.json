@@ -1,5 +1,6 @@
 {
     "common": {
+        "loading": "Caricamento...",
         "footer": {
             "code_of_conduct": "Codice di Condotta",
             "volunteers": "Volontari",
@@ -9,7 +10,19 @@
         },
         "header": {
             "home": "Home",
-            "alt_logo": "Logo di furizon"
+            "nose_count": "Nose count",
+            "information": "Informazioni",
+            "archive": "Archivio",
+            "login": "Accedi",
+            "logout": "Esci",
+            "alt_logo": "Logo di furizon",
+            "alt_profile_picture": "Foto profilo"
         }
-    }
+    },
+    "furpanel": {
+            "badge": "Badge",
+            "room": "Stanza",
+            "upload_area": "Area upload",
+            "user": "Utente"
+        }
 }

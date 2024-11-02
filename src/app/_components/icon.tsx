@@ -1,18 +1,31 @@
 import "../styles/components/icon.css";
 
 export const ICONS = Object.freeze({
-    FIND_IN_PAGE: "find_in_page",
-    CLOSE: "close",
-    ADD_CIRCLE: "add_circle",
     ADD: "add",
-    REMOVE: "remove",
+    ADD_CIRCLE: "add_circle",
+    ARROW_DROP_DOWN: "arrow_drop_down",
+    ARROW_DROP_UP: "arrow_drop_up",
+    BED: "bed",
+    BOOKMARK_STAR: "bookmark_star",
+    CLOSE: "close",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
-    PROGRESS_ACTIVITY: "progress_activity"
+    FIND_IN_PAGE: "find_in_page",
+    GROUPS: "groups",
+    HELP: "help",
+    HOME: "home",
+    INFO: "info",
+    LOGOUT: "logout",
+    PERSON: "person",
+    PERSON_BOOK: "person_book",
+    PETS: "pets",
+    PHOTO_CAMERA: "photo_camera",
+    PROGRESS_ACTIVITY: "progress_activity",
+    REMOVE: "remove",
 });
 
 export default function Icon ({iconName, style, className}: Readonly<{
     iconName: string, style?: object, className?: string;
 }>) {
-    return (<i className={"mdi" + " " + className} style={{...style}}>{iconName}</i>)
+    return (<i className={`mdi ${className ?? ""}`} style={{...style}}>{iconName}</i>)
 }

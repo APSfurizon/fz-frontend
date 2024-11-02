@@ -3,8 +3,28 @@
 header.header {
     width: 100vw;
     background-color: var(--header-bg);
+    position: relative;
+    margin-bottom: 3.125em;
 }
 
 div.logo-container {
-    
+    padding: 1em;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+/* Header links */
+
+div.header-link-container {
+    padding: 1em 1.3125em;
+    gap: 2em;
+}
+
+a.header-link * {
+    vertical-align: middle;
+}
+
+a.header-link>*:first-child {
+    margin-right: 0.375em;
 }

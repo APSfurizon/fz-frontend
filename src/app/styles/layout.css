@@ -18,6 +18,8 @@
 
 .flex-vertical-center { align-items: center; }
 
+.vertical-align-middle * {vertical-align: middle;}
+
 .center { text-align: center; }
 
 .left { text-align: left; }
@@ -38,4 +40,11 @@
     gap: 0.625em;
     width: fit-content;
     box-shadow: 0px 3px 20px 1px #0000003F;
+}
+
+.title-pair {
+    display: flex;
+    align-items: center;
+    gap: 0.3125em;
+    padding: 0.3125em;
 }
