@@ -1,10 +1,9 @@
-@import url(https://fonts.bunny.net/css?family=inter:200,400,600|roboto-slab:200,400,600);
-
+@import url(https://fonts.bunny.net/css?family=inter:200,400,500,600|roboto-slab:200,400,500,600);
 @font-face {
     font-family: 'Material Symbols Rounded';
     font-style: normal;
-    font-weight: 400;
-    src: url('/fonts/MaterialSymbolsRounded.woff2') format('woff2');
+    font-weight: 100 700;
+    src: url('/fonts/MaterialSymbolsRoundedFilled.woff2') format('woff2');
 }
 
 .mdi {
@@ -20,6 +19,7 @@
     word-wrap: normal;
     white-space: nowrap;
     direction: ltr;
+    font-variation-settings: 'FILL' 1;
 
     font-feature-settings: "liga";
 
@@ -35,6 +35,10 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.outline {
+    font-variation-settings: 'FILL' 0;
+}
+
 .title {
     font-family: 'Inter', sans-serif;
 }
@@ -45,6 +49,11 @@
 
 .normal {
     font-weight: 400;
+}
+
+.semi-bold,
+.semibold {
+    font-weight: 500;
 }
 
 .bold {
