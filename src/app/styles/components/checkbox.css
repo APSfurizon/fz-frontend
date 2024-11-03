@@ -1,0 +1,36 @@
+@import url('../colors.css');
+
+button.checkbox {
+    background: none;
+    outline: 0px;
+    border: none;
+    align-items: center;
+    gap: 0.4em;
+}
+
+button.checkbox div.box {
+    padding: 0.06em;
+    outline: 1px solid var(--checkbox-border-normal);
+}
+
+button.checkbox div.box:not(.checked) i {
+    visibility: hidden;
+}
+
+button.checkbox div.box:not(.checked) {
+    background: var(--checkbox-bg-unchecked);
+}
+
+button.checkbox div.box.checked {
+    background: var(--checkbox-bg-checked);
+}
+
+button.checkbox:hover div.box {
+    background: var(--checkbox-bg-hover);
+    outline: 2px solid var(--checkbox-border-hover);
+}
+
+button.checkbox:active div.box {
+    background: var(--checkbox-bg-checked);
+    outline: 2px solid var(--checkbox-border-down);
+}

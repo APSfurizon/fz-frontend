@@ -5,6 +5,7 @@ import { ICONS } from "../../../_components/icon";
 import { useEffect, useState } from "react";
 import { UserPictureData } from "@/app/_lib/api/user";
 import { getTestUserPictureData } from "@/app/_lib/debug";
+import Checkbox from "@/app/_components/checkbox";
 
 export default function UserPage() {
 
