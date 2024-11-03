@@ -10,27 +10,29 @@
 }
 
 .user-picture-container .image-container.sponsor-1, .image-container.sponsor-2 {
-    animation: sponsor-animation 1s ease 0ms infinite;
+    animation: sponsor-animation 3s linear 0ms infinite;
 }
 
 .user-picture-container
 .image-container.sponsor-1 {
     background: var(--profile-picture-border-sponsor);
-    background-size: 400% 400%;
+    background-size: 200% 200%;
     background-repeat: repeat;
 }
 
 .user-picture-container
 .image-container.sponsor-2 {
     background: var(--profile-picture-border-super-sponsor);
-    background-size: 400% 400%;
+    background-size: 200% 200%;
     background-repeat: repeat;
 }
 
 @keyframes sponsor-animation {
-    0% { background-position: 0% 50%; }
-	50% { background-position: 100% 50%; }
-	100% { background-position: 0% 50%; }
+    0% { background-position: 0% 0%; }
+    25% { background-position: 100% 0%; }
+	50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+	100% { background-position: 0% 0%; }
 }
 
 .user-picture-container span.flag {

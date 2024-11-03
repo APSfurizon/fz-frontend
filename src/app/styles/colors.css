@@ -34,8 +34,9 @@
 
     /* User profile picture */
     --profile-picture-border-normal: #E9E9E9;
-    --profile-picture-border-sponsor: linear-gradient(45deg, #6124AB 20%, #AB248F 40%, #8E24AA 60%, #3524AB 80%, #AB243E 100%);
-    --profile-picture-border-super-sponsor: linear-gradient(45deg, #FA5E00 20%, #FAAA00 40%, #FB8C00 60%, #FA3200 80%, #FAC800 100%);
+    --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
+    --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
+
 
     /* User dropdown */
     --user-dropdown-hover-bg: #4D5D75;

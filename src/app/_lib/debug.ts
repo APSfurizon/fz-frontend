@@ -11,7 +11,7 @@ export function getTestHeaderUserData (): Promise<HeaderData> {
         loggedIn: true,
         nickname: 'Drew',
         profile_picture_url: EMPTY_PROFILE_PICTURE_SRC,
-        sponsorType: SponsorType.SUPER
+        sponsorType: SponsorType.SPONSOR
     };
     return new Promise<HeaderData> ((resolve, reject) => {
         setTimeout(()=>resolve(toReturn), 2000);
