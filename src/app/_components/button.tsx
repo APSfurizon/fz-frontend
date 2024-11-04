@@ -1,10 +1,11 @@
+import { CSSProperties } from "react";
 import "../styles/components/button.css";
 import Icon, { ICONS } from "./icon";
 
 export default function Button ({children, iconName, style, className, busy, onClick, disabled}: Readonly<{
     children?: React.ReactNode,
     iconName?: string,
-    style?: object,
+    style?: CSSProperties,
     className?: string,
     busy?: boolean,
     onClick?: React.MouseEventHandler,

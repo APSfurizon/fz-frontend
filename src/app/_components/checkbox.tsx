@@ -1,10 +1,10 @@
 import Icon, { ICONS } from "./icon";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, CSSProperties } from "react";
 import "../styles/components/checkbox.css";
 
 export default function Checkbox ({children, style, className, onClick, disabled}: Readonly<{
     children?: React.ReactNode,
-    style?: object,
+    style?: CSSProperties,
     className?: string,
     onClick?: React.MouseEventHandler,
     disabled?: boolean;
