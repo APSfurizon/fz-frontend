@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import "../styles/components/icon.css";
 
 export const ICONS = Object.freeze({
@@ -7,10 +8,13 @@ export const ICONS = Object.freeze({
     ARROW_DROP_UP: "arrow_drop_up",
     BED: "bed",
     BOOKMARK_STAR: "bookmark_star",
+    CANCEL: "cancel",
     CHECK: "check",
+    CHECK_CIRCLE: "check_circle",
     CLOSE: "close",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
+    ERROR: "error",
     FIND_IN_PAGE: "find_in_page",
     GROUPS: "groups",
     HELP: "help",
@@ -26,7 +30,7 @@ export const ICONS = Object.freeze({
 });
 
 export default function Icon ({iconName, style, className}: Readonly<{
-    iconName: string, style?: object, className?: string;
+    iconName: string, style?: CSSProperties, className?: string;
 }>) {
     return (<i className={`mdi ${className ?? ""}`} style={{...style}}>{iconName}</i>)
 }

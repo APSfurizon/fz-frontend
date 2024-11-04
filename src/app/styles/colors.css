@@ -50,6 +50,20 @@
     /* User dropdown */
     --user-dropdown-hover-bg: #4D5D75;
     --user-dropdown-selected-bg: #242C38;
+
+    /* Notice box */
+    --notice-box-header-bg: #FFFFFF19;
+    --notice-box-header-border: #E9E9E9;
+
+    --notice-box-header-bg-success: #2FEC4219;
+    --notice-box-header-border-success: #2FEC42;
+
+    --notice-box-header-bg-warning: #FFB80019;
+    --notice-box-header-border-warning: #ECA02F;
+
+    --notice-box-header-bg-error: #FF000019;
+    --notice-box-header-border-error: #EC2F2F;
+    
 }
 
 @media (prefers-color-scheme: dark) {
