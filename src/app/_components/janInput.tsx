@@ -24,7 +24,10 @@ export default function JanInput ({iconName,title="",value="",setValue,isNumber,
     const [debugDisabled, setDebugDisabled] = useState(false);
     const [debugWait,setDebugWait] = useState(false);
     const [debugError, setDebugError] = useState(false);
-
+    const [debugPassword, setDebugPassword] = useState(false);
+    
+    const [visiblePassword,setVisiblePassword] = useState(false);
+    
     
     const iconPresent = iconName != undefined;
     
@@ -37,6 +40,7 @@ export default function JanInput ({iconName,title="",value="",setValue,isNumber,
             <div className="margin-bottom-1mm" style={{...headerStyle,position:'relative'}}>
                 <span>{title}</span>
                 <span style={{position:'absolute',right:0,top:0,flexDirection:'row',flex:1,display: 'flex'}}>
+                    <Button onClick={()=>setDebugPassword(!debugPassword)} style={{background:'yellow'}}></Button>
                     <Button onClick={()=>setDebugDisabled(!debugDisabled)} style={{background:'gray'}}></Button>
                     <Button onClick={()=>setDebugWait(!debugWait)} style={{background:'#fff'}}></Button>
                     <Button onClick={()=>setDebugError(!debugError)} className={'danger'}></Button>
@@ -46,7 +50,7 @@ export default function JanInput ({iconName,title="",value="",setValue,isNumber,
                 <input
                     className={"input-field rounded-s" + " " + (className ?? "") + (hasError||debugError ? "danger" : "")}
                     style={{...inputStyle, paddingRight: iconPresent ? '0.5em' : 'revert',height:"40px",width:'100%'}}
-                    type="text"
+                    type={isNumber?"number":(((isPassword||debugPassword)&&!visiblePassword)?"password":"text")}
                     id="input-field"
                     disabled={disabled||debugDisabled}
                     value={inputValue}
@@ -54,6 +58,9 @@ export default function JanInput ({iconName,title="",value="",setValue,isNumber,
                 />
                 {(busy||debugWait) && (
                     <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY} style={{position:'absolute',top:10,right:10}}></Icon>
+                )}
+                {!(busy||debugWait) && (isPassword||debugPassword) && (
+                    <span style={{position:'absolute',top:10,right:10,cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}><Icon className="medium" iconName={visiblePassword?ICONS.VISIBILITY:ICONS.VISIBILITY_OFF}></Icon></span>
                 )}
             </div>
         </div>

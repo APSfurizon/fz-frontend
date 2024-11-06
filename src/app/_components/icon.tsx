@@ -28,6 +28,8 @@ export const ICONS = Object.freeze({
     PHOTO_CAMERA: "photo_camera",
     PROGRESS_ACTIVITY: "progress_activity",
     REMOVE: "remove",
+    VISIBILITY: "visibility",
+    VISIBILITY_OFF: "visibility_off"
 });
 
 export default function Icon ({iconName, style, className}: Readonly<{
