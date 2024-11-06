@@ -10,7 +10,7 @@ export default function statusBox ({children, status, style, className}: Readonl
 
     return (
         <div
-            className={`statusBox ${className ?? ""} ${status}`}
+            className={"statusBox" + " " + (className ?? "") + " " + (status)}
             style={{...style}}>
             <span className="title normal" style={{fontSize: '15px'}}>{children}</span>
         </div>
