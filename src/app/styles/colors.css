@@ -70,9 +70,9 @@
     --text-input-color-disabled:#4D5E6B;
     --text-input-border-normal:#4D5E6B;
     --text-input-border-disabled:#11191F;
-    --text-input-danger-normal: linear-gradient(0deg, #CD5454 0%, #EC2F2F 100%);
-    --text-input-danger-hover: linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%);
-    --text-input-danger-down: linear-gradient(0deg, #a24343 0%, #833232 100%);
+    --text-input-danger-normal: #EC2F2F;
+    --text-input-danger-hover: #cf6c6c;
+    --text-input-danger-down: #833232;
     
     
 }

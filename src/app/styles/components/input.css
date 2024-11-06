@@ -20,19 +20,24 @@ input.input-field:hover:not(:disabled) {
     border-color: var(--text-input-border-disabled); */
 }
 
-input.input-field:focus {
+input.input-field:focus:not(.danger) {
     border: 2px solid var(--text-input-border-normal);
     outline: none;
 }
 
 input.danger {
     border: 1px solid var(--text-input-danger-normal);
+    outline: none;
+}
+input.danger:focus {
+    border: 2px solid var(--text-input-danger-normal);
+    outline: none;
 }
 
 input.danger:hover:not(:disabled) {
-    background: var(--text-input-danger-hover);
+    /* background: var(--text-input-danger-hover); */
 }
 
 input.danger:active:not(:disabled) {
-    background: var(--text-input-danger-down);
+    /* background: var(--text-input-danger-down); */
 }
