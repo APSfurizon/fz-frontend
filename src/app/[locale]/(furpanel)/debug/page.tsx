@@ -5,6 +5,7 @@ import { ICONS } from "../../../_components/icon";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import JanInput from "../../../_components/janInput";
+import StatusBox from "../../../_components/statusBox";
 
 export default function Home() {
 
@@ -19,6 +20,7 @@ export default function Home() {
         <Checkbox>Wofe</Checkbox>
         <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
         <JanInput title={titleInput}></JanInput>
+        <StatusBox status="rejected">Rejected</StatusBox>
     </div>
   );
 }

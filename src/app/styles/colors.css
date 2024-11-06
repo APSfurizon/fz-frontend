@@ -74,7 +74,12 @@
     --text-input-danger-hover: #cf6c6c;
     --text-input-danger-down: #833232;
     
-    
+    /* Status box */
+    --status-box-bg-room:#4D5E6B;
+    --status-box-bg-year:#ECA02F;
+    --status-box-bg-open:#52905B;
+    --status-box-bg-pending:#4D5E6B;
+    --status-box-bg-rejected:#CD5454;
 }
 
 @media (prefers-color-scheme: dark) {
