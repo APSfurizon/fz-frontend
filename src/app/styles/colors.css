@@ -5,7 +5,7 @@
     
     --text-subtitle: #9a9a9a;
     --text-link: #2395D6;
-    --form-background: #141E26;
+    --main-dialog-background: #141E26;
     
     /* Footer */
     --footer-bg: #211A28;
@@ -72,7 +72,7 @@
       --foreground: #ededed;
       --footer-bg: #211A28;
       --header-bg: #141E26;
-      --form-background: #141E26;
+      --main-dialog-background: #141E26;
     }
   }
 
@@ -88,6 +88,6 @@
   color: var(--highlight);
 }
 
-.form {
-  background-color: var(--form-background);
+.main-dialog {
+  background-color: var(--main-dialog-background);
 }

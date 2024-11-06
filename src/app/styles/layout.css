@@ -32,14 +32,20 @@
 
 .rounded-l { border-radius: 3mm; }
 
-.form {
+.main-dialog {
     padding: 1.25em;
     margin: 0 auto 8mm auto;
     display: flex;
     flex-direction: column;
-    gap: 0.625em;
+    gap: 1.25em;
     width: fit-content;
     box-shadow: 0px 3px 20px 1px #0000003F;
+}
+
+.main-dialog .page {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625em;
 }
 
 .title-pair {

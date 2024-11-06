@@ -20,9 +20,20 @@
         }
     },
     "furpanel": {
-            "badge": "Badge",
-            "room": "Room",
-            "upload_area": "Upload area",
-            "user": "User"
+            "badge": {
+                "title": "Badge"
+            },
+            "room": {
+                "title": "Room"
+            },
+            "upload_area": {
+                "title": "Upload area"
+            },
+            "user": {
+                "title": "User"
+            },
+            "debug": {
+                "title": "Debug"
+            }
         }
 }

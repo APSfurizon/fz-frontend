@@ -9,12 +9,6 @@ export default function Home() {
   const [isBusy, setBusy] = useState(false);
 
   return (
-    <div>
-      <main>
-        <Button className="danger" onClick={()=>setBusy(false)} iconName={ICONS.ADD_CIRCLE}>Busy off</Button>
-        <Button busy={isBusy} onClick={()=>{setBusy(true); console.log('aaoa');}} iconName={ICONS.EDIT}>Close</Button>
-        <Checkbox>Wofe</Checkbox>
-      </main>
-    </div>
+    <div className="page"></div>
   );
 }

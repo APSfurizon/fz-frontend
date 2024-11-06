@@ -11,8 +11,6 @@ import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 export default function UserPage() {
 
   return (
-    <div>
-      <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
-    </div>
+    <div className="page"></div>
   );
 }
