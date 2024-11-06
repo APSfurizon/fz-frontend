@@ -74,7 +74,12 @@
     --text-input-danger-hover: linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%);
     --text-input-danger-down: linear-gradient(0deg, #a24343 0%, #833232 100%);
     
-    
+    /* Status box */
+    --status-box-bg-room:#4D5E6B;
+    --status-box-bg-year:#ECA02F;
+    --status-box-bg-open:#52905B;
+    --status-box-bg-pending:#4D5E6B;
+    --status-box-bg-rejected:#CD5454;
 }
 
 @media (prefers-color-scheme: dark) {
