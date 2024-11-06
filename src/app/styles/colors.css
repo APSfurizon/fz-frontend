@@ -75,11 +75,11 @@
     --text-input-danger-down: #833232;
     
     /* Status box */
-    --status-box-bg-room:#4D5E6B;
-    --status-box-bg-year:#ECA02F;
-    --status-box-bg-open:#52905B;
-    --status-box-bg-pending:#4D5E6B;
-    --status-box-bg-rejected:#CD5454;
+    --status-box-bg-default:#4D5E6B;
+    --status-box-bg-warning:#ECA02F;
+    --status-box-bg-success:#52905B;
+    --status-box-bg-normal:#4D5E6B;
+    --status-box-bg-error:#CD5454;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -8,27 +8,28 @@
     color: white;
     align-items: center;
     justify-content: center;
+    background-color: var(--status-box-bg-default);
     gap: 0.5em;
 }
 
-.statusBox.room {
-    background-color: var(--status-box-bg-room);
+/* .statusBox.default {
+    background-color: var(--status-box-bg-default);
     height: 26px;
     width: 106px;
+} */
+
+.statusBox.warning {
+    background-color: var(--status-box-bg-warning);
 }
 
-.statusBox.year {
-    background-color: var(--status-box-bg-year);
+.statusBox.success {
+    background-color: var(--status-box-bg-success);
 }
 
-.statusBox.open {
-    background-color: var(--status-box-bg-open);
+.statusBox.normal {
+    background-color: var(--status-box-bg-normal);
 }
 
-.statusBox.pending {
-    background-color: var(--status-box-bg-pending);
-}
-
-.statusBox.rejected {
-    background-color: var(--status-box-bg-rejected);
+.statusBox.error {
+    background-color: var(--status-box-bg-error);
 }

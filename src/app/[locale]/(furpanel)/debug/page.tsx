@@ -20,11 +20,11 @@ export default function Home() {
         <Checkbox>Wofe</Checkbox>
         <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
         <JanInput title={titleInput}></JanInput>
-        <StatusBox status="room">Triple room</StatusBox>
-        <StatusBox status="year">2024</StatusBox>
-        <StatusBox status="open">Open</StatusBox>
-        <StatusBox status="pending">Pending</StatusBox>
-        <StatusBox status="rejected">Rejected</StatusBox>
+        <StatusBox>Triple room</StatusBox>
+        <StatusBox status="warning">2024</StatusBox>
+        <StatusBox status="success">Open</StatusBox>
+        <StatusBox status="normal">Pending</StatusBox>
+        <StatusBox status="error">Rejected</StatusBox>
     </div>
   );
 }
