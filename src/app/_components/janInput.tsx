@@ -1,9 +1,9 @@
 import { CSSProperties, useState } from "react";
-import "../styles/components/input.css";
+import "../styles/components/janInput.css";
 import Icon, { ICONS } from "./icon";
 import Button from "./button";
 
-export default function JanInput ({iconName,title="",value="",setValue,isNumber,isPassword, style,headerStyle,inputStyle,className, busy,disabled,hasError}: Readonly<{
+export default function JanInput ({iconName,title="",value="",setValue,isNumber,isPassword, style,headerStyle,inputStyle,className,placeholder, busy,disabled,hasError}: Readonly<{
     iconName?: string,
     title?: string,
     value?: string,
@@ -14,21 +14,13 @@ export default function JanInput ({iconName,title="",value="",setValue,isNumber,
     headerStyle?: CSSProperties,
     inputStyle?:CSSProperties,
     className?: string,
+    placeholder?: string,
     busy?: boolean,
-   // onClick?: React.MouseEventHandler,
     disabled?: boolean;
     hasError?: boolean;
   }>) {
     const [inputValue, setInputValue] = useState(value);
-
-    const [debugDisabled, setDebugDisabled] = useState(false);
-    const [debugWait,setDebugWait] = useState(false);
-    const [debugError, setDebugError] = useState(false);
-    const [debugPassword, setDebugPassword] = useState(false);
-    
     const [visiblePassword,setVisiblePassword] = useState(false);
-    
-    
     const iconPresent = iconName != undefined;
     
     const handleChange = (e:any) => {
@@ -38,28 +30,23 @@ export default function JanInput ({iconName,title="",value="",setValue,isNumber,
     return (
         <div className={`custom-input ${className}`} style={{...style}}>
             <div className="margin-bottom-1mm" style={{...headerStyle,position:'relative'}}>
-                <span>{title}</span>
-                <span style={{position:'absolute',right:0,top:0,flexDirection:'row',flex:1,display: 'flex'}}>
-                    <Button onClick={()=>setDebugPassword(!debugPassword)} style={{background:'yellow'}}></Button>
-                    <Button onClick={()=>setDebugDisabled(!debugDisabled)} style={{background:'gray'}}></Button>
-                    <Button onClick={()=>setDebugWait(!debugWait)} style={{background:'#fff'}}></Button>
-                    <Button onClick={()=>setDebugError(!debugError)} className={'danger'}></Button>
-                </span>
+                <span className="title semibold">{title}</span>
             </div>
             <div className="margin-bottom-1mm" style={{...headerStyle,position:'relative'}}>
                 <input
-                    className={"input-field rounded-s" + " " + (className ?? "") + (hasError||debugError ? "danger" : "")}
+                    className={"input-field title rounded-s" + " " + (className ?? "") + (hasError? "danger" : "")}
                     style={{...inputStyle, paddingRight: iconPresent ? '0.5em' : 'revert',height:"40px",width:'100%'}}
-                    type={isNumber?"number":(((isPassword||debugPassword)&&!visiblePassword)?"password":"text")}
+                    placeholder={placeholder ?? ""}
+                    type={isNumber?"number":(((isPassword)&&!visiblePassword)?"password":"text")}
                     id="input-field"
-                    disabled={disabled||debugDisabled}
+                    disabled={disabled}
                     value={inputValue}
                     onChange={handleChange}
                 />
-                {(busy||debugWait) && (
+                {(busy) && (
                     <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY} style={{position:'absolute',top:10,right:10}}></Icon>
                 )}
-                {!(busy||debugWait) && (isPassword||debugPassword) && (
+                {!(busy) && (isPassword) && (
                     <span style={{position:'absolute',top:10,right:10,cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}><Icon className="medium" iconName={visiblePassword?ICONS.VISIBILITY:ICONS.VISIBILITY_OFF}></Icon></span>
                 )}
             </div>

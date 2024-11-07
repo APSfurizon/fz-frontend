@@ -19,7 +19,20 @@ export default function Home() {
         <Button busy={isBusy} onClick={()=>{setBusy(true);}} iconName={ICONS.EDIT}>Busy on</Button>
         <Checkbox>Wofe</Checkbox>
         <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
-        <JanInput title={titleInput}></JanInput>
+        <div style={{display: 'flex'}}>
+          <div style={{flexDirection:'column',marginRight:5}}>
+            <JanInput title={"Text"}/>
+            <JanInput isNumber title={"Number"}/>
+          </div>
+          <div style={{flexDirection:'column',marginRight:5}}>
+            <JanInput isPassword title={"Password"} placeholder="Insert password"/>
+            <JanInput title={"Disabled"} disabled placeholder="Not editable"/>
+          </div>
+          <div>
+            <JanInput title={"Loading"} busy/>
+            <JanInput title={"Error"} hasError/>
+          </div>
+        </div>
         <StatusBox>Triple room</StatusBox>
         <StatusBox status="warning">2024</StatusBox>
         <StatusBox status="success">Open</StatusBox>

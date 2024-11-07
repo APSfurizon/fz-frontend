@@ -1,7 +1,7 @@
 @import url('../colors.css');
 
 input.input-field {
-    background: var(--text-input-bg);
+    background: var(--text-input-bg) !important;
     border: 1px solid var(--text-input-border-normal);
     color: var(--text-input-color);
     min-height: 1.625em;
@@ -18,6 +18,12 @@ input:disabled {
 input.input-field:hover:not(:disabled) {
     /* color: var(--text-input-border-disabled);
     border-color: var(--text-input-border-disabled); */
+}
+input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px var(--text-input-bg) inset !important;
+    -webkit-text-fill-color: var(--text-input-color) !important;
+    caret-color: var(--text-input-color);
+    letter-spacing: 0.5px;
 }
 
 input.input-field:focus:not(.danger) {
