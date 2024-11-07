@@ -1,0 +1,49 @@
+@import url('../colors.css');
+
+input.input-field {
+    background: var(--text-input-bg) !important;
+    border: 1px solid var(--text-input-border-normal);
+    color: var(--text-input-color);
+    min-height: 1.625em;
+    padding: 0.375em 0.4375em;
+    display: flex;
+    gap: 0.5em;
+}
+
+input:disabled {
+    color: var(--text-input-color-disabled);
+    border-color: var(--text-input-border-disabled);
+}
+
+input.input-field:hover:not(:disabled) {
+    /* color: var(--text-input-border-disabled);
+    border-color: var(--text-input-border-disabled); */
+}
+input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px var(--text-input-bg) inset !important;
+    -webkit-text-fill-color: var(--text-input-color) !important;
+    caret-color: var(--text-input-color);
+    letter-spacing: 0.5px;
+}
+
+input.input-field:focus:not(.danger) {
+    border: 2px solid var(--text-input-border-normal);
+    outline: none;
+}
+
+input.danger {
+    border: 1px solid var(--text-input-danger-normal);
+    outline: none;
+}
+input.danger:focus {
+    border: 2px solid var(--text-input-danger-normal);
+    outline: none;
+}
+
+input.danger:hover:not(:disabled) {
+    /* background: var(--text-input-danger-hover); */
+}
+
+input.danger:active:not(:disabled) {
+    /* background: var(--text-input-danger-down); */
+}

@@ -11,7 +11,7 @@ export default function UserDropDown ({headerData}: Readonly<{headerData: Header
     const [isOpen, setOpen] = useState(false);
     const t = useTranslations('common');
     return (
-        <p tabIndex={0} className="user-dropdown horizontal-list flex-vertical-center rounded-m" onClick={()=>setOpen(!isOpen)} onBlur={()=>setOpen(false)}>
+        <span tabIndex={0} className="user-dropdown horizontal-list flex-vertical-center rounded-m" onClick={()=>setOpen(!isOpen)} onBlur={()=>setOpen(false)}>
             <Icon style={{fontSize: "24px"}} iconName={isOpen ? ICONS.ARROW_DROP_UP : ICONS.ARROW_DROP_DOWN}></Icon>
             <span className="title semibold nickname">{headerData.nickname}</span>
             <UserPicture userData={getUserPicture(headerData)}></UserPicture>
@@ -20,6 +20,6 @@ export default function UserDropDown ({headerData}: Readonly<{headerData: Header
                     {t('header.logout')}
                 </a>
             </div>
-        </p>
+        </span>
     )
 }
