@@ -74,12 +74,27 @@
     --text-input-danger-hover: #cf6c6c;
     --text-input-danger-down: #833232;
     
+    /* Auto Complete */
+    --autocomplete-bg:#242C38;
+    --autocomplete-color:#fff;
+    --autocomplete-color-disabled:#4D5E6B;
+    --autocomplete-border-normal:#4D5E6B;
+    --autocomplete-border-disabled:#11191F;
+    --autocomplete-danger-normal: #EC2F2F;
+    --autocomplete-danger-hover: #cf6c6c;
+    --autocomplete-danger-down: #833232;
+    
+    /* Lista */
+    --lista-elemento:rgb(255, 255, 255,0.1);
+
     /* Status box */
     --status-box-bg-default:#4D5E6B;
     --status-box-bg-warning:#ECA02F;
     --status-box-bg-success:#52905B;
     --status-box-bg-normal:#4D5E6B;
     --status-box-bg-error:#CD5454;
+
+
 }
 
 @media (prefers-color-scheme: dark) {

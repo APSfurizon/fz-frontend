@@ -6,6 +6,7 @@ import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import JanInput from "../../../_components/janInput";
 import StatusBox from "../../../_components/statusBox";
+import AutoComplete from "@/app/_components/autoComplete";
 
 export default function Home() {
 
@@ -33,6 +34,7 @@ export default function Home() {
             <JanInput title={"Error"} hasError/>
           </div>
         </div>
+        <AutoComplete title={"Invite in room"}/>
         <StatusBox>Triple room</StatusBox>
         <StatusBox status="warning">2024</StatusBox>
         <StatusBox status="success">Open</StatusBox>
