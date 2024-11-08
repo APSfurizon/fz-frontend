@@ -12,7 +12,7 @@ export default function Home() {
 
   const [isBusy, setBusy] = useState(false);
 
-  const [titleInput,setTitleInput] = useState("Esempio di un Titolo");
+  const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
 
   return (
     <div className="page">
@@ -22,7 +22,7 @@ export default function Home() {
         <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
         <div style={{display: 'flex'}}>
           <div style={{flexDirection:'column',marginRight:5}}>
-            <JanInput label={"Text"}/>
+            <JanInput label={titleInput} onChange={(e)=>setTitleInput(e.target.value)}/>
             <JanInput inputType="number" label={"Number"}/>
           </div>
           <div style={{flexDirection:'column',marginRight:5}}>

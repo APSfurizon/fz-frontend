@@ -11,7 +11,7 @@ export default function JanInput ({busy=false, className, disabled=false, hasErr
     inputType?: "text" | "password" | "number"
     label?: string,
     labelStyle?: CSSProperties,
-    onChange?: React.ComponentState,
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
     placeholder?: string,
     style?: CSSProperties,
     value?: string,
