@@ -22,16 +22,16 @@ export default function Home() {
         <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
         <div style={{display: 'flex'}}>
           <div style={{flexDirection:'column',marginRight:5}}>
-            <JanInput title={"Text"}/>
-            <JanInput isNumber title={"Number"}/>
+            <JanInput label={"Text"}/>
+            <JanInput inputType="number" label={"Number"}/>
           </div>
           <div style={{flexDirection:'column',marginRight:5}}>
-            <JanInput isPassword title={"Password"} placeholder="Insert password"/>
-            <JanInput title={"Disabled"} disabled placeholder="Not editable"/>
+            <JanInput inputType="password" label={"Password"} placeholder="Insert password"/>
+            <JanInput label={"Disabled"} disabled placeholder="Not editable"/>
           </div>
           <div>
-            <JanInput title={"Loading"} busy/>
-            <JanInput title={"Error"} hasError/>
+            <JanInput label={"Loading"} busy/>
+            <JanInput label={"Error"} hasError/>
           </div>
         </div>
         <AutoComplete title={"Invite in room"}/>

@@ -1,54 +1,60 @@
-import { CSSProperties, useState } from "react";
-import "../styles/components/janInput.css";
+import { ChangeEvent, CSSProperties, useState } from "react";
 import Icon, { ICONS } from "./icon";
-import Button from "./button";
+import "../styles/components/janInput.css";
 
-export default function JanInput ({iconName,title="",value="",setValue,isNumber,isPassword, style,headerStyle,inputStyle,className,placeholder, busy,disabled,hasError}: Readonly<{
-    iconName?: string,
-    title?: string,
-    value?: string,
-    setValue?:React.ComponentState,
-    isNumber?: boolean,
-    isPassword?: boolean,
-    style?: CSSProperties,
-    headerStyle?: CSSProperties,
-    inputStyle?:CSSProperties,
-    className?: string,
-    placeholder?: string,
+export default function JanInput ({busy=false, className, disabled=false, hasError=false, inputStyle, inputType="text", label, labelStyle, placeholder, onChange, style, value="" }: Readonly<{
     busy?: boolean,
+    className?: string,
     disabled?: boolean;
     hasError?: boolean;
+    inputStyle?: CSSProperties,
+    inputType?: "text" | "password" | "number"
+    label?: string,
+    labelStyle?: CSSProperties,
+    onChange?: React.ComponentState,
+    placeholder?: string,
+    style?: CSSProperties,
+    value?: string,
   }>) {
+
+    /* States */
     const [inputValue, setInputValue] = useState(value);
-    const [visiblePassword,setVisiblePassword] = useState(false);
-    const iconPresent = iconName != undefined;
+    const [visiblePassword, setVisiblePassword] = useState(false);
     
-    const handleChange = (e:any) => {
+    /* Change handling */
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
-        setValue && setValue(e.target.value);
+        onChange && onChange(e);
     };
+    
+    /* Calc input type */
+    let finalType = inputType;
+    let isPassword = inputType === "password";
+    if (isPassword && visiblePassword) finalType = "text";
+
     return (
-        <div className={`custom-input ${className}`} style={{...style}}>
-            <div className="margin-bottom-1mm" style={{...headerStyle,position:'relative'}}>
-                <span className="title semibold">{title}</span>
-            </div>
-            <div className="margin-bottom-1mm" style={{...headerStyle,position:'relative'}}>
+        <div className={`jan-input ${className}`} style={{...style}}>
+            <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
+            <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                 <input
-                    className={"input-field title rounded-s" + " " + (className ?? "") + (hasError? "danger" : "")}
-                    style={{...inputStyle, paddingRight: iconPresent ? '0.5em' : 'revert',height:"40px",width:'100%'}}
+                    className={`input-field title ${hasError ? "danger" : ""}`}
+                    style={{...inputStyle}}
                     placeholder={placeholder ?? ""}
-                    type={isNumber?"number":(((isPassword)&&!visiblePassword)?"password":"text")}
-                    id="input-field"
+                    type={finalType}
                     disabled={disabled}
                     value={inputValue}
                     onChange={handleChange}
                 />
-                {(busy) && (
-                    <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY} style={{position:'absolute',top:10,right:10}}></Icon>
-                )}
-                {!(busy) && (isPassword) && (
-                    <span style={{position:'absolute',top:10,right:10,cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}><Icon className="medium" iconName={visiblePassword?ICONS.VISIBILITY:ICONS.VISIBILITY_OFF}></Icon></span>
-                )}
+                <span className={`${busy || isPassword ? "icon-container" : ""}`}>
+                    {(busy) && (
+                        <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
+                    )}
+                    {!(busy) && (isPassword) && (
+                        <a style={{cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}>
+                            <Icon className="medium" iconName={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}></Icon>
+                        </a>
+                    )}
+                </span>
             </div>
         </div>
     )
