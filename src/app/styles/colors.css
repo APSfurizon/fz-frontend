@@ -81,6 +81,8 @@
     --autocomplete-danger-normal: #EC2F2F;
     --autocomplete-danger-hover: #cf6c6c;
     --autocomplete-danger-down: #833232;
+    --autocomplete-selected-value-bg: #4D5D75;
+    --autocomplete-selected-value-hover-bg: #5d708d;
     
     /* Lista */
     --suggestion-box-bg: #ffffff1a;

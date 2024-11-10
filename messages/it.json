@@ -19,6 +19,14 @@
             "alt_profile_picture": "Foto profilo"
         }
     },
+    "components": {
+        "autoinput": {
+            "no_results": "Nessun risultato.",
+            "alt_result_image": "Immagine di {description}",
+            "guide": "Inserisci almeno {minSize} caratteri",
+            "loading_data": "Caricamento dati..."
+        }
+    },
     "furpanel": {
             "badge": {
                 "title": "Badge"

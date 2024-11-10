@@ -1,12 +1,13 @@
 'use client'
 import Checkbox from "@/app/_components/checkbox";
-import Button from "../../../_components/button";
+import Button from "@/app/_components/button";
 import { ICONS } from "../../../_components/icon";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import JanInput from "../../../_components/janInput";
-import StatusBox from "../../../_components/statusBox";
-import AutoComplete from "@/app/_components/autoComplete";
+import JanInput from "@/app/_components/janInput";
+import StatusBox from "@/app/_components/statusBox";
+import { AutoInputType } from "@/app/_lib/components/autoInput";
+import AutoInput from "@/app/_components/autoInput";
 
 export default function Home() {
 
@@ -34,7 +35,10 @@ export default function Home() {
             <JanInput label={"Error"} hasError/>
           </div>
         </div>
-        <AutoComplete title={"Invite in room"}/>
+        <div className="horizontal-list gap-2mm">
+        <AutoInput type={AutoInputType.DEBUG_USER} multiple={true} max={10} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
+        <JanInput label={"Error"} hasError/>
+        </div>
         <StatusBox>Triple room</StatusBox>
         <StatusBox status="warning">2024</StatusBox>
         <StatusBox status="success">Open</StatusBox>
