@@ -1,7 +1,9 @@
 @import url('../colors.css');
 
-div.jan-input {
-    
+div.autocomplete-input {
+
+    width: 100%;
+
     label {
         margin-left: 0.125em;
         display: inline-block;
@@ -10,9 +12,14 @@ div.jan-input {
     div.input-container {
         background: var(--text-input-bg);
         outline: 1px solid var(--text-input-border-normal);
+        gap: 0.2em;
+        padding-left: 0.1em;
+        flex-wrap: wrap;
     }
-    
+
     input.input-field {
+        flex: 1;
+        min-width: 10em;
         color: var(--text-input-color);
         background-color: transparent;
         min-height: 1.625em;
@@ -62,4 +69,55 @@ div.jan-input {
     span.icon-container i {
         padding: 0em 0.4em;
     }
+
+    .search-result-container {
+        background: var(--text-input-bg);
+        border: 0px solid var(--text-input-border-normal);
+        color: var(--text-input-color);
+        padding: 0.375em 0.4375em;
+        display: flex;
+        gap: 0.5em;
+        cursor: pointer;
+        box-shadow: 0px 3px 20px 1px #0000003F;
+    }
+
+    .search-result {
+        background: var(--suggestion-box-bg);
+        border: 0px solid var(--text-input-border-normal);
+        color: var(--text-input-color);
+        padding: 0.375em;
+        display: flex;
+        gap: 0.5em;
+    }
+
+    .selected-value {
+        width: fit-content;
+        cursor: default;
+        padding: 0.3125em;
+        background-color: var(--autocomplete-selected-value-bg);
+        border-radius: 1000px;
+        overflow: hidden;
+        gap: 0.3125em;
+    }
+
+    .selected-value:hover {
+        background-color: var(--autocomplete-selected-value-hover-bg); 
+    }
+ 
+    .selected-value img {
+        border-radius: 1000px;
+        max-width: 17pt;
+        height: auto;
+        outline: 1px solid var(--autocomplete-color);
+    }
+
+    .selected-value .delete-selection {
+        margin-right: 0.1em;
+        cursor: pointer;
+    }
+
+    .selected-value .delete-selection:hover {
+        color: var(--autocomplete-danger-normal);
+    }
+
 }

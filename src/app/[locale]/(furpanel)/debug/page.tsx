@@ -1,17 +1,19 @@
 'use client'
 import Checkbox from "@/app/_components/checkbox";
-import Button from "../../../_components/button";
+import Button from "@/app/_components/button";
 import { ICONS } from "../../../_components/icon";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import JanInput from "../../../_components/janInput";
-import StatusBox from "../../../_components/statusBox";
+import JanInput from "@/app/_components/janInput";
+import StatusBox from "@/app/_components/statusBox";
+import { AutoInputType } from "@/app/_lib/components/autoInput";
+import AutoInput from "@/app/_components/autoInput";
 
 export default function Home() {
 
   const [isBusy, setBusy] = useState(false);
 
-  const [titleInput,setTitleInput] = useState("Esempio di un Titolo");
+  const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
 
   return (
     <div className="page">
@@ -21,17 +23,21 @@ export default function Home() {
         <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
         <div style={{display: 'flex'}}>
           <div style={{flexDirection:'column',marginRight:5}}>
-            <JanInput title={"Text"}/>
-            <JanInput isNumber title={"Number"}/>
+            <JanInput label={titleInput} onChange={(e)=>setTitleInput(e.target.value)}/>
+            <JanInput inputType="number" label={"Number"}/>
           </div>
           <div style={{flexDirection:'column',marginRight:5}}>
-            <JanInput isPassword title={"Password"} placeholder="Insert password"/>
-            <JanInput title={"Disabled"} disabled placeholder="Not editable"/>
+            <JanInput inputType="password" label={"Password"} placeholder="Insert password"/>
+            <JanInput label={"Disabled"} disabled placeholder="Not editable"/>
           </div>
           <div>
-            <JanInput title={"Loading"} busy/>
-            <JanInput title={"Error"} hasError/>
+            <JanInput label={"Loading"} busy/>
+            <JanInput label={"Error"} hasError/>
           </div>
+        </div>
+        <div className="horizontal-list gap-2mm">
+        <AutoInput type={AutoInputType.DEBUG_USER} multiple={true} max={10} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
+        <JanInput label={"Error"} hasError/>
         </div>
         <StatusBox>Triple room</StatusBox>
         <StatusBox status="warning">2024</StatusBox>
