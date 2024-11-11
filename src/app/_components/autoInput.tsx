@@ -5,10 +5,12 @@ import { AutoInputSearchResult, AutoInputType, getAutoInputTypeManager } from ".
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 
-export default function AutoInput ({className, disabled=false, hasError=false, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, placeholder, onChange, style, type=AutoInputType.DEBUG_USER}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, hasError=false, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, placeholder, onChange, style, type=AutoInputType.DEBUG_USER}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
+    /**Field name to be used in a form*/
+    fieldName?: string;
     initialIds?: number[],
     inputStyle?: CSSProperties,
     label?: string,
@@ -149,7 +151,8 @@ export default function AutoInput ({className, disabled=false, hasError=false, i
             </a>;
     }
 
-    return (
+    return <>
+        <input type="hidden" name={fieldName} value={selectedIds?.map(id => ("" + id))}></input>
         <div className={`autocomplete-input ${className} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
             <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
             <div style={{position: 'relative'}}>
@@ -191,5 +194,5 @@ export default function AutoInput ({className, disabled=false, hasError=false, i
                 }
             </div>
         </div>
-    )
+    </>
 }
