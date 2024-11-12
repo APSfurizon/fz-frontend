@@ -1,0 +1,52 @@
+div.modal-overlay,
+div.modal-dialog {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 400ms;
+    pointer-events: none;
+}
+
+div.modal-overlay {
+    background-color: var(--modal-overlay-bg);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+}
+
+div.modal-dialog {
+    background-color: var(--modal-dialog-bg);
+    box-shadow: 0px 3px 20px 1px #0000003F;
+    gap: 0.9375em;
+    padding: 1.25em;
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition-property: opacity, top;
+}
+
+div.modal-overlay.open,
+div.modal-dialog.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+div.modal-dialog.open {
+    top: 50%;
+}
+
+div.modal-dialog span.header-title {
+    flex: 1;
+}
+
+div.modal-dialog div.modal-header a.header-close {
+    cursor: pointer;
+    user-select: none;
+}
+
+div.modal-dialog div.modal-header a.header-close:hover {
+    color: var(--modal-button-close);
+}

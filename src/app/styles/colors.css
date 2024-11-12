@@ -94,6 +94,10 @@
     --status-box-bg-normal: #4D5E6B;
     --status-box-bg-error: #CD5454;
 
+    /* Modal */
+    --modal-overlay-bg: #0008;
+    --modal-dialog-bg: #141E26;
+    --modal-button-close: #EC2F2F;
 
 }
 

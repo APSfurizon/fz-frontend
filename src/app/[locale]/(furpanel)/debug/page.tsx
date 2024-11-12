@@ -8,10 +8,14 @@ import JanInput from "@/app/_components/janInput";
 import StatusBox from "@/app/_components/statusBox";
 import { AutoInputType } from "@/app/_lib/components/autoInput";
 import AutoInput from "@/app/_components/autoInput";
+import DataForm from "@/app/_components/dataForm";
+import Modal from "@/app/_components/modal";
 
 export default function Home() {
 
   const [isBusy, setBusy] = useState(false);
+
+  const [isOpen, setOpen] = useState(false);
 
   const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
 
@@ -44,6 +48,12 @@ export default function Home() {
         <StatusBox status="success">Open</StatusBox>
         <StatusBox status="normal">Pending</StatusBox>
         <StatusBox status="error">Rejected</StatusBox>
+        <Modal title="A title" open={isOpen} onClose={(e)=>setOpen(false)}>
+          <DataForm>
+            <JanInput inputType="number" label={"Number"}/>
+          </DataForm>
+        </Modal>
+        <Button onClick={()=>{setOpen(true);}} iconName={ICONS.BED}>Modal</Button>
     </div>
   );
 }

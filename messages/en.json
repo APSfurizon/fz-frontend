@@ -25,6 +25,12 @@
             "alt_result_image": "Image of {description}",
             "guide": "Enter at least {minSize} characters",
             "loading_data": "Loading data..."
+        },
+        "dataForm": {
+            "save": "Save"
+        },
+        "modal": {
+            "close": "Close"
         }
     },
     "furpanel": {

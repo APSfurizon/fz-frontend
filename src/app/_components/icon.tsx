@@ -28,6 +28,7 @@ export const ICONS = Object.freeze({
     PETS: "pets",
     PHOTO_CAMERA: "photo_camera",
     PROGRESS_ACTIVITY: "progress_activity",
+    SAVE: "save",
     REMOVE: "remove",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
