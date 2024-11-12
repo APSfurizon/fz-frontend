@@ -13,6 +13,7 @@ export const ICONS = Object.freeze({
     CHECK: "check",
     CHECK_CIRCLE: "check_circle",
     CLOSE: "close",
+    CONTEXTUAL_TOKEN: "contextual_token",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
     ERROR: "error",

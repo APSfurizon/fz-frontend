@@ -28,6 +28,9 @@
         }
     },
     "furpanel": {
+            "home":{
+                "header": "Benvenuti nel <highlighted>furpanel!</highlighted>"
+            },
             "badge": {
                 "title": "Badge"
             },
