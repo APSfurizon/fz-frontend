@@ -3,13 +3,15 @@ import { useState, MouseEvent, CSSProperties, FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
 import "../styles/components/dataForm.css";
+import { FormAction } from "../_lib/components/dataForm";
 
 export interface SaveButtonData {
     text: string,
     iconName: string
 }
 
-export default function DataForm ({callback, children, className, disabled, endpoint, method="POST", style, saveButton}: Readonly<{
+export default function DataForm ({action, callback, children, className, disabled, endpoint, method="POST", style, saveButton}: Readonly<{
+    action: FormAction<any, any, any>,
     callback?: Function,
     children?: React.ReactNode,
     className?: string,
@@ -28,6 +30,7 @@ export default function DataForm ({callback, children, className, disabled, endp
     const [loading, setLoading] = useState(false);
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+
         e.preventDefault();
         e.stopPropagation();
     }
@@ -36,7 +39,7 @@ export default function DataForm ({callback, children, className, disabled, endp
         <form className={`data-form vertical-list`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
             {children}
             <div className="toolbar-bottom">
-                <Button iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
+                <Button type="submit" iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
             </div>
         </form>
     </>

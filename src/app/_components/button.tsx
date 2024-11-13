@@ -2,18 +2,19 @@ import { CSSProperties } from "react";
 import "../styles/components/button.css";
 import Icon, { ICONS } from "./icon";
 
-export default function Button ({children, iconName, style, className, busy, onClick, disabled}: Readonly<{
+export default function Button ({children, iconName, style, className, busy, onClick, disabled, type = "button"}: Readonly<{
     children?: React.ReactNode,
     iconName?: string,
     style?: CSSProperties,
     className?: string,
     busy?: boolean,
     onClick?: React.MouseEventHandler,
-    disabled?: boolean;
+    disabled?: boolean,
+    type?: "submit" | "reset" | "button"
   }>) {
     const iconPresent = iconName != undefined;
     return (
-        <button onClick={busy ? undefined : onClick}
+        <button type={type} onClick={busy ? undefined : onClick}
             disabled={busy || disabled}
             className={"button rounded-m" + " " + (className ?? "")}
             style={{...style, paddingRight: iconPresent ? '0.5em' : 'revert'}}>
