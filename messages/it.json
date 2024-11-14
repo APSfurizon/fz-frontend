@@ -25,23 +25,44 @@
             "alt_result_image": "Immagine di {description}",
             "guide": "Inserisci almeno {minSize} caratteri",
             "loading_data": "Caricamento dati..."
+        },
+        "dataForm": {
+            "save": "Save"
+        },
+        "modal": {
+            "close": "Chiudi"
         }
     },
     "furpanel": {
-            "badge": {
-                "title": "Badge"
-            },
-            "room": {
-                "title": "Stanza"
-            },
-            "upload_area": {
-                "title": "Area upload"
-            },
-            "user": {
-                "title": "Utente"
-            },
-            "debug": {
-                "title": "Debug"
+        "home":{
+            "header": "Benvenuti nel <highlighted>furpanel!</highlighted>"
+        },
+        "badge": {
+            "title": "Badge"
+        },
+        "room": {
+            "title": "Stanza"
+        },
+        "upload_area": {
+            "title": "Area upload"
+        },
+        "user": {
+            "title": "Utente"
+        },
+        "debug": {
+            "title": "Debug"
+        }
+    },
+    "authentication": {
+        "login": {
+            "login": "Accedi",
+            "label_email": "Email",
+            "placeholder_email": "Inserisci il tuo indirizzo email",
+            "label_password": "Password",
+            "placeholder_password": "Inserisci la tua password",
+            "errors": {
+                "unknown_error": "Errore sconosciuto"
             }
         }
+    }
 }

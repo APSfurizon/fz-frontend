@@ -25,23 +25,44 @@
             "alt_result_image": "Image of {description}",
             "guide": "Enter at least {minSize} characters",
             "loading_data": "Loading data..."
+        },
+        "dataForm": {
+            "save": "Save"
+        },
+        "modal": {
+            "close": "Close"
         }
     },
     "furpanel": {
-            "badge": {
-                "title": "Badge"
-            },
-            "room": {
-                "title": "Room"
-            },
-            "upload_area": {
-                "title": "Upload area"
-            },
-            "user": {
-                "title": "User"
-            },
-            "debug": {
-                "title": "Debug"
+        "home":{
+            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
+        },
+        "badge": {
+            "title": "Badge"
+        },
+        "room": {
+            "title": "Room"
+        },
+        "upload_area": {
+            "title": "Upload area"
+        },
+        "user": {
+            "title": "User"
+        },
+        "debug": {
+            "title": "Debug"
+        }
+    },
+    "authentication": {
+        "login": {
+            "login": "Log in",
+            "label_email": "Email",
+            "placeholder_email": "Enter your email address",
+            "label_password": "Password",
+            "placeholder_password": "Enter your password",
+            "errors": {
+                "unknown_error": "Unknown error"
             }
         }
+    }
 }

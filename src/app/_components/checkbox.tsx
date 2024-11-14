@@ -2,16 +2,18 @@ import Icon, { ICONS } from "./icon";
 import { useState, MouseEvent, CSSProperties } from "react";
 import "../styles/components/checkbox.css";
 
-export default function Checkbox ({children, style, className, onClick, disabled}: Readonly<{
+export default function Checkbox ({children, className, disabled, fieldName, onClick, style}: Readonly<{
     children?: React.ReactNode,
-    style?: CSSProperties,
     className?: string,
+    disabled?: boolean,
+    fieldName?: string,
     onClick?: React.MouseEventHandler,
-    disabled?: boolean;
+    style?: CSSProperties,
   }>) {
     const [checked, setChecked] = useState(false);
     const clickPresent = onClick != undefined;
-    return (
+    return <>
+        <input type="hidden" name={fieldName} value={""+checked}></input>
         <button onClick={(event)=>{if (!disabled) { setChecked(!checked); clickPresent && onClick(event); }}}
         disabled={disabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
@@ -19,5 +21,5 @@ export default function Checkbox ({children, style, className, onClick, disabled
             </div>
             <span className="title normal" style={{fontSize: '15px'}}>{children}</span>
         </button>
-    )
+    </>
 }
