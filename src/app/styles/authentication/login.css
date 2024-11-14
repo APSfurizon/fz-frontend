@@ -1,0 +1,8 @@
+form.login-form {
+    gap: 1.25em;
+}
+
+form .toolbar-bottom {
+    display: flex;
+    justify-content: center;
+}

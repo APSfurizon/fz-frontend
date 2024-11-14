@@ -42,7 +42,7 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
     }
 
     return <>
-        <form className={`data-form vertical-list`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
+        <form className={`data-form vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
             {children}
             <div className="toolbar-bottom">
                 <Button type="submit" iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>

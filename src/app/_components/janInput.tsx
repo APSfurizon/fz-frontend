@@ -2,7 +2,7 @@ import { ChangeEvent, CSSProperties, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import "../styles/components/janInput.css";
 
-export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, inputStyle, inputType="text", label, labelStyle, placeholder, onChange, style, value="" }: Readonly<{
+export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, placeholder, required=false, style, value="" }: Readonly<{
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -10,11 +10,14 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     /**Field name to be used in a form*/
     fieldName?: string,
     inputStyle?: CSSProperties,
-    inputType?: "text" | "password" | "number",
+    inputType?: "text" | "email" | "password" | "number",
     label?: string,
     labelStyle?: CSSProperties,
+    minLength?: number,
+    maxLength?: number,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
     placeholder?: string,
+    required?: boolean,
     style?: CSSProperties,
     value?: string,
   }>) {
@@ -39,6 +42,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
             <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                 <input
+                    required={required}
                     name={fieldName}
                     className={`input-field title ${hasError ? "danger" : ""}`}
                     style={{...inputStyle}}
@@ -47,6 +51,8 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
                     disabled={disabled}
                     value={inputValue}
                     onChange={handleChange}
+                    minLength={minLength}
+                    maxLength={maxLength}
                 />
                 <span className={`${busy || isPassword ? "icon-container" : ""}`}>
                     {(busy) && (

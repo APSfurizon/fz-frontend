@@ -55,7 +55,9 @@
     },
     "authentication": {
         "login": {
+            "title": "authentication",
             "login": "Log in",
+            "create_account": "Create an account",
             "label_email": "Email",
             "placeholder_email": "Enter your email address",
             "label_password": "Password",

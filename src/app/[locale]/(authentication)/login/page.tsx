@@ -7,6 +7,7 @@ import { LoginFormAction } from "@/app/_lib/api/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
+import "../../../styles/authentication/login.css";
 
 export default function Login() {
   
@@ -29,10 +30,11 @@ export default function Login() {
     <div>
       <main>
         <span>{error}</span>
-        <DataForm loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={()=>{console.log ("success")}} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
-          <JanInput fieldName="email" inputType="text" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
-          <JanInput fieldName="password" inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
+        <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={()=>{console.log ("success")}} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
+          <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
+          <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
         </DataForm>
+        <a></a>
       </main>
     </div>
   );

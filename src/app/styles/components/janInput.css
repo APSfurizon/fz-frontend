@@ -1,7 +1,12 @@
 @import url('../colors.css');
 
+div.jan-input:has(input:required) label::after {
+    content: "*";
+    color: red;
+}
+
 div.jan-input {
-    
+
     label {
         margin-left: 0.125em;
         display: inline-block;
