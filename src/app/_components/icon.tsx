@@ -22,6 +22,7 @@ export const ICONS = Object.freeze({
     HELP: "help",
     HOME: "home",
     INFO: "info",
+    KEY: "key",
     LOGOUT: "logout",
     PERSON: "person",
     PERSON_BOOK: "person_book",

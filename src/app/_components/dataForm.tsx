@@ -4,15 +4,17 @@ import { useTranslations } from "next-intl";
 import Button from "./button";
 import "../styles/components/dataForm.css";
 import { FormAction } from "../_lib/components/dataForm";
+import { ApiErrorResponse, ApiResponse, runRequest } from "../_lib/api/global";
 
 export interface SaveButtonData {
     text: string,
     iconName: string
 }
 
-export default function DataForm ({action, callback, children, className, disabled, endpoint, method="POST", style, saveButton}: Readonly<{
+export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, method="POST", style, saveButton}: Readonly<{
     action: FormAction<any, any, any>,
-    callback?: Function,
+    onSuccess?: (data: ApiResponse) => any,
+    onFail?: (data: ApiErrorResponse | string) => any,
     children?: React.ReactNode,
     className?: string,
     disabled?: boolean,
@@ -30,7 +32,11 @@ export default function DataForm ({action, callback, children, className, disabl
     const [loading, setLoading] = useState(false);
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-
+        setLoading (true);
+        runRequest(action, new FormData(e.currentTarget))
+            .then((responseData) => onSuccess && onSuccess (responseData))
+            .catch((errorData) => onFail && onFail (errorData))
+            .finally(()=>setLoading(false));
         e.preventDefault();
         e.stopPropagation();
     }

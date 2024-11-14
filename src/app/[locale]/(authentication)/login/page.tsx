@@ -1,21 +1,39 @@
+"use client"
 import DataForm from "@/app/_components/dataForm";
+import { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
+import { ApiErrorResponse } from "@/app/_lib/api/global";
 import { LoginFormAction } from "@/app/_lib/api/login";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Login() {
+  
+  const t = useTranslations("authentication");
+  const [error, setError] = useState("");
 
+  const manageError = (err: ApiErrorResponse | string) => {
+    console.log (err);
+    if(err instanceof String) {
+      setError(""+err);
+    } else {
+      const errRes = err as ApiErrorResponse;
+      const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].message : t('login.unknown_error');
+      setError(errorMessage);
+    }
+  }
 
-
-    return (
-      <div>
-        <main>
-          <DataForm action={new LoginFormAction}>
-            <JanInput fieldName="email" inputType="text" label={"Password"} placeholder="Insert password"/>
-            <JanInput fieldName="password" inputType="password" label={"Password"} placeholder="Insert password"/>
-          </DataForm>
-        </main>
-      </div>
-    );
+  return (
+    <div>
+      <main>
+        <span>{error}</span>
+        <DataForm action={new LoginFormAction} onSuccess={()=>{console.log ("success")}} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
+          <JanInput fieldName="email" inputType="text" label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
+          <JanInput fieldName="password" inputType="password" label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
+        </DataForm>
+      </main>
+    </div>
+  );
   }
   

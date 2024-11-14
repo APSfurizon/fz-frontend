@@ -13,6 +13,7 @@ div.jan-input {
     }
     
     input.input-field {
+        flex: 1;
         color: var(--text-input-color);
         background-color: transparent;
         min-height: 1.625em;
