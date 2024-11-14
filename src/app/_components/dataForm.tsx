@@ -1,5 +1,5 @@
 import Icon, { ICONS } from "./icon";
-import { useState, MouseEvent, CSSProperties, FormEvent } from "react";
+import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
 import "../styles/components/dataForm.css";
@@ -11,7 +11,7 @@ export interface SaveButtonData {
     iconName: string
 }
 
-export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, method="POST", style, saveButton}: Readonly<{
+export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, loading, method="POST", setLoading, style, saveButton}: Readonly<{
     action: FormAction<any, any, any>,
     onSuccess?: (data: ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | string) => any,
@@ -19,7 +19,9 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
     className?: string,
     disabled?: boolean,
     endpoint?: string,
+    loading: boolean,
     method?: string,
+    setLoading: Dispatch<SetStateAction<boolean>>,
     style?: CSSProperties,
     saveButton?: SaveButtonData
   }>) {
@@ -28,8 +30,6 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
         text: t('dataForm.save'),
         iconName: ICONS.SAVE
     };
-    
-    const [loading, setLoading] = useState(false);
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         setLoading (true);
@@ -40,7 +40,7 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
         e.preventDefault();
         e.stopPropagation();
     }
-    
+
     return <>
         <form className={`data-form vertical-list`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
             {children}

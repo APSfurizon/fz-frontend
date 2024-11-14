@@ -48,10 +48,8 @@ export default function Home() {
         <StatusBox status="success">Open</StatusBox>
         <StatusBox status="normal">Pending</StatusBox>
         <StatusBox status="error">Rejected</StatusBox>
-        <Modal title="A title" open={isOpen} onClose={(e)=>setOpen(false)}>
-          <DataForm>
-            <JanInput inputType="number" label={"Number"}/>
-          </DataForm>
+        <Modal title="A title" open={isOpen} onClose={()=>setOpen(false)}>
+          <span>a modal</span>
         </Modal>
         <Button onClick={()=>{setOpen(true);}} iconName={ICONS.BED}>Modal</Button>
     </div>

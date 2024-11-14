@@ -12,6 +12,7 @@ export default function Login() {
   
   const t = useTranslations("authentication");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const manageError = (err: ApiErrorResponse | string) => {
     console.log (err);
@@ -28,9 +29,9 @@ export default function Login() {
     <div>
       <main>
         <span>{error}</span>
-        <DataForm action={new LoginFormAction} onSuccess={()=>{console.log ("success")}} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
-          <JanInput fieldName="email" inputType="text" label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
-          <JanInput fieldName="password" inputType="password" label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
+        <DataForm loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={()=>{console.log ("success")}} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
+          <JanInput fieldName="email" inputType="text" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
+          <JanInput fieldName="password" inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
         </DataForm>
       </main>
     </div>
