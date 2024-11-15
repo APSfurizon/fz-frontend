@@ -6,3 +6,10 @@ form .toolbar-bottom {
     display: flex;
     justify-content: center;
 }
+
+span.error-container {
+    display: inline-block;
+    margin-bottom: 1.25em;
+    color: var(--text-status-error);
+    width: 100%;
+}

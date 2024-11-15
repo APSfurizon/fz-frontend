@@ -1,15 +1,11 @@
-import { ApiResponse, ApiErrorResponse, ApiRequest } from "../api/global"
+import { ApiResponse, ApiErrorResponse, ApiRequest, RequestAction } from "../api/global"
 
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
+ * coming from a form
  */
-export interface FormAction<T extends ApiRequest, U extends ApiResponse, V extends ApiErrorResponse> {
-    authenticated: boolean,
+export interface FormApiAction<T extends ApiRequest, U extends ApiResponse, V extends ApiErrorResponse> extends RequestAction<U, V> {
     dtoBuilder: FormDTOBuilder<T>,
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT",
-    urlAction: string,
-    onSuccess: (status: number, body?: U) => void,
-    onFail: (status: number, body?: V) => void
 }
 
 /**

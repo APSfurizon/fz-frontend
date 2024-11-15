@@ -1,4 +1,4 @@
-import { FormAction, FormDTOBuilder } from "../components/dataForm";
+import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { ApiErrorResponse, ApiResponse } from "./global";
 
 export interface LoginData {
@@ -19,10 +19,9 @@ export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
         };
         return toReturn;
     }
-
 }
 
-export class LoginFormAction implements FormAction<LoginData, LoginResponse, ApiErrorResponse> {
+export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, ApiErrorResponse> {
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
     authenticated = false;
     dtoBuilder = new LoginDTOBuilder ();

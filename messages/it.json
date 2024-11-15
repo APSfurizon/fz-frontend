@@ -63,7 +63,9 @@
             "label_password": "Password",
             "placeholder_password": "Inserisci la tua password",
             "errors": {
-                "unknown_error": "Errore sconosciuto"
+                "unknown_error": "Errore sconosciuto",
+                "email_not_registered": "Utente non trovato",
+                "invalid_credentials": "Credenziali errate"
             }
         }
     }

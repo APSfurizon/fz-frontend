@@ -3,8 +3,8 @@ import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateActio
 import { useTranslations } from "next-intl";
 import Button from "./button";
 import "../styles/components/dataForm.css";
-import { FormAction } from "../_lib/components/dataForm";
-import { ApiErrorResponse, ApiResponse, runRequest } from "../_lib/api/global";
+import { FormApiAction } from "../_lib/components/dataForm";
+import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "../_lib/api/global";
 
 export interface SaveButtonData {
     text: string,
@@ -12,9 +12,9 @@ export interface SaveButtonData {
 }
 
 export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, loading, method="POST", setLoading, style, saveButton}: Readonly<{
-    action: FormAction<any, any, any>,
+    action: FormApiAction<any, any, any>,
     onSuccess?: (data: ApiResponse) => any,
-    onFail?: (data: ApiErrorResponse | string) => any,
+    onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     children?: React.ReactNode,
     className?: string,
     disabled?: boolean,
@@ -33,7 +33,7 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         setLoading (true);
-        runRequest(action, new FormData(e.currentTarget))
+        runFormRequest(action, new FormData(e.currentTarget))
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => onFail && onFail (errorData))
             .finally(()=>setLoading(false));
