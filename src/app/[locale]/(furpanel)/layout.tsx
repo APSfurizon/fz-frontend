@@ -1,9 +1,12 @@
+"use client"
 import {useTranslations} from 'next-intl';
 import Icon, { ICONS } from "@/app/_components/icon";
 import ToolLink from "@/app/_components/toolLink";
+import useAuth from '@/app/_lib/api/hooks/useAuth';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
     const t = useTranslations('furpanel');
+    useAuth();
     return (
         <div className="main-dialog rounded-s">
             <div className="horizontal-list gap-4mm">

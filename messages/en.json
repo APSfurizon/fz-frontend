@@ -54,18 +54,26 @@
         }
     },
     "authentication": {
+        "title": "authentication",
         "login": {
-            "title": "authentication",
+            "title": "Log in",
             "login": "Log in",
             "create_account": "Create an account",
             "label_email": "Email",
             "placeholder_email": "Enter your email address",
             "label_password": "Password",
             "placeholder_password": "Enter your password",
+            "register_here": "or register here",
             "errors": {
                 "unknown_error": "Unknown error",
+                "network_error": "Errore di rete",
                 "email_not_registered": "User not found",
                 "invalid_credentials": "Credenziali errate"
+            },
+            "register": {
+                "title": "Registration",
+                "register": "Register",
+                "login_here": "or log in here"
             }
         }
     }

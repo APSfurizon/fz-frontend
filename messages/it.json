@@ -54,19 +54,27 @@
         }
     },
     "authentication": {
+        "title": "autenticazione",
         "login": {
-            "title": "autenticazione",
+            "title": "Accesso",
             "login": "Accedi",
             "create_account": "Crea un account",
             "label_email": "Email",
             "placeholder_email": "Inserisci il tuo indirizzo email",
             "label_password": "Password",
             "placeholder_password": "Inserisci la tua password",
+            "register_here": "oppure registrati",
             "errors": {
                 "unknown_error": "Errore sconosciuto",
+                "network_error": "Errore di rete",
                 "email_not_registered": "Utente non trovato",
                 "invalid_credentials": "Credenziali errate"
             }
+        },
+        "register": {
+            "title": "Registrazione",
+            "register": "Registrati",
+            "login_here": "oppure accedi"
         }
     }
 }

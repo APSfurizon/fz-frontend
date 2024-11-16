@@ -87,3 +87,7 @@
 .descriptive {
     font-family: 'Roboto Slab', serif;
 }
+
+.underlined {
+    text-decoration: underline;
+}

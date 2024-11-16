@@ -7,17 +7,17 @@ import { LoginFormAction } from "@/app/_lib/api/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
+import { redirect } from "next/navigation";
 import "../../../styles/authentication/login.css";
+import useTitle from "@/app/_lib/api/hooks/useTitle";
 
 export default function Login() {
-  
   const t = useTranslations("authentication");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
-
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     if(!isDetailedError (err)) {
-      setError(""+err.errorMessage);
+      setError("network_error");
     } else {
       const errRes = err as ApiDetailedErrorResponse;
       const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].code : t('login.errors.unknown_error');
@@ -25,14 +25,20 @@ export default function Login() {
     }
   }
 
+  const manageSuccess = () => {
+    setTimeout(()=>redirect("/home"), 200);
+  }
+
+  useTitle(t("login.title"));
+
   return (
     <div>
       {error && <span className="error-container title small center">{t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-      <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={()=>{}} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
+      <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
         <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
         <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
       </DataForm>
-      <a></a>
+      <Link href="/register" className="suggestion title small center color-subtitle underlined">{t('login.register_here')}</Link>
     </div>
   );
   }

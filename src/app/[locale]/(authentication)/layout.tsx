@@ -11,7 +11,7 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
                     <Icon iconName="design_services"></Icon>
                     <span className="titular bold highlight">furpanel</span>
                     <span> - </span>
-                    <span className="titular bold">{t('login.title')}</span>
+                    <span className="titular bold">{t('title')}</span>
                 </span>
             </div>
             {children}

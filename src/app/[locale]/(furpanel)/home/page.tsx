@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import UserPicture from "@/app/_components/userPicture";
 import Button from "../../../_components/button";
 import Icon, { ICONS } from "../../../_components/icon";
