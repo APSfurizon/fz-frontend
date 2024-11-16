@@ -9,13 +9,11 @@ form .toolbar-bottom {
 
 span.error-container {
     display: inline-block;
-    margin-bottom: 1.25em;
     color: var(--text-status-error);
     width: 100%;
 }
 
 a.suggestion {
     display: inline-block;
-    margin-top: 1.25em;
     width: 100%;
 }

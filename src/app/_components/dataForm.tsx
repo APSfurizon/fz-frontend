@@ -1,5 +1,5 @@
 import Icon, { ICONS } from "./icon";
-import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
 import "../styles/components/dataForm.css";
@@ -11,7 +11,7 @@ export interface SaveButtonData {
     iconName: string
 }
 
-export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, loading, method="POST", setLoading, style, saveButton}: Readonly<{
+export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true}: Readonly<{
     action: FormApiAction<any, any, any>,
     onSuccess?: (data: ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
@@ -19,13 +19,16 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
     className?: string,
     disabled?: boolean,
     endpoint?: string,
+    hideSave?: boolean,
     loading: boolean,
     method?: string,
     setLoading: Dispatch<SetStateAction<boolean>>,
     style?: CSSProperties,
-    saveButton?: SaveButtonData
+    saveButton?: SaveButtonData,
+    resetOnFail?: boolean
   }>) {
     const t = useTranslations('components');
+    const inputRef = useRef<HTMLFormElement>(null);
     if (saveButton === undefined) saveButton = {
         text: t('dataForm.save'),
         iconName: ICONS.SAVE
@@ -35,18 +38,22 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
         setLoading (true);
         runFormRequest(action, new FormData(e.currentTarget))
             .then((responseData) => onSuccess && onSuccess (responseData))
-            .catch((errorData) => onFail && onFail (errorData))
-            .finally(()=>setLoading(false));
+            .catch((errorData) => {
+                onFail && onFail (errorData);
+                if (resetOnFail) inputRef?.current?.reset ();
+            }).finally(()=>setLoading(false));
         e.preventDefault();
         e.stopPropagation();
     }
 
     return <>
-        <form className={`data-form vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
+        <form ref={inputRef} className={`data-form vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
             {children}
+            {!hideSave && (
             <div className="toolbar-bottom">
                 <Button type="submit" iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
             </div>
+            )}
         </form>
     </>
 }

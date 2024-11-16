@@ -1,6 +1,6 @@
 "use client"
 import DataForm from "@/app/_components/dataForm";
-import { ICONS } from "@/app/_components/icon";
+import Icon, { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
 import { LoginFormAction } from "@/app/_lib/api/login";
@@ -31,15 +31,21 @@ export default function Login() {
 
   useTitle(t("login.title"));
 
-  return (
-    <div>
-      {error && <span className="error-container title small center">{t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
+  return <>
+    <div className="horizontal-list gap-4mm flex-center">
+      <span className="title-pair">
+          <Icon iconName="design_services"></Icon>
+          <span className="titular bold highlight">furpanel</span>
+          <span> - </span>
+          <span className="titular bold">{t('login.title').toLowerCase()}</span>
+      </span>
+    </div>
+    {error && <span className="error-container title small center">{t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
       <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
         <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
         <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
       </DataForm>
       <Link href="/register" className="suggestion title small center color-subtitle underlined">{t('login.register_here')}</Link>
-    </div>
-  );
+    </>;
   }
   
