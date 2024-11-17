@@ -18,10 +18,6 @@ a.suggestion {
     width: 100%;
 }
 
-div.hidden {
-    visibility: collapse;
-}
-
 div.form-pair div.jan-input,
 div.form-pair div.autocomplete-input {
     flex: 1;

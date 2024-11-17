@@ -23,7 +23,7 @@
         "autoinput": {
             "no_results": "Nessun risultato.",
             "alt_result_image": "Immagine di {description}",
-            "guide": "Inserisci almeno {minSize} caratteri",
+            "guide": "Inserisci almeno {minSize, plural, =1 {un carattere} other {# caratteri}}",
             "loading_data": "Caricamento dati..."
         },
         "dataForm": {

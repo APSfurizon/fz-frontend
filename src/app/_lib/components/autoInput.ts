@@ -1,4 +1,4 @@
-import { getAutoInputUserData } from "../debug";
+import { getAutoInputCountries, getAutoInputUserData } from "../debug";
 
 export interface AutoInputSearchResult {
     id: number,
@@ -58,7 +58,7 @@ export class AutoInputCountriesManager implements AutoInputTypeManager {
 
     loadByIds (ids: number[]): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
+            getAutoInputCountries ().then (results => {
                 resolve (results.filter (result => ids.includes (result.id)));
             });
         });
@@ -66,7 +66,7 @@ export class AutoInputCountriesManager implements AutoInputTypeManager {
 
     searchByValues (value: string, filterIds?: number[]): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
+            getAutoInputCountries ().then (results => {
                 resolve (
                     results.filter (
                         result => result.description.toLowerCase().includes (value.toLowerCase()) 

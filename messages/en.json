@@ -23,7 +23,7 @@
         "autoinput": {
             "no_results": "No results.",
             "alt_result_image": "Image of {description}",
-            "guide": "Enter at least {minSize} characters",
+            "guide": "Enter at least {minSize, plural, =1 {a character} other {# characters}}",
             "loading_data": "Loading data..."
         },
         "dataForm": {

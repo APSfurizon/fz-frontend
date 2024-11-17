@@ -5,7 +5,7 @@ import { AutoInputSearchResult, AutoInputType, getAutoInputTypeManager } from ".
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 
-export default function AutoInput ({className, disabled=false, fieldName, hasError=false, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, placeholder, required = false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, placeholder, required = false, selectCodes=false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -24,6 +24,8 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     onChange?: (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => void,
     placeholder?: string,
     required?: boolean,
+    /**Choose which value to extract from the selected object*/
+    selectCodes?: boolean,
     style?: CSSProperties,
     type: AutoInputType
   }>) {
@@ -44,6 +46,8 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     const [isFocused, setIsFocused] = useState(false);
     /**Search results */
     const [searchResults, setSearchResults] = useState<AutoInputSearchResult[]>([]);
+    /**Validity */
+    const [isValid, setIsValid] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -135,7 +139,7 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
                 (<Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>)
             }
             {element.icon !== undefined &&
-                (<Icon iconName={element.icon!} ></Icon>)
+                (<Icon iconName={element.icon!}></Icon>)
             }
             <div className="title" style={{flex:1}}>
                 {element.description}
@@ -144,10 +148,15 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
         </div>;
     }
 
+    const valueToSet = selectCodes ? selectedValues.map(value => value.code!) : selectedIds?.map(id => ("" + id));
+
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
-        return <a key={index} className="selected-value horizontal-list flex-vertical-center">
+        return <a key={index} className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
                 {element.imageUrl !== undefined &&
-                    (<Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>)
+                    <Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
+                }
+                {element.icon !== undefined &&
+                    <Icon iconName={element.icon!}></Icon>
                 }
                 <div className="title small" style={{flex:1}}>
                     {element.description}
@@ -156,18 +165,22 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
             </a>;
     }
 
+    const checkChange = () => {
+        setIsValid (valueToSet.length <= maxSelections && ((valueToSet.length > 0 && required) || !required));
+    }
+
     return <>
-        <input type="hidden" name={fieldName} value={selectedIds?.map(id => ("" + id))} required={required}></input>
         <div className={`autocomplete-input ${className} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
-            <label className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
+            <label htmlFor={fieldName} className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
+            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={valueToSet ?? []} required={required} onChange={checkChange}></input>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}
                     {
-                        selectedIds.length < max && (
+                        selectedIds.length < maxSelections && (
                             <input
                                 ref={inputRef}
-                                className={`input-field title ${hasError ? "danger" : ""}`}
+                                className={`input-field title ${!isValid ? "danger" : ""}`}
                                 style={{...inputStyle}}
                                 placeholder={placeholder ?? ""}
                                 type="text"
@@ -177,14 +190,17 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
                                 onBlur={onBlur}
                                 value={searchInput}
                             />
-                        )
+                        ) || <div className="spacer"></div>
                     }
-                    <span className="icon-container">
-                        { isLoading && isFocused
-                        ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-                        : <Icon className="medium" iconName={ICONS.SEARCH}></Icon>
-                        }
-                    </span>
+                    {
+                        multiple && valueToSet.length < maxSelections && 
+                        <span className="icon-container">
+                            { isLoading && isFocused
+                            ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
+                            : <Icon className="medium" iconName={ICONS.SEARCH}></Icon>
+                            }
+                        </span>
+                    }
                 </div>
                 {
                     isFocused && (
