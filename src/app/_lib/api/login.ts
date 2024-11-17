@@ -1,8 +1,6 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { TOKEN_STORAGE_NAME } from "../constants";
 import { ApiErrorResponse, ApiResponse } from "./global";
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 export interface LoginData {
     email?: string;

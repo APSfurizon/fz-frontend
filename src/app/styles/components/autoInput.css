@@ -9,6 +9,11 @@ div.autocomplete-input {
         display: inline-block;
     }
 
+    label.required::after {
+        content: "*";
+        color: red;
+    }
+
     div.input-container {
         background: var(--text-input-bg);
         outline: 1px solid var(--text-input-border-normal);

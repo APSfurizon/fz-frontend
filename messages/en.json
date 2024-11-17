@@ -72,31 +72,65 @@
             }
         },
         "register": {
-                "title": "Registration",
-                "register": "Register",
-                "login_here": "or log in here",
-                "errors": {
-                    "unknown_error": "Unknown error",
-                    "network_error": "Network error",
-                    "email_not_registered": "User not found",
-                    "invalid_credentials": "Credenziali errate"
-                },
-                "phase_1": {
-                    "label_nick": "Nickname",
-                    "placeholder_nick": "Enter your nickname",
-                    "help_nick": "Won't be used for log in",
-                    "label_email": "Email",
-                    "placeholder_email": "Enter an email address",
-                    "label_password": "Password",
-                    "help_password": "Must be at least 6 characters long",
-                    "placeholder_password": "Enter a password",
-                    "label_confirm_password": "Confirm password",
-                    "placeholder_confirm_password": "Confirm your password",
-                    "next": "Next"
-                },
-                "phase_2": {
-                    "back": "Back"
-                }
+            "title": "Registration",
+            "register": "Register",
+            "login_here": "or log in here",
+            "errors": {
+                "unknown_error": "Unknown error",
+                "network_error": "Network error",
+                "email_not_registered": "User not found",
+                "invalid_credentials": "Credenziali errate"
+            },
+            "phase_1": {
+                "label_nick": "Nickname",
+                "placeholder_nick": "Enter your nickname",
+                "help_nick": "Won't be used for log in",
+                "label_email": "Email",
+                "placeholder_email": "Enter an email address",
+                "label_password": "Password",
+                "placeholder_password": "Enter a password",
+                "help_password": "Must be at least 6 characters long",
+                "label_confirm_password": "Confirm password",
+                "placeholder_confirm_password": "Confirm your password",
+                "help_confirm_password": "Must be the same as the password",
+                "next": "Next"
+            },
+            "phase_2": {
+                "title_name": "Personal info",
+                "label_first_name": "First name",
+                "placeholder_first_name": "Enter your first name",
+                "label_last_name": "Last name",
+                "placeholder_last_name": "Enter your last name",
+
+                "title_birth": "Birth data",
+                "label_birthday": "Birthday",
+                "label_birth_country": "Birth country",
+                "placeholder_birth_country": "Enter the birth country",
+                "label_fiscal_code": "Fiscal code",
+                "placeholder_fiscal_code": "Enter the fiscal code",
+                "label_birth_region": "Birth region",
+                "placeholder_birth_region": "Enter the region you were born in",
+                "label_birth_city": "Birth city",
+                "placeholder_birth_city": "Enter the city you were born in",
+
+                "title_residence": "Residence data",
+                "label_residence_country": "Country",
+                "placeholder_residence_country": "Enter your current country",
+                "label_residence_region": "Region",
+                "placeholder_residence_region": "Enter your region",
+                "label_residence_city": "City",
+                "placeholder_residence_city": "Enter the city you're living in",
+                "label_residence_zip_code": "Zip code",
+                "placeholder_residence_zip_code": "Enter the city's zip code",
+                "label_residence_address": "Address",
+                "placeholder_residence_address": "Enter your address",
+                "label_phone_number": "Phone number",
+                "placeholder_phone_number": "Enter your phone number",
+
+                "description_title": "Why are you asking this data?",
+                "description": "This info will be prefilled when ordering the convention ticket.",
+                "back": "Back"
             }
+        }
     }
 }

@@ -5,7 +5,7 @@ import { AutoInputSearchResult, AutoInputType, getAutoInputTypeManager } from ".
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 
-export default function AutoInput ({className, disabled=false, fieldName, hasError=false, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, onChange, placeholder, required = false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, hasError=false, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, placeholder, required = false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -20,6 +20,7 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     /**Minimum number of chars before running a search query */
     minDecodeSize?: number,
     multiple?: boolean,
+    noDelay?: boolean,
     onChange?: (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => void,
     placeholder?: string,
     required?: boolean,
@@ -30,7 +31,7 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
 
     /* States */
     /**Selected ids */
-    const [selectedIds, setSelectedIds] = useState(initialIds);
+    const [selectedIds, setSelectedIds] = useState(initialIds ?? []);
     /**Rendered selected values */
     const [selectedValues, setSelectedValues] = useState<AutoInputSearchResult[]>([]);
     /**Read search input text */
@@ -99,7 +100,7 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
         if(searchInput.trim ().length >= minDecodeSize && isFocused){
             searchTimeoutHandle = setTimeout(() => {
                 searchItem(searchInput);
-            }, 500);
+            }, noDelay ? 0 : 500);
         } else setSearchResults([]);
     }, [searchInput, isFocused]);
 
@@ -133,6 +134,9 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
             {element.imageUrl !== undefined &&
                 (<Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>)
             }
+            {element.icon !== undefined &&
+                (<Icon iconName={element.icon!} ></Icon>)
+            }
             <div className="title" style={{flex:1}}>
                 {element.description}
             </div>
@@ -155,22 +159,26 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     return <>
         <input type="hidden" name={fieldName} value={selectedIds?.map(id => ("" + id))} required={required}></input>
         <div className={`autocomplete-input ${className} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
-            <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
+            <label className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}
-                    <input
-                        ref={inputRef}
-                        className={`input-field title ${hasError ? "danger" : ""}`}
-                        style={{...inputStyle}}
-                        placeholder={placeholder ?? ""}
-                        type="text"
-                        disabled={disabled}
-                        onChange={onSearchTextChange}
-                        onFocus={()=>setIsFocused (true)}
-                        onBlur={onBlur}
-                        value={searchInput}
-                    />
+                    {
+                        selectedIds.length < max && (
+                            <input
+                                ref={inputRef}
+                                className={`input-field title ${hasError ? "danger" : ""}`}
+                                style={{...inputStyle}}
+                                placeholder={placeholder ?? ""}
+                                type="text"
+                                disabled={disabled}
+                                onChange={onSearchTextChange}
+                                onFocus={()=>setIsFocused (true)}
+                                onBlur={onBlur}
+                                value={searchInput}
+                            />
+                        )
+                    }
                     <span className="icon-container">
                         { isLoading && isFocused
                         ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>

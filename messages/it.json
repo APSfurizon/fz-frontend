@@ -82,14 +82,17 @@
                 "invalid_credentials": "Credenziali errate"
             },
             "phase_1": {
+                "label_nick": "Nickname",
+                "placeholder_nick": "Inserisci il tuo nickname",
+                "help_nick": "Non sarà usato per l'accesso",
                 "label_email": "Email",
                 "placeholder_email": "Inserisci un indirizzo email",
-                "help_nick": "Non sarà usato per l'accesso",
                 "label_password": "Password",
                 "placeholder_password": "Inserisci una password",
                 "help_password": "Deve essere lunga almeno 6 caratteri",
                 "label_confirm_password": "Conferma password",
                 "placeholder_confirm_password": "Conferma la tua password",
+                "help_confirm_password": "Deve essere uguale alla password",
                 "next": "Avanti"
             },
             "phase_2": {
