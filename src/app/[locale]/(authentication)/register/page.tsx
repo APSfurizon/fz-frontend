@@ -20,6 +20,8 @@ export default function Register() {
   const t = useTranslations("authentication");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
+  const [birthCountry, setBirthCountry] = useState<string | undefined> ();
+  const [residenceCountry, setResidenceCountry] = useState<string> ();
   const [showFiscalCode, setShowFiscalCode] = useState(false);
 
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
@@ -34,15 +36,11 @@ export default function Register() {
 
   const manageSuccess = () => {
     setTimeout(()=>redirect("/home"), 200);
-  }
+  };
 
-  const onCountryChange = (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => {
-    if (newValue?.code == 'IT') {
-      setShowFiscalCode(true);
-    } else {
-      setShowFiscalCode(false);
-    }
-  }
+  /*const onBirthCountryChange = (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => {
+    
+  };*/
 
   useTitle(t("register.title"));
 
@@ -73,21 +71,21 @@ export default function Register() {
       <span className="title medium bold highlight">{t("register.phase_2.title_birth")}</span>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="birthday" required={true} inputType="date" busy={loading} label={t("register.phase_2.label_birthday")}/>
-        <AutoInput fieldName="birthCountry" required={true} noDelay={true} minDecodeSize={1} onChange={onCountryChange} type={AutoInputType.COUNTRIES} label={t("register.phase_2.label_birth_country")} placeholder={t("register.phase_2.placeholder_birth_country")}/>
+        <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} selectCodes type={AutoInputType.COUNTRIES} onChange={(values, newValue, removedValue) => setBirthCountry (newValue?.code)} label={t("register.phase_2.label_birth_country")} placeholder={t("register.phase_2.placeholder_birth_country")}/>
       </div>
       {/* Show only if birth country is Italy */}
-      <div className="form-pair horizontal-list gap-4mm">
-        <JanInput fieldName="fiscalCode" required={true} inputType="text" busy={loading} label={t("register.phase_2.label_fiscal_code")} placeholder={t("register.phase_2.placeholder_fiscal_code")}/>
+      <div className="form-pair horizontal-list gap-4mm" style={{visibility: birthCountry == "IT" ? "visible" : "collapse"}}>
+        <JanInput fieldName="fiscalCode" required={birthCountry == "IT"} inputType="text" busy={loading} label={t("register.phase_2.label_fiscal_code")} placeholder={t("register.phase_2.placeholder_fiscal_code")}/>
       </div>
       <div className="form-pair horizontal-list gap-4mm">
-        <AutoInput fieldName="birthRegion" required={true} noDelay={true} minDecodeSize={1} type={AutoInputType.COUNTRIES} label={t("register.phase_2.label_birth_region")} placeholder={t("register.phase_2.placeholder_birth_region")}/>
+        <AutoInput fieldName="birthRegion" minDecodeSize={2} selectCodes type={AutoInputType.STATES} param={birthCountry} paramRequired label={t("register.phase_2.label_birth_region")} placeholder={t("register.phase_2.placeholder_birth_region")}/>
         <JanInput fieldName="birthCity" required={true} inputType="text" busy={loading} label={t("register.phase_2.label_birth_city")} placeholder={t("register.phase_2.placeholder_birth_city")}/>
       </div>
       <hr></hr>
       <span className="title medium bold highlight">{t("register.phase_2.title_residence")}</span>
       <div className="form-pair horizontal-list gap-4mm">
-        <AutoInput fieldName="residenceCountry" required={true} noDelay={true} minDecodeSize={1} type={AutoInputType.COUNTRIES} label={t("register.phase_2.label_residence_country")} placeholder={t("register.phase_2.placeholder_residence_country")}/>
-        <AutoInput fieldName="residenceRegion" required={true} noDelay={true} minDecodeSize={1} type={AutoInputType.COUNTRIES} label={t("register.phase_2.label_residence_region")} placeholder={t("register.phase_2.placeholder_residence_region")}/>
+        <AutoInput fieldName="residenceCountry" required={true} minDecodeSize={2} selectCodes type={AutoInputType.COUNTRIES} onChange={(values, newValue, removedValue) => setResidenceCountry (newValue?.code)} label={t("register.phase_2.label_residence_country")} placeholder={t("register.phase_2.placeholder_residence_country")}/>
+        <AutoInput fieldName="residenceRegion" minDecodeSize={2} selectCodes type={AutoInputType.STATES} param={residenceCountry} paramRequired label={t("register.phase_2.label_residence_region")} placeholder={t("register.phase_2.placeholder_residence_region")}/>
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="residenceCity" required={true} inputType="text" busy={loading} label={t("register.phase_2.label_residence_city")} placeholder={t("register.phase_2.placeholder_residence_city")}/>

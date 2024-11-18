@@ -1,4 +1,5 @@
-import { getAutoInputCountries, getAutoInputUserData } from "../debug";
+import { getAutoInputCountries, getAutoInputStates } from "../api/register";
+import { getAutoInputUserData } from "../debug";
 
 export interface AutoInputSearchResult {
     id: number,
@@ -10,13 +11,14 @@ export interface AutoInputSearchResult {
 
 export interface AutoInputTypeManager {
     loadByIds: (ids: number[]) => Promise<AutoInputSearchResult[]>,
-    searchByValues: (value: string, filterIds?: number[]) => Promise<AutoInputSearchResult[]>,
+    searchByValues: (value: string, filterIds?: number[], additionalValues?: any) => Promise<AutoInputSearchResult[]>,
 }
 
 export enum AutoInputType {
     USER,
     DEBUG_USER,
     COUNTRIES,
+    STATES
 }
 
 export class AutoInputDebugUserManager implements AutoInputTypeManager {
@@ -35,7 +37,7 @@ export class AutoInputDebugUserManager implements AutoInputTypeManager {
         });
     }
 
-    searchByValues (value: string, filterIds?: number[]): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, filterIds?: number[], additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputUserData ().then (results => {
                 resolve (
@@ -78,12 +80,43 @@ export class AutoInputCountriesManager implements AutoInputTypeManager {
     }
 }
 
+export class AutoInputStatesManager implements AutoInputTypeManager {
+    static singleton?: AutoInputStatesManager;
+    static get (): AutoInputStatesManager {
+        if (!AutoInputStatesManager.singleton) AutoInputStatesManager.singleton = new AutoInputStatesManager();
+        return AutoInputStatesManager.singleton;
+    }
+
+    loadByIds (ids: number[]): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve, reject) => {
+            getAutoInputCountries ().then (results => {
+                resolve (results.filter (result => ids.includes (result.id)));
+            });
+        });
+    }
+
+    searchByValues (value: string, filterIds?: number[], additionalValues?: any): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve, reject) => {
+            getAutoInputStates (additionalValues).then (results => {
+                resolve (
+                    results.filter (
+                        result => result.description.toLowerCase().includes (value.toLowerCase()) 
+                        && !(filterIds ?? []).includes (result.id)
+                    )
+                );
+            });
+        });
+    }
+}
+
 export function getAutoInputTypeManager (type: AutoInputType): AutoInputTypeManager | undefined {
     switch (type) {
         case AutoInputType.DEBUG_USER:
             return AutoInputDebugUserManager.get();
         case AutoInputType.COUNTRIES:
             return AutoInputCountriesManager.get();
+        case AutoInputType.STATES:
+            return AutoInputStatesManager.get();
         default:
             return undefined;
     }

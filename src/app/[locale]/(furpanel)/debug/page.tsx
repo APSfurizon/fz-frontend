@@ -40,7 +40,7 @@ export default function Home() {
           </div>
         </div>
         <div className="horizontal-list gap-2mm">
-        <AutoInput type={AutoInputType.DEBUG_USER} multiple={true} max={10} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
+        <AutoInput type={AutoInputType.DEBUG_USER} multiple={true} max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
         <JanInput label={"Error"} hasError/>
         </div>
         <StatusBox>Triple room</StatusBox>

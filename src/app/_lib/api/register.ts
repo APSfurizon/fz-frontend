@@ -1,6 +1,8 @@
+import { AutoInputSearchResult } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
+import { getFlagEmoji } from "../components/userPicture";
 import { TOKEN_STORAGE_NAME } from "../constants";
-import { ApiErrorResponse, ApiResponse } from "./global";
+import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "./global";
 
 export interface RegisterPersonalInfo {
     firstName?: string;
@@ -63,4 +65,63 @@ export class RegisterFormAction implements FormApiAction<RegisterData, RegisterR
     urlAction = "authentication/register";
     onSuccess: (status: number, body?: RegisterResponse) => void = (status: number, body?: RegisterResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+/**Either a country or a region */
+export interface Place {
+    name: string,
+    code: string
+}
+
+export interface PlaceApiResponse extends ApiResponse {
+    data: Place[]
+}
+
+export class AutoInputCountriesApiAction implements RequestAction<PlaceApiResponse, ApiErrorResponse> {
+    authenticated = false;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "states/get-countries";
+    onSuccess: (status: number, body?: PlaceApiResponse) => void = (status: number, body?: PlaceApiResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export class AutoInputStatesApiAction implements RequestAction<PlaceApiResponse, ApiErrorResponse> {
+    authenticated = false;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "states/by-country";
+    onSuccess: (status: number, body?: PlaceApiResponse) => void = (status: number, body?: PlaceApiResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export function getAutoInputCountries (): Promise<AutoInputSearchResult[]> {
+    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+        runRequest(new AutoInputCountriesApiAction (), undefined, undefined).then ((data) => {
+            const parsed = data as PlaceApiResponse;
+            resolve (parsed.data.map ((place, index) => {
+                const toReturn: AutoInputSearchResult = {
+                    id: index,
+                    code: place.code,
+                    description: place.name,
+                    icon: getFlagEmoji(place.code)
+                };
+                return toReturn;
+            }));
+        }).catch ((err) => {reject (err)});
+    });
+}
+
+export function getAutoInputStates (countryCode: string): Promise<AutoInputSearchResult[]> {
+    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+        runRequest(new AutoInputStatesApiAction (), undefined, {"code": countryCode}).then ((data) => {
+            const parsed = data as PlaceApiResponse;
+            resolve (parsed.data.map ((place, index) => {
+                const toReturn: AutoInputSearchResult = {
+                    id: index,
+                    code: place.code,
+                    description: place.name
+                };
+                return toReturn;
+            }));
+        }).catch ((err) => {reject (err)});
+    });
 }

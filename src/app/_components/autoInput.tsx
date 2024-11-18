@@ -5,7 +5,7 @@ import { AutoInputSearchResult, AutoInputType, getAutoInputTypeManager } from ".
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 
-export default function AutoInput ({className, disabled=false, fieldName, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, placeholder, required = false, selectCodes=false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, selectCodes=false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -22,6 +22,8 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     multiple?: boolean,
     noDelay?: boolean,
     onChange?: (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => void,
+    param?: string,
+    paramRequired?: boolean,
     placeholder?: string,
     required?: boolean,
     /**Choose which value to extract from the selected object*/
@@ -86,7 +88,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     const searchItem = (searchString: string) => {
         setIsLoading(true);
         setSearchResults([]);
-        getAutoInputTypeManager(type)?.searchByValues(searchString.trim(), selectedIds).then (results => {
+        getAutoInputTypeManager(type)?.searchByValues(searchString.trim(), selectedIds, param).then (results => {
             setSearchResults(results);
             setSearchError(results.length == 0);
         }).catch(err=>{
@@ -108,6 +110,15 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
         } else setSearchResults([]);
     }, [searchInput, isFocused]);
 
+    /**Parameter changed, selections must be cleared */
+    useEffect(() => {
+        setIsFocused(false);
+        setSearchError(false);
+        setSearchResults([]);
+        setIsLoading(false);
+        clearTimeout(searchTimeoutHandle);
+    }, [param]);
+
     /**Cancel any pending search event */
     const onSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchInput (e.currentTarget.value);
@@ -119,7 +130,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
         setSearchError(false);
         setSearchResults([]);
         setIsLoading(false);
-        window.clearTimeout(searchTimeoutHandle);
+        clearTimeout(searchTimeoutHandle);
     }
 
     useEffect(()=> {
@@ -184,7 +195,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
                                 style={{...inputStyle}}
                                 placeholder={placeholder ?? ""}
                                 type="text"
-                                disabled={disabled}
+                                disabled={disabled || (paramRequired && !param)}
                                 onChange={onSearchTextChange}
                                 onFocus={()=>setIsFocused (true)}
                                 onBlur={onBlur}
@@ -203,7 +214,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
                     }
                 </div>
                 {
-                    isFocused && (
+                    isFocused && valueToSet.length < maxSelections && (
                     <div tabIndex={0} className="search-result-container rounded-m" style={{position:'absolute',marginTop:"5px",flexDirection:'column',width:"100%",maxHeight: "250px",overflowY: "auto",}}>
                         {
                             searchInput.length < minDecodeSize

@@ -40,7 +40,7 @@ export function getToken (): string | null {
     return localStorage.getItem(TOKEN_STORAGE_NAME);
 }
 
-export function runRequest (action: RequestAction<ApiResponse, ApiErrorResponse>, body?: ApiRequest, searchParams?: Record<string, string>): Promise<ApiResponse | ApiErrorResponse> {
+export function runRequest (action: RequestAction<any, any>, body?: ApiRequest, searchParams?: Record<string, string>): Promise<ApiResponse | ApiErrorResponse> {
     return new Promise ((resolve, reject) => {
         // Calc headers
         const headers = new Headers({
