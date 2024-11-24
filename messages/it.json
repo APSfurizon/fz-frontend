@@ -72,32 +72,95 @@
             }
         },
         "register": {
-            "title": "Registrazione",
-            "register": "Registrati",
-            "login_here": "oppure accedi",
             "errors": {
-                "unknown_error": "Errore sconosciuto",
-                "network_error": "Errore di rete",
-                "email_not_registered": "Utente non trovato",
-                "invalid_credentials": "Credenziali errate"
+                "email_already_registered": "This email has been already used",
+                "network_error": "Network error",
+                "unknown_error": "Unknown error"
             },
-            "phase_1": {
-                "label_nick": "Nickname",
-                "placeholder_nick": "Inserisci il tuo nickname",
-                "help_nick": "Non sarà usato per l'accesso",
-                "label_email": "Email",
-                "placeholder_email": "Inserisci un indirizzo email",
-                "label_password": "Password",
-                "placeholder_password": "Inserisci una password",
-                "help_password": "Deve essere lunga almeno 6 caratteri",
-                "label_confirm_password": "Conferma password",
-                "placeholder_confirm_password": "Conferma la tua password",
-                "help_confirm_password": "Deve essere uguale alla password",
-                "next": "Avanti"
+            "form": {
+                "birth_city": {
+                    "label": "Birth city",
+                    "placeholder": "Enter the city you were born in"
+                },
+                "birth_country": {
+                    "label": "Birth country",
+                    "placeholder": "Enter the birth country"
+                },
+                "birth_region": {
+                    "label": "Birth region",
+                    "placeholder": "Enter the region you were born in"
+                },
+                "birthday": {
+                    "label": "Birthday"
+                },
+                "confirm_password": {
+                    "help": "Must be the same as the password",
+                    "label": "Confirm password",
+                    "placeholder": "Confirm your password"
+                },
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Enter an email address"
+                },
+                "first_name": {
+                    "label": "First name",
+                    "placeholder": "Enter your first name"
+                },
+                "fiscal_code": {
+                    "label": "Fiscal code",
+                    "placeholder": "Enter the fiscal code"
+                },
+                "last_name": {
+                    "label": "Last name",
+                    "placeholder": "Enter your last name"
+                },
+                "nickname": {
+                    "help": "Won't be used for log in",
+                    "label": "Nickname",
+                    "placeholder": "Enter your nickname"
+                },
+                "password": {
+                    "help": "Must be at least 6 characters long",
+                    "label": "Password",
+                    "placeholder": "Enter a password"
+                },
+                "phone_number": {
+                    "label": "Telefono",
+                    "placeholder": "Esempio: 3331234567"
+                },
+                "residence_address": {
+                    "label": "Indirizzo",
+                    "placeholder": "Esempio: Via San Pelo, 125"
+                },
+                "residence_city": {
+                    "label": "Città",
+                    "placeholder": "Esempio: Roma"
+                },
+                "residence_country": {
+                    "label": "Paese",
+                    "placeholder": "Seleziona il tuo paese"
+                },
+                "residence_region": {
+                    "label": "Provincia",
+                    "placeholder": "Esempio: Barletta Andria Trani"
+                },
+                "residence_zip_code": {
+                    "label": "Codice avviamento postale",
+                    "placeholder": "Esempio: 76121"
+                },
+                "section": {
+                    "birth_data": "Dati di nascita",
+                    "personal_info": "Dati personali",
+                    "residence_data": "Dati di fatturazione"
+                }
             },
-            "phase_2": {
-                "back": "Indietro"
-            }
+            "question": {
+                "description": "La legislatura Italiana rende questi dati necessari per qualsiasi acquisto e tesseramento. Per ulteriori informazioni, consulta le politiche sulla riservatezza.",
+                "description_title": "Perché chiediamo questi dati?"
+            },
+            "login_here": "oppure accedi",
+            "register": "Registrati",
+            "title": "Registrazione"
         }
     }
 }

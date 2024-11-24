@@ -2,122 +2,146 @@ import { getAutoInputCountries, getAutoInputStates } from "../api/register";
 import { getAutoInputUserData } from "../debug";
 
 export interface AutoInputSearchResult {
-    id: number,
-    description: string,
+    id?: number,
+    description?: string,
     code?: string,
     icon?: string,
     imageUrl?: string,
 }
 
-export interface AutoInputTypeManager {
-    loadByIds: (ids: number[]) => Promise<AutoInputSearchResult[]>,
-    searchByValues: (value: string, filterIds?: number[], additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+export class AutoInputFilter {
+    constructor(ids: number[], codes: string[]) {
+        this.filteredIds = ids;
+        this.filteredCodes = codes;
+    }
+
+    applyFilter(data: AutoInputSearchResult) {
+        return data.code && this.filteredCodes.includes(data.code.trim()) || data.id && this.filteredIds.includes(data.id);
+    } 
+
+    filteredCodes: string[];
+    filteredIds: number[];
 }
 
-export enum AutoInputType {
-    USER,
-    DEBUG_USER,
-    COUNTRIES,
-    STATES
+export function getFilterForSelected (type: AutoInputTypeManager, data: (string | number)[]) {
+    let ids: number[] = [];
+    let codes: string[] = [];
+    if (type.codeOnly) {
+        codes = data.map (d => d as string);
+    } else {
+        ids = data.map (d => d as number);
+    }
+    return new AutoInputFilter(ids, codes);
+}
+
+export function filterSearchResult(query: string, results: AutoInputSearchResult[], filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
+    let value = query.trim().toLowerCase();
+    return results.filter ((result) => (result.description?.toLowerCase().includes (value) || result.code?.toLowerCase().includes(value)) && (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result)));
+}
+
+export function filterLoaded(results: AutoInputSearchResult[], filter?: AutoInputFilter) {
+    return results.filter(result => !filter || filter?.applyFilter (result));
+}
+
+/**
+ * @param T string if code is used, number if id is used
+ */
+export interface AutoInputTypeManager {
+    /**Extract data's code only, do not use Ids */
+    codeOnly: boolean,
+    loadByIds: (filter: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+    searchByValues: (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+    isPresent: () => Promise<boolean>
 }
 
 export class AutoInputDebugUserManager implements AutoInputTypeManager {
-    static singleton?: AutoInputDebugUserManager;
+    codeOnly: boolean = true;
 
-    static get (): AutoInputDebugUserManager {
-        if (!AutoInputDebugUserManager.singleton) AutoInputDebugUserManager.singleton = new AutoInputDebugUserManager();
-        return AutoInputDebugUserManager.singleton;
-    }
-
-    loadByIds (ids: number[]): Promise<AutoInputSearchResult[]> {
+    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputUserData ().then (results => {
-                resolve (results.filter (result => ids.includes (result.id)));
+                resolve (filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues (value: string, filterIds?: number[], additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputUserData ().then (results => {
                 resolve (
-                    results.filter (
-                        result => result.description.toLowerCase().includes (value.toLowerCase()) 
-                        && !(filterIds ?? []).includes (result.id)
-                    )
+                    filterSearchResult(value, results, filter, filterOut)
                 );
             });
         });
     }
+
+    isPresent (additionalValue?: any): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            getAutoInputUserData ().then (results => {
+                resolve (results.length > 0);
+            });
+        });
+    };
 }
 
 export class AutoInputCountriesManager implements AutoInputTypeManager {
-    static singleton?: AutoInputCountriesManager;
-    static get (): AutoInputCountriesManager {
-        if (!AutoInputCountriesManager.singleton) AutoInputCountriesManager.singleton = new AutoInputCountriesManager();
-        return AutoInputCountriesManager.singleton;
-    }
+    codeOnly: boolean = true;
 
-    loadByIds (ids: number[]): Promise<AutoInputSearchResult[]> {
+    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputCountries ().then (results => {
-                resolve (results.filter (result => ids.includes (result.id)));
+                resolve (results.filter (result => filter.applyFilter(result)));
             });
         });
     }
 
-    searchByValues (value: string, filterIds?: number[]): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputCountries ().then (results => {
                 resolve (
-                    results.filter (
-                        result => result.description.toLowerCase().includes (value.toLowerCase()) 
-                        && !(filterIds ?? []).includes (result.id)
-                    )
+                    filterSearchResult(value, results, filter, filterOut)
                 );
             });
         });
     }
+
+    isPresent (additionalValue?: any): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            getAutoInputCountries ().then (results => {
+                resolve (results.length > 0);
+            });
+        });
+    };
 }
 
 export class AutoInputStatesManager implements AutoInputTypeManager {
-    static singleton?: AutoInputStatesManager;
-    static get (): AutoInputStatesManager {
-        if (!AutoInputStatesManager.singleton) AutoInputStatesManager.singleton = new AutoInputStatesManager();
-        return AutoInputStatesManager.singleton;
-    }
+    codeOnly: boolean = true;
 
-    loadByIds (ids: number[]): Promise<AutoInputSearchResult[]> {
+    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputCountries ().then (results => {
-                resolve (results.filter (result => ids.includes (result.id)));
+            getAutoInputStates ().then (results => {
+                resolve (filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues (value: string, filterIds?: number[], additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, countryCode?: string): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputStates (additionalValues).then (results => {
+            if (!countryCode) resolve([]);
+            getAutoInputStates (countryCode!).then (results => {
                 resolve (
-                    results.filter (
-                        result => result.description.toLowerCase().includes (value.toLowerCase()) 
-                        && !(filterIds ?? []).includes (result.id)
-                    )
+                    filterSearchResult(value, results, filter, filterOut)
                 );
             });
         });
     }
-}
 
-export function getAutoInputTypeManager (type: AutoInputType): AutoInputTypeManager | undefined {
-    switch (type) {
-        case AutoInputType.DEBUG_USER:
-            return AutoInputDebugUserManager.get();
-        case AutoInputType.COUNTRIES:
-            return AutoInputCountriesManager.get();
-        case AutoInputType.STATES:
-            return AutoInputStatesManager.get();
-        default:
-            return undefined;
-    }
+    isPresent (countryCode?: any): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            if (!countryCode) resolve(false);
+            getAutoInputStates (countryCode!).then (results => {
+                resolve (results.length > 0);
+            });
+        });
+    };
 }

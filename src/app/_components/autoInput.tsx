@@ -1,17 +1,19 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import Image from "next/image";
-import { AutoInputSearchResult, AutoInputType, getAutoInputTypeManager } from "../_lib/components/autoInput";
+import { AutoInputFilter, AutoInputSearchResult, AutoInputTypeManager, getFilterForSelected } from "../_lib/components/autoInput";
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 
-export default function AutoInput ({className, disabled=false, fieldName, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, selectCodes=false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, initialData, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style, type}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
     /**Field name to be used in a form*/
     fieldName?: string;
-    initialIds?: number[],
+    filterIn?: AutoInputFilter,
+    filterOut?: AutoInputFilter,
+    initialData?: (number | string)[],
     inputStyle?: CSSProperties,
     label?: string,
     labelStyle?: CSSProperties,
@@ -26,16 +28,16 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     paramRequired?: boolean,
     placeholder?: string,
     required?: boolean,
-    /**Choose which value to extract from the selected object*/
-    selectCodes?: boolean,
+    /**Sets itself to required, whether there's anything in the remote datasource */
+    requiredIfPresent?: boolean,
     style?: CSSProperties,
-    type: AutoInputType
+    type: AutoInputTypeManager
   }>) {
     const t = useTranslations('components');
 
     /* States */
     /**Selected ids */
-    const [selectedIds, setSelectedIds] = useState(initialIds ?? []);
+    const [selectedIds, setSelectedIds] = useState(initialData ?? []);
     /**Rendered selected values */
     const [selectedValues, setSelectedValues] = useState<AutoInputSearchResult[]>([]);
     /**Read search input text */
@@ -55,11 +57,19 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
 
     /* Props check */
     const maxSelections = multiple == false ? 1 : max;
-    if ((selectedIds ?? []).length > maxSelections) throw 'Input values exceed maximum allowed';
+    if ((selectedIds).length > maxSelections) throw 'Input values exceed maximum allowed';
 
     /**Adds a new item to the selection */
     const addItem = (toAdd: AutoInputSearchResult) => {
-        setSelectedIds ([...selectedIds ?? [], toAdd.id]);
+        let cloneSelectedIds;
+        if (type.codeOnly) {
+            cloneSelectedIds = [...selectedIds as string[]];
+            cloneSelectedIds.push (toAdd.code!);
+        } else {
+            cloneSelectedIds = [...selectedIds as number[]];
+            cloneSelectedIds.push (toAdd.id!);
+        }
+        setSelectedIds (cloneSelectedIds);
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
@@ -69,9 +79,12 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     
     /**Remove a item from the selection */
     const removeItem = (toRemove: AutoInputSearchResult) => {
-        if (selectedIds?.includes (toRemove.id)) {
+        let containsCondition;
+        let identifier = type.codeOnly ? toRemove.code! : toRemove.id!
+        containsCondition = selectedIds.includes (identifier);
+        if (containsCondition) {
             let newSelectedIds = [...selectedIds ?? []];
-            newSelectedIds.splice (selectedIds.indexOf (toRemove.id), 1);
+            newSelectedIds.splice (selectedIds.indexOf (identifier), 1);
             let newSelectedValues = [...selectedValues ?? []];
             newSelectedValues.splice (selectedValues.indexOf (toRemove), 1);
             setSelectedIds (newSelectedIds);
@@ -88,7 +101,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     const searchItem = (searchString: string) => {
         setIsLoading(true);
         setSearchResults([]);
-        getAutoInputTypeManager(type)?.searchByValues(searchString.trim(), selectedIds, param).then (results => {
+        type.searchByValues(searchString.trim(), getFilterForSelected(selectedIds), param).then (results => {
             setSearchResults(results);
             setSearchError(results.length == 0);
         }).catch(err=>{
@@ -117,6 +130,9 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
         setSearchResults([]);
         setIsLoading(false);
         clearTimeout(searchTimeoutHandle);
+        if (requiredIfPresent) {
+
+        }
     }, [param]);
 
     /**Cancel any pending search event */
@@ -134,8 +150,10 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     }
 
     useEffect(()=> {
-        if (initialIds !== undefined)
-            getAutoInputTypeManager(type)?.loadByIds(initialIds).then((values)=>setSelectedValues (values))
+        if (initialData !== undefined) {
+            type.loadByIds(new AutoInputFilter(type.codeOnly ? [] : initialData as number[], type.codeOnly ? initialData as string[] : []))
+            .then((values)=>setSelectedValues (values));
+        }   
     }, []);
 
     /**
@@ -159,7 +177,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
         </div>;
     }
 
-    const valueToSet = selectCodes ? selectedValues.map(value => value.code!) : selectedIds?.map(id => ("" + id));
+    const valueToSet: (string | number | undefined)[] = selectedValues.map(value => type.codeOnly ? value.code! : value.id!);
 
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
         return <a key={index} className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
@@ -183,7 +201,7 @@ export default function AutoInput ({className, disabled=false, fieldName, initia
     return <>
         <div className={`autocomplete-input ${className} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
             <label htmlFor={fieldName} className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
-            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={valueToSet ?? []} required={required} onChange={checkChange}></input>
+            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={(valueToSet ?? []).join(",")} required={required} onChange={checkChange}></input>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}

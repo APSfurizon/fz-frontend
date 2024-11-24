@@ -110,9 +110,9 @@ export function getAutoInputCountries (): Promise<AutoInputSearchResult[]> {
     });
 }
 
-export function getAutoInputStates (countryCode: string): Promise<AutoInputSearchResult[]> {
+export function getAutoInputStates (countryCode?: string): Promise<AutoInputSearchResult[]> {
     return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
-        runRequest(new AutoInputStatesApiAction (), undefined, {"code": countryCode}).then ((data) => {
+        runRequest(new AutoInputStatesApiAction (), undefined, {"code": countryCode ?? ""}).then ((data) => {
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
                 const toReturn: AutoInputSearchResult = {
