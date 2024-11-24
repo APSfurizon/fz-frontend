@@ -11,15 +11,17 @@ export interface SaveButtonData {
     iconName: string
 }
 
-export default function DataForm ({action, onSuccess, onFail, children, className, disabled, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true}: Readonly<{
+export default function DataForm ({action, onSuccess, onFail, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true}: Readonly<{
     action: FormApiAction<any, any, any>,
     onSuccess?: (data: ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
+    checkFn?: () => boolean,
     children?: React.ReactNode,
     className?: string,
     disabled?: boolean,
     endpoint?: string,
     hideSave?: boolean,
+    disableSave?: boolean,
     loading: boolean,
     method?: string,
     setLoading: Dispatch<SetStateAction<boolean>>,
@@ -35,6 +37,13 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
     };
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+        if (checkFn) {
+            if (!checkFn()) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+        }
         setLoading (true);
         runFormRequest(action, new FormData(e.currentTarget))
             .then((responseData) => onSuccess && onSuccess (responseData))
@@ -51,7 +60,7 @@ export default function DataForm ({action, onSuccess, onFail, children, classNam
             {children}
             {!hideSave && (
             <div className="toolbar-bottom">
-                <Button type="submit" iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
+                <Button type="submit" disabled={disableSave} iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
             </div>
             )}
         </form>

@@ -6,10 +6,10 @@ import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import JanInput from "@/app/_components/janInput";
 import StatusBox from "@/app/_components/statusBox";
-import { AutoInputType } from "@/app/_lib/components/autoInput";
 import AutoInput from "@/app/_components/autoInput";
 import DataForm from "@/app/_components/dataForm";
 import Modal from "@/app/_components/modal";
+import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
 
 export default function Home() {
 
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
         </div>
         <div className="horizontal-list gap-2mm">
-        <AutoInput type={AutoInputType.DEBUG_USER} multiple={true} max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
+        <AutoInput manager={new AutoInputDebugUserManager()} multiple={true} max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
         <JanInput label={"Error"} hasError/>
         </div>
         <StatusBox>Triple room</StatusBox>

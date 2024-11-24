@@ -15,23 +15,29 @@ export class AutoInputFilter {
         this.filteredCodes = codes;
     }
 
-    applyFilter(data: AutoInputSearchResult) {
-        return data.code && this.filteredCodes.includes(data.code.trim()) || data.id && this.filteredIds.includes(data.id);
+    static getForSelected (type: AutoInputManager, data: (string | number)[]): AutoInputFilter {
+        let ids: number[] = [];
+        let codes: string[] = [];
+        if (type.codeOnly) {
+            codes = data as string[];
+        } else {
+            ids = data as number[];
+        }
+        return new AutoInputFilter(ids, codes);
+    }
+
+    merge(toMerge: AutoInputFilter) {
+        this.filteredCodes = Array.from(new Set([...this.filteredCodes, ...toMerge.filteredCodes]));
+        this.filteredIds = Array.from(new Set([...this.filteredIds, ...toMerge.filteredIds]))
+        return new AutoInputFilter (this.filteredIds, this.filteredCodes);
+    }
+
+    applyFilter(data: AutoInputSearchResult): boolean {
+        return data.code != undefined && this.filteredCodes.includes(data.code.trim()) || data.id != undefined && this.filteredIds.includes(data.id);
     } 
 
     filteredCodes: string[];
     filteredIds: number[];
-}
-
-export function getFilterForSelected (type: AutoInputTypeManager, data: (string | number)[]) {
-    let ids: number[] = [];
-    let codes: string[] = [];
-    if (type.codeOnly) {
-        codes = data.map (d => d as string);
-    } else {
-        ids = data.map (d => d as number);
-    }
-    return new AutoInputFilter(ids, codes);
 }
 
 export function filterSearchResult(query: string, results: AutoInputSearchResult[], filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
@@ -46,15 +52,15 @@ export function filterLoaded(results: AutoInputSearchResult[], filter?: AutoInpu
 /**
  * @param T string if code is used, number if id is used
  */
-export interface AutoInputTypeManager {
+export interface AutoInputManager {
     /**Extract data's code only, do not use Ids */
     codeOnly: boolean,
     loadByIds: (filter: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
     searchByValues: (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
-    isPresent: () => Promise<boolean>
+    isPresent: (additionalValues?: any) => Promise<boolean>
 }
 
-export class AutoInputDebugUserManager implements AutoInputTypeManager {
+export class AutoInputDebugUserManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
@@ -84,7 +90,7 @@ export class AutoInputDebugUserManager implements AutoInputTypeManager {
     };
 }
 
-export class AutoInputCountriesManager implements AutoInputTypeManager {
+export class AutoInputCountriesManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
@@ -114,7 +120,7 @@ export class AutoInputCountriesManager implements AutoInputTypeManager {
     };
 }
 
-export class AutoInputStatesManager implements AutoInputTypeManager {
+export class AutoInputStatesManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {

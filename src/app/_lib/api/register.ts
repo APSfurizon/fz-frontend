@@ -2,6 +2,7 @@ import { AutoInputSearchResult } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { getFlagEmoji } from "../components/userPicture";
 import { TOKEN_STORAGE_NAME } from "../constants";
+import { nullifyEmptyString } from "../utils";
 import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "./global";
 
 export interface RegisterPersonalInfo {
@@ -34,20 +35,21 @@ export interface RegisterResponse extends ApiResponse {
 export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
     mapToDTO = (data: FormData) => {
         let personalUserInformation: RegisterPersonalInfo = {
-            firstName: data.get('firstName')?.toString (),
-            lastName: data.get('lastName')?.toString (),
-            fiscalCode: data.get('fiscalCode')?.toString (),
-            birthCity: data.get('birthCity')?.toString (),
-            birthRegion: data.get('birthRegion')?.toString (),
-            birthCountry: data.get('birthCountry')?.toString (),
-            birthday: data.get('birthday')?.toString (),
-            residenceAddress: data.get('residenceAddress')?.toString (),
-            residenceZipCode: data.get('residenceZipCode')?.toString (),
-            residenceCity: data.get('residenceCity')?.toString (),
-            residenceRegion: data.get('residenceRegion')?.toString (),
-            residenceCountry: data.get('residenceCountry')?.toString (),
-            phoneNumber: data.get('phoneNumber')?.toString ()
+            firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
+            lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
+            fiscalCode:         nullifyEmptyString(data.get('fiscalCode')?.toString ()),
+            birthCity:          nullifyEmptyString(data.get('birthCity')?.toString ()),
+            birthRegion:        nullifyEmptyString(data.get('birthRegion')?.toString ()),
+            birthCountry:       nullifyEmptyString(data.get('birthCountry')?.toString ()),
+            birthday:           nullifyEmptyString(data.get('birthday')?.toString ()),
+            residenceAddress:   nullifyEmptyString(data.get('residenceAddress')?.toString ()),
+            residenceZipCode:   nullifyEmptyString(data.get('residenceZipCode')?.toString ()),
+            residenceCity:      nullifyEmptyString(data.get('residenceCity')?.toString ()),
+            residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
+            residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
+            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ())
         };
+
         let toReturn: RegisterData = {
             email: data.get('email')?.toString (),
             password: data.get('password')?.toString (),

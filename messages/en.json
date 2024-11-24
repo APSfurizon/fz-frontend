@@ -97,6 +97,12 @@
                     "birth_data": "Birth data",
                     "personal_info": "Personal info",
                     "residence_data": "Residential data"
+                },
+                "disclaimer_tos": {
+                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."
+                },
+                "disclaimer_data_protection": {
+                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle <terms>politiche sulla riservatezza</terms>."
                 }
             },
             "question": {

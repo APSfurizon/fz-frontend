@@ -73,56 +73,56 @@
         },
         "register": {
             "errors": {
-                "email_already_registered": "This email has been already used",
-                "network_error": "Network error",
-                "unknown_error": "Unknown error"
+                "email_already_registered": "Questa email è già stata usata",
+                "network_error": "Errore di rete",
+                "unknown_error": "Errore sconosciuto"
             },
             "form": {
                 "birth_city": {
-                    "label": "Birth city",
-                    "placeholder": "Enter the city you were born in"
+                    "label": "Comune di nascita",
+                    "placeholder": "Es: Bari"
                 },
                 "birth_country": {
-                    "label": "Birth country",
-                    "placeholder": "Enter the birth country"
+                    "label": "Paese",
+                    "placeholder": "Es: Italia"
                 },
                 "birth_region": {
-                    "label": "Birth region",
-                    "placeholder": "Enter the region you were born in"
+                    "label": "Provincia",
+                    "placeholder": "Es: Bari"
                 },
                 "birthday": {
-                    "label": "Birthday"
+                    "label": "Data di nascita"
                 },
                 "confirm_password": {
-                    "help": "Must be the same as the password",
-                    "label": "Confirm password",
-                    "placeholder": "Confirm your password"
+                    "help": "Deve combaciare con la password",
+                    "label": "Conferma password",
+                    "placeholder": "Conferma la tua password"
                 },
                 "email": {
                     "label": "Email",
-                    "placeholder": "Enter an email address"
+                    "placeholder": "esempio@furroso.com"
                 },
                 "first_name": {
-                    "label": "First name",
-                    "placeholder": "Enter your first name"
+                    "label": "Nome",
+                    "placeholder": "Inserisci il tuo nome"
                 },
                 "fiscal_code": {
-                    "label": "Fiscal code",
-                    "placeholder": "Enter the fiscal code"
+                    "label": "Codice fiscale",
+                    "placeholder": "Inserisci il codice fiscale"
                 },
                 "last_name": {
-                    "label": "Last name",
-                    "placeholder": "Enter your last name"
+                    "label": "Cognome",
+                    "placeholder": "Inserisci il tuo cognome"
                 },
                 "nickname": {
-                    "help": "Won't be used for log in",
-                    "label": "Nickname",
-                    "placeholder": "Enter your nickname"
+                    "help": "Il nome del tuo fursona principle. Non sarà usato per l'accesso",
+                    "label": "Soprannome",
+                    "placeholder": "Es: il nome del tuo fursona"
                 },
                 "password": {
-                    "help": "Must be at least 6 characters long",
+                    "help": "Deve essere lunga almeno 6 caratteri",
                     "label": "Password",
-                    "placeholder": "Enter a password"
+                    "placeholder": "Inserisci una password"
                 },
                 "phone_number": {
                     "label": "Telefono",
@@ -145,17 +145,23 @@
                     "placeholder": "Esempio: Barletta Andria Trani"
                 },
                 "residence_zip_code": {
-                    "label": "Codice avviamento postale",
-                    "placeholder": "Esempio: 76121"
+                    "label": "Codice postale",
+                    "placeholder": "Esempio: 70122"
                 },
                 "section": {
                     "birth_data": "Dati di nascita",
                     "personal_info": "Dati personali",
                     "residence_data": "Dati di fatturazione"
+                },
+                "disclaimer_tos": {
+                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."
+                },
+                "disclaimer_data_protection": {
+                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle <terms>politiche sulla riservatezza</terms>."
                 }
             },
             "question": {
-                "description": "La legislatura Italiana rende questi dati necessari per qualsiasi acquisto e tesseramento. Per ulteriori informazioni, consulta le politiche sulla riservatezza.",
+                "description": "La legislatura Italiana rende questi dati necessari per qualsiasi acquisto e tesseramento.",
                 "description_title": "Perché chiediamo questi dati?"
             },
             "login_here": "oppure accedi",
