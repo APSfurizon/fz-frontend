@@ -207,9 +207,9 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 {element.icon !== undefined &&
                     <Icon iconName={element.icon!}></Icon>
                 }
-                <div className="title small" style={{flex:1}}>
+                <span className="title small" style={{flex:1}}>
                     {element.description}
-                </div>
+                </span>
                 <span  onClick={()=>removeItem(element)}><Icon className="medium delete-selection" iconName={ICONS.CANCEL}></Icon></span>
             </a>;
     }

@@ -90,22 +90,31 @@ export class AutoInputDebugUserManager implements AutoInputManager {
     };
 }
 
+export interface CountrySearchResult extends AutoInputSearchResult {
+    phonePrefix: string
+}
+
 export class AutoInputCountriesManager implements AutoInputManager {
     codeOnly: boolean = true;
+    showNumber?: boolean = false;
 
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    constructor(showNumber?: boolean) {
+        this.showNumber = showNumber ?? false;
+    }
+
+    loadByIds (filter: AutoInputFilter): Promise<CountrySearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputCountries ().then (results => {
-                resolve (results.filter (result => filter.applyFilter(result)));
+            getAutoInputCountries (this.showNumber).then (results => {
+                resolve (results.filter (result => filter.applyFilter(result as AutoInputSearchResult)) as CountrySearchResult[]);
             });
         });
     }
 
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<CountrySearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputCountries ().then (results => {
+            getAutoInputCountries (this.showNumber).then (results => {
                 resolve (
-                    filterSearchResult(value, results, filter, filterOut)
+                    filterSearchResult(value, results, filter, filterOut) as CountrySearchResult[]
                 );
             });
         });
@@ -113,7 +122,7 @@ export class AutoInputCountriesManager implements AutoInputManager {
 
     isPresent (additionalValue?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            getAutoInputCountries ().then (results => {
+            getAutoInputCountries (this.showNumber).then (results => {
                 resolve (results.length > 0);
             });
         });

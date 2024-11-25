@@ -5,6 +5,18 @@ div.jan-input:has(input:required) label::after {
     color: red;
 }
 
+/* Error style */
+div.input-container:has(input.input-field.danger),
+div.jan-input.danger>div.input-container {
+    outline-color: var(--text-input-border-danger);
+}
+
+/* Success style */
+div.input-container:has(input.input-field.success),
+div.jan-input.success>div.input-container:has(input.input-field:valid) {
+    outline-color: var(--text-input-border-success);
+}
+
 div.jan-input {
 
     label {
@@ -47,11 +59,6 @@ div.jan-input {
     input.input-field:disabled {
         color: var(--text-input-color-disabled);
     }
-    
-    /* Error style */
-    div.input-container:has(input.input-field.danger) {
-        outline-color: var(--text-input-border-danger);
-    }
 
     /* Handle autofilled data */
     input:-webkit-autofill {
@@ -71,6 +78,6 @@ div.jan-input {
 }
 
 span.help-text {
-    margin-top: -0.8em;
+    margin-top: -1.7em;
     margin-left: 0.1em;
 }

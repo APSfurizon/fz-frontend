@@ -11,7 +11,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     fieldName?: string,
     helpText?: string,
     inputStyle?: CSSProperties,
-    inputType?: "text" | "email" | "password" | "number" | "date",
+    inputType?: "text" | "email" | "password" | "number" | "date" | "tel",
     label?: string,
     labelStyle?: CSSProperties,
     minLength?: number,

@@ -13,7 +13,7 @@ import "../../../styles/authentication/register.css";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import AutoInput from "@/app/_components/autoInput";
 import { RegisterFormAction } from "@/app/_lib/api/register";
-import { AutoInputCountriesManager, AutoInputStatesManager } from "@/app/_lib/components/autoInput";
+import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager } from "@/app/_lib/components/autoInput";
 import Checkbox from "@/app/_components/checkbox";
 
 export default function Register() {
@@ -41,6 +41,10 @@ export default function Register() {
   }
 
   const passwordMatch = confirmPassword === password;
+
+  const setPhoneNumber = (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => {
+
+  }
 
   const checkForm = () => {
     if (!tosAccepted || !privacyAccepted || !passwordMatch) {
@@ -75,18 +79,18 @@ export default function Register() {
       
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" helpText={t("register.form.password.help")}
         busy={loading} label={t("register.form.password.label")} placeholder={t("register.form.password.placeholder")}
-        onChange={(e) => setPassword(e.currentTarget.value)}/>
+        onChange={(e) => setPassword(e.currentTarget.value)} className={`${passwordMatch ? 'success' : 'danger'}`}/>
       <JanInput fieldName="confirmPassword" minLength={6} required={true} inputType="password" helpText={t("register.form.confirm_password.help")}
         busy={loading} label={t("register.form.confirm_password.label")} placeholder={t("register.form.confirm_password.placeholder")}
-        onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
+        onChange={(e) => setConfirmPassword(e.currentTarget.value)} className={`${passwordMatch ? 'success' : 'danger'}`}/>
       <hr></hr>
       {/* Ask user for name data*/}
       <span className="title medium bold highlight">{t("register.form.section.personal_info")}</span>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="firstName" required={true} inputType="text" busy={loading} label={t("register.form.first_name.label")}
           placeholder={t("register.form.first_name.placeholder")}/>
-        <JanInput fieldName="lastName" required={true} inputType="text" busy={loading} label={t("register.form.first_name.label")}
-          placeholder={t("register.form.first_name.placeholder")}/>
+        <JanInput fieldName="lastName" required={true} inputType="text" busy={loading} label={t("register.form.last_name.label")}
+          placeholder={t("register.form.last_name.placeholder")}/>
       </div>
       <hr></hr>
       {/* Ask user for birth data*/}
@@ -123,7 +127,14 @@ export default function Register() {
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="residenceAddress" required={true} inputType="text" busy={loading} label={t("register.form.residence_address.label")} placeholder={t("register.form.residence_address.placeholder")}/>
-        <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={loading} label={t("register.form.phone_number.label")} placeholder={t("register.form.phone_number.placeholder")}/>
+      </div>
+      <div className="form-pair horizontal-list gap-4mm">
+        {/* Phone number */}
+        <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager(true)} 
+          onChange={setPhoneNumber} label={t("register.form.phone_prefix.label")}
+          placeholder={t("register.form.phone_prefix.placeholder")}/>
+        <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={loading} label={t("register.form.phone_number.label")} 
+          placeholder={t("register.form.phone_number.placeholder")} style={{flex: "2"}}/>
       </div>
       <NoticeBox theme={NoticeTheme.FAQ} title={t("register.question.description_title")} className="descriptive">{t("register.question.description")}</NoticeBox>
       <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>{t.rich("register.form.disclaimer_tos.label", {

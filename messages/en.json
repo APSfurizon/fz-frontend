@@ -20,7 +20,8 @@
             "errors": {
                 "email_already_registered": "This email has been already used",
                 "network_error": "Network error",
-                "unknown_error": "Unknown error"
+                "unknown_error": "Unknown error",
+                "invalid_input": "Invalid input"
             },
             "form": {
                 "birth_city": {
@@ -68,6 +69,10 @@
                     "help": "Must be at least 6 characters long",
                     "label": "Password",
                     "placeholder": "Enter a password"
+                },
+                "phone_prefix": {
+                    "label": "Prefix",
+                    "placeholder": "Es: Italy (+39)"
                 },
                 "phone_number": {
                     "label": "Phone number",

@@ -1,9 +1,14 @@
+import { CachedCountries, CachedStates } from "../cache/cache";
 import { AutoInputSearchResult } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { getFlagEmoji } from "../components/userPicture";
 import { TOKEN_STORAGE_NAME } from "../constants";
 import { nullifyEmptyString } from "../utils";
 import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "./global";
+
+/*****************************/
+/*         Entities          */
+/*****************************/
 
 export interface RegisterPersonalInfo {
     firstName?: string;
@@ -72,7 +77,8 @@ export class RegisterFormAction implements FormApiAction<RegisterData, RegisterR
 /**Either a country or a region */
 export interface Place {
     name: string,
-    code: string
+    code: string,
+    phonePrefix: string,
 }
 
 export interface PlaceApiResponse extends ApiResponse {
@@ -95,15 +101,19 @@ export class AutoInputStatesApiAction implements RequestAction<PlaceApiResponse,
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export function getAutoInputCountries (): Promise<AutoInputSearchResult[]> {
+const CACHED_COUNTRIES = new CachedCountries();
+const CACHED_STATES = new CachedStates();
+
+
+export function getAutoInputCountries (showNumber?: boolean): Promise<AutoInputSearchResult[]> {
     return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
-        runRequest(new AutoInputCountriesApiAction (), undefined, undefined).then ((data) => {
+        CACHED_COUNTRIES.get().then ((data) => {
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
                 const toReturn: AutoInputSearchResult = {
                     id: index,
                     code: place.code,
-                    description: place.name,
+                    description: `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`,
                     icon: getFlagEmoji(place.code)
                 };
                 return toReturn;
@@ -114,7 +124,7 @@ export function getAutoInputCountries (): Promise<AutoInputSearchResult[]> {
 
 export function getAutoInputStates (countryCode?: string): Promise<AutoInputSearchResult[]> {
     return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
-        runRequest(new AutoInputStatesApiAction (), undefined, {"code": countryCode ?? ""}).then ((data) => {
+        CACHED_STATES.get (countryCode).then ((data) => {
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
                 const toReturn: AutoInputSearchResult = {

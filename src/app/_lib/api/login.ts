@@ -1,5 +1,5 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { TOKEN_STORAGE_NAME } from "../constants";
+import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../constants";
 import { ApiErrorResponse, ApiResponse } from "./global";
 
 export interface LoginData {
@@ -33,4 +33,7 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
 
 export function loginSuccess(body: LoginResponse) {
     localStorage.setItem(TOKEN_STORAGE_NAME, body.accessToken);
+    let sessionExpiry = new Date();
+    sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
+    document.cookie = `${TOKEN_STORAGE_NAME}=${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
 }

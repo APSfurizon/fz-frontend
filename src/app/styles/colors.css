@@ -72,6 +72,7 @@
     --text-input-border-normal: #4D5E6B;
     --text-input-border-disabled: #11191F;
     --text-input-border-danger:  #EC2F2F;
+    --text-input-border-success:  #35ec2f;
     
     /* Auto Complete */
     --autocomplete-bg: #242C38;

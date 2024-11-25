@@ -75,7 +75,8 @@
             "errors": {
                 "email_already_registered": "Questa email è già stata usata",
                 "network_error": "Errore di rete",
-                "unknown_error": "Errore sconosciuto"
+                "unknown_error": "Errore sconosciuto",
+                "invalid_input": "Dati non validi"
             },
             "form": {
                 "birth_city": {
@@ -123,6 +124,10 @@
                     "help": "Deve essere lunga almeno 6 caratteri",
                     "label": "Password",
                     "placeholder": "Inserisci una password"
+                },
+                "phone_prefix": {
+                    "label": "Prefisso",
+                    "placeholder": "Esempio: Italia (+39)"
                 },
                 "phone_number": {
                     "label": "Telefono",
