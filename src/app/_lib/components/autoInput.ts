@@ -91,7 +91,7 @@ export class AutoInputDebugUserManager implements AutoInputManager {
 }
 
 export interface CountrySearchResult extends AutoInputSearchResult {
-    phonePrefix: string
+    phonePrefix?: string
 }
 
 export class AutoInputCountriesManager implements AutoInputManager {

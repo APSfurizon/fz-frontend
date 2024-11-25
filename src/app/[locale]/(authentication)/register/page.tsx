@@ -13,7 +13,7 @@ import "../../../styles/authentication/register.css";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import AutoInput from "@/app/_components/autoInput";
 import { RegisterFormAction } from "@/app/_lib/api/register";
-import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager } from "@/app/_lib/components/autoInput";
+import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
 import Checkbox from "@/app/_components/checkbox";
 
 export default function Register() {
@@ -42,8 +42,8 @@ export default function Register() {
 
   const passwordMatch = confirmPassword === password;
 
-  const setPhoneNumber = (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => {
-
+  const extractPhonePrefix = (r: CountrySearchResult) => {
+    return r.phonePrefix ?? "";
   }
 
   const checkForm = () => {
@@ -131,8 +131,7 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         {/* Phone number */}
         <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager(true)} 
-          onChange={setPhoneNumber} label={t("register.form.phone_prefix.label")}
-          placeholder={t("register.form.phone_prefix.placeholder")}/>
+          label={t("register.form.phone_prefix.label")} placeholder={t("register.form.phone_prefix.placeholder")} idExtractor={(r) => extractPhonePrefix(r as CountrySearchResult)}/>
         <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={loading} label={t("register.form.phone_number.label")} 
           placeholder={t("register.form.phone_number.placeholder")} style={{flex: "2"}}/>
       </div>

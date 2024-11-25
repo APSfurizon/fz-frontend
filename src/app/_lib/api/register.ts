@@ -1,9 +1,9 @@
 import { CachedCountries, CachedStates } from "../cache/cache";
-import { AutoInputSearchResult } from "../components/autoInput";
+import { AutoInputSearchResult, CountrySearchResult } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { getFlagEmoji } from "../components/userPicture";
 import { TOKEN_STORAGE_NAME } from "../constants";
-import { nullifyEmptyString } from "../utils";
+import { nullifyEmptyString, nullifyEmptyStrings } from "../utils";
 import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "./global";
 
 /*****************************/
@@ -52,7 +52,7 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
             residenceCity:      nullifyEmptyString(data.get('residenceCity')?.toString ()),
             residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
             residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
-            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ())
+            phoneNumber:        nullifyEmptyStrings([data.get('phonePrefix')?.toString (), data.get('phoneNumber')?.toString ()])?.join('')
         };
 
         let toReturn: RegisterData = {
@@ -105,16 +105,17 @@ const CACHED_COUNTRIES = new CachedCountries();
 const CACHED_STATES = new CachedStates();
 
 
-export function getAutoInputCountries (showNumber?: boolean): Promise<AutoInputSearchResult[]> {
-    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySearchResult[]> {
+    return new Promise<CountrySearchResult[]> ((resolve, reject) => {
         CACHED_COUNTRIES.get().then ((data) => {
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
-                const toReturn: AutoInputSearchResult = {
+                const toReturn: CountrySearchResult = {
                     id: index,
                     code: place.code,
                     description: `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`,
-                    icon: getFlagEmoji(place.code)
+                    icon: getFlagEmoji(place.code),
+                    phonePrefix: place.phonePrefix
                 };
                 return toReturn;
             }));

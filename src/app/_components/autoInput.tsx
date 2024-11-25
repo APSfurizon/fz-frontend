@@ -9,7 +9,7 @@ import "../styles/components/autoInput.css";
  * 
  * @returns 
  */
-export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -17,6 +17,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     fieldName?: string;
     filterIn?: AutoInputFilter,
     filterOut?: AutoInputFilter,
+    idExtractor?: (r: AutoInputSearchResult) => string | number,
     initialData?: (number | string)[],
     inputStyle?: CSSProperties,
     label?: string,
@@ -70,12 +71,10 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
 
     /**Adds a new item to the selection */
     const addItem = (toAdd: AutoInputSearchResult) => {
-        let cloneSelectedIds;
+        let cloneSelectedIds = [...selectedIds];
         if (manager.codeOnly) {
-            cloneSelectedIds = [...selectedIds as string[]];
             cloneSelectedIds.push (toAdd.code!);
         } else {
-            cloneSelectedIds = [...selectedIds as number[]];
             cloneSelectedIds.push (toAdd.id!);
         }
         setSelectedIds (cloneSelectedIds);
@@ -214,6 +213,8 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
             </a>;
     }
 
+    const renderedValue = idExtractor ? selectedValues.map(val => idExtractor(val)) : valueToSet ?? [];
+    
     const checkChange = () => {
         setIsValid ((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
     }
@@ -221,7 +222,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     return <>
         <div className={`autocomplete-input ${className ?? ""} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
             <label htmlFor={fieldName} className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
-            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={(valueToSet ?? []).join(",")} required={isRequired} onChange={checkChange}></input>
+            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={renderedValue.join(",")} required={isRequired} onChange={checkChange}></input>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}
