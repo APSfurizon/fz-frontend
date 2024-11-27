@@ -32,8 +32,8 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
 }
 
 export function loginSuccess(body: LoginResponse) {
-    localStorage.setItem(TOKEN_STORAGE_NAME, body.accessToken);
+    localStorage.setItem(TOKEN_STORAGE_NAME, `Bearer ${body.accessToken}`);
     let sessionExpiry = new Date();
     sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
-    document.cookie = `${TOKEN_STORAGE_NAME}=${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
+    document.cookie = `${TOKEN_STORAGE_NAME}=Bearer ${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
 }

@@ -6,7 +6,7 @@ import useAuth from '@/app/_lib/api/hooks/useAuth';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
     const t = useTranslations('furpanel');
-    useAuth();
+    //useAuth();
     return (
         <div className="main-dialog rounded-s">
             <div className="horizontal-list gap-4mm">
