@@ -18,7 +18,6 @@ export async function middleware(req: NextRequest) {
         'Authorization': loginToken.value
       });
       const fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
-      console.log("Fetch status: " + fetchResult.status + " - " + fetchResult.statusText + " - " + loginToken.value + " " + JSON.stringify(fetchResult.body));
       if (fetchResult.ok) {
         return intlMiddleware(req);
       } else {

@@ -1,6 +1,6 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../constants";
-import { ApiErrorResponse, ApiResponse } from "./global";
+import { ApiErrorResponse, ApiResponse, RequestAction } from "./global";
 
 export interface LoginData {
     email?: string;
@@ -31,9 +31,26 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export function loginSuccess(body: LoginResponse) {
+function loginSuccess(body: LoginResponse) {
     localStorage.setItem(TOKEN_STORAGE_NAME, `Bearer ${body.accessToken}`);
     let sessionExpiry = new Date();
     sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
     document.cookie = `${TOKEN_STORAGE_NAME}=Bearer ${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
+}
+
+export interface LogoutResponse extends ApiResponse {
+    success: boolean
+}
+
+export class LogoutApiAction implements RequestAction<LogoutResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "states/get-countries";
+    onSuccess: (status: number, body?: LogoutResponse) => void = (status: number, body?: LogoutResponse) => {logoutSuccess(body)};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {logoutSuccess()};
+}
+
+function logoutSuccess(body?: LogoutResponse) {
+    localStorage.removeItem(TOKEN_STORAGE_NAME);
+    document.cookie = `${TOKEN_STORAGE_NAME}=; expires=${new Date().toUTCString()}; path=/`;
 }

@@ -104,10 +104,10 @@
                     "residence_data": "Residential data"
                 },
                 "disclaimer_tos": {
-                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."
+                    "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>."
                 },
                 "disclaimer_data_protection": {
-                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle <terms>politiche sulla riservatezza</terms>."
+                    "label": "By checking this box, you declare you've read and accepted the <terms>privacy policy</terms>."
                 }
             },
             "question": {

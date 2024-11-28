@@ -35,9 +35,9 @@ export default function Footer () {
             <span>{t('footer.address')}</span>
           </div>
           <p className="tiny color-subtitle center">
-            <span>Designed by </span>
+            <span>Made by </span>
             <a className="color-link" href="https://about.woffo.ovh">Drew</a>
-            <span>, co-engineered by </span>
+            <span>, </span>
             <a className="color-link" href="https://about.woffo.ovh">Stark</a>
             <span> & </span>
             <a className="color-link" href="https://about.woffo.ovh">Stranck</a>

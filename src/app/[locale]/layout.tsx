@@ -30,8 +30,11 @@ export default async function LocalizedLayout({
     <html lang={locale}>
       <body className="vertical-list">
         <NextIntlClientProvider messages={messages}>
-          <Header></Header>
           {children}
+          {/* <HeaderProvider>
+            <Header></Header>
+            {children}
+          </HeaderProvider> */}
           <div className="spacer"></div>
           <Footer></Footer>
         </NextIntlClientProvider>

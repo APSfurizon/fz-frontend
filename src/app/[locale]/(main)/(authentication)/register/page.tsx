@@ -9,12 +9,12 @@ import DataForm from "@/app/_components/dataForm";
 import Icon, { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
-import "../../../styles/authentication/register.css";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import AutoInput from "@/app/_components/autoInput";
 import { RegisterFormAction } from "@/app/_lib/api/register";
 import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
 import Checkbox from "@/app/_components/checkbox";
+import "../../../../styles/authentication/register.css";
 
 export default function Register() {
 
@@ -79,7 +79,7 @@ export default function Register() {
       
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" helpText={t("register.form.password.help")}
         busy={loading} label={t("register.form.password.label")} placeholder={t("register.form.password.placeholder")}
-        onChange={(e) => setPassword(e.currentTarget.value)} className={`${passwordMatch ? 'success' : 'danger'}`}/>
+        onChange={(e) => setPassword(e.currentTarget.value)}/>
       <JanInput fieldName="confirmPassword" minLength={6} required={true} inputType="password" helpText={t("register.form.confirm_password.help")}
         busy={loading} label={t("register.form.confirm_password.label")} placeholder={t("register.form.confirm_password.placeholder")}
         onChange={(e) => setConfirmPassword(e.currentTarget.value)} className={`${passwordMatch ? 'success' : 'danger'}`}/>

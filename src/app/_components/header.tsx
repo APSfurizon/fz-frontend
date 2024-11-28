@@ -8,18 +8,34 @@ import Button from "../_components/button";
 import "../styles/components/header.css";
 import { useEffect, useState } from 'react';
 import UserDropDown from './userDropdown';
+import { useHeaderUpdate } from '../_lib/context/headerProvider';
 
 export default function Header () {
     const t = useTranslations('common');
     const [headerData, setHeaderData] = useState<HeaderData>(EMPTY_HEADER_DATA);
     const [isLoading, setLoading] = useState(true);
+    const {updateHeader, setUpdateHeader} = useHeaderUpdate();
     const router = useRouter();
 
+    const headerUpdateLogic = (doUpdate: boolean) => {
+        if (doUpdate) {
+            getHeaderUserData().then((data)=> {
+                setHeaderData(data);
+            }).catch(()=>{
+                return EMPTY_HEADER_DATA;
+            }).finally(()=>{
+                setLoading(false);
+            });
+            setUpdateHeader(false);
+        }
+    }
+
     useEffect(()=> {
-        getHeaderUserData().then((data)=> {
-            setHeaderData(data);
-            setLoading(false);
-        });
+        headerUpdateLogic(updateHeader);
+    }, [updateHeader]);
+
+    useEffect(()=> {
+        headerUpdateLogic(true);
     }, []);
 
     return (
