@@ -51,9 +51,21 @@ export function runRequest (action: RequestAction<any, any>, body?: ApiRequest, 
         let useSearchParams = searchParams && Object.keys (searchParams).length > 0;
         const endpointUrl = `${API_BASE_URL}${action.urlAction}${useSearchParams ? "?"+new URLSearchParams(searchParams).toString() : ""}`
         fetch(endpointUrl, {method: action.method, body: body ? JSON.stringify(body) : null, headers: headers}).then((fulfilledData) => {
+            const contentType = fulfilledData.headers.get("content-type");
+            const correlationId = fulfilledData.headers.get('X-Correlation-Id') ?? undefined;
             // In case of controlled fail
             if (!fulfilledData.ok) {
                 try {
+                    if (!contentType || contentType.indexOf("application/json") < 0) {
+                        let data: ApiErrorResponse = {
+                            status: fulfilledData.status,
+                            errorMessage: "",
+                            requestId: correlationId
+                        };
+                        action.onFail && action.onFail(fulfilledData.status, data);
+                        reject(data);
+                        return;
+                    }
                     // Try decode the error
                     fulfilledData.json().then((data: ApiDetailedErrorResponse) => {
                         data.status = fulfilledData.status;
@@ -65,18 +77,33 @@ export function runRequest (action: RequestAction<any, any>, body?: ApiRequest, 
                     const data: ApiErrorResponse = {
                         status: fulfilledData.status,
                         errorMessage: ""+err,
-                        requestId: fulfilledData.headers.get('X-Correlation-Id') ?? undefined
+                        requestId: correlationId
                     }
                     action.onFail && action.onFail(fulfilledData.status, data);
                     reject(data);
                 }
             } else {
-                fulfilledData.json().then ((data) => {
-                    action.onSuccess (fulfilledData.status, data);
-                    resolve (data);
-                }).catch ((reason) => {
-                    reject (reason);
-                });
+                try {
+                    if (!contentType || contentType.indexOf("application/json") < 0) {
+                        const data: ApiResponse = {
+                            status: fulfilledData.status,
+                            requestId: correlationId
+                        };
+                        action.onSuccess (fulfilledData.status, data);
+                        resolve (data);
+                        return;
+                    }
+                    fulfilledData.json().then ((data) => {
+                        action.onSuccess (fulfilledData.status, data);
+                        resolve (data);
+                    }).catch ((reason) => {
+                        action.onFail && action.onFail(-1, reason);
+                        reject (reason);
+                    });
+                } catch (e) {
+                    action.onFail && action.onFail(-1, e);
+                    reject (e);
+                }
             }
         }).catch ((rejectedData) => {
             // If any network error occurs

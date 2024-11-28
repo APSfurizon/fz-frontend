@@ -1,21 +1,22 @@
 "use client"
 import {useTranslations} from 'next-intl';
-import { EMPTY_HEADER_DATA, HeaderData } from '../_lib/components/header';
+import { EMPTY_HEADER_DATA, getHeaderUserData, HeaderData } from '../_lib/components/header';
 import Image from "next/image";
 import Icon, { ICONS } from './icon';
+import { useRouter } from 'next/navigation';
 import Button from "../_components/button";
 import "../styles/components/header.css";
 import { useEffect, useState } from 'react';
 import UserDropDown from './userDropdown';
-import { getTestHeaderUserData } from '../_lib/debug';
 
 export default function Header () {
     const t = useTranslations('common');
     const [headerData, setHeaderData] = useState<HeaderData>(EMPTY_HEADER_DATA);
     const [isLoading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(()=> {
-        getTestHeaderUserData().then((data)=> {
+        getHeaderUserData().then((data)=> {
             setHeaderData(data);
             setLoading(false);
         });
@@ -49,7 +50,7 @@ export default function Header () {
                         ? <Button busy={isLoading}>{t('loading')}</Button>
                         : headerData.loggedIn 
                             ? <UserDropDown headerData={headerData}></UserDropDown>
-                            : <Button iconName='key'>{t('header.login')}</Button>
+                            : <Button onClick={()=>router.push('/login')} iconName='key'>{t('header.login')}</Button>
                 }
             </div>
         </header>

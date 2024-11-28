@@ -7,7 +7,7 @@ import { LoginFormAction } from "@/app/_lib/api/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import "../../../styles/authentication/login.css";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 
@@ -15,6 +15,7 @@ export default function Login() {
   const t = useTranslations("authentication");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     if(!isDetailedError (err)) {
       setError("network_error");
@@ -26,7 +27,10 @@ export default function Login() {
   }
 
   const manageSuccess = () => {
-    setTimeout(()=>redirect("/home"), 200);
+    setTimeout(()=>{
+      router.replace("/home");
+      router.refresh();
+    }, 200);
   }
 
   useTitle(t("login.title"));

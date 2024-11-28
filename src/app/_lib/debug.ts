@@ -11,8 +11,8 @@ export function getTestHeaderUserData (): Promise<HeaderData> {
     const toReturn: HeaderData = {
         error: false,
         loggedIn: true,
-        nickname: 'Drew',
-        profile_picture_url: EMPTY_PROFILE_PICTURE_SRC,
+        fursonaName: 'Drew',
+        propicPath: EMPTY_PROFILE_PICTURE_SRC,
         sponsorType: SponsorType.SPONSOR
     };
     return new Promise<HeaderData> ((resolve, reject) => {
