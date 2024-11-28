@@ -10,6 +10,7 @@ import Header from '../_components/header';
 export const metadata: Metadata = {
   title: "Furpanel",
   description: "Enjoy your next adventure",
+  icons: [{ rel: "icon", url: "/images/favicon.png" }]
 };
 
 export default async function LocalizedLayout({
