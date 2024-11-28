@@ -1,36 +1,51 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import Image from "next/image";
-import { AutoInputSearchResult, AutoInputType, getAutoInputTypeManager } from "../_lib/components/autoInput";
+import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "../_lib/components/autoInput";
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 
-export default function AutoInput ({className, disabled=false, fieldName, hasError=false, initialIds, inputStyle, label, labelStyle, max=5, minDecodeSize=3, multiple=false, onChange, placeholder, required = false, style, type=AutoInputType.DEBUG_USER}: Readonly<{
+/**
+ * 
+ * @returns 
+ */
+export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
     /**Field name to be used in a form*/
     fieldName?: string;
-    initialIds?: number[],
+    filterIn?: AutoInputFilter,
+    filterOut?: AutoInputFilter,
+    idExtractor?: (r: AutoInputSearchResult) => string | number,
+    initialData?: (number | string)[],
     inputStyle?: CSSProperties,
     label?: string,
+    /**Defines which auto input manager to use, who handles the search request, passes and filters search results */
+    manager: AutoInputManager,
     labelStyle?: CSSProperties,
     /**Max items a user can select, it is overridden to 1 if multiple is set to false */
     max?: number,
     /**Minimum number of chars before running a search query */
     minDecodeSize?: number,
     multiple?: boolean,
+    /**Do not throttle input events before launching a search request */
+    noDelay?: boolean,
     onChange?: (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => void,
+    param?: string,
+    /**Param is required for the component to be enabled */
+    paramRequired?: boolean,
     placeholder?: string,
     required?: boolean,
-    style?: CSSProperties,
-    type: AutoInputType
+    /**Sets itself to required, whether there's anything in the remote datasource */
+    requiredIfPresent?: boolean,
+    style?: CSSProperties
   }>) {
     const t = useTranslations('components');
 
     /* States */
     /**Selected ids */
-    const [selectedIds, setSelectedIds] = useState(initialIds);
+    const [selectedIds, setSelectedIds] = useState(initialData ?? []);
     /**Rendered selected values */
     const [selectedValues, setSelectedValues] = useState<AutoInputSearchResult[]>([]);
     /**Read search input text */
@@ -43,16 +58,26 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     const [isFocused, setIsFocused] = useState(false);
     /**Search results */
     const [searchResults, setSearchResults] = useState<AutoInputSearchResult[]>([]);
+    /**Validity */
+    const [isValid, setIsValid] = useState(false);
+    /**Required */
+    const [isRequired, setRequired] = useState(required);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
     /* Props check */
     const maxSelections = multiple == false ? 1 : max;
-    if ((selectedIds ?? []).length > maxSelections) throw 'Input values exceed maximum allowed';
+    if ((selectedIds).length > maxSelections) throw 'Input values exceed maximum allowed';
 
     /**Adds a new item to the selection */
     const addItem = (toAdd: AutoInputSearchResult) => {
-        setSelectedIds ([...selectedIds ?? [], toAdd.id]);
+        let cloneSelectedIds = [...selectedIds];
+        if (manager.codeOnly) {
+            cloneSelectedIds.push (toAdd.code!);
+        } else {
+            cloneSelectedIds.push (toAdd.id!);
+        }
+        setSelectedIds (cloneSelectedIds);
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
@@ -62,12 +87,13 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     
     /**Remove a item from the selection */
     const removeItem = (toRemove: AutoInputSearchResult) => {
-        if (selectedIds?.includes (toRemove.id)) {
+        let identifier = manager.codeOnly ? toRemove.code! : toRemove.id!;
+        if (selectedIds.includes (identifier)) {
             let newSelectedIds = [...selectedIds ?? []];
-            newSelectedIds.splice (selectedIds.indexOf (toRemove.id), 1);
+            newSelectedIds.splice (selectedIds.indexOf (identifier), 1);
             let newSelectedValues = [...selectedValues ?? []];
             newSelectedValues.splice (selectedValues.indexOf (toRemove), 1);
-            setSelectedIds (newSelectedIds);
+            setSelectedIds(newSelectedIds);
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
             onChange && onChange (selectedValues ?? [], undefined, toRemove);    
@@ -81,7 +107,9 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
     const searchItem = (searchString: string) => {
         setIsLoading(true);
         setSearchResults([]);
-        getAutoInputTypeManager(type)?.searchByValues(searchString.trim(), selectedIds).then (results => {
+        let excludeFilter = AutoInputFilter.getForSelected(manager, selectedIds);
+        if (filterOut) excludeFilter = excludeFilter.merge(filterOut);
+        manager.searchByValues(searchString.trim(), filterIn, excludeFilter, param).then (results => {
             setSearchResults(results);
             setSearchError(results.length == 0);
         }).catch(err=>{
@@ -99,9 +127,32 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
         if(searchInput.trim ().length >= minDecodeSize && isFocused){
             searchTimeoutHandle = setTimeout(() => {
                 searchItem(searchInput);
-            }, 500);
+            }, noDelay ? 0 : 500);
         } else setSearchResults([]);
     }, [searchInput, isFocused]);
+
+    /**Parameter changed, selections must be cleared */
+    useEffect(() => {
+        setIsFocused(false);
+        setSearchError(false);
+        setSearchResults([]);
+        setIsLoading(false);
+        clearTimeout(searchTimeoutHandle);
+        setRequired(required);
+        if (requiredIfPresent && param) {
+            manager.isPresent (param).then ((isPresent) => {
+                setRequired(isPresent);
+            });
+        } else if (param == null || param == undefined) {
+            setIsFocused(false);
+            setSearchError(false);
+            setSearchResults([]);
+            setIsLoading(false);
+            clearTimeout(searchTimeoutHandle);
+            setSelectedIds([]);
+            setSelectedValues([]);
+        }
+    }, [param]);
 
     /**Cancel any pending search event */
     const onSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -114,12 +165,14 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
         setSearchError(false);
         setSearchResults([]);
         setIsLoading(false);
-        window.clearTimeout(searchTimeoutHandle);
+        clearTimeout(searchTimeoutHandle);
     }
 
     useEffect(()=> {
-        if (initialIds !== undefined)
-            getAutoInputTypeManager(type)?.loadByIds(initialIds).then((values)=>setSelectedValues (values))
+        if (initialData !== undefined) {
+            manager.loadByIds(new AutoInputFilter(manager.codeOnly ? [] : initialData as number[], manager.codeOnly ? initialData as string[] : []))
+            .then((values)=>setSelectedValues (values));
+        }   
     }, []);
 
     /**
@@ -133,6 +186,9 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
             {element.imageUrl !== undefined &&
                 (<Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>)
             }
+            {element.icon !== undefined &&
+                (<Icon iconName={element.icon!}></Icon>)
+            }
             <div className="title" style={{flex:1}}>
                 {element.description}
             </div>
@@ -140,46 +196,64 @@ export default function AutoInput ({className, disabled=false, fieldName, hasErr
         </div>;
     }
 
+    const valueToSet: (string | number | undefined)[] = selectedValues.map(value => manager.codeOnly ? value.code! : value.id!);
+
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
-        return <a key={index} className="selected-value horizontal-list flex-vertical-center">
+        return <a key={index} className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
                 {element.imageUrl !== undefined &&
-                    (<Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>)
+                    <Image src={element.imageUrl!} width={32} height={32} alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
                 }
-                <div className="title small" style={{flex:1}}>
+                {element.icon !== undefined &&
+                    <Icon iconName={element.icon!}></Icon>
+                }
+                <span className="title small" style={{flex:1}}>
                     {element.description}
-                </div>
+                </span>
                 <span  onClick={()=>removeItem(element)}><Icon className="medium delete-selection" iconName={ICONS.CANCEL}></Icon></span>
             </a>;
     }
 
+    const renderedValue = idExtractor ? selectedValues.map(val => idExtractor(val)) : valueToSet ?? [];
+    
+    const checkChange = () => {
+        setIsValid ((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
+    }
+
     return <>
-        <input type="hidden" name={fieldName} value={selectedIds?.map(id => ("" + id))} required={required}></input>
-        <div className={`autocomplete-input ${className} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
-            <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
+        <div className={`autocomplete-input ${className ?? ""} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
+            <label htmlFor={fieldName} className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
+            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={renderedValue.join(",")} required={isRequired} onChange={checkChange}></input>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}
-                    <input
-                        ref={inputRef}
-                        className={`input-field title ${hasError ? "danger" : ""}`}
-                        style={{...inputStyle}}
-                        placeholder={placeholder ?? ""}
-                        type="text"
-                        disabled={disabled}
-                        onChange={onSearchTextChange}
-                        onFocus={()=>setIsFocused (true)}
-                        onBlur={onBlur}
-                        value={searchInput}
-                    />
-                    <span className="icon-container">
-                        { isLoading && isFocused
-                        ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-                        : <Icon className="medium" iconName={ICONS.SEARCH}></Icon>
-                        }
-                    </span>
+                    {
+                        selectedIds.length < maxSelections && (
+                            <input
+                                ref={inputRef}
+                                className={`input-field title ${!isValid && isRequired ? "danger" : ""}`}
+                                style={{...inputStyle}}
+                                placeholder={placeholder ?? ""}
+                                type="text"
+                                disabled={disabled || (paramRequired && !param) || (!isRequired && requiredIfPresent)}
+                                onChange={onSearchTextChange}
+                                onFocus={()=>setIsFocused (true)}
+                                onBlur={onBlur}
+                                value={searchInput}
+                            />
+                        ) || <div className="spacer"></div>
+                    }
+                    {
+                        multiple && valueToSet.length < maxSelections && 
+                        <span className="icon-container">
+                            { isLoading && isFocused
+                            ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
+                            : <Icon className="medium" iconName={ICONS.SEARCH}></Icon>
+                            }
+                        </span>
+                    }
                 </div>
                 {
-                    isFocused && (
+                    isFocused && valueToSet.length < maxSelections && (
                     <div tabIndex={0} className="search-result-container rounded-m" style={{position:'absolute',marginTop:"5px",flexDirection:'column',width:"100%",maxHeight: "250px",overflowY: "auto",}}>
                         {
                             searchInput.length < minDecodeSize

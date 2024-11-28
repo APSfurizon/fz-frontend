@@ -7,15 +7,15 @@ export default function Checkbox ({children, className, disabled, fieldName, onC
     className?: string,
     disabled?: boolean,
     fieldName?: string,
-    onClick?: React.MouseEventHandler,
+    onClick?: (event: MouseEvent<HTMLElement, globalThis.MouseEvent>, checked: boolean) => void,
     style?: CSSProperties,
   }>) {
     const [checked, setChecked] = useState(false);
     const clickPresent = onClick != undefined;
     return <>
         <input type="hidden" name={fieldName} value={""+checked}></input>
-        <button onClick={(event)=>{if (!disabled) { setChecked(!checked); clickPresent && onClick(event); }}}
-        disabled={disabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
+        <button type="button" onClick={(event)=>{if (!disabled) { setChecked(!checked); clickPresent && onClick(event, !checked); }}}
+            disabled={disabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
                 <Icon className="medium" iconName={checked ? ICONS.CHECK : ICONS.CLOSE}></Icon>
             </div>

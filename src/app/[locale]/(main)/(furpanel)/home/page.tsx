@@ -1,7 +1,7 @@
-'use client'
+"use client"
 import UserPicture from "@/app/_components/userPicture";
-import Button from "../../../_components/button";
-import Icon, { ICONS } from "../../../_components/icon";
+import Button from "../../../../_components/button";
+import Icon, { ICONS } from "../../../../_components/icon";
 import { useEffect, useState } from "react";
 import { UserPictureData } from "@/app/_lib/api/user";
 import Checkbox from "@/app/_components/checkbox";

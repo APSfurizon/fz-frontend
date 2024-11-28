@@ -1,30 +1,151 @@
 {
+    "authentication": {
+        "login": {
+            "create_account": "Create an account",
+            "errors": {
+                "email_not_registered": "User not found",
+                "invalid_credentials": "Credenziali errate",
+                "network_error": "Network error",
+                "unknown_error": "Unknown error"
+            },
+            "label_email": "Email",
+            "label_password": "Password",
+            "login": "Log in",
+            "placeholder_email": "Enter your email address",
+            "placeholder_password": "Enter your password",
+            "register_here": "or register here",
+            "title": "Log in"
+        },
+        "register": {
+            "errors": {
+                "email_already_registered": "This email has been already used",
+                "network_error": "Network error",
+                "unknown_error": "Unknown error",
+                "invalid_input": "Invalid input"
+            },
+            "form": {
+                "birth_city": {
+                    "label": "Birth city",
+                    "placeholder": "Ex: Barcelona"
+                },
+                "birth_country": {
+                    "label": "Birth country",
+                    "placeholder": "Select your birth country"
+                },
+                "birth_region": {
+                    "label": "Birth region",
+                    "placeholder": "Enter the region you were born in"
+                },
+                "birthday": {
+                    "label": "Birthday"
+                },
+                "confirm_password": {
+                    "help": "Must be the same as the password",
+                    "label": "Confirm password",
+                    "placeholder": "Confirm your password"
+                },
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Enter an email address"
+                },
+                "first_name": {
+                    "label": "First name",
+                    "placeholder": "Enter your first name"
+                },
+                "fiscal_code": {
+                    "label": "Fiscal code",
+                    "placeholder": "Enter the fiscal code"
+                },
+                "last_name": {
+                    "label": "Last name",
+                    "placeholder": "Enter your last name"
+                },
+                "nickname": {
+                    "help": "Won't be used for log in",
+                    "label": "Nickname",
+                    "placeholder": "Enter your nickname"
+                },
+                "password": {
+                    "help": "Must be at least 6 characters long",
+                    "label": "Password",
+                    "placeholder": "Enter a password"
+                },
+                "phone_prefix": {
+                    "label": "Prefix",
+                    "placeholder": "Es: Italy (+39)"
+                },
+                "phone_number": {
+                    "label": "Phone number",
+                    "placeholder": "Enter your phone number"
+                },
+                "residence_address": {
+                    "label": "Address",
+                    "placeholder": "Enter your address"
+                },
+                "residence_city": {
+                    "label": "City",
+                    "placeholder": "Enter the city you're living in"
+                },
+                "residence_country": {
+                    "label": "Country",
+                    "placeholder": "Enter your current country"
+                },
+                "residence_region": {
+                    "label": "Region",
+                    "placeholder": "Enter your region"
+                },
+                "residence_zip_code": {
+                    "label": "Zip code",
+                    "placeholder": "Enter the city's zip code"
+                },
+                "section": {
+                    "birth_data": "Birth data",
+                    "personal_info": "Personal info",
+                    "residence_data": "Residential data"
+                },
+                "disclaimer_tos": {
+                    "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>."
+                },
+                "disclaimer_data_protection": {
+                    "label": "By checking this box, you declare you've read and accepted the <terms>privacy policy</terms>."
+                }
+            },
+            "question": {
+                "description": "Italy's laws make this data necessary to perform any sort of purchase and membership subscription. Be sure to check the privacy policy.",
+                "description_title": "Why are you asking this data?"
+            },
+            "login_here": "or log in here",
+            "register": "Register",
+            "title": "Registration"
+        },
+        "title": "authentication"
+    },
     "common": {
-        "loading": "Loading...",
         "footer": {
+            "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italy",
             "code_of_conduct": "Code of Conduct",
-            "volunteers": "Volunteers",
             "contact_us": "Contact us",
             "society_name": "Social promotion association Furizon",
-            "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italy"
+            "volunteers": "Volunteers"
         },
         "header": {
-            "home": "Home",
-            "nose_count": "Nose count",
-            "information": "About",
+            "alt_logo": "Furizon logo",
+            "alt_profile_picture": "Profile picture",
             "archive": "Archive",
+            "home": "Home",
+            "information": "About",
             "login": "Login",
             "logout": "Logout",
-            "alt_logo": "Furizon logo",
-            "alt_profile_picture": "Profile picture"
-        }
+            "nose_count": "Nose count"
+        },
+        "loading": "Loading..."
     },
     "components": {
         "autoinput": {
-            "no_results": "No results.",
             "alt_result_image": "Image of {description}",
-            "guide": "Enter at least {minSize} characters",
-            "loading_data": "Loading data..."
+            "guide": "Enter at least {minSize, plural, =1 {a character} other {# characters}}",
+            "loading_data": "Loading data...",
+            "no_results": "No results."
         },
         "dataForm": {
             "save": "Save"
@@ -34,11 +155,14 @@
         }
     },
     "furpanel": {
-        "home":{
-            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
-        },
         "badge": {
             "title": "Badge"
+        },
+        "debug": {
+            "title": "Debug"
+        },
+        "home": {
+            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
         },
         "room": {
             "title": "Room"
@@ -48,21 +172,6 @@
         },
         "user": {
             "title": "User"
-        },
-        "debug": {
-            "title": "Debug"
-        }
-    },
-    "authentication": {
-        "login": {
-            "login": "Log in",
-            "label_email": "Email",
-            "placeholder_email": "Enter your email address",
-            "label_password": "Password",
-            "placeholder_password": "Enter your password",
-            "errors": {
-                "unknown_error": "Unknown error"
-            }
         }
     }
 }

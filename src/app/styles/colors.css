@@ -5,6 +5,7 @@
     
     --text-subtitle: #9a9a9a;
     --text-link: #2395D6;
+    --text-status-error: #e44f4f;
     --main-dialog-background: #141E26;
     
     /* Footer */
@@ -71,6 +72,7 @@
     --text-input-border-normal: #4D5E6B;
     --text-input-border-disabled: #11191F;
     --text-input-border-danger:  #EC2F2F;
+    --text-input-border-success:  #35ec2f;
     
     /* Auto Complete */
     --autocomplete-bg: #242C38;

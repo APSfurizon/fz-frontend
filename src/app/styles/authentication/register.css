@@ -17,3 +17,8 @@ a.suggestion {
     display: inline-block;
     width: 100%;
 }
+
+div.form-pair div.jan-input,
+div.form-pair div.autocomplete-input {
+    flex: 1;
+}

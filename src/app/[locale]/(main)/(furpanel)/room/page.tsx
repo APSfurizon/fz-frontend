@@ -1,6 +1,6 @@
 'use client'
-import Button from "../../../_components/button";
-import { ICONS } from "../../../_components/icon";
+import Button from "../../../../_components/button";
+import { ICONS } from "../../../../_components/icon";
 import { useState } from "react";
 
 export default function RoomPage() {

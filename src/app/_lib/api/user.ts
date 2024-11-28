@@ -26,8 +26,8 @@ export const EMPTY_USER_PICTURE: UserPictureData = {
 
 export function getUserPicture (fromHeader: HeaderData): UserPictureData {
     return {
-        nickname: fromHeader.nickname,
-        profile_picture_url: fromHeader.profile_picture_url,
+        nickname: fromHeader.fursonaName,
+        profile_picture_url: fromHeader.propicPath,
         sponsorType: fromHeader.sponsorType
     };
 }

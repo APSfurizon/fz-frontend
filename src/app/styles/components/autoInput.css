@@ -9,11 +9,15 @@ div.autocomplete-input {
         display: inline-block;
     }
 
+    label.required::after {
+        content: "*";
+        color: red;
+    }
+
     div.input-container {
         background: var(--text-input-bg);
         outline: 1px solid var(--text-input-border-normal);
         gap: 0.2em;
-        padding-left: 0.1em;
         flex-wrap: wrap;
     }
 
@@ -81,6 +85,10 @@ div.autocomplete-input {
         box-shadow: 0px 3px 20px 1px #0000003F;
     }
 
+    :has(input.input-field:not(:focus)) .search-result-container {
+        visibility: collapse;
+    }
+
     .search-result {
         background: var(--suggestion-box-bg);
         border: 0px solid var(--text-input-border-normal);
@@ -94,10 +102,20 @@ div.autocomplete-input {
         width: fit-content;
         cursor: default;
         padding: 0.3125em;
+        margin: 0.05em;
         background-color: var(--autocomplete-selected-value-bg);
         border-radius: 1000px;
         overflow: hidden;
         gap: 0.3125em;
+    }
+
+    .selected-value.single {
+        flex: 1;
+        border-radius: .2em;
+    }
+
+    :has(.single) .spacer {
+        display: none;
     }
 
     .selected-value:hover {
@@ -118,6 +136,15 @@ div.autocomplete-input {
 
     .selected-value .delete-selection:hover {
         color: var(--autocomplete-danger-normal);
+    }
+
+    .suppressed-input {
+        max-width: 0px;
+        max-height: 0px;
+        margin: 0;
+        padding: 0px;
+        outline: none;
+        border: none;
     }
 
 }

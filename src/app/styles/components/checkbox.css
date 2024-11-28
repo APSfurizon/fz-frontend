@@ -6,6 +6,7 @@ button.checkbox {
     border: none;
     align-items: center;
     gap: 0.4em;
+    text-align: left;
 }
 
 button.checkbox div.box {
