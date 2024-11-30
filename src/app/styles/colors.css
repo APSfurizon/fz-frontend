@@ -101,6 +101,9 @@
     --modal-dialog-bg: #141E26;
     --modal-button-close: #EC2F2F;
 
+    --upload-bg: #242C38;
+    --upload-border: #E9E9E9;
+
 }
 
 @media (prefers-color-scheme: dark) {

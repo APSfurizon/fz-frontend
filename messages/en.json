@@ -21,7 +21,8 @@
                 "email_already_registered": "This email has been already used",
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
-                "invalid_input": "Invalid input"
+                "invalid_input": "Invalid input",
+                "region_not_provided": "Region not provided"
             },
             "form": {
                 "birth_city": {
@@ -152,6 +153,13 @@
         },
         "modal": {
             "close": "Close"
+        },
+        "upload": {
+            "alt_preview_image": "Preview of the uploaded picture",
+            "select_image": "Select an image",
+            "loading_uploads": "Loading...",
+            "open": "Open...",
+            "upload": "Upload"
         }
     },
     "furpanel": {

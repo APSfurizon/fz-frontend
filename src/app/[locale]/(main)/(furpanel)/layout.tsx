@@ -9,7 +9,7 @@ import Modal from '@/app/_components/modal';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
     const t = useTranslations('furpanel');
-    const {isOpen, title, modalChildren, showModal, hideModal} = useModalUpdate();
+    const {isOpen, title, modalChildren, hideModal} = useModalUpdate();
     return <>
         <div className="main-dialog rounded-s">
             <div className="horizontal-list gap-4mm">

@@ -1,0 +1,30 @@
+div.upload-container {
+    width: fit-content;
+    padding: 0.625em;
+    background-color: var(--upload-bg);
+
+    * {
+        width: 100%;
+    }
+
+    div.image-container {
+        border: 2px solid var(--upload-border);
+    }
+
+    img.upload-picture {
+        display: block;
+    }
+}
+
+.suppressed-input {
+    max-width: 0px;
+    max-height: 0px;
+    margin: 0px;
+    padding: 0px;
+    outline: none;
+    border: none;
+}
+
+.suppressed-input * {
+    visibility: collapse;
+}

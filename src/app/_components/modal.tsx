@@ -3,22 +3,23 @@ import Icon, { ICONS } from "./icon";
 import "../styles/components/modal.css";
 import { useTranslations } from "next-intl";
 
-export default function Modal ({children, className, onClose, open, overlayClassName, overlayStyle, showHeader=true, style, title }: Readonly<{
-    children?: React.ReactNode, className?: string, onClose: Function, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, showHeader?: boolean, style?: CSSProperties, title?: string;
+export default function Modal ({children, className, onClose, open, overlayClassName, overlayStyle, showHeader=true, style, title, zIndex=500 }: Readonly<{
+    children?: React.ReactNode, className?: string, onClose: Function, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, showHeader?: boolean, style?: CSSProperties, title?: string, zIndex?: number;
 }>) {
     const t = useTranslations("components");
     return <>
         <div className={`modal-overlay ${overlayClassName ?? ""} ${open ? "open" : ""}`}></div>
-        <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`}>
+        <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`} style={{zIndex: zIndex}}>
             {
                 showHeader && (
                     <div className="modal-header horizontal-list">
-                        <span className="header-title title bold medium">{title}</span>
+                        <p className="header-title title bold medium">{title}</p>
+                        <div className="spacer"></div>
                         <a className="header-close" onClick={(e)=>onClose(e)} title={t("modal.close")}><Icon iconName={ICONS.CANCEL}></Icon></a>
                     </div>
                 )
             }
-            {children}
+            {open && children}
         </div>
     </>
 }

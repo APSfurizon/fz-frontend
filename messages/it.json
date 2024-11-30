@@ -31,6 +31,13 @@
         },
         "modal": {
             "close": "Chiudi"
+        },
+        "upload": {
+            "alt_preview_image": "Anteprima dell'immagine caricata",
+            "select_image": "Seleziona immagine",
+            "loading_uploads": "Caricamento...",
+            "open": "Apri...",
+            "upload": "Carica"
         }
     },
     "furpanel": {
@@ -76,7 +83,8 @@
                 "email_already_registered": "Questa email è già stata usata",
                 "network_error": "Errore di rete",
                 "unknown_error": "Errore sconosciuto",
-                "invalid_input": "Dati non validi"
+                "invalid_input": "Dati non validi",
+                "region_not_provided": "Provincia non fornita"
             },
             "form": {
                 "birth_city": {
