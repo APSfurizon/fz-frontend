@@ -139,7 +139,9 @@
             "logout": "Logout",
             "nose_count": "Nose count"
         },
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
     },
     "components": {
         "autoinput": {
@@ -159,7 +161,9 @@
             "select_image": "Select an image",
             "loading_uploads": "Loading...",
             "open": "Open...",
-            "upload": "Upload"
+            "delete": "Delete",
+            "upload": "Upload",
+            "crop": "Crop"
         }
     },
     "furpanel": {

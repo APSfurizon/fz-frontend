@@ -11,6 +11,10 @@ div.upload-container {
         border: 2px solid var(--upload-border);
     }
 
+    div.image-container.danger {
+        border-color: var(--upload-border-danger);
+    }
+
     img.upload-picture {
         display: block;
     }
@@ -27,4 +31,34 @@ div.upload-container {
 
 .suppressed-input * {
     visibility: collapse;
+}
+
+label.upload-label {
+    margin-left: 0.125em;
+    display: inline-block;
+}
+
+div.crop-container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    width: 100%;
+}
+
+div.crop-container > * {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    outline: 2px solid var(--upload-border);
+}
+
+.crop-image {
+    align-items: center;
+    height: max-content;
+    width: max-content;
+    max-width: 80vw;
+    max-height: 60vh;
+}
+
+.crop-canvas {
+    position: absolute;
 }

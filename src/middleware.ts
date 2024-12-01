@@ -17,8 +17,12 @@ export async function middleware(req: NextRequest) {
         'Content-type': 'application/json',
         'Authorization': loginToken.value
       });
-      const fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
-      if (fetchResult.ok) {
+      let fetchResult: Response | undefined = undefined;
+      try {
+        fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
+      } catch (err) {}
+
+      if (fetchResult && fetchResult.ok) {
         return intlMiddleware(req);
       } else {
         req.cookies.delete(TOKEN_STORAGE_NAME);

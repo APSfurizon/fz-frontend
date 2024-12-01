@@ -5,68 +5,141 @@ import { ChangeEvent, ChangeEventHandler, MouseEvent, useEffect, useRef, useStat
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
-import { Media, UploadPhase } from '../_lib/components/upload';
+import { getImageSettings, HandleSettings, ImageSettings, Media, VALID_FILE_TYPES, validateImage } from '../_lib/components/upload';
 import Button from './button';
-import Modal from './modal';
-import UploadDialog from '../_dialogues/uploadDialog';
 import "../styles/components/userUpload.css";
+import Modal from './modal';
 
-export default function Upload ({initialData, directUpload = false, fieldName, isRequired=false, readonly=false, size=96, uploadType = "profile"}: Readonly<{
+export default function Upload ({cropTitle, initialData, fieldName, isRequired=false, label, readonly=false, requireCrop = false, size=96, uploadType = "profile"}: Readonly<{
+    cropTitle?: string,
     initialData?: number,
-    directUpload?: boolean,
     fieldName?: string,
     isRequired?: boolean,
+    label?: string,
+    requireCrop?: boolean,
     readonly?: boolean,
     size?: number,
     uploadType?: "full" | "profile"
 }>) { 
     const t = useTranslations('components');
-    const [isLoading, setLoading] = useState(true);
+    const tcommon = useTranslations('common');
+    const [isLoading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
     const [media, setMedia] = useState<Media | undefined>();
     const inputRef = useRef<HTMLInputElement> (null);
-    /* Upload dialog states */
-    const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+    {/* Crop dialog */}
+    const previewRef = useRef<HTMLImageElement> (null);
+    const canvasRef = useRef<HTMLCanvasElement> (null);
+    const [cropDialogOpen, setCropDialogOpen] = useState(false);
+    const [preview, setPreview] = useState<ImageBitmap>();
+    const [previewString, setPreviewString] = useState<string>();
+    const [imageSettings, setImageSettings] = useState<ImageSettings>();
+    const [topHandle, setTopHandle] = useState<HandleSettings>({x: 10, y:10});
+    const [bottomHandle, setBottomHandle] = useState<HandleSettings>({x: 10, y:10});
 
+    /**Loads the initial value media via its id */
     useEffect(()=> {
         if (initialData) {
 
         }
     }, [initialData]);
 
-    const onPreview = (e: ChangeEvent<HTMLInputElement>) => {
+    const openFileDialog = () => {
+        inputRef.current?.click();
+    };
+
+    /**Whenever a user chooses a picture file */
+    const onFileChosen = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.files && e.currentTarget.files.length == 1) {
-            //setPhase(UploadPhase.PREVIEW);
-            //setPreviewUrl(URL.createObjectURL(inputRef.current!.files![0]))
-        } else {
-            //setPhase(UploadPhase.EMPTY);
+            validateImage(inputRef.current!.files![0]).then((image)=>{
+                if (requireCrop) {
+                    setPreview(image);
+                    if (previewString) URL.revokeObjectURL(previewString);
+                    setPreviewString(URL.createObjectURL(inputRef.current!.files![0]));
+                    setImageSettings(getImageSettings(image, previewRef.current!));
+                    setCropDialogOpen(true);
+                } else {
+                    onFileUpload ();
+                }
+                setError(false);
+            }).catch(()=>{
+                setError(true);
+            })
         }
+    };
+
+    useEffect(()=> {
+        const ctx = canvasRef.current!.getContext("2d");
+        if (ctx == null) return;
+        for (let handle of [topHandle, bottomHandle]) {
+            ctx.beginPath();
+            ctx.arc(handle.x, handle.y, 60, 0, 2*Math.PI);
+            ctx.fillStyle = "#000000";
+            ctx.fill();
+        }
+        
+    }, [topHandle, bottomHandle]);
+
+    /**
+     * When the user has chosen a file to upload or accepted the chosen file's crop settings
+     */
+    const onFileUpload = () => {
+
+    };
+
+    const onPreviewLoaded = () => {
+        if (isLoading || !preview) return;
+        setImageSettings(getImageSettings(preview, previewRef.current!));
     }
-    
-    const imageSrc = media?.path ?? EMPTY_PROFILE_PICTURE_SRC;
+
+    /**
+     * When the user wants to delete the uploaded media
+     */
+    const onDeleteRequest = () => {
+        
+    }
 
     return <>
+        <label htmlFor={fieldName} className={`upload-label title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}>{label}</label>
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={media?.id} required={isRequired}></input>
         <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
-            <div className={`image-container rounded-s`}>
-                <Image className="rounded-s upload-picture" src={imageSrc}
+            <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
+                <Image className="rounded-s upload-picture" src={media?.path ?? EMPTY_PROFILE_PICTURE_SRC}
                     alt={t('upload.alt_preview_image')} width={size} height={size}
                     style={{aspectRatio: "1", maxWidth: size, maxHeight: size, objectFit: "contain"}}>
                 </Image>
             </div>
-            <div className="tools-container">
-                <Button onClick={()=>setUploadDialogOpen(true)} iconName={directUpload ? ICONS.CLOUD_UPLOAD : ICONS.FILE_OPEN} disabled={readonly}>{t('upload.open')}</Button>
+            <div className="horizontal-list gap-2mm">
+                <Button title={t('upload.open')} onClick={()=>openFileDialog()} iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={isLoading}>{!media && t('upload.open')}</Button>
+                {media && <Button title={t('upload.upload')} className="danger" onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly} busy={isLoading}></Button>}
             </div>
         </div>
-        {/* Upload dialog */}
-        <Modal zIndex={401} open={uploadDialogOpen} onClose={()=>setUploadDialogOpen(false)} title={t("upload.select_image")}>
-            <UploadDialog zIndex={401} >
 
-            </UploadDialog>
-        </Modal>
         {/* Form data */}
         <form className="suppressed-input">
             <input type="hidden" value={uploadType}></input>
-            <input type="file" ref={inputRef} onChange={onPreview}></input>
+            <input type="file" accept={VALID_FILE_TYPES.join(',')} ref={inputRef} onChange={onFileChosen}></input>
         </form>
+
+        {/* Crop dialog */}
+        <Modal open={cropDialogOpen} title={cropTitle ?? t("upload.crop")} onClose={()=> setCropDialogOpen(false)}>
+            <div className="crop-container">
+                <Image width={256} height={256} alt="" src={previewString ?? EMPTY_PROFILE_PICTURE_SRC}
+                    className={"crop-image"} style={{objectFit: "contain"}} ref={previewRef}
+                    onLoad={()=>onPreviewLoaded()}>
+                </Image>
+                <canvas ref={canvasRef} className="crop-canvas" width={previewRef.current?.clientWidth}
+                    height={previewRef.current?.clientHeight}>
+                </canvas>
+            </div>
+            <span>{imageSettings?.width} - {imageSettings?.height}. Resize factor: {imageSettings?.resizeFactor}</span>
+            <div className="bottom-toolbar">
+                <Button title={tcommon('cancel')} className="danger" onClick={()=>onDeleteRequest()}
+                    iconName={ICONS.CANCEL} disabled={readonly} busy={isLoading}>{tcommon('cancel')}</Button>
+                <div className="spacer"></div>
+                <Button title={t('upload.upload')} onClick={()=>openFileDialog()}
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={isLoading}>{!media && t('upload.upload')}</Button>    
+            </div>
+        </Modal>    
     </>
 }

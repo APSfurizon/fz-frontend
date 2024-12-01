@@ -15,6 +15,7 @@ export const ICONS = Object.freeze({
     CLOSE: "close",
     CLOUD_UPLOAD: "cloud_upload",
     CONTEXTUAL_TOKEN: "contextual_token",
+    DELETE: "delete",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
     ERROR: "error",

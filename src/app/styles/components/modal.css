@@ -50,3 +50,8 @@ div.modal-dialog div.modal-header a.header-close {
 div.modal-dialog div.modal-header a.header-close:hover {
     color: var(--modal-button-close);
 }
+
+div.modal-dialog div.bottom-toolbar {
+    display: flex;
+    flex-direction: row;
+}

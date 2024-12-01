@@ -1,6 +1,5 @@
 {
     "common": {
-        "loading": "Caricamento...",
         "footer": {
             "code_of_conduct": "Codice di Condotta",
             "volunteers": "Volontari",
@@ -17,7 +16,10 @@
             "logout": "Esci",
             "alt_logo": "Logo di furizon",
             "alt_profile_picture": "Foto profilo"
-        }
+        },
+        "loading": "Caricamento...",
+        "confirm": "Conferma",
+        "cancel": "Cancella"
     },
     "components": {
         "autoinput": {
@@ -37,7 +39,9 @@
             "select_image": "Seleziona immagine",
             "loading_uploads": "Caricamento...",
             "open": "Apri...",
-            "upload": "Carica"
+            "delete": "Elimina",
+            "upload": "Carica",
+            "crop": "Ritaglia"
         }
     },
     "furpanel": {

@@ -8,7 +8,7 @@ export default function Modal ({children, className, onClose, open, overlayClass
 }>) {
     const t = useTranslations("components");
     return <>
-        <div className={`modal-overlay ${overlayClassName ?? ""} ${open ? "open" : ""}`}></div>
+        <div className={`modal-overlay ${overlayClassName ?? ""} ${open ? "open" : ""}`} style={{zIndex: zIndex}}></div>
         <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`} style={{zIndex: zIndex}}>
             {
                 showHeader && (
@@ -19,7 +19,7 @@ export default function Modal ({children, className, onClose, open, overlayClass
                     </div>
                 )
             }
-            {open && children}
+            {children}
         </div>
     </>
 }

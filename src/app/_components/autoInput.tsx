@@ -220,7 +220,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     }
 
     return <>
-        <div className={`autocomplete-input ${className ?? ""} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 9999 : 0}}>
+        <div className={`autocomplete-input ${className ?? ""} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 100 : 0}}>
             <label htmlFor={fieldName} className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={renderedValue.join(",")} required={isRequired} onChange={checkChange}></input>
             <div style={{position: 'relative'}}>
