@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <div className="page">
       <div className="container">
-        <Upload label="Profile picture" requireCrop={true}></Upload>
+        <Upload label="Profile picture" requireCrop={true} uploadType="profile"></Upload>
       </div>
       <Button className="danger" onClick={()=>setBusy(false)} iconName={ICONS.ADD_CIRCLE}>Busy off</Button>
       <Button busy={isBusy} onClick={()=>{setBusy(true);}} iconName={ICONS.EDIT}>Busy on</Button>

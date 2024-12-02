@@ -104,6 +104,9 @@
     --upload-bg: #242C38;
     --upload-border: #E9E9E9;
     --upload-border-danger: #EC2F2F;
+    --upload-crop-handle-normal: radial-gradient(#000000 30%, #fffa 35%, #fffa 50%, #000 60%, #000000 100%);
+    --upload-crop-handle-hover: radial-gradient(#7634B8 30%, #fffa 35%, #fffa 50%, #7634B8 60%, #7634B8 100%);
+    --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
 
 }
 

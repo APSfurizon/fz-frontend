@@ -22,6 +22,11 @@ export type HandleSettings = {
     active: boolean
 }
 
+export type WholeHandleSettings = {
+    startingOffset: Coordinates,
+    active: boolean
+}
+
 export const VALID_FILE_TYPES = ["image/gif", "image/jpeg", "image/png", "image/bmp", "image/webp", "image/tiff"];
 const ERROR_NOT_VALID = "file_not_valid";
 export function validateImage (file: File): Promise<ImageBitmap> {

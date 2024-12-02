@@ -1,11 +1,11 @@
 "use client"
 import { useTranslations } from 'next-intl';
 import { EMPTY_USER_PICTURE, UserPictureData } from '../_lib/api/user';
-import { ChangeEvent, ChangeEventHandler, MouseEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
-import { getImageSettings, Coordinates, ImageSettings, Media, VALID_FILE_TYPES, validateImage, HandleSettings } from '../_lib/components/upload';
+import { getImageSettings, Coordinates, ImageSettings, Media, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings } from '../_lib/components/upload';
 import Button from './button';
 import "../styles/components/userUpload.css";
 import Modal from './modal';
@@ -28,6 +28,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     const [error, setError] = useState(false);
     const [media, setMedia] = useState<Media | undefined>();
     const inputRef = useRef<HTMLInputElement> (null);
+    const {showModal} = useModalUpdate();
     {/* Crop dialog */}
     const previewRef = useRef<HTMLImageElement> (null);
     const canvasRef = useRef<HTMLCanvasElement> (null);
@@ -35,10 +36,13 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     const [cropDialogOpen, setCropDialogOpen] = useState(false);
     const [preview, setPreview] = useState<ImageBitmap>();
     const [previewString, setPreviewString] = useState<string>();
+    {/* Crop UI Logic */}
     const [imageSettings, setImageSettings] = useState<ImageSettings>();
-    const [topHandle, setTopHandle] = useState<HandleSettings>({coordinates: {x: 0, y:0}, active: false});
-    const [bottomHandle, setBottomHandle] = useState<HandleSettings>({coordinates: {x: 100, y:100}, active: false});
-    const {showModal} = useModalUpdate();
+    const EMPTY_HANDLE: HandleSettings = {coordinates: {x: 0, y:0}, active: false};
+    const [topHandle, setTopHandle] = useState<HandleSettings>({...EMPTY_HANDLE});
+    const [bottomHandle, setBottomHandle] = useState<HandleSettings>({...EMPTY_HANDLE, coordinates: {x: 100, y:100}});
+    const [wholeHandle, setWholeHandle] = useState<WholeHandleSettings>({startingOffset: {x: 0, y: 0}, active: false});
+    const [centerOffset, setCenterOffset] = useState<Coordinates>({x: 50, y:50});
 
     /**Loads the initial value media via its id */
     useEffect(()=> {
@@ -74,24 +78,35 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
 
     /**To re-render handles */
     useEffect(()=> {
-        const ctx = canvasRef.current!.getContext("2d");
+        const ctx = canvasRef.current?.getContext("2d");
         if (ctx == null) return;
+        const [x, y, width, height] = [
+            topHandle.coordinates.x,
+            topHandle.coordinates.y, 
+            bottomHandle.coordinates.x - topHandle.coordinates.x,
+            bottomHandle.coordinates.y - topHandle.coordinates.y
+        ];
+        ctx.reset();
+        ctx.fillStyle = "#000000aa";
+        ctx.fillRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+        ctx.clearRect(x, y, width, height);
         ctx.beginPath();
-        ctx.strokeStyle = 'red';
-        ctx.setLineDash([10, 5, 10]);
-        ctx.lineWidth = 5;
-        ctx.rect(topHandle.coordinates.x + 2.5,
-            topHandle.coordinates.y + 2.5, 
-            bottomHandle.coordinates.x - topHandle.coordinates.x - 2.5,
-            bottomHandle.coordinates.y - topHandle.coordinates.y - 2.5);
+        ctx.rect(x, y, width, height);
+        ctx.lineWidth = wholeHandle.active ? 5 : 2;
+        ctx.strokeStyle = "white";
+        ctx.setLineDash([5, 5]);
         ctx.stroke();
-        
+        ctx.lineDashOffset = 5;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
     }, [topHandle, bottomHandle, imageSettings]);
 
     useEffect(() => {
         if (isLoading || !preview) return;
         if (previewRef.current) {
             const observer = new ResizeObserver((entries) => {
+                let settings = getImageSettings(preview, previewRef.current!);
+                
                 onPreviewLoaded();
             });
 
@@ -114,7 +129,107 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     const onPreviewLoaded = () => {
         if (isLoading || !preview) return;
         setImageSettings(getImageSettings(preview, previewRef.current!));
+        setTopHandle({...EMPTY_HANDLE});
+        setBottomHandle({...EMPTY_HANDLE, coordinates: {x: 100, y: 100}});
     };
+
+    const onMove = (e: PointerEvent<HTMLDivElement>) => {
+        const coords = getCoordinates(e);
+        const rect = previewRef.current!.getBoundingClientRect();
+        const requireSquare = uploadType === 'profile';
+        if (topHandle.active) {
+            setTopHandle({
+                ...topHandle, 
+                coordinates: requireSquare ? calcAspectRatio(topHandle.coordinates, coords, rect) : coords
+            });
+        } else if (bottomHandle.active){
+            setBottomHandle({
+                ...bottomHandle,
+                coordinates: requireSquare ? calcAspectRatio(bottomHandle.coordinates, coords, rect) : coords
+            });
+        } else if (wholeHandle.active) {
+            // Get current coordinates
+            const freeCoords = getCoordinates(e);
+            // Get offset
+            const offsetTop: Coordinates = {
+                x: topHandle.coordinates.x - wholeHandle.startingOffset.x,
+                y: topHandle.coordinates.y - wholeHandle.startingOffset.y,
+            };
+            const offsetBottom: Coordinates = {
+                x: bottomHandle.coordinates.x - wholeHandle.startingOffset.x,
+                y: bottomHandle.coordinates.y - wholeHandle.startingOffset.y,
+            }
+
+            const newTopCoordinates: Coordinates = {
+                x: freeCoords.x + offsetTop.x,
+                y: freeCoords.y + offsetTop.y
+            };
+            const newBottomCoordinates: Coordinates = {
+                x: freeCoords.x + offsetBottom.x,
+                y: freeCoords.y + offsetBottom.y
+            };
+
+            const adjustTopCoordinates: Coordinates = { 
+                x: Math.min(Math.max(newTopCoordinates.x, 0), rect.width) - newTopCoordinates.x,
+                y: Math.min(Math.max(newTopCoordinates.y, 0), rect.height) - newTopCoordinates.y,
+            }
+
+            const adjustBottomCoordinates: Coordinates = { 
+                x: Math.min(Math.max(newBottomCoordinates.x, 0), rect.width) - newBottomCoordinates.x,
+                y: Math.min(Math.max(newBottomCoordinates.y, 0), rect.height) - newBottomCoordinates.y,
+            }
+
+            newTopCoordinates.x += adjustBottomCoordinates.x + adjustTopCoordinates.x;
+            newBottomCoordinates.x += adjustBottomCoordinates.x + adjustTopCoordinates.x;
+            newTopCoordinates.y += adjustBottomCoordinates.y + adjustTopCoordinates.y;
+            newBottomCoordinates.y += adjustBottomCoordinates.y + adjustTopCoordinates.y;
+
+
+            const newStartingOffset: Coordinates = {
+                x: freeCoords.x,
+                y: freeCoords.y
+            }
+
+            setTopHandle({...topHandle, coordinates: newTopCoordinates});
+            setBottomHandle({...bottomHandle, coordinates: newBottomCoordinates});
+            setWholeHandle({...wholeHandle, startingOffset: newStartingOffset});
+        }
+    }
+
+    const calcAspectRatio = (original: Coordinates, changed: Coordinates, rect: DOMRect): Coordinates => {
+        const changedX = changed.x - original.x;
+        const changedY = changed.y - original.y
+        const minDelta = Math.abs(changedX) > Math.abs(changedY) ? changedX : changedY;
+        const corrected = Math.min(
+            (original.x + minDelta) - Math.min(Math.max(original.x + minDelta, 0), rect.width),
+            (original.y + minDelta) - Math.min(Math.max(original.y + minDelta, 0), rect.height),
+        )
+        return {
+            x: Math.min(Math.max(original.x + minDelta + corrected, 0), rect.width),
+            y: Math.min(Math.max(original.y + minDelta + corrected, 0), rect.height),
+        }
+    }
+
+    const isOutOfRect = (a: Coordinates, b1: Coordinates, b2: Coordinates) => {
+        let lowerX = Math.min(b1.x, b2.x);
+        let lowerY = Math.min(b1.y, b2.y);
+        let higherX = Math.max(b1.x, b2.x);
+        let higherY = Math.max(b1.y, b2.y);
+        return a.x < lowerX || a.x > higherX || a.y < lowerY || a.y > higherY;
+    }
+
+    const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+        const coords = getCoordinates(e);
+        if (!isOutOfRect(coords, topHandle.coordinates, bottomHandle.coordinates)) {
+            setWholeHandle({...wholeHandle, active: true, startingOffset: coords});
+        }
+    }
+
+    const onLeave = (e: PointerEvent<HTMLDivElement>) => {
+        setTopHandle({...topHandle, active: false});
+        setBottomHandle({...bottomHandle, active: false});
+        setWholeHandle({...wholeHandle, active: false});
+    }
 
     /**
      * When the user wants to delete the uploaded media
@@ -123,11 +238,11 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         
     }
 
-    const getCropCoordinates = (e: MouseEvent): Coordinates => {
-        var rect = previewRef.current!.getBoundingClientRect();
+    const getCoordinates = (e: PointerEvent): Coordinates => {
+        const rect = previewRef.current!.getBoundingClientRect();
         return {
-            x: Math.min(Math.max(Math.round(e.clientX - rect.left), 0), rect.width),
-            y: Math.min(Math.max(Math.round(e.clientY - rect.top), 0), rect.height)
+            x: Math.min(Math.max(e.clientX - rect.left, 0), rect.width),
+            y: Math.min(Math.max(e.clientY - rect.top, 0), rect.height)
         };
     }
     
@@ -168,7 +283,8 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
 
         {/* Crop dialog */}
         <Modal open={cropDialogOpen} title={cropTitle ?? t("upload.crop")} onClose={()=> setCropDialogOpen(false)}>
-            <div className="crop-container" ref={containerRef} onResize={()=>onPreviewLoaded()}>
+            <div className="crop-container" ref={containerRef} onResize={()=>onPreviewLoaded()} onPointerMove={onMove} onPointerLeave={onLeave} onPointerDown={onPointerDown} onPointerUp={onLeave}>
+                <div className="fill-all"></div>
                 <Image width={256} height={256} alt="" src={previewString ?? EMPTY_PROFILE_PICTURE_SRC}
                     className={"crop-image"} style={{objectFit: "contain"}} ref={previewRef}
                     onLoad={()=>onPreviewLoaded()}>
@@ -177,13 +293,13 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
                     height={previewRef.current?.clientHeight}>
                 </canvas>
                 <button className={`handle ${topHandle.active ? "active" : ""}`} style={{top: renderTopHandle.y, left: renderTopHandle.x}}
-                    onPointerDown={()=>setTopHandle({...topHandle, active: true})}
-                    onPointerLeave={()=>setTopHandle({...topHandle, active: false})}
-                    onPointerUp={()=>setTopHandle({...topHandle, active: false})}></button>
+                    onPointerDown={(e)=>{setTopHandle({...topHandle, active: true}); e.stopPropagation();}}
+                    onPointerUp={()=>setTopHandle({...topHandle, active: false})}
+                    onClick={()=>setTopHandle({...topHandle, active: false})}></button>
                 <button className={`handle ${bottomHandle.active ? "active" : ""}`} style={{top: renderBottomHandle.y, left: renderBottomHandle.x}}
-                    onPointerDown={()=>setBottomHandle({...bottomHandle, active: true})}
-                    onPointerLeave={()=>setBottomHandle({...bottomHandle, active: false})}
-                    onPointerUp={()=>setBottomHandle({...bottomHandle, active: false})}></button>
+                    onPointerDown={(e)=>{setBottomHandle({...bottomHandle, active: true}); e.stopPropagation();}}
+                    onPointerUp={()=>setBottomHandle({...bottomHandle, active: false})}
+                    onClick={()=>setBottomHandle({...bottomHandle, active: false})}></button>
             </div>
             <span>{imageSettings?.width} - {imageSettings?.height}. Resize factor: {imageSettings?.resizeFactor}</span>
             <div className="bottom-toolbar">
