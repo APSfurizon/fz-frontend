@@ -1,3 +1,5 @@
+import { Coordinates } from "./components/upload";
+
 export function nullifyEmptyStrings (values?: (string | undefined)[]) {
     return values?.map(s => nullifyEmptyString(s));
 }

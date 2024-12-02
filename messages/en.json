@@ -141,7 +141,8 @@
         },
         "loading": "Loading...",
         "confirm": "Confirm",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "error": "Error"
     },
     "components": {
         "autoinput": {
@@ -159,6 +160,8 @@
         "upload": {
             "alt_preview_image": "Preview of the uploaded picture",
             "select_image": "Select an image",
+            "upload_size_too_small": "This image is too small",
+            "upload_size_too_big": "This image is too big",
             "loading_uploads": "Loading...",
             "open": "Open...",
             "delete": "Delete",

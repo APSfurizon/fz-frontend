@@ -19,7 +19,8 @@
         },
         "loading": "Caricamento...",
         "confirm": "Conferma",
-        "cancel": "Cancella"
+        "cancel": "Cancella",
+        "error": "Errore"
     },
     "components": {
         "autoinput": {
@@ -36,6 +37,8 @@
         },
         "upload": {
             "alt_preview_image": "Anteprima dell'immagine caricata",
+            "upload_size_too_small": "L'immagine è troppo piccola",
+            "upload_size_too_big": "L'immagine è troppo grande",
             "select_image": "Seleziona immagine",
             "loading_uploads": "Caricamento...",
             "open": "Apri...",

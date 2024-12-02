@@ -45,7 +45,8 @@ div.crop-container {
     width: 100%;
 }
 
-div.crop-container > * {
+div.crop-container > img,
+div.crop-container > canvas {
     margin-top: 2em;
     margin-bottom: 2em;
     outline: 2px solid var(--upload-border);
@@ -57,8 +58,22 @@ div.crop-container > * {
     width: max-content;
     max-width: 80vw;
     max-height: 60vh;
+    position: relative;
 }
 
 .crop-canvas {
     position: absolute;
+}
+
+button.handle {
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: none;
+}
+
+button.handle.active {
+    background-color: red;
 }
