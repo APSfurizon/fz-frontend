@@ -17,6 +17,7 @@
             "alt_logo": "Logo di furizon",
             "alt_profile_picture": "Foto profilo"
         },
+        "reload": "Ricarica",
         "loading": "Caricamento...",
         "confirm": "Conferma",
         "cancel": "Cancella",
@@ -50,6 +51,29 @@
     "furpanel": {
         "home":{
             "header": "Benvenuti nel <highlighted>furpanel!</highlighted>"
+        },
+        "booking":{
+            "title": "Prenotazione",
+            "your_booking": "La tua prenotazione",
+            "countdown": "Conto alla rovescia",
+            "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
+            "book_now": "Prenota ora",
+            "edit_booking": "Modifica prenotazione",
+            "editing_locked": "Modifica bloccata",
+            "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
+            "items": {
+                "includes": "include",
+                "membership_card": "Tessera associativa",
+                "room": "Stanza d'albergo",
+                "daily_ticket": "Biglietto giornaliero",
+                "regular_ticket": "Biglietto",
+                "sponsor_none": "regolare",
+                "sponsor": "Sponsor",
+                "super_sponsor": "Super sponsor"
+            },
+            "errors": {
+                "network_error": "Errore di rete"
+            }
         },
         "badge": {
             "title": "Badge"

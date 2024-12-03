@@ -173,6 +173,9 @@
         "badge": {
             "title": "Badge"
         },
+        "booking":{
+            "title": "Booking"
+        },
         "debug": {
             "title": "Debug"
         },

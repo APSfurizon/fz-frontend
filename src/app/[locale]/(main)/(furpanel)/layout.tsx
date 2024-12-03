@@ -2,7 +2,7 @@
 import {useTranslations} from 'next-intl';
 import Icon, { ICONS } from "@/app/_components/icon";
 import ToolLink from "@/app/_components/toolLink";
-import { DEBUG_ENABLED } from '@/app/_lib/constants';
+import { DEBUG_ENABLED, EVENT_NAME } from '@/app/_lib/constants';
 import "../../../styles/furpanel/layout.css";
 import { useModalUpdate } from '@/app/_lib/context/modalProvider';
 import Modal from '@/app/_components/modal';
@@ -19,6 +19,7 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
                 </span>
                 <div className="tools-list horizontal-list gap-4mm">
                     <div style={{flex: "1"}}></div>
+                    <ToolLink href="booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('booking.title')}</ToolLink>
                     <ToolLink href="badge" iconName={ICONS.PERSON_BOOK}>{t('badge.title')}</ToolLink>
                     <ToolLink href="room" iconName={ICONS.BED}>{t('room.title')}</ToolLink>
                     <ToolLink href="upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('upload_area.title')}</ToolLink>

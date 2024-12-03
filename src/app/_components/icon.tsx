@@ -28,6 +28,7 @@ export const ICONS = Object.freeze({
     KEY: "key",
     KEYBOARD_ARROW_LEFT: "keyboard_arrow_left",
     KEYBOARD_ARROW_RIGHT: "keyboard_arrow_right",
+    LOCAL_ACTIVITY: "local_activity",
     LOGOUT: "logout",
     PERSON: "person",
     PERSON_BOOK: "person_book",

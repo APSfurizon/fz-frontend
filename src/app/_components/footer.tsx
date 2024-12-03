@@ -20,14 +20,17 @@ export default function Footer () {
             <a href="https://www.youtube.com/@apsfurizon7425" target="_blank" rel="noopener noreferrer">
               <Image className="footer-logo-youtube" src="/images/footer/youtube-brands-solid.svg" alt="Youtube logo" width={32} height={32}></Image>
             </a>
+            <a href="https://www.instagram.com/furizonaps/" target="_blank" rel="noopener noreferrer">
+              <Image className="footer-logo-instagram" src="/images/footer/instagram-brands-solid.svg" alt="Instagram logo" width={32} height={32}></Image>
+            </a>
+            <a href="https://t.me/APSFurizon" target="_blank" rel="noopener noreferrer">
+              <Image className="footer-logo-telegram" src="/images/footer/telegram-brands-solid.svg" alt="Facebook logo" width={32} height={32}></Image>
+            </a>
             <a href="https://x.com/FurizonEvents" target="_blank" rel="noopener noreferrer">
               <Image className="footer-logo-twitter" src="/images/footer/square-x-twitter-brands-solid.svg" alt="Twitter logo" width={32} height={32}></Image>
             </a>
             <a href="https://www.facebook.com/Furizon/" target="_blank" rel="noopener noreferrer">
               <Image className="footer-logo-facebook" src="/images/footer/facebook-brands-solid.svg" alt="Facebook logo" width={32} height={32}></Image>
-            </a>
-            <a href="https://t.me/APSFurizon" target="_blank" rel="noopener noreferrer">
-              <Image className="footer-logo-telegram" src="/images/footer/telegram-brands-solid.svg" alt="Facebook logo" width={32} height={32}></Image>
             </a>
           </div>
           <div className="horizontal-list gap-4mm tiny normal title flex-center">
