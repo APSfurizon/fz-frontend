@@ -11,7 +11,7 @@ import "../styles/components/userUpload.css";
 import Modal from './modal';
 import { useModalUpdate } from '../_lib/context/modalProvider';
 
-export default function Upload ({cropTitle, initialData, fieldName, isRequired=false, label, readonly=false, requireCrop = false, size=96, uploadType = "profile"}: Readonly<{
+export default function Upload ({cropTitle, initialData, fieldName, isRequired=false, label, readonly=false, requireCrop = false, size=96, uploadType = "full"}: Readonly<{
     cropTitle?: string,
     initialData?: number,
     fieldName?: string,
@@ -106,7 +106,6 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         if (previewRef.current) {
             const observer = new ResizeObserver((entries) => {
                 let settings = getImageSettings(preview, previewRef.current!);
-                
                 onPreviewLoaded();
             });
 
@@ -140,12 +139,12 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         if (topHandle.active) {
             setTopHandle({
                 ...topHandle, 
-                coordinates: requireSquare ? calcAspectRatio(topHandle.coordinates, coords, rect) : coords
+                coordinates: requireSquare ? calcAspectRatio(1, topHandle.coordinates, coords, rect, bottomHandle.coordinates) : coords
             });
         } else if (bottomHandle.active){
             setBottomHandle({
                 ...bottomHandle,
-                coordinates: requireSquare ? calcAspectRatio(bottomHandle.coordinates, coords, rect) : coords
+                coordinates: requireSquare ? calcAspectRatio(1, bottomHandle.coordinates, coords, rect, topHandle.coordinates) : coords
             });
         } else if (wholeHandle.active) {
             // Get current coordinates
@@ -196,18 +195,39 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         }
     }
 
-    const calcAspectRatio = (original: Coordinates, changed: Coordinates, rect: DOMRect): Coordinates => {
+    const calcAspectRatio = (aspectRatio: number, original: Coordinates, changed: Coordinates, rect: DOMRect, otherHandle: Coordinates): Coordinates => {
+        const changedRect = getRect(changed, otherHandle);
         const changedX = changed.x - original.x;
-        const changedY = changed.y - original.y
-        const minDelta = Math.abs(changedX) > Math.abs(changedY) ? changedX : changedY;
-        const corrected = Math.min(
-            (original.x + minDelta) - Math.min(Math.max(original.x + minDelta, 0), rect.width),
-            (original.y + minDelta) - Math.min(Math.max(original.y + minDelta, 0), rect.height),
-        )
+        const changedY = changed.y - original.y;
+        const isXHigher = Math.abs(changedX) > Math.abs(changedY);
+        let calcW = isXHigher ? changedRect.width : Math.round(changedRect.height * aspectRatio);
+        let calcH = !isXHigher ? changedRect.height : Math.round(changedRect.width / aspectRatio);
+        let coordinatesToReturn 
         return {
-            x: Math.min(Math.max(original.x + minDelta + corrected, 0), rect.width),
-            y: Math.min(Math.max(original.y + minDelta + corrected, 0), rect.height),
+            x: isXHigher ? changed.x : changed.y * aspectRatio,
+            y: isXHigher ? changed.x / aspectRatio : changed.y,
         }
+    }
+
+    const getRect = (a: Coordinates, b: Coordinates): DOMRect => {
+        const width = Math.abs(a.x - b.x);
+        const height = Math.abs(a.y - b.y);
+        const top = Math.min(a.y, b.y);
+        const left = Math.min(a.x, b.x);
+        const right = left + width;
+        const bottom = top + height;
+
+        return {
+            width: width,
+            height: height,
+            right: left + width,
+            bottom: top + height,
+            top: top,
+            left: left,
+            x: top,
+            y: left,
+            toJSON: () => null
+        };
     }
 
     const isOutOfRect = (a: Coordinates, b1: Coordinates, b2: Coordinates) => {
