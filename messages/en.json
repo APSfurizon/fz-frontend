@@ -142,7 +142,8 @@
         "loading": "Loading...",
         "confirm": "Confirm",
         "cancel": "Cancel",
-        "error": "Error"
+        "error": "Error",
+        "unknown_error": "Unknown error"
     },
     "components": {
         "autoinput": {
@@ -174,7 +175,25 @@
             "title": "Badge"
         },
         "booking":{
-            "title": "Booking"
+            "title": "Booking",
+            "your_booking": "Your booking",
+            "countdown": "Countdown",
+            "countdown_desc": "Ticket sales will begin on {openingDate}",
+            "book_now": "Book now",
+            "edit_booking": "Edit booking",
+            "editing_locked": "Editing locked",
+            "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
+            "items": {
+                "includes": "includes",
+                "code": "code",
+                "membership_card": "Membership card",
+                "room": "Hotel room",
+                "daily_ticket": "Daily ticket",
+                "regular_ticket": "Ticket",
+                "sponsor_none": "regular",
+                "sponsor": "Sponsor",
+                "super_sponsor": "Super sponsor"
+            }
         },
         "debug": {
             "title": "Debug"

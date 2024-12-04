@@ -35,9 +35,9 @@ Readonly<{title?: string, theme: NoticeTheme, customIcon?: string, children: Rea
         <div className={`notice-box ${className}`} style={{...style}}>
             <div className="header vertical-align-middle" style={{...headerStyle}}>
                 <Icon className="medium" iconName={customIcon ?? icon}></Icon>
-                <span>{title}</span>
+                <span className="title">{title}</span>
             </div>
-            <div className="answer">
+            <div className="answer descriptive">
                 {children}
             </div>
         </div>

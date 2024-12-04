@@ -45,7 +45,7 @@ export interface LogoutResponse extends ApiResponse {
 export class LogoutApiAction implements RequestAction<LogoutResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
-    urlAction = "states/get-countries";
+    urlAction = "authentication/logout";
     onSuccess: (status: number, body?: LogoutResponse) => void = (status: number, body?: LogoutResponse) => {logoutSuccess(body)};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {logoutSuccess()};
 }

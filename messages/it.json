@@ -21,7 +21,8 @@
         "loading": "Caricamento...",
         "confirm": "Conferma",
         "cancel": "Cancella",
-        "error": "Errore"
+        "error": "Errore",
+        "unknown_error": "Errore sconosciuto"
     },
     "components": {
         "autoinput": {
@@ -63,6 +64,7 @@
             "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
             "items": {
                 "includes": "include",
+                "code": "codice",
                 "membership_card": "Tessera associativa",
                 "room": "Stanza d'albergo",
                 "daily_ticket": "Biglietto giornaliero",
@@ -70,9 +72,6 @@
                 "sponsor_none": "regolare",
                 "sponsor": "Sponsor",
                 "super_sponsor": "Super sponsor"
-            },
-            "errors": {
-                "network_error": "Errore di rete"
             }
         },
         "badge": {
