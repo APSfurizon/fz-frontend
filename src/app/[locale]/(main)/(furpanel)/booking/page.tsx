@@ -38,10 +38,12 @@ export default function BookingPage() {
     /**Chooses whether the user has to wait for the countdown */
     const showCountdown = bookingData?.shouldDisplayCountdown;
     const bookingDate = /*new Date(bookingData?.bookingStartTime ?? 0).getTime() ?? 0*/new Date(2024, 11, 5, 0, 5, 0, 0).getTime();
-    const diff = Math.max(bookingDate - now.getTime(), 0);
+    const openDiff = Math.max(bookingDate - now.getTime(), 0);
     /**If the countdown is still running */
-    const isOpen = diff <= 0;
-    const editLockDate = bookingData?.editBookEndTime;
+    const isOpen = openDiff <= 0;
+    const editLockDate = new Date(bookingData?.editBookEndTime ?? 0).getTime();
+    const lockDiff = Math.max(editLockDate - now.getTime(), 0);
+    const isEditLocked = lockDiff <= 0;
     const hasOrder = bookingData?.order && ["PENDING", "PAID"].includes(bookingData?.order?.orderStatus);
     
 
@@ -54,7 +56,7 @@ export default function BookingPage() {
         <div className={`countdown-container rounded-s ${hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
             <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
             {/* Countdown view */}
-            {!isOpen && showCountdown ? <p className="countdown title large rounded-s">{formatter.relativeTime(bookingDate, {now, unit: getBiggestTimeUnit(diff)})}</p>
+            {!isOpen && showCountdown ? <p className="countdown title large rounded-s">{formatter.relativeTime(bookingDate, {now, unit: getBiggestTimeUnit(openDiff)})}</p>
             : 
             !hasOrder && <div className="action-container">
                 <Button className="action-button book-now">
@@ -78,9 +80,15 @@ export default function BookingPage() {
             )</span>
         </p>
         <div className="order-data">
-            <Button className="action-button">
+            <span>{}</span>
+            <div className="order-items-container">
+            </div>
+            <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT}>
                 {t("booking.edit_booking")}
             </Button>
+            <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.editing_locked") : t("booking.editing_locked_warning")}>
+                {t(isEditLocked ? "booking.editing_locked_desc" : "booking.editing_locked_warning_desc", {lockDate: formatter.dateTime(editLockDate)})}
+            </NoticeBox>
         </div>
         </>}
     </>;

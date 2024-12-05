@@ -60,10 +60,12 @@
             "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
             "book_now": "Prenota ora",
             "edit_booking": "Modifica prenotazione",
+            "editing_locked_warning": "Avviso blocco modifiche",
+            "editing_locked_warning_desc": "Dal {lockDate} non sarà più possibile modificare l'ordine.",
             "editing_locked": "Modifica bloccata",
             "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
             "items": {
-                "includes": "include",
+                "includes": "Incluso nella prenotazione",
                 "code": "codice",
                 "membership_card": "Tessera associativa",
                 "room": "Stanza d'albergo",

@@ -1,7 +1,7 @@
 div.countdown-container {
     width: 100%;
     position: relative;
-    min-height: 8em;
+    min-height: 3em;
     overflow: hidden;
 
     img.event-logo {
