@@ -2,7 +2,7 @@
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Button from "../../../../_components/button";
 import Icon, { ICONS } from "../../../../_components/icon";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
@@ -41,11 +41,25 @@ export default function BookingPage() {
     const openDiff = Math.max(bookingDate - now.getTime(), 0);
     /**If the countdown is still running */
     const isOpen = openDiff <= 0;
-    const editLockDate = new Date(bookingData?.editBookEndTime ?? 0).getTime();
-    const lockDiff = Math.max(editLockDate - now.getTime(), 0);
-    const isEditLocked = lockDiff <= 0;
+    const editLockDate = /*new Date(bookingData?.editBookEndTime ?? 0).getTime();*/new Date(2024, 11, 8, 10, 24, 0, 0).getTime();
+    const isEditLocked = Math.max(editLockDate - now.getTime(), 0) <= 0;
     const hasOrder = bookingData?.order && ["PENDING", "PAID"].includes(bookingData?.order?.orderStatus);
-    
+
+    const orderItem = (name: string | React.ReactNode, iconName: string) => {
+        return (<div className="item vertical-list flex-vertical-center">
+            <Icon className="x-large" iconName={iconName}></Icon>
+            <span className="item-name">{name}</span>
+        </div>)
+    }
+
+    /**Order text */
+    let orderTicketName = null;
+    if (hasOrder) {
+        if (bookingData.order.isDailyTicket)
+            orderTicketName = "daily_ticket";
+        else
+            orderTicketName = bookingData.order.sponsorship.toLowerCase() + "_ticket";
+    }
 
     const loadingUi = (
         <span className="title horizontal-list gap-2mm flex-center">
@@ -56,9 +70,8 @@ export default function BookingPage() {
         <div className={`countdown-container rounded-s ${hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
             <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
             {/* Countdown view */}
-            {!isOpen && showCountdown ? <p className="countdown title large rounded-s">{formatter.relativeTime(bookingDate, {now, unit: getBiggestTimeUnit(openDiff)})}</p>
-            : 
-            !hasOrder && <div className="action-container">
+            {!isOpen && showCountdown && !hasOrder ? <p className="countdown title large rounded-s">{formatter.relativeTime(bookingDate, {now, unit: getBiggestTimeUnit(openDiff)})}</p>
+            : !hasOrder && <div className="action-container">
                 <Button className="action-button book-now">
                     {t("booking.book_now")}
                 </Button>
@@ -80,8 +93,17 @@ export default function BookingPage() {
             )</span>
         </p>
         <div className="order-data">
-            <span>{}</span>
-            <div className="order-items-container">
+            <div className="order-items-container horizontal-list flex-same-base gap-4mm">
+                {/* Ticket item */}
+                {orderItem(
+                    t.rich(`booking.items.${orderTicketName}`, {
+                        sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
+                        supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
+                    }),
+                ICONS.LOCAL_ACTIVITY)}
+                {/* Membership item */}
+                {bookingData.hasActiveMembershipForEvent && 
+                orderItem(t("booking.items.membership_card"), ICONS.ID_CARD)}
             </div>
             <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT}>
                 {t("booking.edit_booking")}

@@ -181,18 +181,18 @@
             "countdown_desc": "Ticket sales will begin on {openingDate}",
             "book_now": "Book now",
             "edit_booking": "Edit booking",
+            "editing_locked_warning": "Editing lock memo",
+            "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
             "editing_locked": "Editing locked",
             "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
             "items": {
-                "includes": "includes",
                 "code": "code",
                 "membership_card": "Membership card",
                 "room": "Hotel room",
                 "daily_ticket": "Daily ticket",
-                "regular_ticket": "Ticket",
-                "sponsor_none": "regular",
-                "sponsor": "Sponsor",
-                "super_sponsor": "Super sponsor"
+                "none_ticket": "Regular ticket",
+                "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
+                "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket"
             }
         },
         "debug": {

@@ -33,6 +33,27 @@ div.countdown-container:not(.minimized) {
     min-height: 20em;
 }
 
+div.order-data > *{
+    margin-bottom: 1em;
+}
+
+div.order-items-container div.item {
+    border: .1em solid var(--booking-item-border);
+    background-color: var(--booking-item-bg);
+    border-radius: .5em;
+    padding: .5em;
+    justify-content: center;
+    width: 20%;
+}
+
+b.sponsor-highlight {
+    color: var(--sponsor-text-color);
+}
+
+b.super-sponsor-highlight {
+    color: var(--super-sponsor-text-color);
+}
+
 @keyframes popup {
     10% {
         transform: scale(0);

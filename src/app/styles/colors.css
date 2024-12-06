@@ -112,6 +112,13 @@
     /* Booking page */
     --booking-countdown-bg: #000000d8;
     --booking-book-effect-bg: #fff;
+    --booking-item-border: #87878733;
+    --booking-item-bg: #48474733;
+
+    --sponsor-color: #8E24AA;
+    --sponsor-text-color: #b235d4;
+    --super-sponsor-color: #DB9703;
+    --super-sponsor-text-color: #FAAA00;
 }
 
 @media (prefers-color-scheme: dark) {

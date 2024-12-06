@@ -65,15 +65,13 @@
             "editing_locked": "Modifica bloccata",
             "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
             "items": {
-                "includes": "Incluso nella prenotazione",
                 "code": "codice",
                 "membership_card": "Tessera associativa",
                 "room": "Stanza d'albergo",
                 "daily_ticket": "Biglietto giornaliero",
-                "regular_ticket": "Biglietto",
-                "sponsor_none": "regolare",
-                "sponsor": "Sponsor",
-                "super_sponsor": "Super sponsor"
+                "none_ticket": "Biglietto",
+                "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
+                "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>"
             }
         },
         "badge": {

@@ -6,7 +6,7 @@ export type HeaderData = {
     propicPath?: string,
     loggedIn: boolean,
     error: boolean,
-    sponsorType: number
+    sponsorType: string
 }
 
 export const EMPTY_HEADER_DATA: HeaderData = {
@@ -18,12 +18,11 @@ export const EMPTY_HEADER_DATA: HeaderData = {
 };
 
 export interface HeaderApiResponse extends ApiResponse {
-    id: number;
+    userId: number;
     fursonaName: string;
     locale?: string;
-    propicId?: number;
-    propicPath?: string;
-    sponsorType?: number;
+    propicUrl?: string;
+    sponsorship?: "";
 }
 
 export class HeaderApiAction implements RequestAction<HeaderApiResponse, ApiErrorResponse> {
@@ -40,10 +39,10 @@ export function getHeaderUserData (): Promise<HeaderData> {
             const data = response as HeaderApiResponse;
             const toReturn: HeaderData = {
                 fursonaName: data.fursonaName,
-                propicPath: data.propicId && data.propicPath ? data.propicPath : undefined,
+                propicPath: data.propicUrl,
                 error: false,
                 loggedIn: true,
-                sponsorType: data.sponsorType ?? SponsorType.NONE
+                sponsorType: data.sponsorship ?? SponsorType.NONE
             }
             resolve(toReturn);
         }).catch ((err) => {
