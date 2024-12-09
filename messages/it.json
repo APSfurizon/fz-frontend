@@ -71,7 +71,10 @@
                 "daily_ticket": "Biglietto giornaliero",
                 "none_ticket": "Biglietto",
                 "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
-                "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>"
+                "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
+                "extra_days_BOTH": "Giorni extra",
+                "extra_days_EARLY": "Arrivo anticipato",
+                "extra_days_LATE": "Partenza posticipata"
             }
         },
         "badge": {

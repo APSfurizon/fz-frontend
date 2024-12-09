@@ -9,6 +9,7 @@ export const ICONS = Object.freeze({
     BED: "bed",
     BUG_REPORT: "bug_report",
     BOOKMARK_STAR: "bookmark_star",
+    CALENDAR_ADD_ON: "calendar_add_on",
     CANCEL: "cancel",
     CHECK: "check",
     CHECK_CIRCLE: "check_circle",

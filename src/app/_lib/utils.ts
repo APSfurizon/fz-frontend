@@ -32,3 +32,7 @@ export function getBiggestTimeUnit(ts: number): Intl.RelativeTimeFormatUnit {
     else if (ts >= minute) return "minute";
     else return "second";
 }
+
+export function translate(data: Record<string, string>, locale: string): string {
+    return data[locale] ?? data["en"];
+}

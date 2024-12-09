@@ -46,6 +46,10 @@ div.order-items-container div.item {
     width: 20%;
 }
 
+div.item span.item-name {
+    text-align: center;
+}
+
 b.sponsor-highlight {
     color: var(--sponsor-text-color);
 }

@@ -192,7 +192,11 @@
                 "daily_ticket": "Daily ticket",
                 "none_ticket": "Regular ticket",
                 "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
-                "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket"
+                "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
+                "extra_days_BOTH": "Extra days",
+                "extra_days_EARLY": "Early arrival",
+                "extra_days_LATE": "Late departure"
+
             }
         },
         "debug": {

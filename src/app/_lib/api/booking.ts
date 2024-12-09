@@ -29,3 +29,23 @@ export class BookingOrderApiAction implements RequestAction<BookingOrderResponse
     onSuccess: (status: number, body?: BookingOrderResponse) => void = (status: number, body?: BookingOrderResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
+
+export interface ShopLinkResponse extends ApiResponse {
+    link: string
+}
+
+export class ShopLinkApiAction implements RequestAction<ShopLinkResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "orders-workflow/generate-pretix-shop-link";
+    onSuccess: (status: number, body?: ShopLinkResponse) => void = (status: number, body?: ShopLinkResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export class OrderEditLinkApiAction implements RequestAction<ShopLinkResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "orders-workflow/get-order-edit-link";
+    onSuccess: (status: number, body?: ShopLinkResponse) => void = (status: number, body?: ShopLinkResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
