@@ -6,8 +6,8 @@ export interface OrderData {
     orderStatus: "CANCELED" | "PENDING" | "PAID" | "EXPIRED",
     sponsorship: "NONE" | "SPONSOR" | "SUPER_SPONSOR",
     extraDays: "NONE" | "EARLY" | "LATE" | "BOTH",
-    isDailyTicket: boolean,
-    dailyDays: number[],
+    dailyTicket: boolean,
+    dailyDays: string[],
     room: RoomDataResponse
 }
 
@@ -21,6 +21,15 @@ export interface BookingOrderResponse extends ApiResponse {
     errors: ("SERVER_ERROR" | "MEMBERSHIP_MULTIPLE_DONE" | "MEMBERSHIP_MISSING" |
          "ORDER_MULTIPLE_DONE" | "ORDER_SECRET_NOT_MATCH" | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE")[]
 }
+
+export interface BookingOrderUiData {
+    hasOrder: boolean,
+    ticketName: string,
+    isDaily: boolean | undefined,
+    dailyDays: Date[] | undefined,
+    bookingStartDate: Date,
+    editBookEndDate: Date,
+};
 
 export class BookingOrderApiAction implements RequestAction<BookingOrderResponse, ApiErrorResponse> {
     authenticated = true;

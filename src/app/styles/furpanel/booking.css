@@ -44,10 +44,25 @@ div.order-items-container div.item {
     padding: .5em;
     justify-content: center;
     width: 20%;
+    position: relative;
+    overflow: hidden;
+}
+
+div.order-items-container div.item:has(span.item-subtitle) {
+    padding-bottom: 1.25em;
 }
 
 div.item span.item-name {
     text-align: center;
+}
+
+div.item span.item-subtitle {
+    position: absolute;
+    padding: .1em;
+    bottom: 0%;
+    text-align: center;
+    width: 100%;
+    background-color: var(--booking-item-subtitle-bg);
 }
 
 b.sponsor-highlight {

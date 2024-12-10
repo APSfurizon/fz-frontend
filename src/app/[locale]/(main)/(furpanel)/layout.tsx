@@ -2,7 +2,7 @@
 import {useTranslations} from 'next-intl';
 import Icon, { ICONS } from "@/app/_components/icon";
 import ToolLink from "@/app/_components/toolLink";
-import { DEBUG_ENABLED, EVENT_NAME } from '@/app/_lib/constants';
+import { DEBUG_ENABLED } from '@/app/_lib/constants';
 import "../../../styles/furpanel/layout.css";
 import { useModalUpdate } from '@/app/_lib/context/modalProvider';
 import Modal from '@/app/_components/modal';
