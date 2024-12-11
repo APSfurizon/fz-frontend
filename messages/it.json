@@ -121,7 +121,15 @@
                     "description": "Dal {lockDate}, la modifica della stanza non è più consentita."
                 }
             },
-            "your_room": "La tua stanza"
+            "actions": {
+                "buy_a_room": "Acquista",
+                "join_a_room": "Accetta un invito",
+                "refuse": "Rifiuta",
+                "accept": "Accetta"
+            },
+            "your_room": "La tua stanza",
+            "or": "oppure",
+            "no_room": "Non sei in una stanza, per ora."
         },
         "upload_area": {
             "title": "Area upload"

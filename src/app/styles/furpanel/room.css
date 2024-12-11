@@ -1,0 +1,4 @@
+div.actions-panel {
+    padding: 0.625em;
+    background-color: var(--room-action-panel-bg);
+}
