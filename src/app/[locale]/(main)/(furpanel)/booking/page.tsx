@@ -129,7 +129,7 @@ export default function BookingPage() {
                     </div>
                     }
                 </div>
-                {!isOpen && (
+                {!isOpen && !pageData.hasOrder && (
                     <NoticeBox title={t("booking.countdown")} theme={NoticeTheme.FAQ}>
                         {t("booking.countdown_desc", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
                     </NoticeBox>

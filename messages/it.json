@@ -110,7 +110,18 @@
             "title": "Badge"
         },
         "room": {
-            "title": "Stanza"
+            "title": "Stanza",
+            "messages": {
+                "room_edit_deadline": {
+                    "title": "Scadenza modifiche stanze",
+                    "description": "Hai tempo fino al {lockDate} per modificare la tua stanza."
+                },
+                "room_edit_deadline_end": {
+                    "title": "Modifiche stanze bloccate",
+                    "description": "Dal {lockDate}, la modifica della stanza non è più consentita."
+                }
+            },
+            "your_room": "La tua stanza"
         },
         "upload_area": {
             "title": "Area upload"

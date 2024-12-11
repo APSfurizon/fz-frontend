@@ -235,7 +235,18 @@
             "header": "Welcome to the <highlighted>furpanel!</highlighted>"
         },
         "room": {
-            "title": "Room"
+            "title": "Room",
+            "messages": {
+                "room_edit_deadline": {
+                    "title": "Room editing deadline",
+                    "description": "Be sure to edit your room before {lockDate}."
+                },
+                "room_edit_deadline_end": {
+                    "title": "Room editing locked",
+                    "description": "Since {lockDate}, room editing is now locked."
+                }
+            },
+            "your_room": "Your room"
         },
         "upload_area": {
             "title": "Upload area"
