@@ -23,6 +23,7 @@ export interface RegisterPersonalInfo {
     residenceCity?: string;
     residenceRegion?: string;
     residenceCountry?: string;
+    prefixPhoneNumber?: string;
     phoneNumber?: string;
 }
 
@@ -52,7 +53,8 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
             residenceCity:      nullifyEmptyString(data.get('residenceCity')?.toString ()),
             residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
             residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
-            phoneNumber:        nullifyEmptyStrings([data.get('phonePrefix')?.toString (), data.get('phoneNumber')?.toString ()])?.join('')
+            prefixPhoneNumber:  nullifyEmptyString(data.get('phonePrefix')?.toString ()),
+            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ())
         };
 
         let toReturn: RegisterData = {

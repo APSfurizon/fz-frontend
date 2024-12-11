@@ -22,6 +22,8 @@
 
 .flex-vertical-center { align-items: center; }
 
+.flex-same-base * { flex-basis: 1 1 0; }
+
 .vertical-align-middle * {vertical-align: middle;}
 
 .center { text-align: center; }
@@ -29,6 +31,8 @@
 .left { text-align: left; }
 
 .right { text-align: right; }
+
+.rounded-xs { border-radius: 0.15625em; }
 
 .rounded-s { border-radius: 0.3125em; }
 

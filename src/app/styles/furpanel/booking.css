@@ -1,0 +1,88 @@
+div.countdown-container {
+    width: 100%;
+    position: relative;
+    min-height: 3em;
+    overflow: hidden;
+
+    img.event-logo {
+        max-height: 4em;
+        filter: drop-shadow(0px 0px .8em white);
+    }
+
+    p.countdown,
+    div.action-container {
+        margin: 0 auto;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    p.countdown {
+        background-color: var(--booking-countdown-bg);
+        padding: .5em 1em;
+    }
+
+    button.book-now {
+        animation: popup 500ms ease 100ms 1 forwards;
+        transition-duration: transform 120ms;
+    }
+}
+
+div.countdown-container:not(.minimized) {
+    min-height: 20em;
+}
+
+div.order-data > *{
+    margin-bottom: 1em;
+}
+
+div.order-items-container div.item {
+    border: .1em solid var(--booking-item-border);
+    background-color: var(--booking-item-bg);
+    border-radius: .5em;
+    padding: .5em;
+    justify-content: center;
+    width: 20%;
+    position: relative;
+    overflow: hidden;
+}
+
+div.order-items-container div.item:has(span.item-subtitle) {
+    padding-bottom: 1.25em;
+}
+
+div.item span.item-name {
+    text-align: center;
+}
+
+div.item span.item-subtitle {
+    position: absolute;
+    padding: .1em;
+    bottom: 0%;
+    text-align: center;
+    width: 100%;
+    background-color: var(--booking-item-subtitle-bg);
+}
+
+b.sponsor-highlight {
+    color: var(--sponsor-text-color);
+}
+
+b.super-sponsor-highlight {
+    color: var(--super-sponsor-text-color);
+}
+
+@keyframes popup {
+    10% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(3);
+        box-shadow: 0px 0px 0em 0em var(--booking-book-effect-bg);
+    }
+    100% {
+        transform: scale(2);
+        box-shadow: 0px 0px 2em 1em var(--booking-book-effect-bg);
+    }
+}

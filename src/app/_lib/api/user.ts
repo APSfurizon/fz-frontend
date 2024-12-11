@@ -5,16 +5,16 @@ export const ENDPOINTS = Object.freeze({
 });
 
 export enum SponsorType {
-    NONE = 0,
-    SPONSOR = 1,
-    SUPER = 2
+    NONE = "NONE",
+    SPONSOR = "SPONSOR",
+    SUPER = "SUPER_SPONSOR"
 }
 
 export type UserPictureData = {
     nickname?: string,
     profile_picture_url?: string,
     country?: string,
-    sponsorType: number
+    sponsorType: string
 }
 
 export const EMPTY_USER_PICTURE: UserPictureData = {

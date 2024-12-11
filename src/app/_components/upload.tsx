@@ -202,7 +202,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         const isXHigher = Math.abs(changedX) > Math.abs(changedY);
         let calcW = isXHigher ? changedRect.width : Math.round(changedRect.height * aspectRatio);
         let calcH = !isXHigher ? changedRect.height : Math.round(changedRect.width / aspectRatio);
-        let coordinatesToReturn 
+        //let coordinatesToReturn 
         return {
             x: isXHigher ? changed.x : changed.y * aspectRatio,
             y: isXHigher ? changed.x / aspectRatio : changed.y,

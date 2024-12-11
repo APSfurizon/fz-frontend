@@ -17,10 +17,12 @@
             "alt_logo": "Logo di furizon",
             "alt_profile_picture": "Foto profilo"
         },
+        "reload": "Ricarica",
         "loading": "Caricamento...",
         "confirm": "Conferma",
         "cancel": "Cancella",
-        "error": "Errore"
+        "error": "Errore",
+        "unknown_error": "Errore sconosciuto"
     },
     "components": {
         "autoinput": {
@@ -50,6 +52,59 @@
     "furpanel": {
         "home":{
             "header": "Benvenuti nel <highlighted>furpanel!</highlighted>"
+        },
+        "booking":{
+            "title": "Prenotazione",
+            "your_booking": "La tua prenotazione",
+            "countdown": "Conto alla rovescia",
+            "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
+            "book_now": "Prenota ora",
+            "edit_booking": "Modifica prenotazione",
+            "editing_locked_warning": "Avviso blocco modifiche",
+            "editing_locked_warning_desc": "Dal {lockDate} non sarà più possibile modificare l'ordine.",
+            "editing_locked": "Modifica bloccata",
+            "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
+            "items": {
+                "code": "codice",
+                "membership_card": "Tessera associativa",
+                "room": "Stanza d'albergo",
+                "room_capacity": "Capacità: {capacity, plural, =1 {singola} other {# ospiti}}",
+                "daily_ticket": "Biglietto giornaliero",
+                "daily_days": "Giorni: {days}",
+                "none_ticket": "Biglietto",
+                "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
+                "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
+                "extra_days": "Giorni extra",
+                "extra_days_BOTH": "Early & Late",
+                "extra_days_EARLY": "Early",
+                "extra_days_LATE": "Late"
+            },
+            "errors": {
+                "SERVER_ERROR": {
+                    "title": "Errore server",
+                    "description": "Non è stato possibile recuperare alcuna informazione sull'evento. Provare più tardi"
+                },
+                "MEMBERSHIP_MULTIPLE_DONE": {
+                    "title": "Tessere multiple",
+                    "description": "Risultano attive due tessere in contemporanea. Contattare il supporto per ulteriori informazioni."
+                },
+                "MEMBERSHIP_MISSING": {
+                    "title": "Tessera associativa mancante",
+                    "description": "Per partecipare ad un evento Furizon, devi avere una tessera valida. Ogni tessera ha validità fino al 31 ottobre."
+                },
+                "ORDER_MULTIPLE_DONE": {
+                    "title": "Ordini multipli",
+                    "description": "Sono stati acquistati più ordini per lo stesso account. Contattare il supporto per rettificare la situazione."
+                },
+                "ORDER_SECRET_NOT_MATCH": {
+                    "title": "Ordine non valido",
+                    "description": "Non è stato possibile autenticizzare la veridicità del tuo ordine. Contattare il supporto per ulteriori informazioni."
+                },
+                "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
+                    "title": "Ordine condiviso",
+                    "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
+                }
+            }
         },
         "badge": {
             "title": "Badge"

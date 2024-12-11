@@ -9,19 +9,19 @@
     display: block;
 }
 
-.user-picture-container .image-container.sponsor-1, .image-container.sponsor-2 {
+.user-picture-container .image-container.sponsor-SPONSOR, .image-container.sponsor-SUPER_SPONSOR {
     animation: sponsor-animation 3s linear 0ms infinite;
 }
 
 .user-picture-container
-.image-container.sponsor-1 {
+.image-container.sponsor-SPONSOR {
     background: var(--profile-picture-border-sponsor);
     background-size: 200% 200%;
     background-repeat: repeat;
 }
 
 .user-picture-container
-.image-container.sponsor-2 {
+.image-container.sponsor-SUPER_SPONSOR {
     background: var(--profile-picture-border-super-sponsor);
     background-size: 200% 200%;
     background-repeat: repeat;

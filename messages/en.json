@@ -142,7 +142,8 @@
         "loading": "Loading...",
         "confirm": "Confirm",
         "cancel": "Cancel",
-        "error": "Error"
+        "error": "Error",
+        "unknown_error": "Unknown error"
     },
     "components": {
         "autoinput": {
@@ -172,6 +173,60 @@
     "furpanel": {
         "badge": {
             "title": "Badge"
+        },
+        "booking":{
+            "title": "Booking",
+            "your_booking": "Your booking",
+            "countdown": "Countdown",
+            "countdown_desc": "Ticket sales will begin on {openingDate}",
+            "book_now": "Book now",
+            "edit_booking": "Edit booking",
+            "editing_locked_warning": "Editing lock memo",
+            "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
+            "editing_locked": "Editing locked",
+            "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
+            "items": {
+                "code": "code",
+                "membership_card": "Membership card",
+                "room": "Hotel room",
+                "room_capacity": "Capacity: {capacity, plural, =1 {single} other {# guests}}",
+                "daily_ticket": "Daily ticket",
+                "daily_days": "Days: {days}",
+                "none_ticket": "Regular ticket",
+                "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
+                "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
+                "extra_days": "Extra days",
+                "extra_days_BOTH": "Early & Late",
+                "extra_days_EARLY": "Early",
+                "extra_days_LATE": "Late"
+
+            },
+            "errors": {
+                "SERVER_ERROR": {
+                    "title": "Server error",
+                    "description": "Could not retrieve the current event info. Try again, later."
+                },
+                "MEMBERSHIP_MULTIPLE_DONE": {
+                    "title": "Multiple membership cards",
+                    "description": "It appears you have multiple membership cards active at the same time. Please contact the support for further details."
+                },
+                "MEMBERSHIP_MISSING": {
+                    "title": "Membership card missing",
+                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 31st of October."
+                },
+                "ORDER_MULTIPLE_DONE": {
+                    "title": "Multiple orders",
+                    "description": "You've placed multiple orders for one account. Please contact support in order to undo the situation."
+                },
+                "ORDER_SECRET_NOT_MATCH": {
+                    "title": "Order not valid",
+                    "description": "Could not verify the authenticity of your order. Please contact support to fix this issue."
+                },
+                "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
+                    "title": "Shared order",
+                    "description": "Your order appears to be shared with more users. Please, contact support to rectify the situation."
+                }
+            }
         },
         "debug": {
             "title": "Debug"
