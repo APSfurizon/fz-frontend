@@ -1,6 +1,6 @@
 "use client"
 import { useTranslations } from 'next-intl';
-import { EMPTY_USER_PICTURE, UserPictureData } from '../_lib/api/user';
+import { EMPTY_USER_PICTURE, UserData } from '../_lib/api/user';
 import { useEffect, useState } from 'react';
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import { getFlagEmoji } from '../_lib/components/userPicture';
@@ -8,10 +8,10 @@ import Icon, { ICONS } from './icon';
 import Image from 'next/image';
 import "../styles/components/userPicture.css";
 
-export default function UserPicture ({size, userData, showNickname, showFlag }: Readonly<{size?: number, userData: UserPictureData | Promise<UserPictureData>, showNickname?: boolean, showFlag?: boolean}>) { 
+export default function UserPicture ({size, userData, showNickname, showFlag }: Readonly<{size?: number, userData: UserData | Promise<UserData>, showNickname?: boolean, showFlag?: boolean}>) { 
     const t = useTranslations('common');
     const [isLoading, setLoading] = useState(true);
-    const [pictureData, setPictureData] = useState<UserPictureData>(EMPTY_USER_PICTURE);
+    const [pictureData, setPictureData] = useState<UserData>(EMPTY_USER_PICTURE);
     useEffect(()=>{
         if (userData instanceof Promise) {
             setLoading(true);

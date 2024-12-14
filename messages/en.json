@@ -244,11 +244,11 @@
                 "room_edit_deadline_end": {
                     "title": "Room editing locked",
                     "description": "Since {lockDate}, room editing is now locked."
-                },
-                "invited_to_room": {
-                    "title": "You've been invited to join a room",
-                    "description": "{username} invited you to room {roomName}."
                 }
+            },
+            "invite": {
+                "header": "You've been invited in {amount, plural, =1 {a room} other {# rooms}}.",
+                "title" : "{nickname} invited you to room {roomName}."
             },
             "actions": {
                 "buy_a_room": "Buy a room",
@@ -258,7 +258,8 @@
             },
             "your_room": "Your room",
             "or": "or",
-            "no_room": "You don't have a room, yet."
+            "no_room": "You don't have a room, yet.",
+            "status_owner": "Owner"
         },
         "upload_area": {
             "title": "Upload area"

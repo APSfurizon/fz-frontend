@@ -10,21 +10,21 @@ export enum SponsorType {
     SUPER = "SUPER_SPONSOR"
 }
 
-export type UserPictureData = {
+export type UserData = {
     nickname?: string,
     profile_picture_url?: string,
     country?: string,
     sponsorType: string
 }
 
-export const EMPTY_USER_PICTURE: UserPictureData = {
+export const EMPTY_USER_PICTURE: UserData = {
     nickname: undefined,
     profile_picture_url: undefined,
     country: undefined,
     sponsorType: SponsorType.NONE
 };
 
-export function getUserPicture (fromHeader: HeaderData): UserPictureData {
+export function getUserPicture (fromHeader: HeaderData): UserData {
     return {
         nickname: fromHeader.fursonaName,
         profile_picture_url: fromHeader.propicPath,
