@@ -8,7 +8,7 @@ import Icon, { ICONS } from './icon';
 import Image from 'next/image';
 import "../styles/components/userPicture.css";
 
-export default function UserPicture ({size, userData, showNickname, showFlag }: Readonly<{size?: number, userData: UserData | Promise<UserData>, showNickname?: boolean, showFlag?: boolean}>) { 
+export default function UserPicture ({size, userData, showNickname, showFlag, hideEffect=false }: Readonly<{size?: number, userData: UserData | Promise<UserData>, showNickname?: boolean, showFlag?: boolean, hideEffect?: boolean}>) { 
     const t = useTranslations('common');
     const [isLoading, setLoading] = useState(true);
     const [pictureData, setPictureData] = useState<UserData>(EMPTY_USER_PICTURE);
@@ -27,7 +27,7 @@ export default function UserPicture ({size, userData, showNickname, showFlag }: 
     
     return (
         <div className="user-picture-container vertical-list flex-vertical-center">
-            <div className={`image-container rounded-m sponsor-${pictureData.sponsorType}`}>
+            <div className={`image-container rounded-m sponsor-${pictureData.sponsorType} ${hideEffect ? "no-effect" : ""}`}>
                 <Image className="rounded-s profile-picture" src={pictureData.profile_picture_url ?? EMPTY_PROFILE_PICTURE_SRC} alt={t('header.alt_profile_picture')} width={size ?? 32} height={size ?? 32}></Image>
             </div>
             { showNickname && (

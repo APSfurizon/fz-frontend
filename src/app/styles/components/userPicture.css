@@ -4,6 +4,10 @@
     background-color: var(--profile-picture-border-normal);
 }
 
+.user-picture-container .image-container.no-effect {
+    padding: 0em;
+}
+
 .user-picture-container .profile-picture {
     overflow: hidden;
     display: block;
@@ -14,14 +18,14 @@
 }
 
 .user-picture-container
-.image-container.sponsor-SPONSOR {
+.image-container.sponsor-SPONSOR:not(.no-effect) {
     background: var(--profile-picture-border-sponsor);
     background-size: 200% 200%;
     background-repeat: repeat;
 }
 
 .user-picture-container
-.image-container.sponsor-SUPER_SPONSOR {
+.image-container.sponsor-SUPER_SPONSOR:not(.no-effect) {
     background: var(--profile-picture-border-super-sponsor);
     background-size: 200% 200%;
     background-repeat: repeat;
@@ -37,4 +41,8 @@
 
 .user-picture-container span.flag {
     margin-left: 0.3125em;
+}
+
+.user-picture-container .nickname {
+    padding: 0.4em 0em;
 }

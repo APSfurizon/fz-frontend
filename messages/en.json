@@ -248,13 +248,14 @@
             },
             "invite": {
                 "header": "You've been invited in {amount, plural, =1 {a room} other {# rooms}}.",
-                "title" : "{nickname} invited you to room {roomName}."
+                "title" : "{nickname} invited you to room <room>{roomName}.</room>"
             },
             "actions": {
                 "buy_a_room": "Buy a room",
                 "join_a_room": "Join a room",
                 "refuse": "Refuse",
-                "accept": "Accept"
+                "accept": "Accept",
+                "rename": "Rinomina"
             },
             "your_room": "Your room",
             "or": "or",

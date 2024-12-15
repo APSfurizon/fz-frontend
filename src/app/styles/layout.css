@@ -24,6 +24,12 @@
 
 .flex-same-base * { flex-basis: 1 1 0; }
 
+.flex-space-around { justify-content: space-around; }
+
+.flex-space-between { justify-content: space-between; }
+
+.flex-space-evenly { justify-content: space-evenly; }
+
 .vertical-align-middle * {vertical-align: middle;}
 
 .center { text-align: center; }

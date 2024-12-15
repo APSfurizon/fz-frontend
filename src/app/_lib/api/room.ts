@@ -16,6 +16,7 @@ export interface UserRoom extends RoomData {
 }
 
 export interface RoomInviteData {
+    id: number,
     sender: UserData,
     recipient: UserData,
     room: UserRoom

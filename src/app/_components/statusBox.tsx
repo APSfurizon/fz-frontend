@@ -1,16 +1,15 @@
 import { CSSProperties } from "react";
 import "../styles/components/statusBox.css";
 
-export default function statusBox ({children, status, style, className}: Readonly<{
+export default function statusBox ({children, status="normal", style, className}: Readonly<{
     children?: React.ReactNode,
-    status?: string,
+    status?: "warning" | "success" | "normal" | "error",
     style?: CSSProperties,
     className?: string,
   }>) {
 
     return (
-        <div
-            className={"statusBox" + " " + (className ?? "") + " " + (status)}
+        <div className={`rounded-s statusBox ${className ?? ""} ${status ?? ""}`}
             style={{...style}}>
             <span className="title" style={{fontSize: '15px'}}>{children}</span>
         </div>

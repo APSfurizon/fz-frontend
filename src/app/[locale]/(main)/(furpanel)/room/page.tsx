@@ -9,8 +9,9 @@ import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import "../../../../styles/furpanel/room.css";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Modal from "@/app/_components/modal";
-import { getRoomInvites } from "@/app/_lib/debug";
+import { getRoom, getRoomInvites } from "@/app/_lib/debug";
 import RoomInvite from "@/app/_components/_room/roomInvite";
+import { RoomInviteFetchResponse, UserRoom } from "@/app/_lib/api/room";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -20,8 +21,27 @@ export default function RoomPage() {
   const [showInviteTutorial, setShowInviteTutorial] = useState(false);
   const {showModal} = useModalUpdate();
   useTitle(t("room.title"));
-  
-  const roomData = getRoomInvites();
+
+  // Room related states
+  /* Room invites */
+  const [invites, setInvites] = useState<RoomInviteFetchResponse> ();
+  /* Room data */
+  const [room, setRoom] = useState<UserRoom> ();
+
+  const acceptInvite = (id: number) => {
+    setLoading(true);
+  }
+
+  const refuseInvite = (id: number) => {
+    setLoading(true);
+  }
+
+  useEffect(()=> {
+    setLoading(true);
+    setInvites(getRoomInvites());
+    setRoom(getRoom());
+    setLoading(false);
+  }, [])
 
   /*useEffect(()=>{
     setLoading(true);
@@ -53,14 +73,23 @@ export default function RoomPage() {
         </div>
       </div>
       {/* Invites */}
-      <div className="actions-panel rounded-m">
+      <div className="actions-panel rounded-m vertical-list gap-2mm">
         <span className="title small horizontal-list gap-2mm flex-vertical-center">
           <Icon iconName={ICONS.MAIL}></Icon>
-          {t("room.invite.header", {amount: 5})}
+          {t("room.invite.header", {amount: 1})}
         </span>
         {
-          roomData?.roomInvites?.map(invite => <RoomInvite inviteData={invite}></RoomInvite>)
+          invites?.roomInvites?.map((invite, index) => <RoomInvite key={index} inviteData={invite} busy={loading} onAccept={acceptInvite} onReject={refuseInvite}></RoomInvite>)
         }
+      </div>
+      {/* Your room */}
+      <div className="actions-panel rounded-m vertical-list gap-2mm">
+        <span className="title small horizontal-list gap-2mm flex-vertical-center">
+          <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+          {room?.roomName}
+          <div className="spacer"></div>
+          <Button iconName={ICONS.EDIT_SQUARE}>{t("room.actions.rename")}</Button>
+        </span>
       </div>
     </div>
     <Modal  open={showInviteTutorial} onClose={()=>setShowInviteTutorial(false)}>

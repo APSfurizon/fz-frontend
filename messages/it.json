@@ -123,13 +123,14 @@
             },
             "invite": {
                 "header": "Hai ricevuto {amount, plural, =1 {un invito} other {# inviti}}.",
-                "title" : "{nickname} ti invita nella stanza {roomName}."
+                "title" : "{nickname} ti invita nella stanza <room>{roomName}.</room>"
             },
             "actions": {
                 "buy_a_room": "Acquista",
                 "join_a_room": "Accetta un invito",
                 "refuse": "Rifiuta",
-                "accept": "Accetta"
+                "accept": "Accetta",
+                "rename": "Rinomina"
             },
             "your_room": "La tua stanza",
             "or": "oppure",

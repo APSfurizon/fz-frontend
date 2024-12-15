@@ -2,3 +2,21 @@ div.actions-panel {
     padding: 0.625em;
     background-color: var(--room-action-panel-bg);
 }
+
+div.room-invite {
+    box-shadow: 0px 0px 1em .2em var(--room-invite-shadow);
+    background-color: var(--room-invite-bg);
+    overflow: hidden;
+
+    span.invite-title {
+        padding: 0.625em;
+        background-color: var(--room-invite-bg);
+        border-bottom: 1px solid var(--room-invite-bg);
+    }
+
+    div.invite-toolbar {
+        padding: 0.625em;
+        background-color: var(--room-invite-bg);
+        border-top: 1px solid var(--room-invite-bg);
+    }
+}

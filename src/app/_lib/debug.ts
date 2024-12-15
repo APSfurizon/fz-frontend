@@ -77,21 +77,22 @@ export function getAutoInputCountries (): Promise<AutoInputSearchResult[]> {
 export function getRoomInvites (): RoomInviteFetchResponse {
     const sender1: UserData = {
         sponsorType: SponsorType.NONE,
-        country: "IT",
+        country: "it",
         nickname: "Wooferone"
     }
     const guest1: UserData = {
         sponsorType: SponsorType.SUPER,
-        country: "UK",
+        country: "gb",
         nickname: "Dawg"
     }
     const guest2: UserData = {
         sponsorType: SponsorType.SPONSOR,
-        country: "DE",
+        country: "de",
         nickname: "Weiss"
     }
     const invites: RoomInviteData[] = [
         {
+            id: 5,
             sender: sender1,
             recipient: guest1,
             room: {
@@ -105,4 +106,33 @@ export function getRoomInvites (): RoomInviteFetchResponse {
         }
     ];
     return { roomInvites: invites };
+}
+
+/**
+ * @deprecated for test purposes only
+ */
+export function getRoom() {
+    const sender1: UserData = {
+        sponsorType: SponsorType.NONE,
+        country: "it",
+        nickname: "Wooferone"
+    };
+    const guest1: UserData = {
+        sponsorType: SponsorType.SUPER,
+        country: "gb",
+        nickname: "Dawg"
+    };
+    const guest2: UserData = {
+        sponsorType: SponsorType.SPONSOR,
+        country: "de",
+        nickname: "Weiss"
+    };
+    return {
+        roomName: "Le madrigal",
+        owner: sender1,
+        confirmed: false,
+        roomCapacity: 3,
+        roomTypeNames: {"en": "Chateau d'ax", "it": "Bisca de Roma"},
+        guests: [guest1, guest2]
+    };
 }

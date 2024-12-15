@@ -33,3 +33,15 @@ button.danger:hover:not(:disabled) {
 button.danger:active:not(:disabled) {
     background: var(--button-danger-bg-down);
 }
+
+button.success {
+    background: var(--button-success-bg-normal);
+}
+
+button.success:hover:not(:disabled) {
+    background: var(--button-success-bg-hover);
+}
+
+button.success:active:not(:disabled) {
+    background: var(--button-success-bg-down);
+}
