@@ -129,6 +129,16 @@
                     "description": "Rifiuterai l'invito nella stanza <room>{roomName}</room> di {nickname}."
                 }
             },
+            "input": {
+                "rename_new_name": {
+                    "label": "Nuovo nome",
+                    "placeholder": "Inserisci un nuovo nome stanza"
+                },
+                "invite": {
+                    "label": "Invita qualcuno in stanza",
+                    "placeholder": "Cerca un utente"
+                }
+            },
             "invite": {
                 "header": "Hai ricevuto {amount, plural, =1 {un invito} other {# inviti}}.",
                 "title" : "{nickname} ti invita nella stanza <room>{roomName}.</room>"
@@ -138,12 +148,14 @@
                 "join_a_room": "Accetta un invito",
                 "refuse": "Rifiuta",
                 "accept": "Accetta",
-                "rename": "Rinomina"
+                "rename": "Rinomina",
+                "invite": "Invita"
             },
             "your_room": "La tua stanza",
             "or": "oppure",
             "no_room": "Non sei in una stanza, per ora.",
-            "status_owner": "Gestore"
+            "status_owner": "Gestore",
+            "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimanente} other {# posti rimanenti}}"
         },
         "upload_area": {
             "title": "Area upload"

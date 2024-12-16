@@ -96,6 +96,7 @@ export function getRoomInvites (): RoomInviteFetchResponse {
             sender: sender1,
             recipient: guest1,
             room: {
+                id: 5,
                 roomName: "Le madrigal",
                 pendingInvites: [],
                 owner: sender1,
@@ -129,11 +130,12 @@ export function getRoom(): UserRoom {
         nickname: "Weiss"
     };
     return {
+        id: 5,
         roomName: "Le madrigal",
         pendingInvites: [],
         owner: sender1,
         confirmed: false,
-        roomCapacity: 3,
+        roomCapacity: 5,
         roomTypeNames: {"en": "Chateau d'ax", "it": "Bisca de Roma"},
         guests: [guest1, guest2]
     };

@@ -254,6 +254,16 @@
                     "description": "You will refuse to join <room>{roomName}</room>, owned by {nickname}."
                 }
             },
+            "input": {
+                "rename_new_name": {
+                    "label": "New name",
+                    "placeholder": "Enter a new room name"
+                },
+                "invite": {
+                    "label": "Invite someone in your room",
+                    "placeholder": "Search for a user"
+                }
+            },
             "invite": {
                 "header": "You've been invited in {amount, plural, =1 {a room} other {# rooms}}.",
                 "title" : "{nickname} invited you to room <room>{roomName}.</room>"
@@ -263,12 +273,14 @@
                 "join_a_room": "Join a room",
                 "refuse": "Refuse",
                 "accept": "Accept",
-                "rename": "Rinomina"
+                "rename": "Rename",
+                "invite": "Invite"
             },
             "your_room": "Your room",
             "or": "or",
             "no_room": "You don't have a room, yet.",
-            "status_owner": "Owner"
+            "status_owner": "Owner",
+            "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}"
         },
         "upload_area": {
             "title": "Upload area"
