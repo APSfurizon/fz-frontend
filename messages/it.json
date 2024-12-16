@@ -119,6 +119,14 @@
                 "room_edit_deadline_end": {
                     "title": "Modifiche stanze bloccate",
                     "description": "Dal {lockDate}, la modifica della stanza non è più consentita."
+                },
+                "confirm_invite": {
+                    "title": "Accettare invito?",
+                    "description": "Entrerai nella stanza <room>{roomName}</room> di {nickname}."
+                },
+                "refuse_invite": {
+                    "title": "Rifiutare invito?",
+                    "description": "Rifiuterai l'invito nella stanza <room>{roomName}</room> di {nickname}."
                 }
             },
             "invite": {

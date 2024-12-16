@@ -244,6 +244,14 @@
                 "room_edit_deadline_end": {
                     "title": "Room editing locked",
                     "description": "Since {lockDate}, room editing is now locked."
+                },
+                "confirm_invite": {
+                    "title": "Accept invite?",
+                    "description": "You will join room <room>{roomName}</room>, owned by {nickname}."
+                },
+                "refuse_invite": {
+                    "title": "Refuse invite?",
+                    "description": "You will refuse to join <room>{roomName}</room>, owned by {nickname}."
                 }
             },
             "invite": {

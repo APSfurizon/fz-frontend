@@ -11,6 +11,7 @@ export interface RoomDataResponse extends ApiResponse, RoomData {}
 export interface UserRoom extends RoomData {
     owner: UserData,
     guests: UserData[],
+    pendingInvites: RoomInviteData[],
     roomName: string,
     confirmed: boolean
 }

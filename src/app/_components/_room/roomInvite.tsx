@@ -13,8 +13,8 @@ export default function RoomInvite ({style, className, busy, onAccept, onReject,
     busy?: boolean,
     disabled?: boolean,
     inviteData: RoomInviteData,
-    onAccept: (id: number) => void,
-    onReject: (id: number) => void,
+    onAccept: (invite: RoomInviteData) => void,
+    onReject: (invite: RoomInviteData) => void,
   }>) {
     const t = useTranslations("furpanel");
     const locale = useLocale();
@@ -40,8 +40,8 @@ export default function RoomInvite ({style, className, busy, onAccept, onReject,
             <div className="invite-toolbar horizontal-list gap-4mm">
                 <StatusBox>{translate(inviteData.room.roomTypeNames, locale)}</StatusBox>
                 <div className="spacer"></div>
-                <Button busy={busy} className="danger" iconName={ICONS.DO_NOT_DISTURB_ON} onClick={()=>onReject(inviteData.id)}>{t("room.actions.refuse")}</Button>
-                <Button busy={busy} className="success" iconName={ICONS.PERSON_ADD} onClick={()=>onAccept(inviteData.id)}>{t("room.actions.accept")}</Button>
+                <Button busy={busy} className="danger" iconName={ICONS.DO_NOT_DISTURB_ON} onClick={()=>onReject(inviteData)}>{t("room.actions.refuse")}</Button>
+                <Button busy={busy} className="success" iconName={ICONS.PERSON_ADD} onClick={()=>onAccept(inviteData)}>{t("room.actions.accept")}</Button>
             </div>
         </div>
     </>

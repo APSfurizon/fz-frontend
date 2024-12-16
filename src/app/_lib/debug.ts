@@ -1,4 +1,4 @@
-import { RoomInviteData, RoomInviteFetchResponse } from "./api/room";
+import { RoomData, RoomInviteData, RoomInviteFetchResponse, UserRoom } from "./api/room";
 import { SponsorType, UserData } from "./api/user";
 import { AutoInputSearchResult } from "./components/autoInput";
 import { HeaderData } from "./components/header";
@@ -97,6 +97,7 @@ export function getRoomInvites (): RoomInviteFetchResponse {
             recipient: guest1,
             room: {
                 roomName: "Le madrigal",
+                pendingInvites: [],
                 owner: sender1,
                 confirmed: false,
                 roomCapacity: 3,
@@ -111,7 +112,7 @@ export function getRoomInvites (): RoomInviteFetchResponse {
 /**
  * @deprecated for test purposes only
  */
-export function getRoom() {
+export function getRoom(): UserRoom {
     const sender1: UserData = {
         sponsorType: SponsorType.NONE,
         country: "it",
@@ -129,6 +130,7 @@ export function getRoom() {
     };
     return {
         roomName: "Le madrigal",
+        pendingInvites: [],
         owner: sender1,
         confirmed: false,
         roomCapacity: 3,
