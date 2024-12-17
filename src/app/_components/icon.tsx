@@ -41,12 +41,13 @@ export const ICONS = Object.freeze({
     PETS: "pets",
     PHOTO_CAMERA: "photo_camera",
     PROGRESS_ACTIVITY: "progress_activity",
+    REFRESH: "refresh",
+    REMOVE: "remove",
+    SEARCH:"search",
     SAVE: "save",
     SHOPPING_CART: "shopping_cart",
-    REMOVE: "remove",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
-    SEARCH:"search"
 });
 
 export default function Icon ({iconName, style, className}: Readonly<{

@@ -11,7 +11,7 @@ import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Modal from "@/app/_components/modal";
 import { getRoom, getRoomInvites } from "@/app/_lib/debug";
 import RoomInvite from "@/app/_components/_room/roomInvite";
-import { RoomInviteData, RoomInviteFetchResponse, RoomInviteFormAction, RoomRenameFormAction, UserRoom } from "@/app/_lib/api/room";
+import { RoomInviteData, RoomInviteFetchResponse, RoomInviteFormAction, RoomRenameFormAction, RoomInfo } from "@/app/_lib/api/room";
 import UserPicture from "@/app/_components/userPicture";
 import StatusBox from "@/app/_components/statusBox";
 import { translate } from "@/app/_lib/utils";
@@ -35,7 +35,7 @@ export default function RoomPage() {
   /* Room invites */
   const [invites, setInvites] = useState<RoomInviteFetchResponse> ();
   /* Room data */
-  const [room, setRoom] = useState<UserRoom> ();
+  const [room, setRoom] = useState<RoomInfo> ();
 
   /* Room invites logic */
 
@@ -94,7 +94,7 @@ export default function RoomPage() {
     const modalBody = <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} hideSave className="vertical-list gap-2mm">
       {modalLoading && <Icon className='loading-animation small' iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
-      <input type="hidden" name="roomId" value={room.id}></input>
+      <input type="hidden" name="roomId" value={room.roomId}></input>
       <JanInput inputType="text" fieldName="newName" maxLength={64} minLength={3} busy={modalLoading} label={t("room.input.rename_new_name.label")}
         placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
       <div className="horizontal-list gap-4mm">
@@ -116,7 +116,7 @@ export default function RoomPage() {
     const modalBody = <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} hideSave className="vertical-list gap-2mm">
       {modalLoading && <Icon className='loading-animation small' iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
-      <input type="hidden" name="roomId" value={room.id}></input>
+      <input type="hidden" name="roomId" value={room.roomId}></input>
       <AutoInput fieldName="invitedUsers" manager={new AutoInputDebugUserManager()} multiple={true} 
       max={(room.roomCapacity - room.guests.length - 1)} label={t("room.input.invite.label")}
       placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>

@@ -7,22 +7,35 @@ export interface RoomData {
     roomTypeNames: Record<string, string>
 }
 
-export interface RoomDataResponse extends ApiResponse, RoomData {}
-
-export interface UserRoom extends RoomData {
-    id: number,
-    owner: UserData,
-    guests: UserData[],
-    pendingInvites: RoomInviteData[],
-    roomName: string,
+export interface RoomGuest {
+    guestId: number,
+    userId: number,
+    roomId: number,
     confirmed: boolean
 }
 
+export interface RoomInfo {
+    roomId: number,
+    roomName: string,
+    roomOwnerId: number,
+    roomOwner?: UserData,
+    confirmed: boolean,
+    roomData: RoomData,
+    canInvite: boolean,
+    guests: RoomGuest[],
+    owner: boolean,
+}
+
 export interface RoomInviteData {
-    id: number,
-    sender: UserData,
-    recipient: UserData,
-    room: UserRoom
+    guestId: number,
+    userId: number,
+    roomId: number,
+    confirmed: boolean
+}
+
+export interface RoomInfoResponse extends ApiResponse {
+    roomInfo: RoomInfo,
+    invitations: RoomInviteData[]
 }
 
 export interface RoomInviteFetchResponse extends ApiResponse {
