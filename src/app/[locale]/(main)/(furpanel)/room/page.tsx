@@ -9,12 +9,11 @@ import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import "../../../../styles/furpanel/room.css";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Modal from "@/app/_components/modal";
-import { getRoom, getRoomInvites } from "@/app/_lib/debug";
 import RoomInvite from "@/app/_components/_room/roomInvite";
-import { RoomInviteData, RoomInviteFetchResponse, RoomInviteFormAction, RoomRenameFormAction, RoomInfo } from "@/app/_lib/api/room";
+import { RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteFormAction, RoomRenameFormAction } from "@/app/_lib/api/room";
 import UserPicture from "@/app/_components/userPicture";
 import StatusBox from "@/app/_components/statusBox";
-import { translate } from "@/app/_lib/utils";
+import { getErrorBody, translate } from "@/app/_lib/utils";
 import DataForm from "@/app/_components/dataForm";
 import JanInput from "@/app/_components/janInput";
 import AutoInput from "@/app/_components/autoInput";
@@ -32,21 +31,19 @@ export default function RoomPage() {
   const locale = useLocale();
 
   // Room related states
-  /* Room invites */
-  const [invites, setInvites] = useState<RoomInviteFetchResponse> ();
   /* Room data */
-  const [room, setRoom] = useState<RoomInfo> ();
+  const [data, setData] = useState<RoomInfoResponse> ();
 
   /* Room invites logic */
 
-  const acceptInvite = (invite: RoomInviteData) => {
+  const acceptInvite = (invite: RoomInvitation) => {
     hideModal();
 
   }
 
-  const promptAcceptInvite = (invite: RoomInviteData) => {
+  const promptAcceptInvite = (invite: RoomInvitation) => {
     const modalDescription = t.rich("room.messages.confirm_invite.description", {
-      nickname: invite.room.owner.nickname,
+      nickname: invite.room.roomOwner.fursonaName,
       roomName: invite.room.roomName,
       room: (chunks) => <b className="highlight">{chunks}</b>
     });
@@ -63,13 +60,13 @@ export default function RoomPage() {
     showModal(t("room.messages.confirm_invite.title"), modalBody);
   }
 
-  const refuseInvite = (invite: RoomInviteData) => {
+  const refuseInvite = (invite: RoomInvitation) => {
     hideModal();
   }
 
-  const promptRefuseInvite = (invite: RoomInviteData) => {
+  const promptRefuseInvite = (invite: RoomInvitation) => {
     const modalDescription = t.rich("room.messages.refuse_invite.description", {
-      nickname: invite.room.owner.nickname,
+      nickname: invite.room.roomOwner.fursonaName,
       roomName: invite.room.roomName,
       room: (chunks) => <b className="highlight">{chunks}</b>
     });
@@ -89,12 +86,12 @@ export default function RoomPage() {
   /* Room editing logic */
 
   const promptRoomRename = () => {
-    if (!room) return;
+    if (!data) return;
 
     const modalBody = <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} hideSave className="vertical-list gap-2mm">
       {modalLoading && <Icon className='loading-animation small' iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
-      <input type="hidden" name="roomId" value={room.roomId}></input>
+      <input type="hidden" name="roomId" value={data.roomInfo.roomId}></input>
       <JanInput inputType="text" fieldName="newName" maxLength={64} minLength={3} busy={modalLoading} label={t("room.input.rename_new_name.label")}
         placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
       <div className="horizontal-list gap-4mm">
@@ -111,14 +108,14 @@ export default function RoomPage() {
   /* Room invite logic */
 
   const promptRoomInvite = () => {
-    if (!room) return;
+    if (!data) return;
     
     const modalBody = <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} hideSave className="vertical-list gap-2mm">
       {modalLoading && <Icon className='loading-animation small' iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
-      <input type="hidden" name="roomId" value={room.roomId}></input>
+      <input type="hidden" name="roomId" value={data.roomInfo.roomId}></input>
       <AutoInput fieldName="invitedUsers" manager={new AutoInputDebugUserManager()} multiple={true} 
-      max={(room.roomCapacity - room.guests.length - 1)} label={t("room.input.invite.label")}
+      max={(data.roomInfo.roomData.roomCapacity - data.roomInfo.guests.length)} label={t("room.input.invite.label")}
       placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
       <div className="horizontal-list gap-4mm">
         <Button type="submit" className="success" iconName={ICONS.CHECK}>{tcommon("confirm")}</Button>
@@ -133,9 +130,12 @@ export default function RoomPage() {
 
   useEffect(()=> {
     setLoading(true);
-    setInvites(getRoomInvites());
-    setRoom(getRoom());
-    setLoading(false);
+    runRequest(new RoomInfoApiAction())
+    .then (result => setData(result as RoomInfoResponse))
+    .catch((err)=>showModal(
+        tcommon("error"), 
+        <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+    )).finally(()=>setLoading(false));
   }, [])
 
   /*useEffect(()=>{
@@ -168,18 +168,20 @@ export default function RoomPage() {
         </div>
       </div>
       {/* Invites */}
-      <div className="actions-panel rounded-m vertical-list gap-2mm">
-        <span className="title small horizontal-list gap-2mm flex-vertical-center">
-          <Icon iconName={ICONS.MAIL}></Icon>
-          {t("room.invite.header", {amount: 1})}
-        </span>
-        {
-          invites?.roomInvites?.map((invite, index) => <RoomInvite key={index} inviteData={invite}
-           busy={loading} onAccept={promptAcceptInvite} onReject={promptRefuseInvite}></RoomInvite>)
-        }
-      </div>
+      { data?.invitations && data.invitations.length > 0 && <>
+        <div className="actions-panel rounded-m vertical-list gap-2mm">
+          <span className="title small horizontal-list gap-2mm flex-vertical-center">
+            <Icon iconName={ICONS.MAIL}></Icon>
+            {t("room.invite.header", {amount: 1})}
+          </span>
+          {
+            data?.invitations?.map((invite, index) => <RoomInvite key={index} inviteData={invite}
+            busy={loading} onAccept={promptAcceptInvite} onReject={promptRefuseInvite}></RoomInvite>)
+          }
+        </div>
+      </> }
       {/* Your room */}
-      {room && <>
+      {data?.roomInfo && <>
         <div className="actions-panel rounded-m vertical-list gap-2mm">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
             <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
@@ -190,22 +192,22 @@ export default function RoomPage() {
           <div className="room-invite vertical-list gap-4mm rounded-s">
             <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
                 <Icon iconName={ICONS.BED}></Icon>
-                {room?.roomName}
+                {data?.roomInfo.roomName}
                 <div className="spacer"></div>
                 <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptRoomRename()}>{t("room.actions.rename")}</Button>
             </span>
             <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
-                <div className="room-owner-container">
-                    <UserPicture userData={room!.owner} size={64} showNickname showFlag></UserPicture>
+                {/* <div className="room-owner-container">
+                    <UserPicture userData={data.roomInfo.roomOwner} size={64} showNickname showFlag></UserPicture>
                     <StatusBox>{t("room.status_owner")}</StatusBox>
-                </div>
-                {room?.guests.map ((usr, key) => <UserPicture key={key} size={64} userData={usr} showNickname showFlag></UserPicture>)}
+                </div> */}
+                {data?.roomInfo.guests.map ((guest, key) => <UserPicture key={key} size={64} userData={guest.user} showNickname showFlag></UserPicture>)}
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
-                <StatusBox>{translate(room.roomTypeNames, locale)}</StatusBox>
-                <StatusBox>{t("room.room_number_left", {size: room.roomCapacity - room.guests.length - 1})}</StatusBox>
+                <StatusBox>{translate(data.roomInfo.roomData.roomTypeNames, locale)}</StatusBox>
+                <StatusBox>{t("room.room_number_left", {size: data.roomInfo.roomData.roomCapacity - data.roomInfo.guests.length})}</StatusBox>
                 <div className="spacer"></div>
-                <Button iconName={ICONS.PERSON_ADD} disabled={(room.roomCapacity - room.guests.length - 1) <= 0}
+                <Button iconName={ICONS.PERSON_ADD} disabled={!data.roomInfo.userIsOwner || !data.roomInfo.canInvite}
                   onClick={()=>promptRoomInvite()}>{t("room.actions.invite")}</Button>
             </div>
           </div>

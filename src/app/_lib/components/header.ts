@@ -1,12 +1,12 @@
 import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "../api/global";
-import { SponsorType } from "../api/user";
+import { SponsorType, UserData } from "../api/user";
 
 export type HeaderData = {
     fursonaName?: string,
     propicPath?: string,
     loggedIn: boolean,
     error: boolean,
-    sponsorType: string
+    sponsorType: SponsorType
 }
 
 export const EMPTY_HEADER_DATA: HeaderData = {
@@ -17,13 +17,7 @@ export const EMPTY_HEADER_DATA: HeaderData = {
     sponsorType: SponsorType.NONE
 };
 
-export interface HeaderApiResponse extends ApiResponse {
-    userId: number;
-    fursonaName: string;
-    locale?: string;
-    propicUrl?: string;
-    sponsorship?: "";
-}
+export interface HeaderApiResponse extends UserData, ApiResponse {}
 
 export class HeaderApiAction implements RequestAction<HeaderApiResponse, ApiErrorResponse> {
     authenticated = true;

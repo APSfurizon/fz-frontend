@@ -1,4 +1,4 @@
-import { RoomData, RoomInviteData, RoomInviteFetchResponse, RoomInfo } from "./api/room";
+import { RoomData, RoomInviteData, RoomInviteFetchResponse, CurrentRoomInfo } from "./api/room";
 import { SponsorType, UserData } from "./api/user";
 import { AutoInputSearchResult } from "./components/autoInput";
 import { HeaderData } from "./components/header";
@@ -113,7 +113,7 @@ export function getRoomInvites (): RoomInviteFetchResponse {
 /**
  * @deprecated for test purposes only
  */
-export function getRoom(): RoomInfo {
+export function getRoom(): CurrentRoomInfo {
     const sender1: UserData = {
         sponsorType: SponsorType.NONE,
         country: "it",

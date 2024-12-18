@@ -11,23 +11,26 @@ export enum SponsorType {
 }
 
 export type UserData = {
-    nickname?: string,
-    profile_picture_url?: string,
-    country?: string,
-    sponsorType: string
+    userId: number,
+    fursonaName?: string,
+    locale?: string,
+    propicUrl?: string,
+    sponsorship: SponsorType
 }
 
 export const EMPTY_USER_PICTURE: UserData = {
-    nickname: undefined,
-    profile_picture_url: undefined,
-    country: undefined,
-    sponsorType: SponsorType.NONE
+    userId: -1,
+    fursonaName: undefined,
+    locale: undefined,
+    propicUrl: undefined,
+    sponsorship: SponsorType.NONE
 };
 
 export function getUserPicture (fromHeader: HeaderData): UserData {
     return {
-        nickname: fromHeader.fursonaName,
-        profile_picture_url: fromHeader.propicPath,
-        sponsorType: fromHeader.sponsorType
+        userId: -1,
+        fursonaName: fromHeader.fursonaName,
+        propicUrl: fromHeader.propicPath,
+        sponsorship: fromHeader.sponsorType
     };
 }

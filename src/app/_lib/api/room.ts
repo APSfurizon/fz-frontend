@@ -1,10 +1,11 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { ApiErrorResponse, ApiResponse } from "./global";
+import { ApiErrorResponse, ApiResponse, RequestAction } from "./global";
 import { UserData } from "./user";
 
-export interface RoomData {
-    roomCapacity: number,
-    roomTypeNames: Record<string, string>
+export interface RoomGuestHeader {
+    roomGuest: RoomGuest,
+    user: UserData,
+    orderStatus: "CANCELED" | "PENDING" | "PAID" | "EXPIRED"
 }
 
 export interface RoomGuest {
@@ -14,32 +15,45 @@ export interface RoomGuest {
     confirmed: boolean
 }
 
+export interface RoomData {
+    roomCapacity: number,
+    roomTypeNames: Record<string, string>
+}
+
 export interface RoomInfo {
     roomId: number,
     roomName: string,
-    roomOwnerId: number,
-    roomOwner?: UserData,
+    roomOwner: UserData,
+    userIsOwner: boolean,
+
+    confirmationSupported: boolean,
+    canConfirm: boolean,
+    canUnconfirm: boolean,
     confirmed: boolean,
+
     roomData: RoomData,
     canInvite: boolean,
-    guests: RoomGuest[],
+    guests: RoomGuestHeader[],
     owner: boolean,
 }
 
-export interface RoomInviteData {
-    guestId: number,
-    userId: number,
-    roomId: number,
-    confirmed: boolean
+export interface RoomInvitation {
+    room: RoomInfo,
+    invitation: RoomGuest,
 }
 
 export interface RoomInfoResponse extends ApiResponse {
+    canCreateRoom: boolean,
     roomInfo: RoomInfo,
-    invitations: RoomInviteData[]
+    invitations: RoomInvitation[]
 }
 
-export interface RoomInviteFetchResponse extends ApiResponse {
-    roomInvites: RoomInviteData[]
+export class RoomInfoApiAction implements RequestAction<RoomInfoResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "room/info";
+    onSuccess: (status: number, body?: RoomInfoResponse) => void = (status: number, body?: RoomInfoResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface RoomRenameData {
