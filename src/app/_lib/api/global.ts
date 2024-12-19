@@ -28,7 +28,7 @@ export function isDetailedError (err: ApiErrorResponse | ApiDetailedErrorRespons
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
  */
-export interface RequestAction<U extends ApiResponse, V extends ApiErrorResponse> {
+export interface RequestAction<U extends ApiResponse | Boolean, V extends ApiErrorResponse> {
     authenticated: boolean,
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT",
     urlAction: string,
@@ -40,7 +40,7 @@ export function getToken (): string | null {
     return localStorage.getItem(TOKEN_STORAGE_NAME);
 }
 
-export function runRequest (action: RequestAction<any, any>, body?: ApiRequest, searchParams?: Record<string, string>): Promise<ApiResponse | ApiErrorResponse> {
+export function runRequest (action: RequestAction<any, any>, body?: ApiRequest, searchParams?: Record<string, string>): Promise<Boolean | ApiResponse | ApiErrorResponse> {
     return new Promise ((resolve, reject) => {
         // Calc headers
         const headers = new Headers({
@@ -118,7 +118,7 @@ export function runRequest (action: RequestAction<any, any>, body?: ApiRequest, 
     });
 }
 
-export function runFormRequest (action: FormApiAction<ApiRequest, ApiResponse, ApiErrorResponse>, data?: FormData, searchParams?: Record<string, string>): Promise<ApiResponse | ApiErrorResponse> {
+export function runFormRequest (action: FormApiAction<ApiRequest, ApiResponse, ApiErrorResponse>, data?: FormData, searchParams?: Record<string, string>): Promise<Boolean | ApiResponse | ApiErrorResponse> {
     // Build the DTO if present
     let body: any = undefined;
     if (data){

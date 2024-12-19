@@ -1,4 +1,4 @@
-import { HeaderData } from "../components/header";
+import { ApiErrorResponse, ApiResponse, RequestAction } from "./global";
 
 export const ENDPOINTS = Object.freeze({
     HEADER_DATA: "header/data",
@@ -18,19 +18,12 @@ export type UserData = {
     sponsorship: SponsorType
 }
 
-export const EMPTY_USER_PICTURE: UserData = {
-    userId: -1,
-    fursonaName: undefined,
-    locale: undefined,
-    propicUrl: undefined,
-    sponsorship: SponsorType.NONE
-};
+export interface UserDisplayResponse extends UserData, ApiResponse {}
 
-export function getUserPicture (fromHeader: HeaderData): UserData {
-    return {
-        userId: -1,
-        fursonaName: fromHeader.fursonaName,
-        propicUrl: fromHeader.propicPath,
-        sponsorship: fromHeader.sponsorType
-    };
+export class UserDisplayAction implements RequestAction<UserDisplayResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "users/display/me";
+    onSuccess: (status: number, body?: UserDisplayResponse) => void = (status: number, body?: UserDisplayResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

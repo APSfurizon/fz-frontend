@@ -22,7 +22,13 @@
         "confirm": "Conferma",
         "cancel": "Cancella",
         "error": "Errore",
-        "unknown_error": "Errore sconosciuto"
+        "unknown_error": "Errore sconosciuto",
+        "order_status": {
+            "CANCELED": "Ordine cancellato",
+            "PENDING": "Ordine in attesa",
+            "PAID": "Ordine pagato",
+            "EXPIRED": "Ordine scaduto"
+        }
     },
     "components": {
         "autoinput": {
@@ -127,6 +133,10 @@
                 "refuse_invite": {
                     "title": "Rifiutare invito?",
                     "description": "Rifiuterai l'invito nella stanza <room>{roomName}</room> di {nickname}."
+                },
+                "confirm_delete": {
+                    "title": "Conferma eliminazione",
+                    "description": "Vuoi eliminare <room>{roomName}</room>? Gli ospiti verranno notificati."
                 }
             },
             "input": {
@@ -146,16 +156,20 @@
             "actions": {
                 "buy_a_room": "Acquista",
                 "join_a_room": "Accetta un invito",
+                "create_a_room": "Crea una stanza",
                 "refuse": "Rifiuta",
                 "accept": "Accetta",
                 "rename": "Rinomina",
-                "invite": "Invita"
+                "invite": "Invita",
+                "create": "Crea",
+                "delete": "Elimina"
             },
             "your_room": "La tua stanza",
             "or": "oppure",
             "no_room": "Non sei in una stanza, per ora.",
             "status_owner": "Gestore",
-            "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimanente} other {# posti rimanenti}}"
+            "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimanente} other {# posti rimanenti}}",
+            "default_name": "Stanza di {name}"
         },
         "upload_area": {
             "title": "Area upload"

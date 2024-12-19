@@ -143,7 +143,13 @@
         "confirm": "Confirm",
         "cancel": "Cancel",
         "error": "Error",
-        "unknown_error": "Unknown error"
+        "unknown_error": "Unknown error",
+        "order_status": {
+            "CANCELED": "Cancelled order",
+            "PENDING": "Pending order",
+            "PAID": "Paid order",
+            "EXPIRED": "Expired order"
+        }
     },
     "components": {
         "autoinput": {
@@ -252,6 +258,10 @@
                 "refuse_invite": {
                     "title": "Refuse invite?",
                     "description": "You will refuse to join <room>{roomName}</room>, owned by {nickname}."
+                },
+                "confirm_delete": {
+                    "title": "Delete your room",
+                    "description": "Do you want to delete <room>{roomName}</room>? Confirmed guests will be notified."
                 }
             },
             "input": {
@@ -271,16 +281,20 @@
             "actions": {
                 "buy_a_room": "Buy a room",
                 "join_a_room": "Join a room",
+                "create_a_room": "Create a room",
                 "refuse": "Refuse",
                 "accept": "Accept",
                 "rename": "Rename",
-                "invite": "Invite"
+                "invite": "Invite",
+                "create": "Create",
+                "delete": "Delete"
             },
             "your_room": "Your room",
             "or": "or",
             "no_room": "You don't have a room, yet.",
             "status_owner": "Owner",
-            "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}"
+            "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
+            "default_name": "{name}'s room"
         },
         "upload_area": {
             "title": "Upload area"

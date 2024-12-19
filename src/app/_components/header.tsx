@@ -1,42 +1,17 @@
 "use client"
 import {useTranslations} from 'next-intl';
-import { EMPTY_HEADER_DATA, getHeaderUserData, HeaderData } from '../_lib/components/header';
 import Image from "next/image";
 import Icon, { ICONS } from './icon';
 import { useRouter } from 'next/navigation';
 import Button from "../_components/button";
 import "../styles/components/header.css";
-import { useEffect, useState } from 'react';
 import UserDropDown from './userDropdown';
-import { useHeaderUpdate } from '../_lib/context/headerProvider';
+import { useUser } from '../_lib/context/userProvider';
 
 export default function Header () {
     const t = useTranslations('common');
-    const [headerData, setHeaderData] = useState<HeaderData>(EMPTY_HEADER_DATA);
-    const [isLoading, setLoading] = useState(true);
-    const {updateHeader, setUpdateHeader} = useHeaderUpdate();
+    const {userData, userLoading} = useUser();
     const router = useRouter();
-
-    const headerUpdateLogic = (doUpdate: boolean) => {
-        if (doUpdate) {
-            getHeaderUserData().then((data)=> {
-                setHeaderData(data);
-            }).catch(()=>{
-                return EMPTY_HEADER_DATA;
-            }).finally(()=>{
-                setLoading(false);
-            });
-            setUpdateHeader(false);
-        }
-    }
-
-    useEffect(()=> {
-        headerUpdateLogic(updateHeader);
-    }, [updateHeader]);
-
-    useEffect(()=> {
-        headerUpdateLogic(true);
-    }, []);
 
     return (
         <header className='header'>
@@ -62,10 +37,10 @@ export default function Header () {
                     <span className="title semibold">{t('header.archive')}</span>
                 </a>
                 {
-                    isLoading 
-                        ? <Button busy={isLoading}>{t('loading')}</Button>
-                        : headerData.loggedIn 
-                            ? <UserDropDown headerData={headerData}></UserDropDown>
+                    userLoading 
+                        ? <Button busy={userLoading}>{t('loading')}</Button>
+                        : userData 
+                            ? <UserDropDown userData={userData}></UserDropDown>
                             : <Button onClick={()=>router.push('/login')} iconName='key'>{t('header.login')}</Button>
                 }
             </div>
