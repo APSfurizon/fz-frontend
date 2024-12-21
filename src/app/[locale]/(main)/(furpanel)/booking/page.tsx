@@ -9,9 +9,10 @@ import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { runRequest } from "@/app/_lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, OrderEditLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
-import { getBiggestTimeUnit, getErrorBody, translate } from "@/app/_lib/utils";
+import { getBiggestTimeUnit, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import Image from "next/image";
+import ModalError from "@/app/_components/modalError";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");
@@ -31,8 +32,8 @@ export default function BookingPage() {
         runRequest(new BookingOrderApiAction())
         .then((result)=>setBookingData(result as BookingOrderResponse))
         .catch((err)=>showModal(
-            tcommon("error"), 
-            <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+            tcommon("error"),
+            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setLoading(false));
     }, [])
 
@@ -88,7 +89,7 @@ export default function BookingPage() {
         .then((result)=>window.open((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
-            <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setLinkLoading(false));
     }
 
@@ -99,7 +100,7 @@ export default function BookingPage() {
         .then((result)=>window.open((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
-            <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setLinkLoading(false));
     }
 

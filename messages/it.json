@@ -28,7 +28,9 @@
             "PENDING": "Ordine in attesa",
             "PAID": "Ordine pagato",
             "EXPIRED": "Ordine scaduto"
-        }
+        },
+        "error_header": "Si {count, plural, =1 {è verificato un errore} other {sono verificati # errori}}:",
+        "request_id": "Id richiesta:"
     },
     "components": {
         "autoinput": {
@@ -138,6 +140,9 @@
                     "title": "Conferma eliminazione",
                     "description": "Vuoi eliminare <room>{roomName}</room>? Gli ospiti verranno notificati."
                 }
+            },
+            "errors": {
+                "ORDER_NOT_FOUND": "Ordine non trovato"
             },
             "input": {
                 "rename_new_name": {

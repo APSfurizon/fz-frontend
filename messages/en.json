@@ -149,7 +149,9 @@
             "PENDING": "Pending order",
             "PAID": "Paid order",
             "EXPIRED": "Expired order"
-        }
+        },
+        "error_header": "{count, plural, =1 {An error occurred} other {# errors have occurred}}:",
+        "request_id": "Request ID:"
     },
     "components": {
         "autoinput": {
@@ -263,6 +265,9 @@
                     "title": "Delete your room",
                     "description": "Do you want to delete <room>{roomName}</room>? Confirmed guests will be notified."
                 }
+            },
+            "errors": {
+                "ORDER_NOT_FOUND": "Order not found"
             },
             "input": {
                 "rename_new_name": {

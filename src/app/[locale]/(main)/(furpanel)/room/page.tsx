@@ -12,7 +12,6 @@ import RoomInvite from "@/app/_components/_room/roomInvite";
 import { RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteFormAction, RoomRenameData, RoomRenameFormAction } from "@/app/_lib/api/room";
 import UserPicture from "@/app/_components/userPicture";
 import StatusBox from "@/app/_components/statusBox";
-import { getErrorBody, translate } from "@/app/_lib/utils";
 import DataForm from "@/app/_components/dataForm";
 import JanInput from "@/app/_components/janInput";
 import AutoInput from "@/app/_components/autoInput";
@@ -20,6 +19,8 @@ import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
 import "../../../../styles/furpanel/room.css";
 import { useUser } from "@/app/_lib/context/userProvider";
 import { OrderStatus } from "@/app/_lib/api/order";
+import ModalError from "@/app/_components/modalError";
+import { translate } from "@/app/_lib/utils";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -45,7 +46,7 @@ export default function RoomPage() {
     .then (result => setData(result as RoomInfoResponse))
     .catch((err)=>showModal(
         tcommon("error"), 
-        <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+        <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>
     )).finally(()=>setLoading(false));
   }, [data])
 
@@ -134,7 +135,7 @@ export default function RoomPage() {
     .then((data) => {if ((data as RoomCreateResponse).roomId) setData(undefined);})
     .catch((err)=>showModal(
         tcommon("error"), 
-        <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+        <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
     ))
     .finally(()=>setActionLoading(false));
   }
@@ -146,10 +147,10 @@ export default function RoomPage() {
     setData(undefined)
   }
 
-  const renameRoomFail = (data: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const renameRoomFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     showModal(
       tcommon("error"), 
-      <span className='error'>{getErrorBody(data) ?? tcommon("unknown_error")}</span>
+      <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
     );
   }
 
@@ -185,7 +186,7 @@ export default function RoomPage() {
     .then((data) => {if (data) setData(undefined);})
     .catch((err)=>showModal(
         tcommon("error"), 
-        <span className='error'>{getErrorBody(err) ?? tcommon("unknown_error")}</span>
+        <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
     ))
     .finally(()=>setActionLoading(false));
   }
