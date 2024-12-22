@@ -45,7 +45,7 @@ export default function DataForm ({action, onSuccess, onFail, children, checkFn,
             }
         }
         setLoading (true);
-        runFormRequest(action, new FormData(e.currentTarget))
+        runFormRequest(action, undefined, new FormData(e.currentTarget))
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
                 onFail && onFail (errorData);

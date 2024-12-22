@@ -151,7 +151,10 @@
             "EXPIRED": "Expired order"
         },
         "error_header": "{count, plural, =1 {An error occurred} other {# errors have occurred}}:",
-        "request_id": "Request ID:"
+        "request_id": "Request ID:",
+        "util": {
+            "hoverable": "Clicca per copiare"
+        }
     },
     "components": {
         "autoinput": {
@@ -176,6 +179,9 @@
             "delete": "Delete",
             "upload": "Upload",
             "crop": "Crop"
+        },
+        "input": {
+            "validation_fail": "Valore non valido"
         }
     },
     "furpanel": {

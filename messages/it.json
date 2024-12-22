@@ -30,7 +30,10 @@
             "EXPIRED": "Ordine scaduto"
         },
         "error_header": "Si {count, plural, =1 {è verificato un errore} other {sono verificati # errori}}:",
-        "request_id": "Id richiesta:"
+        "request_id": "ID richiesta:",
+        "util": {
+            "hoverable": "Clicca per copiare"
+        }
     },
     "components": {
         "autoinput": {
@@ -55,6 +58,9 @@
             "delete": "Elimina",
             "upload": "Carica",
             "crop": "Ritaglia"
+        },
+        "input": {
+            "validation_fail": "Valore non valido"
         }
     },
     "furpanel": {
@@ -251,7 +257,7 @@
                 },
                 "nickname": {
                     "help": "Il nome del tuo fursona principle. Non sarà usato per l'accesso",
-                    "label": "Soprannome",
+                    "label": "Nickname",
                     "placeholder": "Es: il nome del tuo fursona"
                 },
                 "password": {

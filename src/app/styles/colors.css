@@ -7,6 +7,8 @@
     --text-link: #2395D6;
     --text-status-error: #e44f4f;
     --main-dialog-background: #141E26;
+
+    --hoverable-bg: #3b3b3b;
     
     /* Footer */
     --footer-bg: #211A28;
@@ -103,7 +105,8 @@
     /* Modal */
     --modal-overlay-bg: #0008;
     --modal-dialog-bg: #141E26;
-    --modal-button-close: #EC2F2F;
+    --modal-button-close: #ffa4a4;
+    --modal-button-close-hover: #EC2F2F;
 
     /* Upload */
     --upload-bg: #242C38;

@@ -1,5 +1,6 @@
 import { ApiErrorResponse, runRequest } from "../api/global";
 import { AutoInputCountriesApiAction, AutoInputStatesApiAction, Place, PlaceApiResponse } from "../api/register";
+import { buildSearchParams } from "../utils";
 
 export function getParamsHash (...p: any[]) {
     var crypto = require('crypto')
@@ -33,16 +34,16 @@ export abstract class CachedData<T> {
     };
 }
 
-export class CachedCountries extends CachedData<PlaceApiResponse | ApiErrorResponse> {
+export class CachedCountries extends CachedData<Boolean | PlaceApiResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData(...p: any[]) {
-        return runRequest(new AutoInputCountriesApiAction (), undefined, undefined);
+        return runRequest(new AutoInputCountriesApiAction ());
     }
 }
 
-export class CachedStates extends CachedData<PlaceApiResponse | ApiErrorResponse> {
+export class CachedStates extends CachedData<Boolean | PlaceApiResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData(...p: string[]) {
-        return runRequest(new AutoInputStatesApiAction (), undefined, {"code": p[0] ?? ""});
+        return runRequest(new AutoInputStatesApiAction (), undefined, undefined, buildSearchParams({"code": p[0] ?? ""}));
     }
 }

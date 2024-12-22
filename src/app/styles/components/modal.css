@@ -45,10 +45,11 @@ div.modal-dialog span.header-title {
 div.modal-dialog div.modal-header a.header-close {
     cursor: pointer;
     user-select: none;
+    color: var(--modal-button-close);
 }
 
 div.modal-dialog div.modal-header a.header-close:hover {
-    color: var(--modal-button-close);
+    color: var(--modal-button-close-hover);
 }
 
 div.modal-dialog div.bottom-toolbar {

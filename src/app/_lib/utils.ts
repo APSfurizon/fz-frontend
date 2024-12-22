@@ -23,3 +23,28 @@ export function getBiggestTimeUnit(ts: number): Intl.RelativeTimeFormatUnit {
 export function translate(data: Record<string, string>, locale: string): string {
     return data[locale] ?? data["en"];
 }
+
+export function isEmpty (str?: string) {
+    return !str || str.length === 0;
+}
+
+export function copyContent (e: HTMLElement) {
+    if (e.textContent) {
+        navigator.clipboard.writeText(e.textContent);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function buildSearchParams (init: Record<string, string | string[]>): URLSearchParams {
+    const params = new URLSearchParams();
+    Object.keys(init).forEach(key => {
+        if (init[key] instanceof Array){
+            init[key].forEach(value =>params.append(key, value));
+        } else {
+            params.append(key, init[key])
+        }
+    })
+    return params;
+}

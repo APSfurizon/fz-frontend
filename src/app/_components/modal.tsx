@@ -3,8 +3,8 @@ import Icon, { ICONS } from "./icon";
 import "../styles/components/modal.css";
 import { useTranslations } from "next-intl";
 
-export default function Modal ({children, className, onClose, open, overlayClassName, overlayStyle, showHeader=true, style, title, zIndex=500 }: Readonly<{
-    children?: React.ReactNode, className?: string, onClose: Function, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, showHeader?: boolean, style?: CSSProperties, title?: string, zIndex?: number;
+export default function Modal ({children, className, icon, onClose, open, overlayClassName, overlayStyle, showHeader=true, style, title, zIndex=500 }: Readonly<{
+    children?: React.ReactNode, className?: string, icon?: string, onClose: Function, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, showHeader?: boolean, style?: CSSProperties, title?: string, zIndex?: number;
 }>) {
     const t = useTranslations("components");
     return <>
@@ -13,6 +13,7 @@ export default function Modal ({children, className, onClose, open, overlayClass
             {
                 showHeader && (
                     <div className="modal-header horizontal-list">
+                        {icon && <Icon style={{marginRight: ".25em"}} iconName={icon}></Icon>}
                         <p className="header-title title bold medium">{title}</p>
                         <div className="spacer"></div>
                         <a className="header-close" onClick={(e)=>onClose(e)} title={t("modal.close")}><Icon iconName={ICONS.CANCEL}></Icon></a>

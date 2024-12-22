@@ -33,7 +33,8 @@ export default function BookingPage() {
         .then((result)=>setBookingData(result as BookingOrderResponse))
         .catch((err)=>showModal(
             tcommon("error"),
-            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
+            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
+            ICONS.ERROR
         )).finally(()=>setLoading(false));
     }, [])
 

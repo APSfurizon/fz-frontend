@@ -34,7 +34,7 @@ export default function UserPicture ({size, userData, showNickname, showFlag, hi
                 <span className="title semibold nickname small">
                     {isLoading && <Icon className='loading-animation small' style={{marginRight: '0.3125em'}} iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
                     {isLoading ? t('loading') : pictureData?.fursonaName ?? 'unknown'}
-                    {pictureData?.locale && showFlag && <span className="flag">{getFlagEmoji(pictureData.locale ?? "it")}</span>}
+                    {pictureData?.locale && showFlag && <span className="flag">{getFlagEmoji(pictureData?.locale?.toLowerCase() ?? "it")}</span>}
                 </span>
             )}
         </div>

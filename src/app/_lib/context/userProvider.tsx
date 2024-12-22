@@ -20,7 +20,7 @@ export function HeaderProvider ({children}: Readonly<{children: React.ReactNode}
     const handleUserUpdate = (doUpdate: boolean) => {
             setUserLoading(true);
             if (doUpdate) {
-                runRequest(new UserDisplayAction(), undefined, undefined).then((data)=> {
+                runRequest(new UserDisplayAction()).then((data)=> {
                     setUserData(data as UserData);
                 })
                 .catch(()=>{})

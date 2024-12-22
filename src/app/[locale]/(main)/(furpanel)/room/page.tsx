@@ -15,12 +15,13 @@ import StatusBox from "@/app/_components/statusBox";
 import DataForm from "@/app/_components/dataForm";
 import JanInput from "@/app/_components/janInput";
 import AutoInput from "@/app/_components/autoInput";
-import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
+import { AutoInputDebugUserManager, AutoInputFilter } from "@/app/_lib/components/autoInput";
 import "../../../../styles/furpanel/room.css";
 import { useUser } from "@/app/_lib/context/userProvider";
 import { OrderStatus } from "@/app/_lib/api/order";
 import ModalError from "@/app/_components/modalError";
 import { translate } from "@/app/_lib/utils";
+import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -39,6 +40,16 @@ export default function RoomPage() {
   /* Room data */
   const [data, setData] = useState<RoomInfoResponse> ();
 
+  // Modal states
+  // rename modal
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
+
+  // invite modal
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
+
+  // accept invite modal
+  const [currentInvite, seetCurrentInvite] = useState<RoomInvitation>();
+
   useEffect(()=> {
     if (data) return;
     setLoading(true);
@@ -53,8 +64,8 @@ export default function RoomPage() {
   /* Room invites logic */
 
   const acceptInvite = (invite: RoomInvitation) => {
-    hideModal();
-
+    //hideModal();
+    setModalLoading(true);
   }
 
   const promptAcceptInvite = (invite: RoomInvitation) => {
@@ -101,26 +112,25 @@ export default function RoomPage() {
 
   const promptRoomInvite = () => {
     if (!data) return;
-    
-    const modalBody = <>
-    <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} hideSave className="vertical-list gap-2mm">
-      {modalLoading && <Icon className='loading-animation small' iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
-      <input type="hidden" name="roomId" value={data.currentRoomInfo.roomId}></input>
-      <AutoInput fieldName="invitedUsers" manager={new AutoInputDebugUserManager()} multiple={true} 
-      max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
-      placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
-      <div className="horizontal-list gap-4mm">
-        <Button type="submit" className="success" iconName={ICONS.CHECK}>{tcommon("confirm")}</Button>
-        <div className="spacer"></div>
-        <Button type="button" className="danger" iconName={ICONS.CANCEL} onClick={()=>hideModal()}>{tcommon("cancel")}</Button>
-      </div>
-    </DataForm>
-    </>;
-
-    showModal(t("room.actions.invite"), modalBody);
+    setInviteModalOpen(true);
   }
 
   /* Room editing logic */
+  const commonSuccess = () => {
+    setRenameModalOpen(false);
+    setInviteModalOpen(false);
+    setData(undefined);
+  }
+
+  const commonFail = (err: ApiErrorResponse | ApiDetailedErrorResponse, translationRoot?: string, translationKey?: string) => {
+    setRenameModalOpen(false);
+    setInviteModalOpen(false);
+    showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot={translationRoot ?? "furpanel"} translationKey={translationKey ?? "room.errors"}></ModalError>
+    );
+  }
+
   // Room creation
   const createRoom = () => {
     if (userLoading) return;
@@ -131,48 +141,17 @@ export default function RoomPage() {
 
     setActionLoading(true);
 
-    runRequest(new RoomCreateApiAction(), roomData, undefined)
+    runRequest(new RoomCreateApiAction(), undefined, roomData, undefined)
     .then((data) => {if ((data as RoomCreateResponse).roomId) setData(undefined);})
-    .catch((err)=>showModal(
-        tcommon("error"), 
-        <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-    ))
+    .catch((err)=>commonFail(err))
     .finally(()=>setActionLoading(false));
   }
 
   // Room Rename
 
-  const renameRoomSuccess = () => {
-    hideModal();
-    setData(undefined)
-  }
-
-  const renameRoomFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    showModal(
-      tcommon("error"), 
-      <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-    );
-  }
-
   const promptRoomRename = () => {
     if (!data) return;
-
-    const modalBody = <>
-    <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={renameRoomSuccess}
-      onFail={renameRoomFail} hideSave className="vertical-list gap-2mm">
-      {modalLoading && <Icon className='loading-animation small' iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
-      <input type="hidden" name="roomId" value={data.currentRoomInfo.roomId}></input>
-      <JanInput inputType="text" fieldName="name" maxLength={64} minLength={3} busy={modalLoading} label={t("room.input.rename_new_name.label")}
-        placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
-      <div className="horizontal-list gap-4mm">
-        <Button type="submit" className="success" iconName={ICONS.CHECK}>{tcommon("confirm")}</Button>
-        <div className="spacer"></div>
-        <Button type="button" className="danger" iconName={ICONS.CANCEL} onClick={()=>hideModal()}>{tcommon("cancel")}</Button>
-      </div>
-    </DataForm>
-    </>;
-
-    showModal(t("room.actions.rename"), modalBody);
+    setRenameModalOpen(true);
   }
 
   // Room deletion
@@ -182,12 +161,9 @@ export default function RoomPage() {
       roomId: roomId
     };
     setActionLoading(true);
-    runRequest(new RoomDeleteAction(), roomData, undefined)
+    runRequest(new RoomDeleteAction(), undefined, roomData, undefined)
     .then((data) => {if (data) setData(undefined);})
-    .catch((err)=>showModal(
-        tcommon("error"), 
-        <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-    ))
+    .catch((err)=>commonFail(err))
     .finally(()=>setActionLoading(false));
   }
 
@@ -270,8 +246,13 @@ export default function RoomPage() {
                 <Icon iconName={ICONS.BED}></Icon>
                 {data?.currentRoomInfo.roomName}
                 <div className="spacer"></div>
-                <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptRoomRename()}>{t("room.actions.rename")}</Button>
-                <Button className="danger" iconName={ICONS.DELETE} onClick={()=>promptRoomDelete()}>{t("room.actions.delete")}</Button>
+                {
+                  data.currentRoomInfo.userIsOwner && <>
+                  <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptRoomRename()}>{t("room.actions.rename")}</Button>
+                  <Button className="danger" iconName={ICONS.DELETE} onClick={()=>promptRoomDelete()}>{t("room.actions.delete")}</Button>
+                  </>
+                }
+                
             </span>
             <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
                 {data?.currentRoomInfo.guests.map ((guest, key) => <div key={key} className="guest-container vertical-list gap-2mm">
@@ -293,8 +274,43 @@ export default function RoomPage() {
         </div>
       </>}
     </div>
+    {/* Invite modal */}
     <Modal open={showInviteTutorial} onClose={()=>setShowInviteTutorial(false)}>
 
+    </Modal>
+    {/* Rename modal */}
+    <Modal title={t("room.actions.rename")} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)}>
+      { data?.currentRoomInfo && <>
+        <DataForm action={new RoomRenameFormAction} method="POST" loading={loading} setLoading={setLoading} onSuccess={commonSuccess}
+          onFail={commonFail} hideSave className="vertical-list gap-2mm">
+          <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
+          <JanInput inputType="text" fieldName="name" required busy={loading} label={t("room.input.rename_new_name.label")}
+          placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
+          <div className="horizontal-list gap-4mm">
+          <Button type="submit" className="success" iconName={ICONS.CHECK} busy={loading}>{tcommon("confirm")}</Button>
+          <div className="spacer"></div>
+          <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={loading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
+          </div>
+        </DataForm>
+        </>}
+    </Modal>
+
+    {/* Invite modal */}
+    <Modal title={t("room.actions.invite")} open={inviteModalOpen} onClose={()=>setInviteModalOpen(false)}>
+        {data?.currentRoomInfo && <>
+        <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
+          onFail={commonFail} hideSave className="vertical-list gap-2mm">
+          <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
+          <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true}
+          max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
+          placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
+          <div className="horizontal-list gap-4mm">
+            <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
+            <div className="spacer"></div>
+            <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setInviteModalOpen(false)}>{tcommon("cancel")}</Button>
+          </div>
+        </DataForm>
+        </>}
     </Modal>
   </>;
 }
