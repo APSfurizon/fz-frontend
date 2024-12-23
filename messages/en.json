@@ -189,12 +189,12 @@
             "title": "Badge"
         },
         "booking":{
-            "title": "Booking",
-            "your_booking": "Your booking",
+            "title": "Reservation",
+            "your_booking": "Your reservation",
             "countdown": "Countdown",
             "countdown_desc": "Ticket sales will begin on {openingDate}",
             "book_now": "Book now",
-            "edit_booking": "Edit booking",
+            "edit_booking": "Edit reservation",
             "editing_locked_warning": "Editing lock memo",
             "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
             "editing_locked": "Editing locked",
