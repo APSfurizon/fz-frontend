@@ -73,11 +73,15 @@
             "countdown": "Conto alla rovescia",
             "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
             "book_now": "Prenota ora",
+            "review_info_first": "Rivedi i tuoi dati personali",
             "edit_booking": "Modifica prenotazione",
+            "retry_payment": "Riprova pagamento",
             "editing_locked_warning": "Avviso blocco modifiche",
             "editing_locked_warning_desc": "Dal {lockDate} non sarà più possibile modificare l'ordine.",
             "editing_locked": "Modifica bloccata",
             "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
+            "booking_review_info": "Revisione dati personali",
+            "booking_review_info_desc": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono per rilasciarti la tessera associativa e per motivi assicurativi.",
             "items": {
                 "code": "codice",
                 "membership_card": "Tessera associativa",
@@ -94,6 +98,7 @@
                 "extra_days_LATE": "Late"
             },
             "errors": {
+                "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",
                 "SERVER_ERROR": {
                     "title": "Errore server",
                     "description": "Non è stato possibile recuperare alcuna informazione sull'evento. Provare più tardi"
@@ -118,6 +123,10 @@
                     "title": "Ordine condiviso",
                     "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
                 }
+            },
+            "actions": {
+                "review_info": "Rivedi informazioni",
+                "confirm_info": "Conferma informazioni"
             }
         },
         "badge": {
@@ -158,6 +167,12 @@
                 "invite": {
                     "label": "Invita qualcuno in stanza",
                     "placeholder": "Cerca un utente"
+                },
+                "force_join": {
+                    "label": "Forza invito"
+                },
+                "force_exit": {
+                    "label": "Forza uscita da altre stanze"
                 }
             },
             "invite": {

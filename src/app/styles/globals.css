@@ -41,8 +41,7 @@ a.hoverable:hover {
 }
 
 *:disabled {
-  filter: grayscale(0.7);
-  opacity: 0.8;
+  filter: grayscale(0.7) brightness(0.8);
 }
 
 /* Scrollbar styles */

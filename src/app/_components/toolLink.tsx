@@ -15,7 +15,7 @@ export default function ToolLink ({iconName, iconStyle, href, children, style, c
         <div className={`tool-link rounded-m ${activeClass} ${className ?? ""}`} style={{...style}}>
             <Link href={href}>
             {iconName !== undefined && <Icon iconName={iconName} style={{...iconStyle}}></Icon>}
-            <span className="title semibold">{children}</span>
+            <span className="title small semibold">{children}</span>
         </Link>
         </div>
     )

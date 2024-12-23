@@ -22,6 +22,7 @@ import { OrderStatus } from "@/app/_lib/api/order";
 import ModalError from "@/app/_components/modalError";
 import { translate } from "@/app/_lib/utils";
 import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
+import Checkbox from "@/app/_components/checkbox";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -302,8 +303,14 @@ export default function RoomPage() {
           onFail={commonFail} hideSave className="vertical-list gap-2mm">
           <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
           <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true}
-          max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
-          placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
+            max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
+            placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
+          { /* TODO: [ADMIN CHECK] */
+            true && <>
+            <Checkbox fieldName="force">{t("room.input.force_join.label")}</Checkbox>
+            <Checkbox fieldName="forceExit">{t("room.input.force_exit.label")}</Checkbox>
+            </>
+          }
           <div className="horizontal-list gap-4mm">
             <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
             <div className="spacer"></div>

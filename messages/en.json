@@ -153,7 +153,7 @@
         "error_header": "{count, plural, =1 {An error occurred} other {# errors have occurred}}:",
         "request_id": "Request ID:",
         "util": {
-            "hoverable": "Clicca per copiare"
+            "hoverable": "Click to copy"
         }
     },
     "components": {
@@ -194,11 +194,15 @@
             "countdown": "Countdown",
             "countdown_desc": "Ticket sales will begin on {openingDate}",
             "book_now": "Book now",
+            "review_info_first": "Review your personal info",
             "edit_booking": "Edit reservation",
+            "retry_payment": "Retry payment",
             "editing_locked_warning": "Editing lock memo",
             "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
             "editing_locked": "Editing locked",
             "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
+            "booking_review_info": "Review personal info",
+            "booking_review_info_desc": "Conferm your membership personal info. This data is needed to release the new membership card and insurance.",
             "items": {
                 "code": "code",
                 "membership_card": "Membership card",
@@ -216,6 +220,7 @@
 
             },
             "errors": {
+                "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened, yet.",
                 "SERVER_ERROR": {
                     "title": "Server error",
                     "description": "Could not retrieve the current event info. Try again, later."
@@ -240,6 +245,10 @@
                     "title": "Shared order",
                     "description": "Your order appears to be shared with more users. Please, contact support to rectify the situation."
                 }
+            },
+            "actions": {
+                "review_info": "Review informations",
+                "confirm_info": "Confirm informazions"
             }
         },
         "debug": {
@@ -283,6 +292,12 @@
                 "invite": {
                     "label": "Invite someone in your room",
                     "placeholder": "Search for a user"
+                },
+                "force_join": {
+                    "label": "Force join the room"
+                },
+                "force_exit": {
+                    "label": "Kick from any other room"
                 }
             },
             "invite": {

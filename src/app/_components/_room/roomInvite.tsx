@@ -31,7 +31,11 @@ export default function RoomInvite ({style, className, busy, onAccept, onReject,
                 }
             </span>
             <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
-                {inviteData.room.guests.map ((usr, key) => <UserPicture key={key} size={64} userData={usr.user} showNickname showFlag></UserPicture>)}
+                {inviteData.room.guests.filter(usr => usr.roomGuest.confirmed)
+                .map ((usr, key) => <div key={key} className="guest-container vertical-list gap-2mm">
+                    <UserPicture key={key} size={64} userData={usr.user} showNickname showFlag></UserPicture>
+                    {inviteData.room.roomOwner.userId === usr.user.userId && <StatusBox>{t("room.status_owner")}</StatusBox>}
+                </div>)}
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
                 <StatusBox>{translate(inviteData.room.roomData.roomTypeNames, locale)}</StatusBox>

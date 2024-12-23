@@ -8,16 +8,18 @@ import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { runRequest } from "@/app/_lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, OrderEditLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
 import { getBiggestTimeUnit, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
-import Image from "next/image";
 import ModalError from "@/app/_components/modalError";
+import ToolLink from "@/app/_components/toolLink";
+import { useRouter } from "next/navigation";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");
     const tcommon = useTranslations("common");
     const formatter = useFormatter();
+    const router = useRouter();
     useTitle(t("booking.title"));
     const now = useNow({updateInterval: 1000});
     const {showModal} = useModalUpdate();
@@ -25,18 +27,7 @@ export default function BookingPage() {
     const [bookingData, setBookingData] = useState<BookingOrderResponse>();
     const [pageData, setPageData] = useState<BookingOrderUiData>();
     const [isLoading, setLoading] = useState<boolean>(false);
-    const [linkLoading, setLinkLoading] = useState<boolean>(false);
-
-    useEffect(()=>{
-        setLoading(true);
-        runRequest(new BookingOrderApiAction())
-        .then((result)=>setBookingData(result as BookingOrderResponse))
-        .catch((err)=>showModal(
-            tcommon("error"),
-            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
-            ICONS.ERROR
-        )).finally(()=>setLoading(false));
-    }, [])
+    const [actionLoading, setActionLoading] = useState<boolean>(false);
 
     /**UI variables */
     /**If editing's locked */
@@ -47,7 +38,17 @@ export default function BookingPage() {
     let openDiff = undefined;
     
     useEffect(()=>{
-        if (!!!bookingData) return;
+        if (!!!bookingData) {
+            setLoading(true);
+            runRequest(new BookingOrderApiAction())
+            .then((result)=>setBookingData(result as BookingOrderResponse))
+            .catch((err)=>showModal(
+                tcommon("error"),
+                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
+                ICONS.ERROR
+            )).finally(()=>setLoading(false));
+            return;
+        }
         /**If user has a valid and paid order */
         const hasOrder = !!bookingData && bookingData?.order && ["PENDING", "PAID"].includes(bookingData?.order?.orderStatus);
 
@@ -69,7 +70,9 @@ export default function BookingPage() {
             isDaily: bookingData.order?.dailyTicket,
             dailyDays: dailyDays,
             bookingStartDate: new Date(bookingData?.bookingStartTime ?? 0),
-            editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0)
+            editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0),
+            shouldUpdateInfo: bookingData?.shouldUpdateInfo,
+            shouldRetry: bookingData.order.orderStatus === "PENDING"
         });
     }, [bookingData]);
 
@@ -84,32 +87,54 @@ export default function BookingPage() {
 
     /**UI Events */
     const requestShopLink = (e: MouseEvent<HTMLElement>) => {
-        if (linkLoading) return;
-        setLinkLoading(true);
+        if (actionLoading) return;
+        setActionLoading(true);
         runRequest(new ShopLinkApiAction())
         .then((result)=>window.open((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-        )).finally(()=>setLinkLoading(false));
+        )).finally(()=>setActionLoading(false));
     }
 
     const requestOrderEditLink = (e: MouseEvent<HTMLElement>) => {
-        if (linkLoading) return;
-        setLinkLoading(true);
+        if (actionLoading) return;
+        setActionLoading(true);
         runRequest(new OrderEditLinkApiAction())
         .then((result)=>window.open((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-        )).finally(()=>setLinkLoading(false));
+        )).finally(()=>setActionLoading(false));
+    }
+
+    const requestRetryPaymentLink = (e: MouseEvent<HTMLElement>) => {
+        if (actionLoading) return;
+        setActionLoading(true);
+        runRequest(new OrderRetryLinkApiAction())
+        .then((result)=>window.open((result as ShopLinkResponse).link))
+        .catch((err)=>showModal(
+            tcommon("error"), 
+            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
+        )).finally(()=>setActionLoading(false));
+    }
+
+    const confirmMembershipData = (e: MouseEvent<HTMLElement>) => {
+        if (actionLoading) return;
+        setActionLoading(true);
+        runRequest(new ConfirmMembershipDataApiAction(), undefined, undefined, undefined)
+        .then((result)=>setBookingData(undefined))
+        .catch((err)=>showModal(
+            tcommon("error"), 
+            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
+        )).finally(()=>setActionLoading(false));
     }
 
     /**Date calculations */
     if (!!pageData) {
         openDiff = Math.max(pageData.bookingStartDate.getTime() - now.getTime(), 0);
         /**If the countdown is still running */
-        isOpen = openDiff <= 0;
+        isOpen = true;//openDiff <= 0;
         isEditLocked = Math.max(pageData.editBookEndDate.getTime() - now.getTime(), 0) <= 0;
     }
 
@@ -120,22 +145,39 @@ export default function BookingPage() {
                     <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>{tcommon("loading")}
                 </span>
             </> : <>
-                <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
-                    <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
-                    {/* Countdown view */}
-                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder ? <p className="countdown title large rounded-s">{formatter.relativeTime(pageData.bookingStartDate, {now, unit: getBiggestTimeUnit(openDiff ?? 0)})}</p>
-                    : !pageData.hasOrder && <div className="action-container">
-                        <Button className="action-button book-now" busy={linkLoading} onClick={requestShopLink}>
-                            {t("booking.book_now")}
-                        </Button>
-                    </div>
-                    }
-                </div>
                 {!isOpen && !pageData.hasOrder && (
                     <NoticeBox title={t("booking.countdown")} theme={NoticeTheme.FAQ}>
                         {t("booking.countdown_desc", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
                     </NoticeBox>
                 )}
+                <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
+                    <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
+                    {/* Countdown view */}
+                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder ? <p className="countdown title large rounded-s">{formatter.relativeTime(pageData.bookingStartDate, {now, unit: getBiggestTimeUnit(openDiff ?? 0)})}</p>
+                    : !pageData.hasOrder && <div className="action-container">
+                        <Button className="action-button book-now" busy={actionLoading} disabled={pageData?.shouldUpdateInfo} onClick={requestShopLink}>
+                            <div className="vertical-list flex-vertical-center">
+                                <span className="title large">{pageData?.shouldUpdateInfo ? <Icon style={{marginRight: ".2em"}} iconName={ICONS.LOCK}></Icon> : <></>}{t("booking.book_now")}</span>
+                                {pageData?.shouldUpdateInfo && <>
+                                    <span className="descriptive tiny">({t("booking.review_info_first")})</span>
+                                </>}
+                            </div>
+                        </Button>
+                    </div>
+                    }
+                </div>
+                {pageData?.shouldUpdateInfo && <>
+                    <NoticeBox title={t("booking.booking_review_info")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
+                        {t("booking.booking_review_info_desc")}
+                        <span className="horizontal-list gap-2mm" style={{marginTop: ".5em"}}>
+                        <Button className="success" busy={actionLoading} onClick={confirmMembershipData} iconName={ICONS.CHECK}>{t("booking.actions.confirm_info")}</Button>
+                        <Button className="warning" busy={actionLoading} onClick={()=>{
+                            router.push("/user");
+                        }} iconName={ICONS.OPEN_IN_NEW}>{t("booking.actions.review_info")}</Button>
+                        </span>
+                        
+                    </NoticeBox>
+                </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
                 <p className="title medium">
@@ -162,12 +204,22 @@ export default function BookingPage() {
                         {bookingData!.order.room && orderItem(`${t("booking.items.room")} ${translate(bookingData!.order.room.roomTypeNames, locale)}`, ICONS.BED,
                             t("booking.items.room_capacity", {capacity: bookingData!.order.room.roomCapacity}))}
                     </div>
-                    <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={linkLoading} onClick={requestOrderEditLink}>
-                        {t("booking.edit_booking")}
-                    </Button>
+
+                    {/* Order actions */}
+                    <div className="horizontal-list gap-4mm">
+                        {pageData?.shouldRetry && !isEditLocked && <>
+                            <Button className="action-button" disabled={isEditLocked} iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
+                            {t("booking.retry_payment")}
+                        </Button>
+                        </>}
+                        <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
+                            {t("booking.edit_booking")}
+                        </Button>
+                    </div>
                     <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.editing_locked") : t("booking.editing_locked_warning")}>
                         {t(isEditLocked ? "booking.editing_locked_desc" : "booking.editing_locked_warning_desc", {lockDate: formatter.dateTime(pageData.editBookEndDate)})}
                     </NoticeBox>
+
                     {/* Errors view */}
                     {bookingData?.errors && <>
                         <div className="errors-container vertical-list gap-4mm">{

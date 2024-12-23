@@ -19,7 +19,7 @@ export default function Button ({children, iconName, style, className, busy, onC
             title={title}
             disabled={busy || disabled}
             className={"button rounded-m" + " " + (className ?? "")}
-            style={{...style, paddingRight: iconPresent ? '0.5em' : 'revert'}}>
+            style={{...style, paddingRight: iconPresent ? '0.5em' : undefined}}>
             {busy && (
                 <Icon className={`medium loading-animation`} iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
             )}
