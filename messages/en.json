@@ -282,7 +282,8 @@
                 }
             },
             "errors": {
-                "ORDER_NOT_FOUND": "Order not found"
+                "ORDER_NOT_FOUND": "Order not found",
+                "ROOM_FULL": "The room is full"
             },
             "input": {
                 "rename_new_name": {
@@ -313,12 +314,17 @@
                 "rename": "Rename",
                 "invite": "Invite",
                 "create": "Create",
-                "delete": "Delete"
+                "delete": "Delete",
+                "kick": "Kick user",
+                "revoke_invite": "Revoke invite",
+                "confirm_room": "Confirm room",
+                "unconfirm_room": "Unconfirm room"
             },
             "your_room": "Your room",
             "or": "or",
             "no_room": "You don't have a room, yet.",
             "status_owner": "Owner",
+            "status_invited": "Invited",
             "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
             "default_name": "{name}'s room"
         },

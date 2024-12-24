@@ -255,21 +255,46 @@ export default function RoomPage() {
                 }
                 
             </span>
+            {/* Room guests */}
             <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
-                {data?.currentRoomInfo.guests.map ((guest, key) => <div key={key} className="guest-container vertical-list gap-2mm">
+                {data?.currentRoomInfo.guests.map ((guest, key) => <div key={key} 
+                  className={`guest-container vertical-list gap-2mm ${guest.roomGuest.confirmed === false ? "invited" : ""}`}>
                   <UserPicture size={64} userData={guest.user} showNickname showFlag></UserPicture>
                   {data.currentRoomInfo.roomOwner.userId === guest.user.userId && <StatusBox>{t("room.status_owner")}</StatusBox>}
                   {[OrderStatus.CANCELED, OrderStatus.EXPIRED, OrderStatus.PENDING].includes(guest.orderStatus) && 
                     <StatusBox status="warning">{tcommon(`order_status.${guest.orderStatus}`)}</StatusBox>
                   }
+                  {guest.roomGuest.confirmed === false && 
+                    <StatusBox status="warning">{t("room.status_invited")}</StatusBox>
+                  }
+
+                  {data.currentRoomInfo.userIsOwner && guest.roomGuest.confirmed === false && <>
+                    <a className="action-kick" href="#" >
+                      <Icon className="medium" iconName={ICONS.CLOSE}></Icon>
+                    </a>
+                  </>}
                 </div>)}
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
                 <StatusBox>{translate(data.currentRoomInfo.roomData.roomTypeNames, locale)}</StatusBox>
                 <StatusBox>{t("room.room_number_left", {size: data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length})}</StatusBox>
                 <div className="spacer"></div>
-                <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.userIsOwner || !data.currentRoomInfo.canInvite}
-                  onClick={()=>promptRoomInvite()}>{t("room.actions.invite")}</Button>
+                {data.currentRoomInfo.userIsOwner ? <>
+                {/* Owner actions */}
+                  <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
+                    onClick={()=>promptRoomInvite()}>{t("room.actions.invite")}</Button>
+                    {data.currentRoomInfo.confirmed === false ? <>
+                      <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
+                        onClick={()=>promptRoomInvite()}>{t("room.actions.confirm_room")}</Button>
+                    </> : <>
+                    <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
+                        onClick={()=>promptRoomInvite()}>{t("room.actions.unconfirm_room")}</Button>
+                    </>}
+                </> : <>
+                {/* Guest actions */}
+                  <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
+                    onClick={()=>promptRoomInvite()}>{t("room.actions.leave")}</Button>
+                </>}
             </div>
           </div>
         </div>

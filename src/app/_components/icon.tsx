@@ -18,6 +18,7 @@ export const ICONS = Object.freeze({
     CLOUD_UPLOAD: "cloud_upload",
     CONTEXTUAL_TOKEN: "contextual_token",
     DELETE: "delete",
+    DISABLED_BY_DEFAULT: "disabled_by_default",
     DO_NOT_DISTURB_ON: "do_not_disturb_on",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",

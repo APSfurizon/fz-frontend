@@ -20,3 +20,25 @@ div.room-invite {
         border-top: 1px solid var(--room-invite-bg);
     }
 }
+
+div.guest-container {
+    position: relative;
+
+    a.action-kick {
+        position: absolute;
+        right: -.5em;
+        top: -.5em;
+        border-radius: 100%;
+        padding: .2em;
+        margin: 0px;
+        background-color: var(--room-invite-kick);
+    }
+
+    a.action-kick:hover {
+        filter: brightness(1.1);
+    }
+
+    a.action-kick:active {
+        filter: brightness(0.8);
+    }
+}

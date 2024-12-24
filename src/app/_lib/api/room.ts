@@ -107,7 +107,7 @@ export class RoomDeleteAction implements RequestAction<Boolean, ApiErrorResponse
 
 export interface RoomInviteApiData {
     roomId: number,
-    invitedUsers: number[],
+    userIds: number[],
     force: boolean,
     forceExit: boolean
 }
@@ -120,7 +120,7 @@ export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: RoomInviteApiData = {
             roomId: parseInt (data.get('roomId')!.toString ()),
-            invitedUsers: data.get('invitedUsers')!.toString ().split(',').map(val=>parseInt(val)),
+            userIds: data.get('invitedUsers')!.toString ().split(',').map(val=>parseInt(val)),
             force: (data.get('force')! ?? "").toString().toLowerCase() === "true",
             forceExit: (data.get('forceExit')! ?? "").toString().toLowerCase() === "true"
         };

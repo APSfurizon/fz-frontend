@@ -7,7 +7,6 @@ export default function ModalError({error, translationRoot, translationKey}: Rea
     const tcommon = useTranslations("common");
     const errors = [];
     let requestId = undefined;
-    console.log(error);
     if (!error) {
         errors.push("unknown_error");
     } else {
