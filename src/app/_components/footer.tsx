@@ -33,7 +33,7 @@ export default function Footer () {
               <Image className="footer-logo-facebook" src="/images/footer/facebook-brands-solid.svg" alt="Facebook logo" width={32} height={32}></Image>
             </a>
           </div>
-          <div className="horizontal-list gap-4mm tiny normal title flex-center">
+          <div className="footer-info horizontal-list gap-4mm tiny normal title flex-center">
             <span>{t('footer.society_name')}</span>
             <span>{t('footer.address')}</span>
           </div>

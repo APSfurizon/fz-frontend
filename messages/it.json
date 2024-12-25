@@ -248,7 +248,8 @@
                 "unknown_error": "Errore sconosciuto",
                 "network_error": "Errore di rete",
                 "email_not_registered": "Utente non trovato",
-                "invalid_credentials": "Credenziali errate"
+                "invalid_credentials": "Credenziali errate",
+                "invalid_input": "Dati non validi"
             }
         },
         "register": {

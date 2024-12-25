@@ -19,12 +19,14 @@ div.room-invite {
         padding: 0.625em;
         background-color: var(--room-invite-bg);
         border-bottom: 1px solid var(--room-invite-bg);
+        flex-wrap: wrap;
     }
 
     div.invite-toolbar {
         padding: 0.625em;
         background-color: var(--room-invite-bg);
         border-top: 1px solid var(--room-invite-bg);
+        flex-wrap: wrap;
     }
 }
 

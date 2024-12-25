@@ -5,3 +5,13 @@
 .main-dialog {
     max-width: 210mm;
 }
+
+@media (max-width:800px) {
+    .main-dialog {
+        min-width: 100vw;
+    }
+
+    .tools-list {
+        flex-direction: column;
+    }
+}

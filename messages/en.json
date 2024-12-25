@@ -6,7 +6,8 @@
                 "email_not_registered": "User not found",
                 "invalid_credentials": "Credenziali errate",
                 "network_error": "Network error",
-                "unknown_error": "Unknown error"
+                "unknown_error": "Unknown error",
+                "invalid_input": "Invalid data"
             },
             "label_email": "Email",
             "label_password": "Password",

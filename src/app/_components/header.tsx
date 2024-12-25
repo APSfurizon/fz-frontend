@@ -27,15 +27,15 @@ export default function Header () {
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
                 </a>
-                <a className="header-link">
+                {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.INFO}></Icon>
                     <span className="title semibold">{t('header.information')}</span>
-                </a>
+                </a> */}
                 <div className="spacer"></div>
-                <a className="header-link">
+                {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.BOOKMARK_STAR}></Icon>
                     <span className="title semibold">{t('header.archive')}</span>
-                </a>
+                </a> */}
                 {
                     userLoading 
                         ? <Button busy={userLoading}>{t('loading')}</Button>

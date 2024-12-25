@@ -50,7 +50,6 @@ export function runRequest (action: ApiAction<any, any>, pathParams?: string[], 
         // Calc url
         let useSearchParams = !!searchParams;
         const endpointUrl = `${API_BASE_URL}${[action.urlAction, ...pathParams ?? []].join("/")}${useSearchParams ? "?"+ (searchParams?.toString() ?? "") : ""}`
-        console.log(endpointUrl, searchParams);
         fetch(endpointUrl, {method: action.method, body: body ? JSON.stringify(body) : null, headers: headers}).then((fulfilledData) => {
             const contentType = fulfilledData.headers.get("content-type");
             const correlationId = fulfilledData.headers.get('X-Correlation-Id') ?? undefined;

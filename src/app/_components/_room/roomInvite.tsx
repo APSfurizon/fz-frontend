@@ -40,8 +40,10 @@ export default function RoomInvite ({style, className, busy, onAccept, onReject,
             <div className="invite-toolbar horizontal-list gap-4mm">
                 <StatusBox>{translate(inviteData.room.roomData.roomTypeNames, locale)}</StatusBox>
                 <div className="spacer"></div>
-                <Button busy={busy} className="danger" iconName={ICONS.DO_NOT_DISTURB_ON} onClick={()=>onReject(inviteData)}>{t("room.actions.refuse")}</Button>
-                <Button busy={busy} className="success" iconName={ICONS.PERSON_ADD} onClick={()=>onAccept(inviteData)}>{t("room.actions.accept")}</Button>
+                <div className="horizontal-list gap-4mm">
+                    <Button busy={busy} className="danger" iconName={ICONS.DO_NOT_DISTURB_ON} onClick={()=>onReject(inviteData)}>{t("room.actions.refuse")}</Button>
+                    <Button busy={busy} className="success" iconName={ICONS.PERSON_ADD} onClick={()=>onAccept(inviteData)}>{t("room.actions.accept")}</Button>
+                </div>
             </div>
         </div>
     </>
