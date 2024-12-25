@@ -1,6 +1,6 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult } from "../components/autoInput";
 import { buildSearchParams } from "../utils";
-import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "./global";
+import { ApiErrorResponse, ApiResponse, ApiAction, runRequest } from "./global";
 
 export const ENDPOINTS = Object.freeze({
     HEADER_DATA: "header/data",
@@ -22,7 +22,7 @@ export type UserData = {
 
 export interface UserDisplayResponse extends UserData, ApiResponse {}
 
-export class UserDisplayAction implements RequestAction<UserDisplayResponse, ApiErrorResponse> {
+export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "users/display/me";
@@ -34,7 +34,7 @@ export interface UserSearchResponse extends ApiResponse {
     users: AutoInputSearchResult[]
 }
 
-export class UserSearchAction implements RequestAction<UserSearchResponse, ApiErrorResponse> {
+export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "users/search/current-event";

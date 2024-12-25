@@ -136,9 +136,16 @@
             "home": "Home",
             "information": "About",
             "login": "Login",
-            "logout": "Logout",
-            "nose_count": "Nose count"
+            "nose_count": "Nose count",
+            "dropdown": {
+                "logout": "Logout",
+                "language": {
+                    "it": "Italiano",
+                    "en": "English"
+                }
+            }
         },
+        "reload": "Reload",
         "loading": "Loading...",
         "confirm": "Confirm",
         "cancel": "Cancel",
@@ -268,7 +275,7 @@
                     "title": "Room editing locked",
                     "description": "Since {lockDate}, room editing is now locked."
                 },
-                "confirm_invite": {
+                "accept_invite": {
                     "title": "Accept invite?",
                     "description": "You will join room <room>{roomName}</room>, owned by {nickname}."
                 },
@@ -279,6 +286,18 @@
                 "confirm_delete": {
                     "title": "Delete your room",
                     "description": "Do you want to delete <room>{roomName}</room>? Confirmed guests will be notified."
+                },
+                "confirm_invite_cancel": {
+                    "title": "Revoke invite",
+                    "description": "Do you want to revoke your invite to {guestName}?"
+                },
+                "confirm_kick": {
+                    "title": "Kick guest",
+                    "description": "Do you want to kick {guestName} from your room?"
+                },
+                "confirm_leave": {
+                    "title": "Leave room",
+                    "description": "Do you want to leave room <room>{roomName}</room>?"
                 }
             },
             "errors": {
@@ -317,8 +336,10 @@
                 "delete": "Delete",
                 "kick": "Kick user",
                 "revoke_invite": "Revoke invite",
-                "confirm_room": "Confirm room",
-                "unconfirm_room": "Unconfirm room"
+                "confirm_room": "Confirm",
+                "unconfirm_room": "Unconfirm",
+                "transfer": "Transfer",
+                "leave": "Leave"
             },
             "your_room": "Your room",
             "or": "or",

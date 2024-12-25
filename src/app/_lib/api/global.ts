@@ -28,7 +28,7 @@ export function isDetailedError (err: ApiErrorResponse | ApiDetailedErrorRespons
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
  */
-export interface RequestAction<U extends ApiResponse | Boolean, V extends ApiErrorResponse> {
+export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorResponse> {
     authenticated: boolean,
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT",
     urlAction: string,
@@ -40,7 +40,7 @@ export function getToken (): string | null {
     return localStorage.getItem(TOKEN_STORAGE_NAME);
 }
 
-export function runRequest (action: RequestAction<any, any>, pathParams?: string[], body?: ApiRequest, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {
+export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {
     return new Promise ((resolve, reject) => {
         // Calc headers
         const headers = new Headers({

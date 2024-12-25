@@ -3,6 +3,13 @@ div.actions-panel {
     background-color: var(--room-action-panel-bg);
 }
 
+div.limit-view {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
+    text-wrap-style: pretty;
+}
+
 div.room-invite {
     box-shadow: 0px 0px 1em .2em var(--room-invite-shadow);
     background-color: var(--room-invite-bg);

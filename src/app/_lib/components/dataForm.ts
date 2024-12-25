@@ -1,10 +1,10 @@
-import { ApiResponse, ApiErrorResponse, ApiRequest, RequestAction } from "../api/global"
+import { ApiResponse, ApiErrorResponse, ApiRequest, ApiAction } from "../api/global"
 
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
  * coming from a form
  */
-export interface FormApiAction<T extends ApiRequest, U extends ApiResponse, V extends ApiErrorResponse> extends RequestAction<U, V> {
+export interface FormApiAction<T extends ApiRequest, U extends ApiResponse | Boolean, V extends ApiErrorResponse> extends ApiAction<U, V> {
     dtoBuilder: FormDTOBuilder<T>,
 }
 

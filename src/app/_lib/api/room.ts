@@ -1,5 +1,5 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { ApiErrorResponse, ApiResponse, RequestAction } from "./global";
+import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
 import { OrderStatus } from "./order";
 import { UserData } from "./user";
 
@@ -44,7 +44,7 @@ export interface RoomCreateData {
 
 export interface RoomCreateResponse extends RoomInfo, ApiResponse {}
 
-export class RoomCreateApiAction implements RequestAction<RoomCreateResponse, ApiErrorResponse> {
+export class RoomCreateApiAction implements ApiAction<RoomCreateResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/create";
@@ -64,7 +64,7 @@ export interface RoomInfoResponse extends ApiResponse {
     invitations: RoomInvitation[]
 }
 
-export class RoomInfoApiAction implements RequestAction<RoomInfoResponse, ApiErrorResponse> {
+export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "room/info";
@@ -97,13 +97,17 @@ export class RoomRenameFormAction implements FormApiAction<RoomRenameData, ApiRe
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export class RoomDeleteAction implements RequestAction<Boolean, ApiErrorResponse> {
+export class RoomDeleteAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/delete";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
+
+/**
+ * Room Invitation
+ */
 
 export interface RoomInviteApiData {
     roomId: number,
@@ -134,5 +138,37 @@ export class RoomInviteFormAction implements FormApiAction<RoomInviteApiData, Ro
     dtoBuilder = new RoomInviteDTOBuilder ();
     urlAction = "room/invite";
     onSuccess: (status: number, body?: RoomInviteResponse) => void = (status: number, body?: RoomInviteResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+/**
+ * Room invitation management
+ */
+
+export interface GuestIdApiData {
+    guestId: number
+}
+
+export class RoomInviteAnswerAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "room/invite";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export class RoomKickAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "room/kick";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "room/leave";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

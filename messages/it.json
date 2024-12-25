@@ -13,14 +13,20 @@
             "information": "Informazioni",
             "archive": "Archivio",
             "login": "Accedi",
-            "logout": "Esci",
             "alt_logo": "Logo di furizon",
-            "alt_profile_picture": "Foto profilo"
+            "alt_profile_picture": "Foto profilo",
+            "dropdown": {
+                "logout": "Esci",
+                "language": {
+                    "it": "Italiano",
+                    "en": "English"
+                }
+            }
         },
         "reload": "Ricarica",
         "loading": "Caricamento...",
         "confirm": "Conferma",
-        "cancel": "Cancella",
+        "cancel": "Annulla",
         "error": "Errore",
         "unknown_error": "Errore sconosciuto",
         "order_status": {
@@ -143,7 +149,7 @@
                     "title": "Modifiche stanze bloccate",
                     "description": "Dal {lockDate}, la modifica della stanza non è più consentita."
                 },
-                "confirm_invite": {
+                "accept_invite": {
                     "title": "Accettare invito?",
                     "description": "Entrerai nella stanza <room>{roomName}</room> di {nickname}."
                 },
@@ -154,6 +160,18 @@
                 "confirm_delete": {
                     "title": "Conferma eliminazione",
                     "description": "Vuoi eliminare <room>{roomName}</room>? Gli ospiti verranno notificati."
+                },
+                "confirm_invite_cancel": {
+                    "title": "Revoca invito",
+                    "description": "Vuoi revocare l'invito in stanza per {guestName}?"
+                },
+                "confirm_kick": {
+                    "title": "Rimuovi ospite",
+                    "description": "Vuoi rimuovere {guestName} dalla tua stanza?"
+                },
+                "confirm_leave": {
+                    "title": "Lascia stanza",
+                    "description": "Vuoi uscire dalla stanza <room>{roomName}</room>?"
                 }
             },
             "errors": {
@@ -192,15 +210,17 @@
                 "delete": "Elimina",
                 "kick": "Rimuovi ospite",
                 "revoke_invite": "Revoca invito",
-                "confirm_room": "Conferma stanza",
-                "unconfirm_room": "Revoca conferma"
+                "confirm_room": "Conferma",
+                "unconfirm_room": "Revoca conferma",
+                "transfer": "Trasferisci",
+                "leave": "Lascia"
             },
             "your_room": "La tua stanza",
             "or": "oppure",
             "no_room": "Non sei in una stanza, per ora.",
             "status_owner": "Gestore",
             "status_invited": "Invitato",
-            "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimanente} other {# posti rimanenti}}",
+            "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
             "default_name": "Stanza di {name}"
         },
         "upload_area": {

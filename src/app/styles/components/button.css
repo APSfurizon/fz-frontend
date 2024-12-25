@@ -7,6 +7,7 @@ button.button {
     padding: 0.375em 0.4375em;
     display: flex;
     gap: 0.5em;
+    align-items: center;
 }
 
 button:disabled {

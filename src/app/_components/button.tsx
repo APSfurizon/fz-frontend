@@ -1,8 +1,8 @@
-import { CSSProperties } from "react";
+import { CSSProperties, EventHandler, MouseEvent, MouseEventHandler, useState } from "react";
 import "../styles/components/button.css";
 import Icon, { ICONS } from "./icon";
 
-export default function Button ({children, iconName, style, className, busy, onClick, disabled, title, type = "button"}: Readonly<{
+export default function Button ({children, iconName, style, className, busy, onClick, disabled, title, type = "button", debounce}: Readonly<{
     children?: React.ReactNode,
     iconName?: string,
     style?: CSSProperties,
@@ -11,13 +11,23 @@ export default function Button ({children, iconName, style, className, busy, onC
     onClick?: React.MouseEventHandler,
     disabled?: boolean,
     title?: string,
-    type?: "submit" | "reset" | "button"
+    type?: "submit" | "reset" | "button",
+    debounce?: number
   }>) {
+    const [disabledState, setDisabledState] = useState(disabled);
     const iconPresent = iconName != undefined;
+    const onClickEvent = (e: MouseEvent<HTMLButtonElement>) => {
+        if (busy || disabledState || !onClick) return;
+        if (debounce && !disabledState) {
+            setDisabledState(true);
+            setTimeout(()=>setDisabledState(false), debounce);
+        }
+        return onClick(e);
+    }
     return (
-        <button type={type} onClick={busy ? undefined : onClick}
+        <button type={type} onClick={onClickEvent}
             title={title}
-            disabled={busy || disabled}
+            disabled={busy || disabledState}
             className={"button rounded-m" + " " + (className ?? "")}
             style={{...style, paddingRight: iconPresent ? '0.5em' : undefined}}>
             {busy && (
