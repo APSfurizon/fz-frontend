@@ -28,6 +28,7 @@
         "confirm": "Conferma",
         "cancel": "Annulla",
         "error": "Errore",
+        "next": "Avanti",
         "unknown_error": "Errore sconosciuto",
         "order_status": {
             "CANCELED": "Ordine cancellato",
@@ -199,7 +200,8 @@
                 "title" : "{nickname} ti invita nella stanza <room>{roomName}.</room>"
             },
             "actions": {
-                "buy_a_room": "Acquista",
+                "buy_a_room": "Acquista stanza",
+                "upgrade_room": "Upgrade stanza",
                 "join_a_room": "Accetta un invito",
                 "create_a_room": "Crea una stanza",
                 "refuse": "Rifiuta",
@@ -221,7 +223,10 @@
             "status_owner": "Gestore",
             "status_invited": "Invitato",
             "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
-            "default_name": "Stanza di {name}"
+            "default_name": "Stanza di {name}",
+            "order_flow": {
+                "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}"
+            }
         },
         "upload_area": {
             "title": "Area upload"

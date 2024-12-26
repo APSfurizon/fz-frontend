@@ -151,6 +151,7 @@
         "confirm": "Confirm",
         "cancel": "Cancel",
         "error": "Error",
+        "next": "Next",
         "unknown_error": "Unknown error",
         "order_status": {
             "CANCELED": "Cancelled order",
@@ -327,6 +328,7 @@
             },
             "actions": {
                 "buy_a_room": "Buy a room",
+                "upgrade_room": "Upgrade room",
                 "join_a_room": "Join a room",
                 "create_a_room": "Create a room",
                 "refuse": "Refuse",
@@ -348,7 +350,10 @@
             "status_owner": "Owner",
             "status_invited": "Invited",
             "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
-            "default_name": "{name}'s room"
+            "default_name": "{name}'s room",
+            "order_flow": {
+                "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}"
+            }
         },
         "upload_area": {
             "title": "Upload area"

@@ -6,6 +6,8 @@ export const ICONS = Object.freeze({
     ADD_CIRCLE: "add_circle",
     ARROW_DROP_DOWN: "arrow_drop_down",
     ARROW_DROP_UP: "arrow_drop_up",
+    ARROW_BACK: "arrow_back",
+    ARROW_FORWARD: "arrow_forward",
     BED: "bed",
     BEDROOM_PARENT: "bedroom_parent",
     BUG_REPORT: "bug_report",
