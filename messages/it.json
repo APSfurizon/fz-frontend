@@ -225,7 +225,14 @@
             "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
             "default_name": "Stanza di {name}",
             "order_flow": {
-                "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}"
+                "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}",
+                "select_type": "Seleziona una stanza",
+                "messages": {
+                    "quota_warning": {
+                        "title": "Avviso sulla disponibilità",
+                        "description": "La disponibilità di una stanza potrebbe variare, ricarica per recuperarne la disponibilità più aggiornata."
+                    }
+                }
             }
         },
         "upload_area": {

@@ -526,7 +526,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room buy modal */}
-    <Modal open={buyModalOpen} title={data?.currentRoomInfo ? t("room.actions.upgrade_room") : t("room.actions.buy_a_room")} onClose={()=>setBuyModalOpen(false)} busy={modalLoading}>
+    <Modal icon={ICONS.BEDROOM_PARENT} open={buyModalOpen} title={data?.currentRoomInfo ? t("room.actions.upgrade_room") : t("room.actions.buy_a_room")} onClose={()=>setBuyModalOpen(false)} busy={modalLoading}>
       <RoomOrderFlow modalLoading={modalLoading} setModalLoading={setModalLoading} close={()=>setBuyModalOpen(false)}></RoomOrderFlow>
     </Modal>
   </>;

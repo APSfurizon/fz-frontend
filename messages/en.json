@@ -352,7 +352,14 @@
             "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
             "default_name": "{name}'s room",
             "order_flow": {
-                "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}"
+                "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}",
+                "select_type": "Select a room type",
+                "messages": {
+                    "quota_warning": {
+                        "title": "Availaility warning",
+                        "description": "Room availability may change while ordering a room, refresh in order to get the latest count of rooms left."
+                    }
+                }
             }
         },
         "upload_area": {

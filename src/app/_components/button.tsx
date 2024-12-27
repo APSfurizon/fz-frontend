@@ -1,4 +1,4 @@
-import { CSSProperties, EventHandler, MouseEvent, MouseEventHandler, useState } from "react";
+import { CSSProperties, EventHandler, MouseEvent, MouseEventHandler, useEffect, useState } from "react";
 import "../styles/components/button.css";
 import Icon, { ICONS } from "./icon";
 
@@ -24,6 +24,9 @@ export default function Button ({children, iconName, style, className, busy, onC
         }
         return onClick(e);
     }
+
+    useEffect(()=>setDisabledState(disabled), [disabled]);
+
     return (
         <button type={type} onClick={onClickEvent}
             title={title}

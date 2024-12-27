@@ -59,3 +59,10 @@ div.modal-dialog div.bottom-toolbar {
     display: flex;
     flex-direction: row;
 }
+
+@media (max-width:800px) {
+    div.modal-dialog {
+        width: 100vw;
+        padding-bottom: 5em;
+    }
+}
