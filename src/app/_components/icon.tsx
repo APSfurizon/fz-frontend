@@ -52,6 +52,7 @@ export const ICONS = Object.freeze({
     SEARCH:"search",
     SAVE: "save",
     SHOPPING_CART: "shopping_cart",
+    SHOPPING_CART_CHECKOUT: "shopping_cart_checkout",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
 });

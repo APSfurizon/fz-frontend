@@ -80,7 +80,7 @@ div.guest-container {
         transition-duration: 120ms;
     }
 
-    a.room-type-container:hover .vertical-list {
+    a.room-type-container:hover:not(.selected) .vertical-list {
         padding-left: .5em;
     }
 }

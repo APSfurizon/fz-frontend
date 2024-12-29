@@ -55,7 +55,7 @@ export interface RoomBuyApiData {
 /**
  * Endpoint to try buy or upgrade your room
  */
-export class RoomStoreBuyFormAction implements ApiAction<ShopLinkResponse, ApiErrorResponse> {
+export class RoomStoreBuyAction implements ApiAction<ShopLinkResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/buy-or-upgrade-room";

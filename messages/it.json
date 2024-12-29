@@ -29,6 +29,7 @@
         "cancel": "Annulla",
         "error": "Errore",
         "next": "Avanti",
+        "back": "Indietro",
         "unknown_error": "Errore sconosciuto",
         "order_status": {
             "CANCELED": "Ordine cancellato",
@@ -227,10 +228,16 @@
             "order_flow": {
                 "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}",
                 "select_type": "Seleziona una stanza",
+                "your_selection": "La tua selezione",
+                "complete_order": "Completa ordine",
                 "messages": {
                     "quota_warning": {
                         "title": "Avviso sulla disponibilità",
                         "description": "La disponibilità di una stanza potrebbe variare, ricarica per recuperarne la disponibilità più aggiornata."
+                    },
+                    "order_notice": {
+                        "title": "Avviso sull'ordine",
+                        "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere automaticamente annullato. Contatta il supporto in caso di ripensamenti."
                     }
                 }
             }

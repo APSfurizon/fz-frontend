@@ -13,3 +13,4 @@ export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|register|no
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
 export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithCover-Resized.jpeg"
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithLogoResized.png";
+export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";

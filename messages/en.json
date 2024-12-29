@@ -152,6 +152,7 @@
         "cancel": "Cancel",
         "error": "Error",
         "next": "Next",
+        "back": "Back",
         "unknown_error": "Unknown error",
         "order_status": {
             "CANCELED": "Cancelled order",
@@ -354,10 +355,16 @@
             "order_flow": {
                 "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}",
                 "select_type": "Select a room type",
+                "your_selection": "Your selection",
+                "complete_order": "Complete order",
                 "messages": {
                     "quota_warning": {
                         "title": "Availaility warning",
                         "description": "Room availability may change while ordering a room, refresh in order to get the latest count of rooms left."
+                    },
+                    "order_notice": {
+                        "title": "Order warning",
+                        "description": "By checking this, you acknowledge that the requested change to your order cannot be reversed automatically. Please contact support, in case you want to go back."
                     }
                 }
             }
