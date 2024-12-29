@@ -4,7 +4,7 @@ import Button from "../button";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { translate } from "@/app/_lib/utils";
 import { getRemainingQuota, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/app/_lib/api/flows/roomOrderFlow";
-import { runRequest } from "@/app/_lib/api/global";
+import { ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import ModalError from "../modalError";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import NoticeBox, { NoticeTheme } from "../noticeBox";
@@ -34,7 +34,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     const {userData, userLoading} = useUser();
 
     /* Data about rooms availability */
-    const [roomsData, setRoomsData] = useState<RoomStoreItemsApiResponse>();
+    const [roomsData, setRoomsData] = useState<RoomStoreItemsApiResponse | null>();
 
     /* Flow step */
     const [step, setStep] = useState<STEPS>(STEPS.START);
@@ -42,21 +42,28 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     /* Selected room type */
     const [selectedType, setSelectedType] = useState<RoomTypeInfo>();
 
+    /* Order disclaimer */
     const [warningAccepted, setWarningAccepted] = useState(false);
+
+    /* Latest error */
+    const [latestError, setLatestError ] = useState<ApiErrorResponse>();
 
     /* Rooms data refresh */
     useEffect(()=>{
-        if (roomsData) return;
+        if (roomsData || !isOpen) return;
         setSelectedType(undefined);
         setModalLoading(true);
         runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
         .then(data=>setRoomsData(data as RoomStoreItemsApiResponse))
-        .catch((err)=>showModal(
-            tcommon("error"),
-            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
-            ICONS.ERROR
-        )).finally(()=>setModalLoading(false));
-    }, [roomsData]);
+        .catch((err)=>{
+            showModal(
+                tcommon("error"),
+                <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>,
+                ICONS.ERROR
+            );
+            setRoomsData(undefined);
+        }).finally(()=>setModalLoading(false));
+    }, [roomsData, isOpen]);
 
     /* Reset upon closure */
     useEffect(()=>{
@@ -77,11 +84,9 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
         }
 
         runRequest(new RoomStoreBuyAction(), undefined, roomBuyData, undefined)
-        .then((result)=>window.open((result as ShopLinkResponse).link))
-        .catch((err)=>showModal(
-            tcommon("error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>
-        )).finally(()=>{setModalLoading(false); close();});
+        .then((result)=>{window.open((result as ShopLinkResponse).link); close();})
+        .catch((err)=>setLatestError(err))
+        .finally(()=>{setModalLoading(false);});
     }
 
     switch(step) {
@@ -90,7 +95,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
             <div className="horizontal-list flex-vertical-center">
                 <span className="title">{t("room.order_flow.select_type")}</span>
                 <div className="spacer"></div>
-                <Button iconName={ICONS.REFRESH} onClick={()=>setRoomsData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
+                <Button iconName={ICONS.REFRESH} onClick={()=>setRoomsData(null)} debounce={3000}>{tcommon("reload")}</Button>
             </div>
             
             <div className="vertical-list gap-4mm room-container">
@@ -131,6 +136,8 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                 </a>}
             </div>
             
+            {latestError && <ModalError error={latestError} translationRoot="furpanel" translationKey="room.errors"></ModalError>}
+
             <div className="vertical-list gap-4mm">
                 <NoticeBox theme={NoticeTheme.Warning} title={t("room.order_flow.messages.order_notice.title")}>
                     <Checkbox onClick={(e, c)=>setWarningAccepted(c)}>
@@ -138,7 +145,9 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                     </Checkbox>
                 </NoticeBox>
                 <div className="horizontal-list gap-4mm">
-                    <Button className="danger" iconName={ICONS.ARROW_BACK} busy={modalLoading} onClick={()=>setStep(step-1)}>{tcommon("back")}</Button>
+                    <Button className="danger" iconName={ICONS.ARROW_BACK} busy={modalLoading} onClick={()=>{setStep(step-1); setLatestError(undefined);}}>
+                        {tcommon("back")}
+                    </Button>
                     <div className="spacer"></div>
                     <Button iconName={ICONS.SHOPPING_CART_CHECKOUT} disabled={!selectedType || !warningAccepted} busy={modalLoading} onClick={changeOrder}>
                         {t("room.order_flow.complete_order")}
