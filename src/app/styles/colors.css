@@ -48,6 +48,7 @@
     --tool-link-bg-active: var(--button-bg-down);
     --tool-link-border-normal: #FFFFFF4C;
     --tool-link-border-down: #FFFFFFCC;
+    --tool-link-hambuger-hover-bg: #ffffff40;
 
     /* User profile picture */
     --profile-picture-border-normal: #E9E9E9;

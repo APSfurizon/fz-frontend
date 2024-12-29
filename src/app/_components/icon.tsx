@@ -39,6 +39,7 @@ export const ICONS = Object.freeze({
     LOCK: "lock",
     LOGOUT: "logout",
     MAIL: "mail",
+    MENU: "menu",
     OPEN_IN_NEW: "open_in_new",
     PERSON: "person",
     PERSON_ADD: "person_add",

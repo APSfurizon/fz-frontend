@@ -4,21 +4,28 @@ import Image from "next/image";
 import Icon, { ICONS } from './icon';
 import { useRouter } from 'next/navigation';
 import Button from "../_components/button";
-import "../styles/components/header.css";
 import UserDropDown from './userDropdown';
 import { useUser } from '../_lib/context/userProvider';
+import { useState } from 'react';
+import "../styles/components/header.css";
 
 export default function Header () {
     const t = useTranslations('common');
     const {userData, userLoading} = useUser();
     const router = useRouter();
+    const [hamburgerOpen, setHamburgerOpen] = useState(false);
 
     return (
         <header className='header'>
             <div className="logo-container center">
                 <Image className="header-logo" src="/images/logo-dark.png" alt={t('header.alt_logo')} width={175} height={40}></Image>
             </div>
-            <div className="header-link-container horizontal-list flex-vertical-center">
+            <span>
+                <a href="#" className="hamburger rounded-l" onClick={()=>setHamburgerOpen(!hamburgerOpen)}>
+                    <Icon iconName={hamburgerOpen ? ICONS.CLOSE : ICONS.MENU}></Icon>
+                </a>
+            </span>
+            <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>

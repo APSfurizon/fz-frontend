@@ -72,7 +72,7 @@ export default function BookingPage() {
             bookingStartDate: new Date(bookingData?.bookingStartTime ?? 0),
             editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0),
             shouldUpdateInfo: bookingData?.shouldUpdateInfo,
-            shouldRetry: bookingData.order.orderStatus === "PENDING"
+            shouldRetry: bookingData.order?.orderStatus === "PENDING"
         });
     }, [bookingData]);
 
