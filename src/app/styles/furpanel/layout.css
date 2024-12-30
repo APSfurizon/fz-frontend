@@ -13,12 +13,12 @@ span:has(.hamburger),
 
 @media (max-width:800px) {
 
-    span:has(.hamburger) {
+    span:has(.hamburger),
+    .hamburger {
         display: block;
     }
     
     .hamburger {
-        display: block;
         padding: .3125em;
     }
 
@@ -29,8 +29,7 @@ span:has(.hamburger),
     .main-dialog {
         min-width: 100vw;
         
-        .tools-list,
-        .tools-list .tool-link {
+        .tools-list {
             transition-duration: 120ms;
         }
 

@@ -21,7 +21,8 @@
                     "it": "Italiano",
                     "en": "English"
                 }
-            }
+            },
+            "app-badge": "Scarica ora l'app ufficiale!"
         },
         "reload": "Ricarica",
         "loading": "Caricamento...",

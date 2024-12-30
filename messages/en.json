@@ -144,7 +144,8 @@
                     "it": "Italiano",
                     "en": "English"
                 }
-            }
+            },
+            "app-badge": "Download now the official app!"
         },
         "reload": "Reload",
         "loading": "Loading...",
@@ -191,7 +192,7 @@
             "crop": "Crop"
         },
         "input": {
-            "validation_fail": "Valore non valido"
+            "validation_fail": "Value not valid"
         }
     },
     "furpanel": {
