@@ -330,7 +330,7 @@
             },
             "actions": {
                 "buy_a_room": "Buy a room",
-                "upgrade_room": "Upgrade room",
+                "upgrade_room": "Upgrade",
                 "join_a_room": "Join a room",
                 "create_a_room": "Create a room",
                 "refuse": "Refuse",

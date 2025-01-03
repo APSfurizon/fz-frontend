@@ -379,7 +379,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Rename modal */}
-    <Modal title={t("room.actions.rename")} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("room.actions.rename")} icon={ICONS.EDIT_SQUARE} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)} busy={modalLoading}>
     { data?.currentRoomInfo && <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm">
@@ -396,7 +396,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Invite modal */}
-    <Modal title={t("room.actions.invite")} open={inviteModalOpen} onClose={()=>setInviteModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("room.actions.invite")} icon={ICONS.PERSON_ADD} open={inviteModalOpen} onClose={()=>setInviteModalOpen(false)} busy={modalLoading}>
     {data?.currentRoomInfo && <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm">
@@ -462,7 +462,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Delete modal */}
-    <Modal title={t("room.messages.confirm_delete.title")} open={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("room.messages.confirm_delete.title")} icon={ICONS.DELETE} open={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)} busy={modalLoading}>
     {data?.currentRoomInfo && <>
       <span className="descriptive small">{t.rich("room.messages.confirm_delete.description", {
         roomName: data.currentRoomInfo.roomName,

@@ -203,7 +203,7 @@
             },
             "actions": {
                 "buy_a_room": "Acquista stanza",
-                "upgrade_room": "Upgrade stanza",
+                "upgrade_room": "Upgrade",
                 "join_a_room": "Accetta un invito",
                 "create_a_room": "Crea una stanza",
                 "refuse": "Rifiuta",
