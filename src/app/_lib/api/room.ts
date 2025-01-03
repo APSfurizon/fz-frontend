@@ -1,4 +1,5 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
+import { nullifyEmptyString, nullifyEmptyStrings } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
 import { OrderStatus } from "./order";
 import { UserData } from "./user";
@@ -170,6 +171,32 @@ export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/leave";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export interface RoomExchangeInitApiData {
+    sourceUserId: number,
+    destUserId: number,
+    action: "room"
+}
+
+export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<RoomExchangeInitApiData> {
+    mapToDTO = (data: FormData) => {
+        let toReturn: RoomExchangeInitApiData = {
+            sourceUserId: parseInt(data.get('userId')!.toString ()),
+            destUserId: parseInt(data.get('recipientId')!.toString()),
+            action: "room"
+        };
+        return toReturn;
+    }
+}
+
+export class RoomExchangeFormAction implements FormApiAction<RoomExchangeInitApiData, Boolean, ApiErrorResponse> {
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    authenticated = true;
+    dtoBuilder = new RoomExchangeInitDTOBuilder ();
+    urlAction = "room/exchange/init";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

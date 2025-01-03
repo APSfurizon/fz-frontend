@@ -9,7 +9,7 @@ import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Modal from "@/app/_components/modal";
 import RoomInvite from "@/app/_components/_room/roomInvite";
-import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction } from "@/app/_lib/api/room";
+import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction } from "@/app/_lib/api/room";
 import UserPicture from "@/app/_components/userPicture";
 import StatusBox from "@/app/_components/statusBox";
 import DataForm from "@/app/_components/dataForm";
@@ -190,6 +190,19 @@ export default function RoomPage() {
   // Room buy modal
   const [buyModalOpen, setBuyModalOpen ] = useState(false);
 
+  // transfer room modal
+  const [transferModalOpen, setTransferModalOpen ] = useState(false);
+  
+  const promptRoomTransfer = () => {
+    if (!data) return;
+    setTransferModalOpen(true);
+  }
+
+  const roomTransferSuccess = () => {
+    showModal(t(""), )
+    commonSuccess();
+  }
+
   /******************/
   /** Common logic **/
   /******************/
@@ -254,14 +267,17 @@ export default function RoomPage() {
       
       {/* Your room */}
       <div className="actions-panel rounded-m vertical-list gap-2mm">
-        <span className="title small horizontal-list gap-2mm flex-vertical-center">
+        <span className="title small horizontal-list gap-2mm flex-vertical-center flex-wrap">
           <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
           {t("room.your_room")}
           <div className="spacer"></div>
-          {
-            data && data.currentRoomInfo && <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.upgrade_room")}</Button>
-          }
           <Button iconName={ICONS.REFRESH} onClick={()=>setData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
+          {
+            data && data.currentRoomInfo &&
+              <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>
+                {t("room.actions.upgrade_room")}
+              </Button>
+          }
         </span>
 
         {/* Loading */}
@@ -301,9 +317,10 @@ export default function RoomPage() {
               <div className="spacer"></div>
               {
                 data.currentRoomInfo.userIsOwner && <>
-                <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptRoomRename()}>{t("room.actions.rename")}</Button>
-                {/*<Button className="danger" iconName={ICONS.LOGOUT} onClick={()=>promptRoomTransfer()}>{t("room.actions.transfer")}</Button>*/  }
-                <Button className="danger" iconName={ICONS.DELETE} onClick={()=>promptRoomDelete()}>{t("room.actions.delete")}</Button>
+                <div className="actions-container horizontal-list flex-wrap gap-4mm">
+                  <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptRoomRename()}>{t("room.actions.rename")}</Button>
+                  <Button className="danger" iconName={ICONS.DELETE} onClick={()=>promptRoomDelete()}>{t("room.actions.delete")}</Button>
+                </div>
                 </>
               }
               
@@ -352,6 +369,7 @@ export default function RoomPage() {
               {/* Guest actions */}
                 <Button iconName={ICONS.PERSON_ADD} onClick={()=>promptRoomLeave()}>{t("room.actions.leave")}</Button>
               </>}
+              <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomTransfer()}>{t("room.actions.transfer")}</Button>
           </div>
         </div>
         </>}
@@ -528,6 +546,23 @@ export default function RoomPage() {
     {/* Room buy modal */}
     <Modal icon={ICONS.BEDROOM_PARENT} open={buyModalOpen} title={data?.currentRoomInfo ? t("room.actions.upgrade_room") : t("room.actions.buy_a_room")} onClose={()=>setBuyModalOpen(false)} busy={modalLoading}>
       <RoomOrderFlow isOpen={buyModalOpen} modalLoading={modalLoading} setModalLoading={setModalLoading} close={()=>setBuyModalOpen(false)}></RoomOrderFlow>
+    </Modal>
+
+    {/* Room transfer modal */}
+    <Modal icon={ICONS.SEND} open={transferModalOpen} title={t("room.actions.transfer")} onClose={()=>setTransferModalOpen(false)} busy={modalLoading}>
+      { data?.currentRoomInfo && <>
+      <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
+        onFail={commonFail} hideSave className="vertical-list gap-2mm">
+        <input type="hidden" name="userId" value={userData?.userId}></input>
+        <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
+          label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
+        <div className="horizontal-list gap-4mm">
+          <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
+          <div className="spacer"></div>
+          <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
+        </div>
+      </DataForm>
+      </>}
     </Modal>
   </>;
 }

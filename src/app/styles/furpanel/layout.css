@@ -1,7 +1,3 @@
-.tools-list {
-    width: 100%;
-}
-
 .main-dialog {
     max-width: 210mm;
 }
@@ -31,6 +27,7 @@ span:has(.hamburger),
         
         .tools-list {
             transition-duration: 120ms;
+            width: 100%;
         }
 
         .tools-list:not(.expanded) .tool-link:not(.active) {

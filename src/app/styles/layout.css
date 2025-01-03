@@ -30,6 +30,8 @@
 
 .flex-space-evenly { justify-content: space-evenly; }
 
+.flex-wrap {flex-wrap: wrap;}
+
 .vertical-align-middle * {vertical-align: middle;}
 
 .center { text-align: center; }
