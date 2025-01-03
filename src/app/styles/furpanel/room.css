@@ -51,3 +51,37 @@ div.guest-container {
         filter: brightness(0.8);
     }
 }
+
+.room-container {
+    flex-wrap: wrap;
+    transition-duration: 120ms;
+
+    a.room-type-container {
+        max-width: 100%;
+        outline: 1px solid var(--room-buy-item-border);
+        text-wrap-mode: nowrap;
+        padding: 0.625em;
+        cursor: pointer;
+        user-select: contain;
+        transition-duration: 120ms;
+    }
+
+    a.room-type-container span {
+        white-space: wrap;
+    }
+
+    a.room-type-container:hover,
+    a.room-type-container.selected {
+        background-color: var(--room-buy-item-hover-bg);
+        outline-width: .25em;
+    }
+
+    a.room-type-container .vertical-list {
+        transition-duration: 120ms;
+    }
+
+    a.room-type-container:hover:not(.selected) .vertical-list {
+        padding-left: .5em;
+    }
+}
+

@@ -2,7 +2,7 @@
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import Button from "../../../../_components/button";
 import Icon, { ICONS } from "../../../../_components/icon";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
@@ -23,6 +23,7 @@ import ModalError from "@/app/_components/modalError";
 import { translate } from "@/app/_lib/utils";
 import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 import Checkbox from "@/app/_components/checkbox";
+import RoomOrderFlow from "@/app/_components/_room/roomOrderFlow";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -186,6 +187,9 @@ export default function RoomPage() {
     .finally(()=>setModalLoading(false));
   }
 
+  // Room buy modal
+  const [buyModalOpen, setBuyModalOpen ] = useState(false);
+
   /******************/
   /** Common logic **/
   /******************/
@@ -254,6 +258,9 @@ export default function RoomPage() {
           <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
           {t("room.your_room")}
           <div className="spacer"></div>
+          {
+            data && data.currentRoomInfo && <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.upgrade_room")}</Button>
+          }
           <Button iconName={ICONS.REFRESH} onClick={()=>setData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
         </span>
 
@@ -265,7 +272,7 @@ export default function RoomPage() {
         </>}
 
         {/* View when user has no room */}
-        {!data || !data.currentRoomInfo && <>
+        {data && !data.currentRoomInfo && <>
           <div className="room-invite actions-panel rounded-m">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
             <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
@@ -276,7 +283,7 @@ export default function RoomPage() {
               ?
                 <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
               : <>
-                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading}>{t("room.actions.buy_a_room")}</Button>
+                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
                 <span className="title small">{t("room.or")}</span>
                 <Button iconName={ICONS.PERSON_ADD} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
               </>
@@ -372,7 +379,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Rename modal */}
-    <Modal title={t("room.actions.rename")} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("room.actions.rename")} icon={ICONS.EDIT_SQUARE} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)} busy={modalLoading}>
     { data?.currentRoomInfo && <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm">
@@ -380,16 +387,16 @@ export default function RoomPage() {
       <JanInput inputType="text" fieldName="name" required busy={modalLoading} label={t("room.input.rename_new_name.label")}
       placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
       <div className="horizontal-list gap-4mm">
-      <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
-      <div className="spacer"></div>
-      <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
+        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
+        <div className="spacer"></div>
+        <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
       </div>
     </DataForm>
     </>}
     </Modal>
 
     {/* Invite modal */}
-    <Modal title={t("room.actions.invite")} open={inviteModalOpen} onClose={()=>setInviteModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("room.actions.invite")} icon={ICONS.PERSON_ADD} open={inviteModalOpen} onClose={()=>setInviteModalOpen(false)} busy={modalLoading}>
     {data?.currentRoomInfo && <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm">
@@ -455,7 +462,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Delete modal */}
-    <Modal title={t("room.messages.confirm_delete.title")} open={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("room.messages.confirm_delete.title")} icon={ICONS.DELETE} open={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)} busy={modalLoading}>
     {data?.currentRoomInfo && <>
       <span className="descriptive small">{t.rich("room.messages.confirm_delete.description", {
         roomName: data.currentRoomInfo.roomName,
@@ -516,6 +523,11 @@ export default function RoomPage() {
         <Button iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setLeaveModalOpen(false)}>{tcommon("cancel")}</Button>
       </div>
     </>}
+    </Modal>
+
+    {/* Room buy modal */}
+    <Modal icon={ICONS.BEDROOM_PARENT} open={buyModalOpen} title={data?.currentRoomInfo ? t("room.actions.upgrade_room") : t("room.actions.buy_a_room")} onClose={()=>setBuyModalOpen(false)} busy={modalLoading}>
+      <RoomOrderFlow isOpen={buyModalOpen} modalLoading={modalLoading} setModalLoading={setModalLoading} close={()=>setBuyModalOpen(false)}></RoomOrderFlow>
     </Modal>
   </>;
 }

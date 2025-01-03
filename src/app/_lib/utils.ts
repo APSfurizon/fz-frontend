@@ -48,3 +48,19 @@ export function buildSearchParams (init: Record<string, string | string[]>): URL
     })
     return params;
 }
+
+export enum DEVICE_TYPE {
+    APPLE = "apple",
+    ANDROID = "android",
+    GENERIC = "generic"
+}
+
+export function getDeviceType (): DEVICE_TYPE {
+    const UA = navigator.userAgent;
+    if (/\b(Android)\b/i.test(UA))
+        return DEVICE_TYPE.ANDROID;
+    else if (/\b(iPad|iPod)\b/i.test(UA) || /\b(iPhone)\b/i.test(UA))
+        return DEVICE_TYPE.APPLE;
+    else
+        return DEVICE_TYPE.GENERIC;
+}

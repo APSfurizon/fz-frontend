@@ -14,6 +14,7 @@
     --footer-bg: #211A28;
     /* Header */
     --header-bg: #141E26;
+    --header-shadow: #00000065;
 
     /* Button */
     --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
@@ -48,6 +49,7 @@
     --tool-link-bg-active: var(--button-bg-down);
     --tool-link-border-normal: #FFFFFF4C;
     --tool-link-border-down: #FFFFFFCC;
+    --tool-link-hambuger-hover-bg: #ffffff40;
 
     /* User profile picture */
     --profile-picture-border-normal: #E9E9E9;
@@ -128,6 +130,10 @@
     --room-invite-bg: #ffffff19;
     --room-invite-shadow: #0005;
     --room-invite-kick: #d3202c;
+
+    /* Room buy flow */
+    --room-buy-item-hover-bg: #ffffff20;
+    --room-buy-item-border: #ffffff;
 
     --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;

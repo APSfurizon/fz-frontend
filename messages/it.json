@@ -21,13 +21,16 @@
                     "it": "Italiano",
                     "en": "English"
                 }
-            }
+            },
+            "app-badge": "Scarica ora l'app ufficiale!"
         },
         "reload": "Ricarica",
         "loading": "Caricamento...",
         "confirm": "Conferma",
         "cancel": "Annulla",
         "error": "Errore",
+        "next": "Avanti",
+        "back": "Indietro",
         "unknown_error": "Errore sconosciuto",
         "order_status": {
             "CANCELED": "Ordine cancellato",
@@ -78,7 +81,7 @@
             "your_booking": "La tua prenotazione",
             "countdown": "Conto alla rovescia",
             "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
-            "book_now": "Prenota ora",
+            "book_now": "Prenota",
             "review_info_first": "Rivedi i tuoi dati personali",
             "edit_booking": "Modifica prenotazione",
             "retry_payment": "Riprova pagamento",
@@ -199,7 +202,8 @@
                 "title" : "{nickname} ti invita nella stanza <room>{roomName}.</room>"
             },
             "actions": {
-                "buy_a_room": "Acquista",
+                "buy_a_room": "Acquista stanza",
+                "upgrade_room": "Upgrade",
                 "join_a_room": "Accetta un invito",
                 "create_a_room": "Crea una stanza",
                 "refuse": "Rifiuta",
@@ -221,7 +225,23 @@
             "status_owner": "Gestore",
             "status_invited": "Invitato",
             "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
-            "default_name": "Stanza di {name}"
+            "default_name": "Stanza di {name}",
+            "order_flow": {
+                "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}",
+                "select_type": "Seleziona una stanza",
+                "your_selection": "La tua selezione",
+                "complete_order": "Completa ordine",
+                "messages": {
+                    "quota_warning": {
+                        "title": "Avviso sulla disponibilità",
+                        "description": "La disponibilità di una stanza potrebbe variare, ricarica per recuperarne la disponibilità più aggiornata."
+                    },
+                    "order_notice": {
+                        "title": "Avviso sull'ordine",
+                        "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere automaticamente annullato. Contatta il supporto in caso di ripensamenti."
+                    }
+                }
+            }
         },
         "upload_area": {
             "title": "Area upload"

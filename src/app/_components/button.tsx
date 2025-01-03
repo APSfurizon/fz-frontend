@@ -1,4 +1,4 @@
-import { CSSProperties, EventHandler, MouseEvent, MouseEventHandler, useState } from "react";
+import { CSSProperties, EventHandler, MouseEvent, MouseEventHandler, useEffect, useState } from "react";
 import "../styles/components/button.css";
 import Icon, { ICONS } from "./icon";
 
@@ -24,18 +24,20 @@ export default function Button ({children, iconName, style, className, busy, onC
         }
         return onClick(e);
     }
+
+    useEffect(()=>setDisabledState(disabled), [disabled]);
+
+    const isCooldown = !busy && debounce !== undefined && disabledState; 
+
     return (
         <button type={type} onClick={onClickEvent}
             title={title}
             disabled={busy || disabledState}
             className={"button rounded-m" + " " + (className ?? "")}
             style={{...style, paddingRight: iconPresent ? '0.5em' : undefined}}>
-            {busy && (
-                <Icon className={`medium loading-animation`} iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-            )}
-            {!busy && iconPresent && (
-                <Icon className={`medium`} iconName={iconName}></Icon>
-            )}
+            {busy && <Icon className={`medium loading-animation`} iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
+            {!busy && isCooldown && <Icon className={`medium`} iconName={ICONS.SNOOZE}></Icon>}
+            {!busy && !isCooldown && iconPresent && <Icon className={`medium`} iconName={iconName}></Icon>}
             {children && <span className="title normal spacer" style={{fontSize: '15px', textAlign:"left"}}>{children}</span>}
         </button>
     )

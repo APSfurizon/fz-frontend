@@ -30,6 +30,10 @@ div.countdown-container {
     }
 }
 
+div.order-items-container {
+    flex-wrap: wrap;
+}
+
 div.countdown-container:not(.minimized) {
     min-height: 20em;
 }
@@ -44,7 +48,8 @@ div.order-items-container div.item {
     border-radius: .5em;
     padding: .5em;
     justify-content: center;
-    width: 20%;
+    width: fit-content;
+    max-width: 15em;
     position: relative;
     overflow: hidden;
 }
@@ -55,6 +60,7 @@ div.order-items-container div.item:has(span.item-subtitle) {
 
 div.item span.item-name {
     text-align: center;
+    max-width: 10em;
 }
 
 div.item span.item-subtitle {

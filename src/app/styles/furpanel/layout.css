@@ -6,9 +6,45 @@
     max-width: 210mm;
 }
 
+span:has(.hamburger),
+.hamburger {
+    display: none;
+}
+
 @media (max-width:800px) {
+
+    span:has(.hamburger),
+    .hamburger {
+        display: block;
+    }
+    
+    .hamburger {
+        padding: .3125em;
+    }
+
+    .hamburger:active {
+        background-color: var(--tool-link-hambuger-hover-bg);
+    }
+
     .main-dialog {
         min-width: 100vw;
+        
+        .tools-list {
+            transition-duration: 120ms;
+        }
+
+        .tools-list:not(.expanded) .tool-link:not(.active) {
+            max-height: 0px;
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+            background: none;
+            border: none;
+        }
+
+        .tools-list:not(.expanded){
+            gap: 0px;
+        }
     }
 
     .tools-list {
