@@ -2,8 +2,9 @@ import { ShopLinkResponse } from "../booking";
 import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
 import { RoomData } from "../room";
 
-export interface RoomTypeQuota {
+export interface PretixItemQuota {
     available: boolean,
+    available_number: number,
     total_size: number,
     pending_orders: number,
     paid_orders: number,
@@ -11,23 +12,26 @@ export interface RoomTypeQuota {
     cart_positions: number,
     blocking_vouchers: number,
     waiting_list: number,
-    used: number,
-    unlimited: boolean
+    unlimited: boolean,
+    used: number
 }
 
-export function getTotalQuota(quota: RoomTypeQuota) {
-    return quota.total_size ? quota.total_size : Number.MAX_SAFE_INTEGER;
+export function getTotalQuota(quota: PretixItemQuota) {
+    return quota.total_size !== undefined && quota.total_size !== null ? quota.total_size : Number.MAX_SAFE_INTEGER;
 }
 
-export function getRemainingQuota (quota: RoomTypeQuota) {
-    const used = quota.pending_orders + quota.paid_orders + quota.exited_orders + quota.cart_positions + quota.blocking_vouchers + quota.waiting_list;
-    return getTotalQuota(quota) - used;
+export function getUsed(quota: PretixItemQuota) {
+    return quota.pending_orders + quota.paid_orders + quota.exited_orders + quota.cart_positions + quota.blocking_vouchers + quota.waiting_list;
+}
+
+export function getRemainingQuota (quota: PretixItemQuota) {
+    return getTotalQuota(quota) - getUsed(quota);
 }
 
 export interface RoomTypeInfo {
     data: RoomData,
     price: string,
-    quotaAvailability: RoomTypeQuota   
+    quotaAvailability: PretixItemQuota   
 }
 
 export interface RoomStoreItemsApiResponse extends ApiResponse {

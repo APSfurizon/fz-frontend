@@ -134,7 +134,7 @@ export default function BookingPage() {
     if (!!pageData) {
         openDiff = Math.max(pageData.bookingStartDate.getTime() - now.getTime(), 0);
         /**If the countdown is still running */
-        isOpen = true;//openDiff <= 0;
+        isOpen = openDiff <= 0;
         isEditLocked = Math.max(pageData.editBookEndDate.getTime() - now.getTime(), 0) <= 0;
     }
 

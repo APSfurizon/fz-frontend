@@ -17,7 +17,7 @@ div.modal-overlay {
 }
 
 div.modal-dialog {
-    max-width: 100vw;
+    max-width: 210mm;
     max-height: 100vh;
     overflow: scroll;
     background-color: var(--modal-dialog-bg);

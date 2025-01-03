@@ -3,7 +3,7 @@ import Icon, { ICONS } from "../icon";
 import Button from "../button";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { translate } from "@/app/_lib/utils";
-import { getRemainingQuota, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/app/_lib/api/flows/roomOrderFlow";
+import { getRemainingQuota, PretixItemQuota, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/app/_lib/api/flows/roomOrderFlow";
 import { ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import ModalError from "../modalError";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
@@ -74,6 +74,11 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
         }
     }, [isOpen]);
 
+    const selectRoomType = (type: RoomTypeInfo) => {
+        if (getRemainingQuota(type.quotaAvailability) > 0)
+        setSelectedType(type);
+    }
+
     const changeOrder = () => {
         if (!selectedType || userLoading || !userData) return;
         setModalLoading(true);
@@ -106,7 +111,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                 {/* Room type selection */}
                 {roomsData?.rooms?.map((roomInfo, index)=>
                     <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`} 
-                    key={index} onClick={()=>setSelectedType(roomInfo)}>
+                    key={index} onClick={()=>selectRoomType(roomInfo)}>
                         {selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId && 
                         <Icon className="large" iconName={ICONS.CHECK_CIRCLE}></Icon>}
                         <div className="vertical-list">
@@ -125,6 +130,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
             </>;
         case STEPS.REVIEW:
             return <>
+            {latestError && <ModalError error={latestError} translationRoot="furpanel" translationKey="room.errors"></ModalError>}
             <span>{t("room.order_flow.your_selection")}</span>
             <div className="room-container">
                 {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>
@@ -135,8 +141,6 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                     </div>
                 </a>}
             </div>
-            
-            {latestError && <ModalError error={latestError} translationRoot="furpanel" translationKey="room.errors"></ModalError>}
 
             <div className="vertical-list gap-4mm">
                 <NoticeBox theme={NoticeTheme.Warning} title={t("room.order_flow.messages.order_notice.title")}>
