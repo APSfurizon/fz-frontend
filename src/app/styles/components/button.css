@@ -7,6 +7,7 @@ button.button {
     padding: 0.375em 0.4375em;
     display: flex;
     gap: 0.5em;
+    align-items: center;
 }
 
 button:disabled {
@@ -32,4 +33,16 @@ button.danger:hover:not(:disabled) {
 
 button.danger:active:not(:disabled) {
     background: var(--button-danger-bg-down);
+}
+
+button.success {
+    background: var(--button-success-bg-normal);
+}
+
+button.success:hover:not(:disabled) {
+    background: var(--button-success-bg-hover);
+}
+
+button.success:active:not(:disabled) {
+    background: var(--button-success-bg-down);
 }

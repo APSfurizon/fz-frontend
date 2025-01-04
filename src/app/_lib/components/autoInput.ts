@@ -45,8 +45,8 @@ export function filterSearchResult(query: string, results: AutoInputSearchResult
     return results.filter ((result) => (result.description?.toLowerCase().includes (value) || result.code?.toLowerCase().includes(value)) && (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result)));
 }
 
-export function filterLoaded(results: AutoInputSearchResult[], filter?: AutoInputFilter) {
-    return results.filter(result => !filter || filter?.applyFilter (result));
+export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoInputFilter, filterOut?: AutoInputFilter) {
+    return results.filter(result => (filterIn?.applyFilter (result) ?? true) && (!filterOut?.applyFilter (result) || true));
 }
 
 /**

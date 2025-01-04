@@ -9,19 +9,6 @@ export function nullifyEmptyString (value?: string) {
     return value ? value.length > 0 ? value : undefined : undefined;
 }
 
-export function getErrorBody (error?: ApiErrorResponse): String | undefined {
-    if (!error) {
-        return undefined;
-    } else {
-        if ("errors" in error && error["errors"]) {
-            const detail: ApiDetailedErrorResponse = error as ApiDetailedErrorResponse;
-            return `${(detail.errors ?? []).join(", ")} (id=${error.requestId})`;
-        } else {
-            return `${error.errorMessage} (id=${error.requestId})`;
-        }
-    }
-}
-
 export function getBiggestTimeUnit(ts: number): Intl.RelativeTimeFormatUnit {
     const second = 1000,
     minute = 60 * second,
@@ -35,4 +22,45 @@ export function getBiggestTimeUnit(ts: number): Intl.RelativeTimeFormatUnit {
 
 export function translate(data: Record<string, string>, locale: string): string {
     return data[locale] ?? data["en"];
+}
+
+export function isEmpty (str?: string) {
+    return !str || str.length === 0;
+}
+
+export function copyContent (e: HTMLElement) {
+    if (e.textContent) {
+        navigator.clipboard.writeText(e.textContent);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function buildSearchParams (init: Record<string, string | string[]>): URLSearchParams {
+    const params = new URLSearchParams();
+    Object.keys(init).forEach(key => {
+        if (init[key] instanceof Array){
+            init[key].forEach(value =>params.append(key, value));
+        } else {
+            params.append(key, init[key])
+        }
+    })
+    return params;
+}
+
+export enum DEVICE_TYPE {
+    APPLE = "apple",
+    ANDROID = "android",
+    GENERIC = "generic"
+}
+
+export function getDeviceType (): DEVICE_TYPE {
+    const UA = navigator.userAgent;
+    if (/\b(Android)\b/i.test(UA))
+        return DEVICE_TYPE.ANDROID;
+    else if (/\b(iPad|iPod)\b/i.test(UA) || /\b(iPhone)\b/i.test(UA))
+        return DEVICE_TYPE.APPLE;
+    else
+        return DEVICE_TYPE.GENERIC;
 }

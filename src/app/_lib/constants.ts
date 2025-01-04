@@ -1,3 +1,5 @@
+import { DEVICE_TYPE } from "./utils";
+
 export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9090/api/v1/';
 export const TOKEN_STORAGE_NAME = "fz-token";
@@ -13,3 +15,6 @@ export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|register|no
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
 export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithCover-Resized.jpeg"
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithLogoResized.png";
+export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
+
+export const APP_LINKS: Record<string, string> = {"android": "https://play.google.com/store/apps/details?id=com.furizon2023", "apple": ""};

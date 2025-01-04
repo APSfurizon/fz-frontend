@@ -17,6 +17,9 @@ div.modal-overlay {
 }
 
 div.modal-dialog {
+    max-width: 210mm;
+    max-height: 100vh;
+    overflow: scroll;
     background-color: var(--modal-dialog-bg);
     box-shadow: 0px 3px 20px 1px #0000003F;
     gap: 0.9375em;
@@ -45,13 +48,21 @@ div.modal-dialog span.header-title {
 div.modal-dialog div.modal-header a.header-close {
     cursor: pointer;
     user-select: none;
+    color: var(--modal-button-close);
 }
 
 div.modal-dialog div.modal-header a.header-close:hover {
-    color: var(--modal-button-close);
+    color: var(--modal-button-close-hover);
 }
 
 div.modal-dialog div.bottom-toolbar {
     display: flex;
     flex-direction: row;
+}
+
+@media (max-width:800px) {
+    div.modal-dialog {
+        width: 100vw;
+        padding-bottom: 5em;
+    }
 }

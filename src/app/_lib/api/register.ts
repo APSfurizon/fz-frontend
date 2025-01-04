@@ -2,9 +2,8 @@ import { CachedCountries, CachedStates } from "../cache/cache";
 import { AutoInputSearchResult, CountrySearchResult } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { getFlagEmoji } from "../components/userPicture";
-import { TOKEN_STORAGE_NAME } from "../constants";
-import { nullifyEmptyString, nullifyEmptyStrings } from "../utils";
-import { ApiErrorResponse, ApiResponse, RequestAction, runRequest } from "./global";
+import { nullifyEmptyString } from "../utils";
+import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
 
 /*****************************/
 /*         Entities          */
@@ -87,7 +86,7 @@ export interface PlaceApiResponse extends ApiResponse {
     data: Place[]
 }
 
-export class AutoInputCountriesApiAction implements RequestAction<PlaceApiResponse, ApiErrorResponse> {
+export class AutoInputCountriesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "states/get-countries";
@@ -95,7 +94,7 @@ export class AutoInputCountriesApiAction implements RequestAction<PlaceApiRespon
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export class AutoInputStatesApiAction implements RequestAction<PlaceApiResponse, ApiErrorResponse> {
+export class AutoInputStatesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "states/by-country";

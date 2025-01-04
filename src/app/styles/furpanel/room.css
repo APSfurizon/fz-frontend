@@ -1,0 +1,87 @@
+div.actions-panel {
+    padding: 0.625em;
+    background-color: var(--room-action-panel-bg);
+}
+
+div.limit-view {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
+    text-wrap-style: pretty;
+}
+
+div.room-invite {
+    box-shadow: 0px 0px 1em .2em var(--room-invite-shadow);
+    background-color: var(--room-invite-bg);
+    overflow: hidden;
+
+    span.invite-title {
+        padding: 0.625em;
+        background-color: var(--room-invite-bg);
+        border-bottom: 1px solid var(--room-invite-bg);
+        flex-wrap: wrap;
+    }
+
+    div.invite-toolbar {
+        padding: 0.625em;
+        background-color: var(--room-invite-bg);
+        border-top: 1px solid var(--room-invite-bg);
+        flex-wrap: wrap;
+    }
+}
+
+div.guest-container {
+    position: relative;
+
+    a.action-kick {
+        position: absolute;
+        right: -.5em;
+        top: -.5em;
+        border-radius: 100%;
+        padding: .2em;
+        margin: 0px;
+        background-color: var(--room-invite-kick);
+    }
+
+    a.action-kick:hover {
+        filter: brightness(1.1);
+    }
+
+    a.action-kick:active {
+        filter: brightness(0.8);
+    }
+}
+
+.room-container {
+    flex-wrap: wrap;
+    transition-duration: 120ms;
+
+    a.room-type-container {
+        max-width: 100%;
+        outline: 1px solid var(--room-buy-item-border);
+        text-wrap-mode: nowrap;
+        padding: 0.625em;
+        cursor: pointer;
+        user-select: contain;
+        transition-duration: 120ms;
+    }
+
+    a.room-type-container span {
+        white-space: wrap;
+    }
+
+    a.room-type-container:hover,
+    a.room-type-container.selected {
+        background-color: var(--room-buy-item-hover-bg);
+        outline-width: .25em;
+    }
+
+    a.room-type-container .vertical-list {
+        transition-duration: 120ms;
+    }
+
+    a.room-type-container:hover:not(.selected) .vertical-list {
+        padding-left: .5em;
+    }
+}
+

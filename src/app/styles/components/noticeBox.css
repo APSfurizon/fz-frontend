@@ -1,5 +1,9 @@
 @import url('../colors.css');
 
+div.notice-box {
+    margin: 1px;
+}
+
 div.notice-box div.header i {
     margin-right: 0.3125em;
 }
@@ -18,6 +22,8 @@ div.notice-box div.header {
 div.notice-box div.answer {
     border-top: none;
     border-radius: 0% 0% 2mm 2mm;
+    padding-left: .6em;
+    padding-right: .6em;
 }
 
 div.notice-box.success {

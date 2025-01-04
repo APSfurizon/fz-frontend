@@ -13,16 +13,36 @@
             "information": "Informazioni",
             "archive": "Archivio",
             "login": "Accedi",
-            "logout": "Esci",
             "alt_logo": "Logo di furizon",
-            "alt_profile_picture": "Foto profilo"
+            "alt_profile_picture": "Foto profilo",
+            "dropdown": {
+                "logout": "Esci",
+                "language": {
+                    "it": "Italiano",
+                    "en": "English"
+                }
+            },
+            "app-badge": "Scarica ora l'app ufficiale!"
         },
         "reload": "Ricarica",
         "loading": "Caricamento...",
         "confirm": "Conferma",
-        "cancel": "Cancella",
+        "cancel": "Annulla",
         "error": "Errore",
-        "unknown_error": "Errore sconosciuto"
+        "next": "Avanti",
+        "back": "Indietro",
+        "unknown_error": "Errore sconosciuto",
+        "order_status": {
+            "CANCELED": "Ordine cancellato",
+            "PENDING": "Ordine in attesa",
+            "PAID": "Ordine pagato",
+            "EXPIRED": "Ordine scaduto"
+        },
+        "error_header": "Si {count, plural, =1 {è verificato un errore} other {sono verificati # errori}}:",
+        "request_id": "ID richiesta:",
+        "util": {
+            "hoverable": "Clicca per copiare"
+        }
     },
     "components": {
         "autoinput": {
@@ -47,6 +67,9 @@
             "delete": "Elimina",
             "upload": "Carica",
             "crop": "Ritaglia"
+        },
+        "input": {
+            "validation_fail": "Valore non valido"
         }
     },
     "furpanel": {
@@ -58,12 +81,16 @@
             "your_booking": "La tua prenotazione",
             "countdown": "Conto alla rovescia",
             "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
-            "book_now": "Prenota ora",
+            "book_now": "Prenota",
+            "review_info_first": "Rivedi i tuoi dati personali",
             "edit_booking": "Modifica prenotazione",
+            "retry_payment": "Riprova pagamento",
             "editing_locked_warning": "Avviso blocco modifiche",
             "editing_locked_warning_desc": "Dal {lockDate} non sarà più possibile modificare l'ordine.",
             "editing_locked": "Modifica bloccata",
             "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
+            "booking_review_info": "Revisione dati personali",
+            "booking_review_info_desc": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono per rilasciarti la tessera associativa e per motivi assicurativi.",
             "items": {
                 "code": "codice",
                 "membership_card": "Tessera associativa",
@@ -80,6 +107,7 @@
                 "extra_days_LATE": "Late"
             },
             "errors": {
+                "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",
                 "SERVER_ERROR": {
                     "title": "Errore server",
                     "description": "Non è stato possibile recuperare alcuna informazione sull'evento. Provare più tardi"
@@ -104,13 +132,126 @@
                     "title": "Ordine condiviso",
                     "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
                 }
+            },
+            "actions": {
+                "review_info": "Rivedi informazioni",
+                "confirm_info": "Conferma informazioni"
             }
         },
         "badge": {
             "title": "Badge"
         },
         "room": {
-            "title": "Stanza"
+            "title": "Stanza",
+            "messages": {
+                "room_edit_deadline": {
+                    "title": "Scadenza modifiche stanze",
+                    "description": "Hai tempo fino al {lockDate} per modificare la tua stanza."
+                },
+                "room_edit_deadline_end": {
+                    "title": "Modifiche stanze bloccate",
+                    "description": "Dal {lockDate}, la modifica della stanza non è più consentita."
+                },
+                "accept_invite": {
+                    "title": "Accettare invito?",
+                    "description": "Entrerai nella stanza <room>{roomName}</room> di {nickname}."
+                },
+                "refuse_invite": {
+                    "title": "Rifiutare invito?",
+                    "description": "Rifiuterai l'invito nella stanza <room>{roomName}</room> di {nickname}."
+                },
+                "confirm_delete": {
+                    "title": "Conferma eliminazione",
+                    "description": "Vuoi eliminare <room>{roomName}</room>? Gli ospiti verranno notificati."
+                },
+                "confirm_invite_cancel": {
+                    "title": "Revoca invito",
+                    "description": "Vuoi revocare l'invito in stanza per {guestName}?"
+                },
+                "confirm_kick": {
+                    "title": "Rimuovi ospite",
+                    "description": "Vuoi rimuovere {guestName} dalla tua stanza?"
+                },
+                "confirm_leave": {
+                    "title": "Lascia stanza",
+                    "description": "Vuoi uscire dalla stanza <room>{roomName}</room>?"
+                },
+                "exchange_invite_sent": {
+                    "title": "Richiesta inviata",
+                    "description": "Fatto! È stata inviata un'email all'utente destinatario."
+                }
+            },
+            "errors": {
+                "ORDER_NOT_FOUND": "Ordine non trovato",
+                "ROOM_FULL": "La stanza è già piena",
+                "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
+            },
+            "input": {
+                "rename_new_name": {
+                    "label": "Nuovo nome",
+                    "placeholder": "Inserisci un nuovo nome stanza"
+                },
+                "invite": {
+                    "label": "Invita qualcuno in stanza",
+                    "placeholder": "Cerca un utente"
+                },
+                "force_join": {
+                    "label": "Forza invito"
+                },
+                "force_exit": {
+                    "label": "Forza uscita da altre stanze"
+                },
+                "exchange_user": {
+                    "label": "Destinatario",
+                    "placeholder": "Cerca un utente destinatario"
+                }
+            },
+            "invite": {
+                "header": "Hai ricevuto {amount, plural, =1 {un invito} other {# inviti}}.",
+                "title" : "{nickname} ti invita nella stanza <room>{roomName}.</room>"
+            },
+            "actions": {
+                "buy_a_room": "Acquista stanza",
+                "upgrade_room": "Upgrade",
+                "join_a_room": "Accetta un invito",
+                "create_a_room": "Crea una stanza",
+                "refuse": "Rifiuta",
+                "accept": "Accetta",
+                "rename": "Rinomina",
+                "invite": "Invita",
+                "create": "Crea",
+                "delete": "Elimina",
+                "kick": "Rimuovi ospite",
+                "revoke_invite": "Revoca invito",
+                "confirm_room": "Conferma",
+                "unconfirm_room": "Revoca conferma",
+                "transfer": "Trasferisci",
+                "transfer_room": "Trasferisci stanza",
+                "leave": "Lascia"
+            },
+            "your_room": "La tua stanza",
+            "or": "oppure",
+            "no_room": "Non sei in una stanza, per ora.",
+            "status_owner": "Gestore",
+            "status_invited": "Invitato",
+            "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
+            "default_name": "Stanza di {name}",
+            "order_flow": {
+                "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}",
+                "select_type": "Seleziona una stanza",
+                "your_selection": "La tua selezione",
+                "complete_order": "Completa ordine",
+                "messages": {
+                    "quota_warning": {
+                        "title": "Avviso sulla disponibilità",
+                        "description": "La disponibilità di una stanza potrebbe variare, ricarica per recuperarne la disponibilità più aggiornata."
+                    },
+                    "order_notice": {
+                        "title": "Avviso sull'ordine",
+                        "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere automaticamente annullato. Contatta il supporto in caso di ripensamenti."
+                    }
+                }
+            }
         },
         "upload_area": {
             "title": "Area upload"
@@ -137,7 +278,8 @@
                 "unknown_error": "Errore sconosciuto",
                 "network_error": "Errore di rete",
                 "email_not_registered": "Utente non trovato",
-                "invalid_credentials": "Credenziali errate"
+                "invalid_credentials": "Credenziali errate",
+                "invalid_input": "Dati non validi"
             }
         },
         "register": {
@@ -187,7 +329,7 @@
                 },
                 "nickname": {
                     "help": "Il nome del tuo fursona principle. Non sarà usato per l'accesso",
-                    "label": "Soprannome",
+                    "label": "Nickname",
                     "placeholder": "Es: il nome del tuo fursona"
                 },
                 "password": {

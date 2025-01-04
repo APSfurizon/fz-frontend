@@ -1,8 +1,9 @@
-import { ChangeEvent, CSSProperties, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import "../styles/components/janInput.css";
+import { useTranslations } from "next-intl";
 
-export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, placeholder, prefix, required=false, style, value="" }: Readonly<{
+export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, pattern, placeholder, prefix, required=false, style, value="" }: Readonly<{
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -17,6 +18,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     minLength?: number,
     maxLength?: number,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
+    pattern?: RegExp,
     placeholder?: string,
     prefix?: string,
     required?: boolean,
@@ -27,11 +29,20 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     /* States */
     const [inputValue, setInputValue] = useState(value);
     const [visiblePassword, setVisiblePassword] = useState(false);
+    const t = useTranslations("furpanel");
     
+    /* Pattern validity */
+    const patternValidity = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!pattern?.test(e.target.value)) {
+            e.target.setCustomValidity(t("input.validation_fail"));
+        }
+    }
+
     /* Change handling */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(prefix ?? "" + e.target.value);
         onChange && onChange(e);
+        pattern && patternValidity(e);
     };
     
     /* Calc input type */

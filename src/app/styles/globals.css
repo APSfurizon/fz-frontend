@@ -36,9 +36,12 @@ a {
   text-decoration: none;
 }
 
+a.hoverable:hover {
+  background-color: var(--hoverable-bg);
+}
+
 *:disabled {
-  filter: grayscale(0.7);
-  opacity: 0.8;
+  filter: grayscale(0.7) brightness(0.8);
 }
 
 /* Scrollbar styles */

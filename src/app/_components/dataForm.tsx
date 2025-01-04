@@ -13,7 +13,7 @@ export interface SaveButtonData {
 
 export default function DataForm ({action, onSuccess, onFail, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true}: Readonly<{
     action: FormApiAction<any, any, any>,
-    onSuccess?: (data: ApiResponse) => any,
+    onSuccess?: (data: Boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     checkFn?: () => boolean,
     children?: React.ReactNode,
@@ -45,7 +45,7 @@ export default function DataForm ({action, onSuccess, onFail, children, checkFn,
             }
         }
         setLoading (true);
-        runFormRequest(action, new FormData(e.currentTarget))
+        runFormRequest(action, undefined, new FormData(e.currentTarget))
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
                 onFail && onFail (errorData);

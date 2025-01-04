@@ -9,14 +9,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
-import { useHeaderUpdate } from "@/app/_lib/context/headerProvider";
+import { useUser } from "@/app/_lib/context/userProvider";
 import "../../../../styles/authentication/login.css";
 
 export default function Login() {
   const t = useTranslations("authentication");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
-  const {updateHeader, setUpdateHeader} = useHeaderUpdate();
+  const {updateUser, setUpdateUser} = useUser();
   const router = useRouter();
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     if(!isDetailedError (err)) {
@@ -30,7 +30,7 @@ export default function Login() {
 
   const manageSuccess = () => {
     setTimeout(()=>{
-      setUpdateHeader(true);
+      setUpdateUser(true);
       router.replace("/home");
     }, 200);
   }

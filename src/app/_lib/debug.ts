@@ -1,4 +1,5 @@
-import { SponsorType, UserPictureData } from "./api/user";
+import { RoomData, RoomInviteData, RoomInviteFetchResponse, CurrentRoomInfo } from "./api/room";
+import { SponsorType, UserData } from "./api/user";
 import { AutoInputSearchResult } from "./components/autoInput";
 import { HeaderData } from "./components/header";
 import { getFlagEmoji } from "./components/userPicture";
@@ -23,14 +24,14 @@ export function getTestHeaderUserData (): Promise<HeaderData> {
 /**
  * @deprecated for test purposes only
  */
-export function getTestUserPictureData (): Promise<UserPictureData> {
-    const toReturn: UserPictureData = {
+export function getTestUserPictureData (): Promise<UserData> {
+    const toReturn: UserData = {
         nickname: 'Drew',
         profile_picture_url: EMPTY_PROFILE_PICTURE_SRC,
         country: 'it',
         sponsorType: SponsorType.SPONSOR
     };
-    return new Promise<UserPictureData> ((resolve, reject) => {
+    return new Promise<UserData> ((resolve, reject) => {
         setTimeout(()=>resolve(toReturn), 2000);
     })
 }
@@ -68,4 +69,74 @@ export function getAutoInputCountries (): Promise<AutoInputSearchResult[]> {
     return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
         setTimeout(()=>resolve(toReturn), 0);
     })
+}
+
+/**
+ * @deprecated for test purposes only
+ */
+export function getRoomInvites (): RoomInviteFetchResponse {
+    const sender1: UserData = {
+        sponsorType: SponsorType.NONE,
+        country: "it",
+        nickname: "Wooferone"
+    }
+    const guest1: UserData = {
+        sponsorType: SponsorType.SUPER,
+        country: "gb",
+        nickname: "Dawg"
+    }
+    const guest2: UserData = {
+        sponsorType: SponsorType.SPONSOR,
+        country: "de",
+        nickname: "Weiss"
+    }
+    const invites: RoomInviteData[] = [
+        {
+            id: 5,
+            sender: sender1,
+            recipient: guest1,
+            room: {
+                roomId: 5,
+                roomName: "Le madrigal",
+                pendingInvites: [],
+                owner: sender1,
+                confirmed: false,
+                roomCapacity: 3,
+                roomTypeNames: {"en": "Chateau d'ax", "it": "Bisca de Roma"},
+                guests: [guest1, guest2]
+            }
+        }
+    ];
+    return { roomInvites: invites };
+}
+
+/**
+ * @deprecated for test purposes only
+ */
+export function getRoom(): CurrentRoomInfo {
+    const sender1: UserData = {
+        sponsorType: SponsorType.NONE,
+        country: "it",
+        nickname: "Wooferone"
+    };
+    const guest1: UserData = {
+        sponsorType: SponsorType.SUPER,
+        country: "gb",
+        nickname: "Dawg"
+    };
+    const guest2: UserData = {
+        sponsorType: SponsorType.SPONSOR,
+        country: "de",
+        nickname: "Weiss"
+    };
+    return {
+        roomId: 5,
+        roomName: "Le madrigal",
+        pendingInvites: [],
+        owner: sender1,
+        confirmed: false,
+        roomCapacity: 5,
+        roomTypeNames: {"en": "Chateau d'ax", "it": "Bisca de Roma"},
+        guests: [guest1, guest2]
+    };
 }

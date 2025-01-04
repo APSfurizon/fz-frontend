@@ -7,11 +7,14 @@
     --text-link: #2395D6;
     --text-status-error: #e44f4f;
     --main-dialog-background: #141E26;
+
+    --hoverable-bg: #3b3b3b;
     
     /* Footer */
     --footer-bg: #211A28;
     /* Header */
     --header-bg: #141E26;
+    --header-shadow: #00000065;
 
     /* Button */
     --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
@@ -21,6 +24,10 @@
     --button-danger-bg-normal: linear-gradient(0deg, #CD5454 0%, #A43D3D 100%);
     --button-danger-bg-hover: linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%);
     --button-danger-bg-down: linear-gradient(0deg, #a24343 0%, #833232 100%);
+
+    --button-success-bg-normal: linear-gradient(0deg, #62a743 0%, #3ba340 100%);
+    --button-success-bg-hover: linear-gradient(0deg, #6ccf71 0%, #56a64f 100%);
+    --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
 
     --button-border-normal: #FFFFFF4C;
     --button-border-down: #FFFFFFCC;
@@ -42,11 +49,13 @@
     --tool-link-bg-active: var(--button-bg-down);
     --tool-link-border-normal: #FFFFFF4C;
     --tool-link-border-down: #FFFFFFCC;
+    --tool-link-hambuger-hover-bg: #ffffff40;
 
     /* User profile picture */
     --profile-picture-border-normal: #E9E9E9;
     --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
     --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
+    --profile-picture-shadow: #242C38;
 
     /* User dropdown */
     --user-dropdown-hover-bg: #4D5D75;
@@ -93,13 +102,13 @@
     --status-box-bg-default: #4D5E6B;
     --status-box-bg-warning: #ECA02F;
     --status-box-bg-success: #52905B;
-    --status-box-bg-normal: #4D5E6B;
     --status-box-bg-error: #CD5454;
 
     /* Modal */
     --modal-overlay-bg: #0008;
     --modal-dialog-bg: #141E26;
-    --modal-button-close: #EC2F2F;
+    --modal-button-close: #ffa4a4;
+    --modal-button-close-hover: #EC2F2F;
 
     /* Upload */
     --upload-bg: #242C38;
@@ -115,6 +124,16 @@
     --booking-item-border: #87878733;
     --booking-item-bg: #48474733;
     --booking-item-subtitle-bg: #87878733;
+
+    /* Room page */
+    --room-action-panel-bg: #242C38;
+    --room-invite-bg: #ffffff19;
+    --room-invite-shadow: #0005;
+    --room-invite-kick: #d3202c;
+
+    /* Room buy flow */
+    --room-buy-item-hover-bg: #ffffff20;
+    --room-buy-item-border: #ffffff;
 
     --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;

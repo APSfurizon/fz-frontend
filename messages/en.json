@@ -1,4 +1,269 @@
 {
+    "common": {
+        "footer": {
+            "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italy",
+            "code_of_conduct": "Code of Conduct",
+            "contact_us": "Contact us",
+            "society_name": "Social promotion association Furizon",
+            "volunteers": "Volunteers"
+        },
+        "header": {
+            "alt_logo": "Furizon logo",
+            "alt_profile_picture": "Profile picture",
+            "archive": "Archive",
+            "home": "Home",
+            "information": "About",
+            "login": "Login",
+            "nose_count": "Nose count",
+            "dropdown": {
+                "logout": "Logout",
+                "language": {
+                    "it": "Italiano",
+                    "en": "English"
+                }
+            },
+            "app-badge": "Download now the official app!"
+        },
+        "reload": "Reload",
+        "loading": "Loading...",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "error": "Error",
+        "next": "Next",
+        "back": "Back",
+        "unknown_error": "Unknown error",
+        "order_status": {
+            "CANCELED": "Cancelled order",
+            "PENDING": "Pending order",
+            "PAID": "Paid order",
+            "EXPIRED": "Expired order"
+        },
+        "error_header": "{count, plural, =1 {An error occurred} other {# errors have occurred}}:",
+        "request_id": "Request ID:",
+        "util": {
+            "hoverable": "Click to copy"
+        }
+    },
+    "components": {
+        "autoinput": {
+            "alt_result_image": "Image of {description}",
+            "guide": "Enter at least {minSize, plural, =1 {a character} other {# characters}}",
+            "loading_data": "Loading data...",
+            "no_results": "No results."
+        },
+        "dataForm": {
+            "save": "Save"
+        },
+        "modal": {
+            "close": "Close"
+        },
+        "upload": {
+            "alt_preview_image": "Preview of the uploaded picture",
+            "select_image": "Select an image",
+            "upload_size_too_small": "This image is too small",
+            "upload_size_too_big": "This image is too big",
+            "loading_uploads": "Loading...",
+            "open": "Open...",
+            "delete": "Delete",
+            "upload": "Upload",
+            "crop": "Crop"
+        },
+        "input": {
+            "validation_fail": "Value not valid"
+        }
+    },
+    "furpanel": {
+        "badge": {
+            "title": "Badge"
+        },
+        "booking":{
+            "title": "Reservation",
+            "your_booking": "Your reservation",
+            "countdown": "Countdown",
+            "countdown_desc": "Ticket sales will begin on {openingDate}",
+            "book_now": "Book now",
+            "review_info_first": "Review your personal info",
+            "edit_booking": "Edit reservation",
+            "retry_payment": "Retry payment",
+            "editing_locked_warning": "Editing lock memo",
+            "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
+            "editing_locked": "Editing locked",
+            "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
+            "booking_review_info": "Review personal info",
+            "booking_review_info_desc": "Conferm your membership personal info. This data is needed to release the new membership card and insurance.",
+            "items": {
+                "code": "code",
+                "membership_card": "Membership card",
+                "room": "Hotel room",
+                "room_capacity": "Capacity: {capacity, plural, =1 {single} other {# guests}}",
+                "daily_ticket": "Daily ticket",
+                "daily_days": "Days: {days}",
+                "none_ticket": "Regular ticket",
+                "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
+                "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
+                "extra_days": "Extra days",
+                "extra_days_BOTH": "Early & Late",
+                "extra_days_EARLY": "Early",
+                "extra_days_LATE": "Late"
+
+            },
+            "errors": {
+                "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened, yet.",
+                "SERVER_ERROR": {
+                    "title": "Server error",
+                    "description": "Could not retrieve the current event info. Try again, later."
+                },
+                "MEMBERSHIP_MULTIPLE_DONE": {
+                    "title": "Multiple membership cards",
+                    "description": "It appears you have multiple membership cards active at the same time. Please contact the support for further details."
+                },
+                "MEMBERSHIP_MISSING": {
+                    "title": "Membership card missing",
+                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 31st of October."
+                },
+                "ORDER_MULTIPLE_DONE": {
+                    "title": "Multiple orders",
+                    "description": "You've placed multiple orders for one account. Please contact support in order to undo the situation."
+                },
+                "ORDER_SECRET_NOT_MATCH": {
+                    "title": "Order not valid",
+                    "description": "Could not verify the authenticity of your order. Please contact support to fix this issue."
+                },
+                "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
+                    "title": "Shared order",
+                    "description": "Your order appears to be shared with more users. Please, contact support to rectify the situation."
+                }
+            },
+            "actions": {
+                "review_info": "Review informations",
+                "confirm_info": "Confirm informazions"
+            }
+        },
+        "debug": {
+            "title": "Debug"
+        },
+        "home": {
+            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
+        },
+        "room": {
+            "title": "Room",
+            "messages": {
+                "room_edit_deadline": {
+                    "title": "Room editing deadline",
+                    "description": "Be sure to edit your room before {lockDate}."
+                },
+                "room_edit_deadline_end": {
+                    "title": "Room editing locked",
+                    "description": "Since {lockDate}, room editing is now locked."
+                },
+                "accept_invite": {
+                    "title": "Accept invite?",
+                    "description": "You will join room <room>{roomName}</room>, owned by {nickname}."
+                },
+                "refuse_invite": {
+                    "title": "Refuse invite?",
+                    "description": "You will refuse to join <room>{roomName}</room>, owned by {nickname}."
+                },
+                "confirm_delete": {
+                    "title": "Delete your room",
+                    "description": "Do you want to delete <room>{roomName}</room>? Confirmed guests will be notified."
+                },
+                "confirm_invite_cancel": {
+                    "title": "Revoke invite",
+                    "description": "Do you want to revoke your invite to {guestName}?"
+                },
+                "confirm_kick": {
+                    "title": "Kick guest",
+                    "description": "Do you want to kick {guestName} from your room?"
+                },
+                "confirm_leave": {
+                    "title": "Leave room",
+                    "description": "Do you want to leave room <room>{roomName}</room>?"
+                },
+                "exchange_invite_sent": {
+                    "title": "Request sent",
+                    "description": "Done! An email has been sent to the recipient."
+                }
+            },
+            "errors": {
+                "ORDER_NOT_FOUND": "Order not found",
+                "ROOM_FULL": "The room is full",
+                "EXCHANGE_STILL_PENDING": "An exchange request is still pending."
+            },
+            "input": {
+                "rename_new_name": {
+                    "label": "New name",
+                    "placeholder": "Enter a new room name"
+                },
+                "invite": {
+                    "label": "Invite someone in your room",
+                    "placeholder": "Search for a user"
+                },
+                "force_join": {
+                    "label": "Force join the room"
+                },
+                "force_exit": {
+                    "label": "Kick from any other room"
+                },
+                "exchange_user": {
+                    "label": "Recipient",
+                    "placeholder": "Search for a user"
+                }
+            },
+            "invite": {
+                "header": "You've been invited in {amount, plural, =1 {a room} other {# rooms}}.",
+                "title" : "{nickname} invited you to room <room>{roomName}.</room>"
+            },
+            "actions": {
+                "buy_a_room": "Buy a room",
+                "upgrade_room": "Upgrade",
+                "join_a_room": "Join a room",
+                "create_a_room": "Create a room",
+                "refuse": "Refuse",
+                "accept": "Accept",
+                "rename": "Rename",
+                "invite": "Invite",
+                "create": "Create",
+                "delete": "Delete",
+                "kick": "Kick user",
+                "revoke_invite": "Revoke invite",
+                "confirm_room": "Confirm",
+                "unconfirm_room": "Unconfirm",
+                "transfer": "Transfer",
+                "transfer_room": "Transfer room",
+                "leave": "Leave"
+            },
+            "your_room": "Your room",
+            "or": "or",
+            "no_room": "You don't have a room, yet.",
+            "status_owner": "Owner",
+            "status_invited": "Invited",
+            "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
+            "default_name": "{name}'s room",
+            "order_flow": {
+                "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}",
+                "select_type": "Select a room type",
+                "your_selection": "Your selection",
+                "complete_order": "Complete order",
+                "messages": {
+                    "quota_warning": {
+                        "title": "Availaility warning",
+                        "description": "Room availability may change while ordering a room, refresh in order to get the latest count of rooms left."
+                    },
+                    "order_notice": {
+                        "title": "Order warning",
+                        "description": "By checking this, you acknowledge that the requested change to your order cannot be reversed automatically. Please contact support, in case you want to go back."
+                    }
+                }
+            }
+        },
+        "upload_area": {
+            "title": "Upload area"
+        },
+        "user": {
+            "title": "User"
+        }
+    },
     "authentication": {
         "login": {
             "create_account": "Create an account",
@@ -6,7 +271,8 @@
                 "email_not_registered": "User not found",
                 "invalid_credentials": "Credenziali errate",
                 "network_error": "Network error",
-                "unknown_error": "Unknown error"
+                "unknown_error": "Unknown error",
+                "invalid_input": "Invalid data"
             },
             "label_email": "Email",
             "label_password": "Password",
@@ -120,128 +386,5 @@
             "title": "Registration"
         },
         "title": "authentication"
-    },
-    "common": {
-        "footer": {
-            "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italy",
-            "code_of_conduct": "Code of Conduct",
-            "contact_us": "Contact us",
-            "society_name": "Social promotion association Furizon",
-            "volunteers": "Volunteers"
-        },
-        "header": {
-            "alt_logo": "Furizon logo",
-            "alt_profile_picture": "Profile picture",
-            "archive": "Archive",
-            "home": "Home",
-            "information": "About",
-            "login": "Login",
-            "logout": "Logout",
-            "nose_count": "Nose count"
-        },
-        "loading": "Loading...",
-        "confirm": "Confirm",
-        "cancel": "Cancel",
-        "error": "Error",
-        "unknown_error": "Unknown error"
-    },
-    "components": {
-        "autoinput": {
-            "alt_result_image": "Image of {description}",
-            "guide": "Enter at least {minSize, plural, =1 {a character} other {# characters}}",
-            "loading_data": "Loading data...",
-            "no_results": "No results."
-        },
-        "dataForm": {
-            "save": "Save"
-        },
-        "modal": {
-            "close": "Close"
-        },
-        "upload": {
-            "alt_preview_image": "Preview of the uploaded picture",
-            "select_image": "Select an image",
-            "upload_size_too_small": "This image is too small",
-            "upload_size_too_big": "This image is too big",
-            "loading_uploads": "Loading...",
-            "open": "Open...",
-            "delete": "Delete",
-            "upload": "Upload",
-            "crop": "Crop"
-        }
-    },
-    "furpanel": {
-        "badge": {
-            "title": "Badge"
-        },
-        "booking":{
-            "title": "Booking",
-            "your_booking": "Your booking",
-            "countdown": "Countdown",
-            "countdown_desc": "Ticket sales will begin on {openingDate}",
-            "book_now": "Book now",
-            "edit_booking": "Edit booking",
-            "editing_locked_warning": "Editing lock memo",
-            "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
-            "editing_locked": "Editing locked",
-            "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
-            "items": {
-                "code": "code",
-                "membership_card": "Membership card",
-                "room": "Hotel room",
-                "room_capacity": "Capacity: {capacity, plural, =1 {single} other {# guests}}",
-                "daily_ticket": "Daily ticket",
-                "daily_days": "Days: {days}",
-                "none_ticket": "Regular ticket",
-                "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
-                "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
-                "extra_days": "Extra days",
-                "extra_days_BOTH": "Early & Late",
-                "extra_days_EARLY": "Early",
-                "extra_days_LATE": "Late"
-
-            },
-            "errors": {
-                "SERVER_ERROR": {
-                    "title": "Server error",
-                    "description": "Could not retrieve the current event info. Try again, later."
-                },
-                "MEMBERSHIP_MULTIPLE_DONE": {
-                    "title": "Multiple membership cards",
-                    "description": "It appears you have multiple membership cards active at the same time. Please contact the support for further details."
-                },
-                "MEMBERSHIP_MISSING": {
-                    "title": "Membership card missing",
-                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 31st of October."
-                },
-                "ORDER_MULTIPLE_DONE": {
-                    "title": "Multiple orders",
-                    "description": "You've placed multiple orders for one account. Please contact support in order to undo the situation."
-                },
-                "ORDER_SECRET_NOT_MATCH": {
-                    "title": "Order not valid",
-                    "description": "Could not verify the authenticity of your order. Please contact support to fix this issue."
-                },
-                "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
-                    "title": "Shared order",
-                    "description": "Your order appears to be shared with more users. Please, contact support to rectify the situation."
-                }
-            }
-        },
-        "debug": {
-            "title": "Debug"
-        },
-        "home": {
-            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
-        },
-        "room": {
-            "title": "Room"
-        },
-        "upload_area": {
-            "title": "Upload area"
-        },
-        "user": {
-            "title": "User"
-        }
     }
 }

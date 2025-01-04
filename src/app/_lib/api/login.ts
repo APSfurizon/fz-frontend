@@ -1,6 +1,6 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../constants";
-import { ApiErrorResponse, ApiResponse, RequestAction } from "./global";
+import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
 
 export interface LoginData {
     email?: string;
@@ -42,7 +42,7 @@ export interface LogoutResponse extends ApiResponse {
     success: boolean
 }
 
-export class LogoutApiAction implements RequestAction<LogoutResponse, ApiErrorResponse> {
+export class LogoutApiAction implements ApiAction<LogoutResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "authentication/logout";
