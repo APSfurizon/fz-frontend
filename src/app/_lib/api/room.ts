@@ -63,7 +63,9 @@ export interface RoomInfoResponse extends ApiResponse {
     canCreateRoom: boolean,
     editingRoomEndTime: string,
     currentRoomInfo: RoomInfo,
-    invitations: RoomInvitation[]
+    invitations: RoomInvitation[],
+    buyOrUpgradeRoomSupported: boolean,
+    canBuyOrUpgradeRoom: boolean
 }
 
 export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorResponse> {
@@ -178,7 +180,7 @@ export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
 export interface RoomExchangeInitApiData {
     sourceUserId: number,
     destUserId: number,
-    action: "room"
+    action: "room" | "order"
 }
 
 export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<RoomExchangeInitApiData> {

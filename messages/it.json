@@ -175,11 +175,16 @@
                 "confirm_leave": {
                     "title": "Lascia stanza",
                     "description": "Vuoi uscire dalla stanza <room>{roomName}</room>?"
+                },
+                "exchange_invite_sent": {
+                    "title": "Richiesta inviata",
+                    "description": "Fatto! È stata inviata un'email all'utente destinatario."
                 }
             },
             "errors": {
                 "ORDER_NOT_FOUND": "Ordine non trovato",
-                "ROOM_FULL": "La stanza è già piena"
+                "ROOM_FULL": "La stanza è già piena",
+                "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
             },
             "input": {
                 "rename_new_name": {
@@ -195,6 +200,10 @@
                 },
                 "force_exit": {
                     "label": "Forza uscita da altre stanze"
+                },
+                "exchange_user": {
+                    "label": "Destinatario",
+                    "placeholder": "Cerca un utente destinatario"
                 }
             },
             "invite": {
@@ -217,6 +226,7 @@
                 "confirm_room": "Conferma",
                 "unconfirm_room": "Revoca conferma",
                 "transfer": "Trasferisci",
+                "transfer_room": "Trasferisci stanza",
                 "leave": "Lascia"
             },
             "your_room": "La tua stanza",

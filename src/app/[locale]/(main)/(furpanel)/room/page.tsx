@@ -199,7 +199,10 @@ export default function RoomPage() {
   }
 
   const roomTransferSuccess = () => {
-    showModal(t(""), )
+    const successBody = <span>
+      {t("room.messages.exchange_invite_sent.description")}
+    </span>;
+    showModal(t("room.messages.exchange_invite_sent.title"), successBody, ICONS.CHECK_CIRCLE);
     commonSuccess();
   }
 
@@ -218,6 +221,7 @@ export default function RoomPage() {
     setInviteCancelModalOpen(false);
     setKickModalOpen(false);
     setLeaveModalOpen(false);
+    setTransferModalOpen(false);
     setData(undefined);
   }
 
@@ -230,6 +234,7 @@ export default function RoomPage() {
     setInviteCancelModalOpen(false);
     setKickModalOpen(false);
     setLeaveModalOpen(false);
+    setTransferModalOpen(false);
     showModal(
       tcommon("error"), 
       <ModalError error={err} translationRoot={translationRoot ?? "furpanel"} translationKey={translationKey ?? "room.errors"}></ModalError>
@@ -248,6 +253,7 @@ export default function RoomPage() {
     )).finally(()=>setLoading(false));
   }, [data]);
 
+  console.log(data);
 
   /********************/
   /** Page Rendering **/
@@ -273,7 +279,7 @@ export default function RoomPage() {
           <div className="spacer"></div>
           <Button iconName={ICONS.REFRESH} onClick={()=>setData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
           {
-            data && data.currentRoomInfo &&
+            data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
               <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>
                 {t("room.actions.upgrade_room")}
               </Button>
@@ -299,7 +305,7 @@ export default function RoomPage() {
               ?
                 <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
               : <>
-                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
+                {!!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom && <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>}
                 <span className="title small">{t("room.or")}</span>
                 <Button iconName={ICONS.PERSON_ADD} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
               </>
@@ -358,18 +364,18 @@ export default function RoomPage() {
               {/* Owner actions */}
                 <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
                   onClick={()=>promptRoomInvite()}>{t("room.actions.invite")}</Button>
-                  {data.currentRoomInfo.confirmed === false ? <>
-                    <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
-                      onClick={()=>promptRoomInvite()}>{t("room.actions.confirm_room")}</Button>
-                  </> : <>
-                  <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
-                      onClick={()=>promptRoomInvite()}>{t("room.actions.unconfirm_room")}</Button>
-                  </>}
+                {data.currentRoomInfo.confirmed === false ? <>
+                  <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
+                    onClick={()=>promptRoomInvite()}>{t("room.actions.confirm_room")}</Button>
+                </> : <>
+                <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
+                    onClick={()=>promptRoomInvite()}>{t("room.actions.unconfirm_room")}</Button>
+                </>}
+                <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomTransfer()}>{t("room.actions.transfer")}</Button>
               </> : <>
               {/* Guest actions */}
-                <Button iconName={ICONS.PERSON_ADD} onClick={()=>promptRoomLeave()}>{t("room.actions.leave")}</Button>
+                <Button iconName={ICONS.DOOR_OPEN} onClick={()=>promptRoomLeave()}>{t("room.actions.leave")}</Button>
               </>}
-              <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomTransfer()}>{t("room.actions.transfer")}</Button>
           </div>
         </div>
         </>}
@@ -549,9 +555,9 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room transfer modal */}
-    <Modal icon={ICONS.SEND} open={transferModalOpen} title={t("room.actions.transfer")} onClose={()=>setTransferModalOpen(false)} busy={modalLoading}>
+    <Modal icon={ICONS.SEND} open={transferModalOpen} title={t("room.actions.transfer_room")} onClose={()=>setTransferModalOpen(false)} busy={modalLoading}>
       { data?.currentRoomInfo && <>
-      <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
+      <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomTransferSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm">
         <input type="hidden" name="userId" value={userData?.userId}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
