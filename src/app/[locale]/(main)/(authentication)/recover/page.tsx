@@ -15,6 +15,7 @@ import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 
 export default function Login() {
   const t = useTranslations("authentication");
+  const tcommon = useTranslations("common");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
   const {updateUser, setUpdateUser} = useUser();
@@ -42,7 +43,7 @@ export default function Login() {
     }, 200);
   }
 
-  useTitle(t("login.title"));
+  useTitle(t("recover.title"));
 
   return <>
     <div className="horizontal-list gap-4mm flex-center">
@@ -50,19 +51,14 @@ export default function Login() {
           <Icon iconName="design_services"></Icon>
           <span className="titular bold highlight">furpanel</span>
           <span> - </span>
-          <span className="titular bold">{t('login.title').toLowerCase()}</span>
+          <span className="titular bold">{t('recover.title').toLowerCase()}</span>
       </span>
     </div>
     {error && <span className="error-container title small center">{t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-    {params.get("register") && <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
-      {t("login.messages.register_success.description")}
-    </NoticeBox>}
-    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
-      <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
-      <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
+    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("recover.actions.send_verification")}}>
+      <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("recover.input.email.label")} placeholder={t("login.placeholder_email")}/>
     </DataForm>
-    <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.register_here')}</Link>
-    <Link href={`/recover?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.recover')}</Link>
+    <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{tcommon('back')}</Link>
   </>;
 }
   

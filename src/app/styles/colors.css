@@ -15,6 +15,7 @@
     /* Header */
     --header-bg: #141E26;
     --header-shadow: #00000065;
+    --header-link-hover-bg: #ffffff10;
 
     /* Button */
     --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);

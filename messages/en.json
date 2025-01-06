@@ -296,11 +296,24 @@
         }
     },
     "authentication": {
+        "title": "authentication",
+        "recover": {
+            "title": "Account recovery",
+            "actions": {
+                "send_verification": "Verify"
+            },
+            "input": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Enter your email address"
+                }
+            }
+        },
         "login": {
             "create_account": "Create an account",
             "errors": {
                 "email_not_registered": "User not found",
-                "invalid_credentials": "Credenziali errate",
+                "invalid_credentials": "Invalid credentials",
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
                 "invalid_input": "Invalid data"
@@ -311,6 +324,7 @@
             "placeholder_email": "Enter your email address",
             "placeholder_password": "Enter your password",
             "register_here": "or register here",
+            "recover": "Recover credentials",
             "title": "Log in",
             "messages": {
                 "register_success": {
@@ -421,7 +435,6 @@
             "login_here": "or log in here",
             "register": "Register",
             "title": "Registration"
-        },
-        "title": "authentication"
+        }
     }
 }

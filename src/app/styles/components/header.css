@@ -48,6 +48,10 @@ header {
     a.header-link>*:first-child {
         margin-right: 0.375em;
     }
+
+    a.header-link:hover span {
+        text-decoration: underline;
+    }
     
     span a.hamburger {
         display: none;

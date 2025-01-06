@@ -296,6 +296,18 @@
     },
     "authentication": {
         "title": "autenticazione",
+        "recover": {
+            "title": "Recupero account",
+            "actions": {
+                "send_verification": "Verifica"
+            },
+            "input": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Inserisci il tuo indirizzo email"
+                }
+            }
+        },
         "login": {
             "title": "Accesso",
             "login": "Accedi",
@@ -305,6 +317,7 @@
             "label_password": "Password",
             "placeholder_password": "Inserisci la tua password",
             "register_here": "oppure registrati",
+            "recover": "Recupera accesso",
             "errors": {
                 "unknown_error": "Errore sconosciuto",
                 "network_error": "Errore di rete",

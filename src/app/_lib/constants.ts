@@ -9,7 +9,7 @@ export const UPLOAD_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_MAX_SIZE 
 
 // Security
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
-export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|register|nosecount)).+)?$/gmi;
+export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|recover|register|nosecount)).+)?$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";

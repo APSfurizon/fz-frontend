@@ -10,6 +10,7 @@ import { ReactEventHandler, useEffect, useState } from 'react';
 import "../styles/components/header.css";
 import { DEVICE_TYPE, getDeviceType } from '../_lib/utils';
 import { APP_LINKS } from '../_lib/constants';
+import Link from 'next/link';
 
 export default function Header () {
     const t = useTranslations('common');
@@ -52,10 +53,10 @@ export default function Header () {
                 </a>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
-                <a className="header-link">
+                <Link href="/home" className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
-                </a>
+                </Link>
                 <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
