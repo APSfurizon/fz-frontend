@@ -78,6 +78,28 @@ div.jan-input {
     }
 }
 
+div.jan-input.hoverable div.input-container {
+    transition-duration: 120ms;
+}
+
+div.jan-input.hoverable:hover div.input-container {
+    outline-color: var(--text-link);
+}
+
+div.jan-input.hoverable:active div.input-container {
+    outline-color: var(--highlight);
+}
+
+@keyframes hoverableClick {
+    0% {
+        outline-color: var(--text-link);
+    }
+
+    100% {
+        outline-color: var(--highlight);
+    }
+}
+
 span.help-text {
     margin-top: -1.7em;
     margin-left: 0.1em;

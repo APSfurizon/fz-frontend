@@ -1,31 +1,18 @@
 'use client'
-import UserPicture from "@/app/_components/userPicture";
+import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import { ICONS } from "../../../../_components/icon";
 import { useEffect, useState } from "react";
-import { UserData } from "@/app/_lib/api/user";
-import { getTestUserPictureData } from "@/app/_lib/debug";
-import Checkbox from "@/app/_components/checkbox";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
+import useTitle from "@/app/_lib/api/hooks/useTitle";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export default function UserPage() {
-
+  const t = useTranslations("furpanel");
   const router = useRouter();
-
+  useTitle(t("user.title"));
+  
   return (
-    <div className="page">
-      {/* Admin area */}
-      <div className="admin-section vertical-list gap-2mm">
-        <div className="horizontal-list">
-          <span className="title">
-            <Icon iconName={ICONS.SECURITY}></Icon>
-          </span>
-        </div>
-        <Button iconName={ICONS.ID_CARD} onClick={()=>router.push("/admin/memberships/a")}>
-          Membership manager
-        </Button>
-      </div>
-    </div>
+    <div className="page"></div>
   );
 }

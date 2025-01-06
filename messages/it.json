@@ -52,7 +52,7 @@
             "loading_data": "Caricamento dati..."
         },
         "dataForm": {
-            "save": "Save"
+            "save": "Salva"
         },
         "modal": {
             "close": "Chiudi"
@@ -266,16 +266,26 @@
             }
         },
         "admin": {
+            "title": "Amministrazione",
+            "sections": {
+                "membership": "Associazione",
+                "membership_cards": "Tesserati"
+            },
             "membership_manager": {
                 "title": "Gestione tessere",
                 "header": "Tessere del ",
                 "actions": {
                     "add": "Aggiungi tessera"
                 },
+                "input": {
+                    "user": {
+                        "label": "Seleziona utente"
+                    }
+                },
                 "table": {
                     "headers": {
                         "user": "Utente",
-                        "verified": "Verificato"
+                        "registered": "Registrato"
                     }
                 }
             },
@@ -396,7 +406,7 @@
                 "section": {
                     "birth_data": "Dati di nascita",
                     "personal_info": "Dati personali",
-                    "residence_data": "Dati di fatturazione"
+                    "residence_data": "Dati di residenza"
                 },
                 "disclaimer_tos": {
                     "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."

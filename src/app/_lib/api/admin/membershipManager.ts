@@ -1,5 +1,8 @@
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
-import { UserData, UserPersonalInfo } from "../user";
+import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../components/autoInput";
+import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
+import { buildSearchParams } from "../../utils";
+import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global";
+import { AutoInputRoomInviteManager, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
 
 export interface MembershipCard {
     cardId: number,
@@ -13,6 +16,7 @@ export interface MembershipCard {
 export interface UserCardData {
     membershipCard: MembershipCard
     userInfo: UserPersonalInfo,
+    email: string,
     user: UserData
 }
 
@@ -38,6 +42,41 @@ export class ChangeCardRegisterStatusApiAction implements ApiAction<Boolean, Api
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "membership/set-membership-card-registration-status";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+            return new Promise((resolve, reject) => {
+                runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-no-membership-card-for-year": additionalValues[0]})).then (results => {
+                    const searchResult = results as UserSearchResponse;
+                    resolve (
+                        filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                    );
+                });
+            });
+        }
+}
+
+export interface AddCardApiData {
+    userId: number
+}
+
+export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
+    mapToDTO = (data: FormData) => {
+        let toReturn: AddCardApiData = {
+            userId: parseInt(data.get('userId')!.toString ()),
+        };
+        return toReturn;
+    }
+}
+
+export class AddCardFormAction implements FormApiAction<AddCardApiData, Boolean, ApiErrorResponse> {
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    authenticated = true;
+    dtoBuilder = new AddCardDTOBuilder ();
+    urlAction = "membership/add-card";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

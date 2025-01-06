@@ -267,16 +267,26 @@
             }
         },
         "admin": {
+            "title": "Admin area",
+            "sections": {
+                "membership": "Memership",
+                "membership_cards": "Cards"
+            },
             "membership_manager": {
                 "title": "Card manager",
                 "header": "Viewing cards for year ",
                 "actions": {
                     "add": "Add card"
                 },
+                "input": {
+                    "user": {
+                        "label": "Seleziona utente"
+                    }
+                },
                 "table": {
                     "headers": {
                         "user": "User",
-                        "verified": "Verified"
+                        "registered": "Registered"
                     }
                 }
             },

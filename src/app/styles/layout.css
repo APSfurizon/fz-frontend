@@ -48,6 +48,14 @@
 
 .rounded-l { border-radius: 3mm; }
 
+.section>*:not(.section-title){
+    margin-left: 0.6em;
+}
+
+.section > .section-title {
+    margin-bottom: 0.5em;
+}
+
 .main-dialog {
     padding: 1.25em;
     margin: 0 auto 8mm auto;
