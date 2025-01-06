@@ -2,7 +2,7 @@
 import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/app/_lib/api/global";
 import { LoginFormAction } from "@/app/_lib/api/login";
 import { useTranslations } from "next-intl";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import DataForm from "@/app/_components/dataForm";
@@ -30,6 +30,8 @@ export default function Register() {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [tosAccepted, setTosAccepted] = useState(false);
 
+  const params = useSearchParams();
+
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     if(!isDetailedError (err)) {
       setError("network_error");
@@ -54,7 +56,12 @@ export default function Register() {
     }
   }
 
-  const manageSuccess = () => setTimeout(()=>redirect("/home"), 200);
+  const manageSuccess = () => setTimeout(()=>{
+    const newParams = new URLSearchParams(params);
+    newParams.append("register", "true");
+    setError(undefined);
+    redirect(`/login?${newParams.toString()}`);
+  }, 200);
 
   const fiscalCodeRequired = birthCountry == "IT";
 
@@ -143,7 +150,7 @@ export default function Register() {
           terms: (chunks) => <Link href="#" className="highlight underlined">{chunks}</Link>
         })}</Checkbox>
     </DataForm>
-    <Link href="/login" className="suggestion title small center color-subtitle underlined">{t('register.login_here')}</Link>
+    <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('register.login_here')}</Link>
   </>;
   }
   

@@ -20,6 +20,26 @@ export type UserData = {
     sponsorship: SponsorType
 }
 
+export interface UserPersonalInfo {
+    id?: number;
+    firstName?: string;
+    lastName?: string;
+    fiscalCode?: string;
+    birthCity?: string;
+    birthRegion?: string;
+    birthCountry?: string;
+    birthday?: string;
+    residenceAddress?: string;
+    residenceZipCode?: string;
+    residenceCity?: string;
+    residenceRegion?: string;
+    residenceCountry?: string;
+    prefixPhoneNumber?: string;
+    phoneNumber?: string;
+    lastUpdatedEventId?: number;
+    userId?: number,
+}
+
 export interface UserDisplayResponse extends UserData, ApiResponse {}
 
 export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {

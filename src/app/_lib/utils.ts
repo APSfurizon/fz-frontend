@@ -28,9 +28,12 @@ export function isEmpty (str?: string) {
     return !str || str.length === 0;
 }
 
-export function copyContent (e: HTMLElement) {
+export function copyContent (e: HTMLElement | HTMLInputElement) {
     if (e.textContent) {
         navigator.clipboard.writeText(e.textContent);
+        return true;
+    } else if ("value" in e) {
+        navigator.clipboard.writeText(e.value);
         return true;
     } else {
         return false;
@@ -64,3 +67,5 @@ export function getDeviceType (): DEVICE_TYPE {
     else
         return DEVICE_TYPE.GENERIC;
 }
+
+export const years = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((i)=>new Date().getUTCFullYear()+i);

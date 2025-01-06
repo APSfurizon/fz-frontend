@@ -9,6 +9,7 @@ export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
   const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
+  const continueParams = new URLSearchParams({"continue": path});
 
   if (needsAuthentication) {
     if (loginToken && loginToken.value) {
@@ -26,10 +27,10 @@ export async function middleware(req: NextRequest) {
         return intlMiddleware(req);
       } else {
         req.cookies.delete(TOKEN_STORAGE_NAME);
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url));
       }
     } else {
-      return NextResponse.redirect(new URL("/login", req.url));
+      return NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url));
     }
   } else {
     return intlMiddleware(req);

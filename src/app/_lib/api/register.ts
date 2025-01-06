@@ -4,33 +4,17 @@ import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { getFlagEmoji } from "../components/userPicture";
 import { nullifyEmptyString } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
+import { UserPersonalInfo } from "./user";
 
 /*****************************/
 /*         Entities          */
 /*****************************/
 
-export interface RegisterPersonalInfo {
-    firstName?: string;
-    lastName?: string;
-    fiscalCode?: string;
-    birthCity?: string;
-    birthRegion?: string;
-    birthCountry?: string;
-    birthday?: string;
-    residenceAddress?: string;
-    residenceZipCode?: string;
-    residenceCity?: string;
-    residenceRegion?: string;
-    residenceCountry?: string;
-    prefixPhoneNumber?: string;
-    phoneNumber?: string;
-}
-
 export interface RegisterData {
     email?: string;
     password?: string;
     fursonaName?: string;
-    personalUserInformation?: RegisterPersonalInfo;
+    personalUserInformation?: UserPersonalInfo;
 }
 
 export interface RegisterResponse extends ApiResponse {
@@ -39,7 +23,7 @@ export interface RegisterResponse extends ApiResponse {
 
 export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
     mapToDTO = (data: FormData) => {
-        let personalUserInformation: RegisterPersonalInfo = {
+        let personalUserInformation: UserPersonalInfo = {
             firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
             lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
             fiscalCode:         nullifyEmptyString(data.get('fiscalCode')?.toString ()),

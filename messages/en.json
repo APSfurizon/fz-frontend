@@ -73,8 +73,8 @@
         }
     },
     "furpanel": {
-        "badge": {
-            "title": "Badge"
+        "home": {
+            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
         },
         "booking":{
             "title": "Reservation",
@@ -139,11 +139,11 @@
                 "confirm_info": "Confirm informazions"
             }
         },
+        "badge": {
+            "title": "Badge"
+        },
         "debug": {
             "title": "Debug"
-        },
-        "home": {
-            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
         },
         "room": {
             "title": "Room",
@@ -261,7 +261,28 @@
             "title": "Upload area"
         },
         "user": {
-            "title": "User"
+            "title": "User",
+            "areas": {
+                "admin": "Admin area"
+            }
+        },
+        "admin": {
+            "membership_manager": {
+                "title": "Card manager",
+                "header": "Viewing cards for year ",
+                "actions": {
+                    "add": "Add card"
+                },
+                "table": {
+                    "headers": {
+                        "user": "User",
+                        "verified": "Verified"
+                    }
+                }
+            },
+            "errors": {
+                "NO_DATA": "No membership cards were found for the year selected."
+            }
         }
     },
     "authentication": {
@@ -280,7 +301,13 @@
             "placeholder_email": "Enter your email address",
             "placeholder_password": "Enter your password",
             "register_here": "or register here",
-            "title": "Log in"
+            "title": "Log in",
+            "messages": {
+                "register_success": {
+                    "title": "Registration success",
+                    "description": "Check your email to confirm your account."
+                }
+            }
         },
         "register": {
             "errors": {

@@ -141,6 +141,9 @@
         "badge": {
             "title": "Badge"
         },
+        "debug": {
+            "title": "Debug"
+        },
         "room": {
             "title": "Stanza",
             "messages": {
@@ -257,10 +260,28 @@
             "title": "Area upload"
         },
         "user": {
-            "title": "Utente"
+            "title": "Utente",
+            "areas": {
+                "admin": "Area amministrativa"
+            }
         },
-        "debug": {
-            "title": "Debug"
+        "admin": {
+            "membership_manager": {
+                "title": "Gestione tessere",
+                "header": "Tessere del ",
+                "actions": {
+                    "add": "Aggiungi tessera"
+                },
+                "table": {
+                    "headers": {
+                        "user": "Utente",
+                        "verified": "Verificato"
+                    }
+                }
+            },
+            "errors": {
+                "NO_DATA": "Non ci sono tessere per l'anno indicato."
+            }
         }
     },
     "authentication": {
@@ -280,7 +301,14 @@
                 "email_not_registered": "Utente non trovato",
                 "invalid_credentials": "Credenziali errate",
                 "invalid_input": "Dati non validi"
+            },
+            "messages": {
+                "register_success": {
+                    "title": "Registrazione effettuata",
+                    "description": "Controlla le mail per verificare il tuo account."
+                }
             }
+            
         },
         "register": {
             "errors": {

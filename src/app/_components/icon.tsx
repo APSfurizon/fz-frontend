@@ -53,6 +53,7 @@ export const ICONS = Object.freeze({
     REMOVE: "remove",
     REPLAY: "replay",
     SEARCH:"search",
+    SECURITY: "security",
     SEND: "send",
     SAVE: "save",
     SHOPPING_CART: "shopping_cart",
