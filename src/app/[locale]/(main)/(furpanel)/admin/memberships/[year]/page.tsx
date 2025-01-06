@@ -87,7 +87,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
 
     return <>
         <div className="page">
-            <div className="horizontal-list flex-vertical-center gap-4mm">
+            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("admin.membership_manager.header", {yearStart: Number(selectedYear)})}</span>
@@ -112,7 +112,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                         <span>{t("admin.errors.NO_DATA")}</span>
                     </div>}
                     {cardsData?.response?.map((data, index)=><details className="row" key={index}>
-                        <summary className="horizontal-list flex-vertical-center gap-2mm">
+                        <summary className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
                             <Icon className="open" iconName={ICONS.ARROW_DROP_DOWN}></Icon>
                             <Icon className="close" iconName={ICONS.ARROW_DROP_UP}></Icon>
                             <div className="data horizontal-list flex-vertical-center gap-2mm">
