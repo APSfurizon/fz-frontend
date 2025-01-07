@@ -329,6 +329,10 @@
                 "register_success": {
                     "title": "Registrazione effettuata",
                     "description": "Controlla le mail per verificare il tuo account."
+                },
+                "confirmation_success": {
+                    "title": "Registrazione confermata",
+                    "description": "Email confermata con successo, adesso è possibile accedere."
                 }
             }
             

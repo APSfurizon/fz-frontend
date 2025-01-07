@@ -57,6 +57,9 @@ export default function Login() {
     {params.get("register") && <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
       {t("login.messages.register_success.description")}
     </NoticeBox>}
+    {params.get("status") === "7" && <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.confirmation_success.title")}>
+      {t("login.messages.confirmation_success.description")}
+    </NoticeBox>}
     <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>

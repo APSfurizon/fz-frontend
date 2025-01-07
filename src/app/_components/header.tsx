@@ -9,7 +9,7 @@ import { useUser } from '../_lib/context/userProvider';
 import { ReactEventHandler, useEffect, useState } from 'react';
 import "../styles/components/header.css";
 import { DEVICE_TYPE, getDeviceType } from '../_lib/utils';
-import { APP_LINKS } from '../_lib/constants';
+import { APP_LINKS, SHOW_APP_BANNER } from '../_lib/constants';
 import Link from 'next/link';
 
 export default function Header () {
@@ -79,7 +79,7 @@ export default function Header () {
                 }
 
                 {/* Phone app */}
-                { [DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && <>
+                { [DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
                     <p className='horizontal-list gap-4mm flex-vertical-center' style={{width: '100%'}}>
                         <span className="descriptive small color-subtitle">{t("header.app-badge")}</span>
                         <div className="spacer"></div>

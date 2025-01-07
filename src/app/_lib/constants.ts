@@ -9,7 +9,7 @@ export const UPLOAD_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_MAX_SIZE 
 
 // Security
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
-export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|recover|register|nosecount)).+)?$/gmi;
+export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
@@ -17,4 +17,6 @@ export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER ?? "https://fur
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithLogoResized.png";
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
 
-export const APP_LINKS: Record<string, string> = {"android": "https://play.google.com/store/apps/details?id=com.furizon2023", "apple": ""};
+export const SHOW_APP_BANNER = (process.env.NEXT_PUBLIC_SHOW_APP_BANNER ?? false) === "true";
+
+export const APP_LINKS: Record<string, string> = {"android": "https://play.google.com/store/apps/details?id=com.furizon2023", "apple": "https://apps.apple.com/it/app/furizon/id6502957058"};

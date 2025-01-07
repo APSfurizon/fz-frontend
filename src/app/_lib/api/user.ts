@@ -2,10 +2,6 @@ import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded,
 import { buildSearchParams } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction, runRequest } from "./global";
 
-export const ENDPOINTS = Object.freeze({
-    HEADER_DATA: "header/data",
-});
-
 export enum SponsorType {
     NONE = "NONE",
     SPONSOR = "SPONSOR",

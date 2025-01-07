@@ -330,12 +330,16 @@
                 "register_success": {
                     "title": "Registration success",
                     "description": "Check your email to confirm your account."
+                },
+                "confirmation_success": {
+                    "title": "Registration confirmed",
+                    "description": "Email has been verified, you may now log in."
                 }
             }
         },
         "register": {
             "errors": {
-                "email_already_registered": "This email has been already used",
+                "email_already_registered": "This email has already been used",
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
                 "invalid_input": "Invalid input",
