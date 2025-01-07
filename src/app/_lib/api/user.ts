@@ -8,12 +8,19 @@ export enum SponsorType {
     SUPER = "SUPER_SPONSOR"
 }
 
+export type UserRole = {
+    roleId: number,
+    displayName: string,
+    internalName: string
+}
+
 export type UserData = {
     userId: number,
     fursonaName?: string,
     locale?: string,
     propicUrl?: string,
-    sponsorship: SponsorType
+    sponsorship: SponsorType,
+    roles?: UserRole[]
 }
 
 export interface UserPersonalInfo {
