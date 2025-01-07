@@ -41,7 +41,7 @@ export interface UserDisplayResponse extends UserData, ApiResponse {}
 export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
-    urlAction = "users/display/me";
+    urlAction = "users/me/display";
     onSuccess: (status: number, body?: UserDisplayResponse) => void = (status: number, body?: UserDisplayResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
