@@ -3,7 +3,7 @@ import DataForm from "@/app/_components/dataForm";
 import Icon, { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
-import { AuthenticationCodes, LoginFormAction } from "@/app/_lib/api/login";
+import { AuthenticationCodes, LoginFormAction } from "@/app/_lib/api/authentication/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";

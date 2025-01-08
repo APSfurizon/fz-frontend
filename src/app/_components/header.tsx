@@ -57,10 +57,10 @@ export default function Header () {
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                <a className="header-link">
+                {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
-                </a>
+                </a> */}
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.INFO}></Icon>
                     <span className="title semibold">{t('header.information')}</span>

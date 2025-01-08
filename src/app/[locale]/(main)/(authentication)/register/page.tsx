@@ -1,6 +1,6 @@
 "use client"
 import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/app/_lib/api/global";
-import { LoginFormAction } from "@/app/_lib/api/login";
+import { LoginFormAction } from "@/app/_lib/api/authentication/login";
 import { useTranslations } from "next-intl";
 import { redirect, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -11,7 +11,7 @@ import JanInput from "@/app/_components/janInput";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import AutoInput from "@/app/_components/autoInput";
-import { RegisterFormAction } from "@/app/_lib/api/register";
+import { RegisterFormAction } from "@/app/_lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
 import Checkbox from "@/app/_components/checkbox";
 import "../../../../styles/authentication/register.css";

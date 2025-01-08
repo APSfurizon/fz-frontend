@@ -304,6 +304,33 @@
                     "label": "Email",
                     "placeholder": "Enter your email address"
                 }
+            },
+            "messages": {
+                "email_success": {
+                    "title": "Account recovery",
+                    "description": "An email is being sent to recover your account."
+                }
+            }
+        },
+        "recover_confirm": {
+            "title": "Change password",
+            "actions": {
+                "change_password": "Change password"
+            },
+            "input": {
+                "new_password": {
+                    "label": "New password",
+                    "placeholder": "Enter a new password",
+                    "help": "Password must be at least 6 characters long"
+                },
+                "confirm_password": {
+                    "label": "Confirm new password",
+                    "placeholder": "Retype the password"
+                }
+            },
+            "errors": {
+                "pw_reset_not_found": "Code is not valid",
+                "unknown_error": "Unknown error"
             }
         },
         "login": {

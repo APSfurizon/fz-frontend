@@ -303,6 +303,33 @@
                     "label": "Email",
                     "placeholder": "Inserisci il tuo indirizzo email"
                 }
+            },
+            "messages": {
+                "email_success": {
+                    "title": "Recupero account",
+                    "description": "È stata inviata una mail per recuperare il tuo account."
+                }
+            }
+        },
+        "recover_confirm": {
+            "title": "Cambia password",
+            "actions": {
+                "change_password": "Cambia password"
+            },
+            "input": {
+                "new_password": {
+                    "label": "Nuova password",
+                    "placeholder": "Crea una nuova password",
+                    "help": "Deve essere lunga almeno 6 caratteri"
+                },
+                "confirm_password": {
+                    "label": "Conferma password",
+                    "placeholder": "Conferma la tua password"
+                }
+            },
+            "errors": {
+                "pw_reset_not_found": "Codice non valido",
+                "unknown_error": "Errore sconosciuto"
             }
         },
         "login": {

@@ -305,7 +305,7 @@ export default function RoomPage() {
               ?
                 <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
               : <>
-                {!!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom && <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>}
+                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
                 <span className="title small">{t("room.or")}</span>
                 <Button iconName={ICONS.PERSON_ADD} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
               </>

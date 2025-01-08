@@ -1,7 +1,7 @@
 import { NoticeTheme } from "@/app/_components/noticeBox";
-import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../constants";
-import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
+import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
+import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../../constants";
+import { ApiErrorResponse, ApiResponse, ApiAction } from "../global";
 
 export const AuthenticationCodes: Record<string, NoticeTheme> = {
     "CONFIRMATION_SUCCESSFUL": NoticeTheme.Success,

@@ -3,7 +3,6 @@ import DataForm from "@/app/_components/dataForm";
 import Icon, { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
-import { LoginFormAction } from "@/app/_lib/api/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
@@ -12,15 +11,23 @@ import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useUser } from "@/app/_lib/context/userProvider";
 import "../../../../styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
+import { RecoverFormAction } from "@/app/_lib/api/authentication/recover";
 
 export default function Login() {
   const t = useTranslations("authentication");
   const tcommon = useTranslations("common");
   const [error, setError] = useState <String | undefined> (undefined);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const {updateUser, setUpdateUser} = useUser();
   const router = useRouter();
   const params = useSearchParams();
+
+  const onLoading = () => {
+    setError(undefined);
+    setSuccess(false);
+  }
+
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     if(!isDetailedError (err)) {
       setError("network_error");
@@ -32,15 +39,7 @@ export default function Login() {
   }
 
   const manageSuccess = () => {
-    setError(undefined);
-    setTimeout(()=>{
-      setUpdateUser(true);
-      if (params) {
-        router.replace(params.get("continue") ?? "/home");
-      } else {
-        router.replace("/home");
-      }
-    }, 200);
+    setSuccess(true);
   }
 
   useTitle(t("recover.title"));
@@ -55,7 +54,12 @@ export default function Login() {
       </span>
     </div>
     {error && <span className="error-container title small center">{t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("recover.actions.send_verification")}}>
+    {success && <NoticeBox theme={NoticeTheme.Success} title={t("recover.messages.email_success.title")}>
+      {t("recover.messages.email_success.description")}
+    </NoticeBox>}
+    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} onSuccess={manageSuccess}
+      action={new RecoverFormAction} onFail={(err) => manageError(err)} onBeforeSubmit={onLoading}
+      saveButton={{iconName: ICONS.MAIL, text: t("recover.actions.send_verification")}}>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("recover.input.email.label")} placeholder={t("login.placeholder_email")}/>
     </DataForm>
     <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{tcommon('back')}</Link>

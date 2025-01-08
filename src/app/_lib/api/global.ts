@@ -46,8 +46,14 @@ export function runRequest (action: ApiAction<any, any>, pathParams?: string[], 
         // Calc headers
         const headers = new Headers({
             'Content-type': 'application/json',
-            'Authorization': action.authenticated ? getToken () ?? '' : ''
         });
+
+        const token = getToken ();
+
+        if (action.authenticated && token && token.length > 0) {
+            headers.append('Authorization', token);
+        }
+        
         // Calc url
         let useSearchParams = !!searchParams;
         const endpointUrl = `${API_BASE_URL}${[action.urlAction, ...pathParams ?? []].join("/")}${useSearchParams ? "?"+ (searchParams?.toString() ?? "") : ""}`
