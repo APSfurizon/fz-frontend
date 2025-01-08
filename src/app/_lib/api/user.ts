@@ -20,9 +20,7 @@ export type UserData = {
     locale?: string,
     propicId?: number,
     propicPath?: string,
-    sponsorType: SponsorType,
-    roles?: UserRole[],
-    permissions?: string[]
+    sponsorType: SponsorType
 }
 
 export interface UserPersonalInfo {
@@ -45,12 +43,16 @@ export interface UserPersonalInfo {
     userId?: number,
 }
 
-export interface UserDisplayResponse extends UserData, ApiResponse {}
+export interface UserDisplayResponse extends ApiResponse {
+    display: UserData,
+    roles?: UserRole[],
+    permissions?: string[]
+}
 
 export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
-    urlAction = "users/me/display";
+    urlAction = "users/display/me";
     onSuccess: (status: number, body?: UserDisplayResponse) => void = (status: number, body?: UserDisplayResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

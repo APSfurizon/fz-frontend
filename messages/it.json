@@ -321,7 +321,7 @@
                 "email_not_registered": "Utente non trovato",
                 "invalid_credentials": "Credenziali errate",
                 "invalid_input": "Dati non validi",
-                "ALREADY_LOGGED_IN": "Hai già effettuato l'accesso"
+                "already_logged_in": "Hai già effettuato l'accesso"
             },
             "messages": {
                 "register_success": {

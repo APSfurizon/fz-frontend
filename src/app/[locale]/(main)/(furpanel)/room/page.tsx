@@ -30,7 +30,7 @@ export default function RoomPage() {
   const tcommon = useTranslations("common");
   const formatter = useFormatter();
   const locale = useLocale();
-  const {userData, userLoading} = useUser();
+  const {userDisplay, userLoading} = useUser();
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
@@ -51,7 +51,7 @@ export default function RoomPage() {
     if (userLoading) return;
 
     const roomData: RoomCreateData = {
-      name: t("room.default_name", {name: userData?.fursonaName})
+      name: t("room.default_name", {name: userDisplay?.display?.fursonaName})
     };
 
     setActionLoading(true);
@@ -559,7 +559,7 @@ export default function RoomPage() {
       { data?.currentRoomInfo && <>
       <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomTransferSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm">
-        <input type="hidden" name="userId" value={userData?.id}></input>
+        <input type="hidden" name="userId" value={userDisplay?.display?.id}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
           label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
         <div className="horizontal-list gap-4mm">

@@ -15,7 +15,7 @@ import Link from 'next/link';
 export default function Header () {
     const t = useTranslations('common');
     const locale = useLocale();
-    const {userData, userLoading} = useUser();
+    const {userDisplay, userLoading} = useUser();
     const router = useRouter();
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
@@ -73,8 +73,8 @@ export default function Header () {
                 {
                     userLoading 
                         ? <Button busy={userLoading}>{t('loading')}</Button>
-                        : userData 
-                            ? <UserDropDown userData={userData}></UserDropDown>
+                        : userDisplay 
+                            ? <UserDropDown userData={userDisplay.display}></UserDropDown>
                             : <Button onClick={()=>router.push('/login')} iconName='key'>{t('header.login')}</Button>
                 }
 

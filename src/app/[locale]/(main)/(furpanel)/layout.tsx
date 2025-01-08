@@ -7,11 +7,15 @@ import { useModalUpdate } from '@/app/_lib/context/modalProvider';
 import Modal from '@/app/_components/modal';
 import { MouseEvent, useState } from 'react';
 import "../../../styles/furpanel/layout.css";
+import { useUser } from '@/app/_lib/context/userProvider';
+import { hasPermission, Permissions } from '@/app/_lib/api/permission';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
     const t = useTranslations('furpanel');
     const {isOpen, icon, title, modalChildren, hideModal} = useModalUpdate();
     const [toolListExpanded, setToolListExpanded] = useState(false);
+
+    const {userDisplay} = useUser();
 
     const toolClick = (e: MouseEvent<HTMLAnchorElement>) => {
         setToolListExpanded(false);
@@ -33,7 +37,7 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
                     {ROOM_ENABLED && <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('room.title')}</ToolLink>}
                     {UPLOAD_ENABLED && <ToolLink onClick={toolClick} href="/upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('upload_area.title')}</ToolLink>}
                     <ToolLink onClick={toolClick} href="/user" iconName={ICONS.PERSON}>{t('user.title')}</ToolLink>
-                    {<ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('admin.title')}</ToolLink>}
+                    {hasPermission(Permissions.SHOW_ADMIN_AREA, userDisplay) && <ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('admin.title')}</ToolLink>}
                     {DEBUG_ENABLED && <ToolLink href="/debug" iconName={ICONS.BUG_REPORT}>{t('debug.title')}</ToolLink>}
                 </div>
                 <span>

@@ -26,16 +26,20 @@ export async function middleware(req: NextRequest) {
       if (fetchResult && fetchResult.ok) {
         return intlMiddleware(req);
       } else {
-        req.cookies.delete(TOKEN_STORAGE_NAME);
-        return NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url));
+        return redirectToLogin(req, continueParams);
       }
     } else {
-      req.cookies.delete(TOKEN_STORAGE_NAME);
-      return NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url));
+      return redirectToLogin(req, continueParams);
     }
   } else {
     return intlMiddleware(req);
   }
+}
+
+const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams) => {
+  const response = NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url), {status: 303});
+  response.cookies.delete(TOKEN_STORAGE_NAME);
+  return response;
 }
  
 export const config = {

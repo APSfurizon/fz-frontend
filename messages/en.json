@@ -314,7 +314,7 @@
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
                 "invalid_input": "Invalid data",
-                "ALREADY_LOGGED_IN": "You're already logged in"
+                "already_logged_in": "You're already logged in"
             },
             "label_email": "Email",
             "label_password": "Password",
