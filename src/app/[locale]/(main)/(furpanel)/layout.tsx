@@ -2,7 +2,7 @@
 import {useTranslations} from 'next-intl';
 import Icon, { ICONS } from "@/app/_components/icon";
 import ToolLink from "@/app/_components/toolLink";
-import { DEBUG_ENABLED } from '@/app/_lib/constants';
+import { BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, ROOM_ENABLED, UPLOAD_ENABLED } from '@/app/_lib/constants';
 import { useModalUpdate } from '@/app/_lib/context/modalProvider';
 import Modal from '@/app/_components/modal';
 import { MouseEvent, useState } from 'react';
@@ -28,12 +28,12 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
                 </span>
                 <div className="spacer"></div>
                 <div className={`tools-list horizontal-list flex-wrap gap-4mm ${toolListExpanded ? "expanded" : ""}`}>
-                    <ToolLink onClick={toolClick} href="/booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('booking.title')}</ToolLink>
-                    <ToolLink onClick={toolClick} href="/badge" iconName={ICONS.PERSON_BOOK}>{t('badge.title')}</ToolLink>
-                    <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('room.title')}</ToolLink>
-                    <ToolLink onClick={toolClick} href="/upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('upload_area.title')}</ToolLink>
+                    {BOOKING_ENABLED && <ToolLink onClick={toolClick} href="/booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('booking.title')}</ToolLink>}
+                    {BADGE_ENABLED && <ToolLink onClick={toolClick} href="/badge" iconName={ICONS.PERSON_BOOK}>{t('badge.title')}</ToolLink>}
+                    {ROOM_ENABLED && <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('room.title')}</ToolLink>}
+                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick} href="/upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('upload_area.title')}</ToolLink>}
                     <ToolLink onClick={toolClick} href="/user" iconName={ICONS.PERSON}>{t('user.title')}</ToolLink>
-                    <ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('admin.title')}</ToolLink>
+                    {<ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('admin.title')}</ToolLink>}
                     {DEBUG_ENABLED && <ToolLink href="/debug" iconName={ICONS.BUG_REPORT}>{t('debug.title')}</ToolLink>}
                 </div>
                 <span>

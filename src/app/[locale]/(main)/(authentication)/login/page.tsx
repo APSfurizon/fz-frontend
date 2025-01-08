@@ -3,7 +3,7 @@ import DataForm from "@/app/_components/dataForm";
 import Icon, { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
-import { LoginFormAction } from "@/app/_lib/api/login";
+import { AuthenticationCodes, LoginFormAction } from "@/app/_lib/api/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
@@ -57,8 +57,8 @@ export default function Login() {
     {params.get("register") && <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
       {t("login.messages.register_success.description")}
     </NoticeBox>}
-    {params.get("status") === "7" && <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.confirmation_success.title")}>
-      {t("login.messages.confirmation_success.description")}
+    {Object.keys(AuthenticationCodes).includes(params.get("status") ?? "") && <NoticeBox theme={AuthenticationCodes[params.get("status") ?? "UNKNOWN"]} title={t(`login.messages.${params.get("status")}.title`)}>
+      {t(`login.messages.${params.get("status")}.description`)}
     </NoticeBox>}
     <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>

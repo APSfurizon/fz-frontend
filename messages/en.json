@@ -258,16 +258,13 @@
             }
         },
         "upload_area": {
-            "title": "Upload area"
+            "title": "Upload"
         },
         "user": {
-            "title": "User",
-            "areas": {
-                "admin": "Admin area"
-            }
+            "title": "User"
         },
         "admin": {
-            "title": "Admin area",
+            "title": "Admin",
             "sections": {
                 "membership": "Memership",
                 "membership_cards": "Cards"
@@ -316,7 +313,8 @@
                 "invalid_credentials": "Invalid credentials",
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
-                "invalid_input": "Invalid data"
+                "invalid_input": "Invalid data",
+                "ALREADY_LOGGED_IN": "You're already logged in"
             },
             "label_email": "Email",
             "label_password": "Password",
@@ -331,9 +329,13 @@
                     "title": "Registration success",
                     "description": "Check your email to confirm your account."
                 },
-                "confirmation_success": {
+                "CONFIRMATION_SUCCESSFUL": {
                     "title": "Registration confirmed",
                     "description": "Email has been verified, you may now log in."
+                },
+                "CONFIRMATION_NOT_FOUND": {
+                    "title": "Code not found",
+                    "description": "Code is not valid or expired."
                 }
             }
         },
