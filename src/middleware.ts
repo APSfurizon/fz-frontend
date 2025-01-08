@@ -8,38 +8,46 @@ const intlMiddleware = createMiddleware(routing);
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
+  const tokenPresent = loginToken && loginToken.value
   const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
   const continueParams = new URLSearchParams({"continue": path});
+  const tokenValid = tokenPresent ? await verifyToken(loginToken.value) : false;
 
-  if (needsAuthentication) {
-    if (loginToken && loginToken.value) {
-      // Try validating the request
-      const headers = new Headers({
-        'Content-type': 'application/json',
-        'Authorization': loginToken.value
-      });
-      let fetchResult: Response | undefined = undefined;
-      try {
-        fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
-      } catch (err) {}
-
-      if (fetchResult && fetchResult.ok) {
-        return intlMiddleware(req);
-      } else {
-        return redirectToLogin(req, continueParams);
-      }
-    } else {
-      return redirectToLogin(req, continueParams);
-    }
-  } else {
+  if (tokenValid) {
     return intlMiddleware(req);
+  } else {
+    if (needsAuthentication) {
+      return redirectToLogin(req, continueParams);
+    } else {
+      return stripToken(intlMiddleware(req));
+    }
   }
+}
+
+async function verifyToken(token: string) {
+  // Try validating the request
+  const headers = new Headers({
+    'Content-type': 'application/json',
+    'Authorization': token
+  });
+  let fetchResult: Response | undefined = undefined;
+  try {
+    fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
+  } catch (err) {
+    return false;
+  }
+
+  return fetchResult && fetchResult.ok;
+}
+
+const stripToken = (res: NextResponse): NextResponse => {
+  res.cookies.delete(TOKEN_STORAGE_NAME);
+  return res;
 }
 
 const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams) => {
   const response = NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url), {status: 303});
-  response.cookies.delete(TOKEN_STORAGE_NAME);
-  return response;
+  return stripToken(response);
 }
  
 export const config = {
