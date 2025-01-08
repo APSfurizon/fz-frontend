@@ -1,5 +1,6 @@
 import { FormApiAction as FormApiAction } from "../components/dataForm"
 import { API_BASE_URL, TOKEN_STORAGE_NAME } from "../constants";
+import { getCookie } from "../utils";
 
 export interface ApiRequest {}
 
@@ -37,7 +38,7 @@ export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorRe
 }
 
 export function getToken (): string | null {
-    return localStorage.getItem(TOKEN_STORAGE_NAME);
+    return getCookie(TOKEN_STORAGE_NAME);
 }
 
 export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {

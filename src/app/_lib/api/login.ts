@@ -39,7 +39,6 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
 }
 
 function loginSuccess(body: LoginResponse) {
-    localStorage.setItem(TOKEN_STORAGE_NAME, `Bearer ${body.accessToken}`);
     let sessionExpiry = new Date();
     sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
     document.cookie = `${TOKEN_STORAGE_NAME}=Bearer ${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
@@ -58,6 +57,5 @@ export class LogoutApiAction implements ApiAction<LogoutResponse, ApiErrorRespon
 }
 
 function logoutSuccess(body?: LogoutResponse) {
-    localStorage.removeItem(TOKEN_STORAGE_NAME);
     document.cookie = `${TOKEN_STORAGE_NAME}=; expires=${new Date().toUTCString()}; path=/`;
 }

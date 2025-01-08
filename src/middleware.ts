@@ -30,6 +30,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url));
       }
     } else {
+      req.cookies.delete(TOKEN_STORAGE_NAME);
       return NextResponse.redirect(new URL(`/login?${continueParams.toString()}`, req.url));
     }
   } else {

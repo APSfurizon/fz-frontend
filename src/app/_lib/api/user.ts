@@ -15,12 +15,14 @@ export type UserRole = {
 }
 
 export type UserData = {
-    userId: number,
+    id: number,
     fursonaName?: string,
     locale?: string,
-    propicUrl?: string,
-    sponsorship: SponsorType,
-    roles?: UserRole[]
+    propicId?: number,
+    propicPath?: string,
+    sponsorType: SponsorType,
+    roles?: UserRole[],
+    permissions?: string[]
 }
 
 export interface UserPersonalInfo {
