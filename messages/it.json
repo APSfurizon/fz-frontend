@@ -135,7 +135,8 @@
             },
             "actions": {
                 "review_info": "Rivedi informazioni",
-                "confirm_info": "Conferma informazioni"
+                "confirm_info": "Conferma informazioni",
+                "transfer_order": "Trasferisci ordine"
             }
         },
         "badge": {
@@ -287,7 +288,8 @@
                 }
             },
             "errors": {
-                "NO_DATA": "Non ci sono tessere per l'anno indicato."
+                "NO_DATA": "Non ci sono tessere per l'anno indicato.",
+                "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
             }
         }
     },
@@ -329,6 +331,7 @@
             },
             "errors": {
                 "pw_reset_not_found": "Codice non valido",
+                "pw_chage_same_password": "La password è uguale alla precedente",
                 "unknown_error": "Errore sconosciuto"
             }
         },

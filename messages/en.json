@@ -136,7 +136,8 @@
             },
             "actions": {
                 "review_info": "Review informations",
-                "confirm_info": "Confirm informazions"
+                "confirm_info": "Confirm informazions",
+                "transfer_order": "Transfer order"
             }
         },
         "badge": {
@@ -288,7 +289,8 @@
                 }
             },
             "errors": {
-                "NO_DATA": "No membership cards were found for the year selected."
+                "NO_DATA": "No membership cards were found for the year selected.",
+                "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
             }
         }
     },
@@ -330,6 +332,7 @@
             },
             "errors": {
                 "pw_reset_not_found": "Code is not valid",
+                "pw_chage_same_password": "The password matches the old one",
                 "unknown_error": "Unknown error"
             }
         },

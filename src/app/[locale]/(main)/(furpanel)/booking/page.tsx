@@ -207,13 +207,16 @@ export default function BookingPage() {
 
                     {/* Order actions */}
                     <div className="horizontal-list gap-4mm">
-                        {pageData?.shouldRetry && !isEditLocked && <>
-                            <Button className="action-button" disabled={isEditLocked} iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
+                        {pageData?.shouldRetry && <>
+                            <Button className="action-button" iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
                             {t("booking.retry_payment")}
                         </Button>
                         </>}
                         <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
                             {t("booking.edit_booking")}
+                        </Button>
+                        <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={requestOrderEditLink}>
+                            {t("booking.actions.transfer_order")}
                         </Button>
                     </div>
                     <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.editing_locked") : t("booking.editing_locked_warning")}>

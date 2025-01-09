@@ -1,7 +1,7 @@
 import { UserDisplayResponse } from "./user";
 
 export enum Permissions {
-    SHOW_ADMIN_AREA = "SHOW_ADMIN_AREA"
+    CAN_SEE_ADMIN_PAGES = "CAN_SEE_ADMIN_PAGES"
 }
 
 export function hasPermission(permission: Permissions, user?: UserDisplayResponse) {
