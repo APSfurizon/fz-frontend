@@ -15,7 +15,7 @@ import StatusBox from "@/app/_components/statusBox";
 import DataForm from "@/app/_components/dataForm";
 import JanInput from "@/app/_components/janInput";
 import AutoInput from "@/app/_components/autoInput";
-import { AutoInputDebugUserManager, AutoInputFilter } from "@/app/_lib/components/autoInput";
+import { AutoInputFilter } from "@/app/_lib/components/autoInput";
 import "../../../../styles/furpanel/room.css";
 import { useUser } from "@/app/_lib/context/userProvider";
 import { OrderStatus } from "@/app/_lib/api/order";
