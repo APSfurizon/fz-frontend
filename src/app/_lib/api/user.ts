@@ -70,9 +70,9 @@ export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorR
 }
 
 /**
- * Defines the search service for users in rooms
+ * Defines the search service to look for users
  */
-export class AutoInputRoomInviteManager implements AutoInputManager {
+export class AutoInputUsersManager implements AutoInputManager {
     codeOnly: boolean = false;
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
@@ -85,7 +85,7 @@ export class AutoInputRoomInviteManager implements AutoInputManager {
 
     searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-not-in-room": "true"})).then (results => {
+            runRequest (new UserSearchAction(), undefined, undefined, undefined).then (results => {
                 const searchResult = results as UserSearchResponse;
                 resolve (
                     filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
@@ -95,4 +95,21 @@ export class AutoInputRoomInviteManager implements AutoInputManager {
     }
 
     isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+}
+
+/**
+ * Defines the search service to look for users to invite in rooms
+ */
+export class AutoInputRoomInviteManager extends AutoInputUsersManager {
+
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve, reject) => {
+            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-not-in-room": "true"})).then (results => {
+                const searchResult = results as UserSearchResponse;
+                resolve (
+                    filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                );
+            });
+        });
+    }
 }

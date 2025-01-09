@@ -7,27 +7,57 @@ import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { runRequest } from "@/app/_lib/api/global";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
 import { getBiggestTimeUnit, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
-import ToolLink from "@/app/_components/toolLink";
 import { useRouter } from "next/navigation";
+import Modal from "@/app/_components/modal";
+import { OrderExchangeFormAction } from "@/app/_lib/api/order";
+import DataForm from "@/app/_components/dataForm";
+import { useUser } from "@/app/_lib/context/userProvider";
+import AutoInput from "@/app/_components/autoInput";
+import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");
     const tcommon = useTranslations("common");
     const formatter = useFormatter();
     const router = useRouter();
-    useTitle(t("booking.title"));
     const now = useNow({updateInterval: 1000});
     const {showModal} = useModalUpdate();
     const locale = useLocale();
+    const {userDisplay} = useUser();
+    
+    // Main logic
     const [bookingData, setBookingData] = useState<BookingOrderResponse>();
     const [pageData, setPageData] = useState<BookingOrderUiData>();
     const [isLoading, setLoading] = useState<boolean>(false);
     const [actionLoading, setActionLoading] = useState<boolean>(false);
+
+    // exchange order modal
+    const [modalLoading, setModalLoading] = useState<boolean>(false);
+    const [exchangeModalOpen, setExchangeModalOpen ] = useState(false);
+
+    const promptExchange = () => {
+        if (!bookingData) return;
+        setExchangeModalOpen(true);
+    }
+
+    const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+        setExchangeModalOpen(false);
+        showModal(
+            tcommon("error"), 
+            <ModalError error={err} translationRoot={"furpanel"} translationKey={"booking.errors"}></ModalError>
+        );
+    }
+
+    const exchangeSuccess = () => {
+        setExchangeModalOpen(false);
+    }
+    
+    useTitle(t("booking.title"));
 
     /**UI variables */
     /**If editing's locked */
@@ -216,7 +246,7 @@ export default function BookingPage() {
                             {t("booking.edit_booking")}
                         </Button>
                         <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={requestOrderEditLink}>
-                            {t("booking.actions.transfer_order")}
+                            {t("booking.actions.exchange_order")}
                         </Button>
                     </div>
                     <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.editing_locked") : t("booking.editing_locked_warning")}>
@@ -238,5 +268,19 @@ export default function BookingPage() {
                 }
             </>}
         </div>
+        {/* Room exchange modal */}
+        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
+            <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
+            onFail={exchangeFail} hideSave className="vertical-list gap-2mm">
+            <input type="hidden" name="userId" value={userDisplay?.display?.id}></input>
+            <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
+                label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
+            <div className="horizontal-list gap-4mm">
+                <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
+                <div className="spacer"></div>
+                <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
+            </div>
+            </DataForm>
+        </Modal>
     </>;
 }

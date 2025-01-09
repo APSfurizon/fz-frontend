@@ -1,5 +1,8 @@
+import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { ApiErrorResponse } from "./global";
+import { buildSearchParams } from "../utils";
+import { ApiErrorResponse, runRequest } from "./global";
+import { AutoInputUsersManager, UserSearchAction, UserSearchResponse } from "./user";
 
 export enum OrderStatus {
     CANCELED = "CANCELED",
@@ -32,4 +35,21 @@ export class OrderExchangeFormAction implements FormApiAction<OrderExchangeInitA
     urlAction = "room/exchange/init";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+/**
+ * Defines the search service for users without orders
+ */
+export class AutoInputOrderExchangeManager extends AutoInputUsersManager {
+    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve, reject) => {
+            runRequest (new UserSearchAction(), undefined, undefined, 
+                buildSearchParams({"fursona-name": value, "filter-not-in-room": "true"})).then (results => {
+                    const searchResult = results as UserSearchResponse;
+                    resolve (
+                        filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                    );
+            });
+        });
+    }
 }

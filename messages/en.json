@@ -137,7 +137,7 @@
             "actions": {
                 "review_info": "Review informations",
                 "confirm_info": "Confirm informazions",
-                "transfer_order": "Transfer order"
+                "exchange_order": "Exchange order"
             }
         },
         "badge": {
@@ -230,8 +230,8 @@
                 "revoke_invite": "Revoke invite",
                 "confirm_room": "Confirm",
                 "unconfirm_room": "Unconfirm",
-                "transfer": "Transfer",
-                "transfer_room": "Transfer room",
+                "exchange": "Exchange",
+                "exchange_room": "Exchange room",
                 "leave": "Leave"
             },
             "your_room": "Your room",
@@ -335,6 +335,9 @@
                 "pw_chage_same_password": "The password matches the old one",
                 "unknown_error": "Unknown error"
             }
+        },
+        "exchange_confirm": {
+            "title": "Confirm exchange"
         },
         "login": {
             "create_account": "Create an account",

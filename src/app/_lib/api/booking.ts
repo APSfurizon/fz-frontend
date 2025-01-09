@@ -18,6 +18,7 @@ export interface BookingOrderResponse extends ApiResponse {
     eventNames: Record<string, string>,
     hasActiveMembershipForEvent: boolean,
     shouldUpdateInfo: boolean,
+    canExchange: boolean,
     order: OrderData,
     errors: ("SERVER_ERROR" | "MEMBERSHIP_MULTIPLE_DONE" | "MEMBERSHIP_MISSING" |
          "ORDER_MULTIPLE_DONE" | "ORDER_SECRET_NOT_MATCH" | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE")[]

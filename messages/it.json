@@ -136,7 +136,7 @@
             "actions": {
                 "review_info": "Rivedi informazioni",
                 "confirm_info": "Conferma informazioni",
-                "transfer_order": "Trasferisci ordine"
+                "exchange_order": "Scambia ordine"
             }
         },
         "badge": {
@@ -229,8 +229,8 @@
                 "revoke_invite": "Revoca invito",
                 "confirm_room": "Conferma",
                 "unconfirm_room": "Revoca conferma",
-                "transfer": "Trasferisci",
-                "transfer_room": "Trasferisci stanza",
+                "exchange": "Scambia",
+                "exchange_room": "Scambia stanza",
                 "leave": "Lascia"
             },
             "your_room": "La tua stanza",
@@ -334,6 +334,9 @@
                 "pw_chage_same_password": "La password è uguale alla precedente",
                 "unknown_error": "Errore sconosciuto"
             }
+        },
+        "exchange_confirm": {
+            "title": "Conferma scambio"
         },
         "login": {
             "title": "Accesso",

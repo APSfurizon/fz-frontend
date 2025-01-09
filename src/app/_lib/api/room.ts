@@ -65,7 +65,8 @@ export interface RoomInfoResponse extends ApiResponse {
     currentRoomInfo: RoomInfo,
     invitations: RoomInvitation[],
     buyOrUpgradeRoomSupported: boolean,
-    canBuyOrUpgradeRoom: boolean
+    canBuyOrUpgradeRoom: boolean,
+    canExchange: boolean
 }
 
 export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorResponse> {
