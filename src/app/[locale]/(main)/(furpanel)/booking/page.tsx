@@ -14,11 +14,10 @@ import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/_components/modal";
-import { OrderExchangeFormAction } from "@/app/_lib/api/order";
+import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/app/_lib/api/order";
 import DataForm from "@/app/_components/dataForm";
 import { useUser } from "@/app/_lib/context/userProvider";
 import AutoInput from "@/app/_components/autoInput";
-import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");
@@ -245,7 +244,7 @@ export default function BookingPage() {
                         <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
                             {t("booking.edit_booking")}
                         </Button>
-                        <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={requestOrderEditLink}>
+                        <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
                             {t("booking.actions.exchange_order")}
                         </Button>
                     </div>
@@ -269,11 +268,11 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Room exchange modal */}
-        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
+        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
             onFail={exchangeFail} hideSave className="vertical-list gap-2mm">
             <input type="hidden" name="userId" value={userDisplay?.display?.id}></input>
-            <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
+            <AutoInput fieldName="recipientId" manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                 label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
             <div className="horizontal-list gap-4mm">
                 <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
