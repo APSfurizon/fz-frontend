@@ -28,9 +28,12 @@ export function isEmpty (str?: string) {
     return !str || str.length === 0;
 }
 
-export function copyContent (e: HTMLElement) {
+export function copyContent (e: HTMLElement | HTMLInputElement) {
     if (e.textContent) {
         navigator.clipboard.writeText(e.textContent);
+        return true;
+    } else if ("value" in e) {
+        navigator.clipboard.writeText(e.value);
         return true;
     } else {
         return false;
@@ -49,6 +52,21 @@ export function buildSearchParams (init: Record<string, string | string[]>): URL
     return params;
 }
 
+export function getCookie(cookieName: string) {
+    let name = cookieName + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
 export enum DEVICE_TYPE {
     APPLE = "apple",
     ANDROID = "android",
@@ -64,3 +82,5 @@ export function getDeviceType (): DEVICE_TYPE {
     else
         return DEVICE_TYPE.GENERIC;
 }
+
+export const years = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((i)=>new Date().getUTCFullYear()+i);

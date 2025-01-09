@@ -52,7 +52,7 @@
             "loading_data": "Caricamento dati..."
         },
         "dataForm": {
-            "save": "Save"
+            "save": "Salva"
         },
         "modal": {
             "close": "Chiudi"
@@ -140,6 +140,9 @@
         },
         "badge": {
             "title": "Badge"
+        },
+        "debug": {
+            "title": "Debug"
         },
         "room": {
             "title": "Stanza",
@@ -254,17 +257,81 @@
             }
         },
         "upload_area": {
-            "title": "Area upload"
+            "title": "Upload"
         },
         "user": {
             "title": "Utente"
         },
-        "debug": {
-            "title": "Debug"
+        "admin": {
+            "title": "Admin",
+            "sections": {
+                "membership": "Associazione",
+                "membership_cards": "Tesserati"
+            },
+            "membership_manager": {
+                "title": "Gestione tessere",
+                "header": "Tessere del ",
+                "actions": {
+                    "add": "Aggiungi tessera"
+                },
+                "input": {
+                    "user": {
+                        "label": "Seleziona utente"
+                    }
+                },
+                "table": {
+                    "headers": {
+                        "user": "Utente",
+                        "registered": "Registrato"
+                    }
+                }
+            },
+            "errors": {
+                "NO_DATA": "Non ci sono tessere per l'anno indicato."
+            }
         }
     },
     "authentication": {
         "title": "autenticazione",
+        "recover": {
+            "title": "Recupero account",
+            "actions": {
+                "send_verification": "Verifica"
+            },
+            "input": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Inserisci il tuo indirizzo email"
+                }
+            },
+            "messages": {
+                "email_success": {
+                    "title": "Recupero account",
+                    "description": "È stata inviata una mail per recuperare il tuo account."
+                }
+            }
+        },
+        "recover_confirm": {
+            "title": "Cambia password",
+            "actions": {
+                "change_password": "Cambia password"
+            },
+            "input": {
+                "new_password": {
+                    "label": "Nuova password",
+                    "placeholder": "Crea una nuova password",
+                    "help": "Deve essere lunga almeno 6 caratteri"
+                },
+                "confirm_password": {
+                    "label": "Conferma password",
+                    "placeholder": "Conferma la tua password"
+                }
+            },
+            "errors": {
+                "pw_reset_not_found": "Codice non valido",
+                "unknown_error": "Errore sconosciuto"
+            }
+        },
         "login": {
             "title": "Accesso",
             "login": "Accedi",
@@ -274,13 +341,30 @@
             "label_password": "Password",
             "placeholder_password": "Inserisci la tua password",
             "register_here": "oppure registrati",
+            "recover": "Recupera accesso",
             "errors": {
                 "unknown_error": "Errore sconosciuto",
                 "network_error": "Errore di rete",
                 "email_not_registered": "Utente non trovato",
                 "invalid_credentials": "Credenziali errate",
-                "invalid_input": "Dati non validi"
+                "invalid_input": "Dati non validi",
+                "already_logged_in": "Hai già effettuato l'accesso"
+            },
+            "messages": {
+                "register_success": {
+                    "title": "Registrazione effettuata",
+                    "description": "Controlla le mail per verificare il tuo account."
+                },
+                "CONFIRMATION_SUCCESSFUL": {
+                    "title": "Registrazione confermata",
+                    "description": "Email confermata con successo, adesso è possibile accedere."
+                },
+                "CONFIRMATION_NOT_FOUND": {
+                    "title": "Codice non trovato",
+                    "description": "Codice non trovato o scaduto"
+                }
             }
+            
         },
         "register": {
             "errors": {
@@ -368,7 +452,7 @@
                 "section": {
                     "birth_data": "Dati di nascita",
                     "personal_info": "Dati personali",
-                    "residence_data": "Dati di fatturazione"
+                    "residence_data": "Dati di residenza"
                 },
                 "disclaimer_tos": {
                     "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."

@@ -1,5 +1,5 @@
 import { ApiErrorResponse, runRequest } from "../api/global";
-import { AutoInputCountriesApiAction, AutoInputStatesApiAction, Place, PlaceApiResponse } from "../api/register";
+import { AutoInputCountriesApiAction, AutoInputStatesApiAction, Place, PlaceApiResponse } from "../api/authentication/register";
 import { buildSearchParams } from "../utils";
 
 export function getParamsHash (...p: any[]) {

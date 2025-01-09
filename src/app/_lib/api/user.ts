@@ -2,25 +2,52 @@ import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded,
 import { buildSearchParams } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction, runRequest } from "./global";
 
-export const ENDPOINTS = Object.freeze({
-    HEADER_DATA: "header/data",
-});
-
 export enum SponsorType {
     NONE = "NONE",
     SPONSOR = "SPONSOR",
     SUPER = "SUPER_SPONSOR"
 }
 
-export type UserData = {
-    userId: number,
-    fursonaName?: string,
-    locale?: string,
-    propicUrl?: string,
-    sponsorship: SponsorType
+export type UserRole = {
+    roleId: number,
+    displayName: string,
+    internalName: string
 }
 
-export interface UserDisplayResponse extends UserData, ApiResponse {}
+export type UserData = {
+    id: number,
+    fursonaName?: string,
+    locale?: string,
+    propicId?: number,
+    propicPath?: string,
+    sponsorType: SponsorType
+}
+
+export interface UserPersonalInfo {
+    id?: number;
+    firstName?: string;
+    lastName?: string;
+    fiscalCode?: string;
+    birthCity?: string;
+    birthRegion?: string;
+    birthCountry?: string;
+    birthday?: string;
+    residenceAddress?: string;
+    residenceZipCode?: string;
+    residenceCity?: string;
+    residenceRegion?: string;
+    residenceCountry?: string;
+    prefixPhoneNumber?: string;
+    phoneNumber?: string;
+    lastUpdatedEventId?: number;
+    userId?: number,
+}
+
+export interface UserDisplayResponse extends ApiResponse {
+    display: UserData,
+    roles?: UserRole[],
+    permissions?: string[]
+}
 
 export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {
     authenticated = true;

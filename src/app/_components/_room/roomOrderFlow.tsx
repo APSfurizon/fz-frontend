@@ -31,7 +31,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     const locale = useLocale();
     const formatter = useFormatter();
     const {showModal, hideModal} = useModalUpdate();
-    const {userData, userLoading} = useUser();
+    const {userDisplay, userLoading} = useUser();
 
     /* Data about rooms availability */
     const [roomsData, setRoomsData] = useState<RoomStoreItemsApiResponse | null>();
@@ -80,11 +80,11 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     }
 
     const changeOrder = () => {
-        if (!selectedType || userLoading || !userData) return;
+        if (!selectedType || userLoading || !userDisplay?.display) return;
         setModalLoading(true);
 
         const roomBuyData: RoomBuyApiData = {
-            userId: userData?.userId,
+            userId: userDisplay.display?.id,
             roomPretixItemId: selectedType.data.roomPretixItemId
         }
 

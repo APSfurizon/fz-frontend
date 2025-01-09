@@ -34,7 +34,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     /**Do not throttle input events before launching a search request */
     noDelay?: boolean,
     onChange?: (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => void,
-    param?: string,
+    param?: any,
     /**Param is required for the component to be enabled */
     paramRequired?: boolean,
     placeholder?: string,

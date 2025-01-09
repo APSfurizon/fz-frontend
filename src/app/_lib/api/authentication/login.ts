@@ -1,6 +1,13 @@
-import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../constants";
-import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
+import { NoticeTheme } from "@/app/_components/noticeBox";
+import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
+import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../../constants";
+import { ApiErrorResponse, ApiResponse, ApiAction } from "../global";
+
+export const AuthenticationCodes: Record<string, NoticeTheme> = {
+    "CONFIRMATION_SUCCESSFUL": NoticeTheme.Success,
+    "CONFIRMATION_NOT_FOUND": NoticeTheme.Warning,
+    "UNKNOWN": NoticeTheme.FAQ
+}
 
 export interface LoginData {
     email?: string;
@@ -24,7 +31,7 @@ export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
 
 export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, ApiErrorResponse> {
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
-    authenticated = false;
+    authenticated = true;
     dtoBuilder = new LoginDTOBuilder ();
     urlAction = "authentication/login";
     onSuccess: (status: number, body?: LoginResponse) => void = (status: number, body?: LoginResponse) => {loginSuccess(body!)};
@@ -32,7 +39,6 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
 }
 
 function loginSuccess(body: LoginResponse) {
-    localStorage.setItem(TOKEN_STORAGE_NAME, `Bearer ${body.accessToken}`);
     let sessionExpiry = new Date();
     sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
     document.cookie = `${TOKEN_STORAGE_NAME}=Bearer ${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
@@ -51,6 +57,5 @@ export class LogoutApiAction implements ApiAction<LogoutResponse, ApiErrorRespon
 }
 
 function logoutSuccess(body?: LogoutResponse) {
-    localStorage.removeItem(TOKEN_STORAGE_NAME);
     document.cookie = `${TOKEN_STORAGE_NAME}=; expires=${new Date().toUTCString()}; path=/`;
 }

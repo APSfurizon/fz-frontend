@@ -1,9 +1,9 @@
-import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, MouseEvent, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import "../styles/components/janInput.css";
 import { useTranslations } from "next-intl";
 
-export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, pattern, placeholder, prefix, required=false, style, value="" }: Readonly<{
+export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, value="" }: Readonly<{
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -18,9 +18,11 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     minLength?: number,
     maxLength?: number,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
+    onClick?: (e: MouseEvent<HTMLInputElement>) => void
     pattern?: RegExp,
     placeholder?: string,
     prefix?: string,
+    readOnly?: boolean,
     required?: boolean,
     style?: CSSProperties,
     value?: string,
@@ -55,6 +57,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
             <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                 <input
+                    readOnly={readOnly}
                     required={required}
                     name={fieldName}
                     className={`input-field title ${hasError ? "danger" : ""}`}
@@ -64,6 +67,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
                     disabled={disabled}
                     value={inputValue}
                     onChange={handleChange}
+                    onClick={onClick}
                     minLength={minLength}
                     maxLength={maxLength}
                 />

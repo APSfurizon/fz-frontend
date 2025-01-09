@@ -5,7 +5,7 @@ import { startTransition, useEffect, useState } from 'react';
 import Icon, { ICONS } from './icon';
 import UserPicture from './userPicture';
 import { runRequest } from '../_lib/api/global';
-import { LogoutApiAction } from '../_lib/api/login';
+import { LogoutApiAction } from '../_lib/api/authentication/login';
 import { useUser } from '../_lib/context/userProvider';
 import { UserData } from '../_lib/api/user';
 import "../styles/components/userDropDown.css";

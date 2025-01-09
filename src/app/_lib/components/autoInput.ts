@@ -1,4 +1,4 @@
-import { getAutoInputCountries, getAutoInputStates } from "../api/register";
+import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
 import { getAutoInputUserData } from "../debug";
 
 export interface AutoInputSearchResult {
