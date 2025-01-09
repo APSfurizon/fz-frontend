@@ -1,6 +1,5 @@
 "use client"
 import { useTranslations } from 'next-intl';
-import { EMPTY_USER_PICTURE, UserData } from '../_lib/api/user';
 import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
