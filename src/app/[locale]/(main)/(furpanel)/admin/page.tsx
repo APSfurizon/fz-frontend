@@ -4,7 +4,6 @@ import Button from "../../../../_components/button";
 import Icon, { ICONS } from "../../../../_components/icon";
 import { useEffect, useState } from "react";
 import { UserData } from "@/app/_lib/api/user";
-import { getTestUserPictureData } from "@/app/_lib/debug";
 import Checkbox from "@/app/_components/checkbox";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { useRouter } from "next/navigation";

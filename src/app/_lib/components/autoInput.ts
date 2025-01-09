@@ -1,5 +1,4 @@
 import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
-import { getAutoInputUserData } from "../debug";
 
 export interface AutoInputSearchResult {
     id?: number,
@@ -58,36 +57,6 @@ export interface AutoInputManager {
     loadByIds: (filter: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
     searchByValues: (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
     isPresent: (additionalValues?: any) => Promise<boolean>
-}
-
-export class AutoInputDebugUserManager implements AutoInputManager {
-    codeOnly: boolean = true;
-
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
-                resolve (filterLoaded(results, filter));
-            });
-        });
-    }
-
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
-                resolve (
-                    filterSearchResult(value, results, filter, filterOut)
-                );
-            });
-        });
-    }
-
-    isPresent (additionalValue?: any): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
-                resolve (results.length > 0);
-            });
-        });
-    };
 }
 
 export interface CountrySearchResult extends AutoInputSearchResult {
