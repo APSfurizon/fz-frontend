@@ -335,7 +335,7 @@ export default function RoomPage() {
               {data?.currentRoomInfo.guests.map ((guest, key) => <div key={key} 
                 className={`guest-container vertical-list gap-2mm ${guest.roomGuest.confirmed === false ? "invited" : ""}`}>
                 <UserPicture size={64} userData={guest.user} showNickname showFlag></UserPicture>
-                {data.currentRoomInfo.roomOwner.id === guest.user.id && <StatusBox>{t("room.status_owner")}</StatusBox>}
+                {data.currentRoomInfo.roomOwner.userId === guest.user.userId && <StatusBox>{t("room.status_owner")}</StatusBox>}
                 {[OrderStatus.CANCELED, OrderStatus.EXPIRED, OrderStatus.PENDING].includes(guest.orderStatus) && 
                   <StatusBox status="warning">{tcommon(`order_status.${guest.orderStatus}`)}</StatusBox>
                 }
@@ -343,7 +343,7 @@ export default function RoomPage() {
                   <StatusBox status="warning">{t("room.status_invited")}</StatusBox>
                 }
 
-                {data.currentRoomInfo.userIsOwner && guest.user.id !== data.currentRoomInfo.roomOwner.id && <>
+                {data.currentRoomInfo.userIsOwner && guest.user.userId !== data.currentRoomInfo.roomOwner.userId && <>
                   <a className="action-kick" href="#" onClick={()=>{
                     if (guest.roomGuest.confirmed)
                       promptKickGuest(guest);
@@ -561,7 +561,7 @@ export default function RoomPage() {
       { data?.currentRoomInfo && <>
       <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm">
-        <input type="hidden" name="userId" value={userDisplay?.display?.id}></input>
+        <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
           label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
         <div className="horizontal-list gap-4mm">

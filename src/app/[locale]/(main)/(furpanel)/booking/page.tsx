@@ -8,7 +8,7 @@ import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
 import { getBiggestTimeUnit, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
@@ -81,23 +81,16 @@ export default function BookingPage() {
         /**If user has a valid and paid order */
         const hasOrder = !!bookingData && bookingData?.order && ["PENDING", "PAID"].includes(bookingData?.order?.orderStatus);
 
-        /**Order text and daily days*/
-        let ticketName: string = "";
-        let dailyDays: Date[] | undefined;
-        if (hasOrder) {
-            if (bookingData.order.dailyTicket) {
-                ticketName = "daily_ticket";
-                dailyDays = bookingData.order.dailyDays.map(dt=>new Date(dt)).sort((a,b)=>a.getTime()-b.getTime());
-            } else {
-                ticketName = bookingData.order.sponsorship.toLowerCase() + "_ticket";
-            }
-        }
+        /**Ticket data*/
+        const ticketData: BookingTicketData = hasOrder ? calcTicketData(bookingData.order) : {
+            isDaily: false,
+            ticketName: "",
+            dailyDays: undefined
+        };
 
         setPageData ({
+            ...ticketData,
             hasOrder: hasOrder,
-            ticketName: ticketName,
-            isDaily: bookingData.order?.dailyTicket,
-            dailyDays: dailyDays,
             bookingStartDate: new Date(bookingData?.bookingStartTime ?? 0),
             editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0),
             shouldUpdateInfo: bookingData?.shouldUpdateInfo,
@@ -271,7 +264,7 @@ export default function BookingPage() {
         <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
             onFail={exchangeFail} hideSave className="vertical-list gap-2mm">
-            <input type="hidden" name="userId" value={userDisplay?.display?.id}></input>
+            <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
             <AutoInput fieldName="recipientId" manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                 label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
             <div className="horizontal-list gap-4mm">

@@ -124,7 +124,6 @@
     --table-border: #fff;
     --table-row-bg: #ffffff19;
     --table-header-separator: #ffffff4d;
-    --room-invite-bg: #ffffff19;
 
     /* Booking page */
     --booking-countdown-bg: #000000d8;
@@ -142,6 +141,9 @@
     /* Room buy flow */
     --room-buy-item-hover-bg: #ffffff20;
     --room-buy-item-border: #ffffff;
+
+    /* Exchange confirm page*/
+    --exchange-info-bg: #242C38;
 
     --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;

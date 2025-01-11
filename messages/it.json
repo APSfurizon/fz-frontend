@@ -28,6 +28,8 @@
         "loading": "Caricamento...",
         "confirm": "Conferma",
         "cancel": "Annulla",
+        "accept": "Accetta",
+        "refuse": "Rifiuta",
         "error": "Errore",
         "next": "Avanti",
         "back": "Indietro",
@@ -337,6 +339,16 @@
         },
         "exchange_confirm": {
             "title": "Conferma scambio",
+            "room": {
+                "received": "<source></source> vuole scambiare stanza con te.",
+                "sent": "Hai chiesto <target></target> di scambiare stanze.",
+                "room_title": "Stanza di <user></user>:"
+            },
+            "order": {
+                "received": "<source></source> vuole cederti il suo ordine.",
+                "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
+                "order_title": "Ordine di <user></user>:"
+            },
             "errors": {
                 "EXCHANGE_NOT_FOUND": "Scambio non trovato"
             }

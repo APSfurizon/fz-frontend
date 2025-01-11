@@ -10,6 +10,7 @@ import { useUser } from '../_lib/context/userProvider';
 import { UserData } from '../_lib/api/user';
 import "../styles/components/userDropDown.css";
 import { getFlagEmoji } from '../_lib/components/userPicture';
+import { useSearchParams } from 'next/navigation';
 
 export default function UserDropDown ({userData}: Readonly<{userData: UserData}>) { 
     const [isOpen, setOpen] = useState(false);
@@ -18,6 +19,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
     const {setUpdateUser} = useUser();
     const router = useRouter();
     const pathname = usePathname();
+    const params = useSearchParams();
     const locale = useLocale();
     
     
@@ -25,11 +27,9 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
         .finally(()=>{
-            setUpdateUser(true);
-            router.replace("/login");
+            router.push("/login");
         });
     }
-
     return (
         <span tabIndex={0} className="user-dropdown horizontal-list flex-vertical-center rounded-m" onClick={()=>setOpen(!isOpen)}
             onBlur={()=>{if (!isHover) setOpen(false)}} onPointerOver={()=>setHover(true)} onPointerLeave={()=>setHover(false)}>
@@ -40,7 +40,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
                 <a href='#' onClick={() => logout()} className='title rounded-m vertical-align-middle'>{t('header.dropdown.logout')}</a>
                 <hr/>
                 {routing.locales.map((lng, index)=> <a href='#' className='title rounded-m vertical-align-middle horizontal-list' key={index}
-                    onClick={() => startTransition(()=> router.replace({pathname}, {locale: lng}))}>
+                    onClick={() => startTransition(()=> router.replace({pathname: pathname, query: Object.fromEntries(params)}, {locale: lng}))}>
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}
                 </a>)}

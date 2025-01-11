@@ -84,7 +84,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
         setModalLoading(true);
 
         const roomBuyData: RoomBuyApiData = {
-            userId: userDisplay.display?.id,
+            userId: userDisplay.display?.userId,
             roomPretixItemId: selectedType.data.roomPretixItemId
         }
 

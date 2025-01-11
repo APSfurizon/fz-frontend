@@ -1,4 +1,4 @@
-import { OrderData } from "./booking";
+import { BookingTicketData, OrderData } from "./booking";
 import { RoomTypeInfo } from "./flows/roomOrderFlow";
 import { ApiAction, ApiErrorResponse, ApiResponse } from "./global";
 import { RoomData } from "./room";

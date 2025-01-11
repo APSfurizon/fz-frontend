@@ -28,6 +28,8 @@
         "loading": "Loading...",
         "confirm": "Confirm",
         "cancel": "Cancel",
+        "accept": "Accept",
+        "refuse": "Refuse",
         "error": "Error",
         "next": "Next",
         "back": "Back",
@@ -338,15 +340,15 @@
         },
         "exchange_confirm": {
             "title": "Confirm exchange",
-            "exchange_title": {
-                "room": {
-                    "received": "<source></source> wants to exchange his room with you.",
-                    "sent": "You asked <target></target> to exchange room."
-                },
-                "order": {
-                    "received": "<source></source> wants to transfer his order with you.",
-                    "sent": "You requested to transfer your order to <target></target>."
-                }
+            "room": {
+                "received": "<source></source> wants to exchange his room with you.",
+                "sent": "You asked <target></target> to exchange room.",
+                "room_title": "<user></user>'s room:"
+            },
+            "order": {
+                "received": "<source></source> wants to transfer his order to you.",
+                "sent": "You requested to transfer your order to <target></target>.",
+                "order_title": "<user></user>'s order:"
             },
             "errors": {
                 "EXCHANGE_NOT_FOUND": "Exchange not found"
