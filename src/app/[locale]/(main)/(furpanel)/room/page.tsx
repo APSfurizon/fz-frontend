@@ -24,6 +24,7 @@ import { translate } from "@/app/_lib/utils";
 import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 import Checkbox from "@/app/_components/checkbox";
 import RoomOrderFlow from "@/app/_components/_room/roomOrderFlow";
+import { Permissions } from "@/app/_lib/api/permission";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -429,8 +430,8 @@ export default function RoomPage() {
       <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
         max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
         placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
-      { /* TODO: [ADMIN CHECK] */
-        true && <>
+      {
+        userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_ROOMS) && <>
         <Checkbox fieldName="force">{t("room.input.force_join.label")}</Checkbox>
         <Checkbox fieldName="forceExit">{t("room.input.force_exit.label")}</Checkbox>
         </>

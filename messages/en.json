@@ -337,7 +337,20 @@
             }
         },
         "exchange_confirm": {
-            "title": "Confirm exchange"
+            "title": "Confirm exchange",
+            "exchange_title": {
+                "room": {
+                    "received": "<source></source> wants to exchange his room with you.",
+                    "sent": "You asked <target></target> to exchange room."
+                },
+                "order": {
+                    "received": "<source></source> wants to transfer his order with you.",
+                    "sent": "You requested to transfer your order to <target></target>."
+                }
+            },
+            "errors": {
+                "EXCHANGE_NOT_FOUND": "Exchange not found"
+            }
         },
         "login": {
             "create_account": "Create an account",
@@ -461,10 +474,11 @@
                     "residence_data": "Residential data"
                 },
                 "disclaimer_tos": {
-                    "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>."
+                    "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>.",
+                    "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_EN.pdf"
                 },
                 "disclaimer_data_protection": {
-                    "label": "By checking this box, you declare you've read and accepted the <terms>privacy policy</terms>."
+                    "label": "By checking this box, you declare you've read and accepted the privacy policy."
                 }
             },
             "question": {

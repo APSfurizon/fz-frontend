@@ -43,7 +43,7 @@ export default function Footer () {
             <span>, </span>
             <a className="color-link" href="https://about.woffo.ovh">Stark</a>
             <span> & </span>
-            <a className="color-link" href="https://about.woffo.ovh">Stranck</a>
+            <a className="color-link" href="https://www.instagram.com/stranckv2">Stranck</a>
           </p>
         </div>
       </footer>

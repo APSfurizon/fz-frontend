@@ -144,11 +144,9 @@ export default function Register() {
       </div>
       <NoticeBox theme={NoticeTheme.FAQ} title={t("register.question.description_title")} className="descriptive">{t("register.question.description")}</NoticeBox>
       <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>{t.rich("register.form.disclaimer_tos.label", {
-          terms: (chunks) => <Link href="#" className="highlight underlined">{chunks}</Link>
+          terms: (chunks) => <Link href={t("register.form.disclaimer_tos.link")} className="highlight underlined">{chunks}</Link>
         })}</Checkbox>
-      <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}>{t.rich("register.form.disclaimer_data_protection.label", {
-          terms: (chunks) => <Link href="#" className="highlight underlined">{chunks}</Link>
-        })}</Checkbox>
+      <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}>{t("register.form.disclaimer_data_protection.label")}</Checkbox>
     </DataForm>
     <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('register.login_here')}</Link>
   </>;

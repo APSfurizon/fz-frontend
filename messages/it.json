@@ -336,7 +336,10 @@
             }
         },
         "exchange_confirm": {
-            "title": "Conferma scambio"
+            "title": "Conferma scambio",
+            "errors": {
+                "EXCHANGE_NOT_FOUND": "Scambio non trovato"
+            }
         },
         "login": {
             "title": "Accesso",
@@ -461,10 +464,11 @@
                     "residence_data": "Dati di residenza"
                 },
                 "disclaimer_tos": {
-                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."
+                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
+                    "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
                 },
                 "disclaimer_data_protection": {
-                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle <terms>politiche sulla riservatezza</terms>."
+                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
                 }
             },
             "question": {

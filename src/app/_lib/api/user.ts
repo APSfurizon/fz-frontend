@@ -18,8 +18,7 @@ export type UserData = {
     id: number,
     fursonaName?: string,
     locale?: string,
-    propicId?: number,
-    propicPath?: string,
+    propicUrl?: string,
     sponsorType: SponsorType
 }
 
