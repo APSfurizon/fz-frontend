@@ -99,6 +99,10 @@ export default function Register() {
         <JanInput fieldName="lastName" required={true} inputType="text" busy={loading} label={t("register.form.last_name.label")}
           placeholder={t("register.form.last_name.placeholder")}/>
       </div>
+      <div className="form-pair horizontal-list gap-4mm">
+        <JanInput fieldName="allergies" required={false} inputType="text" busy={loading} label={t("register.form.allergies.label")}
+            placeholder={t("register.form.allergies.placeholder")}/>
+      </div>
       <hr></hr>
       {/* Ask user for birth data*/}
       <span className="title medium bold highlight">{t("register.form.section.birth_data")}</span>

@@ -18,6 +18,7 @@ export const ICONS = Object.freeze({
     CHECK_CIRCLE: "check_circle",
     CLOSE: "close",
     CLOUD_UPLOAD: "cloud_upload",
+    CONSTRUCTION: "construction",
     CONTENT_COPY: "content_copy",
     CONTEXTUAL_TOKEN: "contextual_token",
     DELETE: "delete",

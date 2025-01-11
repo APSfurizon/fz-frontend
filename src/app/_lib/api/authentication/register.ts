@@ -26,6 +26,7 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
         let personalUserInformation: UserPersonalInfo = {
             firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
             lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
+            allergies:          nullifyEmptyString(data.get('allergies')?.toString ()),
             fiscalCode:         nullifyEmptyString(data.get('fiscalCode')?.toString ()),
             birthCity:          nullifyEmptyString(data.get('birthCity')?.toString ()),
             birthRegion:        nullifyEmptyString(data.get('birthRegion')?.toString ()),

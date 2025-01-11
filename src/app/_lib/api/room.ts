@@ -60,6 +60,7 @@ export interface RoomInvitation {
 }
 
 export interface RoomInfoResponse extends ApiResponse {
+    hasOrder: boolean,
     canCreateRoom: boolean,
     editingRoomEndTime: string,
     currentRoomInfo: RoomInfo,

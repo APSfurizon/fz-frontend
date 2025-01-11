@@ -44,7 +44,8 @@
         "request_id": "ID richiesta:",
         "util": {
             "hoverable": "Clicca per copiare"
-        }
+        },
+        "coming_soon": "Presto in arrivo..."
     },
     "components": {
         "autoinput": {
@@ -237,6 +238,7 @@
             },
             "your_room": "La tua stanza",
             "or": "oppure",
+            "no_order": "Prima acquista un biglietto.",
             "no_room": "Non sei in una stanza, per ora.",
             "status_owner": "Gestore",
             "status_invited": "Invitato",
@@ -396,6 +398,10 @@
                 "region_not_provided": "Provincia non fornita"
             },
             "form": {
+                "allergies": {
+                    "label": "Allergie",
+                    "placeholder": "Hai qualche allergia?"
+                },
                 "birth_city": {
                     "label": "Comune di nascita",
                     "placeholder": "Es: Bari"

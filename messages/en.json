@@ -44,7 +44,8 @@
         "request_id": "Request ID:",
         "util": {
             "hoverable": "Click to copy"
-        }
+        },
+        "coming_soon": "Coming soon..."
     },
     "components": {
         "autoinput": {
@@ -238,6 +239,7 @@
             },
             "your_room": "Your room",
             "or": "or",
+            "no_order": "Please buy a ticket, before.",
             "no_room": "You don't have a room, yet.",
             "status_owner": "Owner",
             "status_invited": "Invited",
@@ -396,6 +398,10 @@
                 "region_not_provided": "Region not provided"
             },
             "form": {
+                "allergies": {
+                    "label": "Allergies",
+                    "placeholder": "Do you have any allergies?"
+                },
                 "birth_city": {
                     "label": "Birth city",
                     "placeholder": "Ex: Barcelona"

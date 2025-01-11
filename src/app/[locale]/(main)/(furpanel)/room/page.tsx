@@ -25,6 +25,7 @@ import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 import Checkbox from "@/app/_components/checkbox";
 import RoomOrderFlow from "@/app/_components/_room/roomOrderFlow";
 import { Permissions } from "@/app/_lib/api/permission";
+import ToolLink from "@/app/_components/toolLink";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -303,10 +304,15 @@ export default function RoomPage() {
             {data && data.canCreateRoom == true 
               ?
                 <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
-              : <>
-                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
+              : data.hasOrder 
+              ? <>
+                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
                 <span className="title small">{t("room.or")}</span>
-                <Button iconName={ICONS.PERSON_ADD} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
+                <Button iconName={ICONS.PERSON_ADD} disabled={!data.hasOrder} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
+              </>
+              : <>
+                <span>{t("room.no_order")}</span>
+                <ToolLink href={"/booking"} iconName={ICONS.LOCAL_ACTIVITY} className="active">{t("booking.title")}</ToolLink>
               </>
             }
           </div>

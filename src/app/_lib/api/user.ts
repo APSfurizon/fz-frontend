@@ -26,6 +26,7 @@ export interface UserPersonalInfo {
     id?: number;
     firstName?: string;
     lastName?: string;
+    allergies?: string;
     fiscalCode?: string;
     birthCity?: string;
     birthRegion?: string;
