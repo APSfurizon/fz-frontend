@@ -9,6 +9,10 @@ export interface ApiResponse {
     requestId?: string
 }
 
+export interface SimpleApiResponse extends ApiResponse {
+    success: boolean
+}
+
 export interface ApiErrorResponse extends ApiResponse {
     errorMessage?: string,
 }

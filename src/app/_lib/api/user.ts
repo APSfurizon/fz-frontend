@@ -1,6 +1,7 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult } from "../components/autoInput";
-import { buildSearchParams } from "../utils";
-import { ApiErrorResponse, ApiResponse, ApiAction, runRequest } from "./global";
+import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
+import { buildSearchParams, nullifyEmptyString } from "../utils";
+import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse } from "./global";
 
 export enum SponsorType {
     NONE = "NONE",
@@ -41,6 +42,7 @@ export interface UserPersonalInfo {
     phoneNumber?: string;
     lastUpdatedEventId?: number;
     userId?: number,
+    note?: string,
 }
 
 export interface UserDisplayResponse extends ApiResponse {
@@ -77,7 +79,8 @@ export class AutoInputUsersManager implements AutoInputManager {
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            runRequest (new UserSearchAction(), ["by-id"], undefined, undefined).then (results => {
+            const params = buildSearchParams({"id": filter.filteredIds.map(num=>""+num)})
+            runRequest (new UserSearchAction(), ["by-id"], undefined, params).then (results => {
                 resolve (filterLoaded(results as AutoInputSearchResult[], filter));
             });
         });
@@ -112,4 +115,46 @@ export class AutoInputRoomInviteManager extends AutoInputUsersManager {
             });
         });
     }
+}
+
+export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonalInfo> {
+    mapToDTO = (data: FormData) => {
+        let toReturn: UserPersonalInfo = {
+            firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
+            lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
+            allergies:          nullifyEmptyString(data.get('allergies')?.toString ()),
+            fiscalCode:         nullifyEmptyString(data.get('fiscalCode')?.toString ()),
+            birthCity:          nullifyEmptyString(data.get('birthCity')?.toString ()),
+            birthRegion:        nullifyEmptyString(data.get('birthRegion')?.toString ()),
+            birthCountry:       nullifyEmptyString(data.get('birthCountry')?.toString ()),
+            birthday:           nullifyEmptyString(data.get('birthday')?.toString ()),
+            residenceAddress:   nullifyEmptyString(data.get('residenceAddress')?.toString ()),
+            residenceZipCode:   nullifyEmptyString(data.get('residenceZipCode')?.toString ()),
+            residenceCity:      nullifyEmptyString(data.get('residenceCity')?.toString ()),
+            residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
+            residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
+            prefixPhoneNumber:  nullifyEmptyString(data.get('phonePrefix')?.toString ()),
+            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ()),
+            userId:             parseInt(data.get('userId')?.toString () ?? "0"),
+            id:                 parseInt(data.get('id')?.toString () ?? "0")
+        };
+        return toReturn;
+    }
+}
+
+export class UpdatePersonalInfoFormAction implements FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    authenticated = true;
+    dtoBuilder = new UpdatePersonalInfoDTOBuilder ();
+    urlAction = "membership/update-personal-user-information";
+    onSuccess: (status: number, body?: SimpleApiResponse) => void = (status: number, body?: SimpleApiResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export class GetPersonalInfoAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "membership/get-personal-user-information";
+    onSuccess: (status: number, body?: UserSearchResponse) => void = (status: number, body?: UserSearchResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

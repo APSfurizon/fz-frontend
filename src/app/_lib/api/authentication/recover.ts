@@ -24,14 +24,14 @@ export class RecoverFormAction implements FormApiAction<RecoverApiData, Boolean,
 }
 
 export interface ChangePasswordApiData {
-    newPassword?: string,
+    password?: string,
     resetPwId?: string
 }
 
 export class ChangePasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: ChangePasswordApiData = {
-            newPassword: data.get('newPassword')?.toString (),
+            password: data.get('password')?.toString (),
             resetPwId: data.get('resetPwId')?.toString (),
         };
         return toReturn;

@@ -15,6 +15,7 @@ import { RegisterFormAction } from "@/app/_lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
 import Checkbox from "@/app/_components/checkbox";
 import "../../../../styles/authentication/register.css";
+import { firstOrUndefined } from "@/app/_lib/utils";
 
 export default function Register() {
 
@@ -108,8 +109,8 @@ export default function Register() {
       <span className="title medium bold highlight">{t("register.form.section.birth_data")}</span>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="birthday" required={true} inputType="date" busy={loading} label={t("register.form.birthday.label")}/>
-        <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager} 
-          onChange={(values, newValue, removedValue) => setBirthCountry (newValue?.code)} label={t("register.form.birth_country.label")}
+        <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager}
+          onChange={(values, newValues, removedValue) => setBirthCountry ((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)} label={t("register.form.birth_country.label")}
           placeholder={t("register.form.birth_country.placeholder")}/>
       </div>
       {/* Show only if birth country is Italy */}
@@ -127,7 +128,7 @@ export default function Register() {
       <span className="title medium bold highlight">{t("register.form.section.residence_data")}</span>
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="residenceCountry" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager} 
-          onChange={(values, newValue, removedValue) => setResidenceCountry (newValue?.code)} label={t("register.form.residence_country.label")}
+          onChange={(values, newValue, removedValue) => setResidenceCountry ((firstOrUndefined(newValue) as AutoInputSearchResult)?.code)} label={t("register.form.residence_country.label")}
           placeholder={t("register.form.residence_country.placeholder")}/>
         <AutoInput fieldName="residenceRegion" minDecodeSize={2} manager={new AutoInputStatesManager} param={residenceCountry} paramRequired requiredIfPresent
           label={t("register.form.residence_region.label")} placeholder={t("register.form.residence_region.placeholder")}/>

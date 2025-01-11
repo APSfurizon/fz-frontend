@@ -266,7 +266,11 @@
             "title": "Upload"
         },
         "user": {
-            "title": "User"
+            "title": "User",
+            "sections": {
+                "user": "User",
+                "user_info": "Personal information"
+            }
         },
         "admin": {
             "title": "Admin",

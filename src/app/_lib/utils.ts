@@ -83,4 +83,12 @@ export function getDeviceType (): DEVICE_TYPE {
         return DEVICE_TYPE.GENERIC;
 }
 
+export function areEquals (a: any, b: any): boolean {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
+
+export function firstOrUndefined(a: any[] | undefined): any | undefined {
+    return a && a.length > 0 ? a[0] : undefined;
+}
+
 export const years = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((i)=>new Date().getUTCFullYear()+i);

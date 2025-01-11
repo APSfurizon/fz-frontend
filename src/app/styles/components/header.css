@@ -22,10 +22,11 @@ header {
         left: 50%;
         transform: translate(-50%, 0%);
         pointer-events: none;
-    
+        overflow: hidden;
+        
         img {
             margin: 1em;
-            height: calc(100% - 2em);
+            max-height: calc(100% - 2em);
             width: auto;
         }
     }

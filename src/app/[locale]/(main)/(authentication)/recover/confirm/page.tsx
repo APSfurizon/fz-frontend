@@ -60,7 +60,7 @@ export default function Login() {
       action={new ChangePasswordFormAction} onFail={(err) => manageError(err)} onBeforeSubmit={onLoading} 
       onSuccess={manageSuccess} disableSave={!passwordMatch}>
       <input type="hidden" name="resetPwId" value={params.get("id") ?? ""}></input>
-      <JanInput fieldName="newPassword" required={true} inputType="password" busy={loading} label={t("recover_confirm.input.new_password.label")}
+      <JanInput fieldName="password" required={true} inputType="password" busy={loading} label={t("recover_confirm.input.new_password.label")}
         placeholder={t("recover_confirm.input.new_password.placeholder")} helpText={t("recover_confirm.input.new_password.help")}
         onChange={(e) => setPassword(e.currentTarget.value)}/>
       <JanInput required={true} inputType="password" busy={loading} label={t("recover_confirm.input.confirm_password.label")}

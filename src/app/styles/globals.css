@@ -26,6 +26,10 @@ body {
   margin: 0;
 }
 
+span {
+  color: var(--foreground);
+}
+
 html > body > div.page-wrapper {
   position: relative;
   min-height: 100vh;
