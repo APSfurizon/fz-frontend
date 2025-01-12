@@ -119,7 +119,7 @@ export default function Register() {
         <JanInput fieldName="birthday" required={true} inputType="date" busy={loading} label={t("register.form.birthday.label")}/>
         <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager}
           onChange={(values, newValues, removedValue) => setBirthCountry ((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)} label={t("register.form.birth_country.label")}
-          placeholder={t("register.form.birth_country.placeholder")}/>
+          placeholder={t("register.form.birth_country.placeholder")} emptyIfUnselected/>
       </div>
       {/* Show only if birth country is Italy */}
       <div className="form-pair horizontal-list gap-4mm" style={{display: fiscalCodeRequired ? "block" : "none"}}>
@@ -128,7 +128,7 @@ export default function Register() {
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="birthRegion" minDecodeSize={2} manager={new AutoInputStatesManager} param={birthCountry} paramRequired requiredIfPresent
-          label={t("register.form.birth_region.label")} placeholder={t("register.form.birth_region.placeholder")}/>
+          label={t("register.form.birth_region.label")} placeholder={t("register.form.birth_region.placeholder")} emptyIfUnselected/>
         <JanInput fieldName="birthCity" required={true} inputType="text" busy={loading} label={t("register.form.birth_city.label")}
           placeholder={t("register.form.birth_city.placeholder")}/>
       </div>
@@ -137,9 +137,9 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="residenceCountry" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager} 
           onChange={(values, newValue, removedValue) => setResidenceCountry ((firstOrUndefined(newValue) as AutoInputSearchResult)?.code)} label={t("register.form.residence_country.label")}
-          placeholder={t("register.form.residence_country.placeholder")}/>
+          placeholder={t("register.form.residence_country.placeholder")} emptyIfUnselected/>
         <AutoInput fieldName="residenceRegion" minDecodeSize={2} manager={new AutoInputStatesManager} param={residenceCountry} paramRequired requiredIfPresent
-          label={t("register.form.residence_region.label")} placeholder={t("register.form.residence_region.placeholder")}/>
+          label={t("register.form.residence_region.label")} placeholder={t("register.form.residence_region.placeholder")} emptyIfUnselected/>
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="residenceCity" required={true} inputType="text" busy={loading} label={t("register.form.residence_city.label")} placeholder={t("register.form.residence_city.placeholder")}/>
@@ -151,7 +151,8 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         {/* Phone number */}
         <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager(true)} 
-          label={t("register.form.phone_prefix.label")} placeholder={t("register.form.phone_prefix.placeholder")} idExtractor={(r) => extractPhonePrefix(r as CountrySearchResult)}/>
+          label={t("register.form.phone_prefix.label")} placeholder={t("register.form.phone_prefix.placeholder")} idExtractor={(r) => extractPhonePrefix(r as CountrySearchResult)}
+          emptyIfUnselected/>
         <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={loading} label={t("register.form.phone_number.label")} 
           placeholder={t("register.form.phone_number.placeholder")} style={{flex: "2"}}/>
       </div>

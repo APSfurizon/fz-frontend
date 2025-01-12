@@ -11,7 +11,7 @@ import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
  * 
  * @returns 
  */
-export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style, emptyIfUnselected = false}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -41,7 +41,8 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     required?: boolean,
     /**Sets itself to required, whether there's anything in the remote datasource */
     requiredIfPresent?: boolean,
-    style?: CSSProperties
+    style?: CSSProperties,
+    emptyIfUnselected?: boolean
   }>) {
     const t = useTranslations('components');
 
@@ -174,6 +175,9 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         setSearchResults([]);
         setIsLoading(false);
         clearTimeout(searchTimeoutHandle);
+        if (emptyIfUnselected) {
+            setTimeout(()=>setSearchInput(""), 100);
+        }
     }
 
     useEffect(()=> {

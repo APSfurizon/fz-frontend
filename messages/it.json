@@ -426,7 +426,7 @@
                 },
                 "birth_country": {
                     "label": "Paese",
-                    "placeholder": "Es: Italia"
+                    "placeholder": "Es: Italy"
                 },
                 "birth_region": {
                     "label": "Provincia",
@@ -472,7 +472,7 @@
                 },
                 "phone_prefix": {
                     "label": "Prefisso",
-                    "placeholder": "Esempio: Italia (+39)"
+                    "placeholder": "Esempio: Italy (+39)"
                 },
                 "phone_number": {
                     "label": "Telefono",
@@ -488,7 +488,7 @@
                 },
                 "residence_country": {
                     "label": "Paese",
-                    "placeholder": "Seleziona il tuo paese"
+                    "placeholder": "Es: Italy"
                 },
                 "residence_region": {
                     "label": "Provincia",
