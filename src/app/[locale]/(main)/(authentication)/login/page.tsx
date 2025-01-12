@@ -31,7 +31,7 @@ export default function Login() {
       const errRes = err as ApiDetailedErrorResponse;
       const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].code : t('login.errors.unknown_error');
       if (errorMessage.toLowerCase().trim() === "already_logged_in") {
-        manageSuccess();
+        router.replace('/home');
         return;
       }
       setError(errorMessage);

@@ -1,5 +1,6 @@
 .main-dialog {
     max-width: 210mm;
+    transition: width 120ms;
 }
 
 span:has(.hamburger),
