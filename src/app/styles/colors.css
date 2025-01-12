@@ -11,7 +11,7 @@
     --hoverable-bg: #2a2b3f;
     
     /* Footer */
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     /* Header */
     --header-bg: #141E26;
     --header-shadow: #00000015;
@@ -155,7 +155,7 @@
   :root {
     --background: #11191F;
     --foreground: #ededed;
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     --header-bg: #141E26;
     --main-dialog-background: #141E26;
   }
@@ -164,7 +164,7 @@
   :root {
     --background: #11191F;
     --foreground: #ededed;
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     --header-bg: #141E26;
     --main-dialog-background: #141E26;
   }

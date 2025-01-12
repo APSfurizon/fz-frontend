@@ -39,12 +39,15 @@ export default function Footer () {
           </div>
           <p className="tiny color-subtitle center">
             <span>Made by </span>
-            <a className="color-link" href="https://about.woffo.ovh">Drew</a>
-            <span>, </span>
-            <a className="color-link" href="https://about.woffo.ovh">Stark</a>
-            <span> & </span>
             <a className="color-link" href="https://www.instagram.com/stranckv2">Stranck</a>
+            <span>, </span>
+            <a className="color-link" href="https://about.woffo.ovh">Drew</a>
+            <span> & </span>
+            <a className="color-link" href="https://x.com/starkthedragon">Stark</a>
           </p>
+          <div className="tiny color-subtitle center">
+            <span>{t("source_code")} <a className="color-link" href="https://github.com/APSfurizon/">https://github.com/APSfurizon/</a></span>
+          </div>
         </div>
       </footer>
   )

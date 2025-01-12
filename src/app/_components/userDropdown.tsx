@@ -27,7 +27,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
         .finally(()=>{
-            router.push("/login");
+            location.replace("/login");
         });
     }
     return (

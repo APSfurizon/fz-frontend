@@ -45,7 +45,8 @@
         "util": {
             "hoverable": "Clicca per copiare"
         },
-        "coming_soon": "Presto in arrivo..."
+        "coming_soon": "Presto in arrivo...",
+        "source_code": "Codice sorgente: "
     },
     "components": {
         "autoinput": {
