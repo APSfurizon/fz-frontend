@@ -46,6 +46,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
                         // are used in combination with a given `pathname`. Since the two will
                         // always match for the current route, we can skip runtime checks.
                         {pathname, params}, {locale: lng});
+                        router.refresh();
                     })}>
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}

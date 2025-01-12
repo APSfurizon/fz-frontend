@@ -5,26 +5,35 @@ import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, TOKEN_STORAGE_NAME } from './ap
  
 const intlMiddleware = createMiddleware(routing);
 
+enum TokenVerification {
+  SUCCESS,
+  NOT_VALID,
+  NETOWRK_ERROR
+}
+
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
   const tokenPresent = loginToken && loginToken.value
   const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
   const continueParams = new URLSearchParams({"continue": path});
-  const tokenValid = tokenPresent ? await verifyToken(loginToken.value) : false;
+  const tokenResult = tokenPresent ? await verifyToken(loginToken.value) : TokenVerification.NOT_VALID;
 
-  if (tokenValid) {
+  if (tokenResult == TokenVerification.SUCCESS) {
     return intlMiddleware(req);
   } else {
     if (needsAuthentication) {
       return redirectToLogin(req, continueParams);
     } else {
-      return stripToken(intlMiddleware(req));
+      if (tokenResult == TokenVerification.NOT_VALID)
+        return stripToken(intlMiddleware(req));
+      else 
+        return redirectToLogin(req, continueParams);
     }
   }
 }
 
-async function verifyToken(token: string) {
+async function verifyToken(token: string): Promise<TokenVerification> {
   // Try validating the request
   const headers = new Headers({
     'Content-type': 'application/json',
@@ -34,10 +43,10 @@ async function verifyToken(token: string) {
   try {
     fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
   } catch (err) {
-    return false;
+    return TokenVerification.NETOWRK_ERROR;
   }
 
-  return fetchResult && fetchResult.ok;
+  return fetchResult && fetchResult.ok ? TokenVerification.SUCCESS : TokenVerification.NOT_VALID;
 }
 
 const stripToken = (res: NextResponse): NextResponse => {
