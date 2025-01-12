@@ -269,6 +269,16 @@
             "sections": {
                 "user": "Utente",
                 "user_info": "Informazioni personali"
+            },
+            "linking": {
+                "title": "Recupero ordine",
+                "description": "Attendi mentre colleghiamo l'ordine al tuo account...",
+                "errors": {
+                    "SERVER_ERROR": "Errore server",
+                    "ORDER_SECRET_NOT_MATCH": "Il codice Ordine non è corretto",
+                    "ORDER_MULTIPLE_DONE": "Errore ordine multiplo",
+                    "ORDER_NOT_FOUND": "Ordine non trovato"
+                }
             }
         },
         "admin": {

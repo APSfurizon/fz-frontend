@@ -270,6 +270,17 @@
             "sections": {
                 "user": "User",
                 "user_info": "Personal information"
+            },
+            "linking": {
+                "title": "Order linking",
+                "description": "Please wait while we link your order to your account...",
+                "errors": {
+                    "SERVER_ERROR": "Server error",
+                    "ORDER_SECRET_NOT_MATCH": "Order secret doesn't match",
+                    "ORDER_MULTIPLE_DONE": "You might have issued multiple orders",
+                    "ORDER_NOT_FOUND": "Order not found"
+                }
+                
             }
         },
         "admin": {

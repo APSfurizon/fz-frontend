@@ -158,3 +158,16 @@ export class GetPersonalInfoAction implements ApiAction<UserSearchResponse, ApiE
     onSuccess: (status: number, body?: UserSearchResponse) => void = (status: number, body?: UserSearchResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
+
+export interface UserOrderLinkingData {
+    orderCode: string,
+    orderSecret: string
+}
+
+export class UserOrderLinkingAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "orders-workflow/link-order";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
