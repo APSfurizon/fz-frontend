@@ -3,15 +3,16 @@ import DataForm from "@/app/_components/dataForm";
 import Icon, { ICONS } from "@/app/_components/icon";
 import JanInput from "@/app/_components/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
-import { AuthenticationCodes, LoginFormAction } from "@/app/_lib/api/authentication/login";
+import { AuthenticationCodes, LoginFormAction, LoginResponse } from "@/app/_lib/api/authentication/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useUser } from "@/app/_lib/context/userProvider";
 import "../../../../styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
+import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/app/_lib/constants";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -20,6 +21,9 @@ export default function Login() {
   const {updateUser, setUpdateUser} = useUser();
   const router = useRouter();
   const params = useSearchParams();
+
+  const onLoad = () => setError(undefined);
+
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     if(!isDetailedError (err)) {
       setError("network_error");
@@ -34,17 +38,13 @@ export default function Login() {
     }
   }
 
-  const manageSuccess = () => {
-    setError(undefined);
+  const manageSuccess = (body?: LoginResponse) => {
+    if (!body) return;
+    const newParams = new URLSearchParams(params);
+    newParams.append(TOKEN_STORAGE_NAME, body.accessToken);
+    router.replace(`/login?${newParams.toString()}`);
     setTimeout(()=>{
       setUpdateUser(true);
-      router.refresh();
-      if (params) {
-        router.replace(params.get("continue") ?? "/home");
-      } else {
-        router.replace("/home");
-      }
-      router.refresh();
     }, 500);
   }
 
@@ -66,7 +66,8 @@ export default function Login() {
     {Object.keys(AuthenticationCodes).includes(params.get("status") ?? "") && <NoticeBox theme={AuthenticationCodes[params.get("status") ?? "UNKNOWN"]} title={t(`login.messages.${params.get("status")}.title`)}>
       {t(`login.messages.${params.get("status")}.description`)}
     </NoticeBox>}
-    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
+    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onBeforeSubmit={()=>onLoad()}
+      onSuccess={(data)=>manageSuccess(data as LoginResponse)} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
     </DataForm>

@@ -9,7 +9,10 @@ export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERS
 
 // Security
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
-export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2}){0,1}(?:\/(?!(login|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
+export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})?(?:\/(?!(login|logout|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
+export const REGEX_SKIP_AUTHENTICATED = /^(\/[A-z]{2})?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
+export const REGEX_LOGIN = /^(\/[A-z]{2})?(\/login(.+)?)?$/gmi;
+export const REGEX_LOGOUT = /^(\/[A-z]{2})?(\/logout(.+)?)?$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";

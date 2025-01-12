@@ -34,14 +34,8 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
     authenticated = true;
     dtoBuilder = new LoginDTOBuilder ();
     urlAction = "authentication/login";
-    onSuccess: (status: number, body?: LoginResponse) => void = (status: number, body?: LoginResponse) => {loginSuccess(body!)};
+    onSuccess: (status: number, body?: LoginResponse) => void = (status: number, body?: LoginResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
-}
-
-function loginSuccess(body: LoginResponse) {
-    let sessionExpiry = new Date();
-    sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
-    document.cookie = `${TOKEN_STORAGE_NAME}=Bearer ${body.accessToken}; expires=${sessionExpiry.toUTCString()}; path=/`;
 }
 
 export interface LogoutResponse extends ApiResponse {

@@ -15,18 +15,19 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
     const [isOpen, setOpen] = useState(false);
     const [isHover, setHover] = useState(false);
     const t = useTranslations('common');
-    const {setUpdateUser} = useUser();
     const router = useRouter();
     const pathname = usePathname();
     const params = useParams();
     const locale = useLocale();
+    const {setUpdateUser} = useUser();
     
     
     const logout = () => {
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
         .finally(()=>{
-            router.replace("/login");
+            router.replace("/logout");
+            setTimeout(()=>setUpdateUser(true), 1000);
         });
     }
     return (
