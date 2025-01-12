@@ -39,11 +39,11 @@ export default function Login() {
     setTimeout(()=>{
       setUpdateUser(true);
       if (params) {
-        router.replace(params.get("continue") ?? "/home");
+        location.replace(params.get("continue") ?? "/home");
       } else {
-        router.replace("/home");
+        location.replace("/home");
       }
-    }, 200);
+    }, 500);
   }
 
   useTitle(t("login.title"));

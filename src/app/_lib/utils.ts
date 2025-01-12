@@ -1,5 +1,6 @@
 import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
 import { Coordinates } from "./components/upload";
+import { MEMBERSHIP_STARTING_YEAR } from "./constants";
 
 export function nullifyEmptyStrings (values?: (string | undefined)[]) {
     return values?.map(s => nullifyEmptyString(s));
@@ -91,4 +92,4 @@ export function firstOrUndefined(a: any[] | undefined): any | undefined {
     return a && a.length > 0 ? a[0] : undefined;
 }
 
-export const years = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((i)=>new Date().getUTCFullYear()+i);
+export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3).fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
