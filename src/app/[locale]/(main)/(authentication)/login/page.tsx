@@ -38,10 +38,11 @@ export default function Login() {
     setError(undefined);
     setTimeout(()=>{
       setUpdateUser(true);
+      router.refresh();
       if (params) {
-        location.replace(params.get("continue") ?? "/home");
+        globalThis.location.href = params.get("continue") ?? "/home";
       } else {
-        location.replace("/home");
+        globalThis.location.href = "/home";
       }
     }, 500);
   }

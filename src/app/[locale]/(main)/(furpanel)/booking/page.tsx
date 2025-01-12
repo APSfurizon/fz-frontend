@@ -14,6 +14,7 @@ import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/_components/modal";
+import StatusBox from "@/app/_components/statusBox";
 import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/app/_lib/api/order";
 import DataForm from "@/app/_components/dataForm";
 import { useUser } from "@/app/_lib/context/userProvider";
@@ -202,11 +203,14 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
-                <p className="title medium">
-                    {t("booking.your_booking")}&nbsp;
+                <p className="title medium horizontal-list gap-2mm">
+                    {t("booking.your_booking")}
                     <span>({t("booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
                     )</span>
+                    <StatusBox status={bookingData?.order.orderStatus == "PENDING" ? "warning" : "success"}>
+                        {tcommon(`order_status.${bookingData?.order.orderStatus}`)}
+                    </StatusBox>
                 </p>
                 <div className="order-data">
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm">

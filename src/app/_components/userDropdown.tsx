@@ -8,9 +8,8 @@ import { runRequest } from '../_lib/api/global';
 import { LogoutApiAction } from '../_lib/api/authentication/login';
 import { useUser } from '../_lib/context/userProvider';
 import { UserData } from '../_lib/api/user';
+import { useParams } from 'next/navigation';
 import "../styles/components/userDropDown.css";
-import { getFlagEmoji } from '../_lib/components/userPicture';
-import { useSearchParams } from 'next/navigation';
 
 export default function UserDropDown ({userData}: Readonly<{userData: UserData}>) { 
     const [isOpen, setOpen] = useState(false);
@@ -19,7 +18,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
     const {setUpdateUser} = useUser();
     const router = useRouter();
     const pathname = usePathname();
-    const params = useSearchParams();
+    const params = useParams();
     const locale = useLocale();
     
     
@@ -27,7 +26,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
         .finally(()=>{
-            location.replace("/login");
+            globalThis.location.href = "/login";
         });
     }
     return (
@@ -40,7 +39,14 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
                 <a href='#' onClick={() => logout()} className='title rounded-m vertical-align-middle'>{t('header.dropdown.logout')}</a>
                 <hr/>
                 {routing.locales.map((lng, index)=> <a href='#' className='title rounded-m vertical-align-middle horizontal-list' key={index}
-                    onClick={() => startTransition(()=> router.replace({pathname: pathname, query: Object.fromEntries(params)}, {locale: lng}))}>
+                    onClick={() => startTransition(()=> {
+                        router.refresh();
+                        router.replace(
+                        // @ts-expect-error -- TypeScript will validate that only known `params`
+                        // are used in combination with a given `pathname`. Since the two will
+                        // always match for the current route, we can skip runtime checks.
+                        {pathname, params}, {locale: lng});
+                    })}>
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}
                 </a>)}

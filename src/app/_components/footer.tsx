@@ -12,9 +12,9 @@ export default function Footer () {
             <Image className="footer-logo" src="/images/logo-dark.png" alt="Furizon logo" width={256} height={60}></Image>
           </div>
           <div className="horizontal-list gap-4mm normal title flex-center">
-            <a href="https://todo.com" target="_blank" rel="noopener noreferrer">{t('footer.code_of_conduct')}</a>
-            <a href="https://todo.com" target="_blank" rel="noopener noreferrer">{t('footer.volunteers')}</a>
-            <a href="https://todo.com" target="_blank" rel="noopener noreferrer">{t('footer.contact_us')}</a>
+            <a href={t("footer.link_code_of_conduct")} target="_blank" rel="noopener noreferrer">{t('footer.code_of_conduct')}</a>
+            <a href="https://furizon.net/join-furizon-staff/" target="_blank" rel="noopener noreferrer">{t('footer.volunteers')}</a>
+            <a href="https://furizon.net/contact/" target="_blank" rel="noopener noreferrer">{t('footer.contact_us')}</a>
           </div>
           <div className="horizontal-list gap-4mm normal title flex-center flex-align-center">
             <a href="https://www.youtube.com/@apsfurizon7425" target="_blank" rel="noopener noreferrer">
