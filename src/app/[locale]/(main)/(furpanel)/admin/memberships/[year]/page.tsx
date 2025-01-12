@@ -139,7 +139,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                             </div>
                             <div className="spacer"></div>
                             <div className="data">
-                                <span className="descriptive "># {(""+data.membershipCard.idInYear).padStart(4, '0')}</span>
+                                <span className="descriptive "># {(""+data.membershipCard.cardNo).padStart(7, '0')}</span>
                             </div>
                             <div className="data">
                                 <Checkbox initialValue={data.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,

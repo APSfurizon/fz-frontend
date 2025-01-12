@@ -444,6 +444,10 @@
                     "label": "Email",
                     "placeholder": "esempio@furroso.com"
                 },
+                "confirm_email": {
+                    "label": "Confirm email",
+                    "placeholder": "esempio@furroso.com"
+                },
                 "first_name": {
                     "label": "Nome",
                     "placeholder": "Inserisci il tuo nome"

@@ -443,7 +443,11 @@
                 },
                 "email": {
                     "label": "Email",
-                    "placeholder": "Enter an email address"
+                    "placeholder": "example@fur.com"
+                },
+                "confirm_email": {
+                    "label": "Confirm email",
+                    "placeholder": "example@fur.com"
                 },
                 "first_name": {
                     "label": "First name",

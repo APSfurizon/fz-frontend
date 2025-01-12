@@ -25,6 +25,9 @@ export default function Register() {
   const [birthCountry, setBirthCountry] = useState<string | undefined>();
   const [residenceCountry, setResidenceCountry] = useState<string>();
 
+  const [email, setEmail] = useState<string>("s");
+  const [confirmEmail, setConfirmEmail] = useState<string>();
+
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
 
@@ -45,12 +48,14 @@ export default function Register() {
 
   const passwordMatch = confirmPassword === password;
 
+  const emailMatch = confirmEmail === email;
+
   const extractPhonePrefix = (r: CountrySearchResult) => {
     return r.phonePrefix ?? "";
   }
 
   const checkForm = () => {
-    if (!tosAccepted || !privacyAccepted || !passwordMatch) {
+    if (!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch) {
       return false;
     } else {
       return true;
@@ -78,12 +83,15 @@ export default function Register() {
     </span>
     </div>
     {error && <span className="error-container title small center">{t(`register.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-    <DataForm checkFn={checkForm} className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new RegisterFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("register.register")}} disableSave={!tosAccepted || !privacyAccepted || !passwordMatch}>
+    <DataForm checkFn={checkForm} className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new RegisterFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("register.register")}} disableSave={!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch}>
       {/* Ask user for username and password */}
       <JanInput fieldName="fursonaName" required={true} inputType="text" helpText={t("register.form.nickname.help")} busy={loading}
         label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")}/>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("register.form.email.label")}
-        placeholder={t("register.form.email.placeholder")}/>
+        placeholder={t("register.form.email.placeholder")} onChange={(e)=>setEmail(e.target.value)}/>
+      <JanInput required={true} inputType="email" busy={loading} label={t("register.form.confirm_email.label")}
+        placeholder={t("register.form.confirm_email.placeholder")} onChange={(e)=>setConfirmEmail(e.target.value)}
+        className={`${emailMatch ? 'success' : 'danger'}`}/>
       
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" helpText={t("register.form.password.help")}
         busy={loading} label={t("register.form.password.label")} placeholder={t("register.form.password.placeholder")}

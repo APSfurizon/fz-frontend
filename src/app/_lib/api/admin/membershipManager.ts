@@ -6,6 +6,7 @@ import { AutoInputRoomInviteManager, UserData, UserPersonalInfo, UserSearchActio
 
 export interface MembershipCard {
     cardId: number,
+    cardNo: string,
     idInYear: number,
     issueYear: number,
     userOwnerId: number,
