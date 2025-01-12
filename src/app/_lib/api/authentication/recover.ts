@@ -28,7 +28,7 @@ export interface ChangePasswordApiData {
     resetPwId?: string
 }
 
-export class ChangePasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
+export class ResetPasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: ChangePasswordApiData = {
             password: data.get('password')?.toString (),
@@ -38,10 +38,10 @@ export class ChangePasswordDTOBuilder implements FormDTOBuilder<ChangePasswordAp
     }
 }
 
-export class ChangePasswordFormAction implements FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
+export class ResetPasswordFormAction implements FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
     authenticated = true;
-    dtoBuilder = new ChangePasswordDTOBuilder ();
+    dtoBuilder = new ResetPasswordDTOBuilder ();
     urlAction = "authentication/pw/change";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};

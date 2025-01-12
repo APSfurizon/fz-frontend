@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import DataForm from "@/app/_components/dataForm";
 import { GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/app/_lib/api/user";
-import { runRequest } from "@/app/_lib/api/global";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import ModalError from "@/app/_components/modalError";
 import { useUser } from "@/app/_lib/context/userProvider";
 import JanInput from "@/app/_components/janInput";
@@ -16,6 +16,7 @@ import AutoInput from "@/app/_components/autoInput";
 import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
 import { firstOrUndefined } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/user.css";
+import { ResetPasswordFormAction } from "@/app/_lib/api/authentication/recover";
 
 export default function UserPage() {
   const t = useTranslations("furpanel");
@@ -34,6 +35,16 @@ export default function UserPage() {
   const [residenceCountry, setResidenceCountry] = useState<string>();
   const fiscalCodeRequired = birthCountry == "IT";
 
+  // Password change logic
+  const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
+  const [password, setPassword] = useState<string>("s");
+  const [confirmPassword, setConfirmPassword] = useState<string>();
+  const passwordMatch = confirmPassword === password;
+  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(
+      tcommon("error"),
+      <ModalError error={err} translationRoot="authentication" translationKey="login.errors"></ModalError>,
+      ICONS.ERROR
+  );
   useEffect(()=>{
     if (personalInformation) return;
     setPersonalInfoLoading(true);
@@ -49,8 +60,8 @@ export default function UserPage() {
   
   return (
       <div className="page">
-        {/* Membership area */}
-        <div className="admin-section section vertical-list gap-2mm">
+        {/* User area */}
+        <div className="section vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <Icon className="x-large" iconName={ICONS.PERSON}></Icon>
             <span className="title medium">{t("user.sections.user")}</span>
@@ -138,6 +149,29 @@ export default function UserPage() {
                   label={tauth("register.form.phone_number.label")} placeholder={tauth("register.form.phone_number.placeholder")}
                   style={{flex: "2"}} value={personalInformation?.phoneNumber}/>
               </div>
+            </DataForm>
+          </div>
+        </div>
+        {/* User area */}
+        <div className="section vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <Icon className="x-large" iconName={ICONS.SECURITY}></Icon>
+            <span className="title medium">{t("user.sections.security")}</span>
+          </div>
+          {/* New password */}
+          <div className="vertical-list gap-2mm">
+            <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+              <span className="title average">
+                {t("user.sections.security_password")}
+              </span>
+            </div>
+            <DataForm className="login-form gap-4mm" loading={passwordChangeLoading} setLoading={setPasswordChangeLoading}
+              action={new ResetPasswordFormAction} onFail={(err) => passwordChangeError(err)} disableSave={!passwordMatch}>
+              <JanInput fieldName="password" required={true} inputType="password" busy={passwordChangeLoading} label={tauth("recover_confirm.input.new_password.label")}
+                placeholder={tauth("recover_confirm.input.new_password.placeholder")} helpText={tauth("recover_confirm.input.new_password.help")}
+                onChange={(e) => setPassword(e.currentTarget.value)}/>
+              <JanInput required={true} inputType="password" busy={passwordChangeLoading} label={tauth("recover_confirm.input.confirm_password.label")}
+                  placeholder={tauth("recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
             </DataForm>
           </div>
         </div>

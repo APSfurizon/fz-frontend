@@ -269,7 +269,9 @@
             "title": "User",
             "sections": {
                 "user": "User",
-                "user_info": "Personal information"
+                "user_info": "Personal information",
+                "security": "Security",
+                "security_password": "Password"
             },
             "linking": {
                 "title": "Order linking",

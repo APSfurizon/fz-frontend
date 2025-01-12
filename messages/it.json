@@ -268,7 +268,9 @@
             "title": "Utente",
             "sections": {
                 "user": "Utente",
-                "user_info": "Informazioni personali"
+                "user_info": "Informazioni personali",
+                "security": "Sicurezza",
+                "security_password": "Password"
             },
             "linking": {
                 "title": "Recupero ordine",
