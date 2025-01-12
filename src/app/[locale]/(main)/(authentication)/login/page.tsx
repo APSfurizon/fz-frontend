@@ -40,10 +40,11 @@ export default function Login() {
       setUpdateUser(true);
       router.refresh();
       if (params) {
-        globalThis.location.href = params.get("continue") ?? "/home";
+        router.replace(params.get("continue") ?? "/home");
       } else {
-        globalThis.location.href = "/home";
+        router.replace("/home");
       }
+      router.refresh();
     }, 500);
   }
 

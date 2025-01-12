@@ -6,7 +6,7 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/a
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useUser } from "@/app/_lib/context/userProvider";
 import "../../../../../styles/authentication/login.css";

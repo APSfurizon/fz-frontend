@@ -19,6 +19,10 @@ export async function middleware(req: NextRequest) {
   const continueParams = new URLSearchParams({"continue": path});
   const tokenResult = tokenPresent ? await verifyToken(loginToken.value) : TokenVerification.NOT_VALID;
 
+  if (!tokenPresent) {
+    console.log(`Token not present for ${req.headers.get("x-real-ip")} - ${req.headers.get("X-Forwarded-For")}`);
+  }
+
   if (tokenResult == TokenVerification.SUCCESS) {
     return intlMiddleware(req);
   } else {

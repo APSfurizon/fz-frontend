@@ -26,7 +26,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
         .finally(()=>{
-            globalThis.location.href = "/login";
+            router.replace("/login");
         });
     }
     return (
@@ -39,7 +39,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
                 <a href='#' onClick={() => logout()} className='title rounded-m vertical-align-middle'>{t('header.dropdown.logout')}</a>
                 <hr/>
                 {routing.locales.map((lng, index)=> <a href='#' className='title rounded-m vertical-align-middle horizontal-list' key={index}
-                    onClick={() => startTransition(()=> {
+                    onClick={() => {
                         router.refresh();
                         router.replace(
                         // @ts-expect-error -- TypeScript will validate that only known `params`
@@ -47,7 +47,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
                         // always match for the current route, we can skip runtime checks.
                         {pathname, params}, {locale: lng});
                         router.refresh();
-                    })}>
+                    }}>
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}
                 </a>)}
