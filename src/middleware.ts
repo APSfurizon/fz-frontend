@@ -14,21 +14,27 @@ enum TokenVerification {
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const params = req.nextUrl.searchParams;
+
+  // Check Token
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
   const tokenPresent = loginToken && loginToken.value
+
+  // Check url regex
   const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
   const shouldSkipIfAuthenticated = REGEX_SKIP_AUTHENTICATED.test(path);
-  const continueParams = new URLSearchParams({"continue": path});
   const isLogin = REGEX_LOGIN.test(path);
   const isLogout = REGEX_LOGOUT.test(path);
+
+  // Create continue params
+  const strippedParams = new URLSearchParams(params);
+  strippedParams.delete("continue");
+  strippedParams.delete(TOKEN_STORAGE_NAME);
+  const continueParams = new URLSearchParams({"continue": `${path}?${strippedParams.toString()}`});
 
   if (isLogin) {
     if ((params.get(TOKEN_STORAGE_NAME) ?? "").length > 0) {
       const token = params.get(TOKEN_STORAGE_NAME) ?? "";
-      const newParams = new URLSearchParams(params);
-      newParams.delete(TOKEN_STORAGE_NAME);
-      newParams.delete("continue");
-      const response = redirectToUrl(params.get("continue") ?? "/home", req, newParams);
+      const response = redirectToUrl(params.get("continue") ?? "/home", req);
       return addToken(response, token);
     } else {
       return intlMiddleware(req);
@@ -41,9 +47,7 @@ export async function middleware(req: NextRequest) {
 
   if (tokenResult == TokenVerification.SUCCESS) {
     if (shouldSkipIfAuthenticated){
-      const newParams = new URLSearchParams(params);
-      newParams.delete("continue");
-      return redirectToUrl(params.get("continue") ?? "/home", req, newParams);
+      return redirectToUrl(params.get("continue") ?? "/home", req);
     } else {
       return intlMiddleware(req);
     }
@@ -96,8 +100,8 @@ const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams) => {
   return stripToken(response);
 }
 
-const redirectToUrl = (path: string, req: NextRequest, continueParams: URLSearchParams) => {
-  return NextResponse.redirect(new URL(`${path}?${continueParams.toString()}`, req.url), {status: 303});
+const redirectToUrl = (path: string, req: NextRequest) => {
+  return NextResponse.redirect(new URL(path, req.url), {status: 303});
 }
  
 export const config = {
