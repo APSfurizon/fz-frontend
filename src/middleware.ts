@@ -43,15 +43,12 @@ export async function middleware(req: NextRequest) {
     if (shouldSkipIfAuthenticated){
       const newParams = new URLSearchParams(params);
       newParams.delete("continue");
-      return 
+      return redirectToUrl(params.get("continue") ?? "/home", req, newParams);
     } else {
       return intlMiddleware(req);
     }
   } else {
     if (needsAuthentication) {
-      if (!tokenPresent) {
-        console.log(`Token not present for ${req.headers.get("x-real-ip")} - ${req.headers.get("X-Forwarded-For")}`);
-      }
       return redirectToLogin(req, continueParams);
     } else {
       if (tokenResult == TokenVerification.NOT_VALID)
