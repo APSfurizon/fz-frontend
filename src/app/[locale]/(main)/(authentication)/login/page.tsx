@@ -26,6 +26,10 @@ export default function Login() {
     } else {
       const errRes = err as ApiDetailedErrorResponse;
       const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].code : t('login.errors.unknown_error');
+      if (errorMessage.toLowerCase().trim() === "already_logged_in") {
+        manageSuccess();
+        return;
+      }
       setError(errorMessage);
     }
   }
