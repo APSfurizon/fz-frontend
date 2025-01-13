@@ -86,6 +86,8 @@
             "your_booking": "Your reservation",
             "countdown": "Countdown",
             "countdown_desc": "Ticket sales will begin on {openingDate}",
+            "coundown_days": "{days, plural, =1 {# day} other {# days}}",
+            "coundown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
             "book_now": "Book now",
             "review_info_first": "Review your personal info",
             "edit_booking": "Edit reservation",
@@ -374,6 +376,9 @@
             "errors": {
                 "EXCHANGE_NOT_FOUND": "Exchange not found"
             }
+        },
+        "logout": {
+            "title": "Logout"
         },
         "login": {
             "create_account": "Create an account",

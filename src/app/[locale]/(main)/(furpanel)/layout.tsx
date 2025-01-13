@@ -2,20 +2,33 @@
 import {useTranslations} from 'next-intl';
 import Icon, { ICONS } from "@/app/_components/icon";
 import ToolLink from "@/app/_components/toolLink";
-import { BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, ROOM_ENABLED, UPLOAD_ENABLED } from '@/app/_lib/constants';
+import { BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, ROOM_ENABLED, TOKEN_STORAGE_NAME, UPLOAD_ENABLED } from '@/app/_lib/constants';
 import { useModalUpdate } from '@/app/_lib/context/modalProvider';
 import Modal from '@/app/_components/modal';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import "../../../styles/furpanel/layout.css";
 import { useUser } from '@/app/_lib/context/userProvider';
 import { hasPermission, Permissions } from '@/app/_lib/api/permission';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
     const t = useTranslations('furpanel');
     const {isOpen, icon, title, modalChildren, hideModal} = useModalUpdate();
     const [toolListExpanded, setToolListExpanded] = useState(false);
-
+    const params = useSearchParams();
+    const path = usePathname();
+    const router = useRouter();
     const {userDisplay} = useUser();
+
+    useEffect(()=>{
+        const token = params.get(TOKEN_STORAGE_NAME);
+        console.log(token);
+        if (token && token.length > 0){
+            const newParams = new URLSearchParams(params);
+            newParams.delete(TOKEN_STORAGE_NAME);
+            router.replace(`${path}?${newParams.toString()}`);
+        }
+    }, [])
 
     const toolClick = (e: MouseEvent<HTMLAnchorElement>) => {
         setToolListExpanded(false);

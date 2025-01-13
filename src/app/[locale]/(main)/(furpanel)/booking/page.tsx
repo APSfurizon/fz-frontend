@@ -9,7 +9,7 @@ import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
-import { getBiggestTimeUnit, translate } from "@/app/_lib/utils";
+import { getBiggestTimeUnit, getCountdown, padStart, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
 import { useRouter } from "next/navigation";
@@ -66,6 +66,8 @@ export default function BookingPage() {
     let isOpen = undefined;
     /**MS Difference between current date and the store opening date*/
     let openDiff = undefined;
+    /**Divided by units of time */
+    let countdown = undefined;
     
     useEffect(()=>{
         if (!!!bookingData) {
@@ -156,6 +158,7 @@ export default function BookingPage() {
     /**Date calculations */
     if (!!pageData) {
         openDiff = Math.max(pageData.bookingStartDate.getTime() - now.getTime(), 0);
+        countdown = getCountdown(openDiff)
         /**If the countdown is still running */
         isOpen = openDiff <= 0;
         isEditLocked = Math.max(pageData.editBookEndDate.getTime() - now.getTime(), 0) <= 0;
@@ -176,7 +179,13 @@ export default function BookingPage() {
                 <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
                     <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
                     {/* Countdown view */}
-                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder ? <p className="countdown title large rounded-s">{formatter.relativeTime(pageData.bookingStartDate, {now, unit: getBiggestTimeUnit(openDiff ?? 0)})}</p>
+                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder && countdown
+                    ? <p className="countdown title bold title large rounded-s center">
+                        { countdown[0] > 0
+                            ? t.rich("booking.coundown_days", {days: countdown[0]})
+                            : t.rich("booking.coundown_clock", {hours: countdown[1], minutes: countdown[2], seconds: countdown[3], b: (chunks)=><b className="small">{chunks}</b>})
+                        }
+                    </p>
                     : !pageData.hasOrder && <div className="action-container">
                         <Button className="action-button book-now" busy={actionLoading} disabled={pageData?.shouldUpdateInfo} onClick={requestShopLink}>
                             <div className="vertical-list flex-vertical-center">

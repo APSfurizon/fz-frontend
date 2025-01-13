@@ -19,7 +19,8 @@ export async function middleware(req: NextRequest) {
   // Check Token
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
   const loginTokenParam = params.get(TOKEN_STORAGE_NAME);
-  const tokenPresent = (loginToken && loginToken.value) || (loginTokenParam && loginTokenParam.length > 0)
+  const getTokenPresent = loginTokenParam && loginTokenParam.length > 0;
+  const tokenPresent = (loginToken && loginToken.value) || getTokenPresent;
 
   // Check url regex
   const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
@@ -44,7 +45,7 @@ export async function middleware(req: NextRequest) {
       return intlMiddleware(req);
     }
   } else if (isLogout) {
-    return redirectToLogin(req, new URLSearchParams());
+    return stripToken(intlMiddleware(req));
   }
 
   const tokenResult = tokenPresent ? await verifyToken(loginToken?.value ?? loginTokenParam!) : TokenVerification.NOT_VALID;

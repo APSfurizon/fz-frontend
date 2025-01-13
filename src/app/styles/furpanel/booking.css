@@ -16,16 +16,18 @@ div.countdown-container {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+        text-transform: capitalize;
     }
 
     p.countdown {
         background-color: var(--booking-countdown-bg);
         padding: .5em 1em;
+        width: 100vw;
     }
 
     button.book-now {
-        animation: popup 500ms ease 100ms 1 forwards;
-        transition-duration: transform 120ms;
+        animation: popup 500ms ease 100ms 1 forwards, breathing 2s 600ms ease-in-out infinite;
+        transition-duration: 120ms;
         padding: 1em 2em;
     }
 }
@@ -91,5 +93,17 @@ b.super-sponsor-highlight {
     100% {
         transform: scale(1);
         box-shadow: 0px 0px 2em 1em var(--booking-book-effect-bg);
+    }
+}
+
+@keyframes breathing {
+    0% {
+        box-shadow: 0px 0px 2em 0em var(--booking-book-effect-bg);
+    }
+    50% {
+        box-shadow: 0px 0px 8em 1em var(--booking-book-effect-bg);
+    }
+    100% {
+        box-shadow: 0px 0px 2em 0em var(--booking-book-effect-bg);
     }
 }

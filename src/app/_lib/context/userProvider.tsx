@@ -6,7 +6,7 @@ interface UserUpdateType {
     updateUser: boolean;
     setUpdateUser: (value: boolean) => void;
     userDisplay?: UserDisplayResponse,
-    setUserDisplay: (value: UserDisplayResponse) => void;
+    setUserDisplay: (value?: UserDisplayResponse) => void;
     userLoading: boolean
 }
 

@@ -86,6 +86,8 @@
             "your_booking": "La tua prenotazione",
             "countdown": "Conto alla rovescia",
             "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
+            "coundown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
+            "coundown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
             "book_now": "Prenota",
             "review_info_first": "Rivedi i tuoi dati personali",
             "edit_booking": "Modifica prenotazione",
@@ -372,6 +374,9 @@
             "errors": {
                 "EXCHANGE_NOT_FOUND": "Scambio non trovato"
             }
+        },
+        "logout": {
+            "title": "Esci"
         },
         "login": {
             "title": "Accesso",

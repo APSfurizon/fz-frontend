@@ -43,6 +43,10 @@
     font-family: 'Inter', sans-serif;
 }
 
+.monospace {
+    font-family: monospace;
+}
+
 .thin {
     font-weight: 200;
 }
