@@ -25,10 +25,7 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
     const logout = () => {
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
-        .finally(()=>{
-            router.replace("/logout");
-            setTimeout(()=>setUpdateUser(true), 1000);
-        });
+        .finally(()=>router.replace("/logout"));
     }
     return (
         <span tabIndex={0} className="user-dropdown horizontal-list flex-vertical-center rounded-m" onClick={()=>setOpen(!isOpen)}

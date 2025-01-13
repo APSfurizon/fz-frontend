@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
   const strippedParams = new URLSearchParams(params);
   strippedParams.delete("continue");
   strippedParams.delete(TOKEN_STORAGE_NAME);
-  const continueParams = new URLSearchParams({"continue": req.nextUrl.toString()});
+  const continueParams = new URLSearchParams({"continue": `${path}?${strippedParams.toString()}`});
 
   if (isLogin) {
     if ((params.get(TOKEN_STORAGE_NAME) ?? "").length > 0) {

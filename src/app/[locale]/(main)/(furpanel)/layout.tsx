@@ -18,15 +18,15 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
     const params = useSearchParams();
     const path = usePathname();
     const router = useRouter();
-    const {userDisplay} = useUser();
+    const {userDisplay, setUpdateUser} = useUser();
 
     useEffect(()=>{
         const token = params.get(TOKEN_STORAGE_NAME);
-        console.log(token);
         if (token && token.length > 0){
             const newParams = new URLSearchParams(params);
             newParams.delete(TOKEN_STORAGE_NAME);
             router.replace(`${path}?${newParams.toString()}`);
+            setUpdateUser(true);
         }
     }, [])
 
