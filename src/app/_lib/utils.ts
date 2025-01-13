@@ -92,4 +92,18 @@ export function firstOrUndefined(a: any[] | undefined): any | undefined {
     return a && a.length > 0 ? a[0] : undefined;
 }
 
+export function extractSearchParams ( uri: string ) {
+    // Get everything after the `?`
+    const [ , paramString ] = uri.split( '?' );
+  
+    // Return parameters
+    return new URLSearchParams( paramString );
+}
+
+export function stripUrl (uri: string) {
+    const url = new URL(uri);
+    const params = new URLSearchParams(url.searchParams);
+    params.forEach((v, k)=>url.searchParams.delete(k));
+    return url.toString();
+}
 export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3).fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
