@@ -29,7 +29,7 @@ export default function OrderLinkPage() {
             orderSecret: secret!
         }
         runRequest(new UserOrderLinkingAction(), undefined, userOrderLinkData)
-        .then(()=>router.replace("/home"))
+        .then(()=>router.replace("/booking"))
         .catch((err)=>showModal(
             tcommon("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="user.linking.errors"></ModalError>

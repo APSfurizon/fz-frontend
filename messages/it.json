@@ -193,8 +193,9 @@
                 }
             },
             "errors": {
-                "ORDER_NOT_FOUND": "Ordine non trovato",
-                "ROOM_FULL": "La stanza è già piena",
+                "ORDER_NOT_FOUND": "Ordine non trovato.",
+                "ORDER_NOT_PAID": "Ordine non pagato.",
+                "ROOM_FULL": "La stanza è già piena.",
                 "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
             },
             "input": {
@@ -224,7 +225,6 @@
             "actions": {
                 "buy_a_room": "Acquista stanza",
                 "upgrade_room": "Upgrade",
-                "join_a_room": "Accetta un invito",
                 "create_a_room": "Crea una stanza",
                 "refuse": "Rifiuta",
                 "accept": "Accetta",
@@ -242,6 +242,7 @@
             },
             "your_room": "La tua stanza",
             "or": "oppure",
+            "or_get_invited": "oppure fatti invitare",
             "no_order": "Prima acquista un biglietto.",
             "no_room": "Non sei in una stanza, per ora.",
             "status_owner": "Gestore",
@@ -291,7 +292,13 @@
             "title": "Admin",
             "sections": {
                 "membership": "Associazione",
-                "membership_cards": "Tesserati"
+                "membership_cards": "Tesserati",
+                "pretix": "Pretix",
+                "pretix_data": "Dati negozio"
+            },
+            "pretix_data": {
+                "reload_event": "Ricarica evento",
+                "reload_orders": "Ricarica ordini"
             },
             "membership_manager": {
                 "title": "Gestione tessere",
@@ -309,11 +316,11 @@
                         "user": "Utente",
                         "registered": "Registrato"
                     }
+                },
+                "errors": {
+                    "NO_DATA": "Non ci sono tessere per l'anno indicato.",
+                    "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
                 }
-            },
-            "errors": {
-                "NO_DATA": "Non ci sono tessere per l'anno indicato.",
-                "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
             }
         }
     },

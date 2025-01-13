@@ -11,14 +11,15 @@ export interface MembershipCard {
     issueYear: number,
     userOwnerId: number,
     createdForOrderId: number,
-    registered: true
+    registered: true,
 }
 
 export interface UserCardData {
     membershipCard: MembershipCard
     userInfo: UserPersonalInfo,
     email: string,
-    user: UserData
+    user: UserData,
+    fromOrderCode: string
 }
 
 export interface GetCardsApiResponse extends ApiResponse {

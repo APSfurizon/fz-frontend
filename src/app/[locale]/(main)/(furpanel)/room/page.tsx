@@ -300,15 +300,20 @@ export default function RoomPage() {
             <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
             {t("room.no_room")}
           </span>
-          <div className="horizontal-list flex-center flex-vertical-center gap-4mm" style={{marginTop: "1em"}}>
-            {data && data.canCreateRoom == true 
-              ?
-                <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
+          <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap" style={{marginTop: "1em"}}>
+            {data.canCreateRoom == true 
+              ? <>
+                  <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
+                  <span className="title small">{t("room.or")}</span>
+                  <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.upgrade_room")}</Button>
+                  <span className="title small">{t("room.or")}</span>
+                  <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomExchange()} 
+                    disabled={!!data && !data.canExchange}>{t("room.actions.exchange")}</Button>
+                </>
               : data.hasOrder 
               ? <>
                 <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
-                <span className="title small">{t("room.or")}</span>
-                <Button iconName={ICONS.PERSON_ADD} disabled={!data.hasOrder} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
+                <span className="title small">{t("room.or_get_invited")}</span>
               </>
               : <>
                 <span>{t("room.no_order")}</span>
@@ -564,7 +569,6 @@ export default function RoomPage() {
 
     {/* Room exchange modal */}
     <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
-      { data?.currentRoomInfo && <>
       <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm">
         <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
@@ -576,7 +580,6 @@ export default function RoomPage() {
           <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
         </div>
       </DataForm>
-      </>}
     </Modal>
   </>;
 }

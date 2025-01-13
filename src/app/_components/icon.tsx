@@ -18,6 +18,7 @@ export const ICONS = Object.freeze({
     CHECK_CIRCLE: "check_circle",
     CLOSE: "close",
     CLOUD_UPLOAD: "cloud_upload",
+    CONFIRMATION_NUMBER: "confirmation_number",
     CONSTRUCTION: "construction",
     CONTENT_COPY: "content_copy",
     CONTEXTUAL_TOKEN: "contextual_token",
@@ -28,6 +29,7 @@ export const ICONS = Object.freeze({
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
     ERROR: "error",
+    EVENT_REPEAT: "event_repeat",
     FEATURED_SEASONAL_AND_GIFTS: "featured_seasonal_and_gifts",
     FILE_OPEN: "file_open",
     FIND_IN_PAGE: "find_in_page",
@@ -62,6 +64,7 @@ export const ICONS = Object.freeze({
     SHOPPING_CART: "shopping_cart",
     SHOPPING_CART_CHECKOUT: "shopping_cart_checkout",
     SNOOZE: "snooze",
+    SYNC: "sync",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
 });

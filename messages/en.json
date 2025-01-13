@@ -194,8 +194,9 @@
                 }
             },
             "errors": {
-                "ORDER_NOT_FOUND": "Order not found",
-                "ROOM_FULL": "The room is full",
+                "ORDER_NOT_FOUND": "Order not found.",
+                "ORDER_NOT_PAID": "Order not paid.",
+                "ROOM_FULL": "The room is full.",
                 "EXCHANGE_STILL_PENDING": "An exchange request is still pending."
             },
             "input": {
@@ -225,7 +226,6 @@
             "actions": {
                 "buy_a_room": "Buy a room",
                 "upgrade_room": "Upgrade",
-                "join_a_room": "Join a room",
                 "create_a_room": "Create a room",
                 "refuse": "Refuse",
                 "accept": "Accept",
@@ -243,6 +243,7 @@
             },
             "your_room": "Your room",
             "or": "or",
+            "or_get_invited": "or get invited",
             "no_order": "Please buy a ticket, before.",
             "no_room": "You don't have a room, yet.",
             "status_owner": "Owner",
@@ -293,7 +294,13 @@
             "title": "Admin",
             "sections": {
                 "membership": "Memership",
-                "membership_cards": "Cards"
+                "membership_cards": "Cards",
+                "pretix": "Pretix",
+                "pretix_data": "Shop data"
+            },
+            "pretix_data": {
+                "reload_event": "Reload event",
+                "reload_orders": "Reload orders"
             },
             "membership_manager": {
                 "title": "Card manager",
@@ -311,11 +318,11 @@
                         "user": "User",
                         "registered": "Registered"
                     }
+                },
+                "errors": {
+                    "NO_DATA": "No membership cards were found for the year selected.",
+                    "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
                 }
-            },
-            "errors": {
-                "NO_DATA": "No membership cards were found for the year selected.",
-                "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
             }
         }
     },
