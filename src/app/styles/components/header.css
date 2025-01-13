@@ -8,7 +8,7 @@ header.header {
     position: sticky;
     top: 0px;
     z-index: 300;
-    box-shadow: 0px 0px .8em .2em var(--header-shadow);
+    box-shadow: 0px 0px .5em .2em var(--header-shadow);
     transition-duration: 120ms;
 }
 
@@ -22,10 +22,11 @@ header {
         left: 50%;
         transform: translate(-50%, 0%);
         pointer-events: none;
-    
+        overflow: hidden;
+        
         img {
             margin: 1em;
-            height: calc(100% - 2em);
+            max-height: calc(100% - 2em);
             width: auto;
         }
     }

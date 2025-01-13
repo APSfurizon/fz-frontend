@@ -5,10 +5,14 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://loca
 export const TOKEN_STORAGE_NAME = "fz-token";
 export const UPLOAD_MIN_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_MIN_SIZE ?? "256");
 export const UPLOAD_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_MAX_SIZE ?? "4096");
+export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");
 
 // Security
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
-export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})(?:\/(?!(login|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
+export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})?(?:\/(?!(login|logout|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
+export const REGEX_SKIP_AUTHENTICATED = /^(\/[A-z]{2})?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
+export const REGEX_LOGIN = /^(\/[A-z]{2})?(\/login(.+)?)?$/gmi;
+export const REGEX_LOGOUT = /^(\/[A-z]{2})?(\/logout(.+)?)?$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";

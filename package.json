@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "^15.0.1",
+    "next": "^15.1.4",
     "next-intl": "^3.23.5",
     "next-translate": "^2.6.2",
     "react": "^18.2.0",

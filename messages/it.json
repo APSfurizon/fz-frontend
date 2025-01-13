@@ -1,11 +1,12 @@
 {
     "common": {
         "footer": {
+            "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italia",
             "code_of_conduct": "Codice di Condotta",
-            "volunteers": "Volontari",
             "contact_us": "Contattaci",
-            "society_name": "Associazione di Promozione Sociale FURIZON",
-            "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italia"
+            "society_name": "Associazione di Promozione Sociale Furizon",
+            "volunteers": "Volontari",
+            "link_code_of_conduct": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-IT_rev25-04-2023.pdf"
         },
         "header": {
             "home": "Home",
@@ -28,6 +29,8 @@
         "loading": "Caricamento...",
         "confirm": "Conferma",
         "cancel": "Annulla",
+        "accept": "Accetta",
+        "refuse": "Rifiuta",
         "error": "Errore",
         "next": "Avanti",
         "back": "Indietro",
@@ -42,7 +45,9 @@
         "request_id": "ID richiesta:",
         "util": {
             "hoverable": "Clicca per copiare"
-        }
+        },
+        "coming_soon": "Presto in arrivo...",
+        "source_code": "Codice sorgente: "
     },
     "components": {
         "autoinput": {
@@ -81,6 +86,8 @@
             "your_booking": "La tua prenotazione",
             "countdown": "Conto alla rovescia",
             "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
+            "coundown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
+            "coundown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
             "book_now": "Prenota",
             "review_info_first": "Rivedi i tuoi dati personali",
             "edit_booking": "Modifica prenotazione",
@@ -135,7 +142,8 @@
             },
             "actions": {
                 "review_info": "Rivedi informazioni",
-                "confirm_info": "Conferma informazioni"
+                "confirm_info": "Conferma informazioni",
+                "exchange_order": "Scambia ordine"
             }
         },
         "badge": {
@@ -185,8 +193,9 @@
                 }
             },
             "errors": {
-                "ORDER_NOT_FOUND": "Ordine non trovato",
-                "ROOM_FULL": "La stanza è già piena",
+                "ORDER_NOT_FOUND": "Ordine non trovato.",
+                "ORDER_NOT_PAID": "Ordine non pagato.",
+                "ROOM_FULL": "La stanza è già piena.",
                 "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
             },
             "input": {
@@ -216,7 +225,6 @@
             "actions": {
                 "buy_a_room": "Acquista stanza",
                 "upgrade_room": "Upgrade",
-                "join_a_room": "Accetta un invito",
                 "create_a_room": "Crea una stanza",
                 "refuse": "Rifiuta",
                 "accept": "Accetta",
@@ -228,12 +236,14 @@
                 "revoke_invite": "Revoca invito",
                 "confirm_room": "Conferma",
                 "unconfirm_room": "Revoca conferma",
-                "transfer": "Trasferisci",
-                "transfer_room": "Trasferisci stanza",
+                "exchange": "Scambia",
+                "exchange_room": "Scambia stanza",
                 "leave": "Lascia"
             },
             "your_room": "La tua stanza",
             "or": "oppure",
+            "or_get_invited": "oppure fatti invitare",
+            "no_order": "Prima acquista un biglietto.",
             "no_room": "Non sei in una stanza, per ora.",
             "status_owner": "Gestore",
             "status_invited": "Invitato",
@@ -260,13 +270,35 @@
             "title": "Upload"
         },
         "user": {
-            "title": "Utente"
+            "title": "Utente",
+            "sections": {
+                "user": "Utente",
+                "user_info": "Informazioni personali",
+                "security": "Sicurezza",
+                "security_password": "Password"
+            },
+            "linking": {
+                "title": "Recupero ordine",
+                "description": "Attendi mentre colleghiamo l'ordine al tuo account...",
+                "errors": {
+                    "SERVER_ERROR": "Errore server",
+                    "ORDER_SECRET_NOT_MATCH": "Il codice Ordine non è corretto",
+                    "ORDER_MULTIPLE_DONE": "Errore ordine multiplo",
+                    "ORDER_NOT_FOUND": "Ordine non trovato"
+                }
+            }
         },
         "admin": {
             "title": "Admin",
             "sections": {
                 "membership": "Associazione",
-                "membership_cards": "Tesserati"
+                "membership_cards": "Tesserati",
+                "pretix": "Pretix",
+                "pretix_data": "Dati negozio"
+            },
+            "pretix_data": {
+                "reload_event": "Ricarica evento",
+                "reload_orders": "Ricarica ordini"
             },
             "membership_manager": {
                 "title": "Gestione tessere",
@@ -284,10 +316,11 @@
                         "user": "Utente",
                         "registered": "Registrato"
                     }
+                },
+                "errors": {
+                    "NO_DATA": "Non ci sono tessere per l'anno indicato.",
+                    "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
                 }
-            },
-            "errors": {
-                "NO_DATA": "Non ci sono tessere per l'anno indicato."
             }
         }
     },
@@ -329,8 +362,28 @@
             },
             "errors": {
                 "pw_reset_not_found": "Codice non valido",
+                "pw_chage_same_password": "La password è uguale alla precedente",
                 "unknown_error": "Errore sconosciuto"
             }
+        },
+        "exchange_confirm": {
+            "title": "Conferma scambio",
+            "room": {
+                "received": "<source></source> vuole scambiare stanza con te.",
+                "sent": "Hai chiesto <target></target> di scambiare stanze.",
+                "room_title": "Stanza di <user></user>:"
+            },
+            "order": {
+                "received": "<source></source> vuole cederti il suo ordine.",
+                "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
+                "order_title": "Ordine di <user></user>:"
+            },
+            "errors": {
+                "EXCHANGE_NOT_FOUND": "Scambio non trovato"
+            }
+        },
+        "logout": {
+            "title": "Esci"
         },
         "login": {
             "title": "Accesso",
@@ -375,13 +428,17 @@
                 "region_not_provided": "Provincia non fornita"
             },
             "form": {
+                "allergies": {
+                    "label": "Allergie",
+                    "placeholder": "Hai qualche allergia?"
+                },
                 "birth_city": {
                     "label": "Comune di nascita",
                     "placeholder": "Es: Bari"
                 },
                 "birth_country": {
                     "label": "Paese",
-                    "placeholder": "Es: Italia"
+                    "placeholder": "Es: Italy"
                 },
                 "birth_region": {
                     "label": "Provincia",
@@ -397,6 +454,10 @@
                 },
                 "email": {
                     "label": "Email",
+                    "placeholder": "esempio@furroso.com"
+                },
+                "confirm_email": {
+                    "label": "Confirm email",
                     "placeholder": "esempio@furroso.com"
                 },
                 "first_name": {
@@ -423,7 +484,7 @@
                 },
                 "phone_prefix": {
                     "label": "Prefisso",
-                    "placeholder": "Esempio: Italia (+39)"
+                    "placeholder": "Esempio: Italy (+39)"
                 },
                 "phone_number": {
                     "label": "Telefono",
@@ -439,7 +500,7 @@
                 },
                 "residence_country": {
                     "label": "Paese",
-                    "placeholder": "Seleziona il tuo paese"
+                    "placeholder": "Es: Italy"
                 },
                 "residence_region": {
                     "label": "Provincia",
@@ -455,10 +516,11 @@
                     "residence_data": "Dati di residenza"
                 },
                 "disclaimer_tos": {
-                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne."
+                    "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
+                    "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
                 },
                 "disclaimer_data_protection": {
-                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle <terms>politiche sulla riservatezza</terms>."
+                    "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
                 }
             },
             "question": {

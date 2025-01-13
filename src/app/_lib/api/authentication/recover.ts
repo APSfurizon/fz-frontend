@@ -24,24 +24,24 @@ export class RecoverFormAction implements FormApiAction<RecoverApiData, Boolean,
 }
 
 export interface ChangePasswordApiData {
-    newPassword?: string,
+    password?: string,
     resetPwId?: string
 }
 
-export class ChangePasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
+export class ResetPasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: ChangePasswordApiData = {
-            newPassword: data.get('newPassword')?.toString (),
+            password: data.get('password')?.toString (),
             resetPwId: data.get('resetPwId')?.toString (),
         };
         return toReturn;
     }
 }
 
-export class ChangePasswordFormAction implements FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
+export class ResetPasswordFormAction implements FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
     authenticated = true;
-    dtoBuilder = new ChangePasswordDTOBuilder ();
+    dtoBuilder = new ResetPasswordDTOBuilder ();
     urlAction = "authentication/pw/change";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};

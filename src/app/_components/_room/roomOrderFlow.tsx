@@ -84,7 +84,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
         setModalLoading(true);
 
         const roomBuyData: RoomBuyApiData = {
-            userId: userDisplay.display?.id,
+            userId: userDisplay.display?.userId,
             roomPretixItemId: selectedType.data.roomPretixItemId
         }
 
@@ -116,7 +116,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                         <Icon className="large" iconName={ICONS.CHECK_CIRCLE}></Icon>}
                         <div className="vertical-list">
                             <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
-                            <span>{formatter.number(parseFloat(roomInfo.price), {style: 'currency', currency: EVENT_CURRENCY})}</span>
+                            <span>{formatter.number(parseFloat(roomInfo.price)-parseFloat(roomsData.priceOfCurrentRoom), {style: 'currency', currency: EVENT_CURRENCY})}</span>
                             <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingQuota(roomInfo.quotaAvailability)})}</span>
                         </div>
                     </a>

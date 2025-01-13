@@ -44,7 +44,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             .catch((err)=>{
                 showModal(
                     tcommon("error"), 
-                    <ModalError error={err} translationRoot="furpanel" translationKey="admin.errors"></ModalError>
+                    <ModalError error={err} translationRoot="furpanel" translationKey="admin.membership_manager.errors"></ModalError>
                 );
                 setChecked(!checked);
             })
@@ -63,7 +63,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
         setAddModalOpen(false);
         showModal(
             tcommon("error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="admin.errors"></ModalError>
+            <ModalError error={err} translationRoot="furpanel" translationKey="admin.membership_manager.errors"></ModalError>
         );
     }
 
@@ -93,7 +93,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
         .catch((err)=>{
             showModal(
               tcommon("error"), 
-              <ModalError error={err} translationRoot="furpanel" translationKey="admin.errors">
+              <ModalError error={err} translationRoot="furpanel" translationKey="admin.membership_manager.errors">
               </ModalError>
             );
             setCardsData(null);
@@ -124,7 +124,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                         </div>
                     </div>}
                     {(cardsData?.response?.length ?? 0) <= 0 && <div className="data">
-                        <span>{t("admin.errors.NO_DATA")}</span>
+                        <span>{t("admin.membership_manager.errors.NO_DATA")}</span>
                     </div>}
                     {cardsData?.response?.map((data, index)=><details className="row" key={index}>
                         <summary className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
@@ -137,9 +137,11 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                             <div className="data">
                                 <span className="descriptive average">{data.userInfo.firstName} {data.userInfo.lastName}</span>
                             </div>
-                            <div className="spacer"></div>
                             <div className="data">
-                                <span className="descriptive "># {(""+data.membershipCard.idInYear).padStart(4, '0')}</span>
+                                <span className="descriptive average">{data.fromOrderCode}</span>
+                            </div>
+                            <div className="data">
+                                <span className="descriptive "># {(""+data.membershipCard.cardNo).padStart(7, '0')}</span>
                             </div>
                             <div className="data">
                                 <Checkbox initialValue={data.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,

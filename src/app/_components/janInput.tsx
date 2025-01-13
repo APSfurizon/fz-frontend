@@ -29,9 +29,11 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
   }>) {
 
     /* States */
-    const [inputValue, setInputValue] = useState(value);
+    const [inputValue, setInputValue] = useState(value ?? "");
     const [visiblePassword, setVisiblePassword] = useState(false);
     const t = useTranslations("furpanel");
+
+    useEffect(()=>setInputValue(value ?? ""), [value]);
     
     /* Pattern validity */
     const patternValidity = (e: ChangeEvent<HTMLInputElement>) => {

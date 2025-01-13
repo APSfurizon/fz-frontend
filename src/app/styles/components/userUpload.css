@@ -50,6 +50,7 @@ div.crop-container > canvas {
     margin-top: 2em;
     margin-bottom: 2em;
     outline: 2px solid var(--upload-border);
+    width: 100%;
 }
 
 div.fill-all {
@@ -63,7 +64,7 @@ div.fill-all {
 .crop-image {
     align-items: center;
     height: max-content;
-    width: max-content;
+    width: 100%;
     max-width: 80vw;
     max-height: 60vh;
     position: relative;

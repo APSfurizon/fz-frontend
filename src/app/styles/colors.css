@@ -11,10 +11,10 @@
     --hoverable-bg: #2a2b3f;
     
     /* Footer */
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     /* Header */
     --header-bg: #141E26;
-    --header-shadow: #00000065;
+    --header-shadow: #00000015;
     --header-link-hover-bg: #ffffff10;
 
     /* Button */
@@ -124,7 +124,6 @@
     --table-border: #fff;
     --table-row-bg: #ffffff19;
     --table-header-separator: #ffffff4d;
-    --room-invite-bg: #ffffff19;
 
     /* Booking page */
     --booking-countdown-bg: #000000d8;
@@ -143,6 +142,9 @@
     --room-buy-item-hover-bg: #ffffff20;
     --room-buy-item-border: #ffffff;
 
+    /* Exchange confirm page*/
+    --exchange-info-bg: #242C38;
+
     --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;
     --super-sponsor-color: #DB9703;
@@ -153,7 +155,7 @@
   :root {
     --background: #11191F;
     --foreground: #ededed;
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     --header-bg: #141E26;
     --main-dialog-background: #141E26;
   }
@@ -162,7 +164,7 @@
   :root {
     --background: #11191F;
     --foreground: #ededed;
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     --header-bg: #141E26;
     --main-dialog-background: #141E26;
   }

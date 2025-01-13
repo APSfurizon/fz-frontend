@@ -8,28 +8,25 @@ import { runRequest } from '../_lib/api/global';
 import { LogoutApiAction } from '../_lib/api/authentication/login';
 import { useUser } from '../_lib/context/userProvider';
 import { UserData } from '../_lib/api/user';
+import { useParams } from 'next/navigation';
 import "../styles/components/userDropDown.css";
-import { getFlagEmoji } from '../_lib/components/userPicture';
 
 export default function UserDropDown ({userData}: Readonly<{userData: UserData}>) { 
     const [isOpen, setOpen] = useState(false);
     const [isHover, setHover] = useState(false);
     const t = useTranslations('common');
-    const {setUpdateUser} = useUser();
     const router = useRouter();
     const pathname = usePathname();
+    const params = useParams();
     const locale = useLocale();
+    const {setUpdateUser} = useUser();
     
     
     const logout = () => {
         runRequest(new LogoutApiAction())
         .catch((err)=>console.warn("Could not log out: "+ err))
-        .finally(()=>{
-            setUpdateUser(true);
-            router.replace("/login");
-        });
+        .finally(()=>router.replace("/logout"));
     }
-
     return (
         <span tabIndex={0} className="user-dropdown horizontal-list flex-vertical-center rounded-m" onClick={()=>setOpen(!isOpen)}
             onBlur={()=>{if (!isHover) setOpen(false)}} onPointerOver={()=>setHover(true)} onPointerLeave={()=>setHover(false)}>
@@ -40,7 +37,15 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
                 <a href='#' onClick={() => logout()} className='title rounded-m vertical-align-middle'>{t('header.dropdown.logout')}</a>
                 <hr/>
                 {routing.locales.map((lng, index)=> <a href='#' className='title rounded-m vertical-align-middle horizontal-list' key={index}
-                    onClick={() => startTransition(()=> router.replace({pathname}, {locale: lng}))}>
+                    onClick={() => {
+                        router.refresh();
+                        router.replace(
+                        // @ts-expect-error -- TypeScript will validate that only known `params`
+                        // are used in combination with a given `pathname`. Since the two will
+                        // always match for the current route, we can skip runtime checks.
+                        {pathname, params}, {locale: lng});
+                        router.refresh();
+                    }}>
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}
                 </a>)}

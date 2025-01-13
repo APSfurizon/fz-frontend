@@ -9,6 +9,10 @@ export interface ApiResponse {
     requestId?: string
 }
 
+export interface SimpleApiResponse extends ApiResponse {
+    success: boolean
+}
+
 export interface ApiErrorResponse extends ApiResponse {
     errorMessage?: string,
 }
@@ -38,7 +42,7 @@ export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorRe
 }
 
 export function getToken (): string | null {
-    return getCookie(TOKEN_STORAGE_NAME);
+    return `Bearer ${getCookie(TOKEN_STORAGE_NAME)}`;
 }
 
 export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {

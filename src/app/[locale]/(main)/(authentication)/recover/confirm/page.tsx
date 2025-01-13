@@ -6,12 +6,12 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/a
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useUser } from "@/app/_lib/context/userProvider";
 import "../../../../../styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { ChangePasswordFormAction } from "@/app/_lib/api/authentication/recover";
+import { ResetPasswordFormAction } from "@/app/_lib/api/authentication/recover";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -57,10 +57,10 @@ export default function Login() {
     {error && <span className="error-container title small center">{t(`recover_confirm.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
     
     <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading}
-      action={new ChangePasswordFormAction} onFail={(err) => manageError(err)} onBeforeSubmit={onLoading} 
+      action={new ResetPasswordFormAction} onFail={(err) => manageError(err)} onBeforeSubmit={onLoading} 
       onSuccess={manageSuccess} disableSave={!passwordMatch}>
       <input type="hidden" name="resetPwId" value={params.get("id") ?? ""}></input>
-      <JanInput fieldName="newPassword" required={true} inputType="password" busy={loading} label={t("recover_confirm.input.new_password.label")}
+      <JanInput fieldName="password" required={true} inputType="password" busy={loading} label={t("recover_confirm.input.new_password.label")}
         placeholder={t("recover_confirm.input.new_password.placeholder")} helpText={t("recover_confirm.input.new_password.help")}
         onChange={(e) => setPassword(e.currentTarget.value)}/>
       <JanInput required={true} inputType="password" busy={loading} label={t("recover_confirm.input.confirm_password.label")}

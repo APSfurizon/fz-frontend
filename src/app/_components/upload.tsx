@@ -1,15 +1,14 @@
 "use client"
 import { useTranslations } from 'next-intl';
-import { EMPTY_USER_PICTURE, UserData } from '../_lib/api/user';
 import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
 import { getImageSettings, Coordinates, ImageSettings, Media, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings } from '../_lib/components/upload';
 import Button from './button';
-import "../styles/components/userUpload.css";
 import Modal from './modal';
 import { useModalUpdate } from '../_lib/context/modalProvider';
+import "../styles/components/userUpload.css";
 
 export default function Upload ({cropTitle, initialData, fieldName, isRequired=false, label, readonly=false, requireCrop = false, size=96, uploadType = "full"}: Readonly<{
     cropTitle?: string,
@@ -302,7 +301,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         </form>
 
         {/* Crop dialog */}
-        <Modal open={cropDialogOpen} title={cropTitle ?? t("upload.crop")} onClose={()=> setCropDialogOpen(false)}>
+        <Modal style={{overflow: "hidden"}} open={cropDialogOpen} title={cropTitle ?? t("upload.crop")} onClose={()=> setCropDialogOpen(false)}>
             <div className="crop-container" ref={containerRef} onResize={()=>onPreviewLoaded()} onPointerMove={onMove} onPointerLeave={onLeave} onPointerDown={onPointerDown} onPointerUp={onLeave}>
                 <div className="fill-all"></div>
                 <Image width={256} height={256} alt="" src={previewString ?? EMPTY_PROFILE_PICTURE_SRC}
@@ -323,7 +322,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
             </div>
             <span>{imageSettings?.width} - {imageSettings?.height}. Resize factor: {imageSettings?.resizeFactor}</span>
             <div className="bottom-toolbar">
-                <Button title={tcommon('cancel')} className="danger" onClick={()=>onDeleteRequest()}
+                <Button title={tcommon('cancel')} className="danger" onClick={()=>setCropDialogOpen(false)}
                     iconName={ICONS.CANCEL} disabled={readonly} busy={isLoading}>{tcommon('cancel')}</Button>
                 <div className="spacer"></div>
                 <Button title={t('upload.upload')} onClick={()=>openFileDialog()}

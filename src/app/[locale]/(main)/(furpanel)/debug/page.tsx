@@ -9,7 +9,7 @@ import StatusBox from "@/app/_components/statusBox";
 import AutoInput from "@/app/_components/autoInput";
 import DataForm from "@/app/_components/dataForm";
 import Modal from "@/app/_components/modal";
-import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
+//import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
 import Upload from "@/app/_components/upload";
 
 export default function Home() {
@@ -44,7 +44,7 @@ export default function Home() {
         </div>
       </div>
       <div className="horizontal-list gap-2mm">
-      <AutoInput manager={new AutoInputDebugUserManager()} multiple={true} max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/>
+      {/* <AutoInput manager={new AutoInputDebugUserManager()} multiple={true} max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/> */}
       <JanInput label={"Error"} hasError/>
       </div>
       <StatusBox>Triple room</StatusBox>

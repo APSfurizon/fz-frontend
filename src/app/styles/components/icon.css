@@ -2,6 +2,10 @@ i.loading-animation {
     animation: loading-animation 500ms linear infinite;
 }
 
+i {
+    color: var(--foreground);
+}
+
 @keyframes loading-animation {
     0% { rotate: 0deg; }       
     100% { rotate: 360deg; }
