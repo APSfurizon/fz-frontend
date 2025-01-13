@@ -4,6 +4,6 @@
     "deprecation"
   ],
   "rules": {
-    "deprecation/deprecation": "warning"
+    "deprecation/deprecation": 1
   }
 }

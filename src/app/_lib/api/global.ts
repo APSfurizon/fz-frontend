@@ -1,11 +1,16 @@
 import { FormApiAction as FormApiAction } from "../components/dataForm"
 import { API_BASE_URL, TOKEN_STORAGE_NAME } from "../constants";
+import { getCookie } from "../utils";
 
 export interface ApiRequest {}
 
 export interface ApiResponse {
     status?: number,
     requestId?: string
+}
+
+export interface SimpleApiResponse extends ApiResponse {
+    success: boolean
 }
 
 export interface ApiErrorResponse extends ApiResponse {
@@ -37,7 +42,7 @@ export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorRe
 }
 
 export function getToken (): string | null {
-    return localStorage.getItem(TOKEN_STORAGE_NAME);
+    return `Bearer ${getCookie(TOKEN_STORAGE_NAME)}`;
 }
 
 export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {
@@ -45,8 +50,14 @@ export function runRequest (action: ApiAction<any, any>, pathParams?: string[], 
         // Calc headers
         const headers = new Headers({
             'Content-type': 'application/json',
-            'Authorization': action.authenticated ? getToken () ?? '' : ''
         });
+
+        const token = getToken ();
+
+        if (action.authenticated && token && token.length > 0) {
+            headers.append('Authorization', token);
+        }
+        
         // Calc url
         let useSearchParams = !!searchParams;
         const endpointUrl = `${API_BASE_URL}${[action.urlAction, ...pathParams ?? []].join("/")}${useSearchParams ? "?"+ (searchParams?.toString() ?? "") : ""}`

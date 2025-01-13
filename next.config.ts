@@ -15,7 +15,8 @@ const nextConfig: NextConfig = {
         search: ""
       }
     ]
-  }
+  },
+  output: "standalone"
 };
 
 export default withNextIntl(nextConfig);

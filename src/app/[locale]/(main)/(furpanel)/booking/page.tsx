@@ -7,27 +7,57 @@ import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { runRequest } from "@/app/_lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
-import { getBiggestTimeUnit, translate } from "@/app/_lib/utils";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
+import { getBiggestTimeUnit, getCountdown, padStart, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
-import ToolLink from "@/app/_components/toolLink";
 import { useRouter } from "next/navigation";
+import Modal from "@/app/_components/modal";
+import StatusBox from "@/app/_components/statusBox";
+import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/app/_lib/api/order";
+import DataForm from "@/app/_components/dataForm";
+import { useUser } from "@/app/_lib/context/userProvider";
+import AutoInput from "@/app/_components/autoInput";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");
     const tcommon = useTranslations("common");
     const formatter = useFormatter();
     const router = useRouter();
-    useTitle(t("booking.title"));
     const now = useNow({updateInterval: 1000});
     const {showModal} = useModalUpdate();
     const locale = useLocale();
+    const {userDisplay} = useUser();
+    
+    // Main logic
     const [bookingData, setBookingData] = useState<BookingOrderResponse>();
     const [pageData, setPageData] = useState<BookingOrderUiData>();
     const [isLoading, setLoading] = useState<boolean>(false);
     const [actionLoading, setActionLoading] = useState<boolean>(false);
+
+    // exchange order modal
+    const [modalLoading, setModalLoading] = useState<boolean>(false);
+    const [exchangeModalOpen, setExchangeModalOpen ] = useState(false);
+
+    const promptExchange = () => {
+        if (!bookingData) return;
+        setExchangeModalOpen(true);
+    }
+
+    const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+        setExchangeModalOpen(false);
+        showModal(
+            tcommon("error"), 
+            <ModalError error={err} translationRoot={"furpanel"} translationKey={"booking.errors"}></ModalError>
+        );
+    }
+
+    const exchangeSuccess = () => {
+        setExchangeModalOpen(false);
+    }
+    
+    useTitle(t("booking.title"));
 
     /**UI variables */
     /**If editing's locked */
@@ -36,6 +66,8 @@ export default function BookingPage() {
     let isOpen = undefined;
     /**MS Difference between current date and the store opening date*/
     let openDiff = undefined;
+    /**Divided by units of time */
+    let countdown = undefined;
     
     useEffect(()=>{
         if (!!!bookingData) {
@@ -52,23 +84,16 @@ export default function BookingPage() {
         /**If user has a valid and paid order */
         const hasOrder = !!bookingData && bookingData?.order && ["PENDING", "PAID"].includes(bookingData?.order?.orderStatus);
 
-        /**Order text and daily days*/
-        let ticketName: string = "";
-        let dailyDays: Date[] | undefined;
-        if (hasOrder) {
-            if (bookingData.order.dailyTicket) {
-                ticketName = "daily_ticket";
-                dailyDays = bookingData.order.dailyDays.map(dt=>new Date(dt)).sort((a,b)=>a.getTime()-b.getTime());
-            } else {
-                ticketName = bookingData.order.sponsorship.toLowerCase() + "_ticket";
-            }
-        }
+        /**Ticket data*/
+        const ticketData: BookingTicketData = hasOrder ? calcTicketData(bookingData.order) : {
+            isDaily: false,
+            ticketName: "",
+            dailyDays: undefined
+        };
 
         setPageData ({
+            ...ticketData,
             hasOrder: hasOrder,
-            ticketName: ticketName,
-            isDaily: bookingData.order?.dailyTicket,
-            dailyDays: dailyDays,
             bookingStartDate: new Date(bookingData?.bookingStartTime ?? 0),
             editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0),
             shouldUpdateInfo: bookingData?.shouldUpdateInfo,
@@ -133,6 +158,7 @@ export default function BookingPage() {
     /**Date calculations */
     if (!!pageData) {
         openDiff = Math.max(pageData.bookingStartDate.getTime() - now.getTime(), 0);
+        countdown = getCountdown(openDiff)
         /**If the countdown is still running */
         isOpen = openDiff <= 0;
         isEditLocked = Math.max(pageData.editBookEndDate.getTime() - now.getTime(), 0) <= 0;
@@ -153,7 +179,13 @@ export default function BookingPage() {
                 <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
                     <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
                     {/* Countdown view */}
-                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder ? <p className="countdown title large rounded-s">{formatter.relativeTime(pageData.bookingStartDate, {now, unit: getBiggestTimeUnit(openDiff ?? 0)})}</p>
+                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder && countdown
+                    ? <p className="countdown title bold title large rounded-s center">
+                        { countdown[0] > 0
+                            ? t.rich("booking.coundown_days", {days: countdown[0]})
+                            : t.rich("booking.coundown_clock", {hours: countdown[1], minutes: countdown[2], seconds: countdown[3], b: (chunks)=><b className="small">{chunks}</b>})
+                        }
+                    </p>
                     : !pageData.hasOrder && <div className="action-container">
                         <Button className="action-button book-now" busy={actionLoading} disabled={pageData?.shouldUpdateInfo} onClick={requestShopLink}>
                             <div className="vertical-list flex-vertical-center">
@@ -180,11 +212,14 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
-                <p className="title medium">
-                    {t("booking.your_booking")}&nbsp;
+                <p className="title medium horizontal-list gap-2mm">
+                    {t("booking.your_booking")}
                     <span>({t("booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
                     )</span>
+                    <StatusBox status={bookingData?.order.orderStatus == "PENDING" ? "warning" : "success"}>
+                        {tcommon(`order_status.${bookingData?.order.orderStatus}`)}
+                    </StatusBox>
                 </p>
                 <div className="order-data">
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm">
@@ -207,13 +242,16 @@ export default function BookingPage() {
 
                     {/* Order actions */}
                     <div className="horizontal-list gap-4mm">
-                        {pageData?.shouldRetry && !isEditLocked && <>
-                            <Button className="action-button" disabled={isEditLocked} iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
+                        {pageData?.shouldRetry && <>
+                            <Button className="action-button" iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
                             {t("booking.retry_payment")}
                         </Button>
                         </>}
                         <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
                             {t("booking.edit_booking")}
+                        </Button>
+                        <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
+                            {t("booking.actions.exchange_order")}
                         </Button>
                     </div>
                     <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.editing_locked") : t("booking.editing_locked_warning")}>
@@ -235,5 +273,19 @@ export default function BookingPage() {
                 }
             </>}
         </div>
+        {/* Room exchange modal */}
+        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
+            <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
+            onFail={exchangeFail} hideSave className="vertical-list gap-2mm">
+            <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
+            <AutoInput fieldName="recipientId" manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
+                label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
+            <div className="horizontal-list gap-4mm">
+                <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
+                <div className="spacer"></div>
+                <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
+            </div>
+            </DataForm>
+        </Modal>
     </>;
 }

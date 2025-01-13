@@ -11,10 +11,11 @@ export interface SaveButtonData {
     iconName: string
 }
 
-export default function DataForm ({action, onSuccess, onFail, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true}: Readonly<{
+export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true, resetOnSuccess=false}: Readonly<{
     action: FormApiAction<any, any, any>,
     onSuccess?: (data: Boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
+    onBeforeSubmit?: Function,
     checkFn?: () => boolean,
     children?: React.ReactNode,
     className?: string,
@@ -27,7 +28,8 @@ export default function DataForm ({action, onSuccess, onFail, children, checkFn,
     setLoading: Dispatch<SetStateAction<boolean>>,
     style?: CSSProperties,
     saveButton?: SaveButtonData,
-    resetOnFail?: boolean
+    resetOnFail?: boolean,
+    resetOnSuccess?: boolean
   }>) {
     const t = useTranslations('components');
     const inputRef = useRef<HTMLFormElement>(null);
@@ -44,13 +46,17 @@ export default function DataForm ({action, onSuccess, onFail, children, checkFn,
                 return;
             }
         }
+        onBeforeSubmit && onBeforeSubmit();
         setLoading (true);
         runFormRequest(action, undefined, new FormData(e.currentTarget))
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
                 onFail && onFail (errorData);
                 if (resetOnFail) inputRef?.current?.reset ();
-            }).finally(()=>setLoading(false));
+            }).finally(()=>{
+                setLoading(false);
+                if (resetOnSuccess) inputRef?.current?.reset ();
+            });
         e.preventDefault();
         e.stopPropagation();
     }

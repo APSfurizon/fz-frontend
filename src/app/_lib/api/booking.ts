@@ -18,21 +18,43 @@ export interface BookingOrderResponse extends ApiResponse {
     eventNames: Record<string, string>,
     hasActiveMembershipForEvent: boolean,
     shouldUpdateInfo: boolean,
+    canExchange: boolean,
     order: OrderData,
     errors: ("SERVER_ERROR" | "MEMBERSHIP_MULTIPLE_DONE" | "MEMBERSHIP_MISSING" |
          "ORDER_MULTIPLE_DONE" | "ORDER_SECRET_NOT_MATCH" | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE")[]
 }
 
-export interface BookingOrderUiData {
-    hasOrder: boolean,
+export interface BookingTicketData {
     ticketName: string,
+    dailyDays?: Date[],
     isDaily: boolean | undefined,
-    dailyDays: Date[] | undefined,
+}
+
+export interface BookingOrderUiData extends BookingTicketData {
+    hasOrder: boolean,
     bookingStartDate: Date,
     editBookEndDate: Date,
     shouldUpdateInfo: boolean,
     shouldRetry: boolean
 };
+
+export function calcTicketData (order: OrderData): BookingTicketData {
+    /**Order text and daily days*/
+    let ticketName: string = "";
+    let dailyDays: Date[] | undefined;
+    if (order.dailyTicket) {
+        ticketName = "daily_ticket";
+        dailyDays = order.dailyDays.map(dt=>new Date(dt)).sort((a,b)=>a.getTime()-b.getTime());
+    } else {
+        ticketName = order.sponsorship.toLowerCase() + "_ticket";
+    }
+
+    return {
+        isDaily: order.dailyTicket,
+        dailyDays: dailyDays,
+        ticketName: ticketName
+    }
+}
 
 export class BookingOrderApiAction implements ApiAction<BookingOrderResponse, ApiErrorResponse> {
     authenticated = true;

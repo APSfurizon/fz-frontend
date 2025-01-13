@@ -5,7 +5,8 @@
             "code_of_conduct": "Code of Conduct",
             "contact_us": "Contact us",
             "society_name": "Social promotion association Furizon",
-            "volunteers": "Volunteers"
+            "volunteers": "Volunteers",
+            "link_code_of_conduct": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-EN_rev25-04-2023.pdf"
         },
         "header": {
             "alt_logo": "Furizon logo",
@@ -28,6 +29,8 @@
         "loading": "Loading...",
         "confirm": "Confirm",
         "cancel": "Cancel",
+        "accept": "Accept",
+        "refuse": "Refuse",
         "error": "Error",
         "next": "Next",
         "back": "Back",
@@ -42,7 +45,9 @@
         "request_id": "Request ID:",
         "util": {
             "hoverable": "Click to copy"
-        }
+        },
+        "coming_soon": "Coming soon...",
+        "source_code": "Source code: "
     },
     "components": {
         "autoinput": {
@@ -73,14 +78,16 @@
         }
     },
     "furpanel": {
-        "badge": {
-            "title": "Badge"
+        "home": {
+            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
         },
         "booking":{
             "title": "Reservation",
             "your_booking": "Your reservation",
             "countdown": "Countdown",
             "countdown_desc": "Ticket sales will begin on {openingDate}",
+            "coundown_days": "{days, plural, =1 {# day} other {# days}}",
+            "coundown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
             "book_now": "Book now",
             "review_info_first": "Review your personal info",
             "edit_booking": "Edit reservation",
@@ -136,14 +143,15 @@
             },
             "actions": {
                 "review_info": "Review informations",
-                "confirm_info": "Confirm informazions"
+                "confirm_info": "Confirm informazions",
+                "exchange_order": "Exchange order"
             }
+        },
+        "badge": {
+            "title": "Badge"
         },
         "debug": {
             "title": "Debug"
-        },
-        "home": {
-            "header": "Welcome to the <highlighted>furpanel!</highlighted>"
         },
         "room": {
             "title": "Room",
@@ -186,8 +194,9 @@
                 }
             },
             "errors": {
-                "ORDER_NOT_FOUND": "Order not found",
-                "ROOM_FULL": "The room is full",
+                "ORDER_NOT_FOUND": "Order not found.",
+                "ORDER_NOT_PAID": "Order not paid.",
+                "ROOM_FULL": "The room is full.",
                 "EXCHANGE_STILL_PENDING": "An exchange request is still pending."
             },
             "input": {
@@ -217,7 +226,6 @@
             "actions": {
                 "buy_a_room": "Buy a room",
                 "upgrade_room": "Upgrade",
-                "join_a_room": "Join a room",
                 "create_a_room": "Create a room",
                 "refuse": "Refuse",
                 "accept": "Accept",
@@ -229,12 +237,14 @@
                 "revoke_invite": "Revoke invite",
                 "confirm_room": "Confirm",
                 "unconfirm_room": "Unconfirm",
-                "transfer": "Transfer",
-                "transfer_room": "Transfer room",
+                "exchange": "Exchange",
+                "exchange_room": "Exchange room",
                 "leave": "Leave"
             },
             "your_room": "Your room",
             "or": "or",
+            "or_get_invited": "or get invited",
+            "no_order": "Please buy a ticket, before.",
             "no_room": "You don't have a room, yet.",
             "status_owner": "Owner",
             "status_invited": "Invited",
@@ -258,21 +268,134 @@
             }
         },
         "upload_area": {
-            "title": "Upload area"
+            "title": "Upload"
         },
         "user": {
-            "title": "User"
+            "title": "User",
+            "sections": {
+                "user": "User",
+                "user_info": "Personal information",
+                "security": "Security",
+                "security_password": "Password"
+            },
+            "linking": {
+                "title": "Order linking",
+                "description": "Please wait while we link your order to your account...",
+                "errors": {
+                    "SERVER_ERROR": "Server error",
+                    "ORDER_SECRET_NOT_MATCH": "Order secret doesn't match",
+                    "ORDER_MULTIPLE_DONE": "You might have issued multiple orders",
+                    "ORDER_NOT_FOUND": "Order not found"
+                }
+                
+            }
+        },
+        "admin": {
+            "title": "Admin",
+            "sections": {
+                "membership": "Memership",
+                "membership_cards": "Cards",
+                "pretix": "Pretix",
+                "pretix_data": "Shop data"
+            },
+            "pretix_data": {
+                "reload_event": "Reload event",
+                "reload_orders": "Reload orders"
+            },
+            "membership_manager": {
+                "title": "Card manager",
+                "header": "Viewing cards for year ",
+                "actions": {
+                    "add": "Add card"
+                },
+                "input": {
+                    "user": {
+                        "label": "Seleziona utente"
+                    }
+                },
+                "table": {
+                    "headers": {
+                        "user": "User",
+                        "registered": "Registered"
+                    }
+                },
+                "errors": {
+                    "NO_DATA": "No membership cards were found for the year selected.",
+                    "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
+                }
+            }
         }
     },
     "authentication": {
+        "title": "authentication",
+        "recover": {
+            "title": "Account recovery",
+            "actions": {
+                "send_verification": "Verify"
+            },
+            "input": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Enter your email address"
+                }
+            },
+            "messages": {
+                "email_success": {
+                    "title": "Account recovery",
+                    "description": "An email is being sent to recover your account."
+                }
+            }
+        },
+        "recover_confirm": {
+            "title": "Change password",
+            "actions": {
+                "change_password": "Change password"
+            },
+            "input": {
+                "new_password": {
+                    "label": "New password",
+                    "placeholder": "Enter a new password",
+                    "help": "Password must be at least 6 characters long"
+                },
+                "confirm_password": {
+                    "label": "Confirm new password",
+                    "placeholder": "Retype the password"
+                }
+            },
+            "errors": {
+                "pw_reset_not_found": "Code is not valid",
+                "pw_chage_same_password": "The password matches the old one",
+                "unknown_error": "Unknown error"
+            }
+        },
+        "exchange_confirm": {
+            "title": "Confirm exchange",
+            "room": {
+                "received": "<source></source> wants to exchange his room with you.",
+                "sent": "You asked <target></target> to exchange room.",
+                "room_title": "<user></user>'s room:"
+            },
+            "order": {
+                "received": "<source></source> wants to transfer his order to you.",
+                "sent": "You requested to transfer your order to <target></target>.",
+                "order_title": "<user></user>'s order:"
+            },
+            "errors": {
+                "EXCHANGE_NOT_FOUND": "Exchange not found"
+            }
+        },
+        "logout": {
+            "title": "Logout"
+        },
         "login": {
             "create_account": "Create an account",
             "errors": {
                 "email_not_registered": "User not found",
-                "invalid_credentials": "Credenziali errate",
+                "invalid_credentials": "Invalid credentials",
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
-                "invalid_input": "Invalid data"
+                "invalid_input": "Invalid data",
+                "already_logged_in": "You're already logged in"
             },
             "label_email": "Email",
             "label_password": "Password",
@@ -280,17 +403,36 @@
             "placeholder_email": "Enter your email address",
             "placeholder_password": "Enter your password",
             "register_here": "or register here",
-            "title": "Log in"
+            "recover": "Recover credentials",
+            "title": "Log in",
+            "messages": {
+                "register_success": {
+                    "title": "Registration success",
+                    "description": "Check your email to confirm your account."
+                },
+                "CONFIRMATION_SUCCESSFUL": {
+                    "title": "Registration confirmed",
+                    "description": "Email has been verified, you may now log in."
+                },
+                "CONFIRMATION_NOT_FOUND": {
+                    "title": "Code not found",
+                    "description": "Code is not valid or expired."
+                }
+            }
         },
         "register": {
             "errors": {
-                "email_already_registered": "This email has been already used",
+                "email_already_registered": "This email has already been used",
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
                 "invalid_input": "Invalid input",
                 "region_not_provided": "Region not provided"
             },
             "form": {
+                "allergies": {
+                    "label": "Allergies",
+                    "placeholder": "Do you have any allergies?"
+                },
                 "birth_city": {
                     "label": "Birth city",
                     "placeholder": "Ex: Barcelona"
@@ -313,7 +455,11 @@
                 },
                 "email": {
                     "label": "Email",
-                    "placeholder": "Enter an email address"
+                    "placeholder": "example@fur.com"
+                },
+                "confirm_email": {
+                    "label": "Confirm email",
+                    "placeholder": "example@fur.com"
                 },
                 "first_name": {
                     "label": "First name",
@@ -371,10 +517,11 @@
                     "residence_data": "Residential data"
                 },
                 "disclaimer_tos": {
-                    "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>."
+                    "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>.",
+                    "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_EN.pdf"
                 },
                 "disclaimer_data_protection": {
-                    "label": "By checking this box, you declare you've read and accepted the <terms>privacy policy</terms>."
+                    "label": "By checking this box, you declare you've read and accepted the privacy policy."
                 }
             },
             "question": {
@@ -384,7 +531,6 @@
             "login_here": "or log in here",
             "register": "Register",
             "title": "Registration"
-        },
-        "title": "authentication"
+        }
     }
 }

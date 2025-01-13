@@ -4,14 +4,14 @@ import Image from "next/image";
 import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "../_lib/components/autoInput";
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
-import { isEmpty } from "../_lib/utils";
+import { areEquals, isEmpty } from "../_lib/utils";
 import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
 
 /**
  * 
  * @returns 
  */
-export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style, emptyIfUnselected = false}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -33,15 +33,16 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     multiple?: boolean,
     /**Do not throttle input events before launching a search request */
     noDelay?: boolean,
-    onChange?: (values: AutoInputSearchResult[], newValue?: AutoInputSearchResult, removedValue?: AutoInputSearchResult) => void,
-    param?: string,
+    onChange?: (values: AutoInputSearchResult[], newValues?: AutoInputSearchResult[], removedValue?: AutoInputSearchResult) => void,
+    param?: any,
     /**Param is required for the component to be enabled */
     paramRequired?: boolean,
     placeholder?: string,
     required?: boolean,
     /**Sets itself to required, whether there's anything in the remote datasource */
     requiredIfPresent?: boolean,
-    style?: CSSProperties
+    style?: CSSProperties,
+    emptyIfUnselected?: boolean
   }>) {
     const t = useTranslations('components');
 
@@ -65,6 +66,12 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     /**Required */
     const [isRequired, setRequired] = useState(required);
 
+    /* latest initialData */
+    const [latestInitialData, setLatestInitialData] = useState<(number | string)[]>();
+
+    /* waitForParam */
+    const [waitForParam, setWaitForParam] = useState(false);
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     /* Props check */
@@ -83,7 +90,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
-        onChange && onChange (selectedValues ?? [], toAdd, undefined);
+        onChange && onChange (selectedValues ?? [], [toAdd], undefined);
         setTimeout (()=>inputRef.current?.focus(), 100);
     }
     
@@ -168,14 +175,31 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         setSearchResults([]);
         setIsLoading(false);
         clearTimeout(searchTimeoutHandle);
+        if (emptyIfUnselected) {
+            setTimeout(()=>setSearchInput(""), 100);
+        }
     }
 
     useEffect(()=> {
-        if (initialData !== undefined) {
-            manager.loadByIds(new AutoInputFilter(manager.codeOnly ? [] : initialData as number[], manager.codeOnly ? initialData as string[] : []))
-            .then((values)=>setSelectedValues (values));
-        }   
-    }, []);
+        if ((initialData !== undefined && !areEquals(initialData, latestInitialData)) || (waitForParam && param)) {
+            if (!param && paramRequired) {
+                setWaitForParam(true);
+                return;
+            }
+            manager.loadByIds(new AutoInputFilter(manager.codeOnly ? [] : initialData as number[], manager.codeOnly ? initialData as string[] : []), idExtractor, [param])
+            .then((values)=>{
+                setSelectedValues (values);
+                if (manager.codeOnly) {
+                    setSelectedIds (values.map(val=>val.code!));
+                } else {
+                    setSelectedIds (values.map(val=>val.id!));
+                }
+                onChange && onChange (values ?? [], values, undefined);
+            });
+        }  
+        setWaitForParam(false);
+        setLatestInitialData(initialData);
+    }, [initialData, param]);
 
     /**
      * Renders each search result

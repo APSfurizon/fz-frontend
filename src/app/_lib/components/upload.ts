@@ -53,3 +53,7 @@ export function getImageSettings (image: ImageBitmap, size: {width: number, heig
         resizeFactor: containerSize < imageSize ? imageSize / containerSize : 1
     }
 }
+
+export function cropAndUpload(image: ImageBitmap) {
+    
+}

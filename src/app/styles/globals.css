@@ -26,6 +26,10 @@ body {
   margin: 0;
 }
 
+span {
+  color: var(--foreground);
+}
+
 html > body > div.page-wrapper {
   position: relative;
   min-height: 100vh;
@@ -34,6 +38,10 @@ html > body > div.page-wrapper {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+a.hoverable{
+  cursor: pointer;
 }
 
 a.hoverable:hover {

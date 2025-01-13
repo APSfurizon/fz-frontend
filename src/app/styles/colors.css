@@ -8,13 +8,14 @@
     --text-status-error: #e44f4f;
     --main-dialog-background: #141E26;
 
-    --hoverable-bg: #3b3b3b;
+    --hoverable-bg: #2a2b3f;
     
     /* Footer */
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     /* Header */
     --header-bg: #141E26;
-    --header-shadow: #00000065;
+    --header-shadow: #00000015;
+    --header-link-hover-bg: #ffffff10;
 
     /* Button */
     --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
@@ -118,6 +119,12 @@
     --upload-crop-handle-hover: radial-gradient(#7634B8 30%, #fffa 35%, #fffa 50%, #7634B8 60%, #7634B8 100%);
     --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
 
+    /* Table */
+    --table-bg: #242C38;
+    --table-border: #fff;
+    --table-row-bg: #ffffff19;
+    --table-header-separator: #ffffff4d;
+
     /* Booking page */
     --booking-countdown-bg: #000000d8;
     --booking-book-effect-bg: #fff;
@@ -135,6 +142,9 @@
     --room-buy-item-hover-bg: #ffffff20;
     --room-buy-item-border: #ffffff;
 
+    /* Exchange confirm page*/
+    --exchange-info-bg: #242C38;
+
     --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;
     --super-sponsor-color: #DB9703;
@@ -145,7 +155,7 @@
   :root {
     --background: #11191F;
     --foreground: #ededed;
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     --header-bg: #141E26;
     --main-dialog-background: #141E26;
   }
@@ -154,7 +164,7 @@
   :root {
     --background: #11191F;
     --foreground: #ededed;
-    --footer-bg: #211A28;
+    --footer-bg: #1C1A25;
     --header-bg: #141E26;
     --main-dialog-background: #141E26;
   }

@@ -15,7 +15,7 @@ import StatusBox from "@/app/_components/statusBox";
 import DataForm from "@/app/_components/dataForm";
 import JanInput from "@/app/_components/janInput";
 import AutoInput from "@/app/_components/autoInput";
-import { AutoInputDebugUserManager, AutoInputFilter } from "@/app/_lib/components/autoInput";
+import { AutoInputFilter } from "@/app/_lib/components/autoInput";
 import "../../../../styles/furpanel/room.css";
 import { useUser } from "@/app/_lib/context/userProvider";
 import { OrderStatus } from "@/app/_lib/api/order";
@@ -24,13 +24,15 @@ import { translate } from "@/app/_lib/utils";
 import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
 import Checkbox from "@/app/_components/checkbox";
 import RoomOrderFlow from "@/app/_components/_room/roomOrderFlow";
+import { Permissions } from "@/app/_lib/api/permission";
+import ToolLink from "@/app/_components/toolLink";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
   const tcommon = useTranslations("common");
   const formatter = useFormatter();
   const locale = useLocale();
-  const {userData, userLoading} = useUser();
+  const {userDisplay, userLoading} = useUser();
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
@@ -51,7 +53,7 @@ export default function RoomPage() {
     if (userLoading) return;
 
     const roomData: RoomCreateData = {
-      name: t("room.default_name", {name: userData?.fursonaName})
+      name: t("room.default_name", {name: userDisplay?.display?.fursonaName})
     };
 
     setActionLoading(true);
@@ -190,15 +192,15 @@ export default function RoomPage() {
   // Room buy modal
   const [buyModalOpen, setBuyModalOpen ] = useState(false);
 
-  // transfer room modal
-  const [transferModalOpen, setTransferModalOpen ] = useState(false);
+  // exchange room modal
+  const [exchangeModalOpen, setExchangeModalOpen ] = useState(false);
   
-  const promptRoomTransfer = () => {
+  const promptRoomExchange = () => {
     if (!data) return;
-    setTransferModalOpen(true);
+    setExchangeModalOpen(true);
   }
 
-  const roomTransferSuccess = () => {
+  const roomExchangeSuccess = () => {
     const successBody = <span>
       {t("room.messages.exchange_invite_sent.description")}
     </span>;
@@ -221,7 +223,7 @@ export default function RoomPage() {
     setInviteCancelModalOpen(false);
     setKickModalOpen(false);
     setLeaveModalOpen(false);
-    setTransferModalOpen(false);
+    setExchangeModalOpen(false);
     setData(undefined);
   }
 
@@ -234,7 +236,7 @@ export default function RoomPage() {
     setInviteCancelModalOpen(false);
     setKickModalOpen(false);
     setLeaveModalOpen(false);
-    setTransferModalOpen(false);
+    setExchangeModalOpen(false);
     showModal(
       tcommon("error"), 
       <ModalError error={err} translationRoot={translationRoot ?? "furpanel"} translationKey={translationKey ?? "room.errors"}></ModalError>
@@ -253,8 +255,6 @@ export default function RoomPage() {
     )).finally(()=>setLoading(false));
   }, [data]);
 
-  console.log(data);
-
   /********************/
   /** Page Rendering **/
   /********************/
@@ -266,7 +266,7 @@ export default function RoomPage() {
         <NoticeBox theme={NoticeTheme.Warning} 
         title={t(`room.messages.${true ? "room_edit_deadline" : "room_edit_deadline_end"}.title`)}>
           {t(`room.messages.${true ? "room_edit_deadline" : "room_edit_deadline_end"}.description`, 
-            {lockDate: formatter.dateTime(new Date(), {dateStyle: "medium"})})}
+            {lockDate: formatter.dateTime(new Date(data?.editingRoomEndTime), {dateStyle: "medium"})})}
         </NoticeBox>
       </>}
 
@@ -300,14 +300,24 @@ export default function RoomPage() {
             <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
             {t("room.no_room")}
           </span>
-          <div className="horizontal-list flex-center flex-vertical-center gap-4mm" style={{marginTop: "1em"}}>
-            {data && data.canCreateRoom == true 
-              ?
-                <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
+          <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap" style={{marginTop: "1em"}}>
+            {data.canCreateRoom == true 
+              ? <>
+                  <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
+                  <span className="title small">{t("room.or")}</span>
+                  <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.upgrade_room")}</Button>
+                  <span className="title small">{t("room.or")}</span>
+                  <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomExchange()} 
+                    disabled={!!data && !data.canExchange}>{t("room.actions.exchange")}</Button>
+                </>
+              : data.hasOrder 
+              ? <>
+                <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>
+                <span className="title small">{t("room.or_get_invited")}</span>
+              </>
               : <>
-                {!!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom && <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.buy_a_room")}</Button>}
-                <span className="title small">{t("room.or")}</span>
-                <Button iconName={ICONS.PERSON_ADD} onClick={()=>setShowInviteTutorial(true)}>{t("room.actions.join_a_room")}</Button> 
+                <span>{t("room.no_order")}</span>
+                <ToolLink href={"/booking"} iconName={ICONS.LOCAL_ACTIVITY} className="active">{t("booking.title")}</ToolLink>
               </>
             }
           </div>
@@ -371,7 +381,10 @@ export default function RoomPage() {
                 <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
                     onClick={()=>promptRoomInvite()}>{t("room.actions.unconfirm_room")}</Button>
                 </>}
-                <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomTransfer()}>{t("room.actions.transfer")}</Button>
+                <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomExchange()} 
+                  disabled={!!data && !data.canExchange}>
+                    {t("room.actions.exchange")}
+                </Button>
               </> : <>
               {/* Guest actions */}
                 <Button iconName={ICONS.DOOR_OPEN} onClick={()=>promptRoomLeave()}>{t("room.actions.leave")}</Button>
@@ -428,8 +441,8 @@ export default function RoomPage() {
       <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
         max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
         placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
-      { /* TODO: [ADMIN CHECK] */
-        true && <>
+      {
+        userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_ROOMS) && <>
         <Checkbox fieldName="force">{t("room.input.force_join.label")}</Checkbox>
         <Checkbox fieldName="forceExit">{t("room.input.force_exit.label")}</Checkbox>
         </>
@@ -554,21 +567,19 @@ export default function RoomPage() {
       <RoomOrderFlow isOpen={buyModalOpen} modalLoading={modalLoading} setModalLoading={setModalLoading} close={()=>setBuyModalOpen(false)}></RoomOrderFlow>
     </Modal>
 
-    {/* Room transfer modal */}
-    <Modal icon={ICONS.SEND} open={transferModalOpen} title={t("room.actions.transfer_room")} onClose={()=>setTransferModalOpen(false)} busy={modalLoading}>
-      { data?.currentRoomInfo && <>
-      <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomTransferSuccess}
+    {/* Room exchange modal */}
+    <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
+      <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm">
-        <input type="hidden" name="userId" value={userData?.userId}></input>
+        <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
           label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
         <div className="horizontal-list gap-4mm">
           <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
           <div className="spacer"></div>
-          <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
+          <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
         </div>
       </DataForm>
-      </>}
     </Modal>
   </>;
 }

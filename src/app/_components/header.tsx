@@ -9,12 +9,13 @@ import { useUser } from '../_lib/context/userProvider';
 import { ReactEventHandler, useEffect, useState } from 'react';
 import "../styles/components/header.css";
 import { DEVICE_TYPE, getDeviceType } from '../_lib/utils';
-import { APP_LINKS } from '../_lib/constants';
+import { APP_LINKS, SHOW_APP_BANNER } from '../_lib/constants';
+import Link from 'next/link';
 
 export default function Header () {
     const t = useTranslations('common');
     const locale = useLocale();
-    const {userData, userLoading} = useUser();
+    const {userDisplay, userLoading} = useUser();
     const router = useRouter();
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
@@ -52,14 +53,14 @@ export default function Header () {
                 </a>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
-                <a className="header-link">
+                <Link href="/home" className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
-                </a>
-                <a className="header-link">
+                </Link>
+                {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
-                </a>
+                </a> */}
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.INFO}></Icon>
                     <span className="title semibold">{t('header.information')}</span>
@@ -72,13 +73,13 @@ export default function Header () {
                 {
                     userLoading 
                         ? <Button busy={userLoading}>{t('loading')}</Button>
-                        : userData 
-                            ? <UserDropDown userData={userData}></UserDropDown>
+                        : userDisplay 
+                            ? <UserDropDown userData={userDisplay.display}></UserDropDown>
                             : <Button onClick={()=>router.push('/login')} iconName='key'>{t('header.login')}</Button>
                 }
 
                 {/* Phone app */}
-                { [DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && <>
+                { [DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
                     <p className='horizontal-list gap-4mm flex-vertical-center' style={{width: '100%'}}>
                         <span className="descriptive small color-subtitle">{t("header.app-badge")}</span>
                         <div className="spacer"></div>

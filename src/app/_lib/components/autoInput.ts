@@ -1,5 +1,4 @@
-import { getAutoInputCountries, getAutoInputStates } from "../api/register";
-import { getAutoInputUserData } from "../debug";
+import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
 
 export interface AutoInputSearchResult {
     id?: number,
@@ -55,39 +54,9 @@ export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoIn
 export interface AutoInputManager {
     /**Extract data's code only, do not use Ids */
     codeOnly: boolean,
-    loadByIds: (filter: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+    loadByIds: (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
     searchByValues: (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
     isPresent: (additionalValues?: any) => Promise<boolean>
-}
-
-export class AutoInputDebugUserManager implements AutoInputManager {
-    codeOnly: boolean = true;
-
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
-                resolve (filterLoaded(results, filter));
-            });
-        });
-    }
-
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
-                resolve (
-                    filterSearchResult(value, results, filter, filterOut)
-                );
-            });
-        });
-    }
-
-    isPresent (additionalValue?: any): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            getAutoInputUserData ().then (results => {
-                resolve (results.length > 0);
-            });
-        });
-    };
 }
 
 export interface CountrySearchResult extends AutoInputSearchResult {
@@ -102,9 +71,18 @@ export class AutoInputCountriesManager implements AutoInputManager {
         this.showNumber = showNumber ?? false;
     }
 
-    loadByIds (filter: AutoInputFilter): Promise<CountrySearchResult[]> {
+    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number): Promise<CountrySearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputCountries (this.showNumber).then (results => {
+                const countries = results.map(data=>{
+                    if (customIdExtractor) {
+                        if (this.codeOnly) {
+                            data.code = customIdExtractor(data) as string ?? data.code;
+                        } else {
+                            data.id = customIdExtractor(data) as number ?? data.id;
+                        }
+                    }
+                })
                 resolve (results.filter (result => filter.applyFilter(result as AutoInputSearchResult)) as CountrySearchResult[]);
             });
         });
@@ -132,9 +110,9 @@ export class AutoInputCountriesManager implements AutoInputManager {
 export class AutoInputStatesManager implements AutoInputManager {
     codeOnly: boolean = true;
 
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputStates ().then (results => {
+            getAutoInputStates (additionalValues[0]).then (results => {
                 resolve (filterLoaded(results, filter));
             });
         });

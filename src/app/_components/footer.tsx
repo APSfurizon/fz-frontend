@@ -12,9 +12,9 @@ export default function Footer () {
             <Image className="footer-logo" src="/images/logo-dark.png" alt="Furizon logo" width={256} height={60}></Image>
           </div>
           <div className="horizontal-list gap-4mm normal title flex-center">
-            <a href="https://todo.com" target="_blank" rel="noopener noreferrer">{t('footer.code_of_conduct')}</a>
-            <a href="https://todo.com" target="_blank" rel="noopener noreferrer">{t('footer.volunteers')}</a>
-            <a href="https://todo.com" target="_blank" rel="noopener noreferrer">{t('footer.contact_us')}</a>
+            <a href={t("footer.link_code_of_conduct")} target="_blank" rel="noopener noreferrer">{t('footer.code_of_conduct')}</a>
+            <a href="https://furizon.net/join-furizon-staff/" target="_blank" rel="noopener noreferrer">{t('footer.volunteers')}</a>
+            <a href="https://furizon.net/contact/" target="_blank" rel="noopener noreferrer">{t('footer.contact_us')}</a>
           </div>
           <div className="horizontal-list gap-4mm normal title flex-center flex-align-center">
             <a href="https://www.youtube.com/@apsfurizon7425" target="_blank" rel="noopener noreferrer">
@@ -39,12 +39,15 @@ export default function Footer () {
           </div>
           <p className="tiny color-subtitle center">
             <span>Made by </span>
-            <a className="color-link" href="https://about.woffo.ovh">Drew</a>
+            <a className="color-link" href="https://www.instagram.com/stranckv2">Stranck</a>
             <span>, </span>
-            <a className="color-link" href="https://about.woffo.ovh">Stark</a>
+            <a className="color-link" href="https://about.woffo.ovh">Drew</a>
             <span> & </span>
-            <a className="color-link" href="https://about.woffo.ovh">Stranck</a>
+            <a className="color-link" href="https://x.com/starkthedragon">Stark</a>
           </p>
+          <div className="tiny color-subtitle center">
+            <span>{t("source_code")} <a className="color-link" href="https://github.com/APSfurizon/">https://github.com/APSfurizon/</a></span>
+          </div>
         </div>
       </footer>
   )

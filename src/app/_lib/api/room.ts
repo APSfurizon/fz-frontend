@@ -1,7 +1,7 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { nullifyEmptyString, nullifyEmptyStrings } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
-import { OrderStatus } from "./order";
+import { OrderExchangeInitApiData, OrderStatus } from "./order";
 import { UserData } from "./user";
 
 export interface RoomGuestHeader {
@@ -60,12 +60,14 @@ export interface RoomInvitation {
 }
 
 export interface RoomInfoResponse extends ApiResponse {
+    hasOrder: boolean,
     canCreateRoom: boolean,
     editingRoomEndTime: string,
     currentRoomInfo: RoomInfo,
     invitations: RoomInvitation[],
     buyOrUpgradeRoomSupported: boolean,
-    canBuyOrUpgradeRoom: boolean
+    canBuyOrUpgradeRoom: boolean,
+    canExchange: boolean
 }
 
 export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorResponse> {
@@ -177,15 +179,9 @@ export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export interface RoomExchangeInitApiData {
-    sourceUserId: number,
-    destUserId: number,
-    action: "room" | "order"
-}
-
-export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<RoomExchangeInitApiData> {
+export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeInitApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: RoomExchangeInitApiData = {
+        let toReturn: OrderExchangeInitApiData = {
             sourceUserId: parseInt(data.get('userId')!.toString ()),
             destUserId: parseInt(data.get('recipientId')!.toString()),
             action: "room"
@@ -194,7 +190,7 @@ export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<RoomExchangeIn
     }
 }
 
-export class RoomExchangeFormAction implements FormApiAction<RoomExchangeInitApiData, Boolean, ApiErrorResponse> {
+export class RoomExchangeFormAction implements FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
     authenticated = true;
     dtoBuilder = new RoomExchangeInitDTOBuilder ();
