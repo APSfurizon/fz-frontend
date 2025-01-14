@@ -84,20 +84,34 @@
         "booking":{
             "title": "Prenotazione",
             "your_booking": "La tua prenotazione",
-            "countdown": "Conto alla rovescia",
-            "countdown_desc": "La vendita dei biglietti inizierà dal {openingDate}",
             "coundown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
             "coundown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
             "book_now": "Prenota",
             "review_info_first": "Rivedi i tuoi dati personali",
             "edit_booking": "Modifica prenotazione",
             "retry_payment": "Riprova pagamento",
-            "editing_locked_warning": "Avviso blocco modifiche",
-            "editing_locked_warning_desc": "Dal {lockDate} non sarà più possibile modificare l'ordine.",
-            "editing_locked": "Modifica bloccata",
-            "editing_locked_desc": "Dal {lockDate} non è più possibile modificare l'ordine.",
-            "booking_review_info": "Revisione dati personali",
-            "booking_review_info_desc": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono per rilasciarti la tessera associativa e per motivi assicurativi.",
+            "messages": {
+                "countdown": {
+                    "title": "Conto alla rovescia",
+                    "description": "La vendita dei biglietti inizierà dal {openingDate}"
+                },
+                "editing_locked_warning": {
+                    "title": "Avviso blocco modifiche",
+                    "description": "Dal {lockDate} non sarà più possibile modificare l'ordine."
+                },
+                "editing_locked": {
+                    "title": "Modifica bloccata",
+                    "description": "Dal {lockDate} non è più possibile modificare l'ordine."
+                },
+                "review_info": {
+                    "title": "Revisione dati personali",
+                    "description": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono per rilasciarti la tessera associativa e per motivi assicurativi."
+                },
+                "exchange_invite_sent": {
+                    "title": "Invito inviato",
+                    "description": "Verrete contattati via email per confermare lo scambio."
+                }
+            },
             "items": {
                 "code": "codice",
                 "membership_card": "Tessera associativa",
@@ -188,8 +202,8 @@
                     "description": "Vuoi uscire dalla stanza <room>{roomName}</room>?"
                 },
                 "exchange_invite_sent": {
-                    "title": "Richiesta inviata",
-                    "description": "Fatto! È stata inviata un'email all'utente destinatario."
+                    "title": "Invito inviato",
+                    "description": "Verrete contattati via email per confermare lo scambio."
                 }
             },
             "errors": {
@@ -401,7 +415,8 @@
                 "email_not_registered": "Utente non trovato",
                 "invalid_credentials": "Credenziali errate",
                 "invalid_input": "Dati non validi",
-                "already_logged_in": "Hai già effettuato l'accesso"
+                "already_logged_in": "Hai già effettuato l'accesso",
+                "confirmation_still_pending": "Conferma l'email prima di accedere"
             },
             "messages": {
                 "register_success": {

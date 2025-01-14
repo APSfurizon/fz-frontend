@@ -55,6 +55,10 @@ export default function BookingPage() {
 
     const exchangeSuccess = () => {
         setExchangeModalOpen(false);
+        showModal(t("booking.messages.exchange_invite_sent.title"), 
+            <span className="descriptive average">
+                {t("booking.messages.exchange_invite_sent.description")}
+            </span>, ICONS.CHECK_CIRCLE);
     }
     
     useTitle(t("booking.title"));
@@ -115,7 +119,7 @@ export default function BookingPage() {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new ShopLinkApiAction())
-        .then((result)=>window.open((result as ShopLinkResponse).link))
+        .then((result)=>router.push((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
@@ -172,8 +176,8 @@ export default function BookingPage() {
                 </span>
             </> : <>
                 {!isOpen && !pageData.hasOrder && (
-                    <NoticeBox title={t("booking.countdown")} theme={NoticeTheme.FAQ}>
-                        {t("booking.countdown_desc", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
+                    <NoticeBox title={t("booking.messages.countdown.title")} theme={NoticeTheme.FAQ}>
+                        {t("booking.messages.countdown.description", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
                     </NoticeBox>
                 )}
                 <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
@@ -199,8 +203,8 @@ export default function BookingPage() {
                     }
                 </div>
                 {pageData?.shouldUpdateInfo && <>
-                    <NoticeBox title={t("booking.booking_review_info")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
-                        {t("booking.booking_review_info_desc")}
+                    <NoticeBox title={t("booking.messages.review_info.title")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
+                        {t("booking.messages.review_info.description")}
                         <span className="horizontal-list gap-2mm" style={{marginTop: ".5em"}}>
                         <Button className="success" busy={actionLoading} onClick={confirmMembershipData} iconName={ICONS.CHECK}>{t("booking.actions.confirm_info")}</Button>
                         <Button className="warning" busy={actionLoading} onClick={()=>{
@@ -254,19 +258,19 @@ export default function BookingPage() {
                             {t("booking.actions.exchange_order")}
                         </Button>
                     </div>
-                    <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.editing_locked") : t("booking.editing_locked_warning")}>
-                        {t(isEditLocked ? "booking.editing_locked_desc" : "booking.editing_locked_warning_desc", {lockDate: formatter.dateTime(pageData.editBookEndDate)})}
+                    <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.messages.editing_locked.title") : t("booking.messages.editing_locked_warning.title")}>
+                        {t(isEditLocked ? "booking.messages.editing_locked.description" : "booking.messages.editing_locked_warning.description", {lockDate: formatter.dateTime(pageData.editBookEndDate)})}
                     </NoticeBox>
 
                     {/* Errors view */}
                     {bookingData?.errors && <>
-                        <div className="errors-container vertical-list gap-4mm">{
-                            bookingData.errors.map((errorCode, index) => {
+                        <div className="errors-container vertical-list gap-4mm">
+                            {bookingData.errors.map((errorCode, index) => {
                                 return <NoticeBox key={index} theme={NoticeTheme.Warning} title={t(`booking.errors.${errorCode}.title`)}>
                                     {t(`booking.errors.${errorCode}.description`)}
                                 </NoticeBox>;
-                            })
-                        }</div>
+                            })}
+                        </div>
                     </>}
                 </div>
                 </>

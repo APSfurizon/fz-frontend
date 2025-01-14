@@ -116,7 +116,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                         <Icon className="large" iconName={ICONS.CHECK_CIRCLE}></Icon>}
                         <div className="vertical-list">
                             <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
-                            <span>{formatter.number(parseFloat(roomInfo.price)-parseFloat(roomsData.priceOfCurrentRoom), {style: 'currency', currency: EVENT_CURRENCY})}</span>
+                            <span>{formatter.number(parseFloat(roomInfo.price)-parseFloat(roomsData.priceOfCurrentRoom ?? "0"), {style: 'currency', currency: EVENT_CURRENCY})}</span>
                             <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingQuota(roomInfo.quotaAvailability)})}</span>
                         </div>
                     </a>
@@ -136,7 +136,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                 {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>
                     <div className="vertical-list">
                         <span className="title">{translate(selectedType.data.roomTypeNames, locale)}</span>
-                        <span>{formatter.number(parseFloat(selectedType.price), {style: 'currency', currency: EVENT_CURRENCY})}</span>
+                        <span>{formatter.number(parseFloat(selectedType.price)-parseFloat(roomsData?.priceOfCurrentRoom ?? "0"), {style: 'currency', currency: EVENT_CURRENCY})}</span>
                         <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingQuota(selectedType.quotaAvailability)})}</span>
                     </div>
                 </a>}

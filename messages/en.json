@@ -84,20 +84,34 @@
         "booking":{
             "title": "Reservation",
             "your_booking": "Your reservation",
-            "countdown": "Countdown",
-            "countdown_desc": "Ticket sales will begin on {openingDate}",
             "coundown_days": "{days, plural, =1 {# day} other {# days}}",
             "coundown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
             "book_now": "Book now",
             "review_info_first": "Review your personal info",
             "edit_booking": "Edit reservation",
             "retry_payment": "Retry payment",
-            "editing_locked_warning": "Editing lock memo",
-            "editing_locked_warning_desc": "After {lockDate}, orders editing will be locked.",
-            "editing_locked": "Editing locked",
-            "editing_locked_desc": "Since {lockDate} every form of booking editing is locked.",
-            "booking_review_info": "Review personal info",
-            "booking_review_info_desc": "Conferm your membership personal info. This data is needed to release the new membership card and insurance.",
+            "messages": {
+                "countdown": {
+                    "title": "Countdown",
+                    "description": "Ticket sales will begin on {openingDate}"
+                },
+                "editing_locked_warning": {
+                    "title": "Editing lock memo",
+                    "description": "After {lockDate}, orders editing will be locked."
+                },
+                "editing_locked": {
+                    "title": "Editing locked",
+                    "description": "Since {lockDate} every form of booking editing is locked."
+                },
+                "review_info": {
+                    "title": "Review personal info",
+                    "description": "Conferm your membership personal info. This data is needed to release the new membership card and insurance."
+                },
+                "exchange_invite_sent": {
+                    "title": "Invite sent",
+                    "description": "You will both be contacted via email to confirm the exchange."
+                }
+            },
             "items": {
                 "code": "code",
                 "membership_card": "Membership card",
@@ -112,7 +126,6 @@
                 "extra_days_BOTH": "Early & Late",
                 "extra_days_EARLY": "Early",
                 "extra_days_LATE": "Late"
-
             },
             "errors": {
                 "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened, yet.",
@@ -189,8 +202,8 @@
                     "description": "Do you want to leave room <room>{roomName}</room>?"
                 },
                 "exchange_invite_sent": {
-                    "title": "Request sent",
-                    "description": "Done! An email has been sent to the recipient."
+                    "title": "Invite sent",
+                    "description": "You will both be contacted via email to confirm the exchange."
                 }
             },
             "errors": {
@@ -395,7 +408,8 @@
                 "network_error": "Network error",
                 "unknown_error": "Unknown error",
                 "invalid_input": "Invalid data",
-                "already_logged_in": "You're already logged in"
+                "already_logged_in": "You're already logged in",
+                "confirmation_still_pending": "Confirm your email before logging in"
             },
             "label_email": "Email",
             "label_password": "Password",
