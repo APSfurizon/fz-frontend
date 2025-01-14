@@ -99,10 +99,11 @@ export default function UserPage() {
                 label={tauth("register.form.birthday.label")} value={personalInformation?.birthday}/>
               </div>
               {/* Show only if birth country is Italy */}
-              <div className="form-pair horizontal-list gap-4mm" style={{display: fiscalCodeRequired ? "block" : "none"}}>
-                <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} inputType="text" busy={personalInfoLoading}
+              <div className="form-pair horizontal-list gap-4mm">
+                <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text"
+                  pattern={/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi} busy={personalInfoLoading} disabled={!fiscalCodeRequired}
                   label={tauth("register.form.fiscal_code.label")} placeholder={tauth("register.form.fiscal_code.placeholder")}
-                  value={personalInformation?.fiscalCode}/>
+                  value={fiscalCodeRequired ? personalInformation?.fiscalCode : ""}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="birthRegion" minDecodeSize={2} manager={new AutoInputStatesManager} 

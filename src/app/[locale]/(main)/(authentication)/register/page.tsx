@@ -122,8 +122,9 @@ export default function Register() {
           placeholder={t("register.form.birth_country.placeholder")} emptyIfUnselected/>
       </div>
       {/* Show only if birth country is Italy */}
-      <div className="form-pair horizontal-list gap-4mm" style={{display: fiscalCodeRequired ? "block" : "none"}}>
-        <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} inputType="text" busy={loading} label={t("register.form.fiscal_code.label")}
+      <div className="form-pair horizontal-list gap-4mm">
+        <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text" disabled={!fiscalCodeRequired}
+          pattern={/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi} busy={loading} label={t("register.form.fiscal_code.label")}
           placeholder={t("register.form.fiscal_code.placeholder")}/>
       </div>
       <div className="form-pair horizontal-list gap-4mm">

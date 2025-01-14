@@ -13,7 +13,7 @@ export function nullifyEmptyStrings (values?: (string | undefined)[]) {
 }
 
 export function nullifyEmptyString (value?: string) {
-    return value ? value.length > 0 ? value : undefined : undefined;
+    return value ? value.length > 0 ? value.trim() : undefined : undefined;
 }
 
 export function getBiggestTimeUnit(ts: number): Intl.RelativeTimeFormatUnit {

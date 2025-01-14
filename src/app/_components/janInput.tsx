@@ -31,7 +31,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     /* States */
     const [inputValue, setInputValue] = useState(value ?? "");
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const t = useTranslations("furpanel");
+    const t = useTranslations("components");
 
     useEffect(()=>setInputValue(value ?? ""), [value]);
     
@@ -39,6 +39,8 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     const patternValidity = (e: ChangeEvent<HTMLInputElement>) => {
         if (!pattern?.test(e.target.value)) {
             e.target.setCustomValidity(t("input.validation_fail"));
+        } else {
+            e.target.setCustomValidity("");
         }
     }
 
