@@ -130,7 +130,7 @@ export default function BookingPage() {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new OrderEditLinkApiAction())
-        .then((result)=>window.open((result as ShopLinkResponse).link))
+        .then((result)=>router.push((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
@@ -141,7 +141,7 @@ export default function BookingPage() {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new OrderRetryLinkApiAction())
-        .then((result)=>window.open((result as ShopLinkResponse).link))
+        .then((result)=>router.push((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
             tcommon("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>

@@ -12,6 +12,7 @@ import { EVENT_CURRENCY } from "@/app/_lib/constants";
 import Checkbox from "../checkbox";
 import { useUser } from "@/app/_lib/context/userProvider";
 import { ShopLinkResponse } from "@/app/_lib/api/booking";
+import { useRouter } from "next/navigation";
 
 enum STEPS {
     START,
@@ -32,6 +33,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     const formatter = useFormatter();
     const {showModal, hideModal} = useModalUpdate();
     const {userDisplay, userLoading} = useUser();
+    const router = useRouter();
 
     /* Data about rooms availability */
     const [roomsData, setRoomsData] = useState<RoomStoreItemsApiResponse | null>();
@@ -89,7 +91,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
         }
 
         runRequest(new RoomStoreBuyAction(), undefined, roomBuyData, undefined)
-        .then((result)=>{window.open((result as ShopLinkResponse).link); close();})
+        .then((result)=>{router.push((result as ShopLinkResponse).link); close();})
         .catch((err)=>setLatestError(err))
         .finally(()=>{setModalLoading(false);});
     }
