@@ -4,11 +4,14 @@ import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateActi
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
-import { getImageSettings, Coordinates, ImageSettings, Media, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings } from '../_lib/components/upload';
+import { getImageSettings, Coordinates, ImageSettings, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings, crop, UploadBadgeAction, BadgeUploadResponse } from '../_lib/components/upload';
 import Button from './button';
 import Modal from './modal';
 import { useModalUpdate } from '../_lib/context/modalProvider';
 import "../styles/components/userUpload.css";
+import { runRequest } from '../_lib/api/global';
+import ModalError from './modalError';
+import { fromUploadResponse, MediaData } from '../_lib/api/media';
 
 export default function Upload ({cropTitle, initialData, fieldName, isRequired=false, label, readonly=false, requireCrop = false, size=96, uploadType = "full"}: Readonly<{
     cropTitle?: string,
@@ -25,7 +28,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     const tcommon = useTranslations('common');
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [media, setMedia] = useState<Media | undefined>();
+    const [media, setMedia] = useState<MediaData | undefined>();
     const inputRef = useRef<HTMLInputElement> (null);
     const {showModal} = useModalUpdate();
     {/* Crop dialog */}
@@ -65,7 +68,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
                     setImageSettings(getImageSettings(image, previewRef.current!));
                     setCropDialogOpen(true);
                 } else {
-                    onFileUpload ();
+                    onFileUpload (image);
                 }
                 setError(false);
             }).catch((message: String)=>{
@@ -120,8 +123,31 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     /**
      * When the user has chosen a file to upload or accepted the chosen file's crop settings
      */
-    const onFileUpload = () => {
-
+    const onFileUpload = (image: ImageBitmap) => {
+        if (!image) return;
+        let cropPromise: Promise<Blob>;
+        if (requireCrop) {
+            if (!imageSettings) return;
+            cropPromise = crop(image, topHandle.coordinates, bottomHandle.coordinates, imageSettings.resizeFactor);
+        } else {
+            cropPromise = crop(image, {x: 0, y: 0}, {x: image.width, y: image.height}, 1);
+        }
+        setPreview(undefined);
+        image.close();
+        
+        cropPromise.then((imageBlob) => {
+            const formData = new FormData();
+            formData.append("image", imageBlob);
+            setLoading(true);
+            setError(false);
+            runRequest(new UploadBadgeAction(), undefined, formData, undefined)
+            .then((badge) => {
+                setMedia(fromUploadResponse(badge as BadgeUploadResponse));
+            }).catch((err)=>showModal(
+                  tcommon("error"), 
+                  <ModalError error={err} translationRoot="components" translationKey="upload.errors"/>
+            )).finally(()=>setLoading(false));
+        })
     };
 
     const onPreviewLoaded = () => {
@@ -283,7 +309,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={media?.id} required={isRequired}></input>
         <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
             <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
-                <Image className="rounded-s upload-picture" src={media?.path ?? EMPTY_PROFILE_PICTURE_SRC}
+                <Image className="rounded-s upload-picture" src={media?.relativePath ?? EMPTY_PROFILE_PICTURE_SRC}
                     alt={t('upload.alt_preview_image')} width={size} height={size}
                     style={{aspectRatio: "1", maxWidth: size, maxHeight: size, objectFit: "contain"}}>
                 </Image>
@@ -325,7 +351,7 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
                 <Button title={tcommon('cancel')} className="danger" onClick={()=>setCropDialogOpen(false)}
                     iconName={ICONS.CANCEL} disabled={readonly} busy={isLoading}>{tcommon('cancel')}</Button>
                 <div className="spacer"></div>
-                <Button title={t('upload.upload')} onClick={()=>openFileDialog()}
+                <Button title={t('upload.upload')} onClick={()=>onFileUpload(preview!)}
                     iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={isLoading}>{!media && t('upload.upload')}</Button>    
             </div>
         </Modal>    

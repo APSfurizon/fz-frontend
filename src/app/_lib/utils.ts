@@ -1,5 +1,5 @@
 import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
-import { Coordinates } from "./components/upload";
+import { Coordinates, Rectangle } from "./components/upload";
 import { MEMBERSHIP_STARTING_YEAR } from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
@@ -14,17 +14,6 @@ export function nullifyEmptyStrings (values?: (string | undefined)[]) {
 
 export function nullifyEmptyString (value?: string) {
     return value ? value.length > 0 ? value.trim() : undefined : undefined;
-}
-
-export function getBiggestTimeUnit(ts: number): Intl.RelativeTimeFormatUnit {
-    const second = 1000,
-    minute = 60 * second,
-    hour = 60 * minute,
-    day = 24 * hour;
-    if (ts >= day) return "day";
-    else if (ts >= hour) return "hour";
-    else if (ts >= minute) return "minute";
-    else return "second";
 }
 
 export function getCountdown (ts: number): number[] {
@@ -130,3 +119,21 @@ export function padStart(x: number) {
 }
 
 export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3).fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
+
+export function getRectangle(p1: Coordinates, p2: Coordinates): Rectangle {
+    const topLeft: Coordinates =  {
+        x: Math.min(p1.x, p2.x),
+        y: Math.min(p1.y, p2.y)
+    };
+
+    const bottomRight: Coordinates = {
+        x: Math.max(p1.x, p2.x),
+        y: Math.max(p1.y, p2.y)
+    };
+
+    return {
+        ...topLeft,
+        width: bottomRight.x - topLeft.x,
+        height: bottomRight.y - topLeft.y
+    };
+}

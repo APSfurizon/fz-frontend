@@ -71,7 +71,10 @@
             "open": "Open...",
             "delete": "Delete",
             "upload": "Upload",
-            "crop": "Crop"
+            "crop": "Crop",
+            "errors": {
+                "UNKNOWN": "Unknown error"
+            }
         },
         "input": {
             "validation_fail": "Value not valid"

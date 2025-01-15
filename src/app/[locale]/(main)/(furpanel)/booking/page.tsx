@@ -9,7 +9,7 @@ import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
-import { getBiggestTimeUnit, getCountdown, padStart, translate } from "@/app/_lib/utils";
+import { getCountdown, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
 import { useRouter } from "next/navigation";

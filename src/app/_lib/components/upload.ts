@@ -1,10 +1,6 @@
+import { ApiAction, ApiErrorResponse, ApiResponse } from "../api/global"
 import { UPLOAD_MAX_SIZE, UPLOAD_MIN_SIZE } from "../constants"
-
-export type Media = {
-    id: number,
-    type: string,
-    path: string
-}
+import { getRectangle } from "../utils"
 
 export type ImageSettings = {
     width: number,
@@ -25,6 +21,13 @@ export type HandleSettings = {
 export type WholeHandleSettings = {
     startingOffset: Coordinates,
     active: boolean
+}
+
+export type Rectangle = {
+    x: number,
+    y: number,
+    width: number,
+    height: number
 }
 
 export const VALID_FILE_TYPES = ["image/gif", "image/jpeg", "image/png", "image/bmp", "image/webp", "image/tiff"];
@@ -54,6 +57,32 @@ export function getImageSettings (image: ImageBitmap, size: {width: number, heig
     }
 }
 
-export function cropAndUpload(image: ImageBitmap) {
-    
+export function crop(image: ImageBitmap, p1: Coordinates, p2: Coordinates, resizeFactor: number): Promise<Blob> {
+    return new Promise ((resolve, reject) => {
+        const rectangle: Rectangle = getRectangle(p1, p2);
+        const canvas = document.createElement('canvas');
+        canvas.width = rectangle.width * resizeFactor;
+        canvas.height = rectangle.height * resizeFactor;
+
+        const canvasCtx = canvas.getContext('2d');
+        canvasCtx?.drawImage(image, rectangle.x * resizeFactor, rectangle.y * resizeFactor,
+            rectangle.width * resizeFactor, rectangle.height * resizeFactor,
+            0, 0, rectangle.width * resizeFactor, rectangle.height * resizeFactor);
+        canvasCtx?.save();
+        const croppedImage = canvas.toBlob((generated) => generated ? resolve(generated) : reject(),
+            "image/png", 1);
+    })
+}
+
+export interface BadgeUploadResponse extends ApiResponse {
+    id: number,
+    relativePath: string
+}
+
+export class UploadBadgeAction implements ApiAction<BadgeUploadResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "badge/upload";
+    onSuccess: (status: number, body?: BadgeUploadResponse) => void = (status: number, body?: BadgeUploadResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

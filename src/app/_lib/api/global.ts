@@ -45,12 +45,14 @@ export function getToken (): string | null {
     return `Bearer ${getCookie(TOKEN_STORAGE_NAME)}`;
 }
 
-export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {
+export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest | FormData, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {
     return new Promise ((resolve, reject) => {
         // Calc headers
-        const headers = new Headers({
-            'Content-type': 'application/json',
-        });
+        const headers = new Headers();
+
+        if (body instanceof FormData == false) {
+            headers.append('Content-type', 'application/json');
+        }
 
         const token = getToken ();
 
@@ -61,7 +63,7 @@ export function runRequest (action: ApiAction<any, any>, pathParams?: string[], 
         // Calc url
         let useSearchParams = !!searchParams;
         const endpointUrl = `${API_BASE_URL}${[action.urlAction, ...pathParams ?? []].join("/")}${useSearchParams ? "?"+ (searchParams?.toString() ?? "") : ""}`
-        fetch(endpointUrl, {method: action.method, body: body ? JSON.stringify(body) : null, headers: headers}).then((fulfilledData) => {
+        fetch(endpointUrl, {method: action.method, body: body ? body instanceof FormData ? body : JSON.stringify(body) : null, headers: headers}).then((fulfilledData) => {
             const contentType = fulfilledData.headers.get("content-type");
             const correlationId = fulfilledData.headers.get('X-Correlation-Id') ?? undefined;
             // In case of controlled fail

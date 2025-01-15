@@ -71,7 +71,10 @@
             "open": "Apri...",
             "delete": "Elimina",
             "upload": "Carica",
-            "crop": "Ritaglia"
+            "crop": "Ritaglia",
+            "errors": {
+                "UNKNOWN": "Errore sconosciuto"
+            }
         },
         "input": {
             "validation_fail": "Valore non valido"
