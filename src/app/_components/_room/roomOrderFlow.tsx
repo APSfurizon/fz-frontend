@@ -123,6 +123,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                         </div>
                     </a>
                 )}
+                {!roomsData?.rooms || roomsData?.rooms?.length == 0 && <span className="title">{t("room.order_flow.no_room_type")}</span>}
             </div>
             <div className="horizontal-list gap-4mm">
                 <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>close()}>{tcommon("cancel")}</Button>

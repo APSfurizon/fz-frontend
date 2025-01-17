@@ -7,6 +7,7 @@ import Icon, { ICONS } from './icon';
 import Image from 'next/image';
 import "../styles/components/userPicture.css";
 import { UserData } from '../_lib/api/user';
+import { getImageUrl } from '../_lib/utils';
 
 export default function UserPicture ({size, userData, showNickname, showFlag, hideEffect=false }: Readonly<{size?: number, userData: UserData | Promise<UserData>, showNickname?: boolean, showFlag?: boolean, hideEffect?: boolean}>) { 
     const t = useTranslations('common');
@@ -28,7 +29,7 @@ export default function UserPicture ({size, userData, showNickname, showFlag, hi
     return (
         <div className="user-picture-container vertical-list flex-vertical-center">
             <div className={`image-container rounded-m sponsor-${pictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`}>
-                <Image className="rounded-s profile-picture" src={pictureData?.propicUrl ?? EMPTY_PROFILE_PICTURE_SRC} alt={t('header.alt_profile_picture')} width={size ?? 32} height={size ?? 32}></Image>
+                <Image className="rounded-s profile-picture" src={getImageUrl(pictureData?.propicUrl) ?? EMPTY_PROFILE_PICTURE_SRC} alt={t('header.alt_profile_picture')} width={size ?? 32} height={size ?? 32}></Image>
             </div>
             { showNickname && (
                 <span className="title semibold nickname small">

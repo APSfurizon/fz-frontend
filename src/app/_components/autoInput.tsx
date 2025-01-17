@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "../_lib/components/autoInput";
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
-import { areEquals, isEmpty } from "../_lib/utils";
+import { areEquals, getImageUrl, isEmpty } from "../_lib/utils";
 import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
 
 /**
@@ -210,7 +210,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     const renderResult = (element: AutoInputSearchResult, index: number) => {
         return <div key={index} className="search-result horizontal-list flex-vertical-center rounded-s" style={{color:'#fff',display:'flex'}} onMouseDown={()=>{addItem(element)}}>
             {element.imageUrl !== undefined &&
-                <Image src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : element.imageUrl} width={32} height={32} 
+                <Image src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC} width={32} height={32} 
                     alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
             }
             {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}

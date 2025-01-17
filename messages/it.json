@@ -164,7 +164,30 @@
             }
         },
         "badge": {
-            "title": "Badge"
+            "title": "Badge",
+            "your_badges": "I tuoi badge",
+            "deadline": "Limite modifiche: {badgeDeadline}",
+            "name": "Nome",
+            "actions": {
+                "upload_badge": "Carica il tuo badge",
+                "edit_fursona_name": "Modifica nome"
+            },
+            "input": {
+                "new_name": {
+                    "label": "Nuovo nome",
+                    "placeholder": "Inserisci un nuovo nome",
+                    "help": "Verrà visualizzato in tutto il sito"
+                }
+            },
+            "messages": {
+                "what_to_upload": {
+                    "title": "Cosa caricare qui?",
+                    "description": "Qualsiasi immagine caricata qua verrà stampata sul tuo badge personale e verrà usata come foto profilo in tutto il sito. Ogni caricamento è visionato e può essere rimosso dallo staff di Furizon."
+                }
+            },
+            "errors": {
+                
+            }
         },
         "debug": {
             "title": "Debug"
@@ -262,6 +285,7 @@
             "or_get_invited": "oppure fatti invitare",
             "no_order": "Prima acquista un biglietto.",
             "no_room": "Non sei in una stanza, per ora.",
+            "can_create": "Hai comprato una stanza, creala per poterla personalizzare.",
             "status_owner": "Gestore",
             "status_invited": "Invitato",
             "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
@@ -269,6 +293,7 @@
             "order_flow": {
                 "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}",
                 "select_type": "Seleziona una stanza",
+                "no_room_type": "Non ci sono altri tipi di stanze al momento.",
                 "your_selection": "La tua selezione",
                 "complete_order": "Completa ordine",
                 "messages": {

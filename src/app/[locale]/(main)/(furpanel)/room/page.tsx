@@ -298,7 +298,7 @@ export default function RoomPage() {
           <div className="room-invite actions-panel rounded-m">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
             <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
-            {t("room.no_room")}
+            {data.canCreateRoom ? t("room.can_create") : t("room.no_room")}
           </span>
           <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap" style={{marginTop: "1em"}}>
             {data.canCreateRoom == true 

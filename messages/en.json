@@ -164,7 +164,30 @@
             }
         },
         "badge": {
-            "title": "Badge"
+            "title": "Badge",
+            "your_badges": "Your badges",
+            "deadline": "Edit deadline: {badgeDeadline}",
+            "name": "Name",
+            "actions": {
+                "upload_badge": "Upload your badge",
+                "edit_fursona_name": "Edit name"
+            },
+            "input": {
+                "new_name": {
+                    "label": "New name",
+                    "placeholder": "Enter a new display name",
+                    "help": "This name will be used site wise"
+                }
+            },
+            "messages": {
+                "what_to_upload": {
+                    "title": "What to upload here?",
+                    "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon’s staff."
+                }
+            },
+            "errors": {
+
+            }
         },
         "debug": {
             "title": "Debug"
@@ -262,6 +285,7 @@
             "or_get_invited": "or get invited",
             "no_order": "Please buy a ticket, before.",
             "no_room": "You don't have a room, yet.",
+            "can_create": "You bought a room, create it in order to personalize it.",
             "status_owner": "Owner",
             "status_invited": "Invited",
             "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
@@ -269,6 +293,7 @@
             "order_flow": {
                 "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}",
                 "select_type": "Select a room type",
+                "no_room_type": "There are no more room tiers at the moment.",
                 "your_selection": "Your selection",
                 "complete_order": "Complete order",
                 "messages": {

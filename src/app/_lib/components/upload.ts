@@ -1,4 +1,5 @@
 import { ApiAction, ApiErrorResponse, ApiResponse } from "../api/global"
+import { MediaData } from "../api/media"
 import { UPLOAD_MAX_SIZE, UPLOAD_MIN_SIZE } from "../constants"
 import { getRectangle } from "../utils"
 
@@ -82,6 +83,18 @@ export interface BadgeUploadResponse extends ApiResponse {
 export class UploadBadgeAction implements ApiAction<BadgeUploadResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "badge/upload";
+    onSuccess: (status: number, body?: BadgeUploadResponse) => void = (status: number, body?: BadgeUploadResponse) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export interface GetMediaResponse extends ApiResponse {
+    media: MediaData[]
+}
+
+export class GetMediaAction implements ApiAction<BadgeUploadResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "badge/upload";
     onSuccess: (status: number, body?: BadgeUploadResponse) => void = (status: number, body?: BadgeUploadResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
