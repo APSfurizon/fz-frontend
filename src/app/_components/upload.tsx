@@ -4,7 +4,7 @@ import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateActi
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
-import { getImageSettings, Coordinates, ImageSettings, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings, crop, UploadBadgeAction, BadgeUploadResponse, GetMediaAction, GetMediaResponse } from '../_lib/components/upload';
+import { getImageSettings, Coordinates, ImageSettings, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings, crop, GetMediaAction, GetMediaResponse } from '../_lib/components/upload';
 import Button from './button';
 import Modal from './modal';
 import { useModalUpdate } from '../_lib/context/modalProvider';
@@ -13,7 +13,7 @@ import { MediaData } from '../_lib/api/media';
 import { areEquals, buildSearchParams, firstOrUndefined, getImageUrl } from '../_lib/utils';
 import { runRequest } from '../_lib/api/global';
 
-export default function Upload ({cropTitle, initialId, initialMedia, fieldName, isRequired=false, label, loading=false, readonly=false, requireCrop = false, size=96, uploadType = "full", setBlob}: Readonly<{
+export default function Upload ({cropTitle, initialId, initialMedia, fieldName, isRequired=false, label, loading=false, readonly=false, requireCrop = false, size=96, uploadType = "full", setBlob, onDelete}: Readonly<{
     cropTitle?: string,
     initialId?: number,
     initialMedia?: MediaData,
@@ -25,7 +25,8 @@ export default function Upload ({cropTitle, initialId, initialMedia, fieldName, 
     readonly?: boolean,
     size?: number,
     uploadType?: "full" | "profile",
-    setBlob?: (blob: Blob) => any
+    setBlob?: (blob: Blob) => any,
+    onDelete?: (mediaId: number) => any
 }>) { 
     const t = useTranslations('components');
     const tcommon = useTranslations('common');
@@ -57,14 +58,15 @@ export default function Upload ({cropTitle, initialId, initialMedia, fieldName, 
     }, [initialId]);
 
     useEffect(()=>{
-        if (!areEquals(initialMedia, lastInitialMedia) || !areEquals(initialId, lastInitialId)) {
+        if ((initialMedia && !areEquals(initialMedia, lastInitialMedia)) ||
+            (initialId && !areEquals(initialId, lastInitialId))) {
             setPreview(undefined);
             setError(false);
             if (previewUrl) URL.revokeObjectURL(previewUrl);
             setPreviewUrl(undefined);
             if (initialMedia) {
                 setLastInitialMedia (initialMedia);
-
+                setMedia(initialMedia);
             } else if (initialId) {
                 setLastInitialId (initialMedia);
                 runRequest(new GetMediaAction(), undefined, undefined, buildSearchParams({"id": ""+initialId}))
@@ -298,7 +300,9 @@ export default function Upload ({cropTitle, initialId, initialMedia, fieldName, 
      * When the user wants to delete the uploaded media
      */
     const onDeleteRequest = () => {
-        
+        if (media) {
+            onDelete && onDelete(media.id);
+        }
     }
 
     const getCoordinates = (e: PointerEvent): Coordinates => {
@@ -335,10 +339,14 @@ export default function Upload ({cropTitle, initialId, initialMedia, fieldName, 
                 </Image>
             </div>
             <div className="horizontal-list gap-2mm">
-                <Button title={t('upload.open')} onClick={()=>openFileDialog()} iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('upload.open')}</Button>
-                {media && <Button title={t('upload.delete')} className="danger" onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly} busy={loading}>
-                    {t('upload.delete')}
-                </Button>}
+                {/* Upload button */}
+                {!media && <Button title={t('upload.open')} onClick={()=>openFileDialog()}
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>
+                    {!media && t('upload.open')}</Button>}
+                {/* Delete button */}
+                {media && <Button title={t('upload.delete')} className="danger"
+                    onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly}
+                    busy={loading}>{t('upload.delete')}</Button>}
             </div>
         </div>
 

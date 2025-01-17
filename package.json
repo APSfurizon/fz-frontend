@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/env": "^15.1.5",
     "next": "^15.1.4",
     "next-intl": "^3.23.5",
     "next-translate": "^2.6.2",

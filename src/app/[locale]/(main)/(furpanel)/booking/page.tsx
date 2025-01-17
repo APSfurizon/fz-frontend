@@ -5,7 +5,7 @@ import Icon, { ICONS } from "../../../../_components/icon";
 import React, { MouseEvent, useEffect, useState } from "react";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
-import { EVENT_BANNER, EVENT_LOGO } from "@/app/_lib/constants";
+import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
@@ -261,6 +261,13 @@ export default function BookingPage() {
                     <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.messages.editing_locked.title") : t("booking.messages.editing_locked_warning.title")}>
                         {t(isEditLocked ? "booking.messages.editing_locked.description" : "booking.messages.editing_locked_warning.description", {lockDate: formatter.dateTime(pageData.editBookEndDate)})}
                     </NoticeBox>
+
+                    {GROUP_CHAT_URL &&
+                    <NoticeBox theme={NoticeTheme.FAQ} customIcon={ICONS.GROUPS} title={t("booking.messages.invite_group.title")}>
+                        {t.rich("booking.messages.invite_group.description", 
+                            {link: (chunks) => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
+                                {GROUP_CHAT_URL}</a>})}
+                    </NoticeBox>}
 
                     {/* Errors view */}
                     {bookingData?.errors && <>

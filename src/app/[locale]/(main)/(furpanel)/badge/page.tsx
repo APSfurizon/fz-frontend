@@ -5,7 +5,7 @@ import Icon, { ICONS } from "../../../../_components/icon";
 import { useEffect, useState } from "react";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import { useFormatter, useTranslations } from "next-intl";
-import { BadgeStatusApiResponse, FursonaNameChangeFormAction } from "@/app/_lib/api/badge";
+import { BadgeStatusApiResponse, DeleteBadgeAction, FursonaNameChangeFormAction } from "@/app/_lib/api/badge";
 import Upload from "@/app/_components/upload";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import StatusBox from "@/app/_components/statusBox";
@@ -13,12 +13,17 @@ import "../../../../styles/furpanel/badge.css";
 import Modal from "@/app/_components/modal";
 import DataForm from "@/app/_components/dataForm";
 import JanInput from "@/app/_components/janInput";
+import { runRequest } from "@/app/_lib/api/global";
+import { UploadBadgeAction } from "@/app/_lib/api/badge";
+import ModalError from "@/app/_components/modalError";
+import { useUser } from "@/app/_lib/context/userProvider";
 
 export default function BadgePage() {
   const tcommon = useTranslations("common");
   const t = useTranslations("furpanel");
   const formatter = useFormatter();
   const {showModal} = useModalUpdate();
+  const {setUpdateUser} = useUser();
   const [loading, setLoading] = useState(false);
   const [badgeStatus, setBadgeStatus] = useState<BadgeStatusApiResponse>();
 
@@ -26,7 +31,27 @@ export default function BadgePage() {
 
   // Badge upload
   const uploadBadge = (blob: Blob) => {
+    const dataToUpload: FormData = new FormData();
+    dataToUpload.append("image", blob);+
+    setLoading(true);
+    runRequest(new UploadBadgeAction(), undefined, dataToUpload)
+    .then(()=>setUpdateUser(true))
+    .catch((err)=>showModal(
+        tcommon("error"), 
+        <ModalError error={err} translationRoot="components" translationKey="upload.errors"></ModalError>
+    )).finally(()=>setLoading(false));
+    setLoading(true);
+  }
 
+  // Badge deletion
+  const deleteBadge = (id: number) => {
+    setLoading(true);
+    runRequest(new DeleteBadgeAction())
+    .then(()=>setUpdateUser(true))
+    .catch((err)=>showModal(
+        tcommon("error"), 
+        <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
+    )).finally(()=>setLoading(false));
   }
 
   // Change name
@@ -38,11 +63,11 @@ export default function BadgePage() {
     // TODO: Run loading fetch
     setBadgeStatus({
       badgeEditingDeadline: "2025-05-24T00:00:00",
-      badgeMedia: {
+      badgeMedia: /*{
         id: 1,
-        mediaType: "image/jpeg",
-        relativePath: "/data/1/31ehij1k23hepijo123phijo.jpeg"
-      },
+        mediaType: "image/webp",
+        relativePath: "/static/images/badges/1/8e99adfc-3e27-411c-95e4-ce8023f21cd2.webp"
+      }*/undefined,
       fursonaName: "Drew",
       fursuits: []
     });
@@ -63,7 +88,8 @@ export default function BadgePage() {
       </span>
       <div className="horizontal-list gap-4mm">
         <div className="vertical-list flex-vertical-center">
-          <Upload initialMedia={badgeStatus?.badgeMedia} requireCrop loading={loading}></Upload>
+          <Upload initialMedia={badgeStatus?.badgeMedia} requireCrop loading={loading}
+           setBlob={uploadBadge} onDelete={deleteBadge}></Upload>
         </div>
         <div className="vertical-list gap-2mm">
           <div className="fursona-change rounded-m horizontal-list flex-vertical-center gap-2mm">

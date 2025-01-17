@@ -113,6 +113,10 @@
                 "exchange_invite_sent": {
                     "title": "Invito inviato",
                     "description": "Verrete contattati via email per confermare lo scambio."
+                },
+                "invite_group": {
+                    "title": "Gruppo ufficiale",
+                    "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
                 }
             },
             "items": {
@@ -186,7 +190,7 @@
                 }
             },
             "errors": {
-                
+                "IMAGE_DIMENSION_TOO_BIG": "L'immagine è troppo grande"
             }
         },
         "debug": {

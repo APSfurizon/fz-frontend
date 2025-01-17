@@ -113,6 +113,10 @@
                 "exchange_invite_sent": {
                     "title": "Invite sent",
                     "description": "You will both be contacted via email to confirm the exchange."
+                },
+                "invite_group": {
+                    "title": "Official group",
+                    "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
                 }
             },
             "items": {
@@ -186,7 +190,7 @@
                 }
             },
             "errors": {
-
+                "IMAGE_DIMENSION_TOO_BIG": "The provided image is too big"
             }
         },
         "debug": {
