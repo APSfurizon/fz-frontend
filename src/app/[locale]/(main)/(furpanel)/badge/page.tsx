@@ -217,9 +217,11 @@ export default function BadgePage() {
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
         <div className="vertical-list flex-vertical-center">
-          <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
-           setBlob={uploadBadge} onDelete={promptBadgeDelete} size={130}>
-           </Upload>
+          <DataForm hideSave loading={loading} setLoading={setLoading}>
+            <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
+            setBlob={uploadBadge} onDelete={promptBadgeDelete} size={130}>
+            </Upload>
+          </DataForm>
         </div>
         <div className="vertical-list gap-2mm">
           <div className="fursona-change rounded-m horizontal-list flex-vertical-center gap-2mm flex-wrap">
@@ -285,7 +287,7 @@ export default function BadgePage() {
     <Modal title={t("badge.actions.edit_badge")} open={changeDataModalOpen} onClose={()=>setChangeDataModalOpen(false)} busy={loading}>
         <DataForm action={new BadgeDataChangeFormAction} loading={loading} setLoading={setLoading} hideSave
           className="gap-2mm" onFail={onChangeFail} onSuccess={onChangeSuccess} >
-          <JanInput inputType="text" fieldName="fursonaName" value={changeDataModalOpen ? badgeStatus?.mainBadge?.fursonaName : ""}
+          <JanInput inputType="text" fieldName="fursonaName" initialValue={changeDataModalOpen ? badgeStatus?.mainBadge?.fursonaName : ""}
             label={t("badge.input.new_name.label")} placeholder={t("badge.input.new_name.placeholder")}>
           </JanInput>
           <AutoInput fieldName="locale" required={true} minDecodeSize={2}
@@ -308,16 +310,18 @@ export default function BadgePage() {
         <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction} 
           restPathParams={editMode ? [""+currentFursuit?.id, "update-with-image"] : undefined}
           loading={loading} setLoading={setLoading} editFormData={editFursuitFormData}
-          hideSave className="gap-2mm" onFail={onFursuitAddEditFail} onSuccess={onFursuitAddEditSuccess} /*shouldReset={!addFursuitModalOpen}*/>
+          hideSave className="gap-2mm" onFail={onFursuitAddEditFail} onSuccess={onFursuitAddEditSuccess} shouldReset={!addFursuitModalOpen} resetOnSuccess>
           <Upload initialMedia={editMode ? deleteFursuitImage ? undefined : currentFursuit?.propic : undefined} requireCrop loading={loading}
-            setBlob={setFursuitBlob} onDelete={removeCurrentImage}></Upload>
-          <JanInput inputType="text" fieldName="name" value={editMode ? currentFursuit?.name : ""}
+            setBlob={setFursuitBlob} onDelete={removeCurrentImage}
+            label={t("badge.input.fursuit_image.label")}
+            helpText={t("badge.input.fursuit_image.help")}></Upload>
+          <JanInput inputType="text" fieldName="name" initialValue={editMode ? currentFursuit?.name : ""}
             label={t("badge.input.fursuit_name.label")} placeholder={t("badge.input.fursuit_name.placeholder")}>
           </JanInput>
-          <JanInput inputType="text" fieldName="species" value={editMode ? currentFursuit?.species : ""}
+          <JanInput inputType="text" fieldName="species" initialValue={editMode ? currentFursuit?.species : ""}
             label={t("badge.input.fursuit_species.label")} placeholder={t("badge.input.fursuit_species.placeholder")}>
           </JanInput>
-          <Checkbox fieldName="bring-to-current-event" disabled={!badgeStatus?.canBringFursuitsToEvent}
+          <Checkbox fieldName="bring-to-current-event" disabled={!(editMode && currentFursuit?.bringingToEvent) && !badgeStatus?.canBringFursuitsToEvent}
             initialValue={editMode ? currentFursuit?.bringingToEvent : false}>
             {t("badge.input.bring_to_event.label", {eventName: EVENT_NAME})}
           </Checkbox>

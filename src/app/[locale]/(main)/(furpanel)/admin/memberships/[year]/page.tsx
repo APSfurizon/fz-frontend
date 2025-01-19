@@ -154,31 +154,31 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                         {/* Copyable data */}
                         <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em"}}>
                             <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={tauth("register.form.first_name.label")} readOnly value={data.userInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={tauth("register.form.last_name.label")} readOnly value={data.userInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={tauth("register.form.email.label")} readOnly value={data.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.first_name.label")} readOnly initialValue={data.userInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.last_name.label")} readOnly initialValue={data.userInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.email.label")} readOnly initialValue={data.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                                 {data.userInfo.fiscalCode && 
-                                    <JanInput className="hoverable" label={tauth("register.form.fiscal_code.label")} readOnly value={data.userInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                                    <JanInput className="hoverable" label={tauth("register.form.fiscal_code.label")} readOnly initialValue={data.userInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
                             </div>
                             <hr></hr>
                             <span className="title small bold">{tauth("register.form.section.birth_data")}</span>
                             <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={tauth("register.form.birth_country.label")} readOnly value={data.userInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.birth_country.label")} readOnly initialValue={data.userInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                                 {data.userInfo.birthRegion &&
-                                    <JanInput className="hoverable" label={tauth("register.form.birth_region.label")} readOnly value={data.userInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                                <JanInput className="hoverable" label={tauth("register.form.birth_city.label")} readOnly value={data.userInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={tauth("register.form.birthday.label")} readOnly value={data.userInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                    <JanInput className="hoverable" label={tauth("register.form.birth_region.label")} readOnly initialValue={data.userInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                                <JanInput className="hoverable" label={tauth("register.form.birth_city.label")} readOnly initialValue={data.userInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.birthday.label")} readOnly initialValue={data.userInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                             </div>
                             <hr></hr>
                             <span className="title small bold">{tauth("register.form.section.residence_data")}</span>
                             <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={tauth("register.form.residence_country.label")} readOnly value={data.userInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.residence_country.label")} readOnly initialValue={data.userInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                                 {data.userInfo.residenceRegion &&
-                                        <JanInput className="hoverable" label={tauth("register.form.residence_region.label")} readOnly value={data.userInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                                <JanInput className="hoverable" label={tauth("register.form.residence_city.label")} readOnly value={data.userInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={tauth("register.form.residence_zip_code.label")} readOnly value={data.userInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={tauth("register.form.residence_address.label")} readOnly value={data.userInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={tauth("register.form.phone_number.label")} readOnly value={(data.userInfo.prefixPhoneNumber ?? "") + (data.userInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                        <JanInput className="hoverable" label={tauth("register.form.residence_region.label")} readOnly initialValue={data.userInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                                <JanInput className="hoverable" label={tauth("register.form.residence_city.label")} readOnly initialValue={data.userInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.residence_zip_code.label")} readOnly initialValue={data.userInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.residence_address.label")} readOnly initialValue={data.userInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={tauth("register.form.phone_number.label")} readOnly initialValue={(data.userInfo.prefixPhoneNumber ?? "") + (data.userInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                             </div>
                         </div>
                     </details>)}

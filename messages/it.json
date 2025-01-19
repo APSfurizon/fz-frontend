@@ -197,6 +197,10 @@
                     "placeholder": "Cerca un paese",
                     "help": "La bandiera comparirà sul tuo badge"
                 },
+                "fursuit_image": {
+                    "label": "Foto",
+                    "help": "Deve essere una fotografia"
+                },
                 "fursuit_name": {
                     "label": "Nome",
                     "placeholder": "Il nome del fursona"
@@ -219,7 +223,7 @@
                 },
                 "confirm_deletion": {
                     "title": "Conferma eliminazione",
-                    "description": "Vuoi eliminare il badge?"
+                    "description": "Vuoi eliminare l'immagine attuale?"
                 },
                 "confirm_fursuit_deletion": {
                     "title": "Elimina fursuit di {name}",
@@ -547,7 +551,7 @@
                     "placeholder": "esempio@furroso.com"
                 },
                 "confirm_email": {
-                    "label": "Confirm email",
+                    "label": "Conferma email",
                     "placeholder": "esempio@furroso.com"
                 },
                 "first_name": {

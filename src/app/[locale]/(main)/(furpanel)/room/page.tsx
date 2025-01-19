@@ -413,7 +413,7 @@ export default function RoomPage() {
     <Modal title={t("room.actions.rename")} icon={ICONS.EDIT_SQUARE} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)} busy={modalLoading}>
     { data?.currentRoomInfo && <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
-      onFail={commonFail} hideSave className="vertical-list gap-2mm">
+      onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess>
       <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
       <JanInput inputType="text" fieldName="name" required busy={modalLoading} label={t("room.input.rename_new_name.label")}
       placeholder={t("room.input.rename_new_name.placeholder")} minLength={2} maxLength={254}></JanInput>
@@ -430,11 +430,12 @@ export default function RoomPage() {
     <Modal title={t("room.actions.invite")} icon={ICONS.PERSON_ADD} open={inviteModalOpen} onClose={()=>setInviteModalOpen(false)} busy={modalLoading}>
     {data?.currentRoomInfo && <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
-      onFail={commonFail} hideSave className="vertical-list gap-2mm">
+      onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!inviteModalOpen}>
       <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
       <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
         max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
-        placeholder={t("room.input.invite.placeholder")} helpText={t("room.input.invite.help")} style={{maxWidth: "500px"}}/>
+        placeholder={t("room.input.invite.placeholder")} helpText={t("room.input.invite.help")} style={{maxWidth: "500px"}}
+        required/>
       {
         userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_ROOMS) && <>
         <Checkbox fieldName="force">{t("room.input.force_join.label")}</Checkbox>
@@ -564,10 +565,11 @@ export default function RoomPage() {
     {/* Room exchange modal */}
     <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
-        onFail={commonFail} hideSave className="vertical-list gap-2mm">
+        onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!exchangeModalOpen}>
         <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
-          label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
+          label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}
+          required/>
         <div className="horizontal-list gap-4mm">
           <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
           <div className="spacer"></div>

@@ -197,6 +197,10 @@
                     "placeholder": "Search a country",
                     "help": "The flag will appear onto your badge"
                 },
+                "fursuit_image": {
+                    "label": "Photo",
+                    "help": "Must be a photo of your fursuit"
+                },
                 "fursuit_name": {
                     "label": "Name",
                     "placeholder": "Enter the sona's name"
@@ -219,7 +223,7 @@
                 },
                 "confirm_deletion": {
                     "title": "Confirm deletion",
-                    "description": "Do you want to delete the current badge?"
+                    "description": "Do you want to delete the current image?"
                 },
                 "confirm_fursuit_deletion": {
                     "title": "Delete {name}'s fursuit",

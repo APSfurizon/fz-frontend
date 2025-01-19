@@ -1,5 +1,5 @@
 import Icon, { ICONS } from "./icon";
-import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef, createContext, useContext } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
 import "../styles/components/dataForm.css";
@@ -11,8 +11,25 @@ export interface SaveButtonData {
     iconName: string
 }
 
-export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", editFormData, setLoading, style, saveButton, resetOnFail=true, resetOnSuccess=false, restPathParams, shouldReset}: Readonly<{
-    action: FormApiAction<any, any, any>,
+// Context management
+interface FormUpdate {
+    reset: boolean,
+    setReset: (b: boolean) => void
+}
+
+const FormContext = createContext<FormUpdate | undefined>(undefined);
+
+export const useFormContext = () => {
+    const context = useContext(FormContext);
+    if (!context) {
+      throw new Error("useFormContext must be used within FormContext.Provider");
+    }
+    return context;
+};
+  
+
+export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", editFormData, setLoading, style, saveButton, resetOnFail=true, resetOnSuccess=false, restPathParams, shouldReset=false}: Readonly<{
+    action?: FormApiAction<any, any, any>,
     onSuccess?: (data: Boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: Function,
@@ -34,6 +51,7 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     restPathParams?: string[],
     shouldReset?: boolean,
   }>) {
+    const [reset, setReset] = useState(false);
     const t = useTranslations('components');
     const inputRef = useRef<HTMLFormElement>(null);
     if (saveButton === undefined) saveButton = {
@@ -41,24 +59,20 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
         iconName: ICONS.SAVE
     };
 
-    const resetData = () => {
-        if (!inputRef?.current?.elements) return;
-        Array.from(inputRef?.current?.elements).forEach((input)=>{
-            if (input) {
-                const event = new Event("change", { bubbles: true });
-                input.dispatchEvent(event);
-            }
-        })
-    }
-
     useEffect(()=>{
         if (shouldReset) {
-            inputRef?.current?.reset ();
-            resetData();
+            setReset(true);
         }
     }, [shouldReset])
 
+    useEffect(()=>{
+        if (reset) {
+            setReset(false);
+        }
+    }, [reset]);
+
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+        if (!action) throw new Error("dataform must have an action to be submitted")
         const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
         if (checkFn) {
             if (!checkFn(formData, e.currentTarget)) {
@@ -73,10 +87,10 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
                 onFail && onFail (errorData);
-                if (resetOnFail) {inputRef?.current?.reset (); resetData();}
+                if (resetOnFail) {setReset(true);}
             }).finally(()=>{
                 setLoading(false);
-                if (resetOnSuccess) {inputRef?.current?.reset (); resetData();}
+                if (resetOnSuccess) {setReset(true);}
             });
         e.preventDefault();
         e.stopPropagation();
@@ -84,7 +98,9 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
 
     return <>
         <form ref={inputRef} className={`data-form vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
-            {children}
+            <FormContext.Provider value={{reset, setReset}}>
+                {children}
+            </FormContext.Provider>
             {!hideSave && (
             <div className="toolbar-bottom">
                 <Button type="submit" disabled={disableSave} iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
