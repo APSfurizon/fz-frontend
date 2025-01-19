@@ -29,7 +29,7 @@ export default function UserPicture ({size, userData, showNickname, showFlag, hi
     return (
         <div className="user-picture-container vertical-list flex-vertical-center">
             <div className={`image-container rounded-m sponsor-${pictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`}>
-                <Image className="rounded-s profile-picture" src={getImageUrl(pictureData?.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC} alt={t('header.alt_profile_picture')} quality={100} width={size ?? 32} height={size ?? 32}></Image>
+                <Image unoptimized className="rounded-s profile-picture" src={getImageUrl(pictureData?.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC} alt={t('header.alt_profile_picture')} quality={100} width={size ?? 32} height={size ?? 32}></Image>
             </div>
             { showNickname && (
                 <span className="title semibold nickname small">

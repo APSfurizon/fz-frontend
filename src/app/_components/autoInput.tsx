@@ -211,7 +211,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     const renderResult = (element: AutoInputSearchResult, index: number) => {
         return <div key={index} className="search-result horizontal-list flex-vertical-center rounded-s" style={{color:'#fff',display:'flex'}} onMouseDown={()=>{addItem(element)}}>
             {element.imageUrl !== undefined &&
-                <Image src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC} width={32} height={32} 
+                <Image unoptimized src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC} width={32} height={32} 
                     alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
             }
             {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}
@@ -227,7 +227,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
         return <a key={index} className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
                 {element.imageUrl !== undefined &&
-                    <Image src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!} width={32} height={32}
+                    <Image unoptimized src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!} width={32} height={32}
                         alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
                 }
                 {element.icon !== undefined && <Icon iconName={element.icon}></Icon>}

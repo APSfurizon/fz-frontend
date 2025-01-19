@@ -334,7 +334,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={media?.mediaId} required={isRequired}></input>
         <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
             <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
-                <Image className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                <Image unoptimized className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
                     alt={t('upload.alt_preview_image')} width={size} height={size} quality={100}
                     style={{aspectRatio: "1", maxWidth: size, maxHeight: size, minWidth: size, minHeight: size, objectFit: "cover"}}>
                 </Image>

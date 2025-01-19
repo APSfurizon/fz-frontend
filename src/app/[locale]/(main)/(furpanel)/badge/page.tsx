@@ -252,7 +252,7 @@ export default function BadgePage() {
           {/* Fursuit badge rendering */}
           {badgeStatus?.fursuits.map((fursuit: Fursuit, index: number)=><div key={index} className="fursuit gap-2mm rounded-s">
             <div className="main-data vertical-list">
-              <Image className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100} src={getImageUrl(fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
+              <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100} src={getImageUrl(fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
               </Image>
               <span className="title average bold">{fursuit.name}</span>
               <span className="title small color-subtitle">{fursuit.species}</span>
