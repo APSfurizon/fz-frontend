@@ -192,11 +192,11 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                 <AutoInput fieldName="userId" manager={new AutoInputUserAddCardManager} label={t("admin.membership_manager.input.user.label")}
                     param={[selectedYear]}></AutoInput>
                 <div className="horizontal-list gap-4mm">
-                    <Button type="submit" className="success" iconName={ICONS.CHECK} busy={loading}>{tcommon("confirm")}</Button>
-                    <div className="spacer"></div>
                     <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={loading} onClick={()=>setAddModalOpen(false)}>
                         {tcommon("cancel")}
                     </Button>
+                    <div className="spacer"></div>
+                    <Button type="submit" className="success" iconName={ICONS.CHECK} busy={loading}>{tcommon("confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

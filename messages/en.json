@@ -47,7 +47,13 @@
             "hoverable": "Click to copy"
         },
         "coming_soon": "Coming soon...",
-        "source_code": "Source code: "
+        "source_code": "Source code: ",
+        "CRUD": {
+            "add": "Add",
+            "update": "Update",
+            "edit": "Edit",
+            "delete": "Delete"
+        }
     },
     "components": {
         "autoinput": {
@@ -170,27 +176,59 @@
         "badge": {
             "title": "Badge",
             "your_badges": "Your badges",
+            "your_fursuits": "Your {amount, plural, =1 {fursuit} other {fursuits}}",
             "deadline": "Edit deadline: {badgeDeadline}",
             "name": "Name",
+            "locale": "Locale",
             "actions": {
                 "upload_badge": "Upload your badge",
-                "edit_fursona_name": "Edit name"
+                "edit_badge": "Edit badge data",
+                "add_fursuit": "Add fursuit",
+                "edit_fursuit": "Edit {name}'s badge"
             },
             "input": {
                 "new_name": {
                     "label": "New name",
                     "placeholder": "Enter a new display name",
-                    "help": "This name will be used site wise"
+                    "help": "This name will be used site wise to identify your account"
+                },
+                "new_locale": {
+                    "label": "Locale",
+                    "placeholder": "Search a country",
+                    "help": "The flag will appear onto your badge"
+                },
+                "fursuit_name": {
+                    "label": "Name",
+                    "placeholder": "Enter the sona's name"
+                },
+                "fursuit_species": {
+                    "label": "Species",
+                    "placeholder": "Enter the animal species"
+                },
+                "bring_to_event": {
+                    "label": "Bring to {eventName}"
+                },
+                "show_in_fursuit_count": {
+                    "label": "Mostra nel fursuit count"
                 }
             },
             "messages": {
                 "what_to_upload": {
                     "title": "What to upload here?",
                     "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon’s staff."
+                },
+                "confirm_deletion": {
+                    "title": "Confirm deletion",
+                    "description": "Do you want to delete the current badge?"
+                },
+                "confirm_fursuit_deletion": {
+                    "title": "Delete {name}'s fursuit",
+                    "description": "Do you want to delete {name}'s fursuit?"
                 }
             },
             "errors": {
-                "IMAGE_DIMENSION_TOO_BIG": "The provided image is too big"
+                "IMAGE_DIMENSION_TOO_BIG": "The provided image is too big",
+                "FURSUIT_NOT_FOUND": "Fursuit not found."
             }
         },
         "debug": {
@@ -249,7 +287,8 @@
                 },
                 "invite": {
                     "label": "Invite someone in your room",
-                    "placeholder": "Search for a user"
+                    "placeholder": "Search for a user",
+                    "help": "You can only invite users with a paid order, except daily tickets"
                 },
                 "force_join": {
                     "label": "Force join the room"

@@ -75,6 +75,7 @@ div.fill-all {
 
 button.handle {
     position: absolute;
+    cursor: pointer;
     display: block;
     width: 20px;
     height: 20px;

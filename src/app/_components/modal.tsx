@@ -1,13 +1,21 @@
-import { ChangeEvent, CSSProperties, KeyboardEvent, EventHandler, useEffect } from "react";
+"use client"
+import { ChangeEvent, CSSProperties, KeyboardEvent, EventHandler, useEffect, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import "../styles/components/modal.css";
 import { useTranslations } from "next-intl";
+import ReactDOM from "react-dom";
 
 export default function Modal ({children, className, icon, onClose, busy, open, overlayClassName, overlayStyle, showHeader=true, style, title, zIndex=500 }: Readonly<{
     children?: React.ReactNode, className?: string, icon?: string, onClose: Function, busy?: boolean, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, showHeader?: boolean, style?: CSSProperties, title?: string, zIndex?: number;
 }>) {
     const t = useTranslations("components");
-    return <>
+    const [container, setContainer] = useState<HTMLElement> ();
+
+    useEffect(()=>{
+        setContainer(globalThis?.document.getElementById("portal-root") ?? undefined);
+    }, []);
+
+    return container ? ReactDOM.createPortal(<>
         <div className={`modal-overlay ${overlayClassName ?? ""} ${open ? "open" : ""}`} style={{zIndex: zIndex, ...overlayStyle}}></div>
         <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`} style={{zIndex: zIndex, ...style}}>
             {
@@ -22,5 +30,5 @@ export default function Modal ({children, className, icon, onClose, busy, open, 
             }
             {children}
         </div>
-    </>
+    </>, container) : <></>;
 }

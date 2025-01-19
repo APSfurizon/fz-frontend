@@ -47,7 +47,13 @@
             "hoverable": "Clicca per copiare"
         },
         "coming_soon": "Presto in arrivo...",
-        "source_code": "Codice sorgente: "
+        "source_code": "Codice sorgente: ",
+        "CRUD": {
+            "add": "Aggiungi",
+            "update": "Aggiorna",
+            "edit": "Modifica",
+            "delete": "Elimina"
+        }
     },
     "components": {
         "autoinput": {
@@ -171,26 +177,58 @@
             "title": "Badge",
             "your_badges": "I tuoi badge",
             "deadline": "Limite modifiche: {badgeDeadline}",
+            "your_fursuits": "{amount, plural, =1 {La tua} other {Le tue}} fursuit",
             "name": "Nome",
+            "locale": "Paese",
             "actions": {
                 "upload_badge": "Carica il tuo badge",
-                "edit_fursona_name": "Modifica nome"
+                "edit_badge": "Modifica dati badge",
+                "add_fursuit": "Aggiungi fursuit",
+                "edit_fursuit": "Modifica badge di {name}"
             },
             "input": {
                 "new_name": {
                     "label": "Nuovo nome",
                     "placeholder": "Inserisci un nuovo nome",
-                    "help": "Verrà visualizzato in tutto il sito"
+                    "help": "Verrà usato sul sito per identificare il tuo account"
+                },
+                "new_locale": {
+                    "label": "Paese",
+                    "placeholder": "Cerca un paese",
+                    "help": "La bandiera comparirà sul tuo badge"
+                },
+                "fursuit_name": {
+                    "label": "Nome",
+                    "placeholder": "Il nome del fursona"
+                },
+                "fursuit_species": {
+                    "label": "Specie",
+                    "placeholder": "Inserisci la specie animale"
+                },
+                "bring_to_event": {
+                    "label": "Porta a {eventName}"
+                },
+                "show_in_fursuit_count": {
+                    "label": "Mostra nel fursuit count"
                 }
             },
             "messages": {
                 "what_to_upload": {
                     "title": "Cosa caricare qui?",
                     "description": "Qualsiasi immagine caricata qua verrà stampata sul tuo badge personale e verrà usata come foto profilo in tutto il sito. Ogni caricamento è visionato e può essere rimosso dallo staff di Furizon."
+                },
+                "confirm_deletion": {
+                    "title": "Conferma eliminazione",
+                    "description": "Vuoi eliminare il badge?"
+                },
+                "confirm_fursuit_deletion": {
+                    "title": "Elimina fursuit di {name}",
+                    "description": "Vuoi eliminare la fursuit di {name}?"
                 }
             },
             "errors": {
-                "IMAGE_DIMENSION_TOO_BIG": "L'immagine è troppo grande"
+                "IMAGE_DIMENSION_TOO_BIG": "L'immagine è troppo grande",
+                "FURSUIT_NOT_FOUND": "La fursuit non è stata trovata."
             }
         },
         "debug": {
@@ -249,7 +287,8 @@
                 },
                 "invite": {
                     "label": "Invita qualcuno in stanza",
-                    "placeholder": "Cerca un utente"
+                    "placeholder": "Cerca un utente",
+                    "help": "Puoi invitare solo utenti con un ordine pagato, eccetto biglietti giornalieri"
                 },
                 "force_join": {
                     "label": "Forza invito"
@@ -259,7 +298,7 @@
                 },
                 "exchange_user": {
                     "label": "Destinatario",
-                    "placeholder": "Cerca un utente destinatario"
+                    "placeholder": "Cerca un destinatario"
                 }
             },
             "invite": {

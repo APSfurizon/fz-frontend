@@ -1,4 +1,5 @@
 import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
+import { MediaData } from "../api/media";
 
 export interface AutoInputSearchResult {
     id?: number,
@@ -6,6 +7,10 @@ export interface AutoInputSearchResult {
     code?: string,
     icon?: string,
     imageUrl?: string,
+}
+
+export interface UserSearchResult extends Partial<AutoInputSearchResult> {
+   propic: MediaData
 }
 
 export class AutoInputFilter {

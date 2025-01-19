@@ -48,6 +48,9 @@ export function validateImage (file: File): Promise<ImageBitmap> {
 }
 
 export function getImageSettings (image: ImageBitmap, size: {width: number, height: number}): ImageSettings {
+    if (!image) {
+        return {width: 0, height: 0, resizeFactor: 1}
+    }
     const isWidthBigger = image.width > image.height;
     const containerSize = isWidthBigger ? size.width : size.height;
     const imageSize = isWidthBigger ? image.width : image.height;

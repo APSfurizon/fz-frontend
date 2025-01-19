@@ -35,6 +35,7 @@ export default async function LocalizedLayout({
           <div className="spacer"></div>
           <Footer></Footer>
         </NextIntlClientProvider>
+        <div id="portal-root"></div>
       </body>
     </html>
   );

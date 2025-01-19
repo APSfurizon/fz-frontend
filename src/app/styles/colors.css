@@ -145,6 +145,9 @@
     /* Exchange confirm page*/
     --exchange-info-bg: #242C38;
 
+    /* Badge page */
+    --badge-fursuit-bg: #ffffff32;
+
     --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;
     --super-sponsor-color: #DB9703;

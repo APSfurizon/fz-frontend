@@ -55,6 +55,8 @@ div.guest-container {
 .room-container {
     flex-wrap: wrap;
     transition-duration: 120ms;
+    max-height: 80vh;
+    overflow-y: scroll;
 
     a.room-type-container {
         max-width: 100%;

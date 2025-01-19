@@ -1,7 +1,8 @@
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult } from "../components/autoInput";
+import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, UserSearchResult } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams, nullifyEmptyString } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse } from "./global";
+import { MediaData } from "./media";
 
 export enum SponsorType {
     NONE = "NONE",
@@ -19,7 +20,7 @@ export type UserData = {
     userId: number,
     fursonaName?: string,
     locale?: string,
-    propicUrl?: string,
+    propic?: MediaData,
     sponsorship: SponsorType
 }
 
@@ -60,7 +61,7 @@ export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErro
 }
 
 export interface UserSearchResponse extends ApiResponse {
-    users: AutoInputSearchResult[]
+    users: UserSearchResult[]
 }
 
 export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
@@ -81,7 +82,8 @@ export class AutoInputUsersManager implements AutoInputManager {
         return new Promise((resolve, reject) => {
             const params = buildSearchParams({"id": filter.filteredIds.map(num=>""+num)})
             runRequest (new UserSearchAction(), ["by-id"], undefined, params).then (results => {
-                resolve (filterLoaded(results as AutoInputSearchResult[], filter));
+                const users = (results as UserSearchResponse).users.map(usr=>toSearchResult(usr));
+                resolve (filterLoaded(users, filter));
             });
         });
     }
@@ -90,14 +92,25 @@ export class AutoInputUsersManager implements AutoInputManager {
         return new Promise((resolve, reject) => {
             runRequest (new UserSearchAction(), undefined, undefined, undefined).then (results => {
                 const searchResult = results as UserSearchResponse;
+                const users = searchResult.users.map(usr=>toSearchResult(usr));
                 resolve (
-                    filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                    filterLoaded(users, filter, filterOut)
                 );
             });
         });
     }
 
     isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+}
+
+export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
+    return {
+        id: usr.id,
+        code: usr.code,
+        icon: usr.icon,
+        description: usr.description,
+        imageUrl: usr.propic?.mediaUrl ?? null
+    }
 }
 
 /**
@@ -109,8 +122,9 @@ export class AutoInputRoomInviteManager extends AutoInputUsersManager {
         return new Promise((resolve, reject) => {
             runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-not-in-room": "true"})).then (results => {
                 const searchResult = results as UserSearchResponse;
+                const users = searchResult.users.map(usr=>toSearchResult(usr));
                 resolve (
-                    filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                    filterLoaded(users, filter, filterOut)
                 );
             });
         });
