@@ -228,6 +228,10 @@
                 "confirm_fursuit_deletion": {
                     "title": "Delete {name}'s fursuit",
                     "description": "Do you want to delete {name}'s fursuit?"
+                },
+                "fursuit_badge": {
+                    "title": "Wanna bring your suit to Furizon?",
+                    "description": "Be sure to check <b>Bring to {eventName}</b>, so that Furizon can organize the fursuit lounge. As of now, you are capable of bringing a total of {maxFursuits, plural, =1 {1 fursuit} other {# fursuits}}. To bring more than that amount, you can buy extra badges by clicking <b>Edit reservation</b> in the Booking tab."
                 }
             },
             "errors": {

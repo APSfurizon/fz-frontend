@@ -241,7 +241,7 @@ export default function BadgePage() {
         </div>
       </div>
       {/* Fursuits */}
-      <div className="fursuit-section rounded-m">
+      <div className="fursuit-section rounded-m vertical-list gap-2mm">
         <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
           <Icon iconName={ICONS.PETS}></Icon>
           <span className="title average">{t("badge.your_fursuits", {amount: badgeStatus?.fursuits.length ?? 0})}</span>
@@ -280,6 +280,10 @@ export default function BadgePage() {
             </div>
           </div>)}
         </div>
+        <NoticeBox theme={NoticeTheme.FAQ} title={t("badge.messages.fursuit_badge.title")}>
+          {t.rich("badge.messages.fursuit_badge.description",
+            {eventName: EVENT_NAME, maxFursuits: badgeStatus?.maxFursuits ?? 0, b: (chunks)=><b className="highlight">{chunks}</b>})}
+        </NoticeBox>
       </div>
     </div>
 

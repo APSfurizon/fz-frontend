@@ -228,6 +228,10 @@
                 "confirm_fursuit_deletion": {
                     "title": "Elimina fursuit di {name}",
                     "description": "Vuoi eliminare la fursuit di {name}?"
+                },
+                "fursuit_badge": {
+                    "title": "Vuoi portare la tua suit a furizon?",
+                    "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, cosicchè Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
                 }
             },
             "errors": {
