@@ -278,7 +278,7 @@ export default function RoomPage() {
           <div className="spacer"></div>
           <Button iconName={ICONS.REFRESH} onClick={()=>setData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
           {
-            data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom && false &&
+            data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
               <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>
                 {t("room.actions.upgrade_room")}
               </Button>
@@ -304,7 +304,7 @@ export default function RoomPage() {
               ? <>
                   <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={()=>createRoom()}>{t("room.actions.create_a_room")}</Button>
                   <span className="title small">{t("room.or")}</span>
-                  <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder || true} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.upgrade_room")}</Button>
+                  <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={()=>setBuyModalOpen(true)}>{t("room.actions.upgrade_room")}</Button>
                   <span className="title small">{t("room.or")}</span>
                   <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomExchange()} 
                     disabled={!!data && !data.canExchange}>{t("room.actions.exchange")}</Button>
