@@ -62,6 +62,6 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
             
             {children}
         </div>
-        <Modal icon={icon} title={title} open={isOpen} onClose={hideModal}>{modalChildren}</Modal>
+        <Modal icon={icon} title={title} open={isOpen} onClose={hideModal} zIndex={600}>{modalChildren}</Modal>
     </>;
   }

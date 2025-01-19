@@ -8,13 +8,13 @@ div.jan-input:has(input:required) label::after {
 /* Error style */
 div.input-container:has(input.input-field.danger),
 div.jan-input.danger>div.input-container,
-div.input-container:has(input.input-field:invalid) {
+div.input-container:has(input.input-field:user-invalid) {
     outline-color: var(--text-input-border-danger);
 }
 
 /* Success style */
 div.input-container:has(input.input-field.success),
-div.jan-input.success>div.input-container:has(input.input-field:valid) {
+div.jan-input.success>div.input-container:has(input.input-field:user-valid) {
     outline-color: var(--text-input-border-success);
 }
 

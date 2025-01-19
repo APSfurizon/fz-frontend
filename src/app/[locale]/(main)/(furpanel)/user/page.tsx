@@ -79,15 +79,15 @@ export default function UserPage() {
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.first_name.label")} placeholder={tauth("register.form.first_name.placeholder")}
-                  value={personalInformation?.firstName}/>
+                  initialValue={personalInformation?.firstName}/>
                 <JanInput fieldName="lastName" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.last_name.label")} placeholder={tauth("register.form.last_name.placeholder")}
-                  value={personalInformation?.lastName}/>
+                  initialValue={personalInformation?.lastName}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="allergies" required={false} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.allergies.label")} placeholder={tauth("register.form.allergies.placeholder")}
-                  value={personalInformation?.allergies}/>
+                  initialValue={personalInformation?.allergies}/>
               </div>
               <span className="title average">{tauth("register.form.section.birth_data")}</span>
               <div className="form-pair horizontal-list gap-4mm">
@@ -96,14 +96,14 @@ export default function UserPage() {
                   label={tauth("register.form.birth_country.label")} placeholder={tauth("register.form.birth_country.placeholder")}
                   initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}/>
                 <JanInput fieldName="birthday" required={true} inputType="date" busy={personalInfoLoading}
-                label={tauth("register.form.birthday.label")} value={personalInformation?.birthday}/>
+                label={tauth("register.form.birthday.label")} initialValue={personalInformation?.birthday}/>
               </div>
               {/* Show only if birth country is Italy */}
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text"
                   pattern={/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi} busy={personalInfoLoading} disabled={!fiscalCodeRequired}
                   label={tauth("register.form.fiscal_code.label")} placeholder={tauth("register.form.fiscal_code.placeholder")}
-                  value={fiscalCodeRequired ? personalInformation?.fiscalCode : ""}/>
+                  initialValue={fiscalCodeRequired ? personalInformation?.fiscalCode : ""}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="birthRegion" minDecodeSize={2} manager={new AutoInputStatesManager} 
@@ -112,7 +112,7 @@ export default function UserPage() {
                   initialData={personalInformation?.birthRegion ? [personalInformation?.birthRegion] : undefined}/>
                 <JanInput fieldName="birthCity" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.birth_city.label")} placeholder={tauth("register.form.birth_city.placeholder")}
-                  value={personalInformation?.birthCity}/>
+                  initialValue={personalInformation?.birthCity}/>
               </div>
               <span className="title average">{tauth("register.form.section.residence_data")}</span>
               <div className="form-pair horizontal-list gap-4mm">
@@ -129,15 +129,15 @@ export default function UserPage() {
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="residenceCity" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.residence_city.label")} placeholder={tauth("register.form.residence_city.placeholder")}
-                  value={personalInformation?.residenceCity}/>
+                  initialValue={personalInformation?.residenceCity}/>
                 <JanInput fieldName="residenceZipCode" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.residence_zip_code.label")} placeholder={tauth("register.form.residence_zip_code.placeholder")}
-                  value={personalInformation?.residenceZipCode}/>
+                  initialValue={personalInformation?.residenceZipCode}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="residenceAddress" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.residence_address.label")} placeholder={tauth("register.form.residence_address.placeholder")}
-                  value={personalInformation?.residenceAddress}/>
+                  initialValue={personalInformation?.residenceAddress}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 {/* Phone number */}
@@ -148,7 +148,7 @@ export default function UserPage() {
                   initialData={personalInformation?.prefixPhoneNumber ? [personalInformation?.prefixPhoneNumber] : undefined}/>
                 <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.phone_number.label")} placeholder={tauth("register.form.phone_number.placeholder")}
-                  style={{flex: "2"}} value={personalInformation?.phoneNumber}/>
+                  style={{flex: "2"}} initialValue={personalInformation?.phoneNumber}/>
               </div>
             </DataForm>
           </div>

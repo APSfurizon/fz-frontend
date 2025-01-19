@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
 import { areEquals, getImageUrl, isEmpty } from "../_lib/utils";
 import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
+import { useFormContext } from "./dataForm";
 
 /**
  * 
@@ -72,6 +73,9 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
 
     /* waitForParam */
     const [waitForParam, setWaitForParam] = useState(false);
+
+    /* reset */
+    const { reset } = useFormContext();
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -182,7 +186,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     }
 
     useEffect(()=> {
-        if ((initialData !== undefined && !areEquals(initialData, latestInitialData)) || (waitForParam && param)) {
+        if ((initialData !== undefined && (!areEquals(initialData, latestInitialData) || reset)) || (waitForParam && param)) {
             if (!param && paramRequired) {
                 setWaitForParam(true);
                 return;
@@ -197,10 +201,16 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 }
                 onChange && onChange (values ?? [], values, undefined);
             });
-        }  
+        } else if (reset) {
+            setSelectedValues([]);
+            setSelectedIds([]);
+            setSearchInput("");
+            setSearchResults([]);
+            onChange && onChange ([], [], undefined);
+        }
         setWaitForParam(false);
         setLatestInitialData(initialData);
-    }, [initialData, param]);
+    }, [initialData, param, reset]);
 
     /**
      * Renders each search result

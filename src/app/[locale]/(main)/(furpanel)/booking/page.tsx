@@ -290,9 +290,9 @@ export default function BookingPage() {
         {/* Room exchange modal */}
         <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
-            onFail={exchangeFail} hideSave className="vertical-list gap-2mm">
+            onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
             <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
-            <AutoInput fieldName="recipientId" manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
+            <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                 label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
             <div className="horizontal-list gap-4mm">
                 <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
