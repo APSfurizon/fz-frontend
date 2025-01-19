@@ -9,6 +9,7 @@ div.modal-dialog {
 div.modal-overlay {
     background-color: var(--modal-overlay-bg);
     position: fixed;
+    transform: none;
     top: 0;
     left: 0;
     width: 100vw;
@@ -19,7 +20,7 @@ div.modal-overlay {
 div.modal-dialog {
     max-width: 210mm;
     max-height: 100vh;
-    overflow: auto;
+    overflow: visible;
     background-color: var(--modal-dialog-bg);
     box-shadow: 0px 3px 20px 1px #0000003F;
     gap: 0.9375em;
@@ -51,8 +52,8 @@ div.modal-dialog div.modal-header a.header-close {
     color: var(--modal-button-close);
 }
 
-div.modal-dialog div.modal-header a.header-close:hover {
-    color: var(--modal-button-close-hover);
+div.modal-dialog div.modal-header a.header-close:hover i {
+    color: var(--modal-button-close-hover) !important;
 }
 
 div.modal-dialog div.bottom-toolbar {

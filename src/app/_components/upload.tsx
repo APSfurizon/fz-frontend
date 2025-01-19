@@ -4,31 +4,35 @@ import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateActi
 import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
-import { getImageSettings, Coordinates, ImageSettings, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings, crop, UploadBadgeAction, BadgeUploadResponse } from '../_lib/components/upload';
+import { getImageSettings, Coordinates, ImageSettings, VALID_FILE_TYPES, validateImage, HandleSettings, WholeHandleSettings, crop, GetMediaAction, GetMediaResponse } from '../_lib/components/upload';
 import Button from './button';
 import Modal from './modal';
 import { useModalUpdate } from '../_lib/context/modalProvider';
 import "../styles/components/userUpload.css";
+import { MediaData } from '../_lib/api/media';
+import { areEquals, buildSearchParams, firstOrUndefined, getImageUrl } from '../_lib/utils';
 import { runRequest } from '../_lib/api/global';
-import ModalError from './modalError';
-import { fromUploadResponse, MediaData } from '../_lib/api/media';
 
-export default function Upload ({cropTitle, initialData, fieldName, isRequired=false, label, readonly=false, requireCrop = false, size=96, uploadType = "full"}: Readonly<{
+export default function Upload ({children, cropTitle, initialMedia, fieldName, isRequired=false, label, loading=false, readonly=false, requireCrop = false, size=96, uploadType = "full", setBlob, onDelete}: Readonly<{
+    children?: React.ReactNode,
     cropTitle?: string,
-    initialData?: number,
+    initialMedia?: MediaData,
     fieldName?: string,
     isRequired?: boolean,
     label?: string,
+    loading: boolean,
     requireCrop?: boolean,
     readonly?: boolean,
     size?: number,
-    uploadType?: "full" | "profile"
+    uploadType?: "full" | "profile",
+    setBlob?: (blob?: Blob) => any,
+    onDelete?: (mediaId: number) => any
 }>) { 
     const t = useTranslations('components');
     const tcommon = useTranslations('common');
-    const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [media, setMedia] = useState<MediaData | undefined>();
+    const [lastInitialMedia, setLastInitialMedia] = useState<MediaData>();
     const inputRef = useRef<HTMLInputElement> (null);
     const {showModal} = useModalUpdate();
     {/* Crop dialog */}
@@ -36,8 +40,9 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     const canvasRef = useRef<HTMLCanvasElement> (null);
     const containerRef = useRef<HTMLDivElement> (null);
     const [cropDialogOpen, setCropDialogOpen] = useState(false);
-    const [preview, setPreview] = useState<ImageBitmap>();
-    const [previewString, setPreviewString] = useState<string>();
+    const [imageToCrop, setImageToCrop] = useState<ImageBitmap>();
+    const [preview, setPreview] = useState<Blob> ();
+    const [previewUrl, setPreviewUrl] = useState<string>();
     {/* Crop UI Logic */}
     const [imageSettings, setImageSettings] = useState<ImageSettings>();
     const EMPTY_HANDLE: HandleSettings = {coordinates: {x: 0, y:0}, active: false};
@@ -46,12 +51,17 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     const [wholeHandle, setWholeHandle] = useState<WholeHandleSettings>({startingOffset: {x: 0, y: 0}, active: false});
     const [centerOffset, setCenterOffset] = useState<Coordinates>({x: 50, y:50});
 
-    /**Loads the initial value media via its id */
-    useEffect(()=> {
-        if (initialData) {
-
+    /**Loads the initial value media */
+    useEffect(()=>{
+        if (!areEquals(initialMedia, lastInitialMedia)) {
+            setPreview(undefined);
+            setError(false);
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            setPreviewUrl(undefined);
+            setLastInitialMedia (initialMedia);
+            setMedia(initialMedia);
         }
-    }, [initialData]);
+    }, [initialMedia])
 
     const openFileDialog = () => {
         inputRef.current?.click();
@@ -62,9 +72,9 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         if (e.currentTarget.files && e.currentTarget.files.length == 1) {
             validateImage(inputRef.current!.files![0]).then((image)=>{
                 if (requireCrop) {
-                    setPreview(image);
-                    if (previewString) URL.revokeObjectURL(previewString);
-                    setPreviewString(URL.createObjectURL(inputRef.current!.files![0]));
+                    setImageToCrop(image);
+                    if (previewUrl) URL.revokeObjectURL(previewUrl);
+                    setPreviewUrl(URL.createObjectURL(inputRef.current!.files![0]));
                     setImageSettings(getImageSettings(image, previewRef.current!));
                     setCropDialogOpen(true);
                 } else {
@@ -76,6 +86,14 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
                 setError(true);
             })
         }
+    };
+    
+    const onCropCanceled = () => {
+        setCropDialogOpen(false);
+        setImageSettings(undefined);
+        setPreview(undefined);
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(undefined);
     };
 
     /**To re-render handles */
@@ -104,10 +122,10 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     }, [topHandle, bottomHandle, imageSettings]);
 
     useEffect(() => {
-        if (isLoading || !preview) return;
+        if (loading || !imageToCrop) return;
         if (previewRef.current) {
             const observer = new ResizeObserver((entries) => {
-                let settings = getImageSettings(preview, previewRef.current!);
+                let settings = getImageSettings(imageToCrop, previewRef.current!);
                 onPreviewLoaded();
             });
 
@@ -132,29 +150,28 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
         } else {
             cropPromise = crop(image, {x: 0, y: 0}, {x: image.width, y: image.height}, 1);
         }
-        setPreview(undefined);
-        image.close();
+        setImageToCrop(undefined);
         
         cropPromise.then((imageBlob) => {
-            const formData = new FormData();
-            formData.append("image", imageBlob);
-            setLoading(true);
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            setPreviewUrl(URL.createObjectURL(imageBlob));
+            if (setBlob) {
+                setBlob(imageBlob);
+            }
             setError(false);
-            runRequest(new UploadBadgeAction(), undefined, formData, undefined)
-            .then((badge) => {
-                setMedia(fromUploadResponse(badge as BadgeUploadResponse));
-            }).catch((err)=>showModal(
-                  tcommon("error"), 
-                  <ModalError error={err} translationRoot="components" translationKey="upload.errors"/>
-            )).finally(()=>setLoading(false));
-        })
+        }).finally(()=>{
+            image.close();
+            setImageToCrop(undefined);
+            setCropDialogOpen(false);
+        });
     };
 
     const onPreviewLoaded = () => {
-        if (isLoading || !preview) return;
-        setImageSettings(getImageSettings(preview, previewRef.current!));
+        if (loading || !imageToCrop) return;
+        setImageSettings(getImageSettings(imageToCrop, previewRef.current!));
         setTopHandle({...EMPTY_HANDLE});
         setBottomHandle({...EMPTY_HANDLE, coordinates: {x: 100, y: 100}});
+        
     };
 
     const onMove = (e: PointerEvent<HTMLDivElement>) => {
@@ -280,7 +297,14 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
      * When the user wants to delete the uploaded media
      */
     const onDeleteRequest = () => {
-        
+        if (media) {
+            onDelete && onDelete(media.mediaId);
+        } else if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+            setPreviewUrl(undefined);
+            setPreview(undefined);
+            setBlob && setBlob(undefined);
+        }
     }
 
     const getCoordinates = (e: PointerEvent): Coordinates => {
@@ -305,32 +329,42 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
     ]
 
     return <>
-        <label htmlFor={fieldName} className={`upload-label title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}>{label}</label>
-        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={media?.id} required={isRequired}></input>
+        {label && <label htmlFor={fieldName} className={`upload-label title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}>
+            {label}
+        </label>}
+        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={media?.mediaId} required={isRequired}></input>
         <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
             <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
-                <Image className="rounded-s upload-picture" src={media?.relativePath ?? EMPTY_PROFILE_PICTURE_SRC}
-                    alt={t('upload.alt_preview_image')} width={size} height={size}
-                    style={{aspectRatio: "1", maxWidth: size, maxHeight: size, objectFit: "contain"}}>
+                <Image unoptimized className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                    alt={t('upload.alt_preview_image')} width={size} height={size} quality={100}
+                    style={{aspectRatio: "1", maxWidth: size, maxHeight: size, minWidth: size, minHeight: size, objectFit: "cover"}}>
                 </Image>
             </div>
-            <div className="horizontal-list gap-2mm">
-                <Button title={t('upload.open')} onClick={()=>openFileDialog()} iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={isLoading}>{!media && t('upload.open')}</Button>
-                {media && <Button title={t('upload.upload')} className="danger" onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly} busy={isLoading}></Button>}
+            <div className="vertical-list gap-2mm">
+                {/* Upload button */}
+                {!media && <Button title={t('upload.open')} onClick={()=>openFileDialog()}
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>
+                    {!media && t('upload.open')}</Button>}
+                {/* Delete button */}
+                {(media || previewUrl) && <Button title={t('upload.delete')} className="danger"
+                    onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly}
+                    busy={loading}>{t('upload.delete')}</Button>}
             </div>
+            {children}
         </div>
 
         {/* Form data */}
-        <form className="suppressed-input">
+        <div className="suppressed-input">
             <input type="hidden" value={uploadType}></input>
             <input type="file" accept={VALID_FILE_TYPES.join(',')} ref={inputRef} onChange={onFileChosen}></input>
-        </form>
+        </div>
 
         {/* Crop dialog */}
-        <Modal style={{overflow: "hidden"}} open={cropDialogOpen} title={cropTitle ?? t("upload.crop")} onClose={()=> setCropDialogOpen(false)}>
-            <div className="crop-container" ref={containerRef} onResize={()=>onPreviewLoaded()} onPointerMove={onMove} onPointerLeave={onLeave} onPointerDown={onPointerDown} onPointerUp={onLeave}>
+        <Modal style={{overflow: "visible"}} open={cropDialogOpen} title={cropTitle ?? t("upload.crop")} onClose={()=> setCropDialogOpen(false)} zIndex={505}>
+            <div className="crop-container" ref={containerRef} onResize={()=>onPreviewLoaded()} onPointerMove={onMove} onPointerLeave={onLeave}
+                onPointerDown={onPointerDown} onPointerUp={onLeave}>
                 <div className="fill-all"></div>
-                <Image width={256} height={256} alt="" src={previewString ?? EMPTY_PROFILE_PICTURE_SRC}
+                <Image width={256} height={256} alt="" src={previewUrl ?? EMPTY_PROFILE_PICTURE_SRC}
                     className={"crop-image"} style={{objectFit: "contain"}} ref={previewRef}
                     onLoad={()=>onPreviewLoaded()}>
                 </Image>
@@ -346,13 +380,12 @@ export default function Upload ({cropTitle, initialData, fieldName, isRequired=f
                     onPointerUp={()=>setBottomHandle({...bottomHandle, active: false})}
                     onClick={()=>setBottomHandle({...bottomHandle, active: false})}></button>
             </div>
-            <span>{imageSettings?.width} - {imageSettings?.height}. Resize factor: {imageSettings?.resizeFactor}</span>
             <div className="bottom-toolbar">
-                <Button title={tcommon('cancel')} className="danger" onClick={()=>setCropDialogOpen(false)}
-                    iconName={ICONS.CANCEL} disabled={readonly} busy={isLoading}>{tcommon('cancel')}</Button>
+                <Button title={tcommon('cancel')} className="danger" onClick={()=>onCropCanceled()}
+                    iconName={ICONS.CANCEL} disabled={readonly} busy={loading}>{tcommon('cancel')}</Button>
                 <div className="spacer"></div>
-                <Button title={t('upload.upload')} onClick={()=>onFileUpload(preview!)}
-                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={isLoading}>{!media && t('upload.upload')}</Button>    
+                <Button title={t('upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('upload.upload')}</Button>    
             </div>
         </Modal>    
     </>

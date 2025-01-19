@@ -1,6 +1,6 @@
 import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
 import { Coordinates, Rectangle } from "./components/upload";
-import { MEMBERSHIP_STARTING_YEAR } from "./constants";
+import { API_BASE_URL, API_IMAGE_URL, MEMBERSHIP_STARTING_YEAR } from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
             HOUR_TS = 1000 * 60 * 60,
@@ -119,6 +119,10 @@ export function padStart(x: number) {
 }
 
 export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3).fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
+
+export function getImageUrl (src?: string): string | undefined {
+    return src && src.length > 0 ? new URL(src, API_IMAGE_URL).href : undefined;
+}
 
 export function getRectangle(p1: Coordinates, p2: Coordinates): Rectangle {
     const topLeft: Coordinates =  {

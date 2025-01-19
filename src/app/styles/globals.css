@@ -26,7 +26,7 @@ body {
   margin: 0;
 }
 
-span {
+span, i {
   color: var(--foreground);
 }
 

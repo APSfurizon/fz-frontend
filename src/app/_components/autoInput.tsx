@@ -4,14 +4,14 @@ import Image from "next/image";
 import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "../_lib/components/autoInput";
 import { useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
-import { areEquals, isEmpty } from "../_lib/utils";
+import { areEquals, getImageUrl, isEmpty } from "../_lib/utils";
 import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
 
 /**
  * 
  * @returns 
  */
-export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style, emptyIfUnselected = false}: Readonly<{
+export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, helpText, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style, emptyIfUnselected = false}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -19,6 +19,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     fieldName?: string;
     filterIn?: AutoInputFilter,
     filterOut?: AutoInputFilter,
+    helpText?: string,
     idExtractor?: (r: AutoInputSearchResult) => string | number,
     initialData?: (number | string)[],
     inputStyle?: CSSProperties,
@@ -210,7 +211,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     const renderResult = (element: AutoInputSearchResult, index: number) => {
         return <div key={index} className="search-result horizontal-list flex-vertical-center rounded-s" style={{color:'#fff',display:'flex'}} onMouseDown={()=>{addItem(element)}}>
             {element.imageUrl !== undefined &&
-                <Image src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : element.imageUrl} width={32} height={32} 
+                <Image unoptimized src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC} width={32} height={32} 
                     alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
             }
             {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}
@@ -226,7 +227,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
         return <a key={index} className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
                 {element.imageUrl !== undefined &&
-                    <Image src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : element.imageUrl} width={32} height={32}
+                    <Image unoptimized src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!} width={32} height={32}
                         alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
                 }
                 {element.icon !== undefined && <Icon iconName={element.icon}></Icon>}
@@ -278,7 +279,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 </div>
                 {
                     isFocused && valueToSet.length < maxSelections && (
-                    <div tabIndex={0} className="search-result-container rounded-m" style={{position:'absolute',marginTop:"5px",flexDirection:'column',width:"100%",maxHeight: "250px",overflowY: "auto",}}>
+                    <div tabIndex={0} className="search-result-container rounded-m" style={{position:'absolute',marginTop:"5px",flexDirection:'column',width:"100%",maxHeight: "200px",overflowY: "auto",}}>
                         {
                             searchInput.length < minDecodeSize
                             ? <span className="title tiny color-subtitle">{t('autoinput.guide', {minSize: minDecodeSize})}</span>
@@ -293,5 +294,6 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 }
             </div>
         </div>
+        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
     </>
 }

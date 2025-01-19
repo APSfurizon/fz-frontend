@@ -23,11 +23,12 @@ export default function Home() {
   return (
     <div className="page">
       <div className="container">
-        <Upload label="Profile picture" requireCrop={false} uploadType="full"></Upload>
+        <Upload loading={false} label="Profile picture" requireCrop={true} uploadType="full"></Upload>
       </div>
       <Button className="danger" onClick={()=>setBusy(false)} iconName={ICONS.ADD_CIRCLE}>Busy off</Button>
       <Button busy={isBusy} onClick={()=>{setBusy(true);}} iconName={ICONS.EDIT}>Busy on</Button>
       <Checkbox>Wofe</Checkbox>
+      <Checkbox busy={isBusy}>Wofe</Checkbox>
       <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
       <div style={{display: 'flex'}}>
         <div style={{flexDirection:'column',marginRight:5}}>

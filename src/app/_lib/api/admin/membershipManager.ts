@@ -2,7 +2,7 @@ import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../comp
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { buildSearchParams } from "../../utils";
 import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global";
-import { AutoInputRoomInviteManager, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
+import { AutoInputRoomInviteManager, toSearchResult, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
 
 export interface MembershipCard {
     cardId: number,
@@ -53,8 +53,9 @@ export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
             return new Promise((resolve, reject) => {
                 runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-no-membership-card-for-year": additionalValues[0]})).then (results => {
                     const searchResult = results as UserSearchResponse;
+                    const users = searchResult.users.map(usr=>toSearchResult(usr));
                     resolve (
-                        filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                        filterLoaded(users, filter, filterOut)
                     );
                 });
             });

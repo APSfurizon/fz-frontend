@@ -25,7 +25,7 @@ export function getUsed(quota: PretixItemQuota) {
 }
 
 export function getRemainingQuota (quota: PretixItemQuota) {
-    return getTotalQuota(quota) - getUsed(quota);
+    return Math.max(getTotalQuota(quota) - getUsed(quota), 0);
 }
 
 export interface RoomTypeInfo {

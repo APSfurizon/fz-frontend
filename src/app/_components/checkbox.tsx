@@ -1,6 +1,7 @@
 import Icon, { ICONS } from "./icon";
 import { useState, MouseEvent, CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
 import "../styles/components/checkbox.css";
+import { areEquals } from "../_lib/utils";
 
 export default function Checkbox ({initialValue, children, className, busy, disabled, fieldName, onClick, style}: Readonly<{
     initialValue?: boolean,
@@ -15,6 +16,7 @@ export default function Checkbox ({initialValue, children, className, busy, disa
     style?: CSSProperties,
   }>) {
     const [checked, setChecked] = useState(initialValue ?? false);
+    const [lastInitialValue, setLastInitialValue] = useState<boolean> ();
     const [busyState, setBusyState] = useState(busy ?? false);
     const clickPresent = onClick != undefined;
 
@@ -26,6 +28,13 @@ export default function Checkbox ({initialValue, children, className, busy, disa
     }
 
     useEffect(()=>setBusyState(busy ?? false), [busy]);
+
+    useEffect(()=>{
+        if (initialValue !== undefined && !areEquals(lastInitialValue, initialValue)) {
+            setChecked(initialValue);
+        }
+        setLastInitialValue(initialValue);
+    }, [initialValue])
 
     return <>
         <input type="hidden" name={fieldName} value={""+checked}></input>

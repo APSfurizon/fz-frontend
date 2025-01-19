@@ -19,7 +19,6 @@ export default function UserDropDown ({userData}: Readonly<{userData: UserData}>
     const pathname = usePathname();
     const params = useParams();
     const locale = useLocale();
-    const {setUpdateUser} = useUser();
     
     
     const logout = () => {

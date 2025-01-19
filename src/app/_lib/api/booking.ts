@@ -8,7 +8,8 @@ export interface OrderData {
     extraDays: "NONE" | "EARLY" | "LATE" | "BOTH",
     dailyTicket: boolean,
     dailyDays: string[],
-    room: RoomData
+    room: RoomData,
+    totalFursuits: number
 }
 
 export interface BookingOrderResponse extends ApiResponse {

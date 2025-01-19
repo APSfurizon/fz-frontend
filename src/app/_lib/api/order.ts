@@ -2,7 +2,7 @@ import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded 
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams } from "../utils";
 import { ApiErrorResponse, runRequest } from "./global";
-import { AutoInputUsersManager, UserSearchAction, UserSearchResponse } from "./user";
+import { AutoInputUsersManager, toSearchResult, UserSearchAction, UserSearchResponse } from "./user";
 
 export enum OrderStatus {
     CANCELED = "CANCELED",
@@ -46,8 +46,9 @@ export class AutoInputOrderExchangeManager extends AutoInputUsersManager {
             runRequest (new UserSearchAction(), undefined, undefined, 
                 buildSearchParams({"fursona-name": value, "filter-not-made-an-order": "true"})).then (results => {
                     const searchResult = results as UserSearchResponse;
+                    const users = searchResult.users.map(usr=>toSearchResult(usr));
                     resolve (
-                        filterLoaded(searchResult.users as AutoInputSearchResult[], filter, filterOut)
+                        filterLoaded(users as AutoInputSearchResult[], filter, filterOut)
                     );
             });
         });

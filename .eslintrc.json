@@ -1,7 +1,7 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"],
+  "extends": ["next/core-web-vitals", "next/typescript", "plugin:deprecation/recommended"],
   "plugins": [
-    "deprecation"
+    "spellcheck"
   ],
   "rules": {
     "deprecation/deprecation": 1

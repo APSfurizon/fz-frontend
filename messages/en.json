@@ -47,7 +47,13 @@
             "hoverable": "Click to copy"
         },
         "coming_soon": "Coming soon...",
-        "source_code": "Source code: "
+        "source_code": "Source code: ",
+        "CRUD": {
+            "add": "Add",
+            "update": "Update",
+            "edit": "Edit",
+            "delete": "Delete"
+        }
     },
     "components": {
         "autoinput": {
@@ -113,6 +119,10 @@
                 "exchange_invite_sent": {
                     "title": "Invite sent",
                     "description": "You will both be contacted via email to confirm the exchange."
+                },
+                "invite_group": {
+                    "title": "Official group",
+                    "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
                 }
             },
             "items": {
@@ -142,7 +152,7 @@
                 },
                 "MEMBERSHIP_MISSING": {
                     "title": "Membership card missing",
-                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 31st of October."
+                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 30th of September."
                 },
                 "ORDER_MULTIPLE_DONE": {
                     "title": "Multiple orders",
@@ -164,7 +174,66 @@
             }
         },
         "badge": {
-            "title": "Badge"
+            "title": "Badge",
+            "your_badges": "Your badges",
+            "your_fursuits": "Your {amount, plural, =1 {fursuit} other {fursuits}}",
+            "deadline": "Edit deadline: {badgeDeadline}",
+            "name": "Name",
+            "locale": "Locale",
+            "actions": {
+                "upload_badge": "Upload your badge",
+                "edit_badge": "Edit badge data",
+                "add_fursuit": "Add fursuit",
+                "edit_fursuit": "Edit {name}'s badge"
+            },
+            "input": {
+                "new_name": {
+                    "label": "New name",
+                    "placeholder": "Enter a new display name",
+                    "help": "This name will be used site wise to identify your account"
+                },
+                "new_locale": {
+                    "label": "Locale",
+                    "placeholder": "Search a country",
+                    "help": "The flag will appear onto your badge"
+                },
+                "fursuit_name": {
+                    "label": "Name",
+                    "placeholder": "Enter the sona's name"
+                },
+                "fursuit_species": {
+                    "label": "Species",
+                    "placeholder": "Enter the animal species"
+                },
+                "bring_to_event": {
+                    "label": "Bring to {eventName}"
+                },
+                "show_in_fursuit_count": {
+                    "label": "Show in fursuit count"
+                }
+            },
+            "messages": {
+                "what_to_upload": {
+                    "title": "What to upload here?",
+                    "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon’s staff."
+                },
+                "confirm_deletion": {
+                    "title": "Confirm deletion",
+                    "description": "Do you want to delete the current badge?"
+                },
+                "confirm_fursuit_deletion": {
+                    "title": "Delete {name}'s fursuit",
+                    "description": "Do you want to delete {name}'s fursuit?"
+                }
+            },
+            "errors": {
+                "IMAGE_DIMENSION_TOO_BIG": "The provided image is too big",
+                "FURSUIT_NOT_FOUND": "Fursuit not found.",
+                "FURSUIT_BADGES_ENDED": "You don't have any more prints available. Buy more by editing your order.",
+                "FURSUIT_ALREADY_BROUGHT_TO_CURRENT_EVENT": "You already marked this fursuit to be brought.",
+                "FURSUIT_NOT_BROUGHT_TO_CURRENT_EVENT": "You already marked this fursuit to not be brought.",
+                "TOO_MANY_FURSUITS_ARE_YOU_A_MILLIONAIRE": "Wow such money ╰(*°▽°*)╯"
+            }
         },
         "debug": {
             "title": "Debug"
@@ -222,7 +291,8 @@
                 },
                 "invite": {
                     "label": "Invite someone in your room",
-                    "placeholder": "Search for a user"
+                    "placeholder": "Search for a user",
+                    "help": "You can only invite users with a paid order, except daily tickets"
                 },
                 "force_join": {
                     "label": "Force join the room"
@@ -262,6 +332,7 @@
             "or_get_invited": "or get invited",
             "no_order": "Please buy a ticket, before.",
             "no_room": "You don't have a room, yet.",
+            "can_create": "You bought a room, create it in order to personalize it.",
             "status_owner": "Owner",
             "status_invited": "Invited",
             "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
@@ -269,6 +340,7 @@
             "order_flow": {
                 "quota_left": "{size, plural, =0 {Sold out} =1 {One left} other {# left}}",
                 "select_type": "Select a room type",
+                "no_room_type": "There are no more room tiers at the moment.",
                 "your_selection": "Your selection",
                 "complete_order": "Complete order",
                 "messages": {

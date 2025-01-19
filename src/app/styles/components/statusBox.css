@@ -19,7 +19,6 @@
 
 .statusBox.warning {
     background-color: var(--status-box-bg-warning);
-    color: black;
 }
 
 .statusBox.error {

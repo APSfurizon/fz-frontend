@@ -86,7 +86,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
                     )}
                 </span>
             </div>
+            {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
         </div>
-        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
     </>
 }

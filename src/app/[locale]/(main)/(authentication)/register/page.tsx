@@ -54,7 +54,7 @@ export default function Register() {
     return r.phonePrefix ?? "";
   }
 
-  const checkForm = () => {
+  const checkForm = (e: FormData, form: HTMLFormElement) => {
     if (!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch) {
       return false;
     } else {

@@ -36,7 +36,6 @@ export default function RoomPage() {
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
-  const [showInviteTutorial, setShowInviteTutorial] = useState(false);
   const {showModal, hideModal} = useModalUpdate();
   useTitle(t("room.title"));
 
@@ -298,7 +297,7 @@ export default function RoomPage() {
           <div className="room-invite actions-panel rounded-m">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
             <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
-            {t("room.no_room")}
+            {data.canCreateRoom ? t("room.can_create") : t("room.no_room")}
           </span>
           <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap" style={{marginTop: "1em"}}>
             {data.canCreateRoom == true 
@@ -374,10 +373,10 @@ export default function RoomPage() {
               {/* Owner actions */}
                 <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
                   onClick={()=>promptRoomInvite()}>{t("room.actions.invite")}</Button>
-                {data.currentRoomInfo.confirmed === false ? <>
+                {data.currentRoomInfo.confirmed === false ? data.currentRoomInfo.confirmationSupported && <>
                   <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
                     onClick={()=>promptRoomInvite()}>{t("room.actions.confirm_room")}</Button>
-                </> : <>
+                </> : data.currentRoomInfo.confirmationSupported && <>
                 <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
                     onClick={()=>promptRoomInvite()}>{t("room.actions.unconfirm_room")}</Button>
                 </>}
@@ -410,11 +409,6 @@ export default function RoomPage() {
       </> }
     </div>
 
-    {/* Invite modal */}
-    <Modal open={showInviteTutorial} onClose={()=>setShowInviteTutorial(false)}>
-
-    </Modal>
-
     {/* Rename modal */}
     <Modal title={t("room.actions.rename")} icon={ICONS.EDIT_SQUARE} open={renameModalOpen} onClose={()=>setRenameModalOpen(false)} busy={modalLoading}>
     { data?.currentRoomInfo && <>
@@ -422,11 +416,11 @@ export default function RoomPage() {
       onFail={commonFail} hideSave className="vertical-list gap-2mm">
       <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
       <JanInput inputType="text" fieldName="name" required busy={modalLoading} label={t("room.input.rename_new_name.label")}
-      placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
+      placeholder={t("room.input.rename_new_name.placeholder")} minLength={2} maxLength={254}></JanInput>
       <div className="horizontal-list gap-4mm">
-        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
-        <div className="spacer"></div>
         <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
       </div>
     </DataForm>
     </>}
@@ -440,7 +434,7 @@ export default function RoomPage() {
       <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
       <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
         max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
-        placeholder={t("room.input.invite.placeholder")} style={{maxWidth: "500px"}}/>
+        placeholder={t("room.input.invite.placeholder")} helpText={t("room.input.invite.help")} style={{maxWidth: "500px"}}/>
       {
         userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_ROOMS) && <>
         <Checkbox fieldName="force">{t("room.input.force_join.label")}</Checkbox>
@@ -448,16 +442,16 @@ export default function RoomPage() {
         </>
       }
       <div className="horizontal-list gap-4mm">
-        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
-        <div className="spacer"></div>
         <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setInviteModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
       </div>
     </DataForm>
     </>}
     </Modal>
 
     {/* Room invite accept */}
-    <Modal title={t("room.messages.accept_invite.title")} open={inviteAcceptModalOpen} busy={modalLoading} onClose={()=>{
+    <Modal title={t("room.messages.accept_invite.title")} className="gap-2mm" open={inviteAcceptModalOpen} busy={modalLoading} onClose={()=>{
       setInviteAcceptModalOpen(false);
       setCurrentInvitation(undefined);
     }}>
@@ -470,9 +464,9 @@ export default function RoomPage() {
         })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={ICONS.CHECK} busy={modalLoading} onClick={()=>acceptInvite(currentInvitation.invitation.guestId)}>{tcommon("confirm")}</Button>
-        <div className="spacer"></div>
         <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setInviteAcceptModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button className="success" iconName={ICONS.CHECK} busy={modalLoading} onClick={()=>acceptInvite(currentInvitation.invitation.guestId)}>{tcommon("confirm")}</Button>
       </div>
       </>}
     </Modal>
@@ -491,9 +485,9 @@ export default function RoomPage() {
         })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button iconName={ICONS.DO_NOT_DISTURB_ON} busy={modalLoading} onClick={()=>refuseInvite(currentInvitation.invitation.guestId)}>{t("room.actions.refuse")}</Button>
-        <div className="spacer"></div>
         <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setInviteRefuseModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button iconName={ICONS.DO_NOT_DISTURB_ON} busy={modalLoading} onClick={()=>refuseInvite(currentInvitation.invitation.guestId)}>{t("room.actions.refuse")}</Button>
       </div>
       </>}
     </Modal>
@@ -507,9 +501,9 @@ export default function RoomPage() {
       })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={ICONS.CHECK} busy={modalLoading} onClick={()=>deleteRoom(data.currentRoomInfo.roomId)}>{t("room.actions.delete")}</Button>
-        <div className="spacer"></div>
         <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setDeleteModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button className="success" iconName={ICONS.CHECK} busy={modalLoading} onClick={()=>deleteRoom(data.currentRoomInfo.roomId)}>{t("room.actions.delete")}</Button>
       </div>
     </>}
     </Modal>
@@ -523,9 +517,9 @@ export default function RoomPage() {
       })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>cancelInvite(selectedGuest.roomGuest.guestId)}>{t("room.actions.revoke_invite")}</Button>
+        <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setInviteCancelModalOpen(false)}>{tcommon("cancel")}</Button>      
         <div className="spacer"></div>
-        <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setInviteCancelModalOpen(false)}>{tcommon("cancel")}</Button>
+        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>cancelInvite(selectedGuest.roomGuest.guestId)}>{t("room.actions.revoke_invite")}</Button>
       </div>
     </>}
     </Modal>
@@ -539,9 +533,9 @@ export default function RoomPage() {
       })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>kickGuest(selectedGuest.roomGuest.guestId)}>{t("room.actions.revoke_invite")}</Button>
-        <div className="spacer"></div>
         <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setKickModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>kickGuest(selectedGuest.roomGuest.guestId)}>{t("room.actions.revoke_invite")}</Button>
       </div>
     </>}
     </Modal>
@@ -555,9 +549,9 @@ export default function RoomPage() {
       })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button className="danger" iconName={ICONS.CHECK} busy={modalLoading} onClick={()=>leaveRoom()}>{t("room.actions.leave")}</Button>
-        <div className="spacer"></div>
         <Button iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setLeaveModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button className="danger" iconName={ICONS.CHECK} busy={modalLoading} onClick={()=>leaveRoom()}>{t("room.actions.leave")}</Button>
       </div>
     </>}
     </Modal>
@@ -575,9 +569,9 @@ export default function RoomPage() {
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
           label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
         <div className="horizontal-list gap-4mm">
-          <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
-          <div className="spacer"></div>
           <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
+          <div className="spacer"></div>
+          <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
         </div>
       </DataForm>
     </Modal>

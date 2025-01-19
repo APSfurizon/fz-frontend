@@ -11,12 +11,13 @@ export interface SaveButtonData {
     iconName: string
 }
 
-export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", setLoading, style, saveButton, resetOnFail=true, resetOnSuccess=false}: Readonly<{
+export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", editFormData, setLoading, style, saveButton, resetOnFail=true, resetOnSuccess=false, restPathParams, shouldReset}: Readonly<{
     action: FormApiAction<any, any, any>,
     onSuccess?: (data: Boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: Function,
-    checkFn?: () => boolean,
+    editFormData?: (data: FormData) => FormData,
+    checkFn?: (e: FormData, form: HTMLFormElement) => boolean,
     children?: React.ReactNode,
     className?: string,
     disabled?: boolean,
@@ -29,7 +30,9 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     style?: CSSProperties,
     saveButton?: SaveButtonData,
     resetOnFail?: boolean,
-    resetOnSuccess?: boolean
+    resetOnSuccess?: boolean,
+    restPathParams?: string[],
+    shouldReset?: boolean,
   }>) {
     const t = useTranslations('components');
     const inputRef = useRef<HTMLFormElement>(null);
@@ -38,9 +41,27 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
         iconName: ICONS.SAVE
     };
 
+    const resetData = () => {
+        if (!inputRef?.current?.elements) return;
+        Array.from(inputRef?.current?.elements).forEach((input)=>{
+            if (input) {
+                const event = new Event("change", { bubbles: true });
+                input.dispatchEvent(event);
+            }
+        })
+    }
+
+    useEffect(()=>{
+        if (shouldReset) {
+            inputRef?.current?.reset ();
+            resetData();
+        }
+    }, [shouldReset])
+
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+        const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
         if (checkFn) {
-            if (!checkFn()) {
+            if (!checkFn(formData, e.currentTarget)) {
                 e.preventDefault();
                 e.stopPropagation();
                 return;
@@ -48,14 +69,14 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
         }
         onBeforeSubmit && onBeforeSubmit();
         setLoading (true);
-        runFormRequest(action, undefined, new FormData(e.currentTarget))
+        runFormRequest(action, restPathParams, formData)
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
                 onFail && onFail (errorData);
-                if (resetOnFail) inputRef?.current?.reset ();
+                if (resetOnFail) {inputRef?.current?.reset (); resetData();}
             }).finally(()=>{
                 setLoading(false);
-                if (resetOnSuccess) inputRef?.current?.reset ();
+                if (resetOnSuccess) {inputRef?.current?.reset (); resetData();}
             });
         e.preventDefault();
         e.stopPropagation();
