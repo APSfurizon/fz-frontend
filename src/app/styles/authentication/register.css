@@ -1,0 +1,30 @@
+form.login-form {
+    gap: 1.25em;
+}
+
+form .toolbar-bottom {
+    display: flex;
+    justify-content: center;
+}
+
+span.error-container {
+    display: inline-block;
+    color: var(--text-status-error);
+    width: 100%;
+}
+
+a.suggestion {
+    display: inline-block;
+    width: 100%;
+}
+
+div.form-pair div.jan-input,
+div.form-pair div.autocomplete-input {
+    flex: 1;
+}
+
+@media (max-width:800px) {
+    .form-pair {
+        flex-direction: column;
+    }
+}

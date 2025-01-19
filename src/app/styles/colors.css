@@ -1,20 +1,177 @@
 :root {
     --body-bg: #11191F;
     --foreground: #fff;
-    --footer-bg: #211A28;
+    --highlight: #ECA02F;
+    
     --text-subtitle: #9a9a9a;
     --text-link: #2395D6;
-    --form-background: #141E26;
+    --text-status-error: #e44f4f;
+    --main-dialog-background: #141E26;
+
+    --hoverable-bg: #2a2b3f;
+    
+    /* Footer */
+    --footer-bg: #1C1A25;
+    /* Header */
+    --header-bg: #141E26;
+    --header-shadow: #00000015;
+    --header-link-hover-bg: #ffffff10;
+
+    /* Button */
+    --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
+    --button-bg-hover: linear-gradient(0deg, #A573D6 0%, #915DC4 100%);
+    --button-bg-down: linear-gradient(0deg, #7634B8 0%, #53287E 100%);
+
+    --button-danger-bg-normal: linear-gradient(0deg, #CD5454 0%, #A43D3D 100%);
+    --button-danger-bg-hover: linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%);
+    --button-danger-bg-down: linear-gradient(0deg, #a24343 0%, #833232 100%);
+
+    --button-success-bg-normal: linear-gradient(0deg, #62a743 0%, #3ba340 100%);
+    --button-success-bg-hover: linear-gradient(0deg, #6ccf71 0%, #56a64f 100%);
+    --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
+
+    --button-border-normal: #FFFFFF4C;
+    --button-border-down: #FFFFFFCC;
+
+    /* Checkbox */
+    --checkbox-bg-unchecked: none;
+    --checkbox-bg-checked: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
+    --checkbox-bg-hover: linear-gradient(0deg, #A573D6 0%, #915DC4 100%);
+    --checkbox-bg-down: linear-gradient(0deg, #7634B8 0%, #53287E 100%);
+
+    --checkbox-border-normal: #ffffffb0;
+    --checkbox-border-hover: #ffffffe8;
+    --checkbox-border-down: #FFFFFFCC;
+
+    /* Tool link */
+    --tool-link-bg-normal: #242C38;
+    --tool-link-bg-hover: #4D5D75;
+    --tool-link-bg-down: #384457;
+    --tool-link-bg-active: var(--button-bg-down);
+    --tool-link-border-normal: #FFFFFF4C;
+    --tool-link-border-down: #FFFFFFCC;
+    --tool-link-hambuger-hover-bg: #ffffff40;
+
+    /* User profile picture */
+    --profile-picture-border-normal: #E9E9E9;
+    --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
+    --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
+    --profile-picture-shadow: #242C38;
+
+    /* User dropdown */
+    --user-dropdown-hover-bg: #4D5D75;
+    --user-dropdown-selected-bg: #242C38;
+
+    /* Notice box */
+    --notice-box-header-bg: #FFFFFF19;
+    --notice-box-header-border: #E9E9E9;
+
+    --notice-box-header-bg-success: #2FEC4219;
+    --notice-box-header-border-success: #2FEC42;
+
+    --notice-box-header-bg-warning: #FFB80019;
+    --notice-box-header-border-warning: #ECA02F;
+
+    --notice-box-header-bg-error: #FF000019;
+    --notice-box-header-border-error: #EC2F2F;
+    
+    /* Input Field */
+    --text-input-bg: #242C38;
+    --text-input-color: #fff;
+    --text-input-color-disabled: #7d8b96;
+    --text-input-border-normal: #4D5E6B;
+    --text-input-border-disabled: #11191F;
+    --text-input-border-danger:  #EC2F2F;
+    --text-input-border-success:  #35ec2f;
+    
+    /* Auto Complete */
+    --autocomplete-bg: #242C38;
+    --autocomplete-color: #fff;
+    --autocomplete-color-disabled: #4D5E6B;
+    --autocomplete-border-normal: #4D5E6B;
+    --autocomplete-border-disabled: #11191F;
+    --autocomplete-danger-normal: #EC2F2F;
+    --autocomplete-danger-hover: #cf6c6c;
+    --autocomplete-danger-down: #833232;
+    --autocomplete-selected-value-bg: #4D5D75;
+    --autocomplete-selected-value-hover-bg: #5d708d;
+    
+    /* Lista */
+    --suggestion-box-bg: #ffffff1a;
+
+    /* Status box */
+    --status-box-bg-default: #4D5E6B;
+    --status-box-bg-warning: #cc9849;
+    --status-box-bg-success: #52905B;
+    --status-box-bg-error: #CD5454;
+
+    /* Modal */
+    --modal-overlay-bg: #0008;
+    --modal-dialog-bg: #141E26;
+    --modal-button-close: #ffa4a4;
+    --modal-button-close-hover: #EC2F2F;
+
+    /* Upload */
+    --upload-bg: #242C38;
+    --upload-border: #E9E9E9;
+    --upload-border-danger: #EC2F2F;
+    --upload-crop-handle-normal: radial-gradient(#000000 30%, #fffa 35%, #fffa 50%, #000 60%, #000000 100%);
+    --upload-crop-handle-hover: radial-gradient(#7634B8 30%, #fffa 35%, #fffa 50%, #7634B8 60%, #7634B8 100%);
+    --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
+
+    /* Table */
+    --table-bg: #242C38;
+    --table-border: #fff;
+    --table-row-bg: #ffffff19;
+    --table-header-separator: #ffffff4d;
+
+    /* Booking page */
+    --booking-countdown-bg: #000000d8;
+    --booking-book-effect-bg: #fff;
+    --booking-item-border: #87878733;
+    --booking-item-bg: #48474733;
+    --booking-item-subtitle-bg: #87878733;
+
+    /* Room page */
+    --room-action-panel-bg: #242C38;
+    --room-invite-bg: #ffffff19;
+    --room-invite-shadow: #0005;
+    --room-invite-kick: #d3202c;
+
+    /* Room buy flow */
+    --room-buy-item-hover-bg: #ffffff20;
+    --room-buy-item-border: #ffffff;
+
+    /* Exchange confirm page*/
+    --exchange-info-bg: #242C38;
+
+    /* Badge page */
+    --badge-fursuit-bg: #ffffff32;
+
+    --sponsor-color: #8E24AA;
+    --sponsor-text-color: #b235d4;
+    --super-sponsor-color: #DB9703;
+    --super-sponsor-text-color: #FAAA00;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-      --background: #11191F;
-      --foreground: #ededed;
-      --footer-bg: #211A28;
-      --form-background: #141E26;
-    }
+  :root {
+    --background: #11191F;
+    --foreground: #ededed;
+    --footer-bg: #1C1A25;
+    --header-bg: #141E26;
+    --main-dialog-background: #141E26;
   }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #11191F;
+    --foreground: #ededed;
+    --footer-bg: #1C1A25;
+    --header-bg: #141E26;
+    --main-dialog-background: #141E26;
+  }
+}
 
 .color-subtitle {
   color: var(--text-subtitle);
@@ -24,6 +181,10 @@
   color: var(--text-link);
 }
 
-.form {
-  background-color: var(--form-background);
+.highlight {
+  color: var(--highlight);
+}
+
+.main-dialog {
+  background-color: var(--main-dialog-background);
 }

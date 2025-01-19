@@ -1,0 +1,20 @@
+div.exchange-info {
+    padding: 0.3125em;
+    background-color: var(--exchange-info-bg);
+}
+
+span.exchange-title {
+    background-color: var(--table-row-bg);
+    padding: 0.3125em 0.625em;
+}
+
+.item-info {
+    gap: 2mm;
+    padding: 0.625em;
+    background-color: var(--table-row-bg);
+}
+
+.item-content{
+    padding: 0.3125em;
+    background-color: var(--table-row-bg);
+}

@@ -1,0 +1,98 @@
+div.upload-container {
+    width: fit-content;
+    padding: 0.625em;
+    background-color: var(--upload-bg);
+
+    * {
+        width: 100%;
+    }
+
+    div.image-container {
+        border: 2px solid var(--upload-border);
+    }
+
+    div.image-container.danger {
+        border-color: var(--upload-border-danger);
+    }
+
+    img.upload-picture {
+        display: block;
+    }
+}
+
+.suppressed-input {
+    max-width: 0px;
+    max-height: 0px;
+    margin: 0px;
+    padding: 0px;
+    outline: none;
+    border: none;
+}
+
+.suppressed-input * {
+    visibility: collapse;
+}
+
+label.upload-label {
+    margin-left: 0.125em;
+    display: inline-block;
+}
+
+div.crop-container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    width: 100%;
+}
+
+div.crop-container > img,
+div.crop-container > canvas {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    outline: 2px solid var(--upload-border);
+}
+
+div.fill-all {
+    position: absolute;
+    width: 100vw;
+    height: 100%;
+    top: 0;
+    overflow: hidden;
+}
+
+.crop-image {
+    align-items: center;
+    height: max-content;
+    width: 100%;
+    max-width: 80vw;
+    max-height: 60vh;
+    position: relative;
+}
+
+.crop-canvas {
+    position: absolute;
+}
+
+button.handle {
+    position: absolute;
+    cursor: pointer;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    transform: translate(-50%, -50%);
+    background: var(--upload-crop-handle-normal);
+    transition-property: transform, background-color;
+    transition-duration: 120ms;
+}
+
+button.handle:hover,
+button.handle.active {
+    transform: translate(-50%, -50%) scale(1.4);
+    background: var(--upload-crop-handle-hover);
+}
+
+button.handle.active {
+    background-color: #fffa;
+}

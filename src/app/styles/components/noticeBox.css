@@ -1,0 +1,54 @@
+@import url('../colors.css');
+
+div.notice-box {
+    margin: 1px;
+}
+
+div.notice-box div.header i {
+    margin-right: 0.3125em;
+}
+
+div.notice-box div.header,
+div.notice-box div.answer {
+    padding: 0.3125em;
+    border: 1px solid var(--notice-box-header-border);
+}
+
+div.notice-box div.header {
+    border-radius: 2mm 2mm 0% 0%;
+    background-color: var(--notice-box-header-bg);
+}
+
+div.notice-box div.answer {
+    border-top: none;
+    border-radius: 0% 0% 2mm 2mm;
+    padding-left: .6em;
+    padding-right: .6em;
+}
+
+div.notice-box.success {
+    div.header, div.answer {
+        border-color: var(--notice-box-header-border-success);
+    }
+    div.header {
+        background-color: var(--notice-box-header-bg-success);
+    }
+}
+
+div.notice-box.warning {
+    div.header, div.answer {
+        border-color: var(--notice-box-header-border-warning);
+    }
+    div.header {
+        background-color: var(--notice-box-header-bg-warning);
+    }
+}
+
+div.notice-box.error {
+    div.header, div.answer {
+        border-color: var(--notice-box-header-border-error);
+    }
+    div.header {
+        background-color: var(--notice-box-header-bg-error);
+    }
+}

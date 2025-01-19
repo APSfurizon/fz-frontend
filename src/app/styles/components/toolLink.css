@@ -1,0 +1,27 @@
+.tool-link {
+    padding: 0.3125em;
+    padding-right: 0.625em;
+    background: var(--tool-link-bg-normal);
+    border: 1px solid var(--tool-link-border-normal);
+}
+
+.tool-link:hover {
+    background: var(--tool-link-bg-hover);
+}
+
+.tool-link:active {
+    background: var(--tool-link-bg-down);
+}
+
+.tool-link.active {
+    background: var(--tool-link-bg-active);
+    border: 1px solid var(--tool-link-border-down);
+}
+
+.tool-link * {
+    vertical-align: middle;
+}
+
+.tool-link i {
+    margin-right: 0.3125em;
+}

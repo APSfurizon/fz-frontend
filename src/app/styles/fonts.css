@@ -1,24 +1,27 @@
-@import url(https://fonts.bunny.net/css?family=inter:200,400,600|roboto-slab:200,400,600);
-
+@import url(https://fonts.bunny.net/css?family=inter:200,400,500,600|roboto-slab:200,400,500,600);
 @font-face {
-    font-family: 'Material Icons';
+    font-family: 'Material Symbols Rounded';
     font-style: normal;
-    font-weight: 400;
-    src: url('/fonts/MaterialIconsRound-Regular.otf')
+    font-weight: 100 700;
+    src: url('/fonts/MaterialSymbolsRoundedFilled.woff2') format('woff2');
 }
 
 .mdi {
-    font-family: 'Material Icons';
+    font-family: 'Material Symbols Rounded';
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
     display: inline-block;
     line-height: 1;
     text-transform: none;
+    display: inline-block;
     letter-spacing: normal;
     word-wrap: normal;
     white-space: nowrap;
     direction: ltr;
+    font-variation-settings: 'FILL' 1;
+
+    font-feature-settings: "liga";
 
     vertical-align: text-top;
 
@@ -28,11 +31,20 @@
     text-rendering: optimizeLegibility;
 
     /* Support for Firefox. */
+    -moz-font-feature-settings: 'liga';
     -moz-osx-font-smoothing: grayscale;
+}
+
+.outline {
+    font-variation-settings: 'FILL' 0;
 }
 
 .title {
     font-family: 'Inter', sans-serif;
+}
+
+.monospace {
+    font-family: monospace;
 }
 
 .thin {
@@ -41,6 +53,11 @@
 
 .normal {
     font-weight: 400;
+}
+
+.semi-bold,
+.semibold {
+    font-weight: 500;
 }
 
 .bold {
@@ -56,11 +73,15 @@
 }
 
 .large {
-    font-size: 20pt;
+    font-size: 18pt;
 }
 
 .medium {
     font-size: 15pt;
+}
+
+.average {
+    font-size: 12pt;
 }
 
 .small {
@@ -73,4 +94,20 @@
 
 .descriptive {
     font-family: 'Roboto Slab', serif;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-center {
+    text-align: center;
 }

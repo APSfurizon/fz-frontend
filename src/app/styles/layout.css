@@ -4,6 +4,8 @@
 
 .horizontal-list { flex-direction: row; }
 
+.spacer { flex-grow: 1; }
+
 .gap-2mm { gap: 2mm; }
 
 .gap-4mm { gap: 4mm; }
@@ -12,9 +14,29 @@
 
 .margin-4mm { margin: 4mm; }
 
+.margin-bottom-1mm { margin-bottom: 1mm; }
+
+.margin-bottom-2mm { margin-bottom: 2mm; }
+
+.margin-top-1mm { margin-top: 1mm; }
+
+.margin-top-2mm { margin-top: 2mm; }
+
 .flex-center { justify-content: center; }
 
 .flex-vertical-center { align-items: center; }
+
+.flex-same-base * { flex-basis: 1 1 0; }
+
+.flex-space-around { justify-content: space-around; }
+
+.flex-space-between { justify-content: space-between; }
+
+.flex-space-evenly { justify-content: space-evenly; }
+
+.flex-wrap {flex-wrap: wrap;}
+
+.vertical-align-middle * {vertical-align: middle;}
 
 .center { text-align: center; }
 
@@ -22,18 +44,41 @@
 
 .right { text-align: right; }
 
-.rounded-s { border-radius: 1mm; }
+.rounded-xs { border-radius: 0.15625em; }
+
+.rounded-s { border-radius: 0.3125em; }
 
 .rounded-m { border-radius: 2mm; }
 
 .rounded-l { border-radius: 3mm; }
 
-.form {
+.section>*:not(.section-title){
+    margin-left: 0.6em;
+}
+
+.section > .section-title {
+    margin-bottom: 0.5em;
+}
+
+.main-dialog {
     padding: 1.25em;
     margin: 0 auto 8mm auto;
     display: flex;
     flex-direction: column;
-    gap: 0.625em;
+    gap: 1.25em;
     width: fit-content;
     box-shadow: 0px 3px 20px 1px #0000003F;
+}
+
+.main-dialog .page {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625em;
+}
+
+.title-pair {
+    display: flex;
+    align-items: center;
+    gap: 0.3125em;
+    padding: 0.3125em;
 }

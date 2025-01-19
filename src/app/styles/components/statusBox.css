@@ -1,0 +1,26 @@
+@import url('../colors.css');
+
+.statusBox {
+    padding: 0.125em 0.5em;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--status-box-bg-default);
+}
+
+.statusBox.normal {
+    background-color: var(--status-box-bg-default);
+}
+
+.statusBox.success {
+    background-color: var(--status-box-bg-success);
+}
+
+.statusBox.warning {
+    background-color: var(--status-box-bg-warning);
+}
+
+.statusBox.error {
+    background-color: var(--status-box-bg-error);
+}

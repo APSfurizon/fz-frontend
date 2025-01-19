@@ -1,0 +1,48 @@
+.user-picture-container .image-container{
+    padding: 0.2em;
+    margin: 0px 0px 0px 0px;
+    background-color: var(--profile-picture-border-normal);
+}
+
+.user-picture-container .image-container.no-effect {
+    padding: 0em;
+}
+
+.user-picture-container .profile-picture {
+    overflow: hidden;
+    display: block;
+}
+
+.user-picture-container .image-container.sponsor-SPONSOR, .image-container.sponsor-SUPER_SPONSOR {
+    animation: sponsor-animation 3s linear 0ms infinite;
+}
+
+.user-picture-container
+.image-container.sponsor-SPONSOR:not(.no-effect) {
+    background: var(--profile-picture-border-sponsor);
+    background-size: 200% 200%;
+    background-repeat: repeat;
+}
+
+.user-picture-container
+.image-container.sponsor-SUPER_SPONSOR:not(.no-effect) {
+    background: var(--profile-picture-border-super-sponsor);
+    background-size: 200% 200%;
+    background-repeat: repeat;
+}
+
+@keyframes sponsor-animation {
+    0% { background-position: 0% 0%; }
+    25% { background-position: 100% 0%; }
+	50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+	100% { background-position: 0% 0%; }
+}
+
+.user-picture-container span.flag {
+    margin-left: 0.3125em;
+}
+
+.user-picture-container .nickname {
+    padding: 0.4em 0em;
+}

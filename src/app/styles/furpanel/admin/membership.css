@@ -1,0 +1,7 @@
+details:not([open]) i.close {
+    display: none;
+}
+
+details[open] i.open {
+    display: none;
+}

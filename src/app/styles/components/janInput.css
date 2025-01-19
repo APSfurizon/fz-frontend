@@ -1,0 +1,106 @@
+@import url('../colors.css');
+
+div.jan-input:has(input:required) label::after {
+    content: "*";
+    color: red;
+}
+
+/* Error style */
+div.input-container:has(input.input-field.danger),
+div.jan-input.danger>div.input-container,
+div.input-container:has(input.input-field:invalid) {
+    outline-color: var(--text-input-border-danger);
+}
+
+/* Success style */
+div.input-container:has(input.input-field.success),
+div.jan-input.success>div.input-container:has(input.input-field:valid) {
+    outline-color: var(--text-input-border-success);
+}
+
+div.jan-input {
+
+    label {
+        margin-left: 0.125em;
+        display: inline-block;
+    }
+
+    div.input-container {
+        background: var(--text-input-bg);
+        outline: 1px solid var(--text-input-border-normal);
+    }
+    
+    input.input-field {
+        flex: 1;
+        color: var(--text-input-color);
+        background-color: transparent;
+        min-height: 1.625em;
+        padding: 0.75em 0.625em;
+        display: flex;
+        overflow: hidden;
+        border: none;
+        outline: none;
+    }
+
+    /* Focus style */
+    div.input-container:has(input.input-field:focus) {
+        outline-width: 2px;
+    }
+
+    input.input-field:focus {
+        outline: none;
+        border: none;
+    }
+    
+    /* Disabled style */
+    div.input-container:has(input.input-field:disabled) {
+        outline-color: var(--text-input-border-disabled);
+    }
+
+    input.input-field:disabled {
+        color: var(--text-input-color-disabled);
+    }
+
+    /* Handle autofilled data */
+    input:-webkit-autofill {
+        box-shadow: 0 0 0 1000px var(--text-input-bg) inset !important;
+        -webkit-text-fill-color: var(--text-input-color) !important;
+        caret-color: var(--text-input-color);
+        letter-spacing: 0.5px;
+    }
+
+    span.icon-container {
+        user-select: none;
+    }
+
+    span.icon-container i {
+        padding: 0em 0.4em;
+    }
+}
+
+div.jan-input.hoverable div.input-container {
+    transition-duration: 120ms;
+}
+
+div.jan-input.hoverable:hover div.input-container {
+    outline-color: var(--text-link);
+}
+
+div.jan-input.hoverable:active div.input-container {
+    outline-color: var(--highlight);
+}
+
+@keyframes hoverableClick {
+    0% {
+        outline-color: var(--text-link);
+    }
+
+    100% {
+        outline-color: var(--highlight);
+    }
+}
+
+span.help-text {
+    margin-top: -0.7em;
+    margin-left: 0.1em;
+}

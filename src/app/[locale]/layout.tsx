@@ -5,19 +5,22 @@ import {notFound} from 'next/navigation';
 import type { Metadata } from "next";
 import Footer from "../_components/footer"
 import "../styles/globals.css";
+import Header from '../_components/header';
 
 export const metadata: Metadata = {
   title: "Furpanel",
   description: "Enjoy your next adventure",
+  icons: [{ rel: "icon", url: "/images/favicon.png" }]
 };
 
 export default async function LocalizedLayout({
   children,
-  params: {locale}
+  params
 }: Readonly<{
   children: React.ReactNode;
-  params: {locale: string};
+  params: Promise<{locale: string}>;
 }>) {
+  const { locale }  = await params;
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -26,13 +29,13 @@ export default async function LocalizedLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="vertical-list">
         <NextIntlClientProvider messages={messages}>
-        <div className="page-wrapper">
           {children}
+          <div className="spacer"></div>
           <Footer></Footer>
-        </div>
         </NextIntlClientProvider>
+        <div id="portal-root"></div>
       </body>
     </html>
   );
