@@ -152,7 +152,7 @@
                 },
                 "MEMBERSHIP_MISSING": {
                     "title": "Membership card missing",
-                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 31st of October."
+                    "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 30th of September."
                 },
                 "ORDER_MULTIPLE_DONE": {
                     "title": "Multiple orders",

@@ -152,7 +152,7 @@
                 },
                 "MEMBERSHIP_MISSING": {
                     "title": "Tessera associativa mancante",
-                    "description": "Per partecipare ad un evento Furizon, devi avere una tessera valida. Ogni tessera ha validità fino al 31 ottobre."
+                    "description": "Per partecipare ad un evento Furizon, devi avere una tessera valida. Ogni tessera ha validità fino al 30 settembre."
                 },
                 "ORDER_MULTIPLE_DONE": {
                     "title": "Ordini multipli",
