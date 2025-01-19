@@ -228,7 +228,11 @@
             },
             "errors": {
                 "IMAGE_DIMENSION_TOO_BIG": "L'immagine è troppo grande",
-                "FURSUIT_NOT_FOUND": "La fursuit non è stata trovata."
+                "FURSUIT_NOT_FOUND": "La fursuit non è stata trovata.",
+                "FURSUIT_BADGES_ENDED": "Hai esaurito le stampe disponibili. Acquistane altre modificando il tuo ordine.",
+                "FURSUIT_ALREADY_BROUGHT_TO_CURRENT_EVENT": "Hai già impostato questo valore.",
+                "FURSUIT_NOT_BROUGHT_TO_CURRENT_EVENT": "Hai già impostato questo valore.",
+                "TOO_MANY_FURSUITS_ARE_YOU_A_MILLIONAIRE": "Che riccanza ╰(*°▽°*)╯"
             }
         },
         "debug": {

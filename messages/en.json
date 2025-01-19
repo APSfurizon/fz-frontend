@@ -228,7 +228,11 @@
             },
             "errors": {
                 "IMAGE_DIMENSION_TOO_BIG": "The provided image is too big",
-                "FURSUIT_NOT_FOUND": "Fursuit not found."
+                "FURSUIT_NOT_FOUND": "Fursuit not found.",
+                "FURSUIT_BADGES_ENDED": "You don't have any more prints available. Buy more by editing your order.",
+                "FURSUIT_ALREADY_BROUGHT_TO_CURRENT_EVENT": "You already marked this fursuit to be brought.",
+                "FURSUIT_NOT_BROUGHT_TO_CURRENT_EVENT": "You already marked this fursuit to not be brought.",
+                "TOO_MANY_FURSUITS_ARE_YOU_A_MILLIONAIRE": "Wow such money ╰(*°▽°*)╯"
             }
         },
         "debug": {

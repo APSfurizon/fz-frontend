@@ -232,6 +232,7 @@ export default function BadgePage() {
               {t("badge.actions.edit_badge")}
             </Button>
           </div>
+          <div className="spacer"></div>
           <NoticeBox theme={NoticeTheme.FAQ} title={t("badge.messages.what_to_upload.title")}>
             {t("badge.messages.what_to_upload.description")}
           </NoticeBox>
