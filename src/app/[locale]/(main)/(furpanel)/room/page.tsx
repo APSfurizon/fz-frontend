@@ -373,10 +373,10 @@ export default function RoomPage() {
               {/* Owner actions */}
                 <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
                   onClick={()=>promptRoomInvite()}>{t("room.actions.invite")}</Button>
-                {data.currentRoomInfo.confirmed === false ? <>
+                {data.currentRoomInfo.confirmed === false ? data.currentRoomInfo.confirmationSupported && <>
                   <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
                     onClick={()=>promptRoomInvite()}>{t("room.actions.confirm_room")}</Button>
-                </> : <>
+                </> : data.currentRoomInfo.confirmationSupported && <>
                 <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
                     onClick={()=>promptRoomInvite()}>{t("room.actions.unconfirm_room")}</Button>
                 </>}
@@ -416,11 +416,11 @@ export default function RoomPage() {
       onFail={commonFail} hideSave className="vertical-list gap-2mm">
       <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
       <JanInput inputType="text" fieldName="name" required busy={modalLoading} label={t("room.input.rename_new_name.label")}
-      placeholder={t("room.input.rename_new_name.placeholder")}></JanInput>
+      placeholder={t("room.input.rename_new_name.placeholder")} minLength={2} maxLength={254}></JanInput>
       <div className="horizontal-list gap-4mm">
-        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
-        <div className="spacer"></div>
         <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setRenameModalOpen(false)}>{tcommon("cancel")}</Button>
+        <div className="spacer"></div>
+        <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
       </div>
     </DataForm>
     </>}

@@ -162,6 +162,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
         }).finally(()=>{
             image.close();
             setImageToCrop(undefined);
+            setCropDialogOpen(false);
         });
     };
 
@@ -379,14 +380,11 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
                     onPointerUp={()=>setBottomHandle({...bottomHandle, active: false})}
                     onClick={()=>setBottomHandle({...bottomHandle, active: false})}></button>
             </div>
-            <div className="horizontal-list">
-
-            </div>
             <div className="bottom-toolbar">
                 <Button title={tcommon('cancel')} className="danger" onClick={()=>onCropCanceled()}
                     iconName={ICONS.CANCEL} disabled={readonly} busy={loading}>{tcommon('cancel')}</Button>
                 <div className="spacer"></div>
-                <Button title={t('upload.upload')} onClick={()=>{onFileUpload(imageToCrop!); setCropDialogOpen(false);}}
+                <Button title={t('upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
                     iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('upload.upload')}</Button>    
             </div>
         </Modal>    

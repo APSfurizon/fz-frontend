@@ -57,7 +57,7 @@ export function getImageSettings (image: ImageBitmap, size: {width: number, heig
     return {
         width: image.width,
         height: image.height,
-        resizeFactor: containerSize < imageSize ? imageSize / containerSize : 1
+        resizeFactor: imageSize / containerSize
     }
 }
 
