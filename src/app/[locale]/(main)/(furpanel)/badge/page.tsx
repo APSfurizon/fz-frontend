@@ -322,7 +322,7 @@ export default function BadgePage() {
             {t("badge.input.bring_to_event.label", {eventName: EVENT_NAME})}
           </Checkbox>
           <Checkbox fieldName="show-in-fursuit-count" 
-            initialValue={editMode ? currentFursuit?.showInFursuitCount : false}>
+            initialValue={editMode ? currentFursuit?.showInFursuitCount : true}>
             {t("badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
           </Checkbox>
           <div className="horizontal-list gap-4mm margin-top-2mm">

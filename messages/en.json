@@ -209,7 +209,7 @@
                     "label": "Bring to {eventName}"
                 },
                 "show_in_fursuit_count": {
-                    "label": "Mostra nel fursuit count"
+                    "label": "Show in fursuit count"
                 }
             },
             "messages": {
