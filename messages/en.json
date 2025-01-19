@@ -197,6 +197,10 @@
                     "placeholder": "Search a country",
                     "help": "The flag will appear onto your badge"
                 },
+                "fursuit_image": {
+                    "label": "Photo",
+                    "help": "Must be a photo of your fursuit"
+                },
                 "fursuit_name": {
                     "label": "Name",
                     "placeholder": "Enter the sona's name"
@@ -215,15 +219,19 @@
             "messages": {
                 "what_to_upload": {
                     "title": "What to upload here?",
-                    "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon’s staff."
+                    "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon’s staff. Any form of explicit content is forbidden, including cub material and pup play."
                 },
                 "confirm_deletion": {
                     "title": "Confirm deletion",
-                    "description": "Do you want to delete the current badge?"
+                    "description": "Do you want to delete the current image?"
                 },
                 "confirm_fursuit_deletion": {
                     "title": "Delete {name}'s fursuit",
                     "description": "Do you want to delete {name}'s fursuit?"
+                },
+                "fursuit_badge": {
+                    "title": "Wanna bring your suit to Furizon?",
+                    "description": "Be sure to check <b>Bring to {eventName}</b>, so that Furizon can organize the fursuit lounge. As of now, you are capable of bringing a total of {maxFursuits, plural, =1 {1 fursuit} other {# fursuits}}. To bring more than that amount, you can buy extra badges by clicking <b>Edit reservation</b> in the Booking tab."
                 }
             },
             "errors": {

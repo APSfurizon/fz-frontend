@@ -2,8 +2,10 @@ import { ChangeEvent, CSSProperties, MouseEvent, useEffect, useRef, useState } f
 import Icon, { ICONS } from "./icon";
 import "../styles/components/janInput.css";
 import { useTranslations } from "next-intl";
+import { areEquals } from "../_lib/utils";
+import { useFormContext } from "./dataForm";
 
-export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, value="" }: Readonly<{
+export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, initialValue }: Readonly<{
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -25,15 +27,27 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     readOnly?: boolean,
     required?: boolean,
     style?: CSSProperties,
-    value?: string,
+    initialValue?: string,
   }>) {
 
     /* States */
-    const [inputValue, setInputValue] = useState(value ?? "");
+    const [inputValue, setInputValue] = useState(initialValue ?? "");
+    const [lastInitialValue, setLastInitialValue] = useState<string>();
     const [visiblePassword, setVisiblePassword] = useState(false);
+    const { reset } = useFormContext();
     const t = useTranslations("components");
 
-    useEffect(()=>setInputValue(value ?? ""), [value]);
+    // Detect reset
+    useEffect(()=>{
+        setInputValue(initialValue ?? "");
+    }, [reset]);
+
+    useEffect(()=>{
+        if (!areEquals(initialValue, lastInitialValue)) {
+            setInputValue(initialValue ?? "")
+        }
+        setLastInitialValue(initialValue);
+    }, [initialValue]);
     
     /* Pattern validity */
     const patternValidity = (e: ChangeEvent<HTMLInputElement>) => {

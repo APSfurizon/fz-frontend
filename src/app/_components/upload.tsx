@@ -12,14 +12,16 @@ import "../styles/components/userUpload.css";
 import { MediaData } from '../_lib/api/media';
 import { areEquals, buildSearchParams, firstOrUndefined, getImageUrl } from '../_lib/utils';
 import { runRequest } from '../_lib/api/global';
+import { useFormContext } from './dataForm';
 
-export default function Upload ({children, cropTitle, initialMedia, fieldName, isRequired=false, label, loading=false, readonly=false, requireCrop = false, size=96, uploadType = "full", setBlob, onDelete}: Readonly<{
+export default function Upload ({children, cropTitle, initialMedia, fieldName, isRequired=false, label, helpText, loading=false, readonly=false, requireCrop = false, size=96, uploadType = "full", setBlob, onDelete}: Readonly<{
     children?: React.ReactNode,
     cropTitle?: string,
     initialMedia?: MediaData,
     fieldName?: string,
     isRequired?: boolean,
     label?: string,
+    helpText?: string,
     loading: boolean,
     requireCrop?: boolean,
     readonly?: boolean,
@@ -50,10 +52,11 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     const [bottomHandle, setBottomHandle] = useState<HandleSettings>({...EMPTY_HANDLE, coordinates: {x: 100, y:100}});
     const [wholeHandle, setWholeHandle] = useState<WholeHandleSettings>({startingOffset: {x: 0, y: 0}, active: false});
     const [centerOffset, setCenterOffset] = useState<Coordinates>({x: 50, y:50});
-
+    // Reset logic
+    const { reset } = useFormContext();
     /**Loads the initial value media */
     useEffect(()=>{
-        if (!areEquals(initialMedia, lastInitialMedia)) {
+        if (!areEquals(initialMedia, lastInitialMedia) || reset) {
             setPreview(undefined);
             setError(false);
             if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -61,7 +64,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
             setLastInitialMedia (initialMedia);
             setMedia(initialMedia);
         }
-    }, [initialMedia])
+    }, [initialMedia, reset])
 
     const openFileDialog = () => {
         inputRef.current?.click();
@@ -329,29 +332,32 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     ]
 
     return <>
-        {label && <label htmlFor={fieldName} className={`upload-label title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}>
-            {label}
-        </label>}
-        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={media?.mediaId} required={isRequired}></input>
-        <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
-            <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
-                <Image unoptimized className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
-                    alt={t('upload.alt_preview_image')} width={size} height={size} quality={100}
-                    style={{aspectRatio: "1", maxWidth: size, maxHeight: size, minWidth: size, minHeight: size, objectFit: "cover"}}>
-                </Image>
+        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={previewUrl} required={isRequired}></input>
+        <div>
+            {label && <label htmlFor={fieldName} className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
+                {label}
+            </label>}
+            <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
+                <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
+                    <Image unoptimized className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                        alt={t('upload.alt_preview_image')} width={size} height={size} quality={100}
+                        style={{aspectRatio: "1", maxWidth: size, maxHeight: size, minWidth: size, minHeight: size, objectFit: "cover"}}>
+                    </Image>
+                </div>
+                <div className="vertical-list gap-2mm">
+                    {/* Upload button */}
+                    {!media && <Button title={t('upload.open')} onClick={()=>openFileDialog()}
+                        iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>
+                        {!media && t('upload.open')}</Button>}
+                    {/* Delete button */}
+                    {(media || previewUrl) && <Button title={t('upload.delete')} className="danger"
+                        onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly}
+                        busy={loading}>{t('upload.delete')}</Button>}
+                </div>
+                {children}
             </div>
-            <div className="vertical-list gap-2mm">
-                {/* Upload button */}
-                {!media && <Button title={t('upload.open')} onClick={()=>openFileDialog()}
-                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>
-                    {!media && t('upload.open')}</Button>}
-                {/* Delete button */}
-                {(media || previewUrl) && <Button title={t('upload.delete')} className="danger"
-                    onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly}
-                    busy={loading}>{t('upload.delete')}</Button>}
-            </div>
-            {children}
         </div>
+        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
 
         {/* Form data */}
         <div className="suppressed-input">
@@ -387,6 +393,6 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
                 <Button title={t('upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
                     iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('upload.upload')}</Button>    
             </div>
-        </Modal>    
+        </Modal>
     </>
 }

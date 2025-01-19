@@ -197,6 +197,10 @@
                     "placeholder": "Cerca un paese",
                     "help": "La bandiera comparirà sul tuo badge"
                 },
+                "fursuit_image": {
+                    "label": "Foto",
+                    "help": "Deve essere una fotografia"
+                },
                 "fursuit_name": {
                     "label": "Nome",
                     "placeholder": "Il nome del fursona"
@@ -215,15 +219,19 @@
             "messages": {
                 "what_to_upload": {
                     "title": "Cosa caricare qui?",
-                    "description": "Qualsiasi immagine caricata qua verrà stampata sul tuo badge personale e verrà usata come foto profilo in tutto il sito. Ogni caricamento è visionato e può essere rimosso dallo staff di Furizon."
+                    "description": "Qualsiasi immagine caricata qua verrà stampata sul tuo badge personale e verrà usata come foto profilo in tutto il sito. Ogni caricamento è visionato e può essere rimosso dallo staff di Furizon. È vietata qualsiasi forma di contenuti espliciti, incluso pup play o cub."
                 },
                 "confirm_deletion": {
                     "title": "Conferma eliminazione",
-                    "description": "Vuoi eliminare il badge?"
+                    "description": "Vuoi eliminare l'immagine attuale?"
                 },
                 "confirm_fursuit_deletion": {
                     "title": "Elimina fursuit di {name}",
                     "description": "Vuoi eliminare la fursuit di {name}?"
+                },
+                "fursuit_badge": {
+                    "title": "Vuoi portare la tua suit a furizon?",
+                    "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, cosicchè Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
                 }
             },
             "errors": {
@@ -547,7 +555,7 @@
                     "placeholder": "esempio@furroso.com"
                 },
                 "confirm_email": {
-                    "label": "Confirm email",
+                    "label": "Conferma email",
                     "placeholder": "esempio@furroso.com"
                 },
                 "first_name": {
