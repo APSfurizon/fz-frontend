@@ -30,6 +30,11 @@ export default function MembershipView({params}: {params: Promise<{ year: number
     // Logic
     const [loading, setLoading] = useState(false);
     const [cardsData, setCardsData] = useState<GetCardsApiResponse | undefined | null>(null);
+
+    // Ui selectors
+    const [hideValid, setHideValid] = useState(false);
+    const [showMissing, setShowMissing] = useState(true);
+    const [showDuplicate, setShowDuplicate] = useState(true);
     
     // Mark as registered
     const markAsRegistered = (event: MouseEvent<HTMLButtonElement>,
@@ -115,6 +120,17 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                 <Button iconName={ICONS.REFRESH} onClick={()=>setCardsData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
                 <Button onClick={()=>setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} iconName={ICONS.ADD}>{t("admin.membership_manager.actions.add")}</Button>
             </div>
+            <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
+                <Checkbox initialValue={hideValid} onClick={(e, c)=>setHideValid(c)}>
+                    {t("admin.membership_manager.actions.hide_valid")}
+                </Checkbox>
+                <Checkbox initialValue={showMissing} onClick={(e, c)=>setShowMissing(c)}>
+                    {t("admin.membership_manager.actions.show_missing_cards")}
+                </Checkbox>
+                <Checkbox initialValue={showDuplicate} onClick={(e, c)=>setShowDuplicate(c)}>
+                    {t("admin.membership_manager.actions.show_extra_cards")}
+                </Checkbox>
+            </div>
             <div className="table-container rounded-m">
                 <div className="table rounded-m">
                     {loading && <div className="row">
@@ -123,13 +139,19 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                             <span className="">{tcommon("loading")}</span>
                         </div>
                     </div>}
-                    {(cardsData?.response?.length ?? 0) <= 0 && <div className="data">
+                    {(cardsData?.cards?.length ?? 0) <= 0 && <div className="data">
                         <span>{t("admin.membership_manager.errors.NO_DATA")}</span>
                     </div>}
-                    {cardsData?.response?.map((data, index)=><details className="row" key={index}>
+                    {/* Cards render */}
+                    {cardsData?.cards?.filter(c=>(c.duplicate && showDuplicate) || (!c.duplicate && !hideValid))
+                        .map((data, index)=><details className="row" key={index}>
                         <summary className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
-                            <Icon className="open" iconName={ICONS.ARROW_DROP_DOWN}></Icon>
-                            <Icon className="close" iconName={ICONS.ARROW_DROP_UP}></Icon>
+                            {data.duplicate ? <Icon iconName={ICONS.FILE_COPY}></Icon>
+                            : <>
+                                <Icon className="open" iconName={ICONS.ARROW_DROP_DOWN}></Icon>
+                                <Icon className="close" iconName={ICONS.ARROW_DROP_UP}></Icon>
+                            </>
+                            }
                             <div className="data horizontal-list flex-vertical-center gap-2mm">
                                 <UserPicture userData={data.user} hideEffect></UserPicture>
                                 <span className="title small">{data.user.fursonaName}</span>
@@ -143,12 +165,16 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                             <div className="data">
                                 <span className="descriptive "># {(""+data.membershipCard.cardNo).padStart(7, '0')}</span>
                             </div>
+                            <div className="spacer"></div>
                             <div className="data">
-                                <Checkbox initialValue={data.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,
+                            {data.duplicate
+                            ?   <span className="highlight">{t("admin.membership_manager.errors.CARD_DUPLICATE")}</span>
+                            :   <Checkbox initialValue={data.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,
                                     checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
                                     setBusy: Dispatch<SetStateAction<boolean>>)=>markAsRegistered(event, checked, setChecked, setBusy, data.membershipCard.cardId)}>
                                         {t("admin.membership_manager.table.headers.registered")}
                                 </Checkbox>
+                            }
                             </div>
                         </summary>
                         {/* Copyable data */}
@@ -181,6 +207,23 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                                 <JanInput className="hoverable" label={tauth("register.form.phone_number.label")} readOnly initialValue={(data.userInfo.prefixPhoneNumber ?? "") + (data.userInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                             </div>
                         </div>
+                    </details>)}
+                    {/* Cardless users */}
+                    {showMissing && cardsData?.usersAtCurrentEventWithoutCard?.map((data, index)=><details className="row" key={index}>
+                        <summary className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
+                            <Icon iconName={ICONS.ERROR}></Icon>
+                            <div className="data horizontal-list flex-vertical-center gap-2mm">
+                                <UserPicture userData={data.user} hideEffect></UserPicture>
+                                <span className="title small">{data.user.fursonaName}</span>
+                            </div>
+                            <div className="data">
+                                <span className="descriptive average">{data.orderCode}</span>
+                            </div>
+                            <div className="spacer"></div>
+                            <div className="data">
+                                <span className="highlight">{t("admin.membership_manager.errors.CARD_MISSING")}</span>
+                            </div>
+                        </summary>
                     </details>)}
                 </div>
             </div>

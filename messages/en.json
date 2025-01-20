@@ -402,7 +402,10 @@
                 "title": "Card manager",
                 "header": "Viewing cards for year ",
                 "actions": {
-                    "add": "Add card"
+                    "add": "Add card",
+                    "show_missing_cards": "Show missing",
+                    "show_extra_cards": "Show duplicate",
+                    "hide_valid": "Hide valid"
                 },
                 "input": {
                     "user": {
@@ -417,7 +420,9 @@
                 },
                 "errors": {
                     "NO_DATA": "No membership cards were found for the year selected.",
-                    "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
+                    "PERMISSION_NOT_FOUND": "You don't have the permission to do that.",
+                    "CARD_MISSING": "Card not present",
+                    "CARD_DUPLICATE": "Duplicate card"
                 }
             }
         }

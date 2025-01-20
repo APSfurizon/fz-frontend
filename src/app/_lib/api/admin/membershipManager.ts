@@ -19,12 +19,14 @@ export interface UserCardData {
     userInfo: UserPersonalInfo,
     email: string,
     user: UserData,
-    fromOrderCode: string
+    fromOrderCode: string,
+    duplicate: boolean
 }
 
 export interface GetCardsApiResponse extends ApiResponse {
-    response: UserCardData[],
-    canAddCards: boolean
+    cards: UserCardData[],
+    canAddCards: boolean,
+    usersAtCurrentEventWithoutCard: {user: UserData, orderCode: string}[]
 }
 
 export class GetCardsApiAction implements ApiAction<GetCardsApiResponse, ApiErrorResponse> {
