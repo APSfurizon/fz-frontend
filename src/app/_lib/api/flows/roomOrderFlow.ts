@@ -16,22 +16,26 @@ export interface PretixItemQuota {
     used: number
 }
 
-export function getTotalQuota(quota: PretixItemQuota) {
+export function getTotalPretixQuota(quota: PretixItemQuota) {
     return quota.total_size !== undefined && quota.total_size !== null ? quota.total_size : Number.MAX_SAFE_INTEGER;
 }
 
-export function getUsed(quota: PretixItemQuota) {
+export function getUsedPretixQuota(quota: PretixItemQuota) {
     return quota.pending_orders + quota.paid_orders + quota.exited_orders + quota.cart_positions + quota.blocking_vouchers + quota.waiting_list;
 }
 
-export function getRemainingQuota (quota: PretixItemQuota) {
-    return Math.max(getTotalQuota(quota) - getUsed(quota), 0);
+export function getRemainingPretixQuota(quota: PretixItemQuota) {
+    return Math.max(getTotalPretixQuota(quota) - getUsedPretixQuota(quota), 0);
+}
+
+export function getRemainingRoomType(room: RoomTypeInfo) {
+    return room.remaining ?? Number.MAX_SAFE_INTEGER;
 }
 
 export interface RoomTypeInfo {
     data: RoomData,
     price: string,
-    quotaAvailability: PretixItemQuota   
+    remaining?: number   
 }
 
 export interface RoomStoreItemsApiResponse extends ApiResponse {

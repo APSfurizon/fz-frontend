@@ -3,7 +3,7 @@ import Icon, { ICONS } from "../icon";
 import Button from "../button";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { translate } from "@/app/_lib/utils";
-import { getRemainingQuota, PretixItemQuota, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/app/_lib/api/flows/roomOrderFlow";
+import { getRemainingRoomType, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/app/_lib/api/flows/roomOrderFlow";
 import { ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import ModalError from "../modalError";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
@@ -77,7 +77,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     }, [isOpen]);
 
     const selectRoomType = (type: RoomTypeInfo) => {
-        if (getRemainingQuota(type.quotaAvailability) > 0)
+        if (getRemainingRoomType(type) > 0)
         setSelectedType(type);
     }
 
@@ -119,7 +119,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                         <div className="vertical-list">
                             <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
                             <span>{formatter.number(parseFloat(roomInfo.price)-parseFloat(roomsData.priceOfCurrentRoom ?? "0"), {style: 'currency', currency: EVENT_CURRENCY})}</span>
-                            <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingQuota(roomInfo.quotaAvailability)})}</span>
+                            <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingRoomType(roomInfo)})}</span>
                         </div>
                     </a>
                 )}
@@ -140,7 +140,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                     <div className="vertical-list">
                         <span className="title">{translate(selectedType.data.roomTypeNames, locale)}</span>
                         <span>{formatter.number(parseFloat(selectedType.price)-parseFloat(roomsData?.priceOfCurrentRoom ?? "0"), {style: 'currency', currency: EVENT_CURRENCY})}</span>
-                        <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingQuota(selectedType.quotaAvailability)})}</span>
+                        <span className="descriptive color-subtitle">{t("room.order_flow.quota_left", {size: getRemainingRoomType(selectedType)})}</span>
                     </div>
                 </a>}
             </div>
