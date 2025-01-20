@@ -34,7 +34,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { reset } = useFormContext();
+    const { reset = false } = useFormContext();
     const t = useTranslations("components");
 
     // Detect reset

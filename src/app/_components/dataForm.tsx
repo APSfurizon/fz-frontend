@@ -22,7 +22,8 @@ const FormContext = createContext<FormUpdate | undefined>(undefined);
 export const useFormContext = () => {
     const context = useContext(FormContext);
     if (!context) {
-      throw new Error("useFormContext must be used within FormContext.Provider");
+      console.warn("useFormContext must be used within FormContext.Provider");
+      return {reset: null, setReset: () => {}};
     }
     return context;
 };

@@ -75,7 +75,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     const [waitForParam, setWaitForParam] = useState(false);
 
     /* reset */
-    const { reset } = useFormContext();
+    const { reset = false } = useFormContext();
 
     const inputRef = useRef<HTMLInputElement>(null);
 

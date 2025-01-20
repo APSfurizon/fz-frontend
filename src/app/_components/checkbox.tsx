@@ -19,7 +19,7 @@ export default function Checkbox ({initialValue, children, className, busy, disa
     const [checked, setChecked] = useState(initialValue ?? false);
     const [lastInitialValue, setLastInitialValue] = useState<boolean> ();
     const [busyState, setBusyState] = useState(busy ?? false);
-    const { reset } = useFormContext();
+    const { reset = false } = useFormContext();
     const clickPresent = onClick != undefined;
 
     const clickEvent = (event: MouseEvent<HTMLButtonElement>) => {

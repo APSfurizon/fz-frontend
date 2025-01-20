@@ -53,7 +53,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     const [wholeHandle, setWholeHandle] = useState<WholeHandleSettings>({startingOffset: {x: 0, y: 0}, active: false});
     const [centerOffset, setCenterOffset] = useState<Coordinates>({x: 50, y:50});
     // Reset logic
-    const { reset } = useFormContext();
+    const { reset = false } = useFormContext();
     /**Loads the initial value media */
     useEffect(()=>{
         if (!areEquals(initialMedia, lastInitialMedia) || reset) {
