@@ -31,6 +31,7 @@ export const ICONS = Object.freeze({
     ERROR: "error",
     EVENT_REPEAT: "event_repeat",
     FEATURED_SEASONAL_AND_GIFTS: "featured_seasonal_and_gifts",
+    FILE_COPY: "file_copy",
     FILE_OPEN: "file_open",
     FIND_IN_PAGE: "find_in_page",
     GROUPS: "groups",
