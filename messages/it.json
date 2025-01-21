@@ -333,7 +333,9 @@
                 "unconfirm_room": "Revoca conferma",
                 "exchange": "Scambia",
                 "exchange_room": "Scambia stanza",
-                "leave": "Lascia"
+                "leave": "Lascia",
+                "show_in_nosecount": "Mostra nel nosecount",
+                "hide_in_nosecount": "Nascondi dal nosecount"
             },
             "your_room": "La tua stanza",
             "or": "oppure",

@@ -333,7 +333,9 @@
                 "unconfirm_room": "Unconfirm",
                 "exchange": "Exchange",
                 "exchange_room": "Exchange room",
-                "leave": "Leave"
+                "leave": "Leave",
+                "show_in_nosecount": "Show in nosecount",
+                "hide_in_nosecount": "Hide from nosecount"
             },
             "your_room": "Your room",
             "or": "or",

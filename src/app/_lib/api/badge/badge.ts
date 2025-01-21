@@ -2,17 +2,7 @@ import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
 import { MediaData } from "../media";
 import { UserData, UserDisplayResponse } from "../user";
-
-export interface Fursuit {
-    id: number,
-    name: string,
-    species: string,
-    propic?: MediaData,
-    bringingToEvent: boolean,
-    showInFursuitCount: boolean,
-    ownerId: number,
-    sponsorship: string
-}
+import { Fursuit } from "./fursuits";
 
 export interface BadgeStatusApiResponse extends ApiResponse {
     badgeEditingDeadline: string,
