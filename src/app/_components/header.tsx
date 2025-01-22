@@ -57,7 +57,7 @@ export default function Header () {
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                <Link href={`/nosecount/${EVENT_NAME}`} className="header-link">
+                <Link href={`/nosecount`} className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
                 </Link>

@@ -43,6 +43,7 @@ export const ICONS = Object.freeze({
     KEYBOARD_ARROW_LEFT: "keyboard_arrow_left",
     KEYBOARD_ARROW_RIGHT: "keyboard_arrow_right",
     LOCAL_ACTIVITY: "local_activity",
+    LOCATION_CITY: "location_city",
     LOCK: "lock",
     LOGOUT: "logout",
     MAIL: "mail",

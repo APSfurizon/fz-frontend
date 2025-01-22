@@ -636,5 +636,19 @@
             "register": "Register",
             "title": "Registration"
         }
+    },
+    "misc": {
+        "nosecount": {
+            "title": "Nose count",
+            "sections": {
+               "fursuits" : "Fursuit count",
+               "sponsors": "All our sponsors",
+               "nosecount": "Who's coming to furizon? Let's find out in the <b>nosecount!</b>"
+            },
+            "links": {
+                "fursuits": "Fursuits",
+                "sponsors": "Sponsors"
+            }
+        }
     }
 }

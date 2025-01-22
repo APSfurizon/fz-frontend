@@ -20,6 +20,7 @@ export interface RoomGuest {
 export interface RoomData {
     roomCapacity: number,
     roomPretixItemId: number,
+    roomInternalName: string,
     roomTypeNames: Record<string, string>,
 }
 

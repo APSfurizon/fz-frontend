@@ -1,3 +1,39 @@
-div.page {
-    
+p.title {
+    text-wrap-mode: wrap;
+}
+
+p.section-title {
+    margin-bottom: .25em;
+}
+
+div.options-list {
+    margin-bottom: .5em;
+}
+
+div.options-list a:active {
+    color: var(--highlight);
+}
+
+a.change-mode {
+    padding: 0.3125em;
+    text-decoration: underline;
+}
+
+div.page,
+div.hotel-container,
+div.room-container {
+    padding: 0.625em;
+    margin: 0 auto;
+}
+
+div.room-type-container,
+div.room-guests {
+    padding: 0.625em 5.2em;
+}
+
+@media screen and (max-width: 480px) {
+    div.room-type-container,
+    div.room-guests {
+        padding: 0.625em .625em;
+    }
 }

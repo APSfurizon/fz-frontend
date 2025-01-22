@@ -636,5 +636,19 @@
             "register": "Registrati",
             "title": "Registrazione"
         }
+    },
+    "misc": {
+        "nosecount": {
+            "title": "Nosecount",
+            "sections": {
+                "fursuits" : "Chi vedrai a Furizon?",
+                "sponsors": "Tutti i nostri sponsor",
+                "nosecount": "Chi verrà a Furizon? Vieni a scoprirlo nel <b>nosecount!</b>"
+            },
+            "links": {
+                "fursuits": "Fursuit",
+                "sponsors": "Sponsor"
+            }
+        }
     }
 }
