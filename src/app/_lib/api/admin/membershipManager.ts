@@ -26,7 +26,7 @@ export interface UserCardData {
 export interface GetCardsApiResponse extends ApiResponse {
     cards: UserCardData[],
     canAddCards: boolean,
-    usersAtCurrentEventWithoutCard: {user: UserData, orderCode: string}[]
+    usersAtCurrentEventWithoutCard: {user: {user: UserData, orderCode: string}, email: string, personalInfo: UserPersonalInfo}[]
 }
 
 export class GetCardsApiAction implements ApiAction<GetCardsApiResponse, ApiErrorResponse> {

@@ -86,7 +86,7 @@ export default function BookingPage() {
             return;
         }
         /**If user has a valid and paid order */
-        const hasOrder = !!bookingData && bookingData?.order && ["PENDING", "PAID"].includes(bookingData?.order?.orderStatus);
+        const hasOrder = !!bookingData && bookingData?.order && ["PENDING", "PAID", "CANCELED"].includes(bookingData?.order?.orderStatus);
 
         /**Ticket data*/
         const ticketData: BookingTicketData = hasOrder ? calcTicketData(bookingData.order) : {
@@ -101,7 +101,7 @@ export default function BookingPage() {
             bookingStartDate: new Date(bookingData?.bookingStartTime ?? 0),
             editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0),
             shouldUpdateInfo: bookingData?.shouldUpdateInfo,
-            shouldRetry: bookingData.order?.orderStatus === "PENDING"
+            shouldRetry: ["PENDING", "CANCELED"].includes(bookingData.order?.orderStatus)
         });
     }, [bookingData]);
 
