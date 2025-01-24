@@ -34,6 +34,7 @@ div.room-type-container,
 div.room-guests {
     padding: 0.625em 3em;
     margin: 0 auto;
+    justify-content: center;
 }
 
 @media screen and (max-width: 600px) {

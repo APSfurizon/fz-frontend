@@ -52,7 +52,7 @@ export default function UserPicture ({size, userData, fursuitData, showNickname,
                 </Image>
             </div>
             { showNickname && (
-                <span className="title semibold nickname small">
+                <span className="title semibold nickname small" style={{maxWidth: size}}>
                     {isLoading && <Icon className='loading-animation small' style={{marginRight: '0.3125em'}} iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
                     {isLoading ? t('loading') : pictureData?.fursonaName ?? fursuitPictureData?.name ?? 'unknown'}
                     {pictureData?.locale && showFlag && <span className="flag">{getFlagEmoji(pictureData?.locale?.toLowerCase() ?? "it")}</span>}

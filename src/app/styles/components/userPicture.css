@@ -45,4 +45,7 @@
 
 .user-picture-container .nickname {
     padding: 0.4em 0em;
+    text-wrap-mode: auto;
+    word-break: break-all;
+    word-wrap: break-word;
 }
