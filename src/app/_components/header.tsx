@@ -9,7 +9,7 @@ import { useUser } from '../_lib/context/userProvider';
 import { ReactEventHandler, useEffect, useState } from 'react';
 import "../styles/components/header.css";
 import { DEVICE_TYPE, getDeviceType } from '../_lib/utils';
-import { APP_LINKS, SHOW_APP_BANNER } from '../_lib/constants';
+import { APP_LINKS, EVENT_NAME, SHOW_APP_BANNER } from '../_lib/constants';
 import Link from 'next/link';
 
 export default function Header () {
@@ -57,10 +57,10 @@ export default function Header () {
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                {/* <a className="header-link">
+                <Link href={`/nosecount`} className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
-                </a> */}
+                </Link>
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.INFO}></Icon>
                     <span className="title semibold">{t('header.information')}</span>

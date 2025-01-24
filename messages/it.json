@@ -53,6 +53,10 @@
             "update": "Aggiorna",
             "edit": "Modifica",
             "delete": "Elimina"
+        },
+        "sponsorships": {
+            "sponsor": "Sponsor",
+            "super_sponsor": "Super Sponsor"
         }
     },
     "components": {
@@ -333,7 +337,9 @@
                 "unconfirm_room": "Revoca conferma",
                 "exchange": "Scambia",
                 "exchange_room": "Scambia stanza",
-                "leave": "Lascia"
+                "leave": "Lascia",
+                "show_in_nosecount": "Mostra nel nosecount",
+                "hide_in_nosecount": "Nascondi dal nosecount"
             },
             "your_room": "La tua stanza",
             "or": "oppure",
@@ -633,6 +639,21 @@
             "login_here": "oppure accedi",
             "register": "Registrati",
             "title": "Registrazione"
+        }
+    },
+    "misc": {
+        "nosecount": {
+            "title": "Nosecount",
+            "sections": {
+                "fursuits" : "Incontra i fursuiter",
+                "sponsors": "Un grazie di ❤️ ai nostri sponsor",
+                "nosecount": "Chi verrà a Furizon? Vieni a scoprirlo nel <b>nosecount!</b>"
+            },
+            "links": {
+                "fursuits": "Fursuit",
+                "sponsors": "Sponsor"
+            },
+            "daily_furs": "Giornalieri"
         }
     }
 }

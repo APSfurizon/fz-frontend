@@ -1,5 +1,21 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { ApiAction, ApiErrorResponse } from "../global";
+import { MediaData } from "../media";
+
+export interface FursuitDetails {
+    id: number,
+    name: string,
+    species: string,
+    propic?: MediaData,
+    sponsorship: string
+}
+
+export interface Fursuit {
+    bringingToEvent: boolean,
+    ownerId: number,
+    showInFursuitCount: boolean,
+    fursuit: FursuitDetails
+}
 
 export class AddFursuitDTOBuilder implements FormDTOBuilder<FormData> {
     mapToDTO = (data: FormData) => {

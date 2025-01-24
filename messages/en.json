@@ -53,6 +53,10 @@
             "update": "Update",
             "edit": "Edit",
             "delete": "Delete"
+        },
+        "sponsorships": {
+            "sponsor": "Sponsor",
+            "super_sponsor": "Super Sponsor"
         }
     },
     "components": {
@@ -333,7 +337,9 @@
                 "unconfirm_room": "Unconfirm",
                 "exchange": "Exchange",
                 "exchange_room": "Exchange room",
-                "leave": "Leave"
+                "leave": "Leave",
+                "show_in_nosecount": "Show in nosecount",
+                "hide_in_nosecount": "Hide from nosecount"
             },
             "your_room": "Your room",
             "or": "or",
@@ -633,6 +639,21 @@
             "login_here": "or log in here",
             "register": "Register",
             "title": "Registration"
+        }
+    },
+    "misc": {
+        "nosecount": {
+            "title": "Nose count",
+            "sections": {
+               "fursuits" : "Meet the fursuiters",
+               "sponsors": "A big thanks to our sponsors ❤️",
+               "nosecount": "Who's coming to furizon? Let's find out in the <b>nosecount!</b>"
+            },
+            "links": {
+                "fursuits": "Fursuits",
+                "sponsors": "Sponsors"
+            },
+            "daily_furs": "Attending daily"
         }
     }
 }

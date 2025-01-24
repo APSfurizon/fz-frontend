@@ -9,7 +9,7 @@ import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import Modal from "@/app/_components/modal";
 import RoomInvite from "@/app/_components/_room/roomInvite";
-import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction } from "@/app/_lib/api/room";
+import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction, RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData } from "@/app/_lib/api/room";
 import UserPicture from "@/app/_components/userPicture";
 import StatusBox from "@/app/_components/statusBox";
 import DataForm from "@/app/_components/dataForm";
@@ -207,6 +207,21 @@ export default function RoomPage() {
     commonSuccess();
   }
 
+  // Room nosecount visibility
+  const [showInNosecount, setShowInNosecount] = useState(false);
+
+  const setVisibility = (newValue: boolean) => {
+    if (!data?.currentRoomInfo?.userIsOwner) return;
+    setLoading(true);
+    const reqData: RoomSetShowInNosecountData = {
+      showInNosecount: newValue
+    };
+    runRequest(new RoomSetShowInNosecountApiAction(), undefined, reqData)
+    .then((res)=>setShowInNosecount(newValue))
+    .catch((err)=>commonFail(err))
+    .finally(()=>setLoading(false));
+  }
+
   /******************/
   /** Common logic **/
   /******************/
@@ -247,8 +262,11 @@ export default function RoomPage() {
     if (data) return;
     setLoading(true);
     runRequest(new RoomInfoApiAction())
-    .then (result => setData(result as RoomInfoResponse))
-    .catch((err)=>showModal(
+    .then (result => {
+      const dataResult = result as RoomInfoResponse
+      setShowInNosecount(dataResult.currentRoomInfo?.showInNosecount);
+      setData(dataResult);
+    }).catch((err)=>showModal(
         tcommon("error"), 
         <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>
     )).finally(()=>setLoading(false));
@@ -276,13 +294,17 @@ export default function RoomPage() {
           <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
           {t("room.your_room")}
           <div className="spacer"></div>
-          <Button iconName={ICONS.REFRESH} onClick={()=>setData(undefined)} debounce={3000}>{tcommon("reload")}</Button>
-          {
-            data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
+          {data?.currentRoomInfo?.userIsOwner &&
+            <Button iconName={!showInNosecount ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}
+              title={!showInNosecount ? t("room.actions.show_in_nosecount") : t("room.actions.hide_in_nosecount")}
+              debounce={500} onClick={()=>setVisibility(!showInNosecount)}>
+            </Button>}
+          {data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
               <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={()=>setBuyModalOpen(true)}>
                 {t("room.actions.upgrade_room")}
               </Button>
           }
+          <Button iconName={ICONS.REFRESH} title={tcommon("reload")} onClick={()=>setData(undefined)} debounce={3000}></Button>
         </span>
 
         {/* Loading */}

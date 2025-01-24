@@ -20,6 +20,7 @@ export interface RoomGuest {
 export interface RoomData {
     roomCapacity: number,
     roomPretixItemId: number,
+    roomInternalName: string,
     roomTypeNames: Record<string, string>,
 }
 
@@ -38,6 +39,8 @@ export interface RoomInfo {
     canInvite: boolean,
     guests: RoomGuestHeader[],
     owner: boolean,
+
+    showInNosecount: boolean
 }
 
 export interface RoomCreateData {
@@ -195,6 +198,19 @@ export class RoomExchangeFormAction implements FormApiAction<OrderExchangeInitAp
     authenticated = true;
     dtoBuilder = new RoomExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";
+    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
+    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
+}
+
+export interface RoomSetShowInNosecountData {
+    roomId?: number,
+    showInNosecount: boolean
+}
+
+export class RoomSetShowInNosecountApiAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "room/show-in-nosecount";
     onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
