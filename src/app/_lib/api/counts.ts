@@ -1,7 +1,7 @@
 import { Fursuit, FursuitDetails } from "./badge/fursuits";
 import { ApiAction, ApiErrorResponse, ApiResponse } from "./global";
 import { RoomData } from "./room";
-import { UserData } from "./user";
+import { SponsorType, UserData } from "./user";
 
 export interface FursuitCountResponse extends ApiResponse {
     fursuits: FursuitDetails[]
@@ -16,7 +16,7 @@ export class FursuitCountApiAction implements ApiAction<FursuitCountResponse, Ap
 }
 
 export interface SponsorCountResponse extends ApiResponse {
-    users: UserData[]
+    users: Record<SponsorType, UserData[]>;
 }
 
 export class SponsorCountApiAction implements ApiAction<SponsorCountResponse, ApiErrorResponse> {
@@ -47,7 +47,7 @@ export interface HotelData {
 export interface NoseCountResponse extends ApiResponse {
     hotels: HotelData[],
     ticketOnlyFurs: UserData[],
-    dailyFurs: UserData[]
+    dailyFurs: Record<string, UserData[]>
 }
 
 export class NoseCountApiAction implements ApiAction<NoseCountResponse, ApiErrorResponse> {

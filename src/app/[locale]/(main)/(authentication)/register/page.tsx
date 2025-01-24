@@ -83,7 +83,10 @@ export default function Register() {
     </span>
     </div>
     {error && <span className="error-container title small center">{t(`register.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-    <DataForm checkFn={checkForm} className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new RegisterFormAction} onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("register.register")}} disableSave={!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch}>
+    <DataForm checkFn={checkForm} className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new RegisterFormAction}
+      onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("register.register")}}
+      disableSave={!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch}
+      resetOnFail={false}>
       {/* Ask user for username and password */}
       <JanInput fieldName="fursonaName" required={true} inputType="text" helpText={t("register.form.nickname.help")} busy={loading}
         label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")}/>

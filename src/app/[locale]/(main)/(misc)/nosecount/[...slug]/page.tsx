@@ -8,7 +8,7 @@ import { AllEventsResponse, FursuitCountApiAction, FursuitCountResponse, GetAllE
 import { buildSearchParams, translate } from "@/app/_lib/utils";
 import UserPicture from "@/app/_components/userPicture";
 import Icon, { ICONS } from "@/app/_components/icon";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import useTitle from "@/app/_lib/api/hooks/useTitle";
 import ModalError from "@/app/_components/modalError";
 import Link from "next/link";
@@ -36,6 +36,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     
     const t = useTranslations("misc");
     const tcommon = useTranslations("common");
+    const formatter = useFormatter();
     const locale = useLocale();
 
     useEffect(()=>{
@@ -87,10 +88,6 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     // Loading logic
     useEffect(() => {
         if (!needsLoading) return;
-        // console.log(MODE_FURSUIT, fursuitMode);
-        // console.log(MODE_SPONSOR, sponsorMode);
-        // console.log("event", selectedEvent);
-        // console.log("eventId", eventId);
         setLoading(true);
         setSponsorData(undefined);
         setFursuitData(undefined);
@@ -154,15 +151,31 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {error && <ModalError translationRoot="misc" translationKey="nosecount.errors" error={error}></ModalError>}
 
         {/* Rendering sponsors */}
-        {sponsorData?.users.map((user, index)=> <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+        {sponsorMode && <>
+        <p className="title x-large bold">{t("nosecount.sections.sponsors")}</p>
+        {options}
+        {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{tcommon("sponsorships.super_sponsor")}</p>}
+        <div className="user-list">
+            {sponsorData?.users.SUPER_SPONSOR?.map((user, index)=>
+                <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+        </div>
+        {sponsorData?.users.SPONSOR && <p className="title large">{tcommon("sponsorships.sponsor")}</p>}
+        <div className="user-list">
+            {sponsorData?.users.SPONSOR?.map((user, index)=>
+                <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+        </div>
+        </>}
+
         {/* Rendering fursuits */}
-        {fursuitMode && fursuitData?.fursuits.map((fursuit, index)=> <>
+        {fursuitMode && <>
         <p className="title x-large bold">{t("nosecount.sections.fursuits")}</p>
         {options}
-        <div className="horizontal-list flex-wrap">
-            <UserPicture size={96} key={index} fursuitData={fursuit} showFlag showNickname></UserPicture>
+        <div className="user-list horizontal-list flex-wrap gap-4mm">
+            {fursuitData?.fursuits.map((fursuit, index)=>
+                <UserPicture size={96} key={index} fursuitData={fursuit} showFlag showNickname></UserPicture>
+            )}
         </div>
-        </>)}
+        </>}
 
         {/* Rendering nosecount */}
         {roomsData && <>
@@ -178,25 +191,45 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
                 </p>
                 {/* Room type */}
                 {hotel.roomTypes.map((roomType, rti)=><div key={rti} className="room-type-container">
-                    <p className="title horizontal-list gap-2mm flex-vertical-center">
+                    <p className="title average horizontal-list gap-2mm flex-vertical-center">
                         <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
                         {translate(roomType.roomData.roomTypeNames, locale)}
                     </p>
                     {/* Room */}
                     {roomType.rooms.map((room, ri)=><div key={ri} className="room-container vertical-list gap-2mm">
-                        <p className="title horizontal-list gap-2mm flex-vertical-center">
-                            <Icon iconName={ICONS.GROUPS}></Icon>
+                        <p key={`rh${ri}`} className="title large bold horizontal-list gap-2mm flex-vertical-center">
+                            <Icon iconName={ICONS.BED}></Icon>
                             {room.roomName}
                         </p>
-                        <div className="horizontal-list flex-wrap gap-4mm room-guests" key={ri}>
+                        <div key={`rgl${ri}`} className="horizontal-list flex-wrap gap-4mm room-guests">
                             {room.guests.map((user, ui)=><>
                                 <UserPicture size={96} key={ui} userData={user} showFlag showNickname></UserPicture>
                             </>)}
                         </div>
+                        <hr></hr>
                     </div>)}
                 </div>)}
             </div>)}
         </div>
+        <div className="user-list horizontal-list flex-wrap gap-4mm">
+            {roomsData.ticketOnlyFurs.map((user, index)=>
+                <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+        </div>
+        {/* Rendering daily furs */}
+        {Object.keys(roomsData.dailyFurs).length > 0 && <>
+            <p className="title average horizontal-list gap-2mm flex-vertical-center">
+                <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+                {t("nosecount.daily_furs")}
+            </p>
+            {Object.keys(roomsData.dailyFurs).map((day, di)=> <div className="daily-day">
+                    <p className="title">{formatter.dateTime(new Date(day), {dateStyle: "medium"})}</p>
+                    <div className="user-list horizontal-list flex-wrap gap-4mm">
+                        {roomsData.dailyFurs[day]?.map((user, ui) => 
+                            <UserPicture size={96} key={ui} userData={user} showFlag showNickname></UserPicture>)}
+                    </div>
+                </div>
+            )}
+            </>}
         </>}
         
     </div>

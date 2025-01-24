@@ -20,18 +20,23 @@ a.change-mode {
 }
 
 div.page,
-div.hotel-container,
-div.room-container {
+div.room-container,
+div.user-list {
     padding: 0.625em;
     margin: 0 auto;
 }
 
-div.room-type-container,
-div.room-guests {
-    padding: 0.625em 5.2em;
+div.hotel-container {
+    padding: 0.625em;
 }
 
-@media screen and (max-width: 480px) {
+div.room-type-container,
+div.room-guests {
+    padding: 0.625em 3em;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 600px) {
     div.room-type-container,
     div.room-guests {
         padding: 0.625em .625em;

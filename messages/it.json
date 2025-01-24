@@ -53,6 +53,10 @@
             "update": "Aggiorna",
             "edit": "Modifica",
             "delete": "Elimina"
+        },
+        "sponsorships": {
+            "sponsor": "Sponsor",
+            "super_sponsor": "Super Sponsor"
         }
     },
     "components": {
@@ -641,14 +645,15 @@
         "nosecount": {
             "title": "Nosecount",
             "sections": {
-                "fursuits" : "Chi vedrai a Furizon?",
-                "sponsors": "Tutti i nostri sponsor",
+                "fursuits" : "Incontra i fursuiter",
+                "sponsors": "Un grazie di ❤️ ai nostri sponsor",
                 "nosecount": "Chi verrà a Furizon? Vieni a scoprirlo nel <b>nosecount!</b>"
             },
             "links": {
                 "fursuits": "Fursuit",
                 "sponsors": "Sponsor"
-            }
+            },
+            "daily_furs": "Giornalieri"
         }
     }
 }
