@@ -1,4 +1,6 @@
 @import url(https://fonts.bunny.net/css?family=inter:200,400,500,600|roboto-slab:200,400,500,600);
+
+/* Importing google font icons */
 @font-face {
     font-family: 'Material Symbols Rounded';
     font-style: normal;
@@ -6,8 +8,17 @@
     src: url('/fonts/MaterialSymbolsRoundedFilled.woff2') format('woff2');
 }
 
+/* Importing Flag emoji fallback font */
+@font-face {
+    font-family: 'Twemoji Country Flags';
+    dominant-baseline: text-top;
+    unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+    src: url('/fonts/TwemojiCountryFlags.woff2') format('woff2');
+    font-display: swap;
+}
+
 .mdi {
-    font-family: 'Material Symbols Rounded';
+    font-family: 'Material Symbols Rounded', 'Twemoji Country Flags';
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
@@ -40,11 +51,11 @@
 }
 
 .title {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Twemoji Country Flags', 'Inter', sans-serif;
 }
 
 .monospace {
-    font-family: monospace;
+    font-family: 'Twemoji Country Flags', monospace;
 }
 
 .thin {
@@ -93,7 +104,7 @@
 }
 
 .descriptive {
-    font-family: 'Roboto Slab', serif;
+    font-family: 'Twemoji Country Flags', 'Roboto Slab', serif;
 }
 
 .underlined {
