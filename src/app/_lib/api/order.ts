@@ -41,7 +41,7 @@ export class OrderExchangeFormAction implements FormApiAction<OrderExchangeInitA
  * Defines the search service for users without orders
  */
 export class AutoInputOrderExchangeManager extends AutoInputUsersManager {
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             runRequest (new UserSearchAction(), undefined, undefined, 
                 buildSearchParams({"fursona-name": value, "filter-not-made-an-order": "true"})).then (results => {

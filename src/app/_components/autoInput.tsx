@@ -2,9 +2,9 @@ import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import Image from "next/image";
 import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "../_lib/components/autoInput";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import "../styles/components/autoInput.css";
-import { areEquals, getImageUrl, isEmpty } from "../_lib/utils";
+import { areEquals, getImageUrl, isEmpty, translateNullable } from "../_lib/utils";
 import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
 import { useFormContext } from "./dataForm";
 
@@ -79,6 +79,8 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
 
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const locale = useLocale();
+
     /* Props check */
     const maxSelections = multiple == false ? 1 : max;
     if ((selectedIds).length > maxSelections) throw 'Input values exceed maximum allowed';
@@ -123,7 +125,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         setSearchResults([]);
         let excludeFilter = AutoInputFilter.getForSelected(manager, selectedIds);
         if (filterOut) excludeFilter = excludeFilter.merge(filterOut);
-        manager.searchByValues(searchString.trim(), filterIn, excludeFilter, param).then (results => {
+        manager.searchByValues(searchString.trim(), locale, filterIn, excludeFilter, param).then (results => {
             setSearchResults(results);
             setSearchError(results.length == 0);
         }).catch(err=>{
@@ -226,7 +228,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
             }
             {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}
             <div className="title" style={{flex:1}}>
-                {element.description}
+                {translateNullable(element.translatedDescription, locale) ?? element.description}
             </div>
             <Icon className="medium" iconName={ICONS.ADD_CIRCLE}></Icon>
         </div>;
@@ -242,7 +244,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 }
                 {element.icon !== undefined && <Icon iconName={element.icon}></Icon>}
                 <span className="title small" style={{flex:1}}>
-                    {element.description}
+                    {translateNullable(element.translatedDescription, locale) ?? element.description}
                 </span>
                 <span  onClick={()=>removeItem(element)}><Icon className="medium delete-selection" iconName={ICONS.CANCEL}></Icon></span>
             </a>;

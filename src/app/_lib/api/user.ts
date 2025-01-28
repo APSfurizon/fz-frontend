@@ -88,7 +88,7 @@ export class AutoInputUsersManager implements AutoInputManager {
         });
     }
 
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             runRequest (new UserSearchAction(), undefined, undefined, undefined).then (results => {
                 const searchResult = results as UserSearchResponse;
@@ -118,7 +118,7 @@ export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
  */
 export class AutoInputRoomInviteManager extends AutoInputUsersManager {
 
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-not-in-room": "true"})).then (results => {
                 const searchResult = results as UserSearchResponse;

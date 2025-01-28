@@ -547,7 +547,7 @@
                 },
                 "birth_country": {
                     "label": "Paese",
-                    "placeholder": "Es: Italy"
+                    "placeholder": "Es: Italia"
                 },
                 "birth_region": {
                     "label": "Provincia",
@@ -609,7 +609,7 @@
                 },
                 "residence_country": {
                     "label": "Paese",
-                    "placeholder": "Es: Italy"
+                    "placeholder": "Es: Italia"
                 },
                 "residence_region": {
                     "label": "Provincia",

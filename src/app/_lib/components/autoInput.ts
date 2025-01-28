@@ -1,8 +1,10 @@
 import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
 import { MediaData } from "../api/media";
+import { translateNullable } from "../utils";
 
 export interface AutoInputSearchResult {
     id?: number,
+    translatedDescription?: Record<string, string>,
     description?: string,
     code?: string,
     icon?: string,
@@ -44,9 +46,16 @@ export class AutoInputFilter {
     filteredIds: number[];
 }
 
-export function filterSearchResult(query: string, results: AutoInputSearchResult[], filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
+export function filterSearchResult(query: string, results: AutoInputSearchResult[], locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
     let value = query.trim().toLowerCase();
-    return results.filter ((result) => (result.description?.toLowerCase().includes (value) || result.code?.toLowerCase().includes(value)) && (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result)));
+    return results.filter ((result) => (
+            result.description?.toLowerCase().includes(value) ||
+            result.code?.toLowerCase().includes(value) ||
+            translateNullable(result.translatedDescription, locale)?.toLowerCase().includes(value)
+        ) &&
+        (!filter || filter.applyFilter (result)) &&
+        (!filterOut || !filterOut.applyFilter (result))
+    );
 }
 
 export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoInputFilter, filterOut?: AutoInputFilter) {
@@ -59,8 +68,11 @@ export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoIn
 export interface AutoInputManager {
     /**Extract data's code only, do not use Ids */
     codeOnly: boolean,
-    loadByIds: (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
-    searchByValues: (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+    loadByIds: (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number,
+        additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+    searchByValues: (value: string, locale?: string,
+        filter?: AutoInputFilter, filterOut?: AutoInputFilter,
+        additionalValues?: any) => Promise<AutoInputSearchResult[]>,
     isPresent: (additionalValues?: any) => Promise<boolean>
 }
 
@@ -93,14 +105,15 @@ export class AutoInputCountriesManager implements AutoInputManager {
         });
     }
 
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<CountrySearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputCountries (this.showNumber).then (results => {
-                resolve (
-                    filterSearchResult(value, results, filter, filterOut) as CountrySearchResult[]
-                );
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter,
+        additionalValues?: any): Promise<CountrySearchResult[]> {
+            return new Promise((resolve, reject) => {
+                getAutoInputCountries (this.showNumber).then (results => {
+                    resolve (
+                        filterSearchResult(value, results, locale, filter, filterOut) as CountrySearchResult[]
+                    );
+                });
             });
-        });
     }
 
     isPresent (additionalValue?: any): Promise<boolean> {
@@ -123,12 +136,12 @@ export class AutoInputStatesManager implements AutoInputManager {
         });
     }
 
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, countryCode?: string): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, countryCode?: string): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             if (!countryCode) resolve([]);
             getAutoInputStates (countryCode!).then (results => {
                 resolve (
-                    filterSearchResult(value, results, filter, filterOut)
+                    filterSearchResult(value, results, locale, filter, filterOut)
                 );
             });
         });

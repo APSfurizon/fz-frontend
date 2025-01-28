@@ -29,7 +29,11 @@ export function getCountdown (ts: number): number[] {
 }
 
 export function translate(data: Record<string, string>, locale: string): string {
-    return data[locale] ?? data["en"];
+    return data ? data[locale] ?? data["en"] : "";
+}
+
+export function translateNullable(data?: Record<string, string>, locale?: string): string | undefined {
+    return data && locale ? data[locale] ?? data["en"] : undefined;
 }
 
 export function isEmpty (str?: string) {
