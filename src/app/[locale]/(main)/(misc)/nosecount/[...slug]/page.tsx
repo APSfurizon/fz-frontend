@@ -203,7 +203,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
                         </p>
                         <div key={`rgl-${hi}-${rti}-${ri}`} className="horizontal-list flex-wrap gap-4mm room-guests">
                             {room.guests.map((user, ui)=><>
-                                <UserPicture size={96} key={ui} userData={user} showFlag showNickname></UserPicture>
+                                <UserPicture size={96} key={`rgl-${hi}-${rti}-${ri}-${ui}`} userData={user} showFlag showNickname></UserPicture>
                             </>)}
                         </div>
                         <hr></hr>
