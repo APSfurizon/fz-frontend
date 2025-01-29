@@ -78,6 +78,7 @@
             "upload_size_too_small": "This image is too small",
             "upload_size_too_big": "This image is too big",
             "loading_uploads": "Loading...",
+            "file_not_valid": "File not valid",
             "open": "Open...",
             "delete": "Delete",
             "upload": "Upload",
@@ -184,6 +185,7 @@
             "deadline": "Edit deadline: {badgeDeadline}",
             "name": "Name",
             "locale": "Locale",
+            "badge_limits": "500x500px max",
             "actions": {
                 "upload_badge": "Upload your badge",
                 "edit_badge": "Edit badge data",
