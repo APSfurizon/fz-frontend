@@ -1,5 +1,4 @@
 import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
-import { Coordinates, Rectangle } from "./components/upload";
 import { API_BASE_URL, API_IMAGE_URL, MEMBERSHIP_STARTING_YEAR } from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
@@ -29,7 +28,11 @@ export function getCountdown (ts: number): number[] {
 }
 
 export function translate(data: Record<string, string>, locale: string): string {
-    return data[locale] ?? data["en"];
+    return data ? data[locale] ?? data["en"] : "";
+}
+
+export function translateNullable(data?: Record<string, string>, locale?: string): string | undefined {
+    return data && locale ? data[locale] ?? data["en"] : undefined;
 }
 
 export function isEmpty (str?: string) {
@@ -122,22 +125,4 @@ export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_
 
 export function getImageUrl (src?: string): string | undefined {
     return src && src.length > 0 ? new URL(src, API_IMAGE_URL).href : undefined;
-}
-
-export function getRectangle(p1: Coordinates, p2: Coordinates): Rectangle {
-    const topLeft: Coordinates =  {
-        x: Math.min(p1.x, p2.x),
-        y: Math.min(p1.y, p2.y)
-    };
-
-    const bottomRight: Coordinates = {
-        x: Math.max(p1.x, p2.x),
-        y: Math.max(p1.y, p2.y)
-    };
-
-    return {
-        ...topLeft,
-        width: bottomRight.x - topLeft.x,
-        height: bottomRight.y - topLeft.y
-    };
 }

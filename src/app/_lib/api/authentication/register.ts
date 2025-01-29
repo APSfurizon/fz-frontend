@@ -65,6 +65,7 @@ export interface Place {
     name: string,
     code: string,
     phonePrefix: string,
+    translatedDescription: Record<string, string>
 }
 
 export interface PlaceApiResponse extends ApiResponse {
@@ -101,7 +102,8 @@ export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySea
                     code: place.code,
                     description: `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`,
                     icon: getFlagEmoji(place.code),
-                    phonePrefix: place.phonePrefix
+                    phonePrefix: place.phonePrefix,
+                    translatedDescription: place.translatedDescription
                 };
                 return toReturn;
             }));

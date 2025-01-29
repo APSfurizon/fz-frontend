@@ -78,6 +78,7 @@
             "upload_size_too_big": "L'immagine è troppo grande",
             "select_image": "Seleziona immagine",
             "loading_uploads": "Caricamento...",
+            "file_not_valid": "File non valido",
             "open": "Apri...",
             "delete": "Elimina",
             "upload": "Carica",
@@ -184,6 +185,7 @@
             "your_fursuits": "{amount, plural, =1 {La tua} other {Le tue}} fursuit",
             "name": "Nome",
             "locale": "Paese",
+            "badge_limits": "Massimo 500x500px",
             "actions": {
                 "upload_badge": "Carica il tuo badge",
                 "edit_badge": "Modifica dati badge",
@@ -547,7 +549,7 @@
                 },
                 "birth_country": {
                     "label": "Paese",
-                    "placeholder": "Es: Italy"
+                    "placeholder": "Es: Italia"
                 },
                 "birth_region": {
                     "label": "Provincia",
@@ -609,7 +611,7 @@
                 },
                 "residence_country": {
                     "label": "Paese",
-                    "placeholder": "Es: Italy"
+                    "placeholder": "Es: Italia"
                 },
                 "residence_region": {
                     "label": "Provincia",

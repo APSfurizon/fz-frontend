@@ -51,7 +51,7 @@ export class ChangeCardRegisterStatusApiAction implements ApiAction<Boolean, Api
 }
 
 export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
-    searchByValues (value: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
             return new Promise((resolve, reject) => {
                 runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value, "filter-no-membership-card-for-year": additionalValues[0]})).then (results => {
                     const searchResult = results as UserSearchResponse;

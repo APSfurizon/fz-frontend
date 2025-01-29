@@ -49,7 +49,7 @@ export default function BadgePage() {
       setBadgeStatus(undefined);
     }).catch((err)=>showModal(
         tcommon("error"), 
-        <ModalError error={err} translationRoot="components" translationKey="upload.errors"></ModalError>
+        <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
     )).finally(()=>setLoading(false));
     setLoading(true);
   }
@@ -219,7 +219,7 @@ export default function BadgePage() {
         <div className="vertical-list flex-vertical-center">
           <DataForm hideSave loading={loading} setLoading={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
-            setBlob={uploadBadge} onDelete={promptBadgeDelete} size={130}>
+            setBlob={uploadBadge} onDelete={promptBadgeDelete} size={130} helpText={t("badge.badge_limits")}>
             </Upload>
           </DataForm>
         </div>
