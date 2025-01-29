@@ -3,17 +3,28 @@ export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9090/api/v1/';
 export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
+/**Minimum size allowed to be cropped */
 export const UPLOAD_SELECTOR_MIN_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_SELECTOR_MIN_SIZE ?? "60");
+/**Maximum size allowed to be cropped */
 export const UPLOAD_SELECTOR_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_SELECTOR_MAX_SIZE ?? "4096");
-export const UPLOAD_MIN_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_MIN_SIZE ?? "60");
-export const UPLOAD_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_MAX_SIZE ?? "500");
+/**Maximum size for a profile picture, all profile pictures exceeding this will be scaled back */
+export const PROFILE_UPLOAD_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_PROFILE_UPLOAD_MAX_SIZE ?? "500");
+/**Maximum width of a full picture, all profile pictures exceeding this will be scaled back */
+export const FULL_UPLOAD_MAX_WIDTH = parseInt(process.env.NEXT_PUBLIC_FULL_UPLOAD_MAX_WIDTH ?? "2500");
+/**Maximum height of a full picture, all profile pictures exceeding this will be scaled back */
+export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLOAD_MAX_HEIGHT ?? "2500");
 export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");
 
 // Security
+/**Session duration in days */
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
+/**Urls that need authentication */
 export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})?(?:\/(?!(login|logout|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
+/**Urls that need to be skipped if user is authenticated */
 export const REGEX_SKIP_AUTHENTICATED = /^(\/[A-z]{2})?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
+/**Login url */
 export const REGEX_LOGIN = /^(\/[A-z]{2})?(\/login(.+)?)?$/gmi;
+/**Logout url */
 export const REGEX_LOGOUT = /^(\/[A-z]{2})?(\/logout(.+)?)?$/gmi;
 
 // Event related data
@@ -25,7 +36,10 @@ export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
 
 export const SHOW_APP_BANNER = (process.env.NEXT_PUBLIC_SHOW_APP_BANNER ?? false) === "true";
 
-export const APP_LINKS: Record<string, string> = {"android": "https://play.google.com/store/apps/details?id=com.furizon2023", "apple": "https://apps.apple.com/it/app/furizon/id6502957058"};
+export const APP_LINKS: Record<string, string> = {
+    "android": "https://play.google.com/store/apps/details?id=com.furizon2023",
+    "apple": "https://apps.apple.com/it/app/furizon/id6502957058"
+};
 
 export const BOOKING_ENABLED = (process.env.NEXT_PUBLIC_BOOKING_ENABLED ?? false) === "true";
 export const BADGE_ENABLED = (process.env.NEXT_PUBLIC_BADGE_ENABLED ?? false) === "true";

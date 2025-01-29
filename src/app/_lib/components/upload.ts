@@ -1,6 +1,6 @@
 import { ApiAction, ApiErrorResponse, ApiResponse } from "../api/global"
 import { MediaData } from "../api/media"
-import { UPLOAD_MAX_SIZE, UPLOAD_SELECTOR_MAX_SIZE, UPLOAD_SELECTOR_MIN_SIZE } from "../constants"
+import { UPLOAD_SELECTOR_MAX_SIZE, UPLOAD_SELECTOR_MIN_SIZE } from "../constants"
 
 export const VALID_FILE_TYPES = ["image/gif", "image/jpeg", "image/png", "image/bmp", "image/webp", "image/tiff"];
 const ERROR_NOT_VALID = "file_not_valid";
@@ -25,6 +25,24 @@ export function imageToBlob (image: ImageBitmap): Promise<Blob> {
     return canvas.convertToBlob();
 };
 
+export function scaleBlob (b: Blob, maxWidth: number, maxHeight: number): Promise<Blob> {
+    return new Promise<Blob>(async (resolve, reject) => {
+        const generatedImage = await createImageBitmap(b);
+        if (!generatedImage) reject("Blob invalid");
+        const scale = Math.min(maxWidth / generatedImage.width, maxHeight / generatedImage.height, 1);
+        const oWidth = generatedImage.width;
+        const oHeight = generatedImage.height;
+        generatedImage?.close();
+        const imageToReturn = await createImageBitmap(b, {resizeWidth: oWidth * scale, resizeHeight: oHeight * scale});
+        if (!imageToReturn) {
+            reject("Image resize failed");
+        } else {
+            const toReturn = await imageToBlob(imageToReturn);
+            resolve(toReturn);
+        }
+    })
+}
+
 export interface GetMediaResponse extends ApiResponse {
     media: MediaData[]
 }
@@ -35,9 +53,4 @@ export class GetMediaAction implements ApiAction<GetMediaResponse, ApiErrorRespo
     urlAction = "badge/upload";
     onSuccess: (status: number, body?: GetMediaResponse) => void = (status: number, body?: GetMediaResponse) => {};
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
-}
-
-export function getScale(data: Cropper.Data): number {
-    // currentSize : 1 = max : x
-    return Math.min(UPLOAD_MAX_SIZE / data.width, UPLOAD_MAX_SIZE / data.height, 1);
 }

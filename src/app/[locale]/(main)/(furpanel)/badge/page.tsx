@@ -219,7 +219,7 @@ export default function BadgePage() {
         <div className="vertical-list flex-vertical-center">
           <DataForm hideSave loading={loading} setLoading={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
-            setBlob={uploadBadge} onDelete={promptBadgeDelete} size={130} helpText={t("badge.badge_limits")}>
+            setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130} helpText={t("badge.badge_limits")}>
             </Upload>
           </DataForm>
         </div>

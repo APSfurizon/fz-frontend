@@ -1,10 +1,10 @@
 "use client"
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateAction, useEffect, useRef, useState } from 'react';
-import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
+import { EMPTY_PROFILE_PICTURE_SRC, UPLOAD_SELECTOR_MIN_SIZE, UPLOAD_SELECTOR_MAX_SIZE, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WIDTH, FULL_UPLOAD_MAX_HEIGHT  } from '../_lib/constants';
 import Icon, { ICONS } from './icon';
 import Image from 'next/image';
-import { VALID_FILE_TYPES, validateImage, GetMediaAction, GetMediaResponse, getScale, imageToBlob } from '../_lib/components/upload';
+import { VALID_FILE_TYPES, validateImage, GetMediaAction, GetMediaResponse, imageToBlob, scaleBlob } from '../_lib/components/upload';
 import Button from './button';
 import Modal from './modal';
 import { useModalUpdate } from '../_lib/context/modalProvider';
@@ -15,7 +15,7 @@ import { useFormContext } from './dataForm';
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-export default function Upload ({children, cropTitle, initialMedia, fieldName, isRequired=false, label, helpText, loading=false, readonly=false, requireCrop = false, size=96, uploadType = "full", setBlob, onDelete}: Readonly<{
+export default function Upload ({children, cropTitle, initialMedia, fieldName, isRequired=false, label, helpText, loading=false, readonly=false, requireCrop = false, viewSize=96, cropAspectRatio = "square", setBlob, onDelete}: Readonly<{
     children?: React.ReactNode,
     cropTitle?: string,
     initialMedia?: MediaData,
@@ -26,8 +26,8 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     loading: boolean,
     requireCrop?: boolean,
     readonly?: boolean,
-    size?: number,
-    uploadType?: "full" | "profile",
+    viewSize?: number,
+    cropAspectRatio?: "full" | "square",
     setBlob?: (blob?: Blob) => any,
     onDelete?: (mediaId: number) => any
 }>) { 
@@ -116,12 +116,25 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
         setImageToCrop(undefined);
         
         cropPromise.then((imageBlob) => {
+            const isProfile = cropAspectRatio === 'square';
+            scaleBlob(imageBlob, isProfile ? PROFILE_UPLOAD_MAX_SIZE : FULL_UPLOAD_MAX_WIDTH,
+                isProfile ? PROFILE_UPLOAD_MAX_SIZE : FULL_UPLOAD_MAX_HEIGHT)
+            .then((scaledBlob) => {
+                if (previewUrl) URL.revokeObjectURL(previewUrl);
+                setPreviewUrl(URL.createObjectURL(scaledBlob));
+                if (setBlob) {
+                    setBlob(scaledBlob);
+                }
+                setError(false);
+            }).catch(()=>{
+                setError(true);
+                if (previewUrl) URL.revokeObjectURL(previewUrl);
+                setPreviewUrl(undefined);    
+            })
+        }).catch (()=> {
+            setError(true);
             if (previewUrl) URL.revokeObjectURL(previewUrl);
-            setPreviewUrl(URL.createObjectURL(imageBlob));
-            if (setBlob) {
-                setBlob(imageBlob);
-            }
-            setError(false);
+            setPreviewUrl(undefined);
         }).finally(()=>{
             image.close();
             setImageToCrop(undefined);
@@ -151,8 +164,8 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
             <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
                 <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
                     <Image unoptimized className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
-                        alt={t('upload.alt_preview_image')} width={size} height={size} quality={100}
-                        style={{aspectRatio: "1", maxWidth: size, maxHeight: size, minWidth: size, minHeight: size, objectFit: "cover"}}>
+                        alt={t('upload.alt_preview_image')} width={viewSize} height={viewSize} quality={100}
+                        style={{aspectRatio: "1", maxWidth: viewSize, maxHeight: viewSize, minWidth: viewSize, minHeight: viewSize, objectFit: "cover"}}>
                     </Image>
                 </div>
                 <div className="vertical-list gap-2mm">
@@ -172,14 +185,13 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
 
         {/* Form data */}
         <div className="suppressed-input">
-            <input type="hidden" value={uploadType}></input>
             <input type="file" accept={VALID_FILE_TYPES.join(',')} ref={inputRef} onChange={onFileChosen}></input>
         </div>
 
         {/* Crop dialog */}
         <Modal style={{overflow: "visible"}} open={cropDialogOpen} title={cropTitle ?? t("upload.crop")}
             onClose={()=> onCropCanceled()} zIndex={505}>
-            <Cropper src={previewUrl} initialAspectRatio={1} guides={false} aspectRatio={1} ref={cropperRef}
+            <Cropper src={previewUrl} initialAspectRatio={1} guides={false} aspectRatio={cropAspectRatio == 'square' ? 1 : undefined} ref={cropperRef}
                 zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100}>
             </Cropper>
             <div className="horizontal-list gap-2mm">

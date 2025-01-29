@@ -157,12 +157,12 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{tcommon("sponsorships.super_sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SUPER_SPONSOR?.map((user, index)=>
-                <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+                <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname></UserPicture>)}
         </div>
         {sponsorData?.users.SPONSOR && <p className="title large">{tcommon("sponsorships.sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SPONSOR?.map((user, index)=>
-                <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+                <UserPicture size={96} key={`s-${index}`} userData={user} showFlag showNickname></UserPicture>)}
         </div>
         </>}
 
@@ -190,20 +190,20 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
                     {translate(hotel.displayName, locale)}
                 </p>
                 {/* Room type */}
-                {hotel.roomTypes.map((roomType, rti)=><div key={rti} className="room-type-container">
+                {hotel.roomTypes.map((roomType, rti)=><div key={`rt${hi}-${rti}`} className="room-type-container">
                     <p className="title average horizontal-list gap-2mm flex-vertical-center">
                         <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
                         {translate(roomType.roomData.roomTypeNames, locale)}
                     </p>
                     {/* Room */}
-                    {roomType.rooms.map((room, ri)=><div key={ri} className="room-container vertical-list gap-2mm">
-                        <p key={`rh${ri}`} className="title large bold horizontal-list gap-2mm flex-vertical-center">
+                    {roomType.rooms.map((room, ri)=><div key={`ri-${hi}-${rti}-${ri}`} className="room-container vertical-list gap-2mm">
+                        <p key={`rh${hi}-${rti}-${ri}`} className="title large bold horizontal-list gap-2mm flex-vertical-center">
                             <Icon iconName={ICONS.BED}></Icon>
                             {room.roomName}
                         </p>
-                        <div key={`rgl${ri}`} className="horizontal-list flex-wrap gap-4mm room-guests">
+                        <div key={`rgl-${hi}-${rti}-${ri}`} className="horizontal-list flex-wrap gap-4mm room-guests">
                             {room.guests.map((user, ui)=><>
-                                <UserPicture size={96} key={ui} userData={user} showFlag showNickname></UserPicture>
+                                <UserPicture size={96} key={`rgl-${hi}-${rti}-${ri}-${ui}`} userData={user} showFlag showNickname></UserPicture>
                             </>)}
                         </div>
                         <hr></hr>
