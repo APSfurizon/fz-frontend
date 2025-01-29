@@ -155,12 +155,12 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         <p className="title x-large bold">{t("nosecount.sections.sponsors")}</p>
         {options}
         {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{tcommon("sponsorships.super_sponsor")}</p>}
-        <div className="user-list">
+        <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SUPER_SPONSOR?.map((user, index)=>
                 <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
         </div>
         {sponsorData?.users.SPONSOR && <p className="title large">{tcommon("sponsorships.sponsor")}</p>}
-        <div className="user-list">
+        <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SPONSOR?.map((user, index)=>
                 <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
         </div>
