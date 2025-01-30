@@ -3,6 +3,20 @@ export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9090/api/v1/';
 export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
+
+export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "furpanel.furizon.net";
+export const APP_VERSION = process.env.version;
+export const APP_GIT = "https://github.com/APSfurizon/";
+export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";
+export const APP_GIT_PROJECT_RELEASE  = new URL("releases/tag/"+APP_VERSION, APP_GIT_PROJECT);
+
+export const READ_CHANGELOG_STORAGE_NAME = "fz-read-changelog";
+export const CHANGELOGS_ENABLED = (process.env.NEXT_PUBLIC_CHANGELOGS_ENABLED ?? true) === "true";
+
+/****************/
+/*****UPLOAD*****/
+/****************/
+
 /**Minimum size allowed to be cropped */
 export const UPLOAD_SELECTOR_MIN_SIZE = parseInt(process.env.NEXT_PUBLIC_UPLOAD_SELECTOR_MIN_SIZE ?? "60");
 /**Maximum size allowed to be cropped */
@@ -13,9 +27,11 @@ export const PROFILE_UPLOAD_MAX_SIZE = parseInt(process.env.NEXT_PUBLIC_PROFILE_
 export const FULL_UPLOAD_MAX_WIDTH = parseInt(process.env.NEXT_PUBLIC_FULL_UPLOAD_MAX_WIDTH ?? "2500");
 /**Maximum height of a full picture, all profile pictures exceeding this will be scaled back */
 export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLOAD_MAX_HEIGHT ?? "2500");
-export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");
 
-// Security
+/****************/
+/****SECURITY****/
+/****************/
+
 /**Session duration in days */
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
@@ -33,13 +49,22 @@ export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER ?? "https://fur
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithLogoResized.png";
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
 export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
+export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");
 
 export const SHOW_APP_BANNER = (process.env.NEXT_PUBLIC_SHOW_APP_BANNER ?? false) === "true";
 
+/****************/
+/***APP*BANNER***/
+/****************/
+
 export const APP_LINKS: Record<string, string> = {
-    "android": "https://play.google.com/store/apps/details?id=com.furizon2023",
-    "apple": "https://apps.apple.com/it/app/furizon/id6502957058"
+    android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "https://play.google.com/store/apps/details?id=com.furizon2023",
+    apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? "https://apps.apple.com/app/furizon/id6502957058"
 };
+
+/****************/
+/******PAGES*****/
+/****************/
 
 export const BOOKING_ENABLED = (process.env.NEXT_PUBLIC_BOOKING_ENABLED ?? false) === "true";
 export const BADGE_ENABLED = (process.env.NEXT_PUBLIC_BADGE_ENABLED ?? false) === "true";

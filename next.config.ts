@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
 import './src/envConfig.ts'
+import { version } from './package.json';
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -26,6 +27,9 @@ const nextConfig: NextConfig = {
         search: ""
       }
     ]
+  },
+  env: {
+    version
   },
   output: "standalone"
 };

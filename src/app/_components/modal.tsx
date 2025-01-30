@@ -20,7 +20,7 @@ export default function Modal ({children, className, icon, onClose, busy, open, 
         <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`} style={{zIndex: zIndex, ...style}}>
             {
                 showHeader && (
-                    <div className="modal-header horizontal-list">
+                    <div className="modal-header horizontal-list gap-2mm">
                         {icon && <Icon style={{marginRight: ".25em"}} iconName={icon}></Icon>}
                         <p className="header-title title bold medium">{title}</p>
                         <div className="spacer"></div>
