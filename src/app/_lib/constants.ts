@@ -4,7 +4,7 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://loca
 export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
 
-export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "furpanel.furizon.net";
+export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "";
 export const APP_VERSION = process.env.version;
 export const APP_GIT = "https://github.com/APSfurizon/";
 export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";
@@ -45,7 +45,7 @@ export const REGEX_LOGOUT = /^(\/[A-z]{2})?(\/logout(.+)?)?$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
-export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithCover-Resized.jpeg"
+export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? ""
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithLogoResized.png";
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
 export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
@@ -58,8 +58,8 @@ export const SHOW_APP_BANNER = (process.env.NEXT_PUBLIC_SHOW_APP_BANNER ?? false
 /****************/
 
 export const APP_LINKS: Record<string, string> = {
-    android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "https://play.google.com/store/apps/details?id=com.furizon2023",
-    apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? "https://apps.apple.com/app/furizon/id6502957058"
+    android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "",
+    apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? ""
 };
 
 /****************/
