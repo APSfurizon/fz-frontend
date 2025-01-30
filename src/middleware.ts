@@ -58,12 +58,12 @@ export async function middleware(req: NextRequest) {
     }
   } else {
     if (needsAuthentication) {
-      return redirectToLogin(req, continueParams);
+      return redirectToLogin(req, continueParams, tokenResult == TokenVerification.NOT_VALID);
     } else {
       if (tokenResult == TokenVerification.NOT_VALID)
         return stripToken(intlMiddleware(req));
       else 
-        return redirectToLogin(req, continueParams);
+        return intlMiddleware(req);
     }
   }
 }
@@ -100,11 +100,11 @@ const addToken = (res: NextResponse, token: string): NextResponse => {
   return res;
 }
 
-const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams) => {
+const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams, strip: boolean) => {
   const url = new URL(`/login`, req.url);
   continueParams.forEach((v, k)=>url.searchParams.append(k, v));
   const response = NextResponse.redirect(url, {status: 303});
-  return stripToken(response);
+  return strip ? stripToken(response) : response;
 }
 
 const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchParams) => {

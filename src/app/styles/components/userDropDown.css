@@ -20,7 +20,7 @@ span.user-dropdown .dropdown-container {
     position: absolute;
     display: none;
     top: 3em;
-    left: 0mm;
+    right: 0mm
 }
 
 span.user-dropdown .dropdown-container hr {
@@ -49,5 +49,10 @@ span.user-dropdown .dropdown-container a {
 
     .user-dropdown .user-picture-container {
         margin-right: 0.3125em;
+    }
+
+    span.user-dropdown .dropdown-container {
+        left: 0mm;
+        width: max-content;
     }
 }

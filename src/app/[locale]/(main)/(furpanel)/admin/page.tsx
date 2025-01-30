@@ -13,6 +13,7 @@ import { useModalUpdate } from "@/app/_lib/context/modalProvider";
 import ModalError from "@/app/_components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/app/_lib/api/admin/pretix";
 import { runRequest } from "@/app/_lib/api/global";
+import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/app/_lib/api/admin/admin";
 
 export default function AdminPage() {
   const t = useTranslations("furpanel");
@@ -20,6 +21,21 @@ export default function AdminPage() {
   const router = useRouter();
   const {showModal} = useModalUpdate();
   useTitle(t("admin.title"));
+
+  // Capabilities logic
+
+  const [loading, setLoading] = useState(false);
+  const [capabilities, setCapabilities] = useState<AdminCapabilitesResponse>(EMPTY_CAPABILITIES);
+
+  useEffect(() => {
+    setLoading(true);
+    runRequest(new GetAdminCapabilitiesApiAction ())
+    .then ((result) => setCapabilities(result as AdminCapabilitesResponse))
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.errors"/>
+    )).finally(()=>setLoading(false));
+  }, [])
 
   // Pretix area logic
 
@@ -63,11 +79,11 @@ export default function AdminPage() {
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.EVENT_REPEAT} onClick={reloadEvent} debounce={5000}
-              busy={reloadEventLoading}>
+              busy={reloadEventLoading} disabled={!capabilities.canRefreshPretixCache}>
               {t("admin.pretix_data.reload_event")}
             </Button>
             <Button iconName={ICONS.SYNC} onClick={reloadOrders} debounce={5000}
-              busy={reloadOrdersLoading}>
+              busy={reloadOrdersLoading} disabled={!capabilities.canRefreshPretixCache}>
               {t("admin.pretix_data.reload_orders")}
             </Button>
           </div>
@@ -87,7 +103,8 @@ export default function AdminPage() {
             </span>
           </div>
           <div className="horizontal-list">
-            <Button iconName={ICONS.ID_CARD} onClick={()=>router.push("/admin/memberships/a")}>
+            <Button iconName={ICONS.ID_CARD} onClick={()=>router.push("/admin/memberships/a")}
+              disabled={!capabilities.canManageMembershipCards}>
               {t("admin.membership_manager.title")}
             </Button>
           </div>

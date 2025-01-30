@@ -70,14 +70,7 @@ export default function Header () {
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.BOOKMARK_STAR}></Icon>
                     <span className="title semibold">{t('header.archive')}</span>
                 </a> */}
-                {
-                    userLoading 
-                        ? <Button busy={userLoading}>{t('loading')}</Button>
-                        : userDisplay 
-                            ? <UserDropDown userData={userDisplay.display}></UserDropDown>
-                            : <Button onClick={()=>router.push('/login')} iconName='key'>{t('header.login')}</Button>
-                }
-
+                <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>
                 {/* Phone app */}
                 { [DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
                     <p className='horizontal-list gap-4mm flex-vertical-center' style={{width: '100%'}}>
