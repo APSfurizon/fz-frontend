@@ -1,5 +1,5 @@
 import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
-import { API_BASE_URL, API_IMAGE_URL, MEMBERSHIP_STARTING_YEAR } from "./constants";
+import { API_BASE_URL, API_IMAGE_URL, APP_VERSION, CHANGELOGS_ENABLED, MEMBERSHIP_STARTING_YEAR, READ_CHANGELOG_STORAGE_NAME } from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
             HOUR_TS = 1000 * 60 * 60,
@@ -125,4 +125,10 @@ export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_
 
 export function getImageUrl (src?: string): string | undefined {
     return src && src.length > 0 ? new URL(src, API_IMAGE_URL).href : undefined;
+}
+
+export function shouldShowChangelog (): boolean {
+    const readVersion = localStorage.getItem(READ_CHANGELOG_STORAGE_NAME);
+    const lastVersion = nullifyEmptyString(readVersion ?? "");
+    return CHANGELOGS_ENABLED && (!lastVersion || lastVersion !== APP_VERSION);
 }

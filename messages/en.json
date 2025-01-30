@@ -57,6 +57,10 @@
         "sponsorships": {
             "sponsor": "Sponsor",
             "super_sponsor": "Super Sponsor"
+        },
+        "changelog": {
+            "title": "Furpanel was updated",
+            "description": "Read the changelog at <a></a>"
         }
     },
     "components": {

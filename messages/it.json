@@ -57,6 +57,10 @@
         "sponsorships": {
             "sponsor": "Sponsor",
             "super_sponsor": "Super Sponsor"
+        },
+        "changelog": {
+            "title": "Il Furpanel si è aggiornato",
+            "description": "Leggi le ultime novità su <a></a>"
         }
     },
     "components": {

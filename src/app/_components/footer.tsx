@@ -1,6 +1,7 @@
 import {useTranslations} from 'next-intl';
 import Image from "next/image";
 import "../styles/components/footer.css";
+import { APP_GIT } from '../_lib/constants';
 
 
 export default function Footer () {
@@ -46,7 +47,7 @@ export default function Footer () {
             <a className="color-link" href="https://x.com/starkthedragon">Stark</a>
           </p>
           <div className="tiny color-subtitle center">
-            <span>{t("source_code")} <a className="color-link" href="https://github.com/APSfurizon/">https://github.com/APSfurizon/</a></span>
+            <span>{t("source_code")} <a className="color-link" href={APP_GIT}>{APP_GIT}</a></span>
           </div>
         </div>
       </footer>
