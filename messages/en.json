@@ -411,7 +411,7 @@
                 "reload_orders": "Reload orders"
             },
             "membership_manager": {
-                "title": "Card manager",
+                "title": "Card management",
                 "header": "Viewing cards for year ",
                 "actions": {
                     "add": "Add card",

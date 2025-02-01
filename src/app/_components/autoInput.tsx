@@ -259,7 +259,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     return <>
         <div className={`autocomplete-input ${className ?? ""} ${disabled ? "disabled": ""}`} style={{...style, zIndex: isFocused ? 100 : 0}}>
             <label htmlFor={fieldName} className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`} style={{...labelStyle}}>{label}</label>
-            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={renderedValue.join(",")} required={isRequired} onChange={checkChange}></input>
+            <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={renderedValue.join(",") ?? ""} required={isRequired} onChange={checkChange}></input>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}
@@ -275,7 +275,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                                 onChange={onSearchTextChange}
                                 onFocus={()=>setIsFocused (true)}
                                 onBlur={onBlur}
-                                value={searchInput}
+                                value={searchInput ?? ""}
                             />
                         ) || <div className="spacer"></div>
                     }

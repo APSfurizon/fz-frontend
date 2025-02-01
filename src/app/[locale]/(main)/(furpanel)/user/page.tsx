@@ -74,8 +74,8 @@ export default function UserPage() {
               </span>
             </div>
             <DataForm className="vertical-list gap-2mm" action={new UpdatePersonalInfoFormAction} loading={personalInfoLoading} setLoading={setPersonalInfoLoading}>
-              <input type="hidden" name="id" value={personalInformation?.id}></input>
-              <input type="hidden" name="userId" value={personalInformation?.userId}></input>
+              <input type="hidden" name="id" value={personalInformation?.id ?? ""}></input>
+              <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.first_name.label")} placeholder={tauth("register.form.first_name.placeholder")}

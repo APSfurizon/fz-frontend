@@ -436,7 +436,7 @@ export default function RoomPage() {
     { data?.currentRoomInfo && <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess>
-      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
+      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId ?? ""}></input>
       <JanInput inputType="text" fieldName="name" required busy={modalLoading} label={t("room.input.rename_new_name.label")}
       placeholder={t("room.input.rename_new_name.placeholder")} minLength={2} maxLength={254}></JanInput>
       <div className="horizontal-list gap-4mm">
@@ -453,7 +453,7 @@ export default function RoomPage() {
     {data?.currentRoomInfo && <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!inviteModalOpen}>
-      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
+      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId ?? ""}></input>
       <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
         max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
         placeholder={t("room.input.invite.placeholder")} helpText={t("room.input.invite.help")} style={{maxWidth: "500px"}}
@@ -588,7 +588,7 @@ export default function RoomPage() {
     <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!exchangeModalOpen}>
-        <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
+        <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
           label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}
           required/>

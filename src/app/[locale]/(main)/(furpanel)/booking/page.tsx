@@ -216,7 +216,7 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
-                <p className="title medium horizontal-list gap-2mm">
+                <div className="title medium horizontal-list gap-2mm">
                     {t("booking.your_booking")}
                     <span>({t("booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
@@ -224,7 +224,7 @@ export default function BookingPage() {
                     <StatusBox status={bookingData?.order.orderStatus == "PENDING" ? "warning" : "success"}>
                         {tcommon(`order_status.${bookingData?.order.orderStatus}`)}
                     </StatusBox>
-                </p>
+                </div>
                 <div className="order-data">
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm">
                         {/* Ticket item */}
@@ -291,7 +291,7 @@ export default function BookingPage() {
         <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
             onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
-            <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
+            <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
             <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                 label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
             <div className="horizontal-list gap-4mm">

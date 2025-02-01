@@ -8,6 +8,7 @@ button.button {
     display: flex;
     gap: 0.5em;
     align-items: center;
+    transition-duration: 120ms;
 }
 
 button:disabled {
@@ -21,6 +22,7 @@ button.button:hover:not(:disabled) {
 button.button:active:not(:disabled) {
     background: var(--button-bg-down);
     border: 1px solid var(--button-border-down);
+    transform: scale(0.95);
 }
 
 button.danger {

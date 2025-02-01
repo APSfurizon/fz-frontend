@@ -111,7 +111,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                 <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("admin.membership_manager.header", {yearStart: Number(selectedYear)})}</span>
-                    <select className="title average" value={selectedYear} onChange={(e)=>router.push(e.target.value)}>
+                    <select className="title average" value={selectedYear ?? ""} onChange={(e)=>router.push(e.target.value)}>
                         {years.map((o, k) => <option key={k}>{o}</option>)}
                     </select>
                 </div>

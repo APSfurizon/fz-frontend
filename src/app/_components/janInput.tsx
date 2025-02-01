@@ -83,7 +83,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
                     placeholder={placeholder ?? ""}
                     type={finalType}
                     disabled={disabled}
-                    value={inputValue}
+                    value={inputValue ?? ""}
                     onChange={handleChange}
                     onClick={onClick}
                     minLength={minLength}
