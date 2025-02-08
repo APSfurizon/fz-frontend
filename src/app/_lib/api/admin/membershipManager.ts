@@ -2,7 +2,7 @@ import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../comp
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { buildSearchParams } from "../../utils";
 import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global";
-import { AutoInputRoomInviteManager, toSearchResult, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
+import { AutoInputRoomInviteManager, CompleteUserData, toSearchResult, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
 
 export interface MembershipCard {
     cardId: number,
@@ -26,7 +26,7 @@ export interface UserCardData {
 export interface GetCardsApiResponse extends ApiResponse {
     cards: UserCardData[],
     canAddCards: boolean,
-    usersAtCurrentEventWithoutCard: {user: {user: UserData, orderCode: string}, email: string, personalInfo: UserPersonalInfo}[]
+    usersAtCurrentEventWithoutCard: CompleteUserData[]
 }
 
 export class GetCardsApiAction implements ApiAction<GetCardsApiResponse, ApiErrorResponse> {

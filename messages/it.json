@@ -403,7 +403,9 @@
                 "membership": "Associazione",
                 "membership_cards": "Tesserati",
                 "pretix": "Pretix",
-                "pretix_data": "Dati negozio"
+                "pretix_data": "Dati negozio",
+                "users": "Utenti",
+                "users_accounts": "Account"
             },
             "pretix_data": {
                 "reload_event": "Ricarica evento",
@@ -434,6 +436,35 @@
                     "PERMISSION_NOT_FOUND": "Non hai i permessi necessari.",
                     "CARD_MISSING": "Tessera non presente",
                     "CARD_DUPLICATE": "Tessera duplicata"
+                }
+            },
+            "users": {
+                "title": "Visualizza utenti",
+                "input": {
+                    "selected_user": {
+                        "label": "Utente selezionato",
+                        "placeholder": "Cerca un utente"
+                    }
+                },
+                "personal_info": "Dati personali",
+                "security": "Sicurezza",
+                "actions": {
+                    "ban": "Espelli",
+                    "unban": "Riammetti"
+                },
+                "messages": {
+                    "confirm_ban": {
+                        "title": "Conferma espulsione",
+                        "description": "L'account verrà disconnesso da tutti i dispositivi e sarà impedito l'accesso."
+                    },
+                    "confirm_unban": {
+                        "title": "Conferma riammissione?",
+                        "description": "All'account sarà di nuovo permesso di accedere."
+                    }
+                },
+                "errors": {
+                    "unknown_user": "Utente non trovato",
+                    "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
                 }
             }
         }
@@ -516,7 +547,8 @@
                 "invalid_credentials": "Credenziali errate",
                 "invalid_input": "Dati non validi",
                 "already_logged_in": "Hai già effettuato l'accesso",
-                "confirmation_still_pending": "Conferma l'email prima di accedere"
+                "confirmation_still_pending": "Conferma l'email prima di accedere",
+                "authentication_is_disabled": "Account disabilitato."
             },
             "messages": {
                 "register_success": {

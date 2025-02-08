@@ -132,3 +132,9 @@ export function shouldShowChangelog (): boolean {
     const lastVersion = nullifyEmptyString(readVersion ?? "");
     return CHANGELOGS_ENABLED && (!lastVersion || lastVersion !== APP_VERSION);
 }
+
+export function errorCodeToApiError (err: string):ApiErrorResponse {
+    return {
+        errorMessage: err
+    };
+}

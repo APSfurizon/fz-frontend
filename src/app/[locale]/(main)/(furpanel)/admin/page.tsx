@@ -89,6 +89,27 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+      {/* Users area */}
+      <div className="admin-section section vertical-list gap-2mm">
+        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <Icon className="x-large" iconName={ICONS.PERSON}></Icon>
+          <span className="title medium">{t("admin.sections.users")}</span>
+        </div>
+        {/* Users generic area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.sections.users_accounts")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm">
+            <Button iconName={ICONS.PERSON_SEARCH} onClick={()=>router.push("/admin/users/")}
+              disabled={!capabilities.canManageMembershipCards}>
+              {t("admin.users.title")}
+            </Button>
+          </div>
+        </div>
+      </div>
       {/* Membership area */}
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
@@ -102,7 +123,7 @@ export default function AdminPage() {
               {t("admin.sections.membership_cards")}
             </span>
           </div>
-          <div className="horizontal-list">
+          <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.ID_CARD} onClick={()=>router.push("/admin/memberships/a")}
               disabled={!capabilities.canManageMembershipCards}>
               {t("admin.membership_manager.title")}

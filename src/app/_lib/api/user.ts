@@ -18,10 +18,18 @@ export type UserRole = {
 
 export type UserData = {
     userId: number,
+    orderCode?: string,
     fursonaName?: string,
     locale?: string,
     propic?: MediaData,
     sponsorship: SponsorType
+}
+
+export type CompleteUserData = {
+    user: {user: UserData, orderCode?: string},
+    email: string,
+    personalInfo: UserPersonalInfo,
+    isBanned?: boolean
 }
 
 export interface UserPersonalInfo {
@@ -90,7 +98,7 @@ export class AutoInputUsersManager implements AutoInputManager {
 
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            runRequest (new UserSearchAction(), undefined, undefined, undefined).then (results => {
+            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"fursona-name": value})).then (results => {
                 const searchResult = results as UserSearchResponse;
                 const users = searchResult.users.map(usr=>toSearchResult(usr));
                 resolve (

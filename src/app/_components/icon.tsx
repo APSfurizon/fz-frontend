@@ -2,6 +2,8 @@ import { CSSProperties } from "react";
 import "../styles/components/icon.css";
 
 export const ICONS = Object.freeze({
+    ACCOUNT_CIRCLE: "account_circle",
+    ACCOUNT_CIRCLE_OFF: "account_circle_off",
     ADD: "add",
     ADD_CIRCLE: "add_circle",
     ARROW_DROP_DOWN: "arrow_drop_down",
@@ -55,6 +57,7 @@ export const ICONS = Object.freeze({
     PERSON: "person",
     PERSON_ADD: "person_add",
     PERSON_BOOK: "person_book",
+    PERSON_SEARCH: "person_search",
     PETS: "pets",
     PHOTO_CAMERA: "photo_camera",
     PROGRESS_ACTIVITY: "progress_activity",
