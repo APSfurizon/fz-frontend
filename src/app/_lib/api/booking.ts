@@ -1,15 +1,36 @@
+import { StatusBoxStyle } from "@/app/_components/statusBox";
+import { ConventionEvent } from "./counts";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
 import { RoomData } from "./room";
 
+export type OrderStatusType = "CANCELED" | "PENDING" | "PAID" | "EXPIRED";
+export type SponsorshipType = "NONE" | "SPONSOR" | "SUPER_SPONSOR";
+export type ExtraDaysType = "NONE" | "EARLY" | "LATE" | "BOTH";
+
+export function mapOrderStatusToStatusBox (s: OrderStatusType): StatusBoxStyle {
+    switch (s) {
+        case "CANCELED":
+        case "EXPIRED":
+            return "error";
+        case "PENDING":
+            return "warning";
+        case "PAID":
+            return "success";
+        default:
+            return "normal";
+    }
+}
+
 export interface OrderData {
     code: string,
-    orderStatus: "CANCELED" | "PENDING" | "PAID" | "EXPIRED",
-    sponsorship: "NONE" | "SPONSOR" | "SUPER_SPONSOR",
-    extraDays: "NONE" | "EARLY" | "LATE" | "BOTH",
+    orderStatus: OrderStatusType,
+    sponsorship: SponsorshipType,
+    extraDays: ExtraDaysType,
     dailyTicket: boolean,
     dailyDays: string[],
     room: RoomData,
-    totalFursuits: number
+    totalFursuits: number,
+    orderEvent: ConventionEvent
 }
 
 export interface BookingOrderResponse extends ApiResponse {

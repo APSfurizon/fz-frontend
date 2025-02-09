@@ -1,9 +1,11 @@
 import { CSSProperties } from "react";
 import "../styles/components/statusBox.css";
 
+export type StatusBoxStyle = "warning" | "success" | "normal" | "error"
+
 export default function statusBox ({children, status="normal", style, className}: Readonly<{
     children?: React.ReactNode,
-    status?: "warning" | "success" | "normal" | "error",
+    status?: StatusBoxStyle,
     style?: CSSProperties,
     className?: string,
   }>) {

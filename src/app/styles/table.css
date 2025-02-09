@@ -15,10 +15,14 @@ table {
             background-color: var(--table-row-bg);
         }
 
+        td.centered,
+        th.centered {
+            align-items: center;
+        }
+
         th:not(:first-child),
         td:not(:first-child) {
             border-left: 0.1em solid var(--table-row-bg);
-            padding-left: 0.625em;
         }
 
         td:first-child, th:first-child {

@@ -58,7 +58,7 @@ export class NoseCountApiAction implements ApiAction<NoseCountResponse, ApiError
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export interface Event {
+export interface ConventionEvent {
     slug: string,
     publicUrl: string,
     id: number,
@@ -73,7 +73,7 @@ export interface Event {
 }
 
 export interface AllEventsResponse extends ApiResponse {
-    events: Event[]
+    events: ConventionEvent[]
 }
 
 export class GetAllEventsApiAction implements ApiAction<AllEventsResponse, ApiErrorResponse> {
@@ -84,8 +84,8 @@ export class GetAllEventsApiAction implements ApiAction<AllEventsResponse, ApiEr
     onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
-export interface CurrentEventResponse extends Event, ApiResponse {
-    events: Event[]
+export interface CurrentEventResponse extends ApiResponse {
+    events: ConventionEvent[]
 }
 
 export class GetCurrentEventApiAction implements ApiAction<CurrentEventResponse, ApiErrorResponse> {

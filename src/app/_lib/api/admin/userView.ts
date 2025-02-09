@@ -1,3 +1,4 @@
+import { OrderData } from "../booking";
 import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
 import { UserData, UserPersonalInfo } from "../user";
 
@@ -10,7 +11,7 @@ export interface UserAdminViewData {
 
 export interface GetUserAdminViewResponse extends ApiResponse {
     user: UserAdminViewData,
-    orders: Record<number, any>
+    orders: OrderData[]
 }
 
 /**

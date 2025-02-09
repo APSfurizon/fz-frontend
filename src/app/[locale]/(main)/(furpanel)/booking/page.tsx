@@ -8,7 +8,7 @@ import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/app/_lib/constants";
 import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
 import { getCountdown, translate } from "@/app/_lib/utils";
 import "../../../../styles/furpanel/booking.css";
 import ModalError from "@/app/_components/modalError";
@@ -221,7 +221,7 @@ export default function BookingPage() {
                     <span>({t("booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
                     )</span>
-                    <StatusBox status={bookingData?.order.orderStatus == "PENDING" ? "warning" : "success"}>
+                    <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
                         {tcommon(`order_status.${bookingData?.order.orderStatus}`)}
                     </StatusBox>
                 </div>

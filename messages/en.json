@@ -449,9 +449,20 @@
                 },
                 "personal_info": "Personal info",
                 "security": "Security",
+                "orders": "Orders",
+                "orders_table": {
+                    "event_name": "Event",
+                    "order_code": "Order code",
+                    "order_status": "Status",
+                    "is_daily": "Is daily",
+                    "sponsorship_type": "Sponsorship",
+                    "extra_days": "Extra days",
+                    "room_type": "Room type"
+                },
                 "actions": {
                     "ban": "Ban",
-                    "unban": "Unban"
+                    "unban": "Unban",
+                    "view_order": "View order"
                 },
                 "messages": {
                     "confirm_ban": {

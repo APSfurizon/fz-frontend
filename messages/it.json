@@ -448,9 +448,20 @@
                 },
                 "personal_info": "Dati personali",
                 "security": "Sicurezza",
+                "orders": "Ordini",
+                "orders_table": {
+                    "event_name": "Evento",
+                    "order_code": "Codice ordine",
+                    "order_status": "Stato",
+                    "is_daily": "Giornaliero",
+                    "sponsorship_type": "Sponsor",
+                    "extra_days": "Giorni extra",
+                    "room_type": "Tipo stanza"
+                },
                 "actions": {
                     "ban": "Espelli",
-                    "unban": "Riammetti"
+                    "unban": "Riammetti",
+                    "view_order": "Vedi ordine"
                 },
                 "messages": {
                     "confirm_ban": {

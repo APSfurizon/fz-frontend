@@ -10,10 +10,14 @@ import { ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
 import { AutoInputUsersManager, UserSearchAction } from "@/app/_lib/api/user";
 import { AutoInputSearchResult } from "@/app/_lib/components/autoInput";
 import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import { copyContent, errorCodeToApiError, firstOrUndefined } from "@/app/_lib/utils";
-import { useTranslations } from "next-intl";
+import { copyContent, errorCodeToApiError, firstOrUndefined, translate } from "@/app/_lib/utils";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import "../../../../../../styles/table.css";
+import Checkbox from "@/app/_components/checkbox";
+import StatusBox from "@/app/_components/statusBox";
+import { mapOrderStatusToStatusBox } from "@/app/_lib/api/booking";
 
 export default function AdminUsersPage ({ params }: {params: Promise<{slug: string[]}>}) {
     const [userId, setUserId] = useState<number> ();
@@ -23,6 +27,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
     const t = useTranslations("furpanel");
     const tcommon = useTranslations("common");
     const tauth = useTranslations("authentication");
+    const locale = useLocale();
     const {showModal} = useModalUpdate();
     const router = useRouter();
 
@@ -164,6 +169,41 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
                     <JanInput className="hoverable" label={tauth("register.form.phone_number.label")} readOnly initialValue={(userData.user.personalInfo.prefixPhoneNumber ?? "") + (userData.user.personalInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                 </div>
             </div>
+            {/* Orders */}
+            <span className="title medium">{t("admin.users.orders")}</span>
+            <table className="order-list rounded-m">
+                <tbody>
+                    <tr>
+                        <th>{t("admin.users.orders_table.event_name")}</th>
+                        <th>{t("admin.users.orders_table.order_code")}</th>
+                        <th>{t("admin.users.orders_table.order_status")}</th>
+                        <th>{t("admin.users.orders_table.is_daily")}</th>
+                        <th>{t("admin.users.orders_table.sponsorship_type")}</th>
+                        <th>{t("admin.users.orders_table.extra_days")}</th>
+                        <th>{t("admin.users.orders_table.room_type")}</th>
+                        <th></th>
+                    </tr>
+                {userData.orders.map((order, oi) => <tr key={oi} className="order-row">
+                    <td>{translate(order.orderEvent.eventNames, locale)}</td>
+                    <td>{order.code}</td>
+                    <td>
+                        <StatusBox status={mapOrderStatusToStatusBox(order.orderStatus)}>
+                            {tcommon(`order_status.${order.orderStatus}`)}
+                        </StatusBox>
+                    </td>
+                    <td className="centered"><Checkbox disabled initialValue={order.dailyTicket}></Checkbox></td>
+                    <td>{order.sponsorship}</td>
+                    <td>{order.extraDays}</td>
+                    <td>{translate(order.room?.roomTypeNames, locale)}</td>
+                    <td>
+                        <a>
+                        <Icon iconName={ICONS.OPEN_IN_NEW}></Icon>
+                        </a>
+                    </td>
+                </tr>)}
+                </tbody>
+            </table>
+            {/* Security */}
             <span className="title medium">{t("admin.users.security")}</span>
             <div className="vertical-list" style={{padding: "0.625em"}}>
                 <div className="horizontal-list gap-2mm">
