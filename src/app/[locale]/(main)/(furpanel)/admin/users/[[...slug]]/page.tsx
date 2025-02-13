@@ -1,23 +1,23 @@
 "use client"
-import AutoInput from "@/app/_components/autoInput";
-import Button from "@/app/_components/button";
-import Icon, { ICONS } from "@/app/_components/icon";
-import JanInput from "@/app/_components/janInput";
-import Modal from "@/app/_components/modal";
-import ModalError from "@/app/_components/modalError";
-import { BanUserAction, GetUserAdminViewAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/app/_lib/api/admin/userView";
-import { ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { AutoInputUsersManager, UserSearchAction } from "@/app/_lib/api/user";
-import { AutoInputSearchResult } from "@/app/_lib/components/autoInput";
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import { copyContent, errorCodeToApiError, firstOrUndefined, translate } from "@/app/_lib/utils";
+import AutoInput from "@/components/autoInput";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
+import JanInput from "@/components/janInput";
+import Modal from "@/components/modal";
+import ModalError from "@/components/modalError";
+import { BanUserAction, GetUserAdminViewAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
+import { ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { AutoInputUsersManager, UserSearchAction } from "@/lib/api/user";
+import { AutoInputSearchResult } from "@/lib/components/autoInput";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import { copyContent, errorCodeToApiError, firstOrUndefined, translate } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import "../../../../../../styles/table.css";
-import Checkbox from "@/app/_components/checkbox";
-import StatusBox from "@/app/_components/statusBox";
-import { mapOrderStatusToStatusBox } from "@/app/_lib/api/booking";
+import "@/styles/table.css";
+import Checkbox from "@/components/checkbox";
+import StatusBox from "@/components/statusBox";
+import { mapOrderStatusToStatusBox } from "@/lib/api/booking";
 
 export default function AdminUsersPage ({ params }: {params: Promise<{slug: string[]}>}) {
     const [userId, setUserId] = useState<number> ();

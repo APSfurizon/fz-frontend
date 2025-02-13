@@ -1,7 +1,7 @@
 import {useTranslations} from 'next-intl';
 import Image from "next/image";
-import "../styles/components/footer.css";
-import { APP_GIT } from '../_lib/constants';
+import "@/styles/components/footer.css";
+import { APP_GIT } from '@/lib/constants';
 
 
 export default function Footer () {

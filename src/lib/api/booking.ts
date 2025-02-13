@@ -1,4 +1,4 @@
-import { StatusBoxStyle } from "@/app/_components/statusBox";
+import { StatusBoxStyle } from "@/components/statusBox";
 import { ConventionEvent } from "./counts";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
 import { RoomData } from "./room";

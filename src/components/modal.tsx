@@ -1,7 +1,7 @@
 "use client"
-import { ChangeEvent, CSSProperties, KeyboardEvent, EventHandler, useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import Icon, { ICONS } from "./icon";
-import "../styles/components/modal.css";
+import "@/styles/components/modal.css";
 import { useTranslations } from "next-intl";
 import ReactDOM from "react-dom";
 

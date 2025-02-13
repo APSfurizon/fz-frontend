@@ -1,21 +1,21 @@
 "use client"
-import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/app/_lib/api/global";
-import { LoginFormAction } from "@/app/_lib/api/authentication/login";
+import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/lib/api/global";
+import { LoginFormAction } from "@/lib/api/authentication/login";
 import { useTranslations } from "next-intl";
 import { redirect, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import DataForm from "@/app/_components/dataForm";
-import Icon, { ICONS } from "@/app/_components/icon";
-import JanInput from "@/app/_components/janInput";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import AutoInput from "@/app/_components/autoInput";
-import { RegisterFormAction } from "@/app/_lib/api/authentication/register";
-import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
-import Checkbox from "@/app/_components/checkbox";
-import "../../../../styles/authentication/register.css";
-import { firstOrUndefined } from "@/app/_lib/utils";
+import DataForm from "@/components/dataForm";
+import Icon, { ICONS } from "@/components/icon";
+import JanInput from "@/components/janInput";
+import useTitle from "@/lib/api/hooks/useTitle";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import AutoInput from "@/components/autoInput";
+import { RegisterFormAction } from "@/lib/api/authentication/register";
+import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/lib/components/autoInput";
+import Checkbox from "@/components/checkbox";
+import "@/styles/authentication/register.css";
+import { firstOrUndefined } from "@/lib/utils";
 
 export default function Register() {
 

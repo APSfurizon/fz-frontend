@@ -1,24 +1,24 @@
 'use client'
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
 import React, { MouseEvent, useEffect, useState } from "react";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
+import useTitle from "@/lib/api/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
-import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/app/_lib/constants";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
-import { getCountdown, translate } from "@/app/_lib/utils";
-import "../../../../styles/furpanel/booking.css";
-import ModalError from "@/app/_components/modalError";
+import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/lib/constants";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/lib/api/booking";
+import { getCountdown, translate } from "@/lib/utils";
+import "@/styles/furpanel/booking.css";
+import ModalError from "@/components/modalError";
 import { useRouter } from "next/navigation";
-import Modal from "@/app/_components/modal";
-import StatusBox from "@/app/_components/statusBox";
-import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/app/_lib/api/order";
-import DataForm from "@/app/_components/dataForm";
-import { useUser } from "@/app/_lib/context/userProvider";
-import AutoInput from "@/app/_components/autoInput";
+import Modal from "@/components/modal";
+import StatusBox from "@/components/statusBox";
+import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/api/order";
+import DataForm from "@/components/dataForm";
+import { useUser } from "@/lib/context/userProvider";
+import AutoInput from "@/components/autoInput";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");

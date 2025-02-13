@@ -1,17 +1,14 @@
 "use client"
-import DataForm from "@/app/_components/dataForm";
-import Icon, { ICONS } from "@/app/_components/icon";
-import JanInput from "@/app/_components/janInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
+import DataForm from "@/components/dataForm";
+import Icon, { ICONS } from "@/components/icon";
+import JanInput from "@/components/janInput";
+import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import { useUser } from "@/app/_lib/context/userProvider";
-import "../../../../../styles/authentication/login.css";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { ResetPasswordFormAction } from "@/app/_lib/api/authentication/recover";
+import useTitle from "@/lib/api/hooks/useTitle";
+import "@/styles/authentication/login.css";
+import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -48,7 +45,7 @@ export default function Login() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon iconName="design_services"></Icon>
+        <Icon iconName={ICONS.DESIGN_SERVICES}></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('recover_confirm.title').toLowerCase()}</span>

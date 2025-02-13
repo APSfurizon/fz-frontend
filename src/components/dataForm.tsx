@@ -2,9 +2,9 @@ import Icon, { ICONS } from "./icon";
 import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef, createContext, useContext } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
-import "../styles/components/dataForm.css";
-import { FormApiAction } from "../_lib/components/dataForm";
-import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "../_lib/api/global";
+import "@/styles/components/dataForm.css";
+import { FormApiAction } from "@/lib/components/dataForm";
+import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 
 export interface SaveButtonData {
     text: string,

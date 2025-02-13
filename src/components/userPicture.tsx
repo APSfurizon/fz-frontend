@@ -1,14 +1,14 @@
 "use client"
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { EMPTY_PROFILE_PICTURE_SRC } from '../_lib/constants';
-import { getFlagEmoji } from '../_lib/components/userPicture';
-import Icon, { ICONS } from './icon';
+import { EMPTY_PROFILE_PICTURE_SRC } from '@/lib/constants';
+import { getFlagEmoji } from '@/lib/components/userPicture';
+import Icon, { ICONS } from '@/components/icon';
 import Image from 'next/image';
-import "../styles/components/userPicture.css";
-import { UserData } from '../_lib/api/user';
-import { getImageUrl } from '../_lib/utils';
-import { FursuitDetails } from '../_lib/api/badge/fursuits';
+import "@/styles/components/userPicture.css";
+import { UserData } from '@/lib/api/user';
+import { getImageUrl } from '@/lib/utils';
+import { FursuitDetails } from '@/lib/api/badge/fursuits';
 
 export default function UserPicture ({size, userData, fursuitData, showNickname, showFlag, hideEffect=false }: Readonly<{size?: number, userData?: UserData | Promise<UserData>, fursuitData?: FursuitDetails | Promise<FursuitDetails>, showNickname?: boolean, showFlag?: boolean, hideEffect?: boolean}>) { 
     const t = useTranslations('common');

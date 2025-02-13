@@ -1,16 +1,16 @@
 "use client"
 import {useTranslations} from 'next-intl';
-import Icon, { ICONS } from "@/app/_components/icon";
-import ToolLink from "@/app/_components/toolLink";
-import { APP_GIT_PROJECT, APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, READ_CHANGELOG_STORAGE_NAME, ROOM_ENABLED, TOKEN_STORAGE_NAME, UPLOAD_ENABLED } from '@/app/_lib/constants';
-import { useModalUpdate } from '@/app/_lib/context/modalProvider';
-import Modal from '@/app/_components/modal';
+import Icon, { ICONS } from "@/components/icon";
+import ToolLink from "@/components/toolLink";
+import { APP_GIT_PROJECT, APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, READ_CHANGELOG_STORAGE_NAME, ROOM_ENABLED, TOKEN_STORAGE_NAME, UPLOAD_ENABLED } from '@/lib/constants';
+import { useModalUpdate } from '@/lib/context/modalProvider';
+import Modal from '@/components/modal';
 import { MouseEvent, useEffect, useState } from 'react';
-import "../../../styles/furpanel/layout.css";
-import { useUser } from '@/app/_lib/context/userProvider';
-import { hasPermission, Permissions } from '@/app/_lib/api/permission';
+import "@/styles/furpanel/layout.css";
+import { useUser } from '@/lib/context/userProvider';
+import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { shouldShowChangelog } from '@/app/_lib/utils';
+import { shouldShowChangelog } from '@/lib/utils';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
     const t = useTranslations('furpanel');

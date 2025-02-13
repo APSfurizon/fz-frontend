@@ -4,7 +4,7 @@ import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { getFlagEmoji } from "../../components/userPicture";
 import { nullifyEmptyString } from "../../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "../global";
-import { UserPersonalInfo } from ".././user";
+import { UserPersonalInfo } from "../user";
 
 /*****************************/
 /*         Entities          */

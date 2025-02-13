@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
-import { ApiDetailedErrorResponse, ApiErrorResponse } from "../_lib/api/global";
-import { copyContent, isEmpty } from "../_lib/utils";
+import { ApiDetailedErrorResponse, ApiErrorResponse } from "@/lib/api/global";
+import { copyContent, isEmpty } from "@/lib/utils";
 
 export default function ModalError({error, translationRoot, translationKey}: Readonly<{error?: ApiErrorResponse, translationRoot: string, translationKey: string}>) {
     const t = useTranslations(translationRoot);

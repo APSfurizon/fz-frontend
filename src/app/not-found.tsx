@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { ICONS } from "./_components/icon";
-import Icon from "./_components/icon";
+import { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 
 export default function NotFound() {
     return (

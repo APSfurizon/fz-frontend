@@ -3,13 +3,12 @@ import {useLocale, useTranslations} from 'next-intl';
 import Image from "next/image";
 import Icon, { ICONS } from './icon';
 import { useRouter } from 'next/navigation';
-import Button from "../_components/button";
 import UserDropDown from './userDropdown';
-import { useUser } from '../_lib/context/userProvider';
-import { ReactEventHandler, useEffect, useState } from 'react';
-import "../styles/components/header.css";
-import { DEVICE_TYPE, getDeviceType } from '../_lib/utils';
-import { APP_LINKS, EVENT_NAME, SHOW_APP_BANNER } from '../_lib/constants';
+import { useUser } from '@/lib/context/userProvider';
+import { useEffect, useState } from 'react';
+import "@/styles/components/header.css";
+import { DEVICE_TYPE, getDeviceType } from '@/lib/utils';
+import { APP_LINKS, SHOW_APP_BANNER } from '@/lib/constants';
 import Link from 'next/link';
 
 export default function Header () {

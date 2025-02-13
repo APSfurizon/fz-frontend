@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import Icon, { ICONS } from "./icon";
-import "../styles/components/noticeBox.css";
+import "@/styles/components/noticeBox.css";
 
 export enum NoticeTheme {
     FAQ,

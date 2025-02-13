@@ -1,19 +1,19 @@
 'use client'
-import UserPicture from "@/app/_components/userPicture";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import UserPicture from "@/components/userPicture";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
 import { MouseEvent, useEffect, useState } from "react";
-import { UserData } from "@/app/_lib/api/user";
-import Checkbox from "@/app/_components/checkbox";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
+import { UserData } from "@/lib/api/user";
+import Checkbox from "@/components/checkbox";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import ModalError from "@/app/_components/modalError";
-import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/app/_lib/api/admin/pretix";
-import { runRequest } from "@/app/_lib/api/global";
-import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/app/_lib/api/admin/admin";
+import useTitle from "@/lib/api/hooks/useTitle";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import ModalError from "@/components/modalError";
+import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
+import { runRequest } from "@/lib/api/global";
+import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
 
 export default function AdminPage() {
   const t = useTranslations("furpanel");

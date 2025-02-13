@@ -1,7 +1,7 @@
 import Icon, { ICONS } from "./icon";
 import { useState, MouseEvent, CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
-import "../styles/components/checkbox.css";
-import { areEquals } from "../_lib/utils";
+import "@/styles/components/checkbox.css";
+import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 
 export default function Checkbox ({initialValue, children, className, busy, disabled, fieldName, onClick, style}: Readonly<{

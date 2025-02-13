@@ -1,17 +1,17 @@
 "use client"
 import { useTranslations } from 'next-intl';
-import { ChangeEvent, ChangeEventHandler, MouseEvent, PointerEvent, SetStateAction, useEffect, useRef, useState } from 'react';
-import { EMPTY_PROFILE_PICTURE_SRC, UPLOAD_SELECTOR_MIN_SIZE, UPLOAD_SELECTOR_MAX_SIZE, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WIDTH, FULL_UPLOAD_MAX_HEIGHT  } from '../_lib/constants';
-import Icon, { ICONS } from './icon';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { EMPTY_PROFILE_PICTURE_SRC, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WIDTH, FULL_UPLOAD_MAX_HEIGHT  } from '@/lib/constants';
+import { ICONS } from '@/components/icon';
 import Image from 'next/image';
-import { VALID_FILE_TYPES, validateImage, GetMediaAction, GetMediaResponse, imageToBlob, scaleBlob } from '../_lib/components/upload';
-import Button from './button';
-import Modal from './modal';
-import { useModalUpdate } from '../_lib/context/modalProvider';
-import "../styles/components/userUpload.css";
-import { MediaData } from '../_lib/api/media';
-import { areEquals, getImageUrl } from '../_lib/utils';
-import { useFormContext } from './dataForm';
+import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
+import Button from '@/components/button';
+import Modal from '@/components/modal';
+import { useModalUpdate } from '@/lib/context/modalProvider';
+import "@/styles/components/userUpload.css";
+import { MediaData } from '@/lib/api/media';
+import { areEquals, getImageUrl } from '@/lib/utils';
+import { useFormContext } from '@/components/dataForm';
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 

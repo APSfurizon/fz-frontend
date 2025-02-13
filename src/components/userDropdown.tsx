@@ -2,15 +2,14 @@
 import {useLocale, useTranslations} from 'next-intl';
 import {routing, usePathname, useRouter} from '@/i18n/routing';
 import { MouseEvent, startTransition, useEffect, useState } from 'react';
-import Icon, { ICONS } from './icon';
-import UserPicture from './userPicture';
-import { runRequest } from '../_lib/api/global';
-import { LogoutApiAction } from '../_lib/api/authentication/login';
-import { useUser } from '../_lib/context/userProvider';
-import { UserData } from '../_lib/api/user';
+import Icon, { ICONS } from '@/components/icon';
+import UserPicture from '@/components/userPicture';
+import { runRequest } from '@/lib/api/global';
+import { LogoutApiAction } from '@/lib/api/authentication/login';
+import { UserData } from '@/lib/api/user';
 import { useParams } from 'next/navigation';
-import "../styles/components/userDropDown.css";
-import Button from './button';
+import "@/styles/components/userDropDown.css";
+import Button from '@/components/button';
 
 export default function UserDropDown ({userData, loading}: Readonly<{userData?: UserData, loading: boolean}>) { 
     const [isOpen, setOpen] = useState(false);
@@ -52,7 +51,8 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
                     <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>
                     {t("loading")}
                 </span>}
-                {!userData && !loading && <Button onClick={()=>router.push('/login')}>
+                {!userData && !loading && <Button onClick={()=>router.push('/login')}
+                    iconName={ICONS.KEY}>
                     {t('header.login')}
                 </Button>}
                 {userData && <>

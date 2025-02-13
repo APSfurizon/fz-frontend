@@ -1,22 +1,22 @@
 "use client"
-import Button from "@/app/_components/button";
-import Icon, { ICONS } from "@/app/_components/icon";
-import Modal from "@/app/_components/modal";
-import ModalError from "@/app/_components/modalError";
-import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, GetCardsApiAction, GetCardsApiResponse, UserCardData } from "@/app/_lib/api/admin/membershipManager";
-import { runRequest } from "@/app/_lib/api/global";
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
+import Modal from "@/components/modal";
+import ModalError from "@/components/modalError";
+import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, GetCardsApiAction, GetCardsApiResponse, UserCardData } from "@/lib/api/admin/membershipManager";
+import { runRequest } from "@/lib/api/global";
+import { useModalUpdate } from "@/lib/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import Checkbox from "@/app/_components/checkbox";
-import UserPicture from "@/app/_components/userPicture";
-import "../../../../../../styles/table.css";
-import "../../../../../../styles/furpanel/admin/membership.css";
-import { copyContent, years } from "@/app/_lib/utils";
-import JanInput from "@/app/_components/janInput";
-import DataForm from "@/app/_components/dataForm";
-import AutoInput from "@/app/_components/autoInput";
+import Checkbox from "@/components/checkbox";
+import UserPicture from "@/components/userPicture";
+import "@/styles/table.css";
+import "@/styles/furpanel/admin/membership.css";
+import { copyContent, years } from "@/lib/utils";
+import JanInput from "@/components/janInput";
+import DataForm from "@/components/dataForm";
+import AutoInput from "@/components/autoInput";
 
 export default function MembershipView({params}: {params: Promise<{ year: number }>}) {
 

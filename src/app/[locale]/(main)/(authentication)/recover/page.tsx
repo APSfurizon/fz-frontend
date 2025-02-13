@@ -1,17 +1,17 @@
 "use client"
-import DataForm from "@/app/_components/dataForm";
-import Icon, { ICONS } from "@/app/_components/icon";
-import JanInput from "@/app/_components/janInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/app/_lib/api/global";
+import DataForm from "@/components/dataForm";
+import Icon, { ICONS } from "@/components/icon";
+import JanInput from "@/components/janInput";
+import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import { useUser } from "@/app/_lib/context/userProvider";
-import "../../../../styles/authentication/login.css";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { RecoverFormAction } from "@/app/_lib/api/authentication/recover";
+import useTitle from "@/lib/api/hooks/useTitle";
+import { useUser } from "@/lib/context/userProvider";
+import "@/styles/authentication/login.css";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { RecoverFormAction } from "@/lib/api/authentication/recover";
 
 export default function Login() {
   const t = useTranslations("authentication");

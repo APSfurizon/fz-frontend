@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import "../styles/components/icon.css";
+import "@/styles/components/icon.css";
 
 export const ICONS = Object.freeze({
     ACCOUNT_CIRCLE: "account_circle",
@@ -25,6 +25,7 @@ export const ICONS = Object.freeze({
     CONTENT_COPY: "content_copy",
     CONTEXTUAL_TOKEN: "contextual_token",
     DELETE: "delete",
+    DESIGN_SERVICES: "design_services",
     DISABLED_BY_DEFAULT: "disabled_by_default",
     DO_NOT_DISTURB_ON: "do_not_disturb_on",
     DOOR_OPEN: "door_open",

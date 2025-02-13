@@ -3,7 +3,7 @@ import { Url } from "next/dist/shared/lib/router/router";
 import { usePathname } from 'next/navigation'
 import Link from "next/link";
 import Icon from "./icon";
-import "../styles/components/toolLink.css";
+import "@/styles/components/toolLink.css";
 import { CSSProperties, MouseEventHandler } from "react";
 import { useLocale } from "next-intl";
 

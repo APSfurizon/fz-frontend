@@ -1,8 +1,8 @@
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGIN, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED, SESSION_DURATION, TOKEN_STORAGE_NAME } from './app/_lib/constants';
-import { extractSearchParams } from './app/_lib/utils';
+import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGIN, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED, SESSION_DURATION, TOKEN_STORAGE_NAME } from './lib/constants';
+import { extractSearchParams } from './lib/utils';
  
 const intlMiddleware = createMiddleware(routing);
 

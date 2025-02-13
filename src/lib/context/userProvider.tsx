@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { UserData, UserDisplayAction, UserDisplayResponse } from "../api/user";
-import { runRequest } from "../api/global";
+import { UserData, UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
+import { runRequest } from "@/lib/api/global";
 
 interface UserUpdateType {
     updateUser: boolean;

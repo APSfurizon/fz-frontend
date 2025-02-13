@@ -1,17 +1,17 @@
 import { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from "react";
-import Icon, { ICONS } from "../icon";
-import Button from "../button";
+import Icon, { ICONS } from "@/components/icon";
+import Button from "@/components/button";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
-import { translate } from "@/app/_lib/utils";
-import { getRemainingRoomType, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/app/_lib/api/flows/roomOrderFlow";
-import { ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import ModalError from "../modalError";
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import NoticeBox, { NoticeTheme } from "../noticeBox";
-import { EVENT_CURRENCY } from "@/app/_lib/constants";
-import Checkbox from "../checkbox";
-import { useUser } from "@/app/_lib/context/userProvider";
-import { ShopLinkResponse } from "@/app/_lib/api/booking";
+import { translate } from "@/lib/utils";
+import { getRemainingRoomType, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/lib/api/flows/roomOrderFlow";
+import { ApiErrorResponse, runRequest } from "@/lib/api/global";
+import ModalError from "@/components/modalError";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { EVENT_CURRENCY } from "@/lib/constants";
+import Checkbox from "@/components/checkbox";
+import { useUser } from "@/lib/context/userProvider";
+import { ShopLinkResponse } from "@/lib/api/booking";
 import { useRouter } from "next/navigation";
 
 enum STEPS {

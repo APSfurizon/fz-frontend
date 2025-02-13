@@ -1,6 +1,6 @@
 "use client"
-import { ConventionEvent, GetCurrentEventApiAction } from "@/app/_lib/api/counts";
-import { runRequest } from "@/app/_lib/api/global";
+import { ConventionEvent, GetCurrentEventApiAction } from "@/lib/api/counts";
+import { runRequest } from "@/lib/api/global";
 import { useRouter } from "next/navigation"
 import { useEffect } from "react";
 

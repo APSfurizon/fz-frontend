@@ -1,11 +1,5 @@
 "use client"
-import UserPicture from "@/app/_components/userPicture";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
-import { useEffect, useState } from "react";
-import { UserData } from "@/app/_lib/api/user";
-import Checkbox from "@/app/_components/checkbox";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
+import Icon, { ICONS } from "@/components/icon";
 import { useTranslations } from "next-intl";
 
 export default function HomePage() {

@@ -1,6 +1,6 @@
-import { FormApiAction as FormApiAction } from "../components/dataForm"
-import { API_BASE_URL, TOKEN_STORAGE_NAME } from "../constants";
-import { getCookie } from "../utils";
+import { FormApiAction as FormApiAction } from "@/lib/components/dataForm"
+import { API_BASE_URL, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import { getCookie } from "@/lib/utils";
 
 export interface ApiRequest {}
 

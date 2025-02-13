@@ -1,8 +1,8 @@
 import { ChangeEvent, CSSProperties, MouseEvent, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
-import "../styles/components/janInput.css";
+import "@/styles/components/janInput.css";
 import { useTranslations } from "next-intl";
-import { areEquals } from "../_lib/utils";
+import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 
 export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, initialValue }: Readonly<{

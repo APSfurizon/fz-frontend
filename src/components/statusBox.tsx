@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import "../styles/components/statusBox.css";
+import "@/styles/components/statusBox.css";
 
 export type StatusBoxStyle = "warning" | "success" | "normal" | "error"
 

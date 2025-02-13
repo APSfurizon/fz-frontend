@@ -1,11 +1,11 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "./icon";
 import Image from "next/image";
-import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "../_lib/components/autoInput";
+import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "@/lib/components/autoInput";
 import { useLocale, useTranslations } from "next-intl";
-import "../styles/components/autoInput.css";
-import { areEquals, getImageUrl, isEmpty, translateNullable } from "../_lib/utils";
-import { EMPTY_PROFILE_PICTURE_SRC } from "../_lib/constants";
+import "@/styles/components/autoInput.css";
+import { areEquals, getImageUrl, isEmpty, translateNullable } from "@/lib/utils";
+import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { useFormContext } from "./dataForm";
 
 /**
