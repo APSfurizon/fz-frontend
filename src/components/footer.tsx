@@ -10,7 +10,10 @@ export default function Footer () {
       <footer className={"footer vertical-list flex-center"}>
         <div className={"vertical-list flex-center gap-4mm"}>
           <div className="center">
-            <Image className="footer-logo" src="/images/logo-dark.png" alt="Furizon logo" width={256} height={60}></Image>
+            <picture className="footer-logo">
+                <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
+                <Image className="footer-logo" src="/images/logo-light.png" alt={t('header.alt_logo')} width={256} height={60}></Image>
+            </picture>
           </div>
           <div className="horizontal-list gap-4mm normal title flex-center">
             <a href={t("footer.link_code_of_conduct")} target="_blank" rel="noopener noreferrer">{t('footer.code_of_conduct')}</a>

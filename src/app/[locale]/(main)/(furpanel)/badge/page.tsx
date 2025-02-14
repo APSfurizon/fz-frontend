@@ -253,20 +253,27 @@ export default function BadgePage() {
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
           {badgeStatus?.fursuits.map((fursuitData: Fursuit, index: number)=><div key={index} className="fursuit gap-2mm rounded-s">
-            <div className="main-data vertical-list">
-              <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100} src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
+            <div className="main-data gap-2mm">
+              <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100}
+                src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
               </Image>
-              <span className="title average bold">{fursuitData.fursuit.name}</span>
-              <span className="title small color-subtitle">{fursuitData.fursuit.species}</span>
-              <hr></hr>
-              {fursuitData.bringingToEvent && <span className="title tiny">
-                <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
-                {t("badge.input.bring_to_event.label", {eventName: EVENT_NAME})}
-              </span>}
-              {fursuitData.showInFursuitCount && <span className="title tiny">
-                <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
-                {t("badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
-              </span>}
+              <div className="details vertical-list gap-2mm">
+                <div className="vertical-list">
+                  <span className="title average bold">{fursuitData.fursuit.name}</span>
+                  <span className="title small color-subtitle">{fursuitData.fursuit.species}</span>
+                  <hr></hr>
+                </div>
+                <div className="vertical-list gap-2mm">
+                  {fursuitData.bringingToEvent && <span className="title tiny">
+                    <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                    {t("badge.input.bring_to_event.label", {eventName: EVENT_NAME})}
+                  </span>}
+                  {fursuitData.showInFursuitCount && <span className="title tiny">
+                    <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                    {t("badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
+                  </span>}
+                </div>
+              </div>
             </div>
             <div className="spacer"></div>
             <div className="fursuit-actions gap-2mm">

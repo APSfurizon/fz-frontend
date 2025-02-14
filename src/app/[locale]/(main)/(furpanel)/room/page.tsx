@@ -557,7 +557,7 @@ export default function RoomPage() {
       <div className="horizontal-list gap-4mm">
         <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setKickModalOpen(false)}>{tcommon("cancel")}</Button>
         <div className="spacer"></div>
-        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>kickGuest(selectedGuest.roomGuest.guestId)}>{t("room.actions.revoke_invite")}</Button>
+        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>kickGuest(selectedGuest.roomGuest.guestId)}>{t("room.actions.kick")}</Button>
       </div>
     </>}
     </Modal>

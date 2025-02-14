@@ -36,11 +36,22 @@ div.fursuit {
     gap: 0.2em;
     background-color: var(--badge-fursuit-bg);
     max-width: 10.25em;
+    
     img.fursuit-image {
         object-fit: cover;
         width: 9em;
         height: auto;
     }
+
+    div.main-data {
+        display: flex;
+        flex-direction: column;
+
+        div.details {
+            justify-content: space-between;
+        }
+    }
+
     div.main-data span {
         overflow-wrap: break-word
     }
@@ -53,7 +64,28 @@ div.fursuit {
     }
 
     div.fursuit {
-        flex-direction: row;
         max-width: 100%;
+
+        div.main-data {
+            flex-direction: row;
+        }
+
+        div.details {
+            width: 100%;
+        }
+
+        div.fursuit-actions {
+            button.button:not(:first-child) {
+                flex: 1;
+            }
+            
+            button.button:first-child {
+                min-width: 45%;
+            }
+
+            div.spacer {
+                display: none;
+            }
+        }
     }
 }

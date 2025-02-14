@@ -44,7 +44,10 @@ export default function Header () {
     return (
         <header className={`header ${collapsed ? "collapsed" : ""}`}>
             <div className="logo-container center">
-                <Image className="header-logo" src="/images/logo-dark.png" alt={t('header.alt_logo')} width={175} height={40}></Image>
+                <picture className="header-logo">
+                    <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
+                    <Image className="header-logo" src="/images/logo-light.png" alt={t('header.alt_logo')} width={175} height={40}></Image>
+                </picture>
             </div>
             <span>
                 <a href="#" className="hamburger rounded-l" onClick={()=>setHamburgerOpen(!hamburgerOpen)}>
