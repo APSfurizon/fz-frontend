@@ -27,7 +27,7 @@ export default function Button ({children, iconName, style, className, busy, onC
 
     useEffect(()=>setDisabledState(disabled), [disabled]);
 
-    const isCooldown = !busy && debounce !== undefined && disabledState; 
+    const isCooldown = !busy && debounce !== undefined && disabledState && !disabled; 
 
     return (
         <button type={type} onClick={onClickEvent}

@@ -1,5 +1,4 @@
 'use client'
-import UserPicture from "@/components/userPicture";
 import Button from "@/components/button";
 import Icon, { ICONS } from "@/components/icon";
 import { MouseEvent, useEffect, useState } from "react";
@@ -14,7 +13,7 @@ import ModalError from "@/components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
 import { runRequest } from "@/lib/api/global";
 import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
-import { GetRenderedBadgesApiAction } from "@/lib/api/admin/badge";
+import { GetRenderedBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
 
 export default function AdminPage() {
   const t = useTranslations("furpanel");
@@ -64,6 +63,17 @@ export default function AdminPage() {
   }
   // Event area logic
 
+  // - orders
+  const [remindOrderLinkLoading, setRemindOrderLinkLoading] = useState(false);
+  const remindOrderLink = (e: MouseEvent<HTMLButtonElement>) => {
+    setRemindOrderLinkLoading(true);
+    runRequest(new RemindOrderLinkApiAction())
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
+    )).finally(()=>setRemindOrderLinkLoading(false))
+  }
+
   // - badge
   const [renderBadgesLoading, setRenderBadgesLoading] = useState(false);
   const renderBadges = (e: MouseEvent<HTMLButtonElement>) => {
@@ -80,6 +90,26 @@ export default function AdminPage() {
       tcommon("error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
     )).finally(()=>setRenderBadgesLoading(false))
+  }
+
+  const [remindBadgesLoading, setRemindBadgesLoading] = useState(false);
+  const remindBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    setRemindBadgesLoading(true);
+    runRequest(new RemindBadgesApiAction())
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
+    )).finally(()=>setRemindBadgesLoading(false))
+  }
+
+  const [remindFursuitBadgesLoading, setRemindFursuitBadgesLoading] = useState(false);
+  const remindFursuitBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    setRemindFursuitBadgesLoading(true);
+    runRequest(new RemindFursuitBadgesApiAction())
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
+    )).finally(()=>setRemindFursuitBadgesLoading(false))
   }
 
   return (
@@ -122,10 +152,32 @@ export default function AdminPage() {
               {t("admin.sections.event_badges")}
             </span>
           </div>
-          <div className="horizontal-list gap-2mm">
+          <div className="horizontal-list gap-2mm flex-wrap">
             <Button iconName={ICONS.PRINT} onClick={renderBadges} debounce={5000}
               busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
               {t("admin.events.badges.print_badges")}
+            </Button>
+            <Button iconName={ICONS.MAIL} onClick={remindBadges} debounce={5000}
+              busy={remindBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
+              {t("admin.events.badges.remind_badges")}
+            </Button>
+            <Button iconName={ICONS.MAIL} onClick={remindFursuitBadges} debounce={5000}
+              busy={remindFursuitBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
+              {t("admin.events.badges.remind_fursuits")}
+            </Button>
+          </div>
+        </div>
+        {/* orders area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.sections.event_orders")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm flex-wrap">
+            <Button iconName={ICONS.MAIL} onClick={remindOrderLink} debounce={5000}
+              busy={remindOrderLinkLoading} disabled={!capabilities.canRemindOrderLinking}>
+              {t("admin.events.orders.remind_order_linking")}
             </Button>
           </div>
         </div>

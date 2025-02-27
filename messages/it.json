@@ -406,6 +406,7 @@
                 "pretix_data": "Dati negozio",
                 "event": "Eventi",
                 "event_badges": "Badge",
+                "event_orders": "Ordini",
                 "users": "Utenti",
                 "users_accounts": "Account"
             },
@@ -415,7 +416,12 @@
             },
             "events": {
                 "badges": {
-                    "print_badges": "Stampa badge"
+                    "print_badges": "Stampa badge",
+                    "remind_badges": "Notifica badge mancanti",
+                    "remind_fursuits": "Notifica fursuit mancanti"
+                },
+                "orders": {
+                    "remind_order_linking": "Notifica ordini disconnessi"
                 }
             },
             "membership_manager": {

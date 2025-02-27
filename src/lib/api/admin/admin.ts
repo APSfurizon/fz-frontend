@@ -5,13 +5,17 @@ export interface AdminCapabilitesResponse extends ApiResponse {
     canBanUsers: boolean,
     canManageMembershipCards: boolean,
     canRefreshPretixCache: boolean,
+    canRemindOrderLinking: boolean,
+    canRemindBadgeUploads: boolean
 }
 
 export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
     canUpgradeUser: false,
     canBanUsers: false,
     canManageMembershipCards: false,
-    canRefreshPretixCache: false
+    canRefreshPretixCache: false,
+    canRemindOrderLinking: false,
+    canRemindBadgeUploads: false
 }
 
 export class GetAdminCapabilitiesApiAction implements ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {

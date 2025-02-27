@@ -29,6 +29,11 @@ div.fursuit-actions {
     flex-direction: row;
 }
 
+div.fursuit-actions button span,
+div.fursuit-actions button div.spacer {
+    display: none;
+}
+
 div.fursuit {
     padding: 0.625em;
     display: flex;
@@ -75,6 +80,10 @@ div.fursuit {
         }
 
         div.fursuit-actions {
+            button.button span {
+                display: block;
+            }
+
             button.button:not(:first-child) {
                 flex: 1;
             }
@@ -86,6 +95,7 @@ div.fursuit {
             div.spacer {
                 display: none;
             }
+
         }
     }
 }

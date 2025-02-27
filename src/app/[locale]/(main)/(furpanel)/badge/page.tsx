@@ -219,7 +219,7 @@ export default function BadgePage() {
         <div className="vertical-list flex-vertical-center">
           <DataForm hideSave loading={loading} setLoading={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
-            setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130} helpText={t("badge.badge_limits")}>
+            setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}>
             </Upload>
           </DataForm>
         </div>
@@ -280,10 +280,13 @@ export default function BadgePage() {
               <Button className="danger" iconName={ICONS.DELETE} busy={loading}
                 onClick={()=>promptDeleteFursuit(fursuitData)} 
                 title={t("badge.messages.confirm_fursuit_deletion.title", {name: fursuitData.fursuit.name})}>
+                  {tcommon("CRUD.delete")}
                 </Button>
               <div className="spacer"></div>
               <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptEditFursuit(fursuitData)}
-                busy={loading} title={t("badge.actions.edit_fursuit", {name: fursuitData.fursuit.name})}></Button>
+                busy={loading} title={t("badge.actions.edit_fursuit", {name: fursuitData.fursuit.name})}>
+                  {tcommon("CRUD.edit")}
+              </Button>
             </div>
           </div>)}
         </div>

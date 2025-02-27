@@ -407,6 +407,7 @@
                 "pretix_data": "Shop data",
                 "event": "Events",
                 "event_badges": "Badges",
+                "event_orders": "Orders",
                 "users": "Users",
                 "users_accounts": "Accounts"
             },
@@ -416,7 +417,12 @@
             },
             "events": {
                 "badges": {
-                    "print_badges": "Print badges"
+                    "print_badges": "Print badges",
+                    "remind_badges": "Remind missing badges",
+                    "remind_fursuits": "Remind missing fursuits"
+                },
+                "orders": {
+                    "remind_order_linking": "Remind unlinked orders"
                 }
             },
             "membership_manager": {
