@@ -3,9 +3,8 @@ import {getMessages} from 'next-intl/server';
 import {routing} from '@/i18n/routing';
 import {notFound} from 'next/navigation';
 import type { Metadata } from "next";
-import Footer from "../_components/footer"
-import "../styles/globals.css";
-import Header from '../_components/header';
+import Footer from "@/components/footer"
+import Header from '@/components/header';
 
 export const metadata: Metadata = {
   title: "Furpanel",

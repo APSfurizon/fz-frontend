@@ -1,19 +1,19 @@
 'use client'
-import UserPicture from "@/app/_components/userPicture";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
 import { MouseEvent, useEffect, useState } from "react";
-import { UserData } from "@/app/_lib/api/user";
-import Checkbox from "@/app/_components/checkbox";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
+import { UserData } from "@/lib/api/user";
+import Checkbox from "@/components/checkbox";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import ModalError from "@/app/_components/modalError";
-import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/app/_lib/api/admin/pretix";
-import { runRequest } from "@/app/_lib/api/global";
-import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/app/_lib/api/admin/admin";
+import useTitle from "@/lib/api/hooks/useTitle";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import ModalError from "@/components/modalError";
+import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
+import { runRequest } from "@/lib/api/global";
+import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, ExportHotelRoomsApiAction, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
+import { GetRenderedBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
 
 export default function AdminPage() {
   const t = useTranslations("furpanel");
@@ -61,6 +61,73 @@ export default function AdminPage() {
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix_data.errors"/>
     )).finally(()=>setReloadOrdersLoading(false));
   }
+  // Event area logic
+
+  // - orders
+  const [remindOrderLinkLoading, setRemindOrderLinkLoading] = useState(false);
+  const remindOrderLink = (e: MouseEvent<HTMLButtonElement>) => {
+    setRemindOrderLinkLoading(true);
+    runRequest(new RemindOrderLinkApiAction())
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
+    )).finally(()=>setRemindOrderLinkLoading(false))
+  }
+
+  const [exportRoomsLoading, setExportRoomsLoading] = useState(false);
+  const exportRooms = (e: MouseEvent<HTMLButtonElement>) => {
+    setExportRoomsLoading(true);
+    runRequest(new ExportHotelRoomsApiAction())
+    .then ((response) => {
+      const res = response as Response;
+      res.blob().then((exportBlob) => {
+        const result = URL.createObjectURL(exportBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
+      })
+    }).catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
+    )).finally(()=>setExportRoomsLoading(false))
+  }
+
+  // - badge
+  const [renderBadgesLoading, setRenderBadgesLoading] = useState(false);
+  const renderBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    setRenderBadgesLoading(true);
+    runRequest(new GetRenderedBadgesApiAction())
+    .then ((response) => {
+      const res = response as Response;
+      res.blob().then((badgesBlob) => {
+        const result = URL.createObjectURL(badgesBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
+      })
+    }).catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
+    )).finally(()=>setRenderBadgesLoading(false))
+  }
+
+  const [remindBadgesLoading, setRemindBadgesLoading] = useState(false);
+  const remindBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    setRemindBadgesLoading(true);
+    runRequest(new RemindBadgesApiAction())
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
+    )).finally(()=>setRemindBadgesLoading(false))
+  }
+
+  const [remindFursuitBadgesLoading, setRemindFursuitBadgesLoading] = useState(false);
+  const remindFursuitBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    setRemindFursuitBadgesLoading(true);
+    runRequest(new RemindFursuitBadgesApiAction())
+    .catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
+    )).finally(()=>setRemindFursuitBadgesLoading(false))
+  }
 
   return (
     <div className="page">
@@ -89,6 +156,74 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+      {/* Event area */}
+      <div className="admin-section section vertical-list gap-2mm">
+        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <Icon className="x-large" iconName={ICONS.LOCAL_ACTIVITY}></Icon>
+          <span className="title medium">{t("admin.sections.event")}</span>
+        </div>
+        {/* badge area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.sections.event_badges")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm flex-wrap">
+            <Button iconName={ICONS.PRINT} onClick={renderBadges} debounce={5000}
+              busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
+              {t("admin.events.badges.print_badges")}
+            </Button>
+            <Button iconName={ICONS.MAIL} onClick={remindBadges} debounce={5000}
+              busy={remindBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
+              {t("admin.events.badges.remind_badges")}
+            </Button>
+            <Button iconName={ICONS.MAIL} onClick={remindFursuitBadges} debounce={5000}
+              busy={remindFursuitBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
+              {t("admin.events.badges.remind_fursuits")}
+            </Button>
+          </div>
+        </div>
+        {/* orders area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.sections.event_orders")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm flex-wrap">
+            <Button iconName={ICONS.DOWNLOAD} onClick={exportRooms} debounce={5000}
+              busy={exportRoomsLoading} disabled={!capabilities.canExportHotelList}>
+              {t("admin.events.orders.export_rooms")}
+            </Button>
+            <Button iconName={ICONS.MAIL} onClick={remindOrderLink} debounce={5000}
+              busy={remindOrderLinkLoading} disabled={!capabilities.canRemindOrderLinking}>
+              {t("admin.events.orders.remind_order_linking")}
+            </Button>
+          </div>
+        </div>
+      </div>
+      {/* Users area */}
+      <div className="admin-section section vertical-list gap-2mm">
+        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <Icon className="x-large" iconName={ICONS.PERSON}></Icon>
+          <span className="title medium">{t("admin.sections.users")}</span>
+        </div>
+        {/* Users generic area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.sections.users_accounts")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm">
+            <Button iconName={ICONS.PERSON_SEARCH} onClick={()=>router.push("/admin/users/")}
+              disabled={!capabilities.canManageMembershipCards}>
+              {t("admin.users.title")}
+            </Button>
+          </div>
+        </div>
+      </div>
       {/* Membership area */}
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
@@ -102,7 +237,7 @@ export default function AdminPage() {
               {t("admin.sections.membership_cards")}
             </span>
           </div>
-          <div className="horizontal-list">
+          <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.ID_CARD} onClick={()=>router.push("/admin/memberships/a")}
               disabled={!capabilities.canManageMembershipCards}>
               {t("admin.membership_manager.title")}

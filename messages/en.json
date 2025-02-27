@@ -404,14 +404,30 @@
                 "membership": "Memership",
                 "membership_cards": "Cards",
                 "pretix": "Pretix",
-                "pretix_data": "Shop data"
+                "pretix_data": "Shop data",
+                "event": "Events",
+                "event_badges": "Badges",
+                "event_orders": "Orders",
+                "users": "Users",
+                "users_accounts": "Accounts"
             },
             "pretix_data": {
                 "reload_event": "Reload event",
                 "reload_orders": "Reload orders"
             },
+            "events": {
+                "badges": {
+                    "print_badges": "Print badges",
+                    "remind_badges": "Remind missing badges",
+                    "remind_fursuits": "Remind missing fursuits"
+                },
+                "orders": {
+                    "remind_order_linking": "Remind unlinked orders",
+                    "export_rooms": "Export hotel rooms"
+                }
+            },
             "membership_manager": {
-                "title": "Card manager",
+                "title": "Card management",
                 "header": "Viewing cards for year ",
                 "actions": {
                     "add": "Add card",
@@ -435,6 +451,46 @@
                     "PERMISSION_NOT_FOUND": "You don't have the permission to do that.",
                     "CARD_MISSING": "Card not present",
                     "CARD_DUPLICATE": "Duplicate card"
+                }
+            },
+            "users": {
+                "title": "View users",
+                "input": {
+                    "selected_user": {
+                        "label": "Selected user",
+                        "placeholder": "Search for a user"
+                    }
+                },
+                "personal_info": "Personal info",
+                "security": "Security",
+                "orders": "Orders",
+                "orders_table": {
+                    "event_name": "Event",
+                    "order_code": "Order code",
+                    "order_status": "Status",
+                    "is_daily": "Is daily",
+                    "sponsorship_type": "Sponsorship",
+                    "extra_days": "Extra days",
+                    "room_type": "Room type"
+                },
+                "actions": {
+                    "ban": "Ban",
+                    "unban": "Unban",
+                    "view_order": "View order"
+                },
+                "messages": {
+                    "confirm_ban": {
+                        "title": "Confirm ban",
+                        "description": "The account will be logged out from all devices and won't be able to log in."
+                    },
+                    "confirm_unban": {
+                        "title": "Confirm unban",
+                        "description": "The account will be allowed to log in."
+                    }
+                },
+                "errors": {
+                    "unknown_user": "User not found",
+                    "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
                 }
             }
         }
@@ -509,7 +565,8 @@
                 "unknown_error": "Unknown error",
                 "invalid_input": "Invalid data",
                 "already_logged_in": "You're already logged in",
-                "confirmation_still_pending": "Confirm your email before logging in"
+                "confirmation_still_pending": "Confirm your email before logging in",
+                "authentication_is_disabled": "Your account has been disabled."
             },
             "label_email": "Email",
             "label_password": "Password",

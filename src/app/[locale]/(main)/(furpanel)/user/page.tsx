@@ -1,22 +1,21 @@
 'use client'
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
+import useTitle from "@/lib/api/hooks/useTitle";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import DataForm from "@/app/_components/dataForm";
-import { GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/app/_lib/api/user";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import ModalError from "@/app/_components/modalError";
-import { useUser } from "@/app/_lib/context/userProvider";
-import JanInput from "@/app/_components/janInput";
-import AutoInput from "@/app/_components/autoInput";
-import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/app/_lib/components/autoInput";
-import { firstOrUndefined } from "@/app/_lib/utils";
-import "../../../../styles/furpanel/user.css";
-import { ResetPasswordFormAction } from "@/app/_lib/api/authentication/recover";
+import DataForm from "@/components/dataForm";
+import { GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/lib/api/user";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import ModalError from "@/components/modalError";
+import { useUser } from "@/lib/context/userProvider";
+import JanInput from "@/components/janInput";
+import AutoInput from "@/components/autoInput";
+import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/lib/components/autoInput";
+import { firstOrUndefined } from "@/lib/utils";
+import "@/styles/furpanel/user.css";
+import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 
 export default function UserPage() {
   const t = useTranslations("furpanel");
@@ -74,8 +73,8 @@ export default function UserPage() {
               </span>
             </div>
             <DataForm className="vertical-list gap-2mm" action={new UpdatePersonalInfoFormAction} loading={personalInfoLoading} setLoading={setPersonalInfoLoading}>
-              <input type="hidden" name="id" value={personalInformation?.id}></input>
-              <input type="hidden" name="userId" value={personalInformation?.userId}></input>
+              <input type="hidden" name="id" value={personalInformation?.id ?? ""}></input>
+              <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
                   label={tauth("register.form.first_name.label")} placeholder={tauth("register.form.first_name.placeholder")}

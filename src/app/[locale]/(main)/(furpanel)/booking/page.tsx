@@ -1,24 +1,24 @@
 'use client'
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
 import React, { MouseEvent, useEffect, useState } from "react";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
+import useTitle from "@/lib/api/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
-import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/app/_lib/constants";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/app/_lib/api/booking";
-import { getCountdown, translate } from "@/app/_lib/utils";
-import "../../../../styles/furpanel/booking.css";
-import ModalError from "@/app/_components/modalError";
+import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/lib/constants";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/lib/api/booking";
+import { getCountdown, translate } from "@/lib/utils";
+import "@/styles/furpanel/booking.css";
+import ModalError from "@/components/modalError";
 import { useRouter } from "next/navigation";
-import Modal from "@/app/_components/modal";
-import StatusBox from "@/app/_components/statusBox";
-import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/app/_lib/api/order";
-import DataForm from "@/app/_components/dataForm";
-import { useUser } from "@/app/_lib/context/userProvider";
-import AutoInput from "@/app/_components/autoInput";
+import Modal from "@/components/modal";
+import StatusBox from "@/components/statusBox";
+import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/api/order";
+import DataForm from "@/components/dataForm";
+import { useUser } from "@/lib/context/userProvider";
+import AutoInput from "@/components/autoInput";
 
 export default function BookingPage() {
     const t = useTranslations("furpanel");
@@ -216,15 +216,15 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
-                <p className="title medium horizontal-list gap-2mm">
+                <div className="title medium horizontal-list gap-2mm">
                     {t("booking.your_booking")}
                     <span>({t("booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
                     )</span>
-                    <StatusBox status={bookingData?.order.orderStatus == "PENDING" ? "warning" : "success"}>
+                    <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
                         {tcommon(`order_status.${bookingData?.order.orderStatus}`)}
                     </StatusBox>
-                </p>
+                </div>
                 <div className="order-data">
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm">
                         {/* Ticket item */}
@@ -291,7 +291,7 @@ export default function BookingPage() {
         <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
             onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
-            <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
+            <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
             <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                 label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
             <div className="horizontal-list gap-4mm">

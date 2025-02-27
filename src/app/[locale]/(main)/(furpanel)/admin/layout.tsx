@@ -1,6 +1,6 @@
 "use client"
-import { Permissions } from "@/app/_lib/api/permission";
-import { useUser } from "@/app/_lib/context/userProvider";
+import { Permissions } from "@/lib/api/permission";
+import { useUser } from "@/lib/context/userProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

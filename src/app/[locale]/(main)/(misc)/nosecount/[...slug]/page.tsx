@@ -1,16 +1,15 @@
 "use client"
-import { EVENT_NAME } from "@/app/_lib/constants";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import "../../../../../styles/misc/nosecount.css";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { AllEventsResponse, FursuitCountApiAction, FursuitCountResponse, GetAllEventsApiAction, NoseCountApiAction, NoseCountResponse, SponsorCountApiAction, SponsorCountResponse } from "@/app/_lib/api/counts";
-import { buildSearchParams, translate } from "@/app/_lib/utils";
-import UserPicture from "@/app/_components/userPicture";
-import Icon, { ICONS } from "@/app/_components/icon";
+import "@/styles/misc/nosecount.css";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { AllEventsResponse, FursuitCountApiAction, FursuitCountResponse, GetAllEventsApiAction, NoseCountApiAction, NoseCountResponse, SponsorCountApiAction, SponsorCountResponse } from "@/lib/api/counts";
+import { buildSearchParams, translate } from "@/lib/utils";
+import UserPicture from "@/components/userPicture";
+import Icon, { ICONS } from "@/components/icon";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import ModalError from "@/app/_components/modalError";
+import useTitle from "@/lib/api/hooks/useTitle";
+import ModalError from "@/components/modalError";
 import Link from "next/link";
 
 export default function NosecountPage({ params }: {params: Promise<{slug: string[]}>}) {

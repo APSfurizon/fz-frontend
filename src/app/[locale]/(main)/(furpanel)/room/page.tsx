@@ -1,31 +1,30 @@
 'use client'
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
-import { SetStateAction, useEffect, useState } from "react";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
+import { useEffect, useState } from "react";
+import useTitle from "@/lib/api/hooks/useTitle";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import Modal from "@/app/_components/modal";
-import RoomInvite from "@/app/_components/_room/roomInvite";
-import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction, RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData } from "@/app/_lib/api/room";
-import UserPicture from "@/app/_components/userPicture";
-import StatusBox from "@/app/_components/statusBox";
-import DataForm from "@/app/_components/dataForm";
-import JanInput from "@/app/_components/janInput";
-import AutoInput from "@/app/_components/autoInput";
-import { AutoInputFilter } from "@/app/_lib/components/autoInput";
-import "../../../../styles/furpanel/room.css";
-import { useUser } from "@/app/_lib/context/userProvider";
-import { OrderStatus } from "@/app/_lib/api/order";
-import ModalError from "@/app/_components/modalError";
-import { translate } from "@/app/_lib/utils";
-import { AutoInputRoomInviteManager } from "@/app/_lib/api/user";
-import Checkbox from "@/app/_components/checkbox";
-import RoomOrderFlow from "@/app/_components/_room/roomOrderFlow";
-import { Permissions } from "@/app/_lib/api/permission";
-import ToolLink from "@/app/_components/toolLink";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import Modal from "@/components/modal";
+import RoomInvite from "@/components/room/roomInvite";
+import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction, RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData } from "@/lib/api/room";
+import UserPicture from "@/components/userPicture";
+import StatusBox from "@/components/statusBox";
+import DataForm from "@/components/dataForm";
+import JanInput from "@/components/janInput";
+import AutoInput from "@/components/autoInput";
+import "@/styles/furpanel/room.css";
+import { useUser } from "@/lib/context/userProvider";
+import { OrderStatus } from "@/lib/api/order";
+import ModalError from "@/components/modalError";
+import { translate } from "@/lib/utils";
+import { AutoInputRoomInviteManager } from "@/lib/api/user";
+import Checkbox from "@/components/checkbox";
+import RoomOrderFlow from "@/components/room/roomOrderFlow";
+import { Permissions } from "@/lib/api/permission";
+import ToolLink from "@/components/toolLink";
 
 export default function RoomPage() {
   const t = useTranslations("furpanel");
@@ -436,7 +435,7 @@ export default function RoomPage() {
     { data?.currentRoomInfo && <>
     <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess>
-      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
+      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId ?? ""}></input>
       <JanInput inputType="text" fieldName="name" required busy={modalLoading} label={t("room.input.rename_new_name.label")}
       placeholder={t("room.input.rename_new_name.placeholder")} minLength={2} maxLength={254}></JanInput>
       <div className="horizontal-list gap-4mm">
@@ -453,7 +452,7 @@ export default function RoomPage() {
     {data?.currentRoomInfo && <>
     <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
       onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!inviteModalOpen}>
-      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId}></input>
+      <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId ?? ""}></input>
       <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
         max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)} label={t("room.input.invite.label")}
         placeholder={t("room.input.invite.placeholder")} helpText={t("room.input.invite.help")} style={{maxWidth: "500px"}}
@@ -558,7 +557,7 @@ export default function RoomPage() {
       <div className="horizontal-list gap-4mm">
         <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setKickModalOpen(false)}>{tcommon("cancel")}</Button>
         <div className="spacer"></div>
-        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>kickGuest(selectedGuest.roomGuest.guestId)}>{t("room.actions.revoke_invite")}</Button>
+        <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={()=>kickGuest(selectedGuest.roomGuest.guestId)}>{t("room.actions.kick")}</Button>
       </div>
     </>}
     </Modal>
@@ -588,7 +587,7 @@ export default function RoomPage() {
     <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("room.actions.exchange_room")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!exchangeModalOpen}>
-        <input type="hidden" name="userId" value={userDisplay?.display?.userId}></input>
+        <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}
           label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}
           required/>

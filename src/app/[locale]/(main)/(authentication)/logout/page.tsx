@@ -1,6 +1,6 @@
 "use client"
-import Icon from "@/app/_components/icon";
-import { useUser } from "@/app/_lib/context/userProvider";
+import Icon from "@/components/icon";
+import { useUser } from "@/lib/context/userProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

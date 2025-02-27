@@ -1,30 +1,30 @@
 'use client'
-import { useModalUpdate } from "@/app/_lib/context/modalProvider";
-import Button from "../../../../_components/button";
-import Icon, { ICONS } from "../../../../_components/icon";
+import { useModalUpdate } from "@/lib/context/modalProvider";
+import Button from "@/components/button";
+import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
+import useTitle from "@/lib/api/hooks/useTitle";
 import { useFormatter, useTranslations } from "next-intl";
-import { BadgeStatusApiResponse, DeleteBadgeAction, BadgeDataChangeFormAction, GetBadgeStatusAction } from "@/app/_lib/api/badge/badge";
-import Upload from "@/app/_components/upload";
-import NoticeBox, { NoticeTheme } from "@/app/_components/noticeBox";
-import StatusBox from "@/app/_components/statusBox";
-import Modal from "@/app/_components/modal";
-import DataForm from "@/app/_components/dataForm";
-import JanInput from "@/app/_components/janInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/app/_lib/api/global";
-import { UploadBadgeAction } from "@/app/_lib/api/badge/badge";
-import ModalError from "@/app/_components/modalError";
-import { useUser } from "@/app/_lib/context/userProvider";
-import { getFlagEmoji } from "@/app/_lib/components/userPicture";
-import AutoInput from "@/app/_components/autoInput";
-import { AutoInputCountriesManager } from "@/app/_lib/components/autoInput";
-import "../../../../styles/furpanel/badge.css";
-import { AddFursuitFormAction, DeleteFursuitApiAction, EditFursuitFormAction, Fursuit } from "@/app/_lib/api/badge/fursuits";
-import Checkbox from "@/app/_components/checkbox";
-import { EMPTY_PROFILE_PICTURE_SRC, EVENT_NAME } from "@/app/_lib/constants";
+import { BadgeStatusApiResponse, DeleteBadgeAction, BadgeDataChangeFormAction, GetBadgeStatusAction } from "@/lib/api/badge/badge";
+import Upload from "@/components/upload";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import StatusBox from "@/components/statusBox";
+import Modal from "@/components/modal";
+import DataForm from "@/components/dataForm";
+import JanInput from "@/components/janInput";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { UploadBadgeAction } from "@/lib/api/badge/badge";
+import ModalError from "@/components/modalError";
+import { useUser } from "@/lib/context/userProvider";
+import { getFlagEmoji } from "@/lib/components/userPicture";
+import AutoInput from "@/components/autoInput";
+import { AutoInputCountriesManager } from "@/lib/components/autoInput";
+import "@/styles/furpanel/badge.css";
+import { AddFursuitFormAction, DeleteFursuitApiAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
+import Checkbox from "@/components/checkbox";
+import { EMPTY_PROFILE_PICTURE_SRC, EVENT_NAME } from "@/lib/constants";
 import Image from "next/image";
-import { getImageUrl } from "@/app/_lib/utils";
+import { getImageUrl } from "@/lib/utils";
 
 export default function BadgePage() {
   const tcommon = useTranslations("common");
@@ -219,7 +219,7 @@ export default function BadgePage() {
         <div className="vertical-list flex-vertical-center">
           <DataForm hideSave loading={loading} setLoading={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
-            setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130} helpText={t("badge.badge_limits")}>
+            setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}>
             </Upload>
           </DataForm>
         </div>
@@ -253,30 +253,40 @@ export default function BadgePage() {
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
           {badgeStatus?.fursuits.map((fursuitData: Fursuit, index: number)=><div key={index} className="fursuit gap-2mm rounded-s">
-            <div className="main-data vertical-list">
-              <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100} src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
+            <div className="main-data gap-2mm">
+              <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100}
+                src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
               </Image>
-              <span className="title average bold">{fursuitData.fursuit.name}</span>
-              <span className="title small color-subtitle">{fursuitData.fursuit.species}</span>
-              <hr></hr>
-              {fursuitData.bringingToEvent && <span className="title tiny">
-                <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
-                {t("badge.input.bring_to_event.label", {eventName: EVENT_NAME})}
-              </span>}
-              {fursuitData.showInFursuitCount && <span className="title tiny">
-                <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
-                {t("badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
-              </span>}
+              <div className="details vertical-list gap-2mm">
+                <div className="vertical-list">
+                  <span className="title average bold">{fursuitData.fursuit.name}</span>
+                  <span className="title small color-subtitle">{fursuitData.fursuit.species}</span>
+                  <hr></hr>
+                </div>
+                <div className="vertical-list gap-2mm">
+                  {fursuitData.bringingToEvent && <span className="title tiny">
+                    <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                    {t("badge.input.bring_to_event.label", {eventName: EVENT_NAME})}
+                  </span>}
+                  {fursuitData.showInFursuitCount && <span className="title tiny">
+                    <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                    {t("badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
+                  </span>}
+                </div>
+              </div>
             </div>
             <div className="spacer"></div>
             <div className="fursuit-actions gap-2mm">
               <Button className="danger" iconName={ICONS.DELETE} busy={loading}
                 onClick={()=>promptDeleteFursuit(fursuitData)} 
                 title={t("badge.messages.confirm_fursuit_deletion.title", {name: fursuitData.fursuit.name})}>
+                  {tcommon("CRUD.delete")}
                 </Button>
               <div className="spacer"></div>
               <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptEditFursuit(fursuitData)}
-                busy={loading} title={t("badge.actions.edit_fursuit", {name: fursuitData.fursuit.name})}></Button>
+                busy={loading} title={t("badge.actions.edit_fursuit", {name: fursuitData.fursuit.name})}>
+                  {tcommon("CRUD.edit")}
+              </Button>
             </div>
           </div>)}
         </div>

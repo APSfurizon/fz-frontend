@@ -403,11 +403,27 @@
                 "membership": "Associazione",
                 "membership_cards": "Tesserati",
                 "pretix": "Pretix",
-                "pretix_data": "Dati negozio"
+                "pretix_data": "Dati negozio",
+                "event": "Eventi",
+                "event_badges": "Badge",
+                "event_orders": "Ordini",
+                "users": "Utenti",
+                "users_accounts": "Account"
             },
             "pretix_data": {
                 "reload_event": "Ricarica evento",
                 "reload_orders": "Ricarica ordini"
+            },
+            "events": {
+                "badges": {
+                    "print_badges": "Stampa badge",
+                    "remind_badges": "Notifica badge mancanti",
+                    "remind_fursuits": "Notifica fursuit mancanti"
+                },
+                "orders": {
+                    "remind_order_linking": "Notifica ordini disconnessi",
+                    "export_rooms": "Esporta stanze hotel"
+                }
             },
             "membership_manager": {
                 "title": "Gestione tessere",
@@ -434,6 +450,46 @@
                     "PERMISSION_NOT_FOUND": "Non hai i permessi necessari.",
                     "CARD_MISSING": "Tessera non presente",
                     "CARD_DUPLICATE": "Tessera duplicata"
+                }
+            },
+            "users": {
+                "title": "Visualizza utenti",
+                "input": {
+                    "selected_user": {
+                        "label": "Utente selezionato",
+                        "placeholder": "Cerca un utente"
+                    }
+                },
+                "personal_info": "Dati personali",
+                "security": "Sicurezza",
+                "orders": "Ordini",
+                "orders_table": {
+                    "event_name": "Evento",
+                    "order_code": "Codice ordine",
+                    "order_status": "Stato",
+                    "is_daily": "Giornaliero",
+                    "sponsorship_type": "Sponsor",
+                    "extra_days": "Giorni extra",
+                    "room_type": "Tipo stanza"
+                },
+                "actions": {
+                    "ban": "Espelli",
+                    "unban": "Riammetti",
+                    "view_order": "Vedi ordine"
+                },
+                "messages": {
+                    "confirm_ban": {
+                        "title": "Conferma espulsione",
+                        "description": "L'account verrà disconnesso da tutti i dispositivi e sarà impedito l'accesso."
+                    },
+                    "confirm_unban": {
+                        "title": "Conferma riammissione?",
+                        "description": "All'account sarà di nuovo permesso di accedere."
+                    }
+                },
+                "errors": {
+                    "unknown_user": "Utente non trovato",
+                    "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
                 }
             }
         }
@@ -516,7 +572,8 @@
                 "invalid_credentials": "Credenziali errate",
                 "invalid_input": "Dati non validi",
                 "already_logged_in": "Hai già effettuato l'accesso",
-                "confirmation_still_pending": "Conferma l'email prima di accedere"
+                "confirmation_still_pending": "Conferma l'email prima di accedere",
+                "authentication_is_disabled": "Account disabilitato."
             },
             "messages": {
                 "register_success": {

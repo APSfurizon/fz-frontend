@@ -1,6 +1,6 @@
 "use client"
-import { Event, GetCurrentEventApiAction } from "@/app/_lib/api/counts";
-import { runRequest } from "@/app/_lib/api/global";
+import { ConventionEvent, GetCurrentEventApiAction } from "@/lib/api/counts";
+import { runRequest } from "@/lib/api/global";
 import { useRouter } from "next/navigation"
 import { useEffect } from "react";
 
@@ -9,7 +9,7 @@ export default function NosecountRoot () {
     useEffect(()=>{
         runRequest(new GetCurrentEventApiAction())
         .then((result)=>{
-            const event = result as Event;
+            const event = result as ConventionEvent;
             router.push(`/nosecount/${event.slug}`)
         }).catch (()=>router.back());
     }, []);

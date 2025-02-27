@@ -1,21 +1,21 @@
 "use client"
-import Icon, { ICONS } from "@/app/_components/icon";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError, runRequest } from "@/app/_lib/api/global";
+import Icon, { ICONS } from "@/components/icon";
+import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError, runRequest } from "@/lib/api/global";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/app/_lib/api/hooks/useTitle";
-import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction, ExchangeUpdateApiData } from "@/app/_lib/api/exchange";
-import { buildSearchParams, translate } from "@/app/_lib/utils";
-import Button from "@/app/_components/button";
-import ModalError from "@/app/_components/modalError";
-import { useUser } from "@/app/_lib/context/userProvider";
-import UserPicture from "@/app/_components/userPicture";
-import { RoomData } from "@/app/_lib/api/room";
-import "../../../../../styles/authentication/login.css";
-import "../../../../../styles/authentication/exchangeConfirm.css";
-import { UserData } from "@/app/_lib/api/user";
-import { calcTicketData } from "@/app/_lib/api/booking";
+import useTitle from "@/lib/api/hooks/useTitle";
+import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction, ExchangeUpdateApiData } from "@/lib/api/exchange";
+import { buildSearchParams, translate } from "@/lib/utils";
+import Button from "@/components/button";
+import ModalError from "@/components/modalError";
+import { useUser } from "@/lib/context/userProvider";
+import UserPicture from "@/components/userPicture";
+import { RoomData } from "@/lib/api/room";
+import "@/styles/authentication/login.css";
+import "@/styles/authentication/exchangeConfirm.css";
+import { UserData } from "@/lib/api/user";
+import { calcTicketData } from "@/lib/api/booking";
 
 export default function ExchangeConfirm() {
   const t = useTranslations("authentication");
