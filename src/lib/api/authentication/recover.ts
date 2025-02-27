@@ -19,8 +19,6 @@ export class RecoverFormAction implements FormApiAction<RecoverApiData, Boolean,
     authenticated = true;
     dtoBuilder = new RecoverDTOBuilder ();
     urlAction = "authentication/pw/reset";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface ChangePasswordApiData {
@@ -43,6 +41,4 @@ export class ResetPasswordFormAction implements FormApiAction<ChangePasswordApiD
     authenticated = true;
     dtoBuilder = new ResetPasswordDTOBuilder ();
     urlAction = "authentication/pw/change";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

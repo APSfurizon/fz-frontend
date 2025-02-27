@@ -14,6 +14,7 @@ import ModalError from "@/components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
 import { runRequest } from "@/lib/api/global";
 import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
+import { GetRenderedBadgesApiAction } from "@/lib/api/admin/badge";
 
 export default function AdminPage() {
   const t = useTranslations("furpanel");
@@ -61,6 +62,25 @@ export default function AdminPage() {
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix_data.errors"/>
     )).finally(()=>setReloadOrdersLoading(false));
   }
+  // Event area logic
+
+  // - badge
+  const [renderBadgesLoading, setRenderBadgesLoading] = useState(false);
+  const renderBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    setRenderBadgesLoading(true);
+    runRequest(new GetRenderedBadgesApiAction())
+    .then ((response) => {
+      const res = response as Response;
+      res.blob().then((badgesBlob) => {
+        const result = URL.createObjectURL(badgesBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
+      })
+    }).catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
+    )).finally(()=>setRenderBadgesLoading(false))
+  }
 
   return (
     <div className="page">
@@ -85,6 +105,27 @@ export default function AdminPage() {
             <Button iconName={ICONS.SYNC} onClick={reloadOrders} debounce={5000}
               busy={reloadOrdersLoading} disabled={!capabilities.canRefreshPretixCache}>
               {t("admin.pretix_data.reload_orders")}
+            </Button>
+          </div>
+        </div>
+      </div>
+      {/* Event area */}
+      <div className="admin-section section vertical-list gap-2mm">
+        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <Icon className="x-large" iconName={ICONS.LOCAL_ACTIVITY}></Icon>
+          <span className="title medium">{t("admin.sections.event")}</span>
+        </div>
+        {/* badge area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.sections.event_badges")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm">
+            <Button iconName={ICONS.PRINT} onClick={renderBadges} debounce={5000}
+              busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
+              {t("admin.events.badges.print_badges")}
             </Button>
           </div>
         </div>

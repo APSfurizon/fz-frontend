@@ -17,8 +17,6 @@ export class GetBadgeStatusAction implements ApiAction<BadgeStatusApiResponse, A
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "badge/";
-    onSuccess: (status: number, body?: BadgeStatusApiResponse) => void = (status: number, body?: BadgeStatusApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface BadgeUploadResponse extends MediaData, ApiResponse {}
@@ -27,16 +25,12 @@ export class UploadBadgeAction implements ApiAction<BadgeUploadResponse, ApiErro
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "badge/user/upload";
-    onSuccess: (status: number, body?: BadgeUploadResponse) => void = (status: number, body?: BadgeUploadResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class DeleteBadgeAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "DELETE";
     urlAction = "badge/user/";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface BadgeDataChangeData {
@@ -60,6 +54,4 @@ export class BadgeDataChangeFormAction implements FormApiAction<BadgeDataChangeD
     authenticated = true;
     dtoBuilder = new BadgeDataChangeDTOBuilder ();
     urlAction = "badge/update-user-badge-info";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

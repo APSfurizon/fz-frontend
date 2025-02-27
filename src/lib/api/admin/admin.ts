@@ -18,6 +18,4 @@ export class GetAdminCapabilitiesApiAction implements ApiAction<AdminCapabilites
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "admin/capabilities";
-    onSuccess: (status: number, body?: AdminCapabilitesResponse) => void = (status: number, body?: AdminCapabilitesResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

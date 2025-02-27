@@ -33,8 +33,6 @@ export class GetCardsApiAction implements ApiAction<GetCardsApiResponse, ApiErro
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "membership/get-cards";
-    onSuccess: (status: number, body?: GetCardsApiResponse) => void = (status: number, body?: GetCardsApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface ChangeCardRegisterStatusApiData {
@@ -46,8 +44,6 @@ export class ChangeCardRegisterStatusApiAction implements ApiAction<Boolean, Api
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "membership/set-membership-card-registration-status";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
@@ -82,6 +78,4 @@ export class AddCardFormAction implements FormApiAction<AddCardApiData, Boolean,
     authenticated = true;
     dtoBuilder = new AddCardDTOBuilder ();
     urlAction = "membership/add-card";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

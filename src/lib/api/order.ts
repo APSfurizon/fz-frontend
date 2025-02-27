@@ -33,8 +33,6 @@ export class OrderExchangeFormAction implements FormApiAction<OrderExchangeInitA
     authenticated = true;
     dtoBuilder = new OrderExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 /**

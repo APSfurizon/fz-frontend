@@ -56,8 +56,6 @@ export class RegisterFormAction implements FormApiAction<RegisterData, RegisterR
     authenticated = false;
     dtoBuilder = new RegisterDTOBuilder ();
     urlAction = "authentication/register";
-    onSuccess: (status: number, body?: RegisterResponse) => void = (status: number, body?: RegisterResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 /**Either a country or a region */
@@ -76,16 +74,12 @@ export class AutoInputCountriesApiAction implements ApiAction<PlaceApiResponse, 
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "states/get-countries";
-    onSuccess: (status: number, body?: PlaceApiResponse) => void = (status: number, body?: PlaceApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class AutoInputStatesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "states/by-country";
-    onSuccess: (status: number, body?: PlaceApiResponse) => void = (status: number, body?: PlaceApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 const CACHED_COUNTRIES = new CachedCountries();

@@ -405,12 +405,19 @@
                 "membership_cards": "Cards",
                 "pretix": "Pretix",
                 "pretix_data": "Shop data",
+                "event": "Events",
+                "event_badges": "Badges",
                 "users": "Users",
                 "users_accounts": "Accounts"
             },
             "pretix_data": {
                 "reload_event": "Reload event",
                 "reload_orders": "Reload orders"
+            },
+            "events": {
+                "badges": {
+                    "print_badges": "Print badges"
+                }
             },
             "membership_manager": {
                 "title": "Card management",

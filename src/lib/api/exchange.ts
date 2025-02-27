@@ -22,8 +22,6 @@ export class ExchangeStatusApiAction implements ApiAction<ExchangeStatusApiRespo
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "room/exchange/info";
-    onSuccess: (status: number, body?: ExchangeStatusApiResponse) => void = (status: number, body?: ExchangeStatusApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface ExchangeUpdateApiData {
@@ -35,6 +33,4 @@ export class ExchangeUpdateApiAction implements ApiAction<Boolean, ApiErrorRespo
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/exchange/update";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

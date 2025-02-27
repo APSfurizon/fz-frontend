@@ -51,8 +51,6 @@ export class RoomStoreItemsApiAction implements ApiAction<RoomStoreItemsApiRespo
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "room/get-room-list-with-quota";
-    onSuccess: (status: number, body?: RoomStoreItemsApiResponse) => void = (status: number, body?: RoomStoreItemsApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface RoomBuyApiData {
@@ -67,6 +65,4 @@ export class RoomStoreBuyAction implements ApiAction<ShopLinkResponse, ApiErrorR
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/buy-or-upgrade-room";
-    onSuccess: (status: number, body?: ShopLinkResponse) => void = (status: number, body?: ShopLinkResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

@@ -404,12 +404,19 @@
                 "membership_cards": "Tesserati",
                 "pretix": "Pretix",
                 "pretix_data": "Dati negozio",
+                "event": "Eventi",
+                "event_badges": "Badge",
                 "users": "Utenti",
                 "users_accounts": "Account"
             },
             "pretix_data": {
                 "reload_event": "Ricarica evento",
                 "reload_orders": "Ricarica ordini"
+            },
+            "events": {
+                "badges": {
+                    "print_badges": "Stampa badge"
+                }
             },
             "membership_manager": {
                 "title": "Gestione tessere",

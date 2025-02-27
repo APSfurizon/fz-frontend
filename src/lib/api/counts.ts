@@ -11,8 +11,6 @@ export class FursuitCountApiAction implements ApiAction<FursuitCountResponse, Ap
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "counts/fursuit";
-    onSuccess: (status: number, body?: FursuitCountResponse) => void = (status: number, body?: FursuitCountResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface SponsorCountResponse extends ApiResponse {
@@ -23,8 +21,6 @@ export class SponsorCountApiAction implements ApiAction<SponsorCountResponse, Ap
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "counts/sponsors";
-    onSuccess: (status: number, body?: SponsorCountResponse) => void = (status: number, body?: SponsorCountResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface NoseRoomDetails {
@@ -54,8 +50,6 @@ export class NoseCountApiAction implements ApiAction<NoseCountResponse, ApiError
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "counts/bopos";
-    onSuccess: (status: number, body?: NoseCountResponse) => void = (status: number, body?: NoseCountResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface ConventionEvent {
@@ -80,8 +74,6 @@ export class GetAllEventsApiAction implements ApiAction<AllEventsResponse, ApiEr
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "events/";
-    onSuccess: (status: number, body?: AllEventsResponse) => void = (status: number, body?: AllEventsResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface CurrentEventResponse extends ApiResponse {
@@ -92,6 +84,4 @@ export class GetCurrentEventApiAction implements ApiAction<CurrentEventResponse,
     authenticated = false;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "events/current";
-    onSuccess: (status: number, body?: CurrentEventResponse) => void = (status: number, body?: CurrentEventResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

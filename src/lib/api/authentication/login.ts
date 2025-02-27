@@ -34,8 +34,6 @@ export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, 
     authenticated = true;
     dtoBuilder = new LoginDTOBuilder ();
     urlAction = "authentication/login";
-    onSuccess: (status: number, body?: LoginResponse) => void = (status: number, body?: LoginResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface LogoutResponse extends ApiResponse {
@@ -46,6 +44,4 @@ export class LogoutApiAction implements ApiAction<LogoutResponse, ApiErrorRespon
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "authentication/logout";
-    onSuccess: (status: number, body?: LogoutResponse) => void = (status: number, body?: LogoutResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

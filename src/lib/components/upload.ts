@@ -51,6 +51,4 @@ export class GetMediaAction implements ApiAction<GetMediaResponse, ApiErrorRespo
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "badge/upload";
-    onSuccess: (status: number, body?: GetMediaResponse) => void = (status: number, body?: GetMediaResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

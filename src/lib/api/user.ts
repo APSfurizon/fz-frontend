@@ -64,8 +64,6 @@ export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErro
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "users/display/me";
-    onSuccess: (status: number, body?: UserDisplayResponse) => void = (status: number, body?: UserDisplayResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface UserSearchResponse extends ApiResponse {
@@ -76,8 +74,6 @@ export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorR
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "users/search/current-event";
-    onSuccess: (status: number, body?: UserSearchResponse) => void = (status: number, body?: UserSearchResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 /**
@@ -169,16 +165,12 @@ export class UpdatePersonalInfoFormAction implements FormApiAction<UserPersonalI
     authenticated = true;
     dtoBuilder = new UpdatePersonalInfoDTOBuilder ();
     urlAction = "membership/update-personal-user-information";
-    onSuccess: (status: number, body?: SimpleApiResponse) => void = (status: number, body?: SimpleApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class GetPersonalInfoAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "membership/get-personal-user-information";
-    onSuccess: (status: number, body?: UserSearchResponse) => void = (status: number, body?: UserSearchResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface UserOrderLinkingData {
@@ -190,6 +182,4 @@ export class UserOrderLinkingAction implements ApiAction<Boolean, ApiErrorRespon
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "orders-workflow/link-order";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

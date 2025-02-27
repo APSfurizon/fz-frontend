@@ -37,15 +37,16 @@ export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorRe
     authenticated: boolean,
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT",
     urlAction: string,
-    onSuccess: (status: number, body?: U) => void,
-    onFail: (status: number, body?: V) => void
+    rawResponse?: boolean,
+    onSuccess?: (status: number, body?: U) => void,
+    onFail?: (status: number, body?: V) => void
 }
 
 export function getToken (): string | null {
     return `Bearer ${getCookie(TOKEN_STORAGE_NAME)}`;
 }
 
-export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest | FormData, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse> {
+export function runRequest (action: ApiAction<any, any>, pathParams?: string[], body?: ApiRequest | FormData, searchParams?: URLSearchParams): Promise<Boolean | ApiResponse | ApiErrorResponse | Response> {
     return new Promise ((resolve, reject) => {
         // Calc headers
         const headers = new Headers();
@@ -97,18 +98,22 @@ export function runRequest (action: ApiAction<any, any>, pathParams?: string[], 
                     reject(data);
                 }
             } else {
+                if (action.rawResponse) {
+                    resolve(fulfilledData);
+                    return;
+                }
                 try {
                     if (!contentType || contentType.indexOf("application/json") < 0) {
                         const data: ApiResponse = {
                             status: fulfilledData.status,
                             requestId: correlationId
                         };
-                        action.onSuccess (fulfilledData.status, data);
+                        action.onSuccess && action.onSuccess (fulfilledData.status, data);
                         resolve (data);
                         return;
                     }
                     fulfilledData.json().then ((data) => {
-                        action.onSuccess (fulfilledData.status, data);
+                        action.onSuccess && action.onSuccess (fulfilledData.status, data);
                         resolve (data);
                     }).catch ((reason) => {
                         action.onFail && action.onFail(-1, reason);

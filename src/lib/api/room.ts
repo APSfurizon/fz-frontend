@@ -53,8 +53,6 @@ export class RoomCreateApiAction implements ApiAction<RoomCreateResponse, ApiErr
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/create";
-    onSuccess: (status: number, body?: RoomCreateResponse) => void = (status: number, body?: RoomCreateResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface RoomInvitation {
@@ -77,8 +75,6 @@ export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorRe
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "room/info";
-    onSuccess: (status: number, body?: RoomInfoResponse) => void = (status: number, body?: RoomInfoResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface RoomEditData {
@@ -102,16 +98,12 @@ export class RoomRenameFormAction implements FormApiAction<RoomRenameData, ApiRe
     authenticated = true;
     dtoBuilder = new RoomRenameDTOBuilder ();
     urlAction = "room/change-name";
-    onSuccess: (status: number, body?: ApiResponse) => void = (status: number, body?: ApiResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class RoomDeleteAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/delete";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 /**
@@ -146,8 +138,6 @@ export class RoomInviteFormAction implements FormApiAction<RoomInviteApiData, Ro
     authenticated = true;
     dtoBuilder = new RoomInviteDTOBuilder ();
     urlAction = "room/invite";
-    onSuccess: (status: number, body?: RoomInviteResponse) => void = (status: number, body?: RoomInviteResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 /**
@@ -162,24 +152,18 @@ export class RoomInviteAnswerAction implements ApiAction<Boolean, ApiErrorRespon
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/invite";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class RoomKickAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/kick";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/leave";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeInitApiData> {
@@ -198,8 +182,6 @@ export class RoomExchangeFormAction implements FormApiAction<OrderExchangeInitAp
     authenticated = true;
     dtoBuilder = new RoomExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface RoomSetShowInNosecountData {
@@ -211,6 +193,4 @@ export class RoomSetShowInNosecountApiAction implements ApiAction<Boolean, ApiEr
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "room/show-in-nosecount";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }

@@ -82,8 +82,6 @@ export class BookingOrderApiAction implements ApiAction<BookingOrderResponse, Ap
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "orders-workflow/get-full-status";
-    onSuccess: (status: number, body?: BookingOrderResponse) => void = (status: number, body?: BookingOrderResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export interface ShopLinkResponse extends ApiResponse {
@@ -94,30 +92,22 @@ export class ShopLinkApiAction implements ApiAction<ShopLinkResponse, ApiErrorRe
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "orders-workflow/generate-pretix-shop-link";
-    onSuccess: (status: number, body?: ShopLinkResponse) => void = (status: number, body?: ShopLinkResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class OrderEditLinkApiAction implements ApiAction<ShopLinkResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "orders-workflow/get-order-edit-link";
-    onSuccess: (status: number, body?: ShopLinkResponse) => void = (status: number, body?: ShopLinkResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class OrderRetryLinkApiAction implements ApiAction<ShopLinkResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "orders-workflow/get-order-retry-payment-link";
-    onSuccess: (status: number, body?: ShopLinkResponse) => void = (status: number, body?: ShopLinkResponse) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
 
 export class ConfirmMembershipDataApiAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
     urlAction = "membership/mark-persona-user-information-as-updated";
-    onSuccess: (status: number, body?: Boolean) => void = (status: number, body?: Boolean) => {};
-    onFail: (status: number, body?: ApiErrorResponse | undefined) => void = () => {};
 }
