@@ -422,7 +422,8 @@
                     "remind_fursuits": "Remind missing fursuits"
                 },
                 "orders": {
-                    "remind_order_linking": "Remind unlinked orders"
+                    "remind_order_linking": "Remind unlinked orders",
+                    "export_rooms": "Export hotel rooms"
                 }
             },
             "membership_manager": {

@@ -421,7 +421,8 @@
                     "remind_fursuits": "Notifica fursuit mancanti"
                 },
                 "orders": {
-                    "remind_order_linking": "Notifica ordini disconnessi"
+                    "remind_order_linking": "Notifica ordini disconnessi",
+                    "export_rooms": "Esporta stanze hotel"
                 }
             },
             "membership_manager": {

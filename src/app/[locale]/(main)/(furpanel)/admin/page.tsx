@@ -12,7 +12,7 @@ import { useModalUpdate } from "@/lib/context/modalProvider";
 import ModalError from "@/components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
 import { runRequest } from "@/lib/api/global";
-import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
+import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, ExportHotelRoomsApiAction, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
 import { GetRenderedBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
 
 export default function AdminPage() {
@@ -72,6 +72,23 @@ export default function AdminPage() {
       tcommon("error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
     )).finally(()=>setRemindOrderLinkLoading(false))
+  }
+
+  const [exportRoomsLoading, setExportRoomsLoading] = useState(false);
+  const exportRooms = (e: MouseEvent<HTMLButtonElement>) => {
+    setExportRoomsLoading(true);
+    runRequest(new ExportHotelRoomsApiAction())
+    .then ((response) => {
+      const res = response as Response;
+      res.blob().then((exportBlob) => {
+        const result = URL.createObjectURL(exportBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
+      })
+    }).catch((err)=>showModal(
+      tcommon("error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
+    )).finally(()=>setExportRoomsLoading(false))
   }
 
   // - badge
@@ -175,6 +192,10 @@ export default function AdminPage() {
             </span>
           </div>
           <div className="horizontal-list gap-2mm flex-wrap">
+            <Button iconName={ICONS.DOWNLOAD} onClick={exportRooms} debounce={5000}
+              busy={exportRoomsLoading} disabled={!capabilities.canExportHotelList}>
+              {t("admin.events.orders.export_rooms")}
+            </Button>
             <Button iconName={ICONS.MAIL} onClick={remindOrderLink} debounce={5000}
               busy={remindOrderLinkLoading} disabled={!capabilities.canRemindOrderLinking}>
               {t("admin.events.orders.remind_order_linking")}
