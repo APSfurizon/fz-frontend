@@ -1,7 +1,7 @@
 import {useTranslations} from 'next-intl';
 import Image from "next/image";
 import "@/styles/components/footer.css";
-import { APP_GIT } from '@/lib/constants';
+import { APP_GIT, APP_VERSION } from '@/lib/constants';
 
 
 export default function Footer () {
@@ -41,6 +41,7 @@ export default function Footer () {
             <span>{t('footer.society_name')}</span>
             <span>{t('footer.address')}</span>
           </div>
+          <p className="title tiny center">Furpanel {APP_VERSION}</p>
           <p className="tiny color-subtitle center">
             <span>Made by </span>
             <a className="color-link" href="https://www.instagram.com/stranckv2">Stranck</a>

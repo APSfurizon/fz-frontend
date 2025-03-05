@@ -135,23 +135,23 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.CONFIRMATION_NUMBER}></Icon>
-          <span className="title medium">{t("admin.sections.pretix")}</span>
+          <span className="title medium">{t("admin.pretix.title")}</span>
         </div>
         {/* Shop data area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.sections.pretix_data")}
+              {t("admin.pretix.data.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.EVENT_REPEAT} onClick={reloadEvent} debounce={5000}
               busy={reloadEventLoading} disabled={!capabilities.canRefreshPretixCache}>
-              {t("admin.pretix_data.reload_event")}
+              {t("admin.pretix.data.reload_event")}
             </Button>
             <Button iconName={ICONS.SYNC} onClick={reloadOrders} debounce={5000}
               busy={reloadOrdersLoading} disabled={!capabilities.canRefreshPretixCache}>
-              {t("admin.pretix_data.reload_orders")}
+              {t("admin.pretix.data.reload_orders")}
             </Button>
           </div>
         </div>
@@ -160,13 +160,13 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.LOCAL_ACTIVITY}></Icon>
-          <span className="title medium">{t("admin.sections.event")}</span>
+          <span className="title medium">{t("admin.events.title")}</span>
         </div>
         {/* badge area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.sections.event_badges")}
+              {t("admin.events.badges.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm flex-wrap">
@@ -188,7 +188,7 @@ export default function AdminPage() {
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.sections.event_orders")}
+              {t("admin.events.orders.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm flex-wrap">
@@ -207,19 +207,33 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.PERSON}></Icon>
-          <span className="title medium">{t("admin.sections.users")}</span>
+          <span className="title medium">{t("admin.users.title")}</span>
         </div>
         {/* Users generic area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.sections.users_accounts")}
+              {t("admin.users.accounts.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.PERSON_SEARCH} onClick={()=>router.push("/admin/users/")}
               disabled={!capabilities.canManageMembershipCards}>
-              {t("admin.users.title")}
+              {t("admin.users.accounts.view.title")}
+            </Button>
+          </div>
+        </div>
+        {/* Users security area */}
+        <div className="vertical-list gap-2mm">
+          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+            <span className="title average">
+              {t("admin.users.security.title")}
+            </span>
+          </div>
+          <div className="horizontal-list gap-2mm">
+            <Button iconName={ICONS.GROUPS} onClick={()=>router.push("/admin/roles/")}
+              disabled={!capabilities.canManageMembershipCards}>
+              {t("admin.users.security.roles.title")}
             </Button>
           </div>
         </div>
@@ -228,13 +242,13 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.ID_CARD}></Icon>
-          <span className="title medium">{t("admin.sections.membership")}</span>
+          <span className="title medium">{t("admin.membership.title")}</span>
         </div>
         {/* Membership card area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.sections.membership_cards")}
+              {t("admin.membership.cards.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">

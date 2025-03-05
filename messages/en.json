@@ -400,28 +400,32 @@
         },
         "admin": {
             "title": "Admin",
-            "sections": {
-                "membership": "Memership",
-                "membership_cards": "Cards",
-                "pretix": "Pretix",
-                "pretix_data": "Shop data",
-                "event": "Events",
-                "event_badges": "Badges",
-                "event_orders": "Orders",
-                "users": "Users",
-                "users_accounts": "Accounts"
+            "errors": {},
+            "pretix": {
+                "title": "Pretix",
+                "data": {
+                    "title": "Shop data",
+                    "reload_event": "Reload event",
+                    "reload_orders": "Reload orders",
+                    "errors": {}
+                }
             },
-            "pretix_data": {
-                "reload_event": "Reload event",
-                "reload_orders": "Reload orders"
+            "membership": {
+                "title": "Membership",
+                "cards": {
+                    "title": "Cards"
+                }
             },
             "events": {
+                "title": "Events",
                 "badges": {
+                    "title": "Badges",
                     "print_badges": "Print badges",
                     "remind_badges": "Remind missing badges",
                     "remind_fursuits": "Remind missing fursuits"
                 },
                 "orders": {
+                    "title": "Orders",
                     "remind_order_linking": "Remind unlinked orders",
                     "export_rooms": "Export hotel rooms"
                 }
@@ -454,43 +458,55 @@
                 }
             },
             "users": {
-                "title": "View users",
-                "input": {
-                    "selected_user": {
-                        "label": "Selected user",
-                        "placeholder": "Search for a user"
+                "title": "Users",
+                "accounts": {
+                    "title": "Accounts",
+                    "view": {
+                        "title": "View user",
+                        "input": {
+                            "selected_user": {
+                                "label": "Selected user",
+                                "placeholder": "Search for a user"
+                            }
+                        },
+                        "personal_info": "Personal info",
+                        "security": "Security",
+                        "orders": "Orders",
+                        "orders_table": {
+                            "event_name": "Event",
+                            "order_code": "Order code",
+                            "order_status": "Status",
+                            "is_daily": "Is daily",
+                            "sponsorship_type": "Sponsorship",
+                            "extra_days": "Extra days",
+                            "room_type": "Room type"
+                        },
+                        "actions": {
+                            "ban": "Ban",
+                            "unban": "Unban",
+                            "view_order": "View order"
+                        },
+                        "messages": {
+                            "confirm_ban": {
+                                "title": "Confirm ban",
+                                "description": "The account will be logged out from all devices and won't be able to log in."
+                            },
+                            "confirm_unban": {
+                                "title": "Confirm unban",
+                                "description": "The account will be allowed to log in."
+                            }
+                        },
+                        "errors": {
+                            "unknown_user": "User not found",
+                            "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
+                        }
                     }
                 },
-                "personal_info": "Personal info",
-                "security": "Security",
-                "orders": "Orders",
-                "orders_table": {
-                    "event_name": "Event",
-                    "order_code": "Order code",
-                    "order_status": "Status",
-                    "is_daily": "Is daily",
-                    "sponsorship_type": "Sponsorship",
-                    "extra_days": "Extra days",
-                    "room_type": "Room type"
-                },
-                "actions": {
-                    "ban": "Ban",
-                    "unban": "Unban",
-                    "view_order": "View order"
-                },
-                "messages": {
-                    "confirm_ban": {
-                        "title": "Confirm ban",
-                        "description": "The account will be logged out from all devices and won't be able to log in."
-                    },
-                    "confirm_unban": {
-                        "title": "Confirm unban",
-                        "description": "The account will be allowed to log in."
+                "security": {
+                    "title": "Security",
+                    "roles": {
+                        "title": "Roles"
                     }
-                },
-                "errors": {
-                    "unknown_user": "User not found",
-                    "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
                 }
             }
         }
