@@ -42,6 +42,11 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
         router.refresh();
     }
 
+    const loginClick = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation ();
+        router.push('/login');
+    }
+
     return (
         <span tabIndex={0} className="user-dropdown horizontal-list flex-vertical-center rounded-m" 
             onClick={()=>setOpen(!isOpen)} onBlur={()=>{if (!isHover) setOpen(false)}}
@@ -51,7 +56,7 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
                     <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>
                     {t("loading")}
                 </span>}
-                {!userData && !loading && <Button onClick={()=>router.push('/login')}
+                {!userData && !loading && <Button onClick={loginClick}
                     iconName={ICONS.KEY}>
                     {t('header.login')}
                 </Button>}

@@ -37,21 +37,22 @@ export default function Footer () {
               <Image className="footer-logo-facebook" src="/images/footer/facebook-brands-solid.svg" alt="Facebook logo" width={32} height={32}></Image>
             </a>
           </div>
-          <div className="footer-info horizontal-list gap-4mm tiny normal title flex-center">
-            <span>{t('footer.society_name')}</span>
-            <span>{t('footer.address')}</span>
-          </div>
-          <p className="title tiny center">Furpanel {APP_VERSION}</p>
-          <p className="tiny color-subtitle center">
-            <span>Made by </span>
-            <a className="color-link" href="https://www.instagram.com/stranckv2">Stranck</a>
-            <span>, </span>
-            <a className="color-link" href="https://about.woffo.ovh">Drew</a>
-            <span> & </span>
-            <a className="color-link" href="https://x.com/starkthedragon">Stark</a>
-          </p>
-          <div className="tiny color-subtitle center">
-            <span>{t("source_code")} <a className="color-link" href={APP_GIT}>{APP_GIT}</a></span>
+          <div className="vertical-list gap-2mm">
+            <div className="footer-info horizontal-list gap-4mm tiny normal title flex-center">
+              <span>{t('footer.society_name')}</span>
+              <span>{t('footer.address')}</span>
+            </div>
+            <p className="tiny color-subtitle center">
+              <span>Furpanel {APP_VERSION} by </span>
+              <a className="color-link" href="https://www.instagram.com/stranckv2">Stranck</a>
+              <span>, </span>
+              <a className="color-link" href="https://about.woffo.ovh">Drew</a>
+              <span> & </span>
+              <a className="color-link" href="https://x.com/starkthedragon">Stark</a>
+            </p>
+            <div className="tiny color-subtitle center">
+              <span>{t("source_code")} <a className="color-link" href={APP_GIT}>{APP_GIT}</a></span>
+            </div>
           </div>
         </div>
       </footer>

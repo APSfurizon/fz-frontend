@@ -163,7 +163,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
             </label>}
             <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
                 <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
-                    <Image unoptimized className="rounded-s upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                    <Image unoptimized className="upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
                         alt={t('upload.alt_preview_image')} width={viewSize} height={viewSize} quality={100}
                         style={{aspectRatio: "1", maxWidth: viewSize, maxHeight: viewSize, minWidth: viewSize, minHeight: viewSize, objectFit: "cover"}}>
                     </Image>

@@ -252,7 +252,7 @@ export default function BadgePage() {
         </div>
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
-          {badgeStatus?.fursuits.map((fursuitData: Fursuit, index: number)=><div key={index} className="fursuit gap-2mm rounded-s">
+          {badgeStatus?.fursuits.map((fursuitData: Fursuit, index: number)=><div key={index} className="fursuit gap-2mm rounded-l">
             <div className="main-data gap-2mm">
               <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100}
                 src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>

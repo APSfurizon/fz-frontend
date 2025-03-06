@@ -14,8 +14,7 @@ span.error-container {
 }
 
 a.suggestion {
-    display: inline-block;
-    width: 100%;
+    text-align: center;
 }
 
 div.form-pair div.jan-input,

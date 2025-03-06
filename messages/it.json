@@ -673,7 +673,7 @@
                     "placeholder": "Inserisci una password"
                 },
                 "phone_prefix": {
-                    "label": "Prefisso",
+                    "label": "Prefisso telefonico",
                     "placeholder": "Esempio: Italy (+39)"
                 },
                 "phone_number": {

@@ -55,6 +55,7 @@ div.jan-input {
     /* Disabled style */
     div.input-container:has(input.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);
+        background-color: var(--text-input-bg-disabled);
     }
 
     input.input-field:disabled {

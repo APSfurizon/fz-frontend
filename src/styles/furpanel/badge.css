@@ -6,7 +6,7 @@ div.fursuit {
 
 div.fursuit-section {
     background-color: var(--room-action-panel-bg);
-    box-shadow: 0px 0px 1em .2em var(--room-invite-shadow);
+    box-shadow: 0px 0px .5em .05em var(--room-invite-shadow);
 }
 
 div.fursona-change,
@@ -40,12 +40,14 @@ div.fursuit {
     flex-direction: column;
     gap: 0.2em;
     background-color: var(--badge-fursuit-bg);
+    border: 1px solid var(--badge-fursuit-border);
     max-width: 10.25em;
     
     img.fursuit-image {
         object-fit: cover;
         width: 9em;
         height: auto;
+        outline: 1px solid var(--badge-fursuit-border);
     }
 
     div.main-data {

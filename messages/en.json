@@ -671,7 +671,7 @@
                     "placeholder": "Enter a password"
                 },
                 "phone_prefix": {
-                    "label": "Prefix",
+                    "label": "Phone prefix",
                     "placeholder": "Es: Italy (+39)"
                 },
                 "phone_number": {

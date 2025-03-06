@@ -39,7 +39,7 @@ header {
     }
     
     a.header-link span {
-        text-shadow: 0px 0px 30px black;
+        text-shadow: 0px 0px 30px var(--header-shadow);
     }
     
     a.header-link * {
