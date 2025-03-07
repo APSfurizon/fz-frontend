@@ -505,7 +505,10 @@
                 "security": {
                     "title": "Security",
                     "roles": {
-                        "title": "Roles"
+                        "title": "Roles",
+                        "actions": {
+                            
+                        }
                     }
                 }
             }

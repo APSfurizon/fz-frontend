@@ -2,6 +2,22 @@ import { FormApiAction as FormApiAction } from "@/lib/components/dataForm"
 import { API_BASE_URL, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { getCookie } from "@/lib/utils";
 
+export enum EntityMode {
+    NEW = 'NEW',
+    EDIT = 'EDIT'
+}
+
+export function parseEntityMode(mode: string): EntityMode | undefined {
+    switch (mode.trim().toLocaleLowerCase()) {
+        case "new":
+            return EntityMode.NEW;
+        case "edit":
+            return EntityMode.EDIT;
+        default:
+            return undefined;
+    }
+}
+
 export interface ApiRequest {}
 
 export interface ApiResponse {

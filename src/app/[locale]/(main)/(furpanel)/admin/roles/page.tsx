@@ -4,7 +4,7 @@ import Icon, { ICONS } from "@/components/icon";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
-export default function RolesList () {
+export default function RolesListPage () {
 
     const router = useRouter();
     const t = useTranslations("furpanel");

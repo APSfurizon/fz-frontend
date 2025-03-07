@@ -503,12 +503,12 @@
                 "security": {
                     "title": "Sicurezza",
                     "roles": {
-                        "title": "Ruoli"
+                        "title": "Ruoli",
+                        "actions": {
+                            
+                        }
                     }
                 }
-            },
-            "roles": {
-                "title": "Ruoli"
             }
         }
     },

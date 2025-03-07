@@ -67,7 +67,8 @@ export default function Login() {
       {t(`login.messages.${params.get("status")}.description`)}
     </NoticeBox>}
     <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onBeforeSubmit={()=>onLoad()}
-      onSuccess={(data)=>manageSuccess(data as LoginResponse)} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}>
+      onSuccess={(data)=>manageSuccess(data as LoginResponse)} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}
+      resetOnFail={false} resetOnSuccess={false}>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
     </DataForm>
