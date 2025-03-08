@@ -17,6 +17,7 @@ import { copyContent, years } from "@/lib/utils";
 import JanInput from "@/components/janInput";
 import DataForm from "@/components/dataForm";
 import AutoInput from "@/components/autoInput";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function MembershipView({params}: {params: Promise<{ year: number }>}) {
 
@@ -133,12 +134,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             </div>
             <div className="table-container rounded-m">
                 <div className="table rounded-m">
-                    {loading && <div className="row">
-                        <div className="data horizontal-list gap-2mm flex-vertical-center">
-                            <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-                            <span className="">{tcommon("loading")}</span>
-                        </div>
-                    </div>}
+                    {loading && <div className="row"><LoadingPanel className="data"/></div>}
                     {(cardsData?.cards?.length ?? 0) <= 0 && <div className="data">
                         <span>{t("admin.membership_manager.errors.NO_DATA")}</span>
                     </div>}

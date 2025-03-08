@@ -422,12 +422,14 @@
                     "title": "Badges",
                     "print_badges": "Print badges",
                     "remind_badges": "Remind missing badges",
-                    "remind_fursuits": "Remind missing fursuits"
+                    "remind_fursuits": "Remind missing fursuits",
+                    "errors": {}
                 },
                 "orders": {
                     "title": "Orders",
                     "remind_order_linking": "Remind unlinked orders",
-                    "export_rooms": "Export hotel rooms"
+                    "export_rooms": "Export hotel rooms",
+                    "errors": {}
                 }
             },
             "membership_manager": {
@@ -506,7 +508,18 @@
                     "title": "Security",
                     "roles": {
                         "title": "Roles",
+                        "list": {
+                            "permissions": "{count, plural, =1 {# permission} other {# permissions}}",
+                            "temporary": "{count, plural, =1 {# temporary member} other {#  temporary members}}",
+                            "members": "{count, plural, =1 {# member} other {# members}}"
+                        },
+                        "messages": {
+                            "discard_changes": "Any unsaved changes will be discarded."
+                        },
                         "actions": {
+                            
+                        },
+                        "errors": {
                             
                         }
                     }

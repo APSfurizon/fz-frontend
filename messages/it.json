@@ -420,12 +420,14 @@
                     "title": "Badge",
                     "print_badges": "Stampa badge",
                     "remind_badges": "Notifica badge mancanti",
-                    "remind_fursuits": "Notifica fursuit mancanti"
+                    "remind_fursuits": "Notifica fursuit mancanti",
+                    "errors": {}
                 },
                 "orders": {
                     "title": "Ordini",
                     "remind_order_linking": "Notifica ordini disconnessi",
-                    "export_rooms": "Esporta stanze hotel"
+                    "export_rooms": "Esporta stanze hotel",
+                    "errors": {}
                 }
             },
             "membership_manager": {
@@ -504,8 +506,19 @@
                     "title": "Sicurezza",
                     "roles": {
                         "title": "Ruoli",
+                        "list": {
+                            "permissions": "{count, plural, =1 {# permesso} other {# permessi}}",
+                            "temporary": "{count, plural, =1 {# membro temporaneo} other {# membri temporanei}}",
+                            "members": "{count, plural, =1 {# membro} other {# membri}}"
+                        },
+                        "messages": {
+                            "discard_changes": "Le modifiche non salvate verranno scartate."
+                        },
                         "actions": {
                             
+                        },
+                        "errors": {
+
                         }
                     }
                 }

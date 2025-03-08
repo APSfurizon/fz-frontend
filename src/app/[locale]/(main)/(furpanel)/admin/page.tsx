@@ -29,7 +29,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     setLoading(true);
-    runRequest(new GetAdminCapabilitiesApiAction ())
+    runRequest(new GetAdminCapabilitiesApiAction())
     .then ((result) => setCapabilities(result as AdminCapabilitesResponse))
     .catch((err)=>showModal(
       tcommon("error"), 
@@ -47,7 +47,7 @@ export default function AdminPage() {
     .then((result)=>{})
     .catch((err)=>showModal(
       tcommon("error"), 
-      <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix_data.errors"/>
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors"/>
     )).finally(()=>setReloadEventLoading(false));
   }
 
@@ -58,7 +58,7 @@ export default function AdminPage() {
     .then((result)=>{})
     .catch((err)=>showModal(
       tcommon("error"), 
-      <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix_data.errors"/>
+      <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors"/>
     )).finally(()=>setReloadOrdersLoading(false));
   }
   // Event area logic

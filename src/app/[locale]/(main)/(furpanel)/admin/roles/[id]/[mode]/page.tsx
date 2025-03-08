@@ -18,6 +18,11 @@ export default function ViewRolePage ({params}: Readonly<{params: Promise<{id: n
     const [entityChanged, setEntityChanged] = useState<boolean> ();
 
     useEffect(()=>{
+        globalThis.onbeforeunload = () => {
+            if (entityMode === EntityMode.EDIT && entityChanged) {
+                return t("admin.users.security.roles.messages.discard_changes");
+            }
+        }
         params.then((loadedParams) => {
             let newId = loadedParams.id;
             let newMode = parseEntityMode(loadedParams.mode);
