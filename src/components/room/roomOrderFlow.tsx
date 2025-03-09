@@ -6,11 +6,11 @@ import { translate } from "@/lib/utils";
 import { getRemainingRoomType, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/lib/api/flows/roomOrderFlow";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { EVENT_CURRENCY } from "@/lib/constants";
 import Checkbox from "@/components/checkbox";
-import { useUser } from "@/lib/context/userProvider";
+import { useUser } from "@/components/context/userProvider";
 import { ShopLinkResponse } from "@/lib/api/booking";
 import { useRouter } from "next/navigation";
 

@@ -1,8 +1,8 @@
 "use client"
 import Header from "@/components/header";
 import Modal from "@/components/modal";
-import { HeaderProvider } from "@/lib/context/userProvider";
-import { ModalProvider } from "@/lib/context/modalProvider";
+import { HeaderProvider } from "@/components/context/userProvider";
+import { ModalProvider } from "@/components/context/modalProvider";
 
 export default function MainLayout ({children}: Readonly<{children: React.ReactNode}>) {
     return (

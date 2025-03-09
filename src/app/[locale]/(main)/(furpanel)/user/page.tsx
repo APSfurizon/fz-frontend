@@ -1,5 +1,5 @@
 'use client'
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
 import useTitle from "@/lib/api/hooks/useTitle";
@@ -9,7 +9,7 @@ import DataForm from "@/components/dataForm";
 import { GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
-import { useUser } from "@/lib/context/userProvider";
+import { useUser } from "@/components/context/userProvider";
 import JanInput from "@/components/janInput";
 import AutoInput from "@/components/autoInput";
 import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/lib/components/autoInput";

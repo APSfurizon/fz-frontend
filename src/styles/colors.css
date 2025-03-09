@@ -118,9 +118,9 @@
   --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
 
   /* Table */
-  --table-bg: #242C38;
+  --table-bg: #d6d6d6;
   --table-border: #fff;
-  --table-row-bg: #ffffff19;
+  --table-row-bg: #ffffff8c;
   --table-header-separator: #ffffff4d;
 
   /* Booking page */

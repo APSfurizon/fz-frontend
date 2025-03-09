@@ -1,5 +1,5 @@
 'use client'
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/button";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ import JanInput from "@/components/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { UploadBadgeAction } from "@/lib/api/badge/badge";
 import ModalError from "@/components/modalError";
-import { useUser } from "@/lib/context/userProvider";
+import { useUser } from "@/components/context/userProvider";
 import { getFlagEmoji } from "@/lib/components/userPicture";
 import AutoInput from "@/components/autoInput";
 import { AutoInputCountriesManager } from "@/lib/components/autoInput";

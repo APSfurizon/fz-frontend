@@ -8,7 +8,7 @@ import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useTitle from "@/lib/api/hooks/useTitle";
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import ModalError from "@/components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
 import { runRequest } from "@/lib/api/global";

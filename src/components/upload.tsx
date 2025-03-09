@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
 import Button from '@/components/button';
 import Modal from '@/components/modal';
-import { useModalUpdate } from '@/lib/context/modalProvider';
+import { useModalUpdate } from '@/components/context/modalProvider';
 import "@/styles/components/userUpload.css";
 import { MediaData } from '@/lib/api/media';
 import { areEquals, getImageUrl } from '@/lib/utils';

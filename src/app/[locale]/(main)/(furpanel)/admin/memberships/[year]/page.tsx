@@ -5,7 +5,7 @@ import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
 import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, GetCardsApiAction, GetCardsApiResponse, UserCardData } from "@/lib/api/admin/membershipManager";
 import { runRequest } from "@/lib/api/global";
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";

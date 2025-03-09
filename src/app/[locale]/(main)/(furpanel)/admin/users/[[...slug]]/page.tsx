@@ -9,7 +9,7 @@ import { BanUserAction, GetUserAdminViewAction, GetUserAdminViewResponse, UnbanU
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { AutoInputUsersManager, UserSearchAction } from "@/lib/api/user";
 import { AutoInputSearchResult } from "@/lib/components/autoInput";
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import { copyContent, errorCodeToApiError, firstOrUndefined, translate } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";

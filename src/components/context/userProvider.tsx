@@ -10,7 +10,7 @@ interface UserUpdateType {
     userLoading: boolean
 }
 
-const UserContext = createContext<UserUpdateType | undefined>(undefined);
+const UserContext = createContext<UserUpdateType>(undefined as any);
 
 export function HeaderProvider ({children}: Readonly<{children: React.ReactNode}>) {
     const [updateUser, setUpdateUser] = useState(false);

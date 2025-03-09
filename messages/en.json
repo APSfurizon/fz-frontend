@@ -52,7 +52,8 @@
             "add": "Add",
             "update": "Update",
             "edit": "Edit",
-            "delete": "Delete"
+            "delete": "Delete",
+            "save": "Save"
         },
         "sponsorships": {
             "sponsor": "Sponsor",
@@ -512,6 +513,25 @@
                             "permissions": "{count, plural, =1 {# permission} other {# permissions}}",
                             "temporary": "{count, plural, =1 {# temporary member} other {#  temporary members}}",
                             "members": "{count, plural, =1 {# member} other {# members}}"
+                        },
+                        "input": {
+                            "internal_name": {
+                                "label": "Internal name"
+                            },
+                            "display_name": {
+                                "label": "Display name"
+                            },
+                            "show_admin_count": {
+                                "label": "Show in admin count"
+                            },
+                            "add_permission": {
+                                "label": "Add permission"
+                            }
+                        },
+                        "sections": {
+                            "data": "Data",
+                            "permissions": "Permissions",
+                            "members": "Members"
                         },
                         "messages": {
                             "discard_changes": "Any unsaved changes will be discarded."

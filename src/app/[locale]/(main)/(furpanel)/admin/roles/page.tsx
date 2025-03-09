@@ -5,7 +5,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
 import { AllRolesResponse, GetRolesApiAction, RoleInfo } from "@/lib/api/admin/role";
 import { runRequest } from "@/lib/api/global";
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,7 +38,7 @@ export default function RolesListPage () {
     }
 
     const editRole = (role: RoleInfo) => {
-        router.push(`/admin/roles/${role.roleId}/edit`);
+        router.push(`/admin/roles/${role.roleId}/data`);
     }
 
     return <div className="page">

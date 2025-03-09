@@ -9,7 +9,7 @@ import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAc
 import { buildSearchParams, translate } from "@/lib/utils";
 import Button from "@/components/button";
 import ModalError from "@/components/modalError";
-import { useUser } from "@/lib/context/userProvider";
+import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
 import { RoomData } from "@/lib/api/room";
 import "@/styles/authentication/login.css";

@@ -1,5 +1,5 @@
 'use client'
-import { useModalUpdate } from "@/lib/context/modalProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/button";
 import Icon, { ICONS } from "@/components/icon";
 import React, { MouseEvent, useEffect, useState } from "react";
@@ -17,7 +17,7 @@ import Modal from "@/components/modal";
 import StatusBox from "@/components/statusBox";
 import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/api/order";
 import DataForm from "@/components/dataForm";
-import { useUser } from "@/lib/context/userProvider";
+import { useUser } from "@/components/context/userProvider";
 import AutoInput from "@/components/autoInput";
 
 export default function BookingPage() {

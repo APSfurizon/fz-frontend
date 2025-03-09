@@ -52,7 +52,8 @@
             "add": "Aggiungi",
             "update": "Aggiorna",
             "edit": "Modifica",
-            "delete": "Elimina"
+            "delete": "Elimina",
+            "save": "Salva"
         },
         "sponsorships": {
             "sponsor": "Sponsor",
@@ -510,6 +511,25 @@
                             "permissions": "{count, plural, =1 {# permesso} other {# permessi}}",
                             "temporary": "{count, plural, =1 {# membro temporaneo} other {# membri temporanei}}",
                             "members": "{count, plural, =1 {# membro} other {# membri}}"
+                        },
+                        "input": {
+                            "internal_name": {
+                                "label": "Nome interno"
+                            },
+                            "display_name": {
+                                "label": "Nome visualizzato"
+                            },
+                            "show_admin_count": {
+                                "label": "Mostra nel admin count"
+                            },
+                            "add_permission": {
+                                "label": "Aggiungi permesso"
+                            }
+                        },
+                        "sections": {
+                            "data": "Anagrafica",
+                            "permissions": "Permessi",
+                            "members": "Membri"
                         },
                         "messages": {
                             "discard_changes": "Le modifiche non salvate verranno scartate."
