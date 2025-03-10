@@ -524,6 +524,9 @@
                             },
                             "add_permission": {
                                 "label": "Aggiungi permesso"
+                            },
+                            "add_member": {
+                                "label": "Aggiungi membro di ruolo"
                             }
                         },
                         "sections": {
