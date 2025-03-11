@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import { ICONS } from "@/components/icon";
 import Modal from "@/components/modal";
-import { RoleData, RoleMember, RoleOutputData } from "@/lib/api/admin/role";
+import { RoleData, RoleMember, RoleOutputData, RoleOutputMember } from "@/lib/api/admin/role";
 import { AutoInputUsersManager } from "@/lib/api/user";
 import { AutoInputFilter, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useTranslations } from "next-intl";
@@ -13,11 +13,13 @@ import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import "@/styles/table.css";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/utils";
+import DataForm from "@/components/dataForm";
+import { DummyFormAction } from "@/lib/components/dataForm";
 
 interface RoleMemberTemp {
     userId: number,
     name: string,
-    profilePictureUrl: string,
+    profilePictureUrl?: string,
     temporaryRole: boolean
 }
 
@@ -25,8 +27,17 @@ function flattenRoleMember(member: RoleMember): RoleMemberTemp {
     return {
         userId: member.displayData.userId,
         name: member.displayData.fursonaName!,
-        profilePictureUrl: member.displayData.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC,
+        profilePictureUrl: member.displayData.propic?.mediaUrl,
         temporaryRole: member.tempRole
+    }
+}
+
+function flattenSearchResult(searchResult: AutoInputSearchResult): RoleMemberTemp {
+    return {
+        userId: searchResult.id!,
+        name: searchResult.description!,
+        profilePictureUrl: searchResult.imageUrl,
+        temporaryRole: false
     }
 }
 
@@ -36,7 +47,7 @@ export default function RoleMembersEditor () {
     const {entity, viewEntity, entityChanged, setEntity} = useEntityEditor<RoleOutputData, RoleData>();
     const [addMemberOpen, setAddMemberOpen] = useState(false);
     const [loadedUsersCache, setLoadedUsersCache] = useState<Record<number, RoleMemberTemp>> ({});
-    const [selectedUserTemp, setSelectedUserTemp] = useState<string> ();
+    const [selectedUserTemp, setSelectedUserTemp] = useState<RoleMemberTemp> ();
 
     useEffect(()=>{
         const flattenedUsers: RoleMemberTemp[] = viewEntity?.users.map(veu => flattenRoleMember(veu)) ?? [];
@@ -45,19 +56,35 @@ export default function RoleMembersEditor () {
     }, [viewEntity]);
 
     const closeAddMemberModal = () => {
+        setSelectedUserTemp(undefined);
         setAddMemberOpen(false);
     }
 
     const selectMember = (values: AutoInputSearchResult[], newValues?: AutoInputSearchResult[], removedValue?: AutoInputSearchResult) => {
-
+        const value = newValues && newValues.length > 0 ? flattenSearchResult(newValues[0]) : undefined;
+        setSelectedUserTemp(value);
     }
 
     const addMember = () => {
-        
+        if (!selectedUserTemp) return;
+        const newMember: RoleOutputMember = {
+            userId: selectedUserTemp.userId,
+            tempRole: false
+        }
+        const newEntity: RoleOutputData = {...entity, users: [...entity.users, newMember]};
+        const newUserCache = {...loadedUsersCache}
+        newUserCache[selectedUserTemp.userId] = selectedUserTemp;
+        setLoadedUsersCache(newUserCache);
+        setEntity(newEntity);
+        closeAddMemberModal();
     }
 
     const removeMember = (id: number) => {
-
+        const newEntity = {...entity, users: entity.users.filter(eu=>eu.userId !== id)}
+        const newUserCache = {...loadedUsersCache}
+        delete newUserCache[id];
+        setLoadedUsersCache(newUserCache);
+        setEntity(newEntity);
     }
 
     return <>
@@ -88,9 +115,11 @@ export default function RoleMembersEditor () {
     </div>
     <Modal open={addMemberOpen} onClose={()=>closeAddMemberModal()}
         title={t("admin.users.security.roles.input.add_member.label")} style={{minWidth: '400px'}}>
-        <AutoInput manager={new AutoInputUsersManager} onChange={selectMember}
-            filterOut={new AutoInputFilter (entity?.users.map(eu=>eu.userId), [])}>
-        </AutoInput>
+        <DataForm action={new DummyFormAction} shouldReset={!addMemberOpen} hideSave>
+            <AutoInput manager={new AutoInputUsersManager} onChange={selectMember}
+                filterOut={new AutoInputFilter (entity?.users.map(eu=>eu.userId), [])}>
+            </AutoInput>
+        </DataForm>
         <div className="horizontal-list gap-4mm">
             <Button type="button" className="danger" iconName={ICONS.CANCEL} 
                 onClick={()=>setAddMemberOpen(false)}>{tcommon("cancel")}</Button>

@@ -42,7 +42,7 @@ export class AutoInputOrderExchangeManager extends AutoInputUsersManager {
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             runRequest (new UserSearchAction(), undefined, undefined, 
-                buildSearchParams({"fursona-name": value, "filter-not-made-an-order": "true"})).then (results => {
+                buildSearchParams({"name": value, "filter-not-made-an-order": "true"})).then (results => {
                     const searchResult = results as UserSearchResponse;
                     const users = searchResult.users.map(usr=>toSearchResult(usr));
                     resolve (

@@ -37,6 +37,7 @@ export function EntityEditorProvider<T, U> ({
         if (!initialViewEntity) return;
         const output = viewToOutput(initialViewEntity);
         setEntityValue(output);
+        setViewEntity(initialViewEntity);
     }, [initialViewEntity])
 
     return <EntityEditorContext.Provider value={{entity, setEntity, entityChanged, viewEntity, setViewEntity}}>{children}</EntityEditorContext.Provider>

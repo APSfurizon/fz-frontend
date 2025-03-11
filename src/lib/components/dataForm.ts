@@ -15,3 +15,14 @@ export interface FormApiAction<T extends ApiRequest, U extends ApiResponse | Boo
 export interface FormDTOBuilder<T> {
     mapToDTO: (data: FormData) => T
 }
+
+export class DummyDTOBuilder implements FormDTOBuilder<any>{
+    mapToDTO = (data: FormData) => {return {}}
+}
+
+export class DummyFormAction implements FormApiAction<any, Boolean, ApiErrorResponse> {
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET"
+    authenticated = true;
+    dtoBuilder = new DummyDTOBuilder ();
+    urlAction = "";
+}

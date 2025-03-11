@@ -9,6 +9,8 @@ import Modal from "@/components/modal";
 import AutoInput from "@/components/autoInput";
 import { AutoInputFilter, AutoInputSearchResult } from "@/lib/components/autoInput";
 import "@/styles/table.css";
+import DataForm from "@/components/dataForm";
+import { DummyFormAction } from "@/lib/components/dataForm";
 
 export default function RolePermissionsEditor () {
     const t = useTranslations("furpanel");
@@ -61,10 +63,12 @@ export default function RolePermissionsEditor () {
     </div>
     <Modal open={addPermissionOpen} onClose={()=>closeAddPermissionModal()}
         title={t("admin.users.security.roles.input.add_permission.label")} style={{minWidth: '400px'}}>
-        <AutoInput manager={new AutoInputPermissionsManager} minDecodeSize={0}
-            filterOut={new AutoInputFilter ([], entity?.enabledPermissions)}
-            onChange={selectPermission}>
-        </AutoInput>
+        <DataForm action={new DummyFormAction} shouldReset={!addPermissionOpen} hideSave>
+            <AutoInput manager={new AutoInputPermissionsManager} minDecodeSize={0}
+                filterOut={new AutoInputFilter ([], entity?.enabledPermissions)}
+                onChange={selectPermission}>
+            </AutoInput>
+        </DataForm>
         <div className="horizontal-list gap-4mm">
             <Button type="button" className="danger" iconName={ICONS.CANCEL} 
                 onClick={()=>setAddPermissionOpen(false)}>{tcommon("cancel")}</Button>
