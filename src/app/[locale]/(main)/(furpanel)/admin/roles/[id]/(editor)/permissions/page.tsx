@@ -15,7 +15,7 @@ import { DummyFormAction } from "@/lib/components/dataForm";
 export default function RolePermissionsEditor () {
     const t = useTranslations("furpanel");
     const tcommon = useTranslations("common");
-    const {entity, entityChanged, setEntity} = useEntityEditor<RoleOutputData, RoleData>();
+    const {entity, entityChanged, setEntity} = useEntityEditor<RoleData, RoleData>();
     const [addPermissionOpen, setAddPermissionOpen] = useState(false);
 
     const [selectedPermissionTemp, setSelectedPermissionTemp] = useState<string> ();

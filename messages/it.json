@@ -527,6 +527,13 @@
                             },
                             "add_member": {
                                 "label": "Aggiungi membro di ruolo"
+                            },
+                            "select_user": {
+                                "label": "Seleziona utente"
+                            },
+                            "temporary_member": {
+                                "label": "Temporaneo",
+                                "help": "Terrà il ruolo solamente per l'evento attuale."
                             }
                         },
                         "sections": {

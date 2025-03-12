@@ -14,7 +14,7 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
     const tcommon = useTranslations("common");
 
     // Get context
-    const {entity, entityChanged} = useEntityEditor<RoleOutputData, RoleData>();
+    const {entity, entityChanged} = useEntityEditor<RoleData, RoleData>();
 
     useEffect(()=>{
         globalThis.onbeforeunload = () => {
@@ -29,7 +29,7 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
         <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
         <div className="horizontal-list gap-2mm">
             <span className="title medium">
-                {entity?.roleDisplayName ?? entity?.roleInternalName ?? ""}
+                {entity?.displayName ?? entity?.internalName ?? ""}
                 {entityChanged && "*"}
             </span>
         </div>

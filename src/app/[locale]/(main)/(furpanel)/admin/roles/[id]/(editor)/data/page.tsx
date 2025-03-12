@@ -9,9 +9,9 @@ import { useTranslations } from "next-intl";
 export default function RoleDataEditor () {
     const t = useTranslations("furpanel");
     const tcommon = useTranslations("common");
-    const {entity, entityChanged, setEntity} = useEntityEditor<RoleOutputData, RoleData>();
+    const {loading, entity, entityChanged, setEntity} = useEntityEditor<RoleData, RoleData>();
 
-    const onChange = (e: Partial<RoleOutputData>) => {
+    const onChange = (e: Partial<RoleData>) => {
         const newData = {...entity, ...e};
         setEntity(newData);
     }
@@ -20,16 +20,17 @@ export default function RoleDataEditor () {
 
     return <>
         <div className="form-pair horizontal-list gap-2mm">
-            <JanInput required initialValue={entity?.roleInternalName}
+            <JanInput required initialValue={entity?.internalName} busy={loading}
                 label={t("admin.users.security.roles.input.internal_name.label")}
-                onChange={(e)=>onChange({roleInternalName: nullifyEmptyString(e.target.value)})}></JanInput>
-            <JanInput initialValue={entity?.roleDisplayName}
+                onChange={(e)=>onChange({internalName: nullifyEmptyString(e.target.value)})}></JanInput>
+            <JanInput initialValue={entity?.displayName} busy={loading}
                 label={t("admin.users.security.roles.input.display_name.label")}
-                onChange={(e)=>onChange({roleDisplayName: nullifyEmptyString(e.target.value)})}></JanInput>
+                onChange={(e)=>onChange({displayName: nullifyEmptyString(e.target.value)})}></JanInput>
             
         </div>
         <div className="form-pair horizontal-list gap-2mm">
-        <Checkbox initialValue={entity?.showInAdminCount} onClick={(e, c)=>onChange({showInAdminCount: c})}>
+        <Checkbox initialValue={entity?.showInAdminCount} onClick={(e, c)=>onChange({showInAdminCount: c})}
+            busy={loading}>
             {t("admin.users.security.roles.input.show_admin_count.label")}
         </Checkbox>
         </div>

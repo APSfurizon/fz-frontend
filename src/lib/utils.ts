@@ -138,3 +138,7 @@ export function errorCodeToApiError (err: string):ApiErrorResponse {
         errorMessage: err
     };
 }
+
+export function resultSelf<A,R> (arg1: A): R {
+    return arg1 as any as R;
+}

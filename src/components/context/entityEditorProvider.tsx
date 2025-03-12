@@ -1,3 +1,4 @@
+import { resultSelf } from "@/lib/utils";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 interface EntityEditorType<T, U> {
@@ -6,23 +7,32 @@ interface EntityEditorType<T, U> {
     viewEntity: U,
     setViewEntity: Dispatch<SetStateAction<U>>;
     entityChanged: boolean;
+    loading: boolean;
 }
 
 const EntityEditorContext = createContext<EntityEditorType<any, any>>(undefined as any);
 
+/**
+ * EntityEditorProvider<T, U, V>
+ * @type T - the view object, the one we receive in input to get the first props.
+ * @type U - the store object, which model is in between holding temporary info to transform in the output type before submission.
+ * @returns 
+ */
 export function EntityEditorProvider<T, U> ({
     children,
-    initialEntity,
     initialViewEntity,
-    viewToOutput
+    initialStoreEntity,
+    viewToStore=resultSelf<T, U>,
+    loading
 }: Readonly<{
     children: React.ReactNode,
-    initialEntity?: T,
-    initialViewEntity?: U,
-    viewToOutput: (view: U) => T
+    initialViewEntity?: T,
+    initialStoreEntity?: U,
+    viewToStore?: (view: T) => U,
+    loading: boolean
 }>) {
-    const [entity, setEntityValue] = useState<T>(initialEntity as T);
-    const [viewEntity, setViewEntity] = useState<U>(initialViewEntity as U);
+    const [entity, setEntityValue] = useState<U>(initialStoreEntity as U);
+    const [viewEntity, setViewEntity] = useState<T>(initialViewEntity as T);
     const setEntity = (newEntity: any) => {
         setEntityValue(newEntity);
         setEntityChanged(true);
@@ -30,17 +40,18 @@ export function EntityEditorProvider<T, U> ({
     const [entityChanged, setEntityChanged ] = useState(false);
 
     useEffect(() => {
-        setEntityValue (initialEntity as T);
-    }, [initialEntity])
+        setEntityValue (initialStoreEntity as U);
+    }, [initialStoreEntity]);
 
     useEffect(() => {
         if (!initialViewEntity) return;
-        const output = viewToOutput(initialViewEntity);
+        const output = viewToStore(initialViewEntity);
         setEntityValue(output);
         setViewEntity(initialViewEntity);
-    }, [initialViewEntity])
+    }, [initialViewEntity]);
 
-    return <EntityEditorContext.Provider value={{entity, setEntity, entityChanged, viewEntity, setViewEntity}}>{children}</EntityEditorContext.Provider>
+    const values = {entity, setEntity, entityChanged, viewEntity, setViewEntity, loading};
+    return <EntityEditorContext.Provider value={values}>{children}</EntityEditorContext.Provider>
 }
 
 export function useEntityEditor<T, U> () {

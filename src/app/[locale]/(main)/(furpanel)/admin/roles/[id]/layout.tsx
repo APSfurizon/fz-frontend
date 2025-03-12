@@ -5,13 +5,14 @@ import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
 import { GetRoleByIdApiAction, RoleData, RoleOutputData, roleToOutput } from "@/lib/api/admin/role";
 import { runRequest } from "@/lib/api/global";
+import { resultSelf } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ViewRoleLayout ({params, children}: Readonly<{params: Promise<{id: number}>, children: React.ReactNode}>) {
     const tcommon = useTranslations("common");
-    const {showModal, hideModal} = useModalUpdate();
+    const {showModal} = useModalUpdate();
     const [roleId, setRoleId] = useState<number>();
     const [loading, setLoading] = useState(false);
     
@@ -42,8 +43,8 @@ export default function ViewRoleLayout ({params, children}: Readonly<{params: Pr
     }, [roleId]);
 
     return <div className="page">
-        <EntityEditorProvider<RoleOutputData, RoleData> initialViewEntity={entity} viewToOutput={roleToOutput}>
-            {loading ? <LoadingPanel/> : children}
+        <EntityEditorProvider<RoleData, RoleData> initialViewEntity={entity} loading={loading}>
+            {children}
         </EntityEditorProvider>
     </div>
 }

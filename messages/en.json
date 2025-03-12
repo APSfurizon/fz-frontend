@@ -529,6 +529,13 @@
                             },
                             "add_member": {
                                 "label": "Add role member"
+                            },
+                            "select_user": {
+                                "label": "Seleziona utente"
+                            },
+                            "temporary_member": {
+                                "label": "Temporary",
+                                "help": "Will own this role for the duration of the current event."
                             }
                         },
                         "sections": {
