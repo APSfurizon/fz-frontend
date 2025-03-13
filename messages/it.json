@@ -522,6 +522,9 @@
                             "show_admin_count": {
                                 "label": "Mostra nel admin count"
                             },
+                            "admin_count_priority": {
+                                "label": "Priorità admin count"
+                            },
                             "add_permission": {
                                 "label": "Aggiungi permesso"
                             },

@@ -34,7 +34,8 @@ export interface RoleData {
     displayName?: string,
     showInAdminCount: boolean,
     enabledPermissions: string[],
-    users: RoleMember[]
+    users: RoleMember[],
+    roleAdmincountPriority: number
 }
 
 export interface RoleDataResponse extends ApiResponse {}
@@ -55,7 +56,14 @@ export interface RoleOutputData {
     roleDisplayName?: string,
     showInAdminCount: boolean,
     enabledPermissions: string[],
-    users: RoleOutputMember[]
+    users: RoleOutputMember[],
+    roleAdmincountPriority: number
+}
+
+export class UpdateRoleByIdApiAction implements ApiAction<RoleDataResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "roles";
 }
 
 export function roleToOutput(view: RoleData): RoleOutputData {
@@ -69,7 +77,8 @@ export function roleToOutput(view: RoleData): RoleOutputData {
                 userId: vu.displayData.userId,
                 tempRole: vu.tempRole
             }
-        })
+        }),
+        roleAdmincountPriority: view.roleAdmincountPriority
     };
 }
 

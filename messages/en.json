@@ -524,6 +524,9 @@
                             "show_admin_count": {
                                 "label": "Show in admin count"
                             },
+                            "admin_count_priority": {
+                                "label": "Admin count priority"
+                            },
                             "add_permission": {
                                 "label": "Add permission"
                             },

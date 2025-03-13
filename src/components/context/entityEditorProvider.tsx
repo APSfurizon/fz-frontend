@@ -8,6 +8,7 @@ interface EntityEditorType<T, U> {
     setViewEntity: Dispatch<SetStateAction<U>>;
     entityChanged: boolean;
     loading: boolean;
+    saveEntity: (entity: U) => void;
 }
 
 const EntityEditorContext = createContext<EntityEditorType<any, any>>(undefined as any);
@@ -23,13 +24,15 @@ export function EntityEditorProvider<T, U> ({
     initialViewEntity,
     initialStoreEntity,
     viewToStore=resultSelf<T, U>,
-    loading
+    loading,
+    onSave
 }: Readonly<{
     children: React.ReactNode,
     initialViewEntity?: T,
     initialStoreEntity?: U,
     viewToStore?: (view: T) => U,
-    loading: boolean
+    loading: boolean,
+    onSave: (entity: U) => void
 }>) {
     const [entity, setEntityValue] = useState<U>(initialStoreEntity as U);
     const [viewEntity, setViewEntity] = useState<T>(initialViewEntity as T);
@@ -48,9 +51,12 @@ export function EntityEditorProvider<T, U> ({
         const output = viewToStore(initialViewEntity);
         setEntityValue(output);
         setViewEntity(initialViewEntity);
+        setEntityChanged(false);
     }, [initialViewEntity]);
 
-    const values = {entity, setEntity, entityChanged, viewEntity, setViewEntity, loading};
+    const saveEntity = (entity: U) => onSave(entity);
+
+    const values = {entity, setEntity, entityChanged, viewEntity, setViewEntity, loading, saveEntity};
     return <EntityEditorContext.Provider value={values}>{children}</EntityEditorContext.Provider>
 }
 

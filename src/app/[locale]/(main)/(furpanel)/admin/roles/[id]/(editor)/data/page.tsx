@@ -29,10 +29,15 @@ export default function RoleDataEditor () {
             
         </div>
         <div className="form-pair horizontal-list gap-2mm">
-        <Checkbox initialValue={entity?.showInAdminCount} onClick={(e, c)=>onChange({showInAdminCount: c})}
-            busy={loading}>
-            {t("admin.users.security.roles.input.show_admin_count.label")}
-        </Checkbox>
+            <JanInput initialValue={entity?.roleAdmincountPriority} busy={loading} inputType="number"
+                label={t("admin.users.security.roles.input.admin_count_priority.label")}
+                onChange={(e)=>onChange({roleAdmincountPriority: parseInt(e.target.value) ?? 0})}></JanInput>
+        </div>
+        <div className="form-pair horizontal-list gap-2mm">
+            <Checkbox initialValue={entity?.showInAdminCount} onClick={(e, c)=>onChange({showInAdminCount: c})}
+                busy={loading}>
+                {t("admin.users.security.roles.input.show_admin_count.label")}
+            </Checkbox>
         </div>
     </>
 }

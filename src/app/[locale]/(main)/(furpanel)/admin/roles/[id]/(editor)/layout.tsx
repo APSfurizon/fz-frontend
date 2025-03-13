@@ -14,7 +14,7 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
     const tcommon = useTranslations("common");
 
     // Get context
-    const {entity, entityChanged} = useEntityEditor<RoleData, RoleData>();
+    const {entity, entityChanged, saveEntity, loading} = useEntityEditor<RoleData, RoleData>();
 
     useEffect(()=>{
         globalThis.onbeforeunload = () => {
@@ -41,7 +41,7 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
     {children}
     <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
         <div className="spacer"></div>
-        <Button disabled={!entity || !entityChanged} iconName={ICONS.SAVE} onClick={()=>{}} >{tcommon("CRUD.save")}</Button>
+        <Button disabled={!entity || !entityChanged} iconName={ICONS.SAVE} onClick={()=>{saveEntity (entity)}} busy={loading}>{tcommon("CRUD.save")}</Button>
     </div>
     </>
 }

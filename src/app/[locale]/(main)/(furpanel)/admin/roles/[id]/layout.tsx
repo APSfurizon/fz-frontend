@@ -3,7 +3,7 @@ import { EntityEditorProvider } from "@/components/context/entityEditorProvider"
 import { useModalUpdate } from "@/components/context/modalProvider";
 import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
-import { GetRoleByIdApiAction, RoleData, RoleOutputData, roleToOutput } from "@/lib/api/admin/role";
+import { GetRoleByIdApiAction, RoleData, RoleOutputData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
 import { runRequest } from "@/lib/api/global";
 import { resultSelf } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -42,8 +42,21 @@ export default function ViewRoleLayout ({params, children}: Readonly<{params: Pr
         )).finally (()=>setLoading(false));
     }, [roleId]);
 
+    // Save entity
+    const saveRole = (toSave: RoleData) => {
+        if (!toSave) return;
+        setLoading(true);
+        const toSend = roleToOutput(toSave);
+        runRequest(new UpdateRoleByIdApiAction(), [""+toSave.roleId], toSend)
+        .then ((response) => setRoleId(roleId))
+        .catch((err)=>showModal(
+            tcommon("error"), 
+            <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors"></ModalError>
+        )).finally (()=>setLoading(false));
+    }
+
     return <div className="page">
-        <EntityEditorProvider<RoleData, RoleData> initialViewEntity={entity} loading={loading}>
+        <EntityEditorProvider<RoleData, RoleData> initialViewEntity={entity} loading={loading} onSave={saveRole}>
             {children}
         </EntityEditorProvider>
     </div>
