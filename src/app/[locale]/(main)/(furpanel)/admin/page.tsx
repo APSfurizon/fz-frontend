@@ -232,7 +232,7 @@ export default function AdminPage() {
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.GROUPS} onClick={()=>router.push("/admin/roles/")}
-              disabled={!capabilities.canManageMembershipCards}>
+              disabled={!capabilities.canUpgradeUser}>
               {t("admin.users.security.roles.title")}
             </Button>
           </div>

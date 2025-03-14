@@ -12,13 +12,13 @@ import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
 import { RoomData } from "@/lib/api/room";
-import "@/styles/authentication/login.css";
-import "@/styles/authentication/exchangeConfirm.css";
 import { UserData } from "@/lib/api/user";
 import { calcTicketData } from "@/lib/api/booking";
+import "@/styles/authentication/login.css";
+import "@/styles/authentication/exchangeConfirm.css";
 
 export default function ExchangeConfirm() {
-  const t = useTranslations("authentication");
+  const t = useTranslations();
   const tfurpanel = useTranslations("furpanel");
   const tcommon = useTranslations("common");
   const formatter = useFormatter();
