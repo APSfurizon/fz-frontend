@@ -16,11 +16,10 @@ import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, ExportHotelRoomsApiAction
 import { GetRenderedBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
 
 export default function AdminPage() {
-  const t = useTranslations("furpanel");
-  const tcommon = useTranslations("common");
+  const t = useTranslations();
   const router = useRouter();
   const {showModal} = useModalUpdate();
-  useTitle(t("admin.title"));
+  useTitle(t("furpanel.admin.title"));
 
   // Capabilities logic
 
@@ -32,7 +31,7 @@ export default function AdminPage() {
     runRequest(new GetAdminCapabilitiesApiAction())
     .then ((result) => setCapabilities(result as AdminCapabilitesResponse))
     .catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.errors"/>
     )).finally(()=>setLoading(false));
   }, [])
@@ -46,7 +45,7 @@ export default function AdminPage() {
     runRequest(new ReloadEventApiAction())
     .then((result)=>{})
     .catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors"/>
     )).finally(()=>setReloadEventLoading(false));
   }
@@ -57,7 +56,7 @@ export default function AdminPage() {
     runRequest(new ReloadOrdersApiAction())
     .then((result)=>{})
     .catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors"/>
     )).finally(()=>setReloadOrdersLoading(false));
   }
@@ -69,7 +68,7 @@ export default function AdminPage() {
     setRemindOrderLinkLoading(true);
     runRequest(new RemindOrderLinkApiAction())
     .catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
     )).finally(()=>setRemindOrderLinkLoading(false))
   }
@@ -86,7 +85,7 @@ export default function AdminPage() {
         URL.revokeObjectURL(result);
       })
     }).catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors"/>
     )).finally(()=>setExportRoomsLoading(false))
   }
@@ -104,7 +103,7 @@ export default function AdminPage() {
         URL.revokeObjectURL(result);
       })
     }).catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
     )).finally(()=>setRenderBadgesLoading(false))
   }
@@ -114,7 +113,7 @@ export default function AdminPage() {
     setRemindBadgesLoading(true);
     runRequest(new RemindBadgesApiAction())
     .catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
     )).finally(()=>setRemindBadgesLoading(false))
   }
@@ -124,7 +123,7 @@ export default function AdminPage() {
     setRemindFursuitBadgesLoading(true);
     runRequest(new RemindFursuitBadgesApiAction())
     .catch((err)=>showModal(
-      tcommon("error"), 
+      t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
     )).finally(()=>setRemindFursuitBadgesLoading(false))
   }
@@ -135,23 +134,23 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.CONFIRMATION_NUMBER}></Icon>
-          <span className="title medium">{t("admin.pretix.title")}</span>
+          <span className="title medium">{t("furpanel.admin.pretix.title")}</span>
         </div>
         {/* Shop data area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.pretix.data.title")}
+              {t("furpanel.admin.pretix.data.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.EVENT_REPEAT} onClick={reloadEvent} debounce={5000}
               busy={reloadEventLoading} disabled={!capabilities.canRefreshPretixCache}>
-              {t("admin.pretix.data.reload_event")}
+              {t("furpanel.admin.pretix.data.reload_event")}
             </Button>
             <Button iconName={ICONS.SYNC} onClick={reloadOrders} debounce={5000}
               busy={reloadOrdersLoading} disabled={!capabilities.canRefreshPretixCache}>
-              {t("admin.pretix.data.reload_orders")}
+              {t("furpanel.admin.pretix.data.reload_orders")}
             </Button>
           </div>
         </div>
@@ -160,27 +159,27 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.LOCAL_ACTIVITY}></Icon>
-          <span className="title medium">{t("admin.events.title")}</span>
+          <span className="title medium">{t("furpanel.admin.events.title")}</span>
         </div>
         {/* badge area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.events.badges.title")}
+              {t("furpanel.admin.events.badges.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm flex-wrap">
             <Button iconName={ICONS.PRINT} onClick={renderBadges} debounce={5000}
               busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
-              {t("admin.events.badges.print_badges")}
+              {t("furpanel.admin.events.badges.print_badges")}
             </Button>
             <Button iconName={ICONS.MAIL} onClick={remindBadges} debounce={5000}
               busy={remindBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
-              {t("admin.events.badges.remind_badges")}
+              {t("furpanel.admin.events.badges.remind_badges")}
             </Button>
             <Button iconName={ICONS.MAIL} onClick={remindFursuitBadges} debounce={5000}
               busy={remindFursuitBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
-              {t("admin.events.badges.remind_fursuits")}
+              {t("furpanel.admin.events.badges.remind_fursuits")}
             </Button>
           </div>
         </div>
@@ -188,17 +187,17 @@ export default function AdminPage() {
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.events.orders.title")}
+              {t("furpanel.admin.events.orders.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm flex-wrap">
             <Button iconName={ICONS.DOWNLOAD} onClick={exportRooms} debounce={5000}
               busy={exportRoomsLoading} disabled={!capabilities.canExportHotelList}>
-              {t("admin.events.orders.export_rooms")}
+              {t("furpanel.admin.events.orders.export_rooms")}
             </Button>
             <Button iconName={ICONS.MAIL} onClick={remindOrderLink} debounce={5000}
               busy={remindOrderLinkLoading} disabled={!capabilities.canRemindOrderLinking}>
-              {t("admin.events.orders.remind_order_linking")}
+              {t("furpanel.admin.events.orders.remind_order_linking")}
             </Button>
           </div>
         </div>
@@ -213,13 +212,13 @@ export default function AdminPage() {
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.users.accounts.title")}
+              {t("furpanel.admin.users.accounts.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.PERSON_SEARCH} onClick={()=>router.push("/admin/users/")}
               disabled={!capabilities.canManageMembershipCards}>
-              {t("admin.users.accounts.view.title")}
+              {t("furpanel.admin.users.accounts.view.title")}
             </Button>
           </div>
         </div>
@@ -227,13 +226,13 @@ export default function AdminPage() {
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.users.security.title")}
+              {t("furpanel.admin.users.security.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.GROUPS} onClick={()=>router.push("/admin/roles/")}
               disabled={!capabilities.canUpgradeUser}>
-              {t("admin.users.security.roles.title")}
+              {t("furpanel.admin.users.security.roles.title")}
             </Button>
           </div>
         </div>
@@ -242,19 +241,19 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.ID_CARD}></Icon>
-          <span className="title medium">{t("admin.membership.title")}</span>
+          <span className="title medium">{t("furpanel.admin.membership.title")}</span>
         </div>
         {/* Membership card area */}
         <div className="vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <span className="title average">
-              {t("admin.membership.cards.title")}
+              {t("furpanel.admin.membership.cards.title")}
             </span>
           </div>
           <div className="horizontal-list gap-2mm">
             <Button iconName={ICONS.ID_CARD} onClick={()=>router.push("/admin/memberships/a")}
               disabled={!capabilities.canManageMembershipCards}>
-              {t("admin.membership_manager.title")}
+              {t("furpanel.admin.membership_manager.title")}
             </Button>
           </div>
         </div>

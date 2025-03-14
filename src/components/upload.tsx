@@ -31,8 +31,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     setBlob?: (blob?: Blob) => any,
     onDelete?: (mediaId: number) => any
 }>) { 
-    const t = useTranslations('components');
-    const tcommon = useTranslations('common');
+    const t = useTranslations();
     const [error, setError] = useState(false);
     const [media, setMedia] = useState<MediaData | undefined>();
     const [lastInitialMedia, setLastInitialMedia] = useState<MediaData>();
@@ -77,7 +76,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
                 }
                 setError(false);
             }).catch((message: String)=>{
-                showModal (tcommon("error"), <span className='error'>{t(`upload.${message}`)}</span>)
+                showModal (t("common.error"), <span className='error'>{t(`components.upload.${message}`)}</span>)
                 setError(true);
             })
         }
@@ -164,19 +163,19 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
             <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
                 <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
                     <Image unoptimized className="upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
-                        alt={t('upload.alt_preview_image')} width={viewSize} height={viewSize} quality={100}
+                        alt={t('components.upload.alt_preview_image')} width={viewSize} height={viewSize} quality={100}
                         style={{aspectRatio: "1", maxWidth: viewSize, maxHeight: viewSize, minWidth: viewSize, minHeight: viewSize, objectFit: "cover"}}>
                     </Image>
                 </div>
                 <div className="vertical-list gap-2mm">
                     {/* Upload button */}
-                    {!media && <Button title={t('upload.open')} onClick={()=>openFileDialog()}
+                    {!media && <Button title={t('components.upload.open')} onClick={()=>openFileDialog()}
                         iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>
-                        {!media && t('upload.open')}</Button>}
+                        {!media && t('components.upload.open')}</Button>}
                     {/* Delete button */}
-                    {(media || previewUrl) && <Button title={t('upload.delete')} className="danger"
+                    {(media || previewUrl) && <Button title={t('components.upload.delete')} className="danger"
                         onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly}
-                        busy={loading}>{t('upload.delete')}</Button>}
+                        busy={loading}>{t('components.upload.delete')}</Button>}
                 </div>
                 {children}
             </div>
@@ -189,7 +188,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
         </div>
 
         {/* Crop dialog */}
-        <Modal style={{overflow: "visible"}} open={cropDialogOpen} title={cropTitle ?? t("upload.crop")}
+        <Modal style={{overflow: "visible"}} open={cropDialogOpen} title={cropTitle ?? t("components.upload.crop")}
             onClose={()=> onCropCanceled()} zIndex={505}>
             <Cropper src={previewUrl} initialAspectRatio={1} guides={false} aspectRatio={cropAspectRatio == 'square' ? 1 : undefined} ref={cropperRef}
                 zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100}>
@@ -201,11 +200,11 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
                 <Button iconName={ICONS.RESET_SETTINGS} onClick={()=>cropperRef.current?.cropper.reset()}></Button>
             </div>
             <div className="bottom-toolbar">
-                <Button title={tcommon('cancel')} className="danger" onClick={()=>onCropCanceled()}
-                    iconName={ICONS.CANCEL} disabled={readonly} busy={loading}>{tcommon('cancel')}</Button>
+                <Button title={t('common.cancel')} className="danger" onClick={()=>onCropCanceled()}
+                    iconName={ICONS.CANCEL} disabled={readonly} busy={loading}>{t('common.cancel')}</Button>
                 <div className="spacer"></div>
-                <Button title={t('upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
-                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('upload.upload')}</Button>    
+                <Button title={t('components.upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('components.upload.upload')}</Button>    
             </div>
         </Modal>
     </>

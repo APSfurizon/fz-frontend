@@ -16,11 +16,10 @@ import { UserData } from "@/lib/api/user";
 import { calcTicketData } from "@/lib/api/booking";
 import "@/styles/authentication/login.css";
 import "@/styles/authentication/exchangeConfirm.css";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function ExchangeConfirm() {
   const t = useTranslations();
-  const tfurpanel = useTranslations("furpanel");
-  const tcommon = useTranslations("common");
   const formatter = useFormatter();
   const locale = useLocale();
   const router = useRouter();
@@ -31,7 +30,7 @@ export default function ExchangeConfirm() {
     return <>
     <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
       <Icon className="large" iconName={ICONS.PACKAGE_2}></Icon>
-      {t.rich("exchange_confirm.room.room_title", {
+      {t.rich("authentication.exchange_confirm.room.room_title", {
         user: (chunks)=><><UserPicture userData={userData}/>{userData.fursonaName}</>,
       })}
     </span>
@@ -41,7 +40,7 @@ export default function ExchangeConfirm() {
         <span className="title horizontal-list flex-vertical-center">
           {translate(data.roomTypeNames, locale)}
         </span>
-        <span className="small descriptive color-subtitle">{tfurpanel("booking.items.room_capacity", {capacity: data.roomCapacity})}</span>
+        <span className="small descriptive color-subtitle">{t("furpanel.booking.items.room_capacity", {capacity: data.roomCapacity})}</span>
       </div>
     </div>
     </>;
@@ -84,7 +83,7 @@ export default function ExchangeConfirm() {
     router.replace(exchangeData?.action == "order" ? "/booking" : "/room");
   }
 
-  useTitle(t("exchange_confirm.title"));
+  useTitle(t("authentication.exchange_confirm.title"));
 
   const isOwner = exchangeData && userDisplay && exchangeData.sourceUser.userId === userDisplay.display.userId;
 
@@ -98,21 +97,18 @@ export default function ExchangeConfirm() {
         <Icon iconName="design_services"></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
-        <span className="titular bold">{t('exchange_confirm.title').toLowerCase()}</span>
+        <span className="titular bold">{t('authentication.exchange_confirm.title').toLowerCase()}</span>
       </span>
     </div>
     {error && 
     <ModalError translationKey="exchange_confirm.errors" translationRoot="authentication" error={error}>
     </ModalError>
     }
-    {loading && <span>
-      <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>
-      {tcommon("loading")}
-    </span>}
+    {loading && <LoadingPanel/>}
     {exchangeData && userDisplay && <>
       <div className="exchange-info rounded-l vertical-list gap-2mm">
         <span className="title bold exchange-title rounded-m horizontal-list gap-2mm flex-vertical-center flex-wrap">
-          {t.rich(`exchange_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
+          {t.rich(`authentication.exchange_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
             source: (chunks)=><><UserPicture userData={exchangeData.sourceUser}/>{exchangeData.sourceUser.fursonaName}</>,
             target: (chunks)=><><UserPicture userData={exchangeData.targetUser}/>{exchangeData.targetUser.fursonaName}</>,
           })}
@@ -136,7 +132,7 @@ export default function ExchangeConfirm() {
             <div className="item-info vertical-list rounded-m">
               <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
                 <Icon className="large" iconName={ICONS.LOCAL_ACTIVITY}></Icon>
-                {t.rich("exchange_confirm.order.order_title", {
+                {t.rich("authentication.exchange_confirm.order.order_title", {
                   user: (chunks)=><><UserPicture userData={exchangeData.sourceUser}/>{exchangeData.sourceUser.fursonaName}</>,
                 })}
               </span>
@@ -144,28 +140,28 @@ export default function ExchangeConfirm() {
                 {/* Ticket name */}
                 <span className="horizontal-list gap-2mm">
                   <Icon iconName={ICONS.LOCAL_ACTIVITY}></Icon>
-                  {tfurpanel.rich(`booking.items.${ticketData.ticketName}`, {
+                  {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
                       sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
                       supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
                   })}
                 </span>
                 {/* Daily days */}
                 {ticketData?.isDaily && <span className="horizontal-list gap-2mm">
-                  {tfurpanel("booking.items.daily_days", 
+                  {t("furpanel.booking.items.daily_days", 
                     {days: ticketData.dailyDays?.map(dt => formatter.dateTime(dt, {day: "2-digit"})).join(", ")})}
                 </span>}
                 {/* Extra days */}
                 {exchangeData.fullOrderExchange.extraDays && exchangeData.fullOrderExchange.extraDays !== "NONE" &&
                 <span className="horizontal-list gap-2mm">
                   <Icon iconName={ICONS.CALENDAR_ADD_ON}></Icon>
-                  {tfurpanel(`booking.items.extra_days_${exchangeData.fullOrderExchange.extraDays}`)}
+                  {t(`furpanel.booking.items.extra_days_${exchangeData.fullOrderExchange.extraDays}`)}
                 </span>}
                 {/* Room */}
                 {exchangeData.fullOrderExchange.room && <span className="horizontal-list gap-2mm">
                   <Icon iconName={ICONS.BED}></Icon>
                   {translate(exchangeData.fullOrderExchange.room.roomTypeNames, locale)}
                   &nbsp;
-                  ({tfurpanel("booking.items.room_capacity", 
+                  ({t("furpanel.booking.items.room_capacity", 
                     {capacity: exchangeData.fullOrderExchange.room.roomCapacity})})
                 </span>}
               </div>
@@ -174,9 +170,9 @@ export default function ExchangeConfirm() {
         </div>
       </div>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={ICONS.CHECK} busy={loading} onClick={()=>updateExchangeStatus(true)}>{tcommon("accept")}</Button>
+        <Button className="success" iconName={ICONS.CHECK} busy={loading} onClick={()=>updateExchangeStatus(true)}>{t("common.accept")}</Button>
         <div className="spacer"></div>
-        <Button className="danger" iconName={ICONS.CANCEL} busy={loading} onClick={()=>updateExchangeStatus(false)}>{tcommon("refuse")}</Button>
+        <Button className="danger" iconName={ICONS.CANCEL} busy={loading} onClick={()=>updateExchangeStatus(false)}>{t("common.refuse")}</Button>
       </div>
     </>}
   </>;

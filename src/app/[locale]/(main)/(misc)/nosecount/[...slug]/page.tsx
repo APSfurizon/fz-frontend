@@ -33,8 +33,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     const [error, setError] = useState<ApiErrorResponse | ApiDetailedErrorResponse> ();
     const [loading, setLoading] = useState(false);
     
-    const t = useTranslations("misc");
-    const tcommon = useTranslations("common");
+    const t = useTranslations();
     const formatter = useFormatter();
     const locale = useLocale();
 
@@ -120,22 +119,22 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         }
     }, [needsLoading]);
 
-    useTitle(t("nosecount.title"));
+    useTitle(t("misc.nosecount.title"));
 
     const options = <>
         {/* Rendering options */}
         <div className="options-list horizontal-list flex-wrap gap-4mm">
             {(fursuitMode || sponsorMode) && 
                 <Link href={`/nosecount/${selectedEvent}/`} className="title bold change-mode">
-                    {t("nosecount.title")}
+                    {t("misc.nosecount.title")}
                 </Link>}
             {!fursuitMode && 
                 <Link href={`/nosecount/${selectedEvent}/fursuits`} className="title bold change-mode">
-                    {t("nosecount.links.fursuits")}
+                    {t("misc.nosecount.links.fursuits")}
                 </Link>}
             {!sponsorMode && 
                 <Link href={`/nosecount/${selectedEvent}/sponsors`} className="title bold change-mode">
-                    {t("nosecount.links.sponsors")}
+                    {t("misc.nosecount.links.sponsors")}
                 </Link>}
         </div>
     </>
@@ -144,21 +143,21 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {loading && <div className="vertical-list flex-vertical-center">
             <div className="horizontal-list gap-4mm">
                 <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-                {tcommon("loading")}
+                {t("common.loading")}
             </div>
         </div>}
         {error && <ModalError translationRoot="misc" translationKey="nosecount.errors" error={error}></ModalError>}
 
         {/* Rendering sponsors */}
         {sponsorMode && <>
-        <p className="title x-large bold">{t("nosecount.sections.sponsors")}</p>
+        <p className="title x-large bold">{t("misc.nosecount.sections.sponsors")}</p>
         {options}
-        {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{tcommon("sponsorships.super_sponsor")}</p>}
+        {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SUPER_SPONSOR?.map((user, index)=>
                 <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname></UserPicture>)}
         </div>
-        {sponsorData?.users.SPONSOR && <p className="title large">{tcommon("sponsorships.sponsor")}</p>}
+        {sponsorData?.users.SPONSOR && <p className="title large">{t("common.sponsorships.sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SPONSOR?.map((user, index)=>
                 <UserPicture size={96} key={`s-${index}`} userData={user} showFlag showNickname></UserPicture>)}
@@ -167,7 +166,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
 
         {/* Rendering fursuits */}
         {fursuitMode && <>
-        <p className="title x-large bold">{t("nosecount.sections.fursuits")}</p>
+        <p className="title x-large bold">{t("misc.nosecount.sections.fursuits")}</p>
         {options}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {fursuitData?.fursuits.map((fursuit, index)=>
@@ -178,7 +177,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
 
         {/* Rendering nosecount */}
         {roomsData && <>
-        <p className="title x-large bold section-title">{t.rich("nosecount.sections.nosecount", 
+        <p className="title x-large bold section-title">{t.rich("misc.nosecount.sections.nosecount", 
             {b: (chunks)=><b className="highlight">{chunks}</b>})}</p>
         {options}
         {/* Hotel */}
@@ -218,7 +217,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {Object.keys(roomsData.dailyFurs).length > 0 && <>
             <p className="title average horizontal-list gap-2mm flex-vertical-center">
                 <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
-                {t("nosecount.daily_furs")}
+                {t("misc.nosecount.daily_furs")}
             </p>
             {Object.keys(roomsData.dailyFurs).map((day, di)=> <div className="daily-day">
                     <p className="title">{formatter.dateTime(new Date(day), {dateStyle: "medium"})}</p>

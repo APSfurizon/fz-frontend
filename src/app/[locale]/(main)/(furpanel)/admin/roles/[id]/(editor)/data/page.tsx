@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 
 export default function RoleDataEditor () {
     const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
     const {loading, entity, entityChanged, setEntity} = useEntityEditor<RoleData, RoleData>();
 
     const onChange = (e: Partial<RoleData>) => {

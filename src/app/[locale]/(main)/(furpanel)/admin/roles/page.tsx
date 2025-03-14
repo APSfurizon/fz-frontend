@@ -14,8 +14,7 @@ import "@/styles/table.css";
 export default function RolesListPage () {
 
     const router = useRouter();
-    const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
+    const t = useTranslations();
     const {showModal} = useModalUpdate();
 
     const [loading, setLoading] = useState(false);
@@ -32,7 +31,7 @@ export default function RolesListPage () {
         runRequest (new GetRolesApiAction())
         .then((response)=>setRoles((response as AllRolesResponse).roles))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors"/>
         )).finally(()=>setLoading(false));
     }
@@ -45,12 +44,12 @@ export default function RolesListPage () {
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
             <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
             <div className="horizontal-list gap-2mm">
-                <span className="title medium">{t("admin.users.security.roles.title")}</span>
+                <span className="title medium">{t("furpanel.admin.users.security.roles.title")}</span>
             </div>
 
             <div className="spacer"></div>
-            <Button iconName={ICONS.REFRESH} onClick={()=>loadRoles()} debounce={3000}>{tcommon("reload")}</Button>
-            <Button iconName={ICONS.ADD} onClick={()=>{}} >{tcommon("CRUD.add")}</Button>
+            <Button iconName={ICONS.REFRESH} onClick={()=>loadRoles()} debounce={3000}>{t("common.reload")}</Button>
+            <Button iconName={ICONS.ADD} onClick={()=>{}} >{t("common.CRUD.add")}</Button>
         </div>
         {/* Roles table */}
         <div className="table-container rounded-m">
@@ -66,13 +65,13 @@ export default function RolesListPage () {
                     </div>
                     <div className="spacer"></div>
                     <div className="data">
-                        <span className="descriptive average">{t("admin.users.security.roles.list.permissions", {count: role.permissionsNumber})}</span>
+                        <span className="descriptive average">{t("furpanel.admin.users.security.roles.list.permissions", {count: role.permissionsNumber})}</span>
                     </div>
                     <div className="data">
-                    <span className="descriptive average">{t("admin.users.security.roles.list.members", {count: role.permanentUsersNumber})}</span>
+                    <span className="descriptive average">{t("furpanel.admin.users.security.roles.list.members", {count: role.permanentUsersNumber})}</span>
                     </div>
                     <div className="data">
-                    <span className="descriptive average">{t("admin.users.security.roles.list.temporary", {count: role.temporaryUsersNumber})}</span>
+                    <span className="descriptive average">{t("furpanel.admin.users.security.roles.list.temporary", {count: role.temporaryUsersNumber})}</span>
                     </div>
                 </div>)}
             </div>

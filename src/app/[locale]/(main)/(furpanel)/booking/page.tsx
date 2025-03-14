@@ -19,10 +19,10 @@ import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/ap
 import DataForm from "@/components/dataForm";
 import { useUser } from "@/components/context/userProvider";
 import AutoInput from "@/components/autoInput";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function BookingPage() {
-    const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
+    const t = useTranslations();
     const formatter = useFormatter();
     const router = useRouter();
     const now = useNow({updateInterval: 1000});
@@ -48,20 +48,20 @@ export default function BookingPage() {
     const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
         setExchangeModalOpen(false);
         showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot={"furpanel"} translationKey={"booking.errors"}></ModalError>
         );
     }
 
     const exchangeSuccess = () => {
         setExchangeModalOpen(false);
-        showModal(t("booking.messages.exchange_invite_sent.title"), 
+        showModal(t("furpanel.booking.messages.exchange_invite_sent.title"), 
             <span className="descriptive average">
-                {t("booking.messages.exchange_invite_sent.description")}
+                {t("furpanel.booking.messages.exchange_invite_sent.description")}
             </span>, ICONS.CHECK_CIRCLE);
     }
     
-    useTitle(t("booking.title"));
+    useTitle(t("furpanel.booking.title"));
 
     /**UI variables */
     /**If editing's locked */
@@ -79,7 +79,7 @@ export default function BookingPage() {
             runRequest(new BookingOrderApiAction())
             .then((result)=>setBookingData(result as BookingOrderResponse))
             .catch((err)=>showModal(
-                tcommon("error"),
+                t("common.error"),
                 <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
                 ICONS.ERROR
             )).finally(()=>setLoading(false));
@@ -121,7 +121,7 @@ export default function BookingPage() {
         runRequest(new ShopLinkApiAction())
         .then((result)=>router.push((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setActionLoading(false));
     }
@@ -132,7 +132,7 @@ export default function BookingPage() {
         runRequest(new OrderEditLinkApiAction())
         .then((result)=>router.push((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setActionLoading(false));
     }
@@ -143,7 +143,7 @@ export default function BookingPage() {
         runRequest(new OrderRetryLinkApiAction())
         .then((result)=>router.push((result as ShopLinkResponse).link))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setActionLoading(false));
     }
@@ -154,7 +154,7 @@ export default function BookingPage() {
         runRequest(new ConfirmMembershipDataApiAction(), undefined, undefined, undefined)
         .then((result)=>setBookingData(undefined))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
         )).finally(()=>setActionLoading(false));
     }
@@ -170,14 +170,10 @@ export default function BookingPage() {
 
     return <>
         <div className="page">
-            {isLoading || !!!pageData ? <>
-                <span className="title horizontal-list gap-2mm flex-center">
-                    <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>{tcommon("loading")}
-                </span>
-            </> : <>
+            {isLoading || !!!pageData ? <LoadingPanel/> : <>
                 {!isOpen && !pageData.hasOrder && (
-                    <NoticeBox title={t("booking.messages.countdown.title")} theme={NoticeTheme.FAQ}>
-                        {t("booking.messages.countdown.description", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
+                    <NoticeBox title={t("furpanel.booking.messages.countdown.title")} theme={NoticeTheme.FAQ}>
+                        {t("furpanel.booking.messages.countdown.description", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
                     </NoticeBox>
                 )}
                 <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
@@ -186,16 +182,16 @@ export default function BookingPage() {
                     {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder && countdown
                     ? <p className="countdown title bold title large rounded-s center">
                         { countdown[0] > 0
-                            ? t.rich("booking.coundown_days", {days: countdown[0]})
-                            : t.rich("booking.coundown_clock", {hours: countdown[1], minutes: countdown[2], seconds: countdown[3], b: (chunks)=><b className="small">{chunks}</b>})
+                            ? t.rich("furpanel.booking.coundown_days", {days: countdown[0]})
+                            : t.rich("furpanel.booking.coundown_clock", {hours: countdown[1], minutes: countdown[2], seconds: countdown[3], b: (chunks)=><b className="small">{chunks}</b>})
                         }
                     </p>
                     : !pageData.hasOrder && <div className="action-container">
                         <Button className="action-button book-now" busy={actionLoading} disabled={pageData?.shouldUpdateInfo} onClick={requestShopLink}>
                             <div className="vertical-list flex-vertical-center">
-                                <span className="title large">{pageData?.shouldUpdateInfo ? <Icon style={{marginRight: ".2em"}} iconName={ICONS.LOCK}></Icon> : <></>}{t("booking.book_now")}</span>
+                                <span className="title large">{pageData?.shouldUpdateInfo ? <Icon style={{marginRight: ".2em"}} iconName={ICONS.LOCK}></Icon> : <></>}{t("furpanel.booking.book_now")}</span>
                                 {pageData?.shouldUpdateInfo && <>
-                                    <span className="descriptive tiny">({t("booking.review_info_first")})</span>
+                                    <span className="descriptive tiny">({t("furpanel.booking.review_info_first")})</span>
                                 </>}
                             </div>
                         </Button>
@@ -203,13 +199,13 @@ export default function BookingPage() {
                     }
                 </div>
                 {pageData?.shouldUpdateInfo && <>
-                    <NoticeBox title={t("booking.messages.review_info.title")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
-                        {t("booking.messages.review_info.description")}
+                    <NoticeBox title={t("furpanel.booking.messages.review_info.title")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
+                        {t("furpanel.booking.messages.review_info.description")}
                         <span className="horizontal-list gap-2mm" style={{marginTop: ".5em"}}>
-                        <Button className="success" busy={actionLoading} onClick={confirmMembershipData} iconName={ICONS.CHECK}>{t("booking.actions.confirm_info")}</Button>
+                        <Button className="success" busy={actionLoading} onClick={confirmMembershipData} iconName={ICONS.CHECK}>{t("furpanel.booking.actions.confirm_info")}</Button>
                         <Button className="warning" busy={actionLoading} onClick={()=>{
                             router.push("/user");
-                        }} iconName={ICONS.OPEN_IN_NEW}>{t("booking.actions.review_info")}</Button>
+                        }} iconName={ICONS.OPEN_IN_NEW}>{t("furpanel.booking.actions.review_info")}</Button>
                         </span>
                         
                     </NoticeBox>
@@ -217,12 +213,12 @@ export default function BookingPage() {
                 {pageData.hasOrder && <>
                 {/* Order view */}
                 <div className="title medium horizontal-list gap-2mm">
-                    {t("booking.your_booking")}
-                    <span>({t("booking.items.code")}&nbsp;
+                    {t("furpanel.booking.your_booking")}
+                    <span>({t("furpanel.booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
                     )</span>
                     <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
-                        {tcommon(`order_status.${bookingData?.order.orderStatus}`)}
+                        {t(`common.order_status.${bookingData?.order.orderStatus}`)}
                     </StatusBox>
                 </div>
                 <div className="order-data">
@@ -234,39 +230,39 @@ export default function BookingPage() {
                                 supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
                             }),
                         ICONS.LOCAL_ACTIVITY, 
-                        pageData.isDaily ? t("booking.items.daily_days", {days: pageData.dailyDays?.map(dt => formatter.dateTime(dt, {day: "2-digit"})).join(", ")}) : undefined)}
+                        pageData.isDaily ? t("furpanel.booking.items.daily_days", {days: pageData.dailyDays?.map(dt => formatter.dateTime(dt, {day: "2-digit"})).join(", ")}) : undefined)}
                         {/* Membership item */}
-                        {bookingData!.hasActiveMembershipForEvent && orderItem(t("booking.items.membership_card"), ICONS.ID_CARD)}
+                        {bookingData!.hasActiveMembershipForEvent && orderItem(t("furpanel.booking.items.membership_card"), ICONS.ID_CARD)}
                         {/* Extra days */}
-                        {bookingData!.order.extraDays !== "NONE" && orderItem(t("booking.items.extra_days"), ICONS.CALENDAR_ADD_ON, t(`booking.items.extra_days_${bookingData!.order.extraDays}`))}
+                        {bookingData!.order.extraDays !== "NONE" && orderItem(t("furpanel.booking.items.extra_days"), ICONS.CALENDAR_ADD_ON, t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`))}
                         {/* Room */}
-                        {bookingData!.order.room && orderItem(`${t("booking.items.room")} ${translate(bookingData!.order.room.roomTypeNames, locale)}`, ICONS.BED,
-                            t("booking.items.room_capacity", {capacity: bookingData!.order.room.roomCapacity}))}
+                        {bookingData!.order.room && orderItem(`${t("furpanel.booking.items.room")} ${translate(bookingData!.order.room.roomTypeNames, locale)}`, ICONS.BED,
+                            t("furpanel.booking.items.room_capacity", {capacity: bookingData!.order.room.roomCapacity}))}
                     </div>
 
                     {/* Order actions */}
                     <div className="horizontal-list gap-4mm">
                         {pageData?.shouldRetry && <>
                             <Button className="action-button" iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
-                            {t("booking.retry_payment")}
+                            {t("furpanel.booking.retry_payment")}
                         </Button>
                         </>}
                         <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
-                            {t("booking.edit_booking")}
+                            {t("furpanel.booking.edit_booking")}
                         </Button>
                         <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
-                            {t("booking.actions.exchange_order")}
+                            {t("furpanel.booking.actions.exchange_order")}
                         </Button>
                     </div>
 
                     <div className="vertical-list gap-2mm">
-                        <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("booking.messages.editing_locked.title") : t("booking.messages.editing_locked_warning.title")}>
-                            {t(isEditLocked ? "booking.messages.editing_locked.description" : "booking.messages.editing_locked_warning.description", {lockDate: formatter.dateTime(pageData.editBookEndDate)})}
+                        <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("furpanel.booking.messages.editing_locked.title") : t("furpanel.booking.messages.editing_locked_warning.title")}>
+                            {t(isEditLocked ? "furpanel.booking.messages.editing_locked.description" : "furpanel.booking.messages.editing_locked_warning.description", {lockDate: formatter.dateTime(pageData.editBookEndDate)})}
                         </NoticeBox>
 
                         {GROUP_CHAT_URL &&
-                        <NoticeBox theme={NoticeTheme.FAQ} customIcon={ICONS.GROUPS} title={t("booking.messages.invite_group.title")}>
-                            {t.rich("booking.messages.invite_group.description", 
+                        <NoticeBox theme={NoticeTheme.FAQ} customIcon={ICONS.GROUPS} title={t("furpanel.booking.messages.invite_group.title")}>
+                            {t.rich("furpanel.booking.messages.invite_group.description", 
                                 {link: (chunks) => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
                                     {GROUP_CHAT_URL}</a>})}
                         </NoticeBox>}
@@ -276,8 +272,8 @@ export default function BookingPage() {
                     {bookingData?.errors && <>
                         <div className="errors-container vertical-list gap-4mm">
                             {bookingData.errors.map((errorCode, index) => {
-                                return <NoticeBox key={index} theme={NoticeTheme.Warning} title={t(`booking.errors.${errorCode}.title`)}>
-                                    {t(`booking.errors.${errorCode}.description`)}
+                                return <NoticeBox key={index} theme={NoticeTheme.Warning} title={t(`furpanel.booking.errors.${errorCode}.title`)}>
+                                    {t(`furpanel.booking.errors.${errorCode}.description`)}
                                 </NoticeBox>;
                             })}
                         </div>
@@ -288,16 +284,16 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Room exchange modal */}
-        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
+        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
             onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
             <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
             <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
-                label={t("room.input.exchange_user.label")} placeholder={t("room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
+                label={t("furpanel.room.input.exchange_user.label")} placeholder={t("furpanel.room.input.exchange_user.placeholder")} style={{maxWidth: "500px"}}/>
             <div className="horizontal-list gap-4mm">
-                <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{tcommon("cancel")}</Button>
+                <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{tcommon("confirm")}</Button>
+                <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{t("common.confirm")}</Button>
             </div>
             </DataForm>
         </Modal>

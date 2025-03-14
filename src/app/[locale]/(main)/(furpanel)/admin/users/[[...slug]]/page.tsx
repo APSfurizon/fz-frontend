@@ -24,9 +24,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
     const [userData, setUserData] = useState<GetUserAdminViewResponse> ();
     const [loading, setLoading] = useState<boolean> ();
     const [error, setError] = useState<ApiErrorResponse>();
-    const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
-    const tauth = useTranslations("authentication");
+    const t = useTranslations();
     const locale = useLocale();
     const {showModal} = useModalUpdate();
     const router = useRouter();
@@ -47,7 +45,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
         }
         runRequest(new BanUserAction(), undefined, body)
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors"/>
         )).finally(()=>{
             setLoading(false);
@@ -71,7 +69,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
         }
         runRequest(new UnbanUserAction(), undefined, body)
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors"/>
         )).finally(()=>{
             setLoading(false);
@@ -112,7 +110,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
         runRequest(new GetUserAdminViewAction(), [""+userId])
         .then (data => setUserData(data as GetUserAdminViewResponse))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("common.error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors"/>
         )).finally(()=>setLoading(false));
     }, [userId, userData]);
@@ -125,8 +123,8 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
 
     return <>
     <div className="page">
-        <AutoInput manager={new AutoInputUsersManager} label={t("admin.users.input.selected_user.label")}
-            placeholder={t("admin.users.input.selected_user.placeholder")}
+        <AutoInput manager={new AutoInputUsersManager} label={t("furpanel.admin.users.accounts.view.input.selected_user.label")}
+            placeholder={t("furpanel.admin.users.accounts.view.input.selected_user.placeholder")}
             initialData={userId ? [userId] : undefined}
             onChange={onUserSelect}>
         </AutoInput>
@@ -134,53 +132,53 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
             </ModalError>}
         {loading && <span className="title horizontal-list gap-2mm flex-vertical-center">
             <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-            {tcommon("loading")}
+            {t("common.loading")}
         </span>}
         {/** User data render */}
         {userData && <>
             {/* Personal info */}
-            <span className="title medium">{t("admin.users.personal_info")}</span>
+            <span className="title medium">{t("furpanel.admin.users.accounts.view.personal_info")}</span>
             <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em"}}>
                 <div className="horizontal-list flex-wrap gap-4mm">
-                    <JanInput className="hoverable" label={tauth("register.form.first_name.label")} readOnly initialValue={userData.user.personalInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                    <JanInput className="hoverable" label={tauth("register.form.last_name.label")} readOnly initialValue={userData.user.personalInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                    <JanInput className="hoverable" label={tauth("register.form.email.label")} readOnly initialValue={userData.user.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={userData.user.personalInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={userData.user.personalInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.email.label")} readOnly initialValue={userData.user.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                     {userData.user.personalInfo.fiscalCode && 
-                        <JanInput className="hoverable" label={tauth("register.form.fiscal_code.label")} readOnly initialValue={userData.user.personalInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                        <JanInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")} readOnly initialValue={userData.user.personalInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
                 </div>
                 <hr></hr>
-                <span className="title small bold">{tauth("register.form.section.birth_data")}</span>
+                <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
                 <div className="horizontal-list flex-wrap gap-4mm">
-                    <JanInput className="hoverable" label={tauth("register.form.birth_country.label")} readOnly initialValue={userData.user.personalInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.birth_country.label")} readOnly initialValue={userData.user.personalInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                     {userData.user.personalInfo.birthRegion &&
-                        <JanInput className="hoverable" label={tauth("register.form.birth_region.label")} readOnly initialValue={userData.user.personalInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                    <JanInput className="hoverable" label={tauth("register.form.birth_city.label")} readOnly initialValue={userData.user.personalInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                    <JanInput className="hoverable" label={tauth("register.form.birthday.label")} readOnly initialValue={userData.user.personalInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                        <JanInput className="hoverable" label={t("authentication.register.form.birth_region.label")} readOnly initialValue={userData.user.personalInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                    <JanInput className="hoverable" label={t("authentication.register.form.birth_city.label")} readOnly initialValue={userData.user.personalInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.birthday.label")} readOnly initialValue={userData.user.personalInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                 </div>
                 <hr></hr>
-                <span className="title small bold">{tauth("register.form.section.residence_data")}</span>
+                <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
                 <div className="horizontal-list flex-wrap gap-4mm">
-                    <JanInput className="hoverable" label={tauth("register.form.residence_country.label")} readOnly initialValue={userData.user.personalInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.residence_country.label")} readOnly initialValue={userData.user.personalInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                     {userData.user.personalInfo.residenceRegion &&
-                            <JanInput className="hoverable" label={tauth("register.form.residence_region.label")} readOnly initialValue={userData.user.personalInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                    <JanInput className="hoverable" label={tauth("register.form.residence_city.label")} readOnly initialValue={userData.user.personalInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                    <JanInput className="hoverable" label={tauth("register.form.residence_zip_code.label")} readOnly initialValue={userData.user.personalInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                    <JanInput className="hoverable" label={tauth("register.form.residence_address.label")} readOnly initialValue={userData.user.personalInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                    <JanInput className="hoverable" label={tauth("register.form.phone_number.label")} readOnly initialValue={(userData.user.personalInfo.prefixPhoneNumber ?? "") + (userData.user.personalInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                            <JanInput className="hoverable" label={t("authentication.register.form.residence_region.label")} readOnly initialValue={userData.user.personalInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                    <JanInput className="hoverable" label={t("authentication.register.form.residence_city.label")} readOnly initialValue={userData.user.personalInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.residence_zip_code.label")} readOnly initialValue={userData.user.personalInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.residence_address.label")} readOnly initialValue={userData.user.personalInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                    <JanInput className="hoverable" label={t("authentication.register.form.phone_number.label")} readOnly initialValue={(userData.user.personalInfo.prefixPhoneNumber ?? "") + (userData.user.personalInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                 </div>
             </div>
             {/* Orders */}
-            <span className="title medium">{t("admin.users.orders")}</span>
+            <span className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</span>
             <table className="order-list rounded-m">
                 <tbody>
                     <tr>
-                        <th>{t("admin.users.orders_table.event_name")}</th>
-                        <th>{t("admin.users.orders_table.order_code")}</th>
-                        <th>{t("admin.users.orders_table.order_status")}</th>
-                        <th>{t("admin.users.orders_table.is_daily")}</th>
-                        <th>{t("admin.users.orders_table.sponsorship_type")}</th>
-                        <th>{t("admin.users.orders_table.extra_days")}</th>
-                        <th>{t("admin.users.orders_table.room_type")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.event_name")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.order_code")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.order_status")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.is_daily")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.sponsorship_type")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.extra_days")}</th>
+                        <th>{t("furpanel.admin.users.accounts.view.orders_table.room_type")}</th>
                         <th></th>
                     </tr>
                 {userData.orders.map((order, oi) => <tr key={oi} className="order-row">
@@ -188,7 +186,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
                     <td>{order.code}</td>
                     <td>
                         <StatusBox status={mapOrderStatusToStatusBox(order.orderStatus)}>
-                            {tcommon(`order_status.${order.orderStatus}`)}
+                            {t(`common.order_status.${order.orderStatus}`)}
                         </StatusBox>
                     </td>
                     <td className="centered"><Checkbox disabled initialValue={order.dailyTicket}></Checkbox></td>
@@ -204,37 +202,37 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
                 </tbody>
             </table>
             {/* Security */}
-            <span className="title medium">{t("admin.users.security")}</span>
+            <span className="title medium">{t("furpanel.admin.users.security.title")}</span>
             <div className="vertical-list" style={{padding: "0.625em"}}>
                 <div className="horizontal-list gap-2mm">
                     {!userData.user.banned && <Button iconName={ICONS.ACCOUNT_CIRCLE_OFF} onClick={promptBan}>
-                        {t("admin.users.actions.ban")}</Button>}
+                        {t("furpanel.admin.users.accounts.view.actions.ban")}</Button>}
                     {userData.user.banned && <Button iconName={ICONS.ACCOUNT_CIRCLE} onClick={promptUnban}>
-                        {t("admin.users.actions.unban")}</Button>}
+                        {t("furpanel.admin.users.accounts.view.actions.unban")}</Button>}
                 </div>
             </div>
         </>}
     </div>
     <Modal open={banModalOpen} onClose={()=>setBanModalOpen(false)} busy={loading}
-        title={t('admin.users.messages.confirm_ban.title')}>
-            <span className="descriptive">{t('admin.users.messages.confirm_ban.description')}</span>
+        title={t("furpanel.admin.users.accounts.view.messages.confirm_ban.title")}>
+            <span className="descriptive">{t("furpanel.admin.users.accounts.view.messages.confirm_ban.description")}</span>
             <div className="bottom-toolbar">
-                <Button title={tcommon('cancel')} className="danger" onClick={()=>setBanModalOpen(false)}
-                    iconName={ICONS.CANCEL} busy={loading}>{tcommon('cancel')}</Button>
+                <Button title={t("common.cancel")} className="danger" onClick={()=>setBanModalOpen(false)}
+                    iconName={ICONS.CANCEL} busy={loading}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button title={t('admin.users.actions.ban')} onClick={()=>ban()}
-                    iconName={ICONS.ACCOUNT_CIRCLE_OFF} busy={loading}>{t('admin.users.actions.ban')}</Button>    
+                <Button title={t("furpanel.admin.users.accounts.view.actions.ban")} onClick={()=>ban()}
+                    iconName={ICONS.ACCOUNT_CIRCLE_OFF} busy={loading}>{t("furpanel.admin.users.accounts.view.actions.ban")}</Button>    
             </div>
     </Modal>
     <Modal open={unbanModalOpen} onClose={()=>setUnbanModalOpen(false)} busy={loading}
-        title={t('admin.users.messages.confirm_unban.title')}>
-            <span className="descriptive">{t('admin.users.messages.confirm_unban.description')}</span>
+        title={t("furpanel.admin.users.accounts.view.messages.confirm_unban.title")}>
+            <span className="descriptive">{t("furpanel.admin.users.accounts.view.messages.confirm_unban.description")}</span>
             <div className="bottom-toolbar">
-                <Button title={tcommon('cancel')} className="danger" onClick={()=>setUnbanModalOpen(false)}
-                    iconName={ICONS.CANCEL} busy={loading}>{tcommon('cancel')}</Button>
+                <Button title={t("common.cancel")} className="danger" onClick={()=>setUnbanModalOpen(false)}
+                    iconName={ICONS.CANCEL} busy={loading}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button title={t('admin.users.actions.unban')} onClick={()=>unban()}
-                    iconName={ICONS.ACCOUNT_CIRCLE} busy={loading}>{t('admin.users.actions.unban')}</Button>    
+                <Button title={t("furpanel.admin.users.accounts.view.actions.unban")} onClick={()=>unban()}
+                    iconName={ICONS.ACCOUNT_CIRCLE} busy={loading}>{t("furpanel.admin.users.accounts.view.actions.unban")}</Button>
             </div>
     </Modal>
     </>;

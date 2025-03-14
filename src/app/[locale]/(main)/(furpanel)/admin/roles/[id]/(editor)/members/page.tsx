@@ -44,9 +44,8 @@ const EMPTY_ROLE_MEMBER: RoleMember = {
 }
 
 export default function RoleMembersEditor () {
-    const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
-    const {entity, viewEntity, entityChanged, setEntity} = useEntityEditor<RoleData, RoleData>();
+    const t = useTranslations();
+    const {entity, setEntity} = useEntityEditor<RoleData, RoleData>();
     const [addMemberOpen, setAddMemberOpen] = useState(false);
     const [selectedUserTemp, setSelectedUserTemp] = useState<RoleMember> ();
     const [temporaryUserTemp, setTemporaryUserTemp] = useState<boolean>();
@@ -96,7 +95,7 @@ export default function RoleMembersEditor () {
     return <>
     <div className="horizontal-list gap-2mm">
         <div className="spacer"></div>
-        <Button iconName={ICONS.ADD} onClick={()=>{setAddMemberOpen(true)}}>{tcommon("CRUD.add")}</Button>
+        <Button iconName={ICONS.ADD} onClick={()=>{setAddMemberOpen(true)}}>{t("common.CRUD.add")}</Button>
     </div>
     {/* Permissions table */}
     <div className="table-container rounded-m">
@@ -115,7 +114,7 @@ export default function RoleMembersEditor () {
                 <div className="spacer"></div>
                 <div className="data">
                     <Checkbox disabled initialValue={roleMember.tempRole}>
-                        {t("admin.users.security.roles.input.temporary_member.label")}
+                        {t("furpanel.admin.users.security.roles.input.temporary_member.label")}
                     </Checkbox>
                 </div>
                 <div className="data">
@@ -125,29 +124,29 @@ export default function RoleMembersEditor () {
         </div>
     </div>
     <Modal open={addMemberOpen} onClose={()=>closeAddMemberModal()}
-        title={t("admin.users.security.roles.input.add_member.label")} style={{minWidth: '400px'}}>
+        title={t("furpanel.admin.users.security.roles.input.add_member.label")} style={{minWidth: '400px'}}>
         <DataForm action={new DummyFormAction} shouldReset={!addMemberOpen} hideSave
             className="vertical-list gap-2mm">
             <AutoInput manager={new AutoInputUsersManager} onChange={selectMember}
                 filterOut={new AutoInputFilter (entity?.users.map(eu=>eu.displayData.userId), [])}
-                label={t("admin.users.security.roles.input.select_user.label")}>
+                label={t("furpanel.admin.users.security.roles.input.select_user.label")}>
             </AutoInput>
             <div className="vertical-list gap-2mm">
                 <Checkbox onClick={setTemporary} initialValue={temporaryUserTemp}>
-                    {t("admin.users.security.roles.input.temporary_member.label")}
+                    {t("furpanel.admin.users.security.roles.input.temporary_member.label")}
                 </Checkbox>
                 <span className="descriptive tiny color-subtitle">
-                    {t("admin.users.security.roles.input.temporary_member.help")}
+                    {t("furpanel.admin.users.security.roles.input.temporary_member.help")}
                 </span>
             </div>
         </DataForm>
         <div className="horizontal-list gap-4mm">
             <Button type="button" className="danger" iconName={ICONS.CANCEL} 
-                onClick={()=>setAddMemberOpen(false)}>{tcommon("cancel")}</Button>
+                onClick={()=>setAddMemberOpen(false)}>{t("common.cancel")}</Button>
             <div className="spacer"></div>
             <Button type="submit" className="success" iconName={ICONS.CHECK}
                 onClick={()=>addMember()} disabled={!!!selectedUserTemp}>
-                    {tcommon("confirm")}
+                    {t("common.confirm")}
             </Button>
         </div>
     </Modal>

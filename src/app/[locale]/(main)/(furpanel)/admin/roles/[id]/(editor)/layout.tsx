@@ -10,8 +10,7 @@ import { useEffect } from "react";
 
 export default function RoleEditorLayout ({children}: Readonly<{children: React.ReactNode}>) {
     const router = useRouter();
-    const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
+    const t = useTranslations();
 
     // Get context
     const {entity, entityChanged, saveEntity, loading} = useEntityEditor<RoleData, RoleData>();
@@ -19,7 +18,7 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
     useEffect(()=>{
         globalThis.onbeforeunload = () => {
             if (entityChanged) {
-                return t("admin.users.security.roles.messages.discard_changes");
+                return t("furpanel.admin.users.security.roles.messages.discard_changes");
             }
         }
     }, []);
@@ -34,14 +33,14 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
             </span>
         </div>
         <div className="spacer"></div>
-        <ToolLink iconName={ICONS.ID_CARD} href="data">{t("admin.users.security.roles.sections.data")}</ToolLink>
-        <ToolLink iconName={ICONS.SECURITY} href="permissions">{t("admin.users.security.roles.sections.permissions")}</ToolLink>
-        <ToolLink iconName={ICONS.GROUPS} href="members">{t("admin.users.security.roles.sections.members")}</ToolLink>
+        <ToolLink iconName={ICONS.ID_CARD} href="data">{t("furpanel.admin.users.security.roles.sections.data")}</ToolLink>
+        <ToolLink iconName={ICONS.SECURITY} href="permissions">{t("furpanel.admin.users.security.roles.sections.permissions")}</ToolLink>
+        <ToolLink iconName={ICONS.GROUPS} href="members">{t("furpanel.admin.users.security.roles.sections.members")}</ToolLink>
     </div>
     {children}
     <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
         <div className="spacer"></div>
-        <Button disabled={!entity || !entityChanged} iconName={ICONS.SAVE} onClick={()=>{saveEntity (entity)}} busy={loading}>{tcommon("CRUD.save")}</Button>
+        <Button disabled={!entity || !entityChanged} iconName={ICONS.SAVE} onClick={()=>{saveEntity (entity)}} busy={loading}>{t("common.CRUD.save")}</Button>
     </div>
     </>
 }

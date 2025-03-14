@@ -11,7 +11,7 @@ import { notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ViewRoleLayout ({params, children}: Readonly<{params: Promise<{id: number}>, children: React.ReactNode}>) {
-    const tcommon = useTranslations("common");
+    const t = useTranslations("common");
     const {showModal} = useModalUpdate();
     const [roleId, setRoleId] = useState<number>();
     const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function ViewRoleLayout ({params, children}: Readonly<{params: Pr
         runRequest(new GetRoleByIdApiAction(), [roleId.toString()])
         .then ((response) => setEntity(response as RoleData))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors"></ModalError>
         )).finally (()=>setLoading(false));
     }, [roleId]);
@@ -50,7 +50,7 @@ export default function ViewRoleLayout ({params, children}: Readonly<{params: Pr
         runRequest(new UpdateRoleByIdApiAction(), [""+toSave.roleId], toSend)
         .then ((response) => setRoleId(roleId))
         .catch((err)=>showModal(
-            tcommon("error"), 
+            t("error"), 
             <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors"></ModalError>
         )).finally (()=>setLoading(false));
     }

@@ -18,9 +18,7 @@ import "@/styles/furpanel/user.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 
 export default function UserPage() {
-  const t = useTranslations("furpanel");
-  const tcommon = useTranslations("common");
-  const tauth = useTranslations("authentication");
+  const t = useTranslations();
   const router = useRouter();
   const {showModal} = useModalUpdate();
   const {userLoading, userDisplay} = useUser();
@@ -40,7 +38,7 @@ export default function UserPage() {
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
   const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(
-      tcommon("error"),
+      t("common.error"),
       <ModalError error={err} translationRoot="authentication" translationKey="login.errors"></ModalError>,
       ICONS.ERROR
   );
@@ -50,12 +48,12 @@ export default function UserPage() {
     runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
     .then((result)=>setPersonalInformation(result as UserPersonalInfo))
     .catch((err)=>showModal(
-        tcommon("error"), 
+        t("common.error"), 
         <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
     )).finally(()=>setPersonalInfoLoading(false));
   }, [personalInformation])
 
-  useTitle(t("user.title"));
+  useTitle(t("furpanel.user.title"));
   
   return (
       <div className="page">
@@ -63,13 +61,13 @@ export default function UserPage() {
         <div className="section vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <Icon className="x-large" iconName={ICONS.PERSON}></Icon>
-            <span className="title medium">{t("user.sections.user")}</span>
+            <span className="title medium">{t("furpanel.user.sections.user")}</span>
           </div>
           {/* Personal info manager */}
           <div className="vertical-list gap-2mm">
             <div className="horizontal-list section-title gap-2mm flex-vertical-center">
               <span className="title average">
-                {t("user.sections.user_info")}
+                {t("furpanel.user.sections.user_info")}
               </span>
             </div>
             <DataForm className="vertical-list gap-2mm" action={new UpdatePersonalInfoFormAction} loading={personalInfoLoading} setLoading={setPersonalInfoLoading}>
@@ -77,76 +75,76 @@ export default function UserPage() {
               <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.first_name.label")} placeholder={tauth("register.form.first_name.placeholder")}
+                  label={t("authentication.register.form.first_name.label")} placeholder={t("authentication.register.form.first_name.placeholder")}
                   initialValue={personalInformation?.firstName}/>
                 <JanInput fieldName="lastName" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.last_name.label")} placeholder={tauth("register.form.last_name.placeholder")}
+                  label={t("authentication.register.form.last_name.label")} placeholder={t("authentication.register.form.last_name.placeholder")}
                   initialValue={personalInformation?.lastName}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="allergies" required={false} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.allergies.label")} placeholder={tauth("register.form.allergies.placeholder")}
+                  label={t("authentication.register.form.allergies.label")} placeholder={t("authentication.register.form.allergies.placeholder")}
                   initialValue={personalInformation?.allergies}/>
               </div>
-              <span className="title average">{tauth("register.form.section.birth_data")}</span>
+              <span className="title average">{t("authentication.register.form.section.birth_data")}</span>
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} multiple={false}
                   manager={new AutoInputCountriesManager} onChange={(values, newValues, removedValue) => setBirthCountry ((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)}
-                  label={tauth("register.form.birth_country.label")} placeholder={tauth("register.form.birth_country.placeholder")}
+                  label={t("authentication.register.form.birth_country.label")} placeholder={t("authentication.register.form.birth_country.placeholder")}
                   initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}/>
                 <JanInput fieldName="birthday" required={true} inputType="date" busy={personalInfoLoading}
-                label={tauth("register.form.birthday.label")} initialValue={personalInformation?.birthday}/>
+                label={t("authentication.register.form.birthday.label")} initialValue={personalInformation?.birthday}/>
               </div>
               {/* Show only if birth country is Italy */}
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text"
                   pattern={/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi} busy={personalInfoLoading} disabled={!fiscalCodeRequired}
-                  label={tauth("register.form.fiscal_code.label")} placeholder={tauth("register.form.fiscal_code.placeholder")}
+                  label={t("authentication.register.form.fiscal_code.label")} placeholder={t("authentication.register.form.fiscal_code.placeholder")}
                   initialValue={fiscalCodeRequired ? personalInformation?.fiscalCode : ""}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="birthRegion" minDecodeSize={2} manager={new AutoInputStatesManager} 
-                  param={birthCountry} paramRequired requiredIfPresent label={tauth("register.form.birth_region.label")}
-                  placeholder={tauth("register.form.birth_region.placeholder")}
+                  param={birthCountry} paramRequired requiredIfPresent label={t("authentication.register.form.birth_region.label")}
+                  placeholder={t("authentication.register.form.birth_region.placeholder")}
                   initialData={personalInformation?.birthRegion ? [personalInformation?.birthRegion] : undefined}/>
                 <JanInput fieldName="birthCity" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.birth_city.label")} placeholder={tauth("register.form.birth_city.placeholder")}
+                  label={t("authentication.register.form.birth_city.label")} placeholder={t("authentication.register.form.birth_city.placeholder")}
                   initialValue={personalInformation?.birthCity}/>
               </div>
-              <span className="title average">{tauth("register.form.section.residence_data")}</span>
+              <span className="title average">{t("authentication.register.form.section.residence_data")}</span>
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="residenceCountry" required={true} minDecodeSize={2}
-                  manager={new AutoInputCountriesManager} label={tauth("register.form.residence_country.label")}
+                  manager={new AutoInputCountriesManager} label={t("authentication.register.form.residence_country.label")}
                   onChange={(values, newValues, removedValue) => setResidenceCountry ((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)} 
-                  placeholder={tauth("register.form.residence_country.placeholder")}
+                  placeholder={t("authentication.register.form.residence_country.placeholder")}
                   initialData={personalInformation?.residenceCountry ? [personalInformation?.residenceCountry] : undefined}/>
                 <AutoInput fieldName="residenceRegion" minDecodeSize={2}
                   manager={new AutoInputStatesManager} param={residenceCountry} paramRequired requiredIfPresent
-                  label={tauth("register.form.residence_region.label")} placeholder={tauth("register.form.residence_region.placeholder")}
+                  label={t("authentication.register.form.residence_region.label")} placeholder={t("authentication.register.form.residence_region.placeholder")}
                   initialData={personalInformation?.residenceRegion ? [personalInformation?.residenceRegion] : undefined}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="residenceCity" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.residence_city.label")} placeholder={tauth("register.form.residence_city.placeholder")}
+                  label={t("authentication.register.form.residence_city.label")} placeholder={t("authentication.register.form.residence_city.placeholder")}
                   initialValue={personalInformation?.residenceCity}/>
                 <JanInput fieldName="residenceZipCode" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.residence_zip_code.label")} placeholder={tauth("register.form.residence_zip_code.placeholder")}
+                  label={t("authentication.register.form.residence_zip_code.label")} placeholder={t("authentication.register.form.residence_zip_code.placeholder")}
                   initialValue={personalInformation?.residenceZipCode}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="residenceAddress" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.residence_address.label")} placeholder={tauth("register.form.residence_address.placeholder")}
+                  label={t("authentication.register.form.residence_address.label")} placeholder={t("authentication.register.form.residence_address.placeholder")}
                   initialValue={personalInformation?.residenceAddress}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 {/* Phone number */}
                 <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2}
-                  manager={new AutoInputCountriesManager(true)} label={tauth("register.form.phone_prefix.label")}
-                  placeholder={tauth("register.form.phone_prefix.placeholder")}
+                  manager={new AutoInputCountriesManager(true)} label={t("authentication.register.form.phone_prefix.label")}
+                  placeholder={t("authentication.register.form.phone_prefix.placeholder")}
                   idExtractor={(r) => (r as CountrySearchResult).phonePrefix ?? ""}
                   initialData={personalInformation?.prefixPhoneNumber ? [personalInformation?.prefixPhoneNumber] : undefined}/>
                 <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={personalInfoLoading}
-                  label={tauth("register.form.phone_number.label")} placeholder={tauth("register.form.phone_number.placeholder")}
+                  label={t("authentication.register.form.phone_number.label")} placeholder={t("authentication.register.form.phone_number.placeholder")}
                   style={{flex: "2"}} initialValue={personalInformation?.phoneNumber}/>
               </div>
             </DataForm>
@@ -156,22 +154,22 @@ export default function UserPage() {
         <div className="section vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm flex-vertical-center">
             <Icon className="x-large" iconName={ICONS.SECURITY}></Icon>
-            <span className="title medium">{t("user.sections.security")}</span>
+            <span className="title medium">{t("furpanel.user.sections.security")}</span>
           </div>
           {/* New password */}
           <div className="vertical-list gap-2mm">
             <div className="horizontal-list section-title gap-2mm flex-vertical-center">
               <span className="title average">
-                {t("user.sections.security_password")}
+                {t("furpanel.user.sections.security_password")}
               </span>
             </div>
             <DataForm className="login-form gap-4mm" loading={passwordChangeLoading} setLoading={setPasswordChangeLoading}
               action={new ResetPasswordFormAction} onFail={(err) => passwordChangeError(err)} disableSave={!passwordMatch}>
-              <JanInput fieldName="password" required={true} inputType="password" busy={passwordChangeLoading} label={tauth("recover_confirm.input.new_password.label")}
-                placeholder={tauth("recover_confirm.input.new_password.placeholder")} helpText={tauth("recover_confirm.input.new_password.help")}
+              <JanInput fieldName="password" required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.new_password.label")}
+                placeholder={t("authentication.recover_confirm.input.new_password.placeholder")} helpText={t("authentication.recover_confirm.input.new_password.help")}
                 onChange={(e) => setPassword(e.currentTarget.value)}/>
-              <JanInput required={true} inputType="password" busy={passwordChangeLoading} label={tauth("recover_confirm.input.confirm_password.label")}
-                  placeholder={tauth("recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
+              <JanInput required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.confirm_password.label")}
+                  placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
             </DataForm>
           </div>
         </div>

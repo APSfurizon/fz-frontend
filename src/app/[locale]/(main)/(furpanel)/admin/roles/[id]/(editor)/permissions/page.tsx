@@ -13,9 +13,8 @@ import DataForm from "@/components/dataForm";
 import { DummyFormAction } from "@/lib/components/dataForm";
 
 export default function RolePermissionsEditor () {
-    const t = useTranslations("furpanel");
-    const tcommon = useTranslations("common");
-    const {entity, entityChanged, setEntity} = useEntityEditor<RoleData, RoleData>();
+    const t = useTranslations();
+    const {entity, setEntity} = useEntityEditor<RoleData, RoleData>();
     const [addPermissionOpen, setAddPermissionOpen] = useState(false);
 
     const [selectedPermissionTemp, setSelectedPermissionTemp] = useState<string> ();
@@ -45,7 +44,7 @@ export default function RolePermissionsEditor () {
     return <>
     <div className="horizontal-list gap-2mm">
         <div className="spacer"></div>
-        <Button iconName={ICONS.ADD} onClick={()=>{setAddPermissionOpen(true)}}>{tcommon("CRUD.add")}</Button>
+        <Button iconName={ICONS.ADD} onClick={()=>{setAddPermissionOpen(true)}}>{t("common.CRUD.add")}</Button>
     </div>
     {/* Permissions table */}
     <div className="table-container rounded-m">
@@ -62,7 +61,7 @@ export default function RolePermissionsEditor () {
         </div>
     </div>
     <Modal open={addPermissionOpen} onClose={()=>closeAddPermissionModal()}
-        title={t("admin.users.security.roles.input.add_permission.label")} style={{minWidth: '400px'}}>
+        title={t("furpanel.admin.users.security.roles.input.add_permission.label")} style={{minWidth: '400px'}}>
         <DataForm action={new DummyFormAction} shouldReset={!addPermissionOpen} hideSave>
             <AutoInput manager={new AutoInputPermissionsManager} minDecodeSize={0}
                 filterOut={new AutoInputFilter ([], entity?.enabledPermissions)}
@@ -71,11 +70,11 @@ export default function RolePermissionsEditor () {
         </DataForm>
         <div className="horizontal-list gap-4mm">
             <Button type="button" className="danger" iconName={ICONS.CANCEL} 
-                onClick={()=>setAddPermissionOpen(false)}>{tcommon("cancel")}</Button>
+                onClick={()=>setAddPermissionOpen(false)}>{t("common.cancel")}</Button>
             <div className="spacer"></div>
             <Button type="submit" className="success" iconName={ICONS.CHECK}
                 onClick={()=>addPermission()} disabled={!!!selectedPermissionTemp}>
-                    {tcommon("confirm")}
+                    {t("common.confirm")}
             </Button>
         </div>
     </Modal>
