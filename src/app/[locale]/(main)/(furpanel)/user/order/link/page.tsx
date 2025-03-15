@@ -8,6 +8,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function OrderLinkPage() {
     const params = useSearchParams();
@@ -36,9 +37,6 @@ export default function OrderLinkPage() {
     }, [])
 
     return <Modal open={true} busy={loading} onClose={()=>{router.replace("/home")}} title={t("furpanel.user.linking.title")} icon={ICONS.LOCAL_ACTIVITY}>
-        {loading && <span className="title horizontal-list flex-vertical-center gap-2mm">
-            <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-            {t("furpanel.user.linking.description")}
-        </span>}
+        {loading && <LoadingPanel>{t("furpanel.user.linking.description")}</LoadingPanel>}
     </Modal>
 }

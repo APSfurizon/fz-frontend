@@ -11,6 +11,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import useTitle from "@/lib/api/hooks/useTitle";
 import ModalError from "@/components/modalError";
 import Link from "next/link";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function NosecountPage({ params }: {params: Promise<{slug: string[]}>}) {
     const MODE_FURSUIT = "fursuits";
@@ -140,12 +141,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     </>
 
     return <div className="page">
-        {loading && <div className="vertical-list flex-vertical-center">
-            <div className="horizontal-list gap-4mm">
-                <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-                {t("common.loading")}
-            </div>
-        </div>}
+        {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel/></div>}
         {error && <ModalError translationRoot="misc" translationKey="nosecount.errors" error={error}></ModalError>}
 
         {/* Rendering sponsors */}

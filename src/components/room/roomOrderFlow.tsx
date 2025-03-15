@@ -13,6 +13,7 @@ import Checkbox from "@/components/checkbox";
 import { useUser } from "@/components/context/userProvider";
 import { ShopLinkResponse } from "@/lib/api/booking";
 import { useRouter } from "next/navigation";
+import LoadingPanel from "../loadingPanel";
 
 enum STEPS {
     START,
@@ -108,7 +109,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
                 <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.room.order_flow.messages.quota_warning.title")}>
                     {t("furpanel.room.order_flow.messages.quota_warning.description")}
                 </NoticeBox>
-                {modalLoading && <span><Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>{t("common.loading")}</span>}
+                {modalLoading && <LoadingPanel/>}
                 {/* Room type selection */}
                 {roomsData?.rooms?.map((roomInfo, index)=>
                     <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`} 

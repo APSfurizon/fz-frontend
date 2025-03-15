@@ -2,9 +2,6 @@
 import Button from "@/components/button";
 import Icon, { ICONS } from "@/components/icon";
 import { MouseEvent, useEffect, useState } from "react";
-import { UserData } from "@/lib/api/user";
-import Checkbox from "@/components/checkbox";
-import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useTitle from "@/lib/api/hooks/useTitle";
@@ -206,7 +203,7 @@ export default function AdminPage() {
       <div className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
           <Icon className="x-large" iconName={ICONS.PERSON}></Icon>
-          <span className="title medium">{t("admin.users.title")}</span>
+          <span className="title medium">{t("furpanel.admin.users.title")}</span>
         </div>
         {/* Users generic area */}
         <div className="vertical-list gap-2mm">

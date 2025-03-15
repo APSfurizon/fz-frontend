@@ -5,6 +5,7 @@ import Icon, { ICONS } from "@/components/icon";
 import ToolLink from "@/components/toolLink";
 import { RoleData, RoleOutputData } from "@/lib/api/admin/role";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -15,17 +16,9 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
     // Get context
     const {entity, entityChanged, saveEntity, loading} = useEntityEditor<RoleData, RoleData>();
 
-    useEffect(()=>{
-        globalThis.onbeforeunload = () => {
-            if (entityChanged) {
-                return t("furpanel.admin.users.security.roles.messages.discard_changes");
-            }
-        }
-    }, []);
-
     return <>
     <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-        <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
+        <Link href="/admin/roles"><Icon iconName={ICONS.ARROW_BACK}/></Link>
         <div className="horizontal-list gap-2mm">
             <span className="title medium">
                 {entity?.displayName ?? entity?.internalName ?? ""}

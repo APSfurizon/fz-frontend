@@ -60,6 +60,12 @@ export interface RoleOutputData {
     roleAdmincountPriority: number
 }
 
+export class DeleteRolesApiAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "DELETE";
+    urlAction = "roles";
+}
+
 export class UpdateRoleByIdApiAction implements ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";

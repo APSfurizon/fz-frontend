@@ -225,7 +225,7 @@ export default function BookingPage() {
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm">
                         {/* Ticket item */}
                         {orderItem(
-                            t.rich(`booking.items.${pageData.ticketName}`, {
+                            t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                 sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
                                 supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
                             }),

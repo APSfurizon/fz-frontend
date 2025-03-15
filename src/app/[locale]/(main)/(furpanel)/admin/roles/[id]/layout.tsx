@@ -4,7 +4,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
 import { GetRoleByIdApiAction, RoleData, RoleOutputData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
-import { runRequest } from "@/lib/api/global";
+import { ApiResponse, runRequest } from "@/lib/api/global";
 import { resultSelf } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { notFound, useRouter } from "next/navigation";
@@ -34,7 +34,7 @@ export default function ViewRoleLayout ({params, children}: Readonly<{params: Pr
     useEffect(()=>{
         if (roleId === undefined) return;
         setLoading(true);
-        runRequest(new GetRoleByIdApiAction(), [roleId.toString()])
+        getEntity()
         .then ((response) => setEntity(response as RoleData))
         .catch((err)=>showModal(
             t("error"), 
@@ -42,17 +42,33 @@ export default function ViewRoleLayout ({params, children}: Readonly<{params: Pr
         )).finally (()=>setLoading(false));
     }, [roleId]);
 
+    // Get the entity
+    const getEntity = () => {
+        if (roleId === undefined) return Promise.reject(null);
+        return runRequest(new GetRoleByIdApiAction(), [roleId.toString()])
+    }
+
     // Save entity
     const saveRole = (toSave: RoleData) => {
-        if (!toSave) return;
-        setLoading(true);
-        const toSend = roleToOutput(toSave);
-        runRequest(new UpdateRoleByIdApiAction(), [""+toSave.roleId], toSend)
-        .then ((response) => setRoleId(roleId))
-        .catch((err)=>showModal(
-            t("error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors"></ModalError>
-        )).finally (()=>setLoading(false));
+        return new Promise<RoleData> ((resolve, reject) => {
+            if (!toSave) return;
+            setLoading(true);
+            const toSend = roleToOutput(toSave);
+            runRequest(new UpdateRoleByIdApiAction(), [""+toSave.roleId], toSend)
+            .then ((response) => {
+                getEntity()
+                .then((data)=>resolve(data as RoleData))
+                .catch((err)=>reject(err));
+            })
+            .catch((err)=>{
+                showModal(
+                    t("error"), 
+                    <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors"></ModalError>
+                );
+                reject(err);
+            })
+            .finally (()=>setLoading(false));
+        });
     }
 
     return <div className="page">

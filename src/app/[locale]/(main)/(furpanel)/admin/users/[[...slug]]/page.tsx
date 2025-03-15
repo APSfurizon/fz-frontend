@@ -18,6 +18,7 @@ import "@/styles/table.css";
 import Checkbox from "@/components/checkbox";
 import StatusBox from "@/components/statusBox";
 import { mapOrderStatusToStatusBox } from "@/lib/api/booking";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function AdminUsersPage ({ params }: {params: Promise<{slug: string[]}>}) {
     const [userId, setUserId] = useState<number> ();
@@ -130,10 +131,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
         </AutoInput>
         {error && <ModalError translationRoot="furpanel" translationKey="admin.users.errors" error={error}>
             </ModalError>}
-        {loading && <span className="title horizontal-list gap-2mm flex-vertical-center">
-            <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-            {t("common.loading")}
-        </span>}
+        {loading && <LoadingPanel/>}
         {/** User data render */}
         {userData && <>
             {/* Personal info */}

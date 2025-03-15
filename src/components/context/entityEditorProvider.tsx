@@ -32,7 +32,7 @@ export function EntityEditorProvider<T, U> ({
     initialStoreEntity?: U,
     viewToStore?: (view: T) => U,
     loading: boolean,
-    onSave: (entity: U) => void
+    onSave: (entity: U) => Promise<T>
 }>) {
     const [entity, setEntityValue] = useState<U>(initialStoreEntity as U);
     const [viewEntity, setViewEntity] = useState<T>(initialViewEntity as T);
@@ -48,13 +48,21 @@ export function EntityEditorProvider<T, U> ({
 
     useEffect(() => {
         if (!initialViewEntity) return;
-        const output = viewToStore(initialViewEntity);
-        setEntityValue(output);
         setViewEntity(initialViewEntity);
-        setEntityChanged(false);
     }, [initialViewEntity]);
 
-    const saveEntity = (entity: U) => onSave(entity);
+    useEffect(() => {
+        if (!viewEntity) return;
+        const output = viewToStore(viewEntity);
+        setEntityValue(output);
+        setEntityChanged(false);
+    }, [viewEntity]);
+
+    const saveEntity = (entity: U) => {
+        onSave(entity)
+        .then((role)=>setViewEntity(role))
+        .catch((err)=>console.warn(`Entity editor save failed with: ${JSON.stringify(err)}`))
+    }
 
     const values = {entity, setEntity, entityChanged, viewEntity, setViewEntity, loading, saveEntity};
     return <EntityEditorContext.Provider value={values}>{children}</EntityEditorContext.Provider>

@@ -121,6 +121,7 @@
   --table-bg: #d6d6d6;
   --table-border: #fff;
   --table-row-bg: #ffffff8c;
+  --table-row-bg-hover: #ffffffdc;
   --table-header-separator: #ffffff4d;
 
   /* Booking page */
@@ -277,6 +278,7 @@
     --table-bg: #242C38;
     --table-border: #fff;
     --table-row-bg: #ffffff19;
+    --table-row-bg-hover: #ffffff3d;
     --table-header-separator: #ffffff4d;
 
     /* Booking page */
