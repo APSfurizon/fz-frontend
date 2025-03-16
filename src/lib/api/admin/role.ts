@@ -2,6 +2,7 @@ import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded 
 import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global"
 import { UserData } from "../user";
 import { getAutoInputPermissions } from "../authentication/register";
+import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 
 export interface RoleInfo {
     roleId: number,
@@ -58,6 +59,30 @@ export interface RoleOutputData {
     enabledPermissions: string[],
     users: RoleOutputMember[],
     roleAdmincountPriority: number
+}
+
+export interface AddRoleApiData {
+    internalName: string
+}
+
+export interface AddRoleApiResponse extends ApiResponse {
+    roleId: number
+}
+
+export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
+    mapToDTO = (data: FormData) => {
+        let toReturn: AddRoleApiData = {
+            internalName: data.get("internalName")!.toString ()
+        };
+        return toReturn;
+    }
+}
+
+export class AddRoleFormAction implements FormApiAction<AddRoleApiData, AddRoleApiResponse, ApiErrorResponse> {
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    authenticated = true;
+    dtoBuilder = new AddRoleDTOBuilder ();
+    urlAction = "roles/";
 }
 
 export class DeleteRolesApiAction implements ApiAction<Boolean, ApiErrorResponse> {

@@ -212,9 +212,9 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
-                <div className="title medium horizontal-list gap-2mm">
-                    {t("furpanel.booking.your_booking")}
-                    <span>({t("furpanel.booking.items.code")}&nbsp;
+                <div className="horizontal-list gap-2mm flex-wrap">
+                    <span className="title medium">{t("furpanel.booking.your_booking")}</span>
+                    <span className="title medium">({t("furpanel.booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
                     )</span>
                     <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
@@ -283,8 +283,9 @@ export default function BookingPage() {
                 }
             </>}
         </div>
-        {/* Room exchange modal */}
+        {/* Order exchange modal */}
         <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={()=>setExchangeModalOpen(false)} busy={modalLoading}>
+            <span className="descriptive small">{t("furpanel.booking.messages.exchange_explaination")}</span>
             <DataForm action={new OrderExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
             onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
             <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>

@@ -22,6 +22,8 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     const [eventId, setEventId] = useState<number>();
     const [selectedEvent, setSelectedEvent] = useState<string>();
 
+    const [totalCount, setTotalCount] = useState<number>();
+
     // Modes
     const [roomsData, setRoomsData] = useState<NoseCountResponse> ();
     const [fursuitMode, setFursuitMode] = useState(false);
@@ -120,6 +122,23 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         }
     }, [needsLoading]);
 
+    useEffect(()=>{
+        if (!roomsData) return;
+        const hotelGuestCount = roomsData.hotels.map(
+            hotel=>hotel.roomTypes.map(
+                roomType => roomType.rooms.map(
+                    room => room.guests
+                )
+            )
+        ).flat(3).length;
+        
+        const dailyFursCount = new Set(Object.keys(roomsData.dailyFurs).map(
+            day => roomsData.dailyFurs[day].map(user=>user.userId)
+        ).flat()).size;
+
+        setTotalCount(hotelGuestCount + roomsData.ticketOnlyFurs.length + dailyFursCount);
+    }, [roomsData])
+
     useTitle(t("misc.nosecount.title"));
 
     const options = <>
@@ -175,6 +194,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {roomsData && <>
         <p className="title x-large bold section-title">{t.rich("misc.nosecount.sections.nosecount", 
             {b: (chunks)=><b className="highlight">{chunks}</b>})}</p>
+        <p className="title large">{t("misc.nosecount.total_count", {count: totalCount ?? 0})}</p>
         {options}
         {/* Hotel */}
         <div className="vertical-list gap-4mm">

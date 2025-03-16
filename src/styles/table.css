@@ -73,3 +73,8 @@ table {
 .selectable:hover {
     background-color: var(--table-row-bg-hover);
 }
+
+.clickable:active,
+.selectable:active {
+    transform: scale(0.98);
+}

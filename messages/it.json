@@ -133,7 +133,8 @@
         "invite_group": {
           "title": "Gruppo ufficiale",
           "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
-        }
+        },
+        "exchange_explaination": "Puoi dare via la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio."
       },
       "items": {
         "code": "codice",
@@ -546,7 +547,8 @@
             },
             "messages": {
               "discard_changes": "Le modifiche non salvate verranno scartate.",
-              "confirm_deletion": "Eliminare il ruolo {roleName}? Rimuoverà {members} membri e {tempMembers} membri temporanei."
+              "confirm_deletion": "Eliminare il ruolo {roleName}? Rimuoverà {members} membri e {tempMembers} membri temporanei.",
+              "add_role": "Prima di tutto, inserisci il codice di riferimento"
             },
             "actions": {
               "delete_role": "Elimina ruolo",
@@ -779,7 +781,8 @@
         "fursuits": "Fursuit",
         "sponsors": "Sponsor"
       },
-      "daily_furs": "Giornalieri"
+      "daily_furs": "Giornalieri",
+      "total_count": "{count, plural, =1 {UN ospite} other {# ospiti}}"
     }
   }
 }

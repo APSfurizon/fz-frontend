@@ -102,11 +102,8 @@ export default function RoleMembersEditor () {
         <div className="table rounded-m">
             {entity?.users?.map((roleMember, mi) => <div key={mi} className="row horizontal-list flex-vertical-center gap-2mm flex-wrap">
                 <div className="data">
-                    <span className="title average">{roleMember.displayData.userId}</span>
-                </div>
-                <div className="data">
                     <Image unoptimized src={getImageUrl(roleMember.displayData.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
-                        width={32} height={32} alt="image"/>
+                        width={32} height={32} alt="image" className="rounded-s"/>
                 </div>
                 <div className="data">
                     <span>{roleMember.displayData.fursonaName}</span>
