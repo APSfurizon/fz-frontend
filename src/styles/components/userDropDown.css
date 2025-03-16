@@ -1,57 +1,73 @@
 @import url('../colors.css');
 
-span.user-dropdown {
+div.user-dropdown {
     position: relative;
-    padding: 0.1875em;
+    display: block;
     user-select: none;
 }
 
-span.user-dropdown:not(:has(.dropdown-container.open)):hover,
-span.user-dropdown .dropdown-container a:hover {
+div.user-dropdown .dropdown-button {
+    border: 1px solid transparent;
+    padding: 0.1875em;
+    border-radius: 2mm;
+    background-color: transparent;
+}
+
+div.user-dropdown .dropdown-container {
+    width: 100%;
+    position: absolute;
+    display: none;
+    gap: .2em;
+    top: auto;
+    right: 0mm;
+    border: 1px solid var(--tool-link-border-normal);
+    border-top: none;
+    border-radius: 0mm 0mm 2mm 2mm;
+}
+
+div.user-dropdown .dropdown-container a {
+    padding: 0.625em 2em 0.625em 0.625em;
+}
+
+div.user-dropdown .dropdown-container hr {
+    margin: 0.25em;
+}
+
+div.user-dropdown .dropdown-container.open {
+    display: flex;
+}
+
+div.user-dropdown:not(:has(.dropdown-container.open)):hover,
+div.user-dropdown .dropdown-container a:hover {
     background-color: var(--user-dropdown-hover-bg);
 }
 
-span.user-dropdown:has(.dropdown-container.open),
+div.user-dropdown:has(.dropdown-container.open),
 .dropdown-container {
     background-color: var(--user-dropdown-selected-bg);
 }
 
-span.user-dropdown .dropdown-container {
-    position: absolute;
-    display: none;
-    top: 3em;
-    right: 0mm
+div.user-dropdown:has(.dropdown-container.open),
+div.user-dropdown:has(.dropdown-container.open) .dropdown-button {
+    border-radius: 2mm 2mm 0px 0px;
 }
 
-span.user-dropdown .dropdown-container hr {
-    margin: 0.25em;
-}
-
-span.user-dropdown span.nickname {
-    margin-right: 0.3125em;
-}
-
-span.user-dropdown .dropdown-container.open {
-    display: flex;
-    gap: .2em;
-    border: 1px solid var(--tool-link-border-normal)
-}
-
-span.user-dropdown .dropdown-container a {
-    padding: 0.625em 2em 0.625em 0.625em;
+div.user-dropdown:has(.dropdown-container.open) .dropdown-button {
+    border: 1px solid var(--tool-link-border-normal);
+    border-bottom: 1px solid transparent;
 }
 
 @media (max-width:800px) {
-    .user-dropdown {
+    div.user-dropdown {
         flex-direction: row-reverse;
         margin-left: -0.3125em;
     }
 
-    .user-dropdown .user-picture-container {
+    div.user-dropdown .user-picture-container {
         margin-right: 0.3125em;
     }
 
-    span.user-dropdown .dropdown-container {
+    div.user-dropdown .dropdown-container {
         left: 0mm;
         width: max-content;
     }

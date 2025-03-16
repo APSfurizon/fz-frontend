@@ -222,7 +222,7 @@ export default function BookingPage() {
                     </StatusBox>
                 </div>
                 <div className="order-data">
-                    <div className="order-items-container horizontal-list flex-same-base gap-4mm">
+                    <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                         {/* Ticket item */}
                         {orderItem(
                             t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
@@ -250,6 +250,7 @@ export default function BookingPage() {
                         <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
                             {t("furpanel.booking.edit_booking")}
                         </Button>
+                        <div className="spacer"></div>
                         <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
                             {t("furpanel.booking.actions.exchange_order")}
                         </Button>

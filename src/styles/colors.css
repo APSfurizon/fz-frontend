@@ -22,7 +22,7 @@
   --button-bg-hover: linear-gradient(0deg, #b1d1f5 0%, #94cdf3 100%);
   --button-bg-down: linear-gradient(0deg, #49aee9 0%, #549ccc 100%);
 
-  --button-danger-bg-normal: linear-gradient(0deg, #d15e5e 0%, #ce4848 100%);
+  --button-danger-bg-normal: linear-gradient(0deg, #d65050 0%, #e74d4d 100%);
   --button-danger-bg-hover: linear-gradient(0deg, #e29b9b 0%, #ee7777 100%);
   --button-danger-bg-down: linear-gradient(0deg, #993f3f 0%, #912e2e 100%);
 
@@ -127,9 +127,9 @@
   /* Booking page */
   --booking-countdown-bg: #000000d8;
   --booking-book-effect-bg: #fff;
-  --booking-item-border: #87878733;
+  --booking-item-border: #b8b8b8;
   --booking-item-bg: #f1f1f133;
-  --booking-item-subtitle-bg: #87878733;
+  --booking-item-subtitle-bg: #d3d3d35d;
 
   /* Room page */
   --room-action-panel-bg: #e7e7e7;
@@ -222,7 +222,7 @@
 
     /* Notice box */
     --notice-box-header-bg: #FFFFFF19;
-    --notice-box-header-border: #E9E9E9;
+    --notice-box-header-border: #FFFFFF19;
 
     --notice-box-header-bg-success: #2FEC4219;
     --notice-box-header-border-success: #2FEC42;

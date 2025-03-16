@@ -55,11 +55,11 @@ export default function Header () {
                 </a>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
-                <Link href="/home" className="header-link">
+                <Link href="/home" className="header-link medium">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.HOME}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                <Link href={`/nosecount`} className="header-link">
+                <Link href={`/nosecount`} className="header-link medium">
                     <Icon style={{fontSize: "24px"}} iconName={ICONS.GROUPS}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
                 </Link>

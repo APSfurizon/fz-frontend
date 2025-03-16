@@ -12,6 +12,7 @@
     "@next/env": "^15.1.5",
     "next": "^15.1.4",
     "next-intl": "^3.23.5",
+    "next-qrcode": "^2.5.1",
     "next-translate": "^2.6.2",
     "react": "^18.2.0",
     "react-cropper": "^2.3.3",
