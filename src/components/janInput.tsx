@@ -27,12 +27,12 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     readOnly?: boolean,
     required?: boolean,
     style?: CSSProperties,
-    initialValue?: string,
+    initialValue?: string | number,
   }>) {
 
     /* States */
     const [inputValue, setInputValue] = useState(initialValue ?? "");
-    const [lastInitialValue, setLastInitialValue] = useState<string>();
+    const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
     const { reset = false } = useFormContext();
     const t = useTranslations("components");

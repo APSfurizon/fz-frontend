@@ -1,158 +1,158 @@
 :root {
-    --background: #eeeeee;
-    --foreground: #111111;
-    --highlight: #ECA02F;
-    
-    --text-subtitle: #9a9a9a;
-    --text-link: #2b6ec5;
-    --text-status-error: #e44f4f;
-    --main-dialog-background: #f1f1f1;
+  --background: #eeeeee;
+  --foreground: #111111;
+  --highlight: #eb9616;
+  
+  --text-subtitle: #494949;
+  --text-link: #2b6ec5;
+  --text-status-error: #e44f4f;
+  --main-dialog-background: #f1f1f1;
 
-    --hoverable-bg: #2a2b3f;
-    
-    /* Footer */
-    --footer-bg: #d6d6d6;
-    /* Header */
-    --header-bg: #f1f1f1;
-    --header-shadow: #00000015;
-    --header-link-hover-bg: #ffffff10;
+  --hoverable-bg: #2a2b3f;
+  
+  /* Footer */
+  --footer-bg: #e7e7e7;
+  /* Header */
+  --header-bg: #f1f1f1;
+  --header-shadow: #00000015;
+  --header-link-hover-bg: #ffffff10;
 
-    /* Button */
-    --button-bg-normal: linear-gradient(0deg, #9ac4f5 0%, #69bcf3 100%);
-    --button-bg-hover: linear-gradient(0deg, #b1d1f5 0%, #94cdf3 100%);
-    --button-bg-down: linear-gradient(0deg, #49aee9 0%, #549ccc 100%);
+  /* Button */
+  --button-bg-normal: linear-gradient(0deg, #9ac4f5 0%, #69bcf3 100%);
+  --button-bg-hover: linear-gradient(0deg, #b1d1f5 0%, #94cdf3 100%);
+  --button-bg-down: linear-gradient(0deg, #49aee9 0%, #549ccc 100%);
 
-    --button-danger-bg-normal: linear-gradient(0deg, #d15e5e 0%, #ce4848 100%);
-    --button-danger-bg-hover: linear-gradient(0deg, #e29b9b 0%, #ee7777 100%);
-    --button-danger-bg-down: linear-gradient(0deg, #993f3f 0%, #912e2e 100%);
+  --button-danger-bg-normal: linear-gradient(0deg, #d15e5e 0%, #ce4848 100%);
+  --button-danger-bg-hover: linear-gradient(0deg, #e29b9b 0%, #ee7777 100%);
+  --button-danger-bg-down: linear-gradient(0deg, #993f3f 0%, #912e2e 100%);
 
-    --button-success-bg-normal: linear-gradient(0deg, #8cdd6c 0%, #5fbb64 100%);
-    --button-success-bg-hover: linear-gradient(0deg, #8edd92 0%, #8fda89 100%);
-    --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
+  --button-success-bg-normal: linear-gradient(0deg, #8cdd6c 0%, #5fbb64 100%);
+  --button-success-bg-hover: linear-gradient(0deg, #8edd92 0%, #8fda89 100%);
+  --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
 
-    --button-border-normal: #FFFFFF4C;
-    --button-border-down: #FFFFFFCC;
+  --button-border-normal: #FFFFFF4C;
+  --button-border-down: #FFFFFFCC;
 
-    /* Checkbox */
-    --checkbox-bg-unchecked: none;
-    --checkbox-bg-checked: linear-gradient(0deg, #9ac4f5 0%, #69bcf3 100%);
-    --checkbox-bg-hover: linear-gradient(0deg, #b1d1f5 0%, #94cdf3 100%);
-    --checkbox-bg-down: linear-gradient(0deg, #5697c2 0%, #4791c2 100%);
+  /* Checkbox */
+  --checkbox-bg-unchecked: none;
+  --checkbox-bg-checked: linear-gradient(0deg, #9ac4f5 0%, #69bcf3 100%);
+  --checkbox-bg-hover: linear-gradient(0deg, #b1d1f5 0%, #94cdf3 100%);
+  --checkbox-bg-down: linear-gradient(0deg, #5697c2 0%, #4791c2 100%);
 
-    --checkbox-border-normal: #ffffffb0;
-    --checkbox-border-hover: #ffffffe8;
-    --checkbox-border-down: #FFFFFFCC;
+  --checkbox-border-normal: #000000b0;
+  --checkbox-border-hover: #000000e8;
+  --checkbox-border-down: #000000cc;
 
-    /* Tool link */
-    --tool-link-bg-normal: #d6d6d6;
-    --tool-link-bg-hover: #6582ad;
-    --tool-link-bg-down: #566e94;
-    --tool-link-bg-active: var(--button-bg-down);
-    --tool-link-border-normal: #FFFFFF4C;
-    --tool-link-border-down: #FFFFFFCC;
-    --tool-link-hambuger-hover-bg: #ffffff40;
+  /* Tool link */
+  --tool-link-bg-normal: #d6d6d6;
+  --tool-link-bg-hover: #6582ad;
+  --tool-link-bg-down: #566e94;
+  --tool-link-bg-active: var(--button-bg-down);
+  --tool-link-border-normal: #FFFFFF4C;
+  --tool-link-border-down: #FFFFFFCC;
+  --tool-link-hambuger-hover-bg: #ffffff40;
 
-    /* User profile picture */
-    --profile-picture-border-normal: #E9E9E9;
-    --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
-    --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
-    --profile-picture-shadow: #242C38;
+  /* User profile picture */
+  --profile-picture-border-normal: #E9E9E9;
+  --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
+  --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
+  --profile-picture-shadow: #242C38;
 
-    /* User dropdown */
-    --user-dropdown-hover-bg: #4D5D75;
-    --user-dropdown-selected-bg: #242C38;
+  /* User dropdown */
+  --user-dropdown-hover-bg: #e9e9e9;
+  --user-dropdown-selected-bg: #ffffff;
 
-    /* Notice box */
-    --notice-box-header-bg: #d3d3d35d;
-    --notice-box-header-border: #b8b8b8;
+  /* Notice box */
+  --notice-box-header-bg: #d3d3d35d;
+  --notice-box-header-border: #b8b8b8;
 
-    --notice-box-header-bg-success: #2FEC4219;
-    --notice-box-header-border-success: #2FEC42;
+  --notice-box-header-bg-success: #2FEC4219;
+  --notice-box-header-border-success: #2FEC42;
 
-    --notice-box-header-bg-warning: #FFB80019;
-    --notice-box-header-border-warning: #ECA02F;
+  --notice-box-header-bg-warning: #FFB80019;
+  --notice-box-header-border-warning: #ECA02F;
 
-    --notice-box-header-bg-error: #FF000019;
-    --notice-box-header-border-error: #EC2F2F;
-    
-    /* Input Field */
-    --text-input-bg: #242C38;
-    --text-input-color: #fff;
-    --text-input-color-disabled: #7d8b96;
-    --text-input-border-normal: #4D5E6B;
-    --text-input-border-disabled: #11191F;
-    --text-input-border-danger:  #EC2F2F;
-    --text-input-border-success:  #35ec2f;
-    
-    /* Auto Complete */
-    --autocomplete-bg: #242C38;
-    --autocomplete-color: #fff;
-    --autocomplete-color-disabled: #4D5E6B;
-    --autocomplete-border-normal: #4D5E6B;
-    --autocomplete-border-disabled: #11191F;
-    --autocomplete-danger-normal: #EC2F2F;
-    --autocomplete-danger-hover: #cf6c6c;
-    --autocomplete-danger-down: #833232;
-    --autocomplete-selected-value-bg: #4D5D75;
-    --autocomplete-selected-value-hover-bg: #5d708d;
-    
-    /* Lista */
-    --suggestion-box-bg: #ffffff1a;
+  --notice-box-header-bg-error: #FF000019;
+  --notice-box-header-border-error: #EC2F2F;
+  
+  /* Input Field */
+  --text-input-bg: #ffffff;
+  --text-input-bg-disabled: #e4e4e4;
+  --text-input-color: #202020;
+  --text-input-color-disabled: #7d8b96;
+  --text-input-border-normal: #11191F;
+  --text-input-border-disabled: #747b80;
+  --text-input-border-danger:  #EC2F2F;
+  --text-input-border-success:  #35ec2f;
+  
+  /* Auto Complete */
+  --autocomplete-color: #1a1a1a;
+  --autocomplete-danger-normal: #EC2F2F;
+  --autocomplete-danger-hover: #cf6c6c;
+  --autocomplete-danger-down: #833232;
+  --autocomplete-selected-value-bg: #c3d6f1;
+  --autocomplete-selected-value-bg-hover: #a1badd;
+  
+  /* Lista */
+  --suggestion-box-bg: #c3d6f1;
+  --suggestion-box-bg-hover: #c3d6f1;
 
-    /* Status box */
-    --status-box-bg-default: #dadada;
-    --status-box-bg-warning: #cc9849;
-    --status-box-bg-success: #70bb69;
-    --status-box-bg-error: #e05d5d;
+  /* Status box */
+  --status-box-bg-default: #dadada;
+  --status-box-bg-warning: #f1aa40;
+  --status-box-bg-success: #70bb69;
+  --status-box-bg-error: #e05d5d;
 
-    /* Modal */
-    --modal-overlay-bg: #0008;
-    --modal-dialog-bg: #f1f1f1;
-    --modal-button-close: #ffa4a4;
-    --modal-button-close-hover: #EC2F2F;
+  /* Modal */
+  --modal-overlay-bg: #0008;
+  --modal-dialog-bg: #f1f1f1;
+  --modal-button-close: #ffa4a4;
+  --modal-button-close-hover: #EC2F2F;
 
-    /* Upload */
-    --upload-bg: #242C38;
-    --upload-border: #E9E9E9;
-    --upload-border-danger: #EC2F2F;
-    --upload-crop-handle-normal: radial-gradient(#000000 30%, #fffa 35%, #fffa 50%, #000 60%, #000000 100%);
-    --upload-crop-handle-hover: radial-gradient(#7634B8 30%, #fffa 35%, #fffa 50%, #7634B8 60%, #7634B8 100%);
-    --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
+  /* Upload */
+  --upload-bg: #ffffff;
+  --upload-border: #afafaf;
+  --upload-border-danger: #EC2F2F;
+  --upload-crop-handle-normal: radial-gradient(#000000 30%, #fffa 35%, #fffa 50%, #000 60%, #000000 100%);
+  --upload-crop-handle-hover: radial-gradient(#7634B8 30%, #fffa 35%, #fffa 50%, #7634B8 60%, #7634B8 100%);
+  --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
 
-    /* Table */
-    --table-bg: #242C38;
-    --table-border: #fff;
-    --table-row-bg: #ffffff19;
-    --table-header-separator: #ffffff4d;
+  /* Table */
+  --table-bg: #d6d6d6;
+  --table-border: #fff;
+  --table-row-bg: #ffffff8c;
+  --table-row-bg-hover: #ffffffdc;
+  --table-header-separator: #ffffff4d;
 
-    /* Booking page */
-    --booking-countdown-bg: #000000d8;
-    --booking-book-effect-bg: #fff;
-    --booking-item-border: #87878733;
-    --booking-item-bg: #48474733;
-    --booking-item-subtitle-bg: #87878733;
+  /* Booking page */
+  --booking-countdown-bg: #000000d8;
+  --booking-book-effect-bg: #fff;
+  --booking-item-border: #87878733;
+  --booking-item-bg: #f1f1f133;
+  --booking-item-subtitle-bg: #87878733;
 
-    /* Room page */
-    --room-action-panel-bg: #dfdfdf;
-    --room-invite-bg: #ffffff62;
-    --room-invite-shadow: #0005;
-    --room-invite-kick: #d3202c;
+  /* Room page */
+  --room-action-panel-bg: #e7e7e7;
+  --room-invite-bg: #ffffff62;
+  --room-invite-shadow: #0000004b;
+  --room-invite-kick: #d3202c;
 
-    /* Room buy flow */
-    --room-buy-item-hover-bg: #ffffff20;
-    --room-buy-item-border: #181818;
+  /* Room buy flow */
+  --room-buy-item-hover-bg: #ffffff20;
+  --room-buy-item-border: #181818;
 
-    /* Exchange confirm page*/
-    --exchange-info-bg: #242C38;
+  /* Exchange confirm page*/
+  --exchange-info-bg: #242C38;
 
-    /* Badge page */
-    --badge-fursuit-bg: #ffffff32;
+  /* Badge page */
+  --badge-fursuit-bg: #ffffff;
+  --badge-fursuit-border: #afafaf;
 
-    /* Sponsor colors */
-    --sponsor-color: #8E24AA;
-    --sponsor-text-color: #b235d4;
-    --super-sponsor-color: #DB9703;
-    --super-sponsor-text-color: #FAAA00;
+  /* Sponsor colors */
+  --sponsor-color: #8E24AA;
+  --sponsor-text-color: #b235d4;
+  --super-sponsor-color: #DB9703;
+  --super-sponsor-text-color: #FAAA00;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -235,6 +235,7 @@
     
     /* Input Field */
     --text-input-bg: #242C38;
+    --text-input-bg-disabled: #374355;
     --text-input-color: #fff;
     --text-input-color-disabled: #7d8b96;
     --text-input-border-normal: #4D5E6B;
@@ -243,11 +244,7 @@
     --text-input-border-success:  #35ec2f;
     
     /* Auto Complete */
-    --autocomplete-bg: #242C38;
     --autocomplete-color: #fff;
-    --autocomplete-color-disabled: #4D5E6B;
-    --autocomplete-border-normal: #4D5E6B;
-    --autocomplete-border-disabled: #11191F;
     --autocomplete-danger-normal: #EC2F2F;
     --autocomplete-danger-hover: #cf6c6c;
     --autocomplete-danger-down: #833232;
@@ -270,7 +267,7 @@
     --modal-button-close-hover: #EC2F2F;
 
     /* Upload */
-    --upload-bg: #242C38;
+    --upload-bg: #ffffff13;
     --upload-border: #E9E9E9;
     --upload-border-danger: #EC2F2F;
     --upload-crop-handle-normal: radial-gradient(#000000 30%, #fffa 35%, #fffa 50%, #000 60%, #000000 100%);
@@ -281,6 +278,7 @@
     --table-bg: #242C38;
     --table-border: #fff;
     --table-row-bg: #ffffff19;
+    --table-row-bg-hover: #ffffff3d;
     --table-header-separator: #ffffff4d;
 
     /* Booking page */
@@ -304,7 +302,8 @@
     --exchange-info-bg: #242C38;
 
     /* Badge page */
-    --badge-fursuit-bg: #ffffff32;
+    --badge-fursuit-bg: #ffffff17;
+    --badge-fursuit-border: #afafaf;
 
     /* Sponsor colors */
     --sponsor-color: #8E24AA;

@@ -2,22 +2,27 @@ div.upload-container {
     width: fit-content;
     padding: 0.625em;
     background-color: var(--upload-bg);
+    border: 1px solid var(--upload-border);
 
     * {
         width: 100%;
     }
 
     div.image-container {
-        border: 2px solid var(--upload-border);
+        outline: 1px solid var(--upload-border);
     }
 
     div.image-container.danger {
-        border-color: var(--upload-border-danger);
+        outline: 1px solid var(--upload-border-danger);    
     }
 
     img.upload-picture {
         display: block;
     }
+}
+
+div.upload-container:has(div.image-container.danger) {
+    border: 1px solid var(--upload-border-danger);
 }
 
 .suppressed-input {

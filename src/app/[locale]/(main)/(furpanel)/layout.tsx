@@ -3,18 +3,17 @@ import {useTranslations} from 'next-intl';
 import Icon, { ICONS } from "@/components/icon";
 import ToolLink from "@/components/toolLink";
 import { APP_GIT_PROJECT, APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, READ_CHANGELOG_STORAGE_NAME, ROOM_ENABLED, TOKEN_STORAGE_NAME, UPLOAD_ENABLED } from '@/lib/constants';
-import { useModalUpdate } from '@/lib/context/modalProvider';
+import { useModalUpdate } from '@/components/context/modalProvider';
 import Modal from '@/components/modal';
 import { MouseEvent, useEffect, useState } from 'react';
 import "@/styles/furpanel/layout.css";
-import { useUser } from '@/lib/context/userProvider';
+import { useUser } from '@/components/context/userProvider';
 import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { shouldShowChangelog } from '@/lib/utils';
 
 export default function Layout({children}: Readonly<{children: React.ReactNode;}>) {
-    const t = useTranslations('furpanel');
-    const tcommon = useTranslations('common');
+    const t = useTranslations();
     const {isOpen, icon, title, modalChildren, hideModal, showModal} = useModalUpdate();
     const [toolListExpanded, setToolListExpanded] = useState(false);
     const params = useSearchParams();
@@ -33,9 +32,9 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
         }
         if (shouldShowChangelog()) {
             localStorage.setItem(READ_CHANGELOG_STORAGE_NAME, APP_VERSION ?? "");
-            showModal(tcommon("changelog.title"),
+            showModal(t("common.changelog.title"),
             <span>
-                {tcommon.rich("changelog.description", {
+                {t.rich("common.changelog.description", {
                     a: (chunks) => <a target='_blank' href={APP_GIT_PROJECT_RELEASE.toString()}>{APP_GIT_PROJECT_RELEASE.toString()}</a>
                 })}
             </span>,
@@ -58,13 +57,13 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
                 </span>
                 <div className="spacer"></div>
                 <div className={`tools-list horizontal-list flex-wrap gap-4mm ${toolListExpanded ? "expanded" : ""}`}>
-                    {BOOKING_ENABLED && <ToolLink onClick={toolClick} href="/booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('booking.title')}</ToolLink>}
-                    {BADGE_ENABLED && <ToolLink onClick={toolClick} href="/badge" iconName={ICONS.PERSON_BOOK}>{t('badge.title')}</ToolLink>}
-                    {ROOM_ENABLED && <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('room.title')}</ToolLink>}
-                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick} href="/upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('upload_area.title')}</ToolLink>}
-                    <ToolLink onClick={toolClick} href="/user" iconName={ICONS.PERSON}>{t('user.title')}</ToolLink>
-                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('admin.title')}</ToolLink>}
-                    {DEBUG_ENABLED && <ToolLink href="/debug" iconName={ICONS.BUG_REPORT}>{t('debug.title')}</ToolLink>}
+                    {BOOKING_ENABLED && <ToolLink onClick={toolClick} href="/booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('furpanel.booking.title')}</ToolLink>}
+                    {BADGE_ENABLED && <ToolLink onClick={toolClick} href="/badge" iconName={ICONS.PERSON_BOOK}>{t('furpanel.badge.title')}</ToolLink>}
+                    {ROOM_ENABLED && <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('furpanel.room.title')}</ToolLink>}
+                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick} href="/upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('furpanel.upload_area.title')}</ToolLink>}
+                    <ToolLink onClick={toolClick} href="/user" iconName={ICONS.PERSON}>{t('furpanel.user.title')}</ToolLink>
+                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('furpanel.admin.title')}</ToolLink>}
+                    {DEBUG_ENABLED && <ToolLink href="/debug" iconName={ICONS.BUG_REPORT}>{t('furpanel.debug.title')}</ToolLink>}
                 </div>
                 <span>
                     <a href="#" className="hamburger rounded-l" onClick={()=>setToolListExpanded(!toolListExpanded)}>

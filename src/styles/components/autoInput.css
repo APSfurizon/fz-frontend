@@ -47,6 +47,7 @@ div.autocomplete-input {
     /* Disabled style */
     div.input-container:has(input.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);
+        background-color: var(--text-input-bg-disabled);
     }
 
     input.input-field:disabled {
@@ -90,12 +91,20 @@ div.autocomplete-input {
     }
 
     .search-result {
-        background: var(--suggestion-box-bg);
+        background: var(--autocomplete-selected-value-bg);
         border: 0px solid var(--text-input-border-normal);
         color: var(--text-input-color);
         padding: 0.375em;
         display: flex;
         gap: 0.5em;
+    }
+
+    .search-result:hover {
+        background-color: var(--autocomplete-selected-value-bg-hover);
+    }
+
+    .search-result > span {
+        color: var(--text-input-color);
     }
 
     .selected-value {

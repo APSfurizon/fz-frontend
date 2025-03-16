@@ -39,7 +39,7 @@ export class AutoInputFilter {
     }
 
     applyFilter(data: AutoInputSearchResult): boolean {
-        return data.code != undefined && this.filteredCodes.includes(data.code.trim()) || data.id != undefined && this.filteredIds.includes(data.id);
+        return (data.code != undefined && this.filteredCodes.includes(data.code.trim())) || (data.id != undefined && this.filteredIds.includes(data.id));
     } 
 
     filteredCodes: string[];
@@ -59,7 +59,7 @@ export function filterSearchResult(query: string, results: AutoInputSearchResult
 }
 
 export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoInputFilter, filterOut?: AutoInputFilter) {
-    return results.filter(result => (filterIn?.applyFilter (result) ?? true) && (!filterOut?.applyFilter (result) || true));
+    return results.filter(result => (filterIn?.applyFilter (result) ?? true) && (!(filterOut?.applyFilter (result) ?? true)));
 }
 
 /**

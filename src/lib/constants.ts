@@ -35,7 +35,7 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 /**Session duration in days */
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
-export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})?(?:\/(?!(login|logout|recover|register|nosecount|recover\/confirm)).+)?$/gmi;
+export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})?(?:\/(?!(login|logout|recover|register|nosecount|recover\/confirm|api\/og)).+)?$/gmi;
 /**Urls that need to be skipped if user is authenticated */
 export const REGEX_SKIP_AUTHENTICATED = /^(\/[A-z]{2})?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
 /**Login url */

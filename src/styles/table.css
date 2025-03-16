@@ -59,3 +59,22 @@ table {
         padding-left: 0.625em;
     }
 }
+
+.clickable,
+.selectable {
+    transition-duration: 120ms;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover,
+.selectable:hover {
+    background-color: var(--table-row-bg-hover);
+}
+
+.clickable:active,
+.selectable:active {
+    transform: scale(0.98);
+}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Icon, { ICONS } from './icon';
 import { useRouter } from 'next/navigation';
 import UserDropDown from './userDropdown';
-import { useUser } from '@/lib/context/userProvider';
+import { useUser } from '@/components/context/userProvider';
 import { useEffect, useState } from 'react';
 import "@/styles/components/header.css";
 import { DEVICE_TYPE, getDeviceType } from '@/lib/utils';

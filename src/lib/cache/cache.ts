@@ -1,6 +1,7 @@
 import { ApiErrorResponse, runRequest } from "../api/global";
 import { AutoInputCountriesApiAction, AutoInputStatesApiAction, Place, PlaceApiResponse } from "../api/authentication/register";
 import { buildSearchParams } from "../utils";
+import { GetPermissionsApiAction, GetPermissionsResponse } from "../api/admin/role";
 
 export function getParamsHash (...p: any[]) {
     var crypto = require('crypto')
@@ -45,5 +46,12 @@ export class CachedStates extends CachedData<Boolean | PlaceApiResponse | ApiErr
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData(...p: string[]) {
         return runRequest(new AutoInputStatesApiAction (), undefined, undefined, buildSearchParams({"code": p[0] ?? ""}));
+    }
+}
+
+export class CachedPermissions extends CachedData<Boolean | GetPermissionsResponse | ApiErrorResponse> {
+    duration: number = 1 * 24 * 60 * 60; // One day
+    loadData(...p: string[]) {
+        return runRequest(new GetPermissionsApiAction (), undefined, undefined, undefined);
     }
 }

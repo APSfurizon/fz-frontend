@@ -14,17 +14,5 @@ span.error-container {
 }
 
 a.suggestion {
-    display: inline-block;
-    width: 100%;
-}
-
-div.form-pair div.jan-input,
-div.form-pair div.autocomplete-input {
-    flex: 1;
-}
-
-@media (max-width:800px) {
-    .form-pair {
-        flex-direction: column;
-    }
+    text-align: center;
 }

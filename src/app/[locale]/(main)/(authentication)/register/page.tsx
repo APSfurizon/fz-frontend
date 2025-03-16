@@ -166,7 +166,9 @@ export default function Register() {
         })}</Checkbox>
       <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}>{t("register.form.disclaimer_data_protection.label")}</Checkbox>
     </DataForm>
-    <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('register.login_here')}</Link>
+    <div>
+      <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('register.login_here')}</Link>
+    </div>
   </>;
   }
   

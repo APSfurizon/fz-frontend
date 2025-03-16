@@ -1,8 +1,9 @@
-import { CachedCountries, CachedStates } from "../../cache/cache";
+import { CachedCountries, CachedPermissions, CachedStates } from "../../cache/cache";
 import { AutoInputSearchResult, CountrySearchResult } from "../../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { getFlagEmoji } from "../../components/userPicture";
 import { nullifyEmptyString } from "../../utils";
+import { GetPermissionsResponse } from "../admin/role";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "../global";
 import { UserPersonalInfo } from "../user";
 
@@ -84,6 +85,7 @@ export class AutoInputStatesApiAction implements ApiAction<PlaceApiResponse, Api
 
 const CACHED_COUNTRIES = new CachedCountries();
 const CACHED_STATES = new CachedStates();
+const CACHED_PERMISSIONS = new CachedPermissions();
 
 
 export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySearchResult[]> {
@@ -114,6 +116,22 @@ export function getAutoInputStates (countryCode?: string): Promise<AutoInputSear
                     id: index,
                     code: place.code,
                     description: place.name
+                };
+                return toReturn;
+            }));
+        }).catch ((err) => {reject (err)});
+    });
+}
+
+export function getAutoInputPermissions (): Promise<AutoInputSearchResult[]> {
+    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+        CACHED_PERMISSIONS.get ().then ((data) => {
+            const parsed = data as GetPermissionsResponse;
+            resolve (parsed.permissions.map ((permission, index) => {
+                const toReturn: AutoInputSearchResult = {
+                    id: index,
+                    code: permission,
+                    description: permission
                 };
                 return toReturn;
             }));

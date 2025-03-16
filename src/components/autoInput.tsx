@@ -227,8 +227,10 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                     alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
             }
             {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}
-            <div className="title" style={{flex:1}}>
-                {translateNullable(element.translatedDescription, locale) ?? element.description}
+            <div style={{flex:1}}>
+                <span className="title">
+                    {translateNullable(element.translatedDescription, locale) ?? element.description}
+                </span>
             </div>
             <Icon className="medium" iconName={ICONS.ADD_CIRCLE}></Icon>
         </div>;

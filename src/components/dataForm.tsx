@@ -22,7 +22,6 @@ const FormContext = createContext<FormUpdate | undefined>(undefined);
 export const useFormContext = () => {
     const context = useContext(FormContext);
     if (!context) {
-      console.warn("useFormContext must be used within FormContext.Provider");
       return {reset: null, setReset: () => {}};
     }
     return context;
@@ -42,9 +41,9 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     endpoint?: string,
     hideSave?: boolean,
     disableSave?: boolean,
-    loading: boolean,
+    loading?: boolean,
     method?: string,
-    setLoading: Dispatch<SetStateAction<boolean>>,
+    setLoading?: Dispatch<SetStateAction<boolean>>,
     style?: CSSProperties,
     saveButton?: SaveButtonData,
     resetOnFail?: boolean,
@@ -83,14 +82,14 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
             }
         }
         onBeforeSubmit && onBeforeSubmit();
-        setLoading (true);
+        setLoading && setLoading (true);
         runFormRequest(action, restPathParams, formData)
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
                 onFail && onFail (errorData);
                 if (resetOnFail) {setReset(true);}
             }).finally(()=>{
-                setLoading(false);
+                setLoading && setLoading(false);
                 if (resetOnSuccess) {setReset(true);}
             });
         e.preventDefault();

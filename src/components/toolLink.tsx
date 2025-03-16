@@ -12,7 +12,9 @@ export default function ToolLink ({iconName, iconStyle, href, children, style, c
 }>) {
     const path = usePathname();
     const locale = useLocale();
-    const activeClass = path === href.toString() || path?.replace(`/${locale}`,'') == href ? "active": "";
+    const currentPath = "https://localhost" + path.replaceAll(`/${locale}`, "");
+    const resolved = new URL(href.toString(), currentPath).href;
+    const activeClass = currentPath.includes(resolved) ? "active": "";
     return <Link href={href} onClick={onClick} className={`tool-link rounded-m ${activeClass} ${className ?? ""}`} style={{...style}}>
             {iconName !== undefined && <Icon iconName={iconName} style={{...iconStyle}}></Icon>}
             <span className="title small semibold">{children}</span>

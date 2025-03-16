@@ -10,7 +10,7 @@ interface ModalUpdateType {
     hideModal: () => void;
 }
 
-const ModalContext = createContext<ModalUpdateType | undefined>(undefined);
+const ModalContext = createContext<ModalUpdateType>(undefined as any);
 
 export function ModalProvider ({children}: Readonly<{children: React.ReactNode}>) {
     const [isOpen, setOpen] = useState(false);

@@ -10,9 +10,8 @@ import useTitle from "@/lib/api/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 
-export default function Login() {
+export default function RecoverConfirm() {
   const t = useTranslations("authentication");
-  const tcommon = useTranslations("common");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState<string>("s");

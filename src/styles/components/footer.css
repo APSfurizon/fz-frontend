@@ -13,3 +13,10 @@
         align-items: center;
     }
 }
+
+@media (prefers-color-scheme: light) {
+    img.footer-logo-instagram,
+    img.footer-logo-twitter {
+        filter: invert(1);
+    }
+}

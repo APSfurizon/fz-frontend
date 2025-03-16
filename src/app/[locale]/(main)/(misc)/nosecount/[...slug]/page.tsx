@@ -11,6 +11,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import useTitle from "@/lib/api/hooks/useTitle";
 import ModalError from "@/components/modalError";
 import Link from "next/link";
+import LoadingPanel from "@/components/loadingPanel";
 
 export default function NosecountPage({ params }: {params: Promise<{slug: string[]}>}) {
     const MODE_FURSUIT = "fursuits";
@@ -20,6 +21,8 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     const [allEvents, setAllEvents] = useState<AllEventsResponse>();
     const [eventId, setEventId] = useState<number>();
     const [selectedEvent, setSelectedEvent] = useState<string>();
+
+    const [totalCount, setTotalCount] = useState<number>();
 
     // Modes
     const [roomsData, setRoomsData] = useState<NoseCountResponse> ();
@@ -33,8 +36,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     const [error, setError] = useState<ApiErrorResponse | ApiDetailedErrorResponse> ();
     const [loading, setLoading] = useState(false);
     
-    const t = useTranslations("misc");
-    const tcommon = useTranslations("common");
+    const t = useTranslations();
     const formatter = useFormatter();
     const locale = useLocale();
 
@@ -120,45 +122,57 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         }
     }, [needsLoading]);
 
-    useTitle(t("nosecount.title"));
+    useEffect(()=>{
+        if (!roomsData) return;
+        const hotelGuestCount = roomsData.hotels.map(
+            hotel=>hotel.roomTypes.map(
+                roomType => roomType.rooms.map(
+                    room => room.guests
+                )
+            )
+        ).flat(3).length;
+        
+        const dailyFursCount = new Set(Object.keys(roomsData.dailyFurs).map(
+            day => roomsData.dailyFurs[day].map(user=>user.userId)
+        ).flat()).size;
+
+        setTotalCount(hotelGuestCount + roomsData.ticketOnlyFurs.length + dailyFursCount);
+    }, [roomsData])
+
+    useTitle(t("misc.nosecount.title"));
 
     const options = <>
         {/* Rendering options */}
         <div className="options-list horizontal-list flex-wrap gap-4mm">
             {(fursuitMode || sponsorMode) && 
                 <Link href={`/nosecount/${selectedEvent}/`} className="title bold change-mode">
-                    {t("nosecount.title")}
+                    {t("misc.nosecount.title")}
                 </Link>}
             {!fursuitMode && 
                 <Link href={`/nosecount/${selectedEvent}/fursuits`} className="title bold change-mode">
-                    {t("nosecount.links.fursuits")}
+                    {t("misc.nosecount.links.fursuits")}
                 </Link>}
             {!sponsorMode && 
                 <Link href={`/nosecount/${selectedEvent}/sponsors`} className="title bold change-mode">
-                    {t("nosecount.links.sponsors")}
+                    {t("misc.nosecount.links.sponsors")}
                 </Link>}
         </div>
     </>
 
     return <div className="page">
-        {loading && <div className="vertical-list flex-vertical-center">
-            <div className="horizontal-list gap-4mm">
-                <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
-                {tcommon("loading")}
-            </div>
-        </div>}
+        {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel/></div>}
         {error && <ModalError translationRoot="misc" translationKey="nosecount.errors" error={error}></ModalError>}
 
         {/* Rendering sponsors */}
         {sponsorMode && <>
-        <p className="title x-large bold">{t("nosecount.sections.sponsors")}</p>
+        <p className="title x-large bold">{t("misc.nosecount.sections.sponsors")}</p>
         {options}
-        {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{tcommon("sponsorships.super_sponsor")}</p>}
+        {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SUPER_SPONSOR?.map((user, index)=>
                 <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname></UserPicture>)}
         </div>
-        {sponsorData?.users.SPONSOR && <p className="title large">{tcommon("sponsorships.sponsor")}</p>}
+        {sponsorData?.users.SPONSOR && <p className="title large">{t("common.sponsorships.sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SPONSOR?.map((user, index)=>
                 <UserPicture size={96} key={`s-${index}`} userData={user} showFlag showNickname></UserPicture>)}
@@ -167,7 +181,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
 
         {/* Rendering fursuits */}
         {fursuitMode && <>
-        <p className="title x-large bold">{t("nosecount.sections.fursuits")}</p>
+        <p className="title x-large bold">{t("misc.nosecount.sections.fursuits")}</p>
         {options}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {fursuitData?.fursuits.map((fursuit, index)=>
@@ -178,8 +192,9 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
 
         {/* Rendering nosecount */}
         {roomsData && <>
-        <p className="title x-large bold section-title">{t.rich("nosecount.sections.nosecount", 
+        <p className="title x-large bold section-title">{t.rich("misc.nosecount.sections.nosecount", 
             {b: (chunks)=><b className="highlight">{chunks}</b>})}</p>
+        <p className="title large">{t("misc.nosecount.total_count", {count: totalCount ?? 0})}</p>
         {options}
         {/* Hotel */}
         <div className="vertical-list gap-4mm">
@@ -218,7 +233,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {Object.keys(roomsData.dailyFurs).length > 0 && <>
             <p className="title average horizontal-list gap-2mm flex-vertical-center">
                 <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
-                {t("nosecount.daily_furs")}
+                {t("misc.nosecount.daily_furs")}
             </p>
             {Object.keys(roomsData.dailyFurs).map((day, di)=> <div className="daily-day">
                     <p className="title">{formatter.dateTime(new Date(day), {dateStyle: "medium"})}</p>
