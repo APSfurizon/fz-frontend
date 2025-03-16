@@ -30,7 +30,8 @@ export interface OrderData {
     dailyDays: string[],
     room: RoomData,
     totalFursuits: number,
-    orderEvent: ConventionEvent
+    orderEvent: ConventionEvent,
+    secret: string
 }
 
 export interface BookingOrderResponse extends ApiResponse {

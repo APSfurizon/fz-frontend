@@ -10,7 +10,7 @@ import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/lib/api/booking";
 import { getCountdown, translate } from "@/lib/utils";
-import "@/styles/furpanel/booking.css";
+import { useQRCode } from 'next-qrcode'
 import ModalError from "@/components/modalError";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
@@ -20,6 +20,7 @@ import DataForm from "@/components/dataForm";
 import { useUser } from "@/components/context/userProvider";
 import AutoInput from "@/components/autoInput";
 import LoadingPanel from "@/components/loadingPanel";
+import "@/styles/furpanel/booking.css";
 
 export default function BookingPage() {
     const t = useTranslations();
@@ -61,6 +62,10 @@ export default function BookingPage() {
             </span>, ICONS.CHECK_CIRCLE);
     }
     
+    // order QR logic
+    const [secretModalOpen, setSecretModalOpen] = useState(false);
+    const { Canvas } = useQRCode();
+
     useTitle(t("furpanel.booking.title"));
 
     /**UI variables */
@@ -212,7 +217,7 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                 {/* Order view */}
-                <div className="horizontal-list gap-2mm flex-wrap">
+                <div className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
                     <span className="title medium">{t("furpanel.booking.your_booking")}</span>
                     <span className="title medium">({t("furpanel.booking.items.code")}&nbsp;
                     <b className="highlight">{bookingData?.order?.code}</b>
@@ -220,9 +225,11 @@ export default function BookingPage() {
                     <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
                         {t(`common.order_status.${bookingData?.order.orderStatus}`)}
                     </StatusBox>
+                    {bookingData?.order?.secret && <Button iconName={ICONS.QR_CODE} onClick={()=>setSecretModalOpen(true)}
+                        title={t("furpanel.booking.actions.show_qr")}/>}
                 </div>
                 <div className="order-data">
-                    <div className="order-items-container horizontal-list flex-same-base gap-4mm">
+                    <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                         {/* Ticket item */}
                         {orderItem(
                             t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
@@ -247,9 +254,10 @@ export default function BookingPage() {
                             {t("furpanel.booking.retry_payment")}
                         </Button>
                         </>}
-                        <Button className="action-button" disabled={isEditLocked} iconName={ICONS.EDIT} busy={actionLoading} onClick={requestOrderEditLink}>
+                        <Button className="action-button" disabled={isEditLocked} iconName={ICONS.OPEN_IN_NEW} busy={actionLoading} onClick={requestOrderEditLink}>
                             {t("furpanel.booking.edit_booking")}
                         </Button>
+                        <div className="spacer"></div>
                         <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
                             {t("furpanel.booking.actions.exchange_order")}
                         </Button>
@@ -297,6 +305,26 @@ export default function BookingPage() {
                 <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{t("common.confirm")}</Button>
             </div>
             </DataForm>
+        </Modal>
+        {/* QR Secret modal */}
+        <Modal open={secretModalOpen} icon={ICONS.QR_CODE} title={t("furpanel.booking.reservation_qr")} onClose={()=>setSecretModalOpen(false)}>
+                <div className="horizontal-list" style={{justifyContent: "center"}}>
+                <Canvas
+                    text={bookingData?.order?.secret ?? "a"}
+                    options={{
+                        type: 'image/jpeg',
+                        quality: 0.3,
+                        errorCorrectionLevel: 'M',
+                        margin: 3,
+                        scale: 4,
+                        width: 200,
+                        color: {
+                        dark: '#000000',
+                        light: '#FFFFFF',
+                        },
+                    }}
+                />
+                </div>
         </Modal>
     </>;
 }

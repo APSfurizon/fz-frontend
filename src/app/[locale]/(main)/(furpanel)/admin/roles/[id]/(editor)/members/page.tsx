@@ -126,7 +126,7 @@ export default function RoleMembersEditor () {
             className="vertical-list gap-2mm">
             <AutoInput manager={new AutoInputUsersManager} onChange={selectMember}
                 filterOut={new AutoInputFilter (entity?.users.map(eu=>eu.displayData.userId), [])}
-                label={t("furpanel.admin.users.security.roles.input.select_user.label")}>
+                label={t("furpanel.admin.users.security.roles.input.select_user.label")} param={[true]}>
             </AutoInput>
             <div className="vertical-list gap-2mm">
                 <Checkbox onClick={setTemporary} initialValue={temporaryUserTemp}>

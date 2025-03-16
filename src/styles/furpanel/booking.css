@@ -32,16 +32,16 @@ div.countdown-container {
     }
 }
 
-div.order-items-container {
-    flex-wrap: wrap;
-}
-
 div.countdown-container:not(.minimized) {
     min-height: 20em;
 }
 
 div.order-data > *{
     margin-bottom: 1em;
+}
+
+div.order-items-container {
+    justify-content: space-between;
 }
 
 div.order-items-container div.item {
@@ -58,6 +58,10 @@ div.order-items-container div.item {
 
 div.order-items-container div.item:has(span.item-subtitle) {
     padding-bottom: 1.25em;
+}
+
+div.item {
+    flex-grow: 1;
 }
 
 div.item span.item-name {
