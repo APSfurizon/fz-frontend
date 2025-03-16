@@ -65,6 +65,7 @@ export const ICONS = Object.freeze({
     PHOTO_CAMERA: "photo_camera",
     PRINT: "print",
     PROGRESS_ACTIVITY: "progress_activity",
+    QR_CODE: "qr_code",
     REFRESH: "refresh",
     REMOVE: "remove",
     REPLAY: "replay",

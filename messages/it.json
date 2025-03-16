@@ -181,8 +181,10 @@
       "actions": {
         "review_info": "Rivedi informazioni",
         "confirm_info": "Conferma informazioni",
-        "exchange_order": "Scambia ordine"
-      }
+        "exchange_order": "Scambia ordine",
+        "show_qr": "Mostra codice QR"
+      },
+      "reservation_qr": "Codice QR prenotazione"
     },
     "badge": {
       "title": "Badge",

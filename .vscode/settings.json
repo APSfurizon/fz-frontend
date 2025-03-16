@@ -3,5 +3,5 @@
         "messages",
         "src/i18n"
     ],
-    "i18n-ally.keystyle": "auto"
+    "i18n-ally.keystyle": "nested"
 }

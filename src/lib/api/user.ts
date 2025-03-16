@@ -78,6 +78,7 @@ export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorR
 
 /**
  * Defines the search service to look for users
+ * @param additionalValues [0] = isAdminSearch = boolean
  */
 export class AutoInputUsersManager implements AutoInputManager {
     codeOnly: boolean = false;
@@ -94,7 +95,7 @@ export class AutoInputUsersManager implements AutoInputManager {
 
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value})).then (results => {
+            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "is-admin-search": additionalValues[0] ?? false})).then (results => {
                 const searchResult = results as UserSearchResponse;
                 const users = searchResult.users.map(usr=>toSearchResult(usr));
                 resolve (
