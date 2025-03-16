@@ -225,8 +225,11 @@ export default function BookingPage() {
                     <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
                         {t(`common.order_status.${bookingData?.order.orderStatus}`)}
                     </StatusBox>
-                    {bookingData?.order?.secret && <Button iconName={ICONS.QR_CODE} onClick={()=>setSecretModalOpen(true)}
-                        title={t("furpanel.booking.actions.show_qr")}/>}
+                    {bookingData?.order?.checkinSecret &&
+                        <Button iconName={ICONS.QR_CODE} onClick={()=>setSecretModalOpen(true)} title={t("furpanel.booking.actions.show_qr")}>
+                            {t("furpanel.booking.actions.show_qr")}
+                        </Button>
+                    }
                 </div>
                 <div className="order-data">
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
@@ -310,11 +313,11 @@ export default function BookingPage() {
         <Modal open={secretModalOpen} icon={ICONS.QR_CODE} title={t("furpanel.booking.reservation_qr")} onClose={()=>setSecretModalOpen(false)}>
                 <div className="horizontal-list" style={{justifyContent: "center"}}>
                 <Canvas
-                    text={bookingData?.order?.secret ?? "a"}
+                    text={bookingData?.order?.checkinSecret ?? "a"}
                     options={{
-                        type: 'image/jpeg',
-                        quality: 0.3,
-                        errorCorrectionLevel: 'M',
+                        type: 'image/webp',
+                        quality: 0.25,
+                        errorCorrectionLevel: 'H',
                         margin: 3,
                         scale: 4,
                         width: 200,

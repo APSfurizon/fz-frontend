@@ -182,9 +182,9 @@
         "review_info": "Review informations",
         "confirm_info": "Confirm informazions",
         "exchange_order": "Exchange order",
-        "show_qr": "Show QR code"
+        "show_qr": "Check-in QR code"
       },
-      "reservation_qr": "Reservation QR code"
+      "reservation_qr": "Check-in QR code"
     },
     "badge": {
       "title": "Badge",

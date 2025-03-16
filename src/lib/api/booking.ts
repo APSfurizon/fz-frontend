@@ -31,7 +31,7 @@ export interface OrderData {
     room: RoomData,
     totalFursuits: number,
     orderEvent: ConventionEvent,
-    secret: string
+    checkinSecret: string
 }
 
 export interface BookingOrderResponse extends ApiResponse {
