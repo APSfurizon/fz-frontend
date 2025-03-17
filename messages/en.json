@@ -134,7 +134,8 @@
           "title": "Official group",
           "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
         },
-        "exchange_explaination": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such exchange."
+        "exchange_explaination": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such exchange.",
+        "reservation_qr": "Show this QR code to a Furizon staffer when checking in."
       },
       "items": {
         "code": "code",

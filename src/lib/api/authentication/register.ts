@@ -93,14 +93,13 @@ export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySea
         CACHED_COUNTRIES.get().then ((data) => {
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
-                const toReturn: CountrySearchResult = {
-                    id: index,
-                    code: place.code,
-                    description: `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`,
-                    icon: getFlagEmoji(place.code),
-                    phonePrefix: place.phonePrefix,
-                    translatedDescription: place.translatedDescription
-                };
+                const toReturn = new CountrySearchResult();
+                toReturn.id = index;
+                toReturn.code = place.code;
+                toReturn.description = `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`;
+                toReturn.icon = getFlagEmoji(place.code);
+                toReturn.phonePrefix = place.phonePrefix;
+                toReturn.translatedDescription = place.translatedDescription;
                 return toReturn;
             }));
         }).catch ((err) => {reject (err)});
@@ -112,11 +111,10 @@ export function getAutoInputStates (countryCode?: string): Promise<AutoInputSear
         CACHED_STATES.get (countryCode).then ((data) => {
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
-                const toReturn: AutoInputSearchResult = {
-                    id: index,
-                    code: place.code,
-                    description: place.name
-                };
+                const toReturn = new AutoInputSearchResult();
+                toReturn.id = index;
+                toReturn.code = place.code;
+                toReturn.description = place.name;
                 return toReturn;
             }));
         }).catch ((err) => {reject (err)});
@@ -128,11 +126,10 @@ export function getAutoInputPermissions (): Promise<AutoInputSearchResult[]> {
         CACHED_PERMISSIONS.get ().then ((data) => {
             const parsed = data as GetPermissionsResponse;
             resolve (parsed.permissions.map ((permission, index) => {
-                const toReturn: AutoInputSearchResult = {
-                    id: index,
-                    code: permission,
-                    description: permission
-                };
+                const toReturn = new AutoInputSearchResult();
+                toReturn.id = index;
+                toReturn.code = permission;
+                toReturn.description = permission;
                 return toReturn;
             }));
         }).catch ((err) => {reject (err)});

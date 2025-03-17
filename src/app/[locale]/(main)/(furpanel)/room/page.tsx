@@ -346,10 +346,10 @@ export default function RoomPage() {
           <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
               <Icon iconName={ICONS.BED}></Icon>
               <span className="limit-view">{data?.currentRoomInfo.roomName}</span>
-              <div className="spacer"></div>
+              <div className="spacer" style={{flexGrow: "300"}}></div>
               {
                 data.currentRoomInfo.userIsOwner && <>
-                <div className="actions-container horizontal-list flex-wrap gap-4mm">
+                <div className="actions-container horizontal-list flex-wrap gap-4mm flex-space-between" style={{flexGrow: "1"}}>
                   <Button iconName={ICONS.EDIT_SQUARE} onClick={()=>promptRoomRename()}>{t("furpanel.room.actions.rename")}</Button>
                   <Button className="danger" iconName={ICONS.DELETE} onClick={()=>promptRoomDelete()}>{t("furpanel.room.actions.delete")}</Button>
                 </div>
@@ -385,26 +385,28 @@ export default function RoomPage() {
           <div className="invite-toolbar horizontal-list gap-4mm">
               <StatusBox>{translate(data.currentRoomInfo.roomData.roomTypeNames, locale)}</StatusBox>
               <StatusBox>{t("furpanel.room.room_number_left", {size: data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length})}</StatusBox>
-              <div className="spacer"></div>
-              {data.currentRoomInfo.userIsOwner ? <>
-              {/* Owner actions */}
-                <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
-                  onClick={()=>promptRoomInvite()}>{t("furpanel.room.actions.invite")}</Button>
-                {data.currentRoomInfo.confirmed === false ? data.currentRoomInfo.confirmationSupported && <>
-                  <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
-                    onClick={()=>promptRoomInvite()}>{t("furpanel.room.actions.confirm_room")}</Button>
-                </> : data.currentRoomInfo.confirmationSupported && <>
-                <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
-                    onClick={()=>promptRoomInvite()}>{t("furpanel.room.actions.unconfirm_room")}</Button>
+              <div className="spacer" style={{flexGrow: "300"}}></div>
+              <div className="horizontal-list flex-space-between gap-4mm" style={{flexGrow: "1"}}>
+                {data.currentRoomInfo.userIsOwner ? <>
+                {/* Owner actions */}
+                  <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
+                    onClick={()=>promptRoomInvite()}>{t("furpanel.room.actions.invite")}</Button>
+                  {data.currentRoomInfo.confirmed === false ? data.currentRoomInfo.confirmationSupported && <>
+                    <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
+                      onClick={()=>promptRoomInvite()}>{t("furpanel.room.actions.confirm_room")}</Button>
+                  </> : data.currentRoomInfo.confirmationSupported && <>
+                  <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
+                      onClick={()=>promptRoomInvite()}>{t("furpanel.room.actions.unconfirm_room")}</Button>
+                  </>}
+                  <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomExchange()} 
+                    disabled={!!data && !data.canExchange}>
+                      {t("furpanel.room.actions.exchange")}
+                  </Button>
+                </> : <>
+                {/* Guest actions */}
+                  <Button iconName={ICONS.DOOR_OPEN} onClick={()=>promptRoomLeave()}>{t("furpanel.room.actions.leave")}</Button>
                 </>}
-                <Button className="danger" iconName={ICONS.SEND} onClick={()=>promptRoomExchange()} 
-                  disabled={!!data && !data.canExchange}>
-                    {t("furpanel.room.actions.exchange")}
-                </Button>
-              </> : <>
-              {/* Guest actions */}
-                <Button iconName={ICONS.DOOR_OPEN} onClick={()=>promptRoomLeave()}>{t("furpanel.room.actions.leave")}</Button>
-              </>}
+              </div>
           </div>
         </div>
         </>}

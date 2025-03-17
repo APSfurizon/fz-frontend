@@ -2,17 +2,22 @@ import { getAutoInputCountries, getAutoInputStates } from "../api/authentication
 import { MediaData } from "../api/media";
 import { translateNullable } from "../utils";
 
-export interface AutoInputSearchResult {
-    id?: number,
-    translatedDescription?: Record<string, string>,
-    description?: string,
-    code?: string,
-    icon?: string,
-    imageUrl?: string,
-}
-
-export interface UserSearchResult extends Partial<AutoInputSearchResult> {
-   propic: MediaData
+export class AutoInputSearchResult {
+    id?: number;
+    translatedDescription?: Record<string, string>;
+    description?: string;
+    code?: string;
+    icon?: string;
+    imageUrl?: string;
+    public getDescription (locale?: string): string {
+        if (this.translatedDescription && locale) {
+            return this.translatedDescription[locale] ?? this.description;
+        } else if (this.description) {
+            return this.description;
+        } else {
+            return this.id?.toString() ?? this.code ?? "";
+        }
+    }
 }
 
 export class AutoInputFilter {
@@ -46,16 +51,38 @@ export class AutoInputFilter {
     filteredIds: number[];
 }
 
-export function filterSearchResult(query: string, results: AutoInputSearchResult[], locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
+export enum SearchType {
+    DEFAULT,
+    STARTING,
+}
+
+export function filterSearchResult(query: string, searchType: SearchType, results: AutoInputSearchResult[], locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
     let value = query.trim().toLowerCase();
-    return results.filter ((result) => (
-            result.description?.toLowerCase().includes(value) ||
-            result.code?.toLowerCase().includes(value) ||
-            translateNullable(result.translatedDescription, locale)?.toLowerCase().includes(value)
-        ) &&
+    return results.filter ((result) => applySearch(value, searchType, result, locale) &&
         (!filter || filter.applyFilter (result)) &&
         (!filterOut || !filterOut.applyFilter (result))
     );
+}
+
+/**
+ * Applies search based on type
+ * @param query the query to seach
+ * @param type the type of search to use
+ * @param result the search result to test
+ * @param locale the current locale to get the translated description
+ */
+export function applySearch (query: string, searchType: SearchType, result: AutoInputSearchResult, locale?: string) {
+    const translatedDescription = translateNullable(result.translatedDescription, locale)?.toLowerCase();
+    switch(searchType) {
+        case SearchType.STARTING:
+            return result.description?.toLowerCase().startsWith(query) ||
+                result.code?.toLowerCase().startsWith(query) ||
+                translatedDescription?.startsWith(query);
+        default:
+            return result.description?.toLowerCase().includes(query) ||
+                result.code?.toLowerCase().includes(query) ||
+                translatedDescription?.includes(query);
+    }
 }
 
 export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoInputFilter, filterOut?: AutoInputFilter) {
@@ -63,21 +90,44 @@ export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoIn
 }
 
 /**
- * @param T string if code is used, number if id is used
+ * Manages the autoinput fetching logic, from search to loading prefilled data
+ * @param codeOnly string if code is used, number if id is used
  */
 export interface AutoInputManager {
     /**Extract data's code only, do not use Ids */
     codeOnly: boolean,
+    /**
+     * 
+     * @param filter filter out anything
+     * @param customIdExtractor a custom way to extract the data from the item
+     * @param additionalValues additional values to be used as search params
+     */
     loadByIds: (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number,
         additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+    /**
+     * Executes a full text search
+     * @param value the query to look
+     * @param locale the locale to use to translate the items
+     * @param filter filter out every item that's not in this filter
+     * @param filterOut filter out every item that's in this filter
+     * @param additionalValues additional values to be used as search params
+     */
     searchByValues: (value: string, locale?: string,
         filter?: AutoInputFilter, filterOut?: AutoInputFilter,
         additionalValues?: any) => Promise<AutoInputSearchResult[]>,
+
+    /**
+     * To be used with requiresParam in autoinput, enables the component whenever the parameter is initialized and there are search results that are selectable
+     * @param additionalValues  additional values to be used as search params
+     */
     isPresent: (additionalValues?: any) => Promise<boolean>
 }
 
-export interface CountrySearchResult extends AutoInputSearchResult {
-    phonePrefix?: string
+export class CountrySearchResult extends AutoInputSearchResult {
+    phonePrefix?: string;
+    public getDescription (locale?: string): string {
+        return `${super.getDescription()}`;
+    }
 }
 
 export class AutoInputCountriesManager implements AutoInputManager {
@@ -110,7 +160,7 @@ export class AutoInputCountriesManager implements AutoInputManager {
             return new Promise((resolve, reject) => {
                 getAutoInputCountries (this.showNumber).then (results => {
                     resolve (
-                        filterSearchResult(value, results, locale, filter, filterOut) as CountrySearchResult[]
+                        filterSearchResult(value, SearchType.STARTING, results, locale, filter, filterOut) as CountrySearchResult[]
                     );
                 });
             });
@@ -141,7 +191,7 @@ export class AutoInputStatesManager implements AutoInputManager {
             if (!countryCode) resolve([]);
             getAutoInputStates (countryCode!).then (results => {
                 resolve (
-                    filterSearchResult(value, results, locale, filter, filterOut)
+                    filterSearchResult(value, SearchType.STARTING, results, locale, filter, filterOut)
                 );
             });
         });

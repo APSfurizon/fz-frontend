@@ -10,7 +10,7 @@ import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/lib/api/booking";
 import { getCountdown, translate } from "@/lib/utils";
-import { useQRCode } from 'next-qrcode'
+import { useQRCode } from 'next-qrcode';
 import ModalError from "@/components/modalError";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
@@ -219,17 +219,14 @@ export default function BookingPage() {
                 {/* Order view */}
                 <div className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
                     <span className="title medium">{t("furpanel.booking.your_booking")}</span>
-                    <span className="title medium">({t("furpanel.booking.items.code")}&nbsp;
-                    <b className="highlight">{bookingData?.order?.code}</b>
-                    )</span>
-                    <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
-                        {t(`common.order_status.${bookingData?.order.orderStatus}`)}
-                    </StatusBox>
-                    {bookingData?.order?.checkinSecret &&
-                        <Button iconName={ICONS.QR_CODE} onClick={()=>setSecretModalOpen(true)} title={t("furpanel.booking.actions.show_qr")}>
-                            {t("furpanel.booking.actions.show_qr")}
-                        </Button>
-                    }
+                    <div className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
+                        <span className="title medium">({t("furpanel.booking.items.code")}&nbsp;
+                        <b className="highlight">{bookingData?.order?.code}</b>
+                        )</span>
+                        <StatusBox status={mapOrderStatusToStatusBox(bookingData?.order.orderStatus ?? "CANCELED")}>
+                            {t(`common.order_status.${bookingData?.order.orderStatus}`)}
+                        </StatusBox>
+                    </div>
                 </div>
                 <div className="order-data">
                     <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
@@ -251,19 +248,26 @@ export default function BookingPage() {
                     </div>
 
                     {/* Order actions */}
-                    <div className="horizontal-list gap-4mm">
+                    <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                         {pageData?.shouldRetry && <>
                             <Button className="action-button" iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
                             {t("furpanel.booking.retry_payment")}
                         </Button>
                         </>}
-                        <Button className="action-button" disabled={isEditLocked} iconName={ICONS.OPEN_IN_NEW} busy={actionLoading} onClick={requestOrderEditLink}>
-                            {t("furpanel.booking.edit_booking")}
+                        {bookingData?.order?.checkinSecret &&
+                        <Button iconName={ICONS.QR_CODE} onClick={()=>setSecretModalOpen(true)} title={t("furpanel.booking.actions.show_qr")}>
+                            {t("furpanel.booking.actions.show_qr")}
                         </Button>
-                        <div className="spacer"></div>
-                        <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
-                            {t("furpanel.booking.actions.exchange_order")}
-                        </Button>
+                        }
+                        <div className="spacer" style={{flexGrow: "300"}}></div>
+                        <div className="horizontal-list gap-4mm flex-wrap flex-space-between" style={{flexGrow: "1"}}>
+                            <Button className="action-button" disabled={isEditLocked} iconName={ICONS.OPEN_IN_NEW} busy={actionLoading} onClick={requestOrderEditLink}>
+                                {t("furpanel.booking.edit_booking")}
+                            </Button>
+                            <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={()=>promptExchange()}>
+                                {t("furpanel.booking.actions.exchange_order")}
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="vertical-list gap-2mm">
@@ -311,7 +315,7 @@ export default function BookingPage() {
         </Modal>
         {/* QR Secret modal */}
         <Modal open={secretModalOpen} icon={ICONS.QR_CODE} title={t("furpanel.booking.reservation_qr")} onClose={()=>setSecretModalOpen(false)}>
-                <div className="horizontal-list" style={{justifyContent: "center"}}>
+            <div className="horizontal-list" style={{justifyContent: "center"}}>
                 <Canvas
                     text={bookingData?.order?.checkinSecret ?? "a"}
                     options={{
@@ -322,12 +326,19 @@ export default function BookingPage() {
                         scale: 4,
                         width: 200,
                         color: {
-                        dark: '#000000',
-                        light: '#FFFFFF',
-                        },
+                            dark: '#000000',
+                            light: '#FFFFFF',
+                        }
+                    }}
+                    logo={{
+                        src: '/images/favicon.png',
+                        options: {
+                            width: 30
+                        }
                     }}
                 />
-                </div>
+            </div>
+            <span className="descriptive small">{t("furpanel.booking.messages.reservation_qr")}</span>
         </Modal>
     </>;
 }

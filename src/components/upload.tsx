@@ -27,7 +27,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     requireCrop?: boolean,
     readonly?: boolean,
     viewSize?: number,
-    cropAspectRatio?: "full" | "square",
+    cropAspectRatio?: "any" | "square",
     setBlob?: (blob?: Blob) => any,
     onDelete?: (mediaId: number) => any
 }>) { 
@@ -191,7 +191,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
         <Modal style={{overflow: "visible"}} open={cropDialogOpen} title={cropTitle ?? t("components.upload.crop")}
             onClose={()=> onCropCanceled()} zIndex={505}>
             <Cropper src={previewUrl} initialAspectRatio={1} guides={false} aspectRatio={cropAspectRatio == 'square' ? 1 : undefined} ref={cropperRef}
-                zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100}>
+                zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100} style={{maxHeight: '75vh'}}>
             </Cropper>
             <div className="horizontal-list gap-2mm">
                 <Button iconName={ICONS.ROTATE_LEFT} onClick={()=>cropperRef.current?.cropper.rotate(-45)}></Button>
