@@ -94,6 +94,7 @@ export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySea
             const parsed = data as PlaceApiResponse;
             resolve (parsed.data.map ((place, index) => {
                 const toReturn = new CountrySearchResult();
+                toReturn.showPhoneNumber = showNumber;
                 toReturn.id = index;
                 toReturn.code = place.code;
                 toReturn.description = `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`;

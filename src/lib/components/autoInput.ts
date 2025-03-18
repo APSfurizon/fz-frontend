@@ -125,8 +125,9 @@ export interface AutoInputManager {
 
 export class CountrySearchResult extends AutoInputSearchResult {
     phonePrefix?: string;
+    showPhoneNumber?: boolean;
     public getDescription (locale?: string): string {
-        return `${super.getDescription()}`;
+        return super.getDescription(locale) + (this.showPhoneNumber === true ? ` (${this.phonePrefix})` : "");
     }
 }
 
@@ -178,10 +179,11 @@ export class AutoInputCountriesManager implements AutoInputManager {
 export class AutoInputStatesManager implements AutoInputManager {
     codeOnly: boolean = true;
 
-    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any[]): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputStates (additionalValues[0]).then (results => {
-                resolve (filterLoaded(results, filter));
+            getAutoInputStates (additionalValues ? additionalValues[0] : undefined).then (results => {
+                const filtered = filterLoaded(results, filter);
+                resolve (filtered);
             });
         });
     }
