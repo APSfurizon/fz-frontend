@@ -44,7 +44,7 @@ export class AutoInputFilter {
     }
 
     applyFilter(data: AutoInputSearchResult): boolean {
-        return (data.code != undefined && this.filteredCodes.includes(data.code.trim())) || (data.id != undefined && this.filteredIds.includes(data.id));
+        return (data.code !== undefined && this.filteredCodes.includes(data.code.trim())) || (data.id !== undefined && this.filteredIds.includes(data.id));
     } 
 
     filteredCodes: string[];
@@ -86,7 +86,7 @@ export function applySearch (query: string, searchType: SearchType, result: Auto
 }
 
 export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoInputFilter, filterOut?: AutoInputFilter) {
-    return results.filter(result => (filterIn?.applyFilter (result) ?? true) && (!(filterOut?.applyFilter (result) ?? true)));
+    return results.filter(result => (filterIn?.applyFilter (result) ?? true) && (!(filterOut?.applyFilter (result) ?? false)));
 }
 
 /**
@@ -182,7 +182,7 @@ export class AutoInputStatesManager implements AutoInputManager {
     loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any[]): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
             getAutoInputStates (additionalValues ? additionalValues[0] : undefined).then (results => {
-                const filtered = filterLoaded(results, filter);
+                const filtered = filterLoaded(results, filter, undefined);
                 resolve (filtered);
             });
         });
