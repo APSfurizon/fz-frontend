@@ -53,15 +53,18 @@ export class AutoInputFilter {
 
 export enum SearchType {
     DEFAULT,
-    STARTING,
+    RANKED,
+}
+
+export type SearchRank = {
+    data: AutoInputSearchResult,
+    rank: number
 }
 
 export function filterSearchResult(query: string, searchType: SearchType, results: AutoInputSearchResult[], locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
     let value = query.trim().toLowerCase();
-    return results.filter ((result) => applySearch(value, searchType, result, locale) &&
-        (!filter || filter.applyFilter (result)) &&
-        (!filterOut || !filterOut.applyFilter (result))
-    );
+    const filteredResults = results.filter ((result) => (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result)));
+    return applySearch(value, searchType, filteredResults, locale);
 }
 
 /**
@@ -71,17 +74,31 @@ export function filterSearchResult(query: string, searchType: SearchType, result
  * @param result the search result to test
  * @param locale the current locale to get the translated description
  */
-export function applySearch (query: string, searchType: SearchType, result: AutoInputSearchResult, locale?: string) {
-    const translatedDescription = translateNullable(result.translatedDescription, locale)?.toLowerCase();
+export function applySearch (query: string, searchType: SearchType, results: AutoInputSearchResult[], locale?: string): AutoInputSearchResult[] {
+    
     switch(searchType) {
-        case SearchType.STARTING:
-            return result.description?.toLowerCase().startsWith(query) ||
-                result.code?.toLowerCase().startsWith(query) ||
-                translatedDescription?.startsWith(query);
+        case SearchType.RANKED:
+            const ranked = results.map(result => {
+                const translatedDescription = translateNullable(result.translatedDescription, locale)?.toLowerCase();
+                const ranks: number[] = [translatedDescription ?? result.description ?? result.code]
+                    .map(dsc => dsc ? dsc.toLowerCase().trim().indexOf(query.toLowerCase().trim()) : -1)
+                    .filter(r=>r>-1);
+                if (ranks.length == 0) ranks.push(-1);
+                return {
+                    data: result,
+                    rank: Math.min(...ranks)
+                }
+            });
+            return ranked.filter(r=>r.rank>-1)
+                .sort((a, b)=>a.rank - b.rank)
+                .map(sortedResult=>sortedResult.data);
         default:
-            return result.description?.toLowerCase().includes(query) ||
+            return results.filter(result => {
+                const translatedDescription = translateNullable(result.translatedDescription, locale)?.toLowerCase();
+                result.description?.toLowerCase().includes(query) ||
                 result.code?.toLowerCase().includes(query) ||
-                translatedDescription?.includes(query);
+                translatedDescription?.includes(query)
+            });
     }
 }
 
@@ -161,7 +178,7 @@ export class AutoInputCountriesManager implements AutoInputManager {
             return new Promise((resolve, reject) => {
                 getAutoInputCountries (this.showNumber).then (results => {
                     resolve (
-                        filterSearchResult(value, SearchType.STARTING, results, locale, filter, filterOut) as CountrySearchResult[]
+                        filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut) as CountrySearchResult[]
                     );
                 });
             });
@@ -193,7 +210,7 @@ export class AutoInputStatesManager implements AutoInputManager {
             if (!countryCode) resolve([]);
             getAutoInputStates (countryCode!).then (results => {
                 resolve (
-                    filterSearchResult(value, SearchType.STARTING, results, locale, filter, filterOut)
+                    filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
                 );
             });
         });
