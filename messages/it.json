@@ -551,11 +551,16 @@
             "messages": {
               "discard_changes": "Le modifiche non salvate verranno scartate.",
               "confirm_deletion": "Eliminare il ruolo {roleName}? Rimuoverà {members} membri e {tempMembers} membri temporanei.",
-              "add_role": "Prima di tutto, inserisci il codice di riferimento"
+              "add_role": "Prima di tutto, inserisci il codice di riferimento",
+              "duplicate_user": {
+                "title": "Membro duplicato",
+                "description": "Non puoi inserire un membro più volte nello stesso ruolo"
+              }
             },
             "actions": {
               "delete_role": "Elimina ruolo",
-              "add_role": "Aggiungi ruolo"
+              "add_role": "Aggiungi ruolo",
+              "purge_temporary_roles": "Rimuovi membri temporanei"
             },
             "errors": {}
           }

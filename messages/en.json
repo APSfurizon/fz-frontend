@@ -552,11 +552,16 @@
             "messages": {
               "discard_changes": "Any unsaved changes will be discarded.",
               "confirm_deletion": "Delete role {roleName}? It will remove {members} members and {tempMembers} temporary members.",
-              "add_role": "First, enter the role internal name"
+              "add_role": "First, enter the role internal name",
+              "duplicate_user": {
+                "title": "Duplicate member",
+                "description": "You cannot insert a member in a role more times"
+              }
             },
             "actions": {
               "delete_role": "Delete role",
-              "add_role": "Add role"
+              "add_role": "Add role",
+              "purge_temporary_roles": "Purge temporary members"
             },
             "errors": {}
           }
