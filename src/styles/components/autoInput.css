@@ -136,6 +136,8 @@ div.autocomplete-input {
         max-width: 17pt;
         height: auto;
         outline: 1px solid var(--autocomplete-color);
+        overflow: none;
+        font-size: 4pt;
     }
 
     .selected-value .delete-selection {

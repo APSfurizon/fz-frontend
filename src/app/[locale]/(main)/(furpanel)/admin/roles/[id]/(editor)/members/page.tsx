@@ -17,6 +17,7 @@ import DataForm from "@/components/dataForm";
 import { DummyFormAction } from "@/lib/components/dataForm";
 import Checkbox from "@/components/checkbox";
 import { MediaData } from "@/lib/api/media";
+import { useModalUpdate } from "@/components/context/modalProvider";
 
 function flattenSearchResult(searchResult: AutoInputSearchResult): RoleMember {
     const flattenedMedia: MediaData = {
@@ -49,6 +50,7 @@ export default function RoleMembersEditor () {
     const [addMemberOpen, setAddMemberOpen] = useState(false);
     const [selectedUserTemp, setSelectedUserTemp] = useState<RoleMember> ();
     const [temporaryUserTemp, setTemporaryUserTemp] = useState<boolean>();
+    const {showModal} = useModalUpdate();
 
     const closeAddMemberModal = () => {
         setSelectedUserTemp(undefined);
@@ -68,6 +70,18 @@ export default function RoleMembersEditor () {
         setSelectedUserTemp(newSelectedUserTemp);
     }
 
+    const changeUserTemporaryRole = (member: RoleMember, newStatus: boolean) => {
+        const newRoleMember: RoleMember = {...member, tempRole: newStatus};
+        const newUsers: RoleMember[] = [...entity.users].map(record => {
+            if (member.displayData.userId === record.displayData.userId) {
+                return newRoleMember;
+            }
+            return record;
+        });
+        const newEntity: RoleData = {...entity, users: newUsers};
+        setEntity(newEntity);
+    }
+
     const selectMember = (values: AutoInputSearchResult[], newValues?: AutoInputSearchResult[], removedValue?: AutoInputSearchResult) => {
         const value = newValues && newValues.length > 0 ? flattenSearchResult(newValues[0]) : undefined;
         patchSelectedUserTemp(value);
@@ -82,6 +96,13 @@ export default function RoleMembersEditor () {
     const addMember = () => {
         if (!selectedUserTemp) return;
         const toAdd = {...selectedUserTemp, tempRole: temporaryUserTemp ?? false}
+        if (entity.users.find(usr=>usr.displayData.userId === toAdd.displayData.userId)) {
+            showModal(t("furpanel.admin.users.security.roles.messages.duplicate_user.title"),
+                <span className="descriptive">
+                    {t("furpanel.admin.users.security.roles.messages.duplicate_user.description")}
+                </span>, ICONS.ERROR);
+            return;
+        }
         const newEntity: RoleData = {...entity, users: [...entity.users, toAdd]};
         setEntity(newEntity);
         closeAddMemberModal();
@@ -92,9 +113,15 @@ export default function RoleMembersEditor () {
         setEntity(newEntity);
     }
 
+    const purgeTemporaryMembers = () => {
+        const newEntity = {...entity, users: entity.users.filter(eu=>!!!eu.tempRole)}
+        setEntity(newEntity);
+    }
+
     return <>
     <div className="horizontal-list gap-2mm">
         <div className="spacer"></div>
+        <Button className="danger" iconName={ICONS.HOURGLASS_DISABLED} onClick={()=>{purgeTemporaryMembers()}}>{t("furpanel.admin.users.security.roles.actions.purge_temporary_roles")}</Button>
         <Button iconName={ICONS.ADD} onClick={()=>{setAddMemberOpen(true)}}>{t("common.CRUD.add")}</Button>
     </div>
     {/* Permissions table */}
@@ -110,7 +137,8 @@ export default function RoleMembersEditor () {
                 </div>
                 <div className="spacer"></div>
                 <div className="data">
-                    <Checkbox disabled initialValue={roleMember.tempRole}>
+                    <Checkbox initialValue={roleMember.tempRole}
+                        onClick={(e, checked)=>changeUserTemporaryRole (roleMember, checked)}>
                         {t("furpanel.admin.users.security.roles.input.temporary_member.label")}
                     </Checkbox>
                 </div>

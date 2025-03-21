@@ -62,13 +62,4 @@ div.user-dropdown:has(.dropdown-container.open) .dropdown-button {
         flex-direction: row-reverse;
         margin-left: -0.3125em;
     }
-
-    div.user-dropdown .user-picture-container {
-        margin-right: 0.3125em;
-    }
-
-    div.user-dropdown .dropdown-container {
-        left: 0mm;
-        width: max-content;
-    }
 }

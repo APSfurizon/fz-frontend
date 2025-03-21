@@ -224,12 +224,12 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         return <div key={index} className="search-result horizontal-list flex-vertical-center rounded-s" style={{color:'#fff',display:'flex'}} onMouseDown={()=>{addItem(element)}}>
             {element.imageUrl !== undefined &&
                 <Image unoptimized src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC} width={32} height={32} 
-                    alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
+                    alt={t('autoinput.alt_result_image', {description: element?.getDescription(locale)})}></Image>
             }
             {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}
             <div style={{flex:1}}>
                 <span className="title">
-                    {translateNullable(element.translatedDescription, locale) ?? element.description}
+                    {element?.getDescription(locale)}
                 </span>
             </div>
             <Icon className="medium" iconName={ICONS.ADD_CIRCLE}></Icon>
@@ -238,15 +238,15 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
 
     const valueToSet: (string | number | undefined)[] = selectedValues.map(value => manager.codeOnly ? value.code! : value.id!);
 
-    const renderSelected = (element: AutoInputSearchResult, index: number) => {
+const renderSelected = (element: AutoInputSearchResult, index: number) => {
         return <a key={index} className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
                 {element.imageUrl !== undefined &&
                     <Image unoptimized src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!} width={32} height={32}
-                        alt={t('autoinput.alt_result_image', {description: element.description})}></Image>
+                        alt={t('autoinput.alt_result_image', {description: element?.getDescription(locale)})}></Image>
                 }
                 {element.icon !== undefined && <Icon iconName={element.icon}></Icon>}
                 <span className="title small" style={{flex:1}}>
-                    {translateNullable(element.translatedDescription, locale) ?? element.description}
+                    {element?.getDescription(locale)}
                 </span>
                 <span  onClick={()=>removeItem(element)}><Icon className="medium delete-selection" iconName={ICONS.CANCEL}></Icon></span>
             </a>;

@@ -1,8 +1,12 @@
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, UserSearchResult } from "../components/autoInput";
+import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams, nullifyEmptyString } from "../utils";
 import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse } from "./global";
 import { MediaData } from "./media";
+
+export interface UserSearchResult extends Partial<AutoInputSearchResult> {
+    propic: MediaData
+}
 
 export enum SponsorType {
     NONE = "NONE",
@@ -109,13 +113,13 @@ export class AutoInputUsersManager implements AutoInputManager {
 }
 
 export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
-    return {
-        id: usr.id,
-        code: usr.code,
-        icon: usr.icon,
-        description: usr.description,
-        imageUrl: usr.propic?.mediaUrl ?? null
-    }
+    const toReturn = new AutoInputSearchResult();
+    toReturn.id = usr.id,
+    toReturn.code = usr.code,
+    toReturn.icon = usr.icon,
+    toReturn.description = usr.description,
+    toReturn.imageUrl = usr.propic?.mediaUrl ?? null
+    return toReturn;
 }
 
 /**

@@ -143,7 +143,7 @@ export default function RolesListPage () {
         title={t("furpanel.admin.users.security.roles.actions.add_role")}>
             <DataForm shouldReset={!addRoleModalOpen} setLoading={setLoading} loading={loading}
                 action={new AddRoleFormAction} onSuccess={(data)=>onAddSuccess(data as AddRoleApiResponse)}
-                onFail={onAddFail} resetOnSuccess hideSave>
+                onFail={onAddFail} resetOnSuccess hideSave className="vertical-list gap-2mm">
                 <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>
                 <JanInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/gmi}></JanInput>
                 <div className="bottom-toolbar">

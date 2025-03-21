@@ -43,6 +43,7 @@ export const ICONS = Object.freeze({
     GROUPS: "groups",
     HELP: "help",
     HOME: "home",
+    HOURGLASS_DISABLED: "hourglass_disabled",
     ID_CARD: "id_card",
     INFO: "info",
     KEY: "key",

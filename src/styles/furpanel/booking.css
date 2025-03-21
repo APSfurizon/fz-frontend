@@ -51,7 +51,6 @@ div.order-items-container div.item {
     padding: .5em;
     justify-content: center;
     width: fit-content;
-    max-width: 15em;
     position: relative;
     overflow: hidden;
 }
