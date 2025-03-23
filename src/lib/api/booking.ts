@@ -57,6 +57,7 @@ export interface BookingOrderUiData extends BookingTicketData {
     hasOrder: boolean,
     bookingStartDate: Date,
     editBookEndDate: Date,
+    showCountdown: boolean,
     shouldUpdateInfo: boolean,
     shouldRetry: boolean
 };

@@ -185,7 +185,8 @@
         "exchange_order": "Exchange order",
         "show_qr": "Check-in QR code"
       },
-      "reservation_qr": "Check-in QR code"
+      "reservation_qr": "Check-in QR code",
+      "event_logo": "Event's logo"
     },
     "badge": {
       "title": "Badge",

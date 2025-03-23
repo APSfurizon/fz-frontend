@@ -7,6 +7,10 @@ import { GetPermissionsResponse } from "../admin/role";
 import { ApiErrorResponse, ApiResponse, ApiAction } from "../global";
 import { UserPersonalInfo } from "../user";
 
+export const extractPhonePrefix = (r?: CountrySearchResult) => {
+    return r?.phonePrefix ?? "";
+}
+
 /*****************************/
 /*         Entities          */
 /*****************************/

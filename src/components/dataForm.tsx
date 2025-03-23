@@ -2,9 +2,9 @@ import Icon, { ICONS } from "./icon";
 import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef, createContext, useContext } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
-import "@/styles/components/dataForm.css";
 import { FormApiAction } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
+import "@/styles/components/dataForm.css";
 
 export interface SaveButtonData {
     text: string,
@@ -97,7 +97,7 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     }
 
     return <>
-        <form ref={inputRef} className={`data-form vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
+        <form ref={inputRef} className={`ù vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
             <FormContext.Provider value={{reset, setReset}}>
                 {children}
             </FormContext.Provider>

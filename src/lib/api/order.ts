@@ -46,7 +46,7 @@ export class AutoInputOrderExchangeManager extends AutoInputUsersManager {
                     const searchResult = results as UserSearchResponse;
                     const users = searchResult.users.map(usr=>toSearchResult(usr));
                     resolve (
-                        filterLoaded(users as AutoInputSearchResult[], filter, filterOut)
+                        filterLoaded(users, filter, filterOut)
                     );
             });
         });

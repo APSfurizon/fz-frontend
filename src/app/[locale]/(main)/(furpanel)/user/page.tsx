@@ -16,6 +16,7 @@ import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManage
 import { firstOrUndefined } from "@/lib/utils";
 import "@/styles/furpanel/user.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
+import { extractPhonePrefix } from "@/lib/api/authentication/register";
 
 export default function UserPage() {
   const t = useTranslations();
@@ -30,7 +31,8 @@ export default function UserPage() {
   const [personalInfoLoading, setPersonalInfoLoading] = useState(false);
   const [birthCountry, setBirthCountry] = useState<string | undefined>();
   const [residenceCountry, setResidenceCountry] = useState<string>();
-  const fiscalCodeRequired = birthCountry == "IT";
+  const [phonePrefix, setPhonePrefix] = useState<string>();
+  const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
 
   // Password change logic
   const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
@@ -89,7 +91,7 @@ export default function UserPage() {
               <span className="title average">{t("authentication.register.form.section.birth_data")}</span>
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} multiple={false}
-                  manager={new AutoInputCountriesManager} onChange={(values, newValues, removedValue) => setBirthCountry ((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)}
+                  manager={new AutoInputCountriesManager} onChange={(values, newValues, removedValue) => setBirthCountry ((firstOrUndefined(newValues) as CountrySearchResult)?.code)}
                   label={t("authentication.register.form.birth_country.label")} placeholder={t("authentication.register.form.birth_country.placeholder")}
                   initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}/>
                 <JanInput fieldName="birthday" required={true} inputType="date" busy={personalInfoLoading}
@@ -115,7 +117,7 @@ export default function UserPage() {
               <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="residenceCountry" required={true} minDecodeSize={2}
                   manager={new AutoInputCountriesManager} label={t("authentication.register.form.residence_country.label")}
-                  onChange={(values, newValues, removedValue) => setResidenceCountry ((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)} 
+                  onChange={(values, newValues, removedValue) => setResidenceCountry ((firstOrUndefined(newValues) as CountrySearchResult)?.code)} 
                   placeholder={t("authentication.register.form.residence_country.placeholder")}
                   initialData={personalInformation?.residenceCountry ? [personalInformation?.residenceCountry] : undefined}/>
                 <AutoInput fieldName="residenceRegion" minDecodeSize={2}
@@ -140,12 +142,13 @@ export default function UserPage() {
                 {/* Phone number */}
                 <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2}
                   manager={new AutoInputCountriesManager(true)} label={t("authentication.register.form.phone_prefix.label")}
+                  onChange={(values, newValue, removedValue) => setPhonePrefix (extractPhonePrefix(firstOrUndefined(newValue) as CountrySearchResult))}
                   placeholder={t("authentication.register.form.phone_prefix.placeholder")}
                   idExtractor={(r) => (r as CountrySearchResult).phonePrefix ?? ""}
                   initialData={personalInformation?.prefixPhoneNumber ? [personalInformation?.prefixPhoneNumber] : undefined}/>
                 <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.phone_number.label")} placeholder={t("authentication.register.form.phone_number.placeholder")}
-                  style={{flex: "2"}} initialValue={personalInformation?.phoneNumber}/>
+                  style={{flex: "2"}} initialValue={personalInformation?.phoneNumber} prefix={phonePrefix}/>
               </div>
             </DataForm>
           </div>

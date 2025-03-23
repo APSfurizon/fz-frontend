@@ -21,12 +21,12 @@ import { useUser } from "@/components/context/userProvider";
 import AutoInput from "@/components/autoInput";
 import LoadingPanel from "@/components/loadingPanel";
 import "@/styles/furpanel/booking.css";
+import Countdown from "./countdown";
 
 export default function BookingPage() {
     const t = useTranslations();
     const formatter = useFormatter();
     const router = useRouter();
-    const now = useNow({updateInterval: 1000});
     const {showModal} = useModalUpdate();
     const locale = useLocale();
     const {userDisplay} = useUser();
@@ -105,6 +105,7 @@ export default function BookingPage() {
             hasOrder: hasOrder,
             bookingStartDate: new Date(bookingData?.bookingStartTime ?? 0),
             editBookEndDate: new Date(bookingData?.editBookEndTime ?? 0),
+            showCountdown: bookingData?.shouldDisplayCountdown ?? true,
             shouldUpdateInfo: bookingData?.shouldUpdateInfo,
             shouldRetry: ["PENDING", "CANCELED"].includes(bookingData.order?.orderStatus)
         });
@@ -117,18 +118,6 @@ export default function BookingPage() {
             <span className="descriptive small item-name">{name}</span>
             {subtitle && <span className="descriptive tiny item-subtitle">{subtitle}</span>}
         </div>)
-    }
-
-    /**UI Events */
-    const requestShopLink = (e: MouseEvent<HTMLElement>) => {
-        if (actionLoading) return;
-        setActionLoading(true);
-        runRequest(new ShopLinkApiAction())
-        .then((result)=>router.push((result as ShopLinkResponse).link))
-        .catch((err)=>showModal(
-            t("common.error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-        )).finally(()=>setActionLoading(false));
     }
 
     const requestOrderEditLink = (e: MouseEvent<HTMLElement>) => {
@@ -166,43 +155,13 @@ export default function BookingPage() {
 
     /**Date calculations */
     if (!!pageData) {
-        openDiff = Math.max(pageData.bookingStartDate.getTime() - now.getTime(), 0);
-        countdown = getCountdown(openDiff)
-        /**If the countdown is still running */
-        isOpen = openDiff <= 0;
-        isEditLocked = Math.max(pageData.editBookEndDate.getTime() - now.getTime(), 0) <= 0;
+        isEditLocked = Math.max(pageData.editBookEndDate.getTime() - new Date().getTime(), 0) <= 0;
     }
 
     return <>
         <div className="page">
             {isLoading || !!!pageData ? <LoadingPanel/> : <>
-                {!isOpen && !pageData.hasOrder && (
-                    <NoticeBox title={t("furpanel.booking.messages.countdown.title")} theme={NoticeTheme.FAQ}>
-                        {t("furpanel.booking.messages.countdown.description", {openingDate: formatter.dateTime(pageData.bookingStartDate)})}
-                    </NoticeBox>
-                )}
-                <div className={`countdown-container rounded-s ${pageData.hasOrder ? "minimized" : ""}`} style={{backgroundImage: `url(${EVENT_BANNER})`}}>
-                    <img className="event-logo" alt="a" src={EVENT_LOGO} ></img>
-                    {/* Countdown view */}
-                    {!isOpen && bookingData?.shouldDisplayCountdown && !pageData.hasOrder && countdown
-                    ? <p className="countdown title bold title large rounded-s center">
-                        { countdown[0] > 0
-                            ? t.rich("furpanel.booking.coundown_days", {days: countdown[0]})
-                            : t.rich("furpanel.booking.coundown_clock", {hours: countdown[1], minutes: countdown[2], seconds: countdown[3], b: (chunks)=><b className="small">{chunks}</b>})
-                        }
-                    </p>
-                    : !pageData.hasOrder && <div className="action-container">
-                        <Button className="action-button book-now" busy={actionLoading} disabled={pageData?.shouldUpdateInfo} onClick={requestShopLink}>
-                            <div className="vertical-list flex-vertical-center">
-                                <span className="title large">{pageData?.shouldUpdateInfo ? <Icon style={{marginRight: ".2em"}} iconName={ICONS.LOCK}></Icon> : <></>}{t("furpanel.booking.book_now")}</span>
-                                {pageData?.shouldUpdateInfo && <>
-                                    <span className="descriptive tiny">({t("furpanel.booking.review_info_first")})</span>
-                                </>}
-                            </div>
-                        </Button>
-                    </div>
-                    }
-                </div>
+                <Countdown data={pageData}></Countdown>
                 {pageData?.shouldUpdateInfo && <>
                     <NoticeBox title={t("furpanel.booking.messages.review_info.title")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
                         {t("furpanel.booking.messages.review_info.description")}

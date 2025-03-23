@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
 import { MediaData } from "../api/media";
 import { translateNullable } from "../utils";
@@ -9,6 +10,7 @@ export class AutoInputSearchResult {
     code?: string;
     icon?: string;
     imageUrl?: string;
+    iconCSS?: CSSProperties;
     public getDescription (locale?: string): string {
         if (this.translatedDescription && locale) {
             return this.translatedDescription[locale] ?? this.description;
@@ -143,6 +145,7 @@ export interface AutoInputManager {
 export class CountrySearchResult extends AutoInputSearchResult {
     phonePrefix?: string;
     showPhoneNumber?: boolean;
+    iconCSS?: CSSProperties = {transform: 'translate(0%, -10%)'};
     public getDescription (locale?: string): string {
         return super.getDescription(locale) + (this.showPhoneNumber === true ? ` (${this.phonePrefix})` : "");
     }
@@ -168,7 +171,7 @@ export class AutoInputCountriesManager implements AutoInputManager {
                         }
                     }
                 })
-                resolve (results.filter (result => filter.applyFilter(result as AutoInputSearchResult)) as CountrySearchResult[]);
+                resolve (results.filter (result => filter.applyFilter(result)));
             });
         });
     }
@@ -178,7 +181,7 @@ export class AutoInputCountriesManager implements AutoInputManager {
             return new Promise((resolve, reject) => {
                 getAutoInputCountries (this.showNumber).then (results => {
                     resolve (
-                        filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut) as CountrySearchResult[]
+                        filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
                     );
                 });
             });

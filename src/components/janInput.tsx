@@ -60,7 +60,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
 
     /* Change handling */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(prefix ?? "" + e.target.value);
+        setInputValue(e.target.value);
         onChange && onChange(e);
         pattern && patternValidity(e);
     };
@@ -74,6 +74,9 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>
             <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
+                {prefix && <span className="title small color-subtitle">
+                    {prefix}
+                </span>}
                 <input
                     readOnly={readOnly}
                     required={required}

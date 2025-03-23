@@ -11,7 +11,7 @@ import JanInput from "@/components/janInput";
 import useTitle from "@/lib/api/hooks/useTitle";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import AutoInput from "@/components/autoInput";
-import { RegisterFormAction } from "@/lib/api/authentication/register";
+import { extractPhonePrefix, RegisterFormAction } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/lib/components/autoInput";
 import Checkbox from "@/components/checkbox";
 import "@/styles/authentication/register.css";
@@ -24,6 +24,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [birthCountry, setBirthCountry] = useState<string | undefined>();
   const [residenceCountry, setResidenceCountry] = useState<string>();
+  const [phonePrefix, setPhonePrefix] = useState<string>();
 
   const [email, setEmail] = useState<string>("s");
   const [confirmEmail, setConfirmEmail] = useState<string>();
@@ -50,10 +51,6 @@ export default function Register() {
 
   const emailMatch = confirmEmail === email;
 
-  const extractPhonePrefix = (r: CountrySearchResult) => {
-    return r.phonePrefix ?? "";
-  }
-
   const checkForm = (e: FormData, form: HTMLFormElement) => {
     if (!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch) {
       return false;
@@ -69,7 +66,7 @@ export default function Register() {
     redirect(`/login?${newParams.toString()}`);
   }, 200);
 
-  const fiscalCodeRequired = birthCountry == "IT";
+  const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
 
   useTitle(t("register.title"));
 
@@ -156,9 +153,10 @@ export default function Register() {
         {/* Phone number */}
         <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2} manager={new AutoInputCountriesManager(true)} 
           label={t("register.form.phone_prefix.label")} placeholder={t("register.form.phone_prefix.placeholder")} idExtractor={(r) => extractPhonePrefix(r as CountrySearchResult)}
+          onChange={(values, newValue, removedValue) => setPhonePrefix (extractPhonePrefix(firstOrUndefined(newValue) as CountrySearchResult))}
           emptyIfUnselected/>
         <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={loading} label={t("register.form.phone_number.label")} 
-          placeholder={t("register.form.phone_number.placeholder")} style={{flex: "2"}}/>
+          placeholder={t("register.form.phone_number.placeholder")} style={{flex: "2"}} prefix={phonePrefix}/>
       </div>
       <NoticeBox theme={NoticeTheme.FAQ} title={t("register.question.description_title")} className="descriptive">{t("register.question.description")}</NoticeBox>
       <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>{t.rich("register.form.disclaimer_tos.label", {

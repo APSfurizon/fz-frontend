@@ -226,7 +226,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 <Image unoptimized src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC} width={32} height={32} 
                     alt={t('autoinput.alt_result_image', {description: element?.getDescription(locale)})}></Image>
             }
-            {element.icon !== undefined && <Icon iconName={element.icon!}></Icon>}
+            {element.icon !== undefined && <Icon style={element.iconCSS} iconName={element.icon!}></Icon>}
             <div style={{flex:1}}>
                 <span className="title">
                     {element?.getDescription(locale)}
@@ -244,7 +244,7 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
                     <Image unoptimized src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!} width={32} height={32}
                         alt={t('autoinput.alt_result_image', {description: element?.getDescription(locale)})}></Image>
                 }
-                {element.icon !== undefined && <Icon iconName={element.icon}></Icon>}
+                {element.icon !== undefined && <Icon style={element.iconCSS} iconName={element.icon}></Icon>}
                 <span className="title small" style={{flex:1}}>
                     {element?.getDescription(locale)}
                 </span>

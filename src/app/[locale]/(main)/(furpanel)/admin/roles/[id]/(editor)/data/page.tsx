@@ -15,8 +15,6 @@ export default function RoleDataEditor () {
         setEntity(newData);
     }
 
-    console.log("rerender");
-
     return <>
         <div className="form-pair horizontal-list gap-2mm">
             <JanInput required initialValue={entity?.internalName} busy={loading}
