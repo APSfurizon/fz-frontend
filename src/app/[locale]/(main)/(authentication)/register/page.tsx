@@ -12,10 +12,12 @@ import useTitle from "@/lib/api/hooks/useTitle";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import AutoInput from "@/components/autoInput";
 import { extractPhonePrefix, RegisterFormAction } from "@/lib/api/authentication/register";
-import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/lib/components/autoInput";
+import { AutoInputSearchResult } from "@/lib/components/autoInput";
 import Checkbox from "@/components/checkbox";
 import "@/styles/authentication/register.css";
 import { firstOrUndefined } from "@/lib/utils";
+import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
+import { AutoInputGenderManager, AutoInputSexManager } from "@/lib/api/user";
 
 export default function Register() {
 
@@ -107,6 +109,14 @@ export default function Register() {
           placeholder={t("register.form.first_name.placeholder")}/>
         <JanInput fieldName="lastName" required={true} inputType="text" busy={loading} label={t("register.form.last_name.label")}
           placeholder={t("register.form.last_name.placeholder")}/>
+      </div>
+      <div className="form-pair horizontal-list gap-4mm">
+        <AutoInput fieldName="sex" required minDecodeSize={0}
+          manager={new AutoInputSexManager}
+          label={t("register.form.sex.label")} placeholder={t("register.form.sex.placeholder")}/>
+        <AutoInput fieldName="gender" required minDecodeSize={0}
+          manager={new AutoInputGenderManager}
+          label={t("register.form.gender.label")} placeholder={t("register.form.gender.placeholder")}/>
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <JanInput fieldName="allergies" required={false} inputType="text" busy={loading} label={t("register.form.allergies.label")}

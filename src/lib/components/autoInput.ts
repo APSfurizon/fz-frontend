@@ -1,6 +1,4 @@
 import { CSSProperties } from "react";
-import { getAutoInputCountries, getAutoInputStates } from "../api/authentication/register";
-import { MediaData } from "../api/media";
 import { translateNullable } from "../utils";
 
 export class AutoInputSearchResult {
@@ -20,6 +18,18 @@ export class AutoInputSearchResult {
             return this.id?.toString() ?? this.code ?? "";
         }
     }
+}
+
+export function createSearchResult (entity: Partial<AutoInputSearchResult>) {
+    const toReturn = new AutoInputSearchResult();
+    toReturn.id = entity.id;
+    toReturn.code = entity.code;
+    toReturn.description = entity.description;
+    toReturn.translatedDescription = entity.translatedDescription;
+    toReturn.icon = entity.icon;
+    toReturn.imageUrl = entity.imageUrl;
+    toReturn.iconCSS = entity.iconCSS;
+    return toReturn;
 }
 
 export class AutoInputFilter {
@@ -140,91 +150,4 @@ export interface AutoInputManager {
      * @param additionalValues  additional values to be used as search params
      */
     isPresent: (additionalValues?: any) => Promise<boolean>
-}
-
-export class CountrySearchResult extends AutoInputSearchResult {
-    phonePrefix?: string;
-    showPhoneNumber?: boolean;
-    iconCSS?: CSSProperties = {transform: 'translate(0%, -10%)'};
-    public getDescription (locale?: string): string {
-        return super.getDescription(locale) + (this.showPhoneNumber === true ? ` (${this.phonePrefix})` : "");
-    }
-}
-
-export class AutoInputCountriesManager implements AutoInputManager {
-    codeOnly: boolean = true;
-    showNumber?: boolean = false;
-
-    constructor(showNumber?: boolean) {
-        this.showNumber = showNumber ?? false;
-    }
-
-    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number): Promise<CountrySearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputCountries (this.showNumber).then (results => {
-                const countries = results.map(data=>{
-                    if (customIdExtractor) {
-                        if (this.codeOnly) {
-                            data.code = customIdExtractor(data) as string ?? data.code;
-                        } else {
-                            data.id = customIdExtractor(data) as number ?? data.id;
-                        }
-                    }
-                })
-                resolve (results.filter (result => filter.applyFilter(result)));
-            });
-        });
-    }
-
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter,
-        additionalValues?: any): Promise<CountrySearchResult[]> {
-            return new Promise((resolve, reject) => {
-                getAutoInputCountries (this.showNumber).then (results => {
-                    resolve (
-                        filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
-                    );
-                });
-            });
-    }
-
-    isPresent (additionalValue?: any): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            getAutoInputCountries (this.showNumber).then (results => {
-                resolve (results.length > 0);
-            });
-        });
-    };
-}
-
-export class AutoInputStatesManager implements AutoInputManager {
-    codeOnly: boolean = true;
-
-    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number, additionalValues?: any[]): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            getAutoInputStates (additionalValues ? additionalValues[0] : undefined).then (results => {
-                const filtered = filterLoaded(results, filter, undefined);
-                resolve (filtered);
-            });
-        });
-    }
-
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, countryCode?: string): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            if (!countryCode) resolve([]);
-            getAutoInputStates (countryCode!).then (results => {
-                resolve (
-                    filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
-                );
-            });
-        });
-    }
-
-    isPresent (countryCode?: any): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            if (!countryCode) resolve(false);
-            getAutoInputStates (countryCode!).then (results => {
-                resolve (results.length > 0);
-            });
-        });
-    };
 }
