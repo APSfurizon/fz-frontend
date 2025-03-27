@@ -6,13 +6,14 @@ import useTitle from "@/lib/api/hooks/useTitle";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import DataForm from "@/components/dataForm";
-import { GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/lib/api/user";
+import { AutoInputGenderManager, AutoInputSexManager, GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
 import JanInput from "@/components/janInput";
 import AutoInput from "@/components/autoInput";
-import { AutoInputCountriesManager, AutoInputSearchResult, AutoInputStatesManager, CountrySearchResult } from "@/lib/components/autoInput";
+import { AutoInputSearchResult } from "@/lib/components/autoInput";
+import { AutoInputStatesManager, CountrySearchResult, AutoInputCountriesManager } from "@/lib/api/geo";
 import { firstOrUndefined } from "@/lib/utils";
 import "@/styles/furpanel/user.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
@@ -82,6 +83,16 @@ export default function UserPage() {
                 <JanInput fieldName="lastName" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.last_name.label")} placeholder={t("authentication.register.form.last_name.placeholder")}
                   initialValue={personalInformation?.lastName}/>
+              </div>
+              <div className="form-pair horizontal-list gap-4mm">
+                <AutoInput fieldName="sex" required minDecodeSize={0}
+                  manager={new AutoInputSexManager}
+                  label={t("authentication.register.form.sex.label")} placeholder={t("authentication.register.form.sex.placeholder")}
+                  initialData={personalInformation?.sex ? [personalInformation?.sex] : undefined}/>
+                <AutoInput fieldName="gender" required minDecodeSize={0}
+                  manager={new AutoInputGenderManager}
+                  label={t("authentication.register.form.gender.label")} placeholder={t("authentication.register.form.gender.placeholder")}
+                  initialData={personalInformation?.gender ? [personalInformation?.gender] : undefined}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
                 <JanInput fieldName="allergies" required={false} inputType="text" busy={personalInfoLoading}

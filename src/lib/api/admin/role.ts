@@ -1,8 +1,8 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
 import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global"
 import { UserData } from "../user";
-import { getAutoInputPermissions } from "../authentication/register";
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { CACHED_PERMISSIONS, CachedPermissions } from "@/lib/cache/cache";
 
 export interface RoleInfo {
     roleId: number,
@@ -121,6 +121,21 @@ export class GetPermissionsApiAction implements ApiAction<GetPermissionsResponse
     authenticated = true;
     method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
     urlAction = "roles/permissions";
+}
+
+export function getAutoInputPermissions (): Promise<AutoInputSearchResult[]> {
+    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+        CACHED_PERMISSIONS.get ().then ((data) => {
+            const parsed = data as GetPermissionsResponse;
+            resolve (parsed.permissions.map ((permission, index) => {
+                const toReturn = new AutoInputSearchResult();
+                toReturn.id = index;
+                toReturn.code = permission;
+                toReturn.description = permission;
+                return toReturn;
+            }));
+        }).catch ((err) => {reject (err)});
+    });
 }
 
 /**

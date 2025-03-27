@@ -768,6 +768,14 @@
         },
         "disclaimer_data_protection": {
           "label": "By checking this box, you declare you've read and accepted the privacy policy."
+        },
+        "sex": {
+          "label": "Sex",
+          "placeholder": "Enter your biological sex"
+        },
+        "gender": {
+          "label": "Gender",
+          "placeholder": "Enter your gender"
         }
       },
       "question": {

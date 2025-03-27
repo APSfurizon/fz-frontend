@@ -18,7 +18,7 @@ import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
 import { getFlagEmoji } from "@/lib/components/userPicture";
 import AutoInput from "@/components/autoInput";
-import { AutoInputCountriesManager } from "@/lib/components/autoInput";
+import { AutoInputCountriesManager } from "@/lib/api/geo";
 import "@/styles/furpanel/badge.css";
 import { AddFursuitFormAction, DeleteFursuitApiAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
 import Checkbox from "@/components/checkbox";

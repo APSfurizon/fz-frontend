@@ -176,6 +176,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                             <div className="horizontal-list flex-wrap gap-4mm">
                                 <JanInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={data.userInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                                 <JanInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={data.userInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                                <JanInput className="hoverable" label={t("authentication.register.form.sex.label")} readOnly initialValue={data.userInfo.sex} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                                 <JanInput className="hoverable" label={t("authentication.register.form.email.label")} readOnly initialValue={data.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                                 {data.userInfo.fiscalCode && 
                                     <JanInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")} readOnly initialValue={data.userInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}

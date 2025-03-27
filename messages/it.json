@@ -767,6 +767,14 @@
         },
         "disclaimer_data_protection": {
           "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
+        },
+        "sex": {
+          "label": "Sesso",
+          "placeholder": "Inserisci il tuo sesso"
+        },
+        "gender": {
+          "label": "Genere",
+          "placeholder": "Inserisci il tuo genere"
         }
       },
       "question": {

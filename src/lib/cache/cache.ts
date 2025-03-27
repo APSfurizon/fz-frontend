@@ -1,5 +1,5 @@
 import { ApiErrorResponse, runRequest } from "../api/global";
-import { AutoInputCountriesApiAction, AutoInputStatesApiAction, Place, PlaceApiResponse } from "../api/authentication/register";
+import { AutoInputCountriesApiAction, AutoInputStatesApiAction, Place, PlaceApiResponse } from "../api/geo";
 import { buildSearchParams } from "../utils";
 import { GetPermissionsApiAction, GetPermissionsResponse } from "../api/admin/role";
 
@@ -42,6 +42,8 @@ export class CachedCountries extends CachedData<Boolean | PlaceApiResponse | Api
     }
 }
 
+export const CACHED_COUNTRIES = new CachedCountries();
+
 export class CachedStates extends CachedData<Boolean | PlaceApiResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData(...p: string[]) {
@@ -49,9 +51,13 @@ export class CachedStates extends CachedData<Boolean | PlaceApiResponse | ApiErr
     }
 }
 
+export const CACHED_STATES = new CachedStates();
+
 export class CachedPermissions extends CachedData<Boolean | GetPermissionsResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData(...p: string[]) {
         return runRequest(new GetPermissionsApiAction (), undefined, undefined, undefined);
     }
 }
+
+export const CACHED_PERMISSIONS = new CachedPermissions();

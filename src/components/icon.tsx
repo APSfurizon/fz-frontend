@@ -35,6 +35,7 @@ export const ICONS = Object.freeze({
     ERROR: "error",
     EVENT_REPEAT: "event_repeat",
     FEATURED_SEASONAL_AND_GIFTS: "featured_seasonal_and_gifts",
+    FEMALE: "female",
     FIBER_MANUAL_RECORD: "fiber_manual_record",
     FILE_COPY: "file_copy",
     FILE_OPEN: "file_open",
@@ -55,6 +56,7 @@ export const ICONS = Object.freeze({
     LOCK: "lock",
     LOGOUT: "logout",
     MAIL: "mail",
+    MALE: "male",
     MENU: "menu",
     OPEN_IN_NEW: "open_in_new",
     PACKAGE_2: "package_2",
@@ -82,6 +84,7 @@ export const ICONS = Object.freeze({
     SNOOZE: "snooze",
     STAR: "star",
     SYNC: "sync",
+    TRANSGENDER: "transgender",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
 });

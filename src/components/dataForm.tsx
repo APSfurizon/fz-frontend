@@ -97,7 +97,7 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     }
 
     return <>
-        <form ref={inputRef} className={`ù vertical-list ${className}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
+        <form ref={inputRef} className={`data-form vertical-list ${className ?? ""}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
             <FormContext.Provider value={{reset, setReset}}>
                 {children}
             </FormContext.Provider>
