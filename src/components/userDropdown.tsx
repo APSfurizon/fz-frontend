@@ -8,7 +8,7 @@ import { runRequest } from '@/lib/api/global';
 import { LogoutApiAction } from '@/lib/api/authentication/login';
 import { UserData } from '@/lib/api/user';
 import { useParams } from 'next/navigation';
-import Button from '@/components/button';
+import Button from '@/components/input/button';
 import LoadingPanel from './loadingPanel';
 import "@/styles/components/userDropDown.css";
 

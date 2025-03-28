@@ -1,5 +1,5 @@
 import { ChangeEvent, CSSProperties, MouseEvent, useEffect, useRef, useState } from "react";
-import Icon, { ICONS } from "./icon";
+import Icon, { ICONS } from "../icon";
 import "@/styles/components/janInput.css";
 import { useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";

@@ -1,6 +1,6 @@
 import { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from "react";
 import Icon, { ICONS } from "@/components/icon";
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { translate } from "@/lib/utils";
 import { getRemainingRoomType, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/lib/api/flows/roomOrderFlow";
@@ -9,7 +9,7 @@ import ModalError from "@/components/modalError";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { EVENT_CURRENCY } from "@/lib/constants";
-import Checkbox from "@/components/checkbox";
+import Checkbox from "@/components/input/checkbox";
 import { useUser } from "@/components/context/userProvider";
 import { ShopLinkResponse } from "@/lib/api/booking";
 import { useRouter } from "next/navigation";

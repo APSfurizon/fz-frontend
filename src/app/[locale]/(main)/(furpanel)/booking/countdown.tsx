@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon, { ICONS } from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";

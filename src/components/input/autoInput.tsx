@@ -1,5 +1,5 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
-import Icon, { ICONS } from "./icon";
+import Icon, { ICONS } from "../icon";
 import Image from "next/image";
 import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "@/lib/components/autoInput";
 import { useLocale, useTranslations } from "next-intl";

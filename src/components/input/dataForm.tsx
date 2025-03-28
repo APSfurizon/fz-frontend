@@ -1,4 +1,4 @@
-import Icon, { ICONS } from "./icon";
+import Icon, { ICONS } from "../icon";
 import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef, createContext, useContext } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";

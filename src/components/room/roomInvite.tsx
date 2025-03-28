@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import Icon, { ICONS } from "@/components/icon";
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import UserPicture from "@/components/userPicture";
 import { useLocale, useTranslations } from "next-intl";
 import StatusBox from "@/components/statusBox";

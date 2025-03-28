@@ -1,7 +1,7 @@
 "use client"
-import DataForm from "@/components/dataForm";
+import DataForm from "@/components/input/dataForm";
 import Icon, { ICONS } from "@/components/icon";
-import JanInput from "@/components/janInput";
+import JanInput from "@/components/input/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { AuthenticationCodes, LoginFormAction, LoginResponse } from "@/lib/api/authentication/login";
 import { useTranslations } from "next-intl";

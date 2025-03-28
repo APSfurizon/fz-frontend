@@ -1,16 +1,16 @@
 'use client'
-import Checkbox from "@/components/checkbox";
-import Button from "@/components/button";
+import Checkbox from "@/components/input/checkbox";
+import Button from "@/components/input/button";
 import { ICONS } from "@/components/icon";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import JanInput from "@/components/janInput";
+import JanInput from "@/components/input/janInput";
 import StatusBox from "@/components/statusBox";
-import AutoInput from "@/components/autoInput";
-import DataForm from "@/components/dataForm";
+import AutoInput from "@/components/input/autoInput";
+import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
 //import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
-import Upload from "@/components/upload";
+import Upload from "@/components/input/upload";
 
 export default function Home() {
 

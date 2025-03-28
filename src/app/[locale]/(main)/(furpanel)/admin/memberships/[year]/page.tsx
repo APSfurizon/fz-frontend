@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
@@ -9,14 +9,14 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import Checkbox from "@/components/checkbox";
+import Checkbox from "@/components/input/checkbox";
 import UserPicture from "@/components/userPicture";
 import "@/styles/table.css";
 import "@/styles/furpanel/admin/membership.css";
 import { copyContent, years } from "@/lib/utils";
-import JanInput from "@/components/janInput";
-import DataForm from "@/components/dataForm";
-import AutoInput from "@/components/autoInput";
+import JanInput from "@/components/input/janInput";
+import DataForm from "@/components/input/dataForm";
+import AutoInput from "@/components/input/autoInput";
 import LoadingPanel from "@/components/loadingPanel";
 
 export default function MembershipView({params}: {params: Promise<{ year: number }>}) {

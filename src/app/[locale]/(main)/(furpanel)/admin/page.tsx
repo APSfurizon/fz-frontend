@@ -1,5 +1,5 @@
 'use client'
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import { MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

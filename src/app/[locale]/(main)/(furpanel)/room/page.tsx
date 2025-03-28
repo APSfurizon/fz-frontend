@@ -1,6 +1,6 @@
 'use client'
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
 import useTitle from "@/lib/api/hooks/useTitle";
@@ -12,16 +12,16 @@ import RoomInvite from "@/components/room/roomInvite";
 import { GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse, RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuest, RoomGuestHeader, RoomInfo, RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction, RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameData, RoomRenameFormAction, RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData } from "@/lib/api/room";
 import UserPicture from "@/components/userPicture";
 import StatusBox from "@/components/statusBox";
-import DataForm from "@/components/dataForm";
-import JanInput from "@/components/janInput";
-import AutoInput from "@/components/autoInput";
+import DataForm from "@/components/input/dataForm";
+import JanInput from "@/components/input/janInput";
+import AutoInput from "@/components/input/autoInput";
 import "@/styles/furpanel/room.css";
 import { useUser } from "@/components/context/userProvider";
 import { OrderStatus } from "@/lib/api/order";
 import ModalError from "@/components/modalError";
 import { translate } from "@/lib/utils";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
-import Checkbox from "@/components/checkbox";
+import Checkbox from "@/components/input/checkbox";
 import RoomOrderFlow from "@/components/room/roomOrderFlow";
 import { Permissions } from "@/lib/api/permission";
 import ToolLink from "@/components/toolLink";

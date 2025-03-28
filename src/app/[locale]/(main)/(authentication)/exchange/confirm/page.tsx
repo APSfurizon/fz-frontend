@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/lib/api/hooks/useTitle";
 import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction, ExchangeUpdateApiData } from "@/lib/api/exchange";
 import { buildSearchParams, translate } from "@/lib/utils";
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";

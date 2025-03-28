@@ -1,6 +1,6 @@
 import { CSSProperties, MouseEvent, useEffect, useState } from "react";
 import "@/styles/components/button.css";
-import Icon, { ICONS } from "./icon";
+import Icon, { ICONS } from "../icon";
 
 export default function Button ({children, iconName, style, className, busy, onClick, disabled, title, type = "button", debounce}: Readonly<{
     children?: React.ReactNode,
