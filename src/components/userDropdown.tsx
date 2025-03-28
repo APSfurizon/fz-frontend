@@ -1,13 +1,12 @@
 "use client"
 import {useLocale, useTranslations} from 'next-intl';
-import {routing, usePathname, useRouter} from '@/i18n/routing';
+import {Link, routing, useRouter} from '@/i18n/routing';
 import { MouseEvent, useState } from 'react';
 import Icon, { ICONS } from '@/components/icon';
 import UserPicture from '@/components/userPicture';
 import { runRequest } from '@/lib/api/global';
 import { LogoutApiAction } from '@/lib/api/authentication/login';
 import { UserData } from '@/lib/api/user';
-import { useParams } from 'next/navigation';
 import Button from '@/components/input/button';
 import LoadingPanel from './loadingPanel';
 import "@/styles/components/userDropDown.css";
@@ -17,10 +16,7 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
     const [isHover, setHover] = useState(false);
     const t = useTranslations('common');
     const router = useRouter();
-    const pathname = usePathname();
-    const params = useParams();
     const locale = useLocale();
-    
     
     const logout = () => {
         runRequest(new LogoutApiAction())
@@ -31,16 +27,6 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
     const optionClick = (e: MouseEvent<HTMLDivElement>) => {
         setOpen(!isOpen);
         e.stopPropagation();
-    }
-
-    const onLanguageClick = (newLanguage: string) => {
-        router.refresh();
-        router.replace(
-        // @ts-expect-error -- TypeScript will validate that only known `params`
-        // are used in combination with a given `pathname`. Since the two will
-        // always match for the current route, we can skip runtime checks.
-        {pathname, params}, {locale: newLanguage});
-        router.refresh();
     }
 
     const loginClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -75,11 +61,11 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
                 </a>}
                 {/* Language selector */}
                 <hr/>
-                {routing.locales.map((lng, index)=> <a href='#' className='title small rounded-s vertical-align-middle horizontal-list' key={index}
-                    onClick={() => onLanguageClick (lng)}>
+                {routing.locales.map((lng, index)=> <Link href="/" className='title small rounded-s vertical-align-middle horizontal-list'
+                    key={index} locale={lng}>
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}
-                </a>)}
+                </Link>)}
             </div>
         </div>
     )
