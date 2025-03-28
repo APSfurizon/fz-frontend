@@ -2,7 +2,7 @@ import { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from "re
 import Icon, { ICONS } from "@/components/icon";
 import Button from "@/components/input/button";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
-import { translate } from "@/lib/utils";
+import { translate } from "@/lib/translations";
 import { getRemainingRoomType, RoomBuyApiData, RoomStoreBuyAction, RoomStoreItemsApiAction, RoomStoreItemsApiResponse, RoomTypeInfo } from "@/lib/api/flows/roomOrderFlow";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";

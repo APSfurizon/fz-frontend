@@ -56,7 +56,8 @@ export default function Layout({children}: Readonly<{children: React.ReactNode;}
                     </span>
                 </span>
                 <div className="spacer"></div>
-                <div className={`tools-list horizontal-list flex-wrap gap-4mm ${toolListExpanded ? "expanded" : ""}`}>
+                <div className={`tools-list horizontal-list flex-wrap gap-4mm ${toolListExpanded ? "expanded" : ""}`}
+                    style={{justifyContent: 'flex-end'}}>
                     {BOOKING_ENABLED && <ToolLink onClick={toolClick} href="/booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('furpanel.booking.title')}</ToolLink>}
                     {BADGE_ENABLED && <ToolLink onClick={toolClick} href="/badge" iconName={ICONS.PERSON_BOOK}>{t('furpanel.badge.title')}</ToolLink>}
                     {ROOM_ENABLED && <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('furpanel.room.title')}</ToolLink>}

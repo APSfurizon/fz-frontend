@@ -27,14 +27,6 @@ export function getCountdown (ts: number): number[] {
     return [days, hours, minutes, seconds];
 }
 
-export function translate(data: Record<string, string>, locale: string): string {
-    return data ? data[locale] ?? data["en"] : "";
-}
-
-export function translateNullable(data?: Record<string, string>, locale?: string): string | undefined {
-    return data && locale ? data[locale] ?? data["en"] : undefined;
-}
-
 export function isEmpty (str?: string) {
     return !str || str.length === 0;
 }

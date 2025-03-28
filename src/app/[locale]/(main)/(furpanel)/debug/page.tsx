@@ -11,6 +11,7 @@ import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
 //import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
 import Upload from "@/components/input/upload";
+import ComboBox from "@/components/input/combobox";
 
 export default function Home() {
 
@@ -57,6 +58,7 @@ export default function Home() {
         <span>a modal</span>
       </Modal>
       <Button onClick={()=>{setOpen(true);}} iconName={ICONS.BED}>Modal</Button>
+      <ComboBox></ComboBox>
     </div>
   );
 }

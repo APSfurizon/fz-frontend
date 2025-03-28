@@ -19,7 +19,7 @@ import "@/styles/furpanel/room.css";
 import { useUser } from "@/components/context/userProvider";
 import { OrderStatus } from "@/lib/api/order";
 import ModalError from "@/components/modalError";
-import { translate } from "@/lib/utils";
+import { translate } from "@/lib/translations";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
 import Checkbox from "@/components/input/checkbox";
 import RoomOrderFlow from "@/components/room/roomOrderFlow";
