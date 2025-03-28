@@ -55,6 +55,10 @@ export function buildSearchParams (init: Record<string, string | string[]>): URL
     return params;
 }
 
+export function setCookie(cookieName: string, value: string, expiry: Date, path: string = "/", sameSite: string  = "lax") {
+    document.cookie = `${cookieName}=${value};expires=${expiry.toUTCString()};path=${path};sameSite=${sameSite}`;
+}
+
 export function getCookie(cookieName: string) {
     let name = cookieName + "=";
     let ca = document.cookie.split(';');
@@ -68,7 +72,7 @@ export function getCookie(cookieName: string) {
       }
     }
     return "";
-  }
+}
 
 export enum DEVICE_TYPE {
     APPLE = "apple",

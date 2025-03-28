@@ -785,6 +785,9 @@
       "login_here": "or log in here",
       "register": "Register",
       "title": "Registration"
+    },
+    "logging_in": {
+      "title": "Logging in"
     }
   },
   "misc": {

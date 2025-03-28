@@ -1,7 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGIN, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED, SESSION_DURATION, TOKEN_STORAGE_NAME } from './lib/constants';
+import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED, SESSION_DURATION, TOKEN_STORAGE_NAME } from './lib/constants';
 import { extractSearchParams } from './lib/utils';
  
 const intlMiddleware = createMiddleware(routing);
@@ -20,12 +20,11 @@ export async function middleware(req: NextRequest) {
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
   const loginTokenParam = params.get(TOKEN_STORAGE_NAME);
   const getTokenPresent = loginTokenParam && loginTokenParam.length > 0;
-  const tokenPresent = (loginToken && loginToken.value) || getTokenPresent;
+  const tokenPresent = (!!loginToken && !!loginToken.value) || !!getTokenPresent;
 
   // Check url regex
   const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
   const shouldSkipIfAuthenticated = REGEX_SKIP_AUTHENTICATED.test(path);
-  const isLogin = REGEX_LOGIN.test(path);
   const isLogout = REGEX_LOGOUT.test(path);
 
   // Create continue params
@@ -34,17 +33,7 @@ export async function middleware(req: NextRequest) {
   strippedParams.delete(TOKEN_STORAGE_NAME);
   const continueParams = new URLSearchParams({"continue": `${path}?${strippedParams.toString()}`});
 
-  if (isLogin) {
-    if ((params.get(TOKEN_STORAGE_NAME) ?? "").length > 0) {
-      const token = params.get(TOKEN_STORAGE_NAME) ?? "";
-      const newSearchParams = new URLSearchParams();
-      newSearchParams.append(TOKEN_STORAGE_NAME, token);
-      const response = redirectToUrl(params.get("continue") ?? "/home", req, newSearchParams);
-      return addToken(response, token);
-    } else {
-      return intlMiddleware(req);
-    }
-  } else if (isLogout) {
+  if (isLogout) {
     return stripToken(intlMiddleware(req));
   }
 
@@ -86,17 +75,6 @@ async function verifyToken(token: string): Promise<TokenVerification> {
 
 const stripToken = (res: NextResponse): NextResponse => {
   res.cookies.delete(TOKEN_STORAGE_NAME);
-  return res;
-}
-
-const addToken = (res: NextResponse, token: string): NextResponse => {
-  let sessionExpiry = new Date();
-  sessionExpiry = new Date (sessionExpiry.setDate (sessionExpiry.getDate () + SESSION_DURATION));
-  res.cookies.set(TOKEN_STORAGE_NAME, token, {
-    expires: sessionExpiry,
-    path: '/',
-    sameSite: 'lax'
-  });
   return res;
 }
 
