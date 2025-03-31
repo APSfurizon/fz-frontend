@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { InputEntity } from "./components/input";
 
 export type TranslatableString = Record<string, string>;
@@ -27,5 +28,11 @@ export class TranslatableInputEntity extends InputEntity {
         ?? this.id?.toString()
         ?? this.code
         ?? "";
+    }
+    constructor(id?: number, code?: string, description?: string,
+        icon?: string, imageUrl?: string, iconCSS?: CSSProperties,
+        translatedDescription?: TranslatableString) {
+            super (id, code, description, icon, imageUrl, iconCSS);
+            this.translatedDescription = translatedDescription;
     }
 }

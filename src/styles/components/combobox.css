@@ -1,0 +1,62 @@
+@import url('../colors.css');
+@import url('./janInput.css');
+
+/* Error style */
+div.input-container:has(input.input-field.danger),
+div.jan-input.danger>div.input-container,
+div.input-container:has(input.input-field:user-invalid) {
+    outline-color: var(--text-input-border-danger);
+}
+
+/* Success style */
+div.input-container:has(input.input-field.success),
+div.jan-input.success>div.input-container:has(input.input-field:user-valid) {
+    outline-color: var(--text-input-border-success);
+}
+
+div.jan-input {
+    
+    select.input-field {
+        flex: 1;
+        color: var(--text-input-color);
+        background: var(--text-input-bg);
+        min-height: 1.625em;
+        padding: 0.75em 0.625em;
+        display: flex;
+        overflow: hidden;
+        border: none;
+        outline: none;
+    }
+
+    option {
+        color: var(--text-input-color);
+    }
+
+    /* Focus style */
+    div.input-container:has(select.input-field:focus) {
+        outline-width: 2px;
+    }
+
+    select.input-field:focus {
+        outline: none;
+        border: none;
+    }
+    
+    /* Disabled style */
+    div.input-container:has(select.input-field:disabled) {
+        outline-color: var(--text-input-border-disabled);
+        background-color: var(--text-input-bg-disabled);
+    }
+
+    select.input-field:disabled {
+        color: var(--text-input-color-disabled);
+    }
+
+    /* Handle autofilled data */
+    select:-webkit-autofill {
+        box-shadow: 0 0 0 1000px var(--text-input-bg) inset !important;
+        -webkit-text-fill-color: var(--text-input-color) !important;
+        caret-color: var(--text-input-color);
+        letter-spacing: 0.5px;
+    }
+}

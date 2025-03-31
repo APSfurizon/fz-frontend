@@ -20,4 +20,23 @@ export class InputEntity {
         ?? this.code
         ?? "";
     }
+    constructor(id?: number, code?: string, description?: string,
+        icon?: string, imageUrl?: string, iconCSS?: CSSProperties) {
+            this.id = id;
+            this.code = code;
+            this.description = description;
+            this.icon = icon;
+            this.imageUrl = imageUrl;
+            this.iconCSS = iconCSS;
+    }
+}
+
+export const inputEntityIdExtractor = (entity: InputEntity) => {
+    if (!entity.id) throw `Invalid id on entity ${JSON.stringify(entity)}`;
+    return entity.id;
+}
+
+export const inputEntityCodeExtractor = (entity: InputEntity) => {
+    if (!entity.code) throw `Invalid code on entity ${JSON.stringify(entity)}`;
+    return entity.code;
 }

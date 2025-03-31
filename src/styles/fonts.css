@@ -58,6 +58,10 @@
     font-family: 'Twemoji Country Flags', monospace;
 }
 
+.italic {
+    font-style: italic;
+}
+
 .thin {
     font-weight: 200;
 }
@@ -121,4 +125,9 @@
 
 .align-center {
     text-align: center;
+}
+
+.reset {
+    text-decoration: none;
+    font-style: normal;
 }
