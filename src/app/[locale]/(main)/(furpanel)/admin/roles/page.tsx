@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 import { MouseEvent, useEffect, useState } from "react";
 import "@/styles/table.css";
 import Modal from "@/components/modal";
-import DataForm from "@/components/dataForm";
-import JanInput from "@/components/janInput";
+import DataForm from "@/components/input/dataForm";
+import JanInput from "@/components/input/janInput";
 
 export default function RolesListPage () {
 

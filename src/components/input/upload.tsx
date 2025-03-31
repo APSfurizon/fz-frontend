@@ -5,13 +5,13 @@ import { EMPTY_PROFILE_PICTURE_SRC, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WID
 import { ICONS } from '@/components/icon';
 import Image from 'next/image';
 import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
-import Button from '@/components/button';
+import Button from '@/components/input/button';
 import Modal from '@/components/modal';
 import { useModalUpdate } from '@/components/context/modalProvider';
 import "@/styles/components/userUpload.css";
 import { MediaData } from '@/lib/api/media';
 import { areEquals, getImageUrl } from '@/lib/utils';
-import { useFormContext } from '@/components/dataForm';
+import { useFormContext } from '@/components/input/dataForm';
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
@@ -155,7 +155,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     }
     
     return <>
-        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} value={previewUrl ?? ""} required={isRequired}></input>
+        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} defaultValue={previewUrl ?? ""} required={isRequired}></input>
         <div>
             {label && <label htmlFor={fieldName} className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
                 {label}

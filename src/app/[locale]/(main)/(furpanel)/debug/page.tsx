@@ -1,16 +1,19 @@
 'use client'
-import Checkbox from "@/components/checkbox";
-import Button from "@/components/button";
+import Checkbox from "@/components/input/checkbox";
+import Button from "@/components/input/button";
 import { ICONS } from "@/components/icon";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import JanInput from "@/components/janInput";
+import JanInput from "@/components/input/janInput";
 import StatusBox from "@/components/statusBox";
-import AutoInput from "@/components/autoInput";
-import DataForm from "@/components/dataForm";
+import AutoInput from "@/components/input/autoInput";
+import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
 //import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
-import Upload from "@/components/upload";
+import Upload from "@/components/input/upload";
+import ComboBox from "@/components/input/combobox";
+import { ComboboxGroup, ComboboxItem } from "@/lib/components/combobox";
+import { inputEntityCodeExtractor } from "@/lib/components/input";
 
 export default function Home() {
 
@@ -19,6 +22,16 @@ export default function Home() {
   const [isOpen, setOpen] = useState(false);
 
   const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
+
+  const group1 = new ComboboxGroup([
+    new ComboboxItem(1,"aa", "aLetter", "pencil", undefined, undefined, {"it": "ciao", "en": "Hello"}),
+    new ComboboxItem(2,"bb", "bLetter", "rocket", undefined, undefined, {"it": "razzo", "en": "Rocket"})
+  ], "gouppone", {"it": "Gruppo", "en": "Group"})
+  const item3 = new ComboboxItem(3,"cc", "cLetter", "book", undefined, undefined, {"it": "Libro", "en": "Book"});
+
+  const selectItems: (ComboboxItem | ComboboxGroup)[] = [
+    group1, item3
+  ]
 
   return (
     <div className="page">
@@ -57,6 +70,7 @@ export default function Home() {
         <span>a modal</span>
       </Modal>
       <Button onClick={()=>{setOpen(true);}} iconName={ICONS.BED}>Modal</Button>
+      <ComboBox fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></ComboBox>
     </div>
   );
 }

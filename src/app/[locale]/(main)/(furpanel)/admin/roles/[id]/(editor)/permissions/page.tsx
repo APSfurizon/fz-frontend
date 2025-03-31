@@ -2,14 +2,14 @@
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import { AutoInputPermissionsManager, RoleData, RoleOutputData } from "@/lib/api/admin/role";
 import { useTranslations } from "next-intl";
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import { ICONS } from "@/components/icon";
 import { useState } from "react";
 import Modal from "@/components/modal";
-import AutoInput from "@/components/autoInput";
+import AutoInput from "@/components/input/autoInput";
 import { AutoInputFilter, AutoInputSearchResult } from "@/lib/components/autoInput";
 import "@/styles/table.css";
-import DataForm from "@/components/dataForm";
+import DataForm from "@/components/input/dataForm";
 import { DummyFormAction } from "@/lib/components/dataForm";
 
 export default function RolePermissionsEditor () {

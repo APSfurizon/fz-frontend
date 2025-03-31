@@ -1,6 +1,6 @@
 "use client"
-import AutoInput from "@/components/autoInput";
-import Button from "@/components/button";
+import AutoInput from "@/components/input/autoInput";
+import Button from "@/components/input/button";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import { ICONS } from "@/components/icon";
 import Modal from "@/components/modal";
@@ -13,9 +13,9 @@ import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import "@/styles/table.css";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/utils";
-import DataForm from "@/components/dataForm";
+import DataForm from "@/components/input/dataForm";
 import { DummyFormAction } from "@/lib/components/dataForm";
-import Checkbox from "@/components/checkbox";
+import Checkbox from "@/components/input/checkbox";
 import { MediaData } from "@/lib/api/media";
 import { useModalUpdate } from "@/components/context/modalProvider";
 

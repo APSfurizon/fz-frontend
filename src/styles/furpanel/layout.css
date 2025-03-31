@@ -1,5 +1,5 @@
 .main-dialog {
-    max-width: 210mm;
+    width: 210mm;
     transition: width 120ms;
 }
 

@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import Icon, { ICONS } from "@/components/icon";
 import ToolLink from "@/components/toolLink";

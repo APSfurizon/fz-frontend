@@ -1,24 +1,6 @@
-import { CSSProperties } from "react";
-import { translateNullable } from "../utils";
+import { TranslatableInputEntity, TranslatableString, translateNullable } from "@/lib/translations";
 
-export class AutoInputSearchResult {
-    id?: number;
-    translatedDescription?: Record<string, string>;
-    description?: string;
-    code?: string;
-    icon?: string;
-    imageUrl?: string;
-    iconCSS?: CSSProperties;
-    public getDescription (locale?: string): string {
-        if (this.translatedDescription && locale) {
-            return this.translatedDescription[locale] ?? this.description;
-        } else if (this.description) {
-            return this.description;
-        } else {
-            return this.id?.toString() ?? this.code ?? "";
-        }
-    }
-}
+export class AutoInputSearchResult extends TranslatableInputEntity {}
 
 export function createSearchResult (entity: Partial<AutoInputSearchResult>) {
     const toReturn = new AutoInputSearchResult();

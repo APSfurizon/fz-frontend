@@ -1,7 +1,7 @@
 "use client"
-import DataForm from "@/components/dataForm";
+import DataForm from "@/components/input/dataForm";
 import Icon, { ICONS } from "@/components/icon";
-import JanInput from "@/components/janInput";
+import JanInput from "@/components/input/janInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { AuthenticationCodes, LoginFormAction, LoginResponse } from "@/lib/api/authentication/login";
 import { useTranslations } from "next-intl";
@@ -12,7 +12,8 @@ import useTitle from "@/lib/api/hooks/useTitle";
 import { useUser } from "@/components/context/userProvider";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { TOKEN_STORAGE_NAME } from "@/lib/constants";
+import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import { setCookie } from "@/lib/utils";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -40,9 +41,9 @@ export default function Login() {
 
   const manageSuccess = (body?: LoginResponse) => {
     if (!body) return;
-    const newParams = new URLSearchParams(params);
-    newParams.append(TOKEN_STORAGE_NAME, body.accessToken);
-    router.replace(`/login?${newParams.toString()}`);
+    const sessionExpiry = new Date (new Date().getTime () + SESSION_DURATION * 24 * 60 * 60 * 1000);
+    setCookie (TOKEN_STORAGE_NAME, body.accessToken, sessionExpiry);
+    router.replace(`/logging?${params.toString()}`);
     setTimeout(()=>{
       setUpdateUser(true);
     }, 500);

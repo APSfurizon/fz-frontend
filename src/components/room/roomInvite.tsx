@@ -1,10 +1,10 @@
 import { CSSProperties } from "react";
 import Icon, { ICONS } from "@/components/icon";
-import Button from "@/components/button";
+import Button from "@/components/input/button";
 import UserPicture from "@/components/userPicture";
 import { useLocale, useTranslations } from "next-intl";
 import StatusBox from "@/components/statusBox";
-import { translate } from "@/lib/utils";
+import { translate } from "@/lib/translations";
 import { RoomInvitation } from "@/lib/api/room";
 
 export default function RoomInvite ({style, className, busy, onAccept, onReject, disabled, inviteData}: Readonly<{

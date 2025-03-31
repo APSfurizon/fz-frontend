@@ -784,6 +784,9 @@
       "login_here": "oppure accedi",
       "register": "Registrati",
       "title": "Registrazione"
+    },
+    "logging_in": {
+      "title": "Accesso in corso"
     }
   },
   "misc": {

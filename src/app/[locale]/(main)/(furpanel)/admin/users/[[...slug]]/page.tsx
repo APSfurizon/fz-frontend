@@ -1,8 +1,8 @@
 "use client"
-import AutoInput from "@/components/autoInput";
-import Button from "@/components/button";
+import AutoInput from "@/components/input/autoInput";
+import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
-import JanInput from "@/components/janInput";
+import JanInput from "@/components/input/janInput";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
 import { BanUserAction, GetUserAdminViewAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
@@ -10,12 +10,13 @@ import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { AutoInputUsersManager, UserSearchAction } from "@/lib/api/user";
 import { AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { copyContent, errorCodeToApiError, firstOrUndefined, translate } from "@/lib/utils";
+import { copyContent, errorCodeToApiError, firstOrUndefined } from "@/lib/utils";
+import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "@/styles/table.css";
-import Checkbox from "@/components/checkbox";
+import Checkbox from "@/components/input/checkbox";
 import StatusBox from "@/components/statusBox";
 import { mapOrderStatusToStatusBox } from "@/lib/api/booking";
 import LoadingPanel from "@/components/loadingPanel";

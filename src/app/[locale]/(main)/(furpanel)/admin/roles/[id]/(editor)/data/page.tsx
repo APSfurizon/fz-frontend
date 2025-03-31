@@ -1,7 +1,7 @@
 "use client"
-import Checkbox from "@/components/checkbox";
+import Checkbox from "@/components/input/checkbox";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
-import JanInput from "@/components/janInput";
+import JanInput from "@/components/input/janInput";
 import { RoleData, RoleOutputData } from "@/lib/api/admin/role";
 import { nullifyEmptyString } from "@/lib/utils";
 import { useTranslations } from "next-intl";

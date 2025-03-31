@@ -3,13 +3,14 @@ import { CACHED_COUNTRIES, CACHED_STATES, CachedCountries, CachedStates } from "
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, SearchType } from "../components/autoInput";
 import { getFlagEmoji } from "../components/userPicture";
 import { ApiAction, ApiErrorResponse, ApiResponse } from "./global";
+import { TranslatableString } from "../translations";
 
 /**Either a country or a region */
 export interface Place {
     name: string,
     code: string,
     phonePrefix: string,
-    translatedDescription: Record<string, string>
+    translatedDescription: TranslatableString
 }
 
 export interface PlaceApiResponse extends ApiResponse {

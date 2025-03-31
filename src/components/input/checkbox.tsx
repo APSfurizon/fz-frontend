@@ -1,4 +1,4 @@
-import Icon, { ICONS } from "./icon";
+import Icon, { ICONS } from "../icon";
 import { useState, MouseEvent, CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
 import "@/styles/components/checkbox.css";
 import { areEquals } from "@/lib/utils";
