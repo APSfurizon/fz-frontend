@@ -309,3 +309,26 @@ export class AutoInputGenderManager implements AutoInputManager {
 
     isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
 }
+
+export interface UserSession {
+    sessionId: string,
+    userAgent: string,
+    createdAt: string,
+    lastUsageAt: string
+}
+
+export interface AllSessionsResponse extends ApiResponse {
+    sessions: UserSession[]
+}
+
+export class GetAllSessionsAction implements ApiAction<AllSessionsResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "users/me/sessions";
+}
+
+export class DestroyAllSessionsAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "authentication/destroy-all-sessions";
+}

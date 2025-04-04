@@ -31,7 +31,10 @@ const nextConfig: NextConfig = {
   env: {
     version
   },
-  output: "standalone"
+  output: "standalone",
+  eslint: {
+    dirs: ['app', 'components', 'lib']
+  }
 };
 
 export default withNextIntl(nextConfig);

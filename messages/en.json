@@ -390,7 +390,8 @@
         "user": "User",
         "user_info": "Personal information",
         "security": "Security",
-        "security_password": "Password"
+        "security_password": "Password",
+        "sessions": "Active sessions"
       },
       "linking": {
         "title": "Order linking",
@@ -400,6 +401,14 @@
           "ORDER_SECRET_NOT_MATCH": "Order secret doesn't match",
           "ORDER_MULTIPLE_DONE": "You might have issued multiple orders",
           "ORDER_NOT_FOUND": "Order not found"
+        }
+      },
+      "sessions": {
+        "actions": {
+          "terminate_all_sessions": "Terminate all"
+        },
+        "messages": {
+          "confirm_terminate_all_sessions": "Terminate all sessions? You will be disconnected from all your devices."
         }
       }
     },

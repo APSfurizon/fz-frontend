@@ -6,7 +6,7 @@ import useTitle from "@/lib/api/hooks/useTitle";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import DataForm from "@/components/input/dataForm";
-import { AutoInputGenderManager, AutoInputSexManager, GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/lib/api/user";
+import { AllSessionsResponse, AutoInputGenderManager, AutoInputSexManager, DestroyAllSessionsAction, GetAllSessionsAction, GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo, UserSession } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
@@ -18,6 +18,8 @@ import { firstOrUndefined } from "@/lib/utils";
 import "@/styles/furpanel/user.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
+import Modal from "@/components/modal";
+import Button from "@/components/input/button";
 
 export default function UserPage() {
   const t = useTranslations();
@@ -35,6 +37,48 @@ export default function UserPage() {
   const [phonePrefix, setPhonePrefix] = useState<string>();
   const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
 
+  useEffect(()=>{
+    if (personalInformation) return;
+    setPersonalInfoLoading(true);
+    runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
+    .then((result)=>setPersonalInformation(result as UserPersonalInfo))
+    .catch((err)=>showModal(
+        t("common.error"), 
+        <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
+    )).finally(()=>setPersonalInfoLoading(false));
+  }, [personalInformation])
+
+  // Sessions logic
+  const [sessions, setSessions] = useState<UserSession[]>();
+  const [sessionsLoading, setSessionsLoading] = useState(false);
+  const [destroyConfirmModalOpen, setDestroyConfirmModalOpen] = useState(false);
+
+  // Sessions loading
+  useEffect(()=> {
+    if (sessions) return;
+    setSessionsLoading (true);
+    runRequest(new GetAllSessionsAction ())
+    .then ((result) => setSessions((result as AllSessionsResponse).sessions))
+    .catch((err)=>showModal(
+      t("common.error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
+    )).finally(()=>setSessionsLoading(false));
+  })
+
+  const destroyAllSessions = () => {
+    if (!sessions) return;
+    setSessionsLoading (true);
+    runRequest(new DestroyAllSessionsAction ())
+    .then (()=>setSessions(undefined))
+    .catch((err)=>showModal(
+      t("common.error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
+    )).finally(()=>{
+      setSessionsLoading(false);
+      setDestroyConfirmModalOpen(false);
+    });
+  }
+
   // Password change logic
   const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
   const [password, setPassword] = useState<string>("s");
@@ -45,20 +89,10 @@ export default function UserPage() {
       <ModalError error={err} translationRoot="authentication" translationKey="login.errors"></ModalError>,
       ICONS.ERROR
   );
-  useEffect(()=>{
-    if (personalInformation) return;
-    setPersonalInfoLoading(true);
-    runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
-    .then((result)=>setPersonalInformation(result as UserPersonalInfo))
-    .catch((err)=>showModal(
-        t("common.error"), 
-        <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-    )).finally(()=>setPersonalInfoLoading(false));
-  }, [personalInformation])
 
   useTitle(t("furpanel.user.title"));
   
-  return (
+  return <>
       <div className="page">
         {/* User area */}
         <div className="section vertical-list gap-2mm">
@@ -170,6 +204,16 @@ export default function UserPage() {
             <Icon className="x-large" iconName={ICONS.SECURITY}></Icon>
             <span className="title medium">{t("furpanel.user.sections.security")}</span>
           </div>
+          <div className="vertical-list gap-2mm">
+            <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+              <span className="title average">
+                {t("furpanel.user.sections.sessions")}
+              </span>
+            </div>
+            <Button onClick={()=>setDestroyConfirmModalOpen(true)}>
+              {t("furpanel.user.sessions.actions.terminate_all_sessions")}
+            </Button>
+          </div>
           {/* New password */}
           <div className="vertical-list gap-2mm">
             <div className="horizontal-list section-title gap-2mm flex-vertical-center">
@@ -181,12 +225,24 @@ export default function UserPage() {
               action={new ResetPasswordFormAction} onFail={(err) => passwordChangeError(err)} disableSave={!passwordMatch}>
               <JanInput fieldName="password" required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.new_password.label")}
                 placeholder={t("authentication.recover_confirm.input.new_password.placeholder")} helpText={t("authentication.recover_confirm.input.new_password.help")}
-                onChange={(e) => setPassword(e.currentTarget.value)}/>
+                onChange={(e) => setPassword(e.currentTarget.value)} autocomplete="new-password"/>
               <JanInput required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.confirm_password.label")}
-                  placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
+                  placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}
+                  autocomplete="current-password"/>
             </DataForm>
           </div>
         </div>
       </div>
-    );
+      <Modal open={destroyConfirmModalOpen} onClose={()=>setDestroyConfirmModalOpen(false)}
+        title={t("furpanel.user.sessions.actions.terminate_all_sessions")}>
+          <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_all_sessions")}</span>
+          <div className="bottom-toolbar">
+              <Button title={t("common.cancel")} className="danger" onClick={()=>setDestroyConfirmModalOpen(false)}
+                  iconName={ICONS.CANCEL} busy={sessionsLoading}>{t("common.cancel")}</Button>
+              <div className="spacer"></div>
+              <Button title={t("common.CRUD.delete")} onClick={()=>destroyAllSessions()}
+                  iconName={ICONS.DELETE} busy={sessionsLoading}>{t("common.CRUD.delete")}</Button>    
+          </div>
+      </Modal>
+    </>;
 }

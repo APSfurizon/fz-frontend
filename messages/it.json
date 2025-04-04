@@ -390,7 +390,8 @@
         "user": "Utente",
         "user_info": "Informazioni personali",
         "security": "Sicurezza",
-        "security_password": "Password"
+        "security_password": "Password",
+        "sessions": "Sessioni attive"
       },
       "linking": {
         "title": "Recupero ordine",
@@ -400,6 +401,14 @@
           "ORDER_SECRET_NOT_MATCH": "Il codice Ordine non è corretto",
           "ORDER_MULTIPLE_DONE": "Errore ordine multiplo",
           "ORDER_NOT_FOUND": "Ordine non trovato"
+        }
+      },
+      "sessions": {
+        "actions": {
+          "terminate_all_sessions": "Termina tutte"
+        },
+        "messages": {
+          "confirm_terminate_all_sessions": "Terminare tutte le sessioni? Verrai disconnesso da tutti i dispositivi."
         }
       }
     },
