@@ -6,31 +6,32 @@ table {
     border-spacing: 0px 0.625em;
     background-color: var(--table-bg);
     padding: 0em 0.625em;
-
-    tr {
-        overflow: hidden;
-
-        td, th {
-            padding: 0.3125em;
-            background-color: var(--table-row-bg);
-        }
-
-        td.centered,
-        th.centered {
-            align-items: center;
-        }
-
-        th:not(:first-child),
-        td:not(:first-child) {
-            border-left: 0.1em solid var(--table-row-bg);
-        }
-
-        td:first-child, th:first-child {
-            border-radius: 0.3em 0px 0px 0.3em;
-        }
-
-        td:last-child, th:last-child {
-            border-radius: 0px 0.3em 0.3em 0px;
+    tbody {
+        tr {
+            overflow: hidden;
+    
+            td, th {
+                padding: 0.3125em;
+                background-color: var(--table-row-bg);
+            }
+    
+            td.centered,
+            th.centered {
+                align-items: center;
+            }
+    
+            th:not(:first-child),
+            td:not(:first-child) {
+                border-left: 0.1em solid var(--table-row-bg);
+            }
+    
+            td:first-child, th:first-child {
+                border-radius: 0.3em 0px 0px 0.3em;
+            }
+    
+            td:last-child, th:last-child {
+                border-radius: 0px 0.3em 0.3em 0px;
+            }
         }
     }
 }

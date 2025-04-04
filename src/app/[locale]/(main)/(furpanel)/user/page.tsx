@@ -3,10 +3,10 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
 import useTitle from "@/lib/api/hooks/useTitle";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { useRouter } from "next/navigation";
 import DataForm from "@/components/input/dataForm";
-import { AllSessionsResponse, AutoInputGenderManager, AutoInputSexManager, DestroyAllSessionsAction, GetAllSessionsAction, GetPersonalInfoAction, UpdatePersonalInfoFormAction, UserPersonalInfo, UserSession } from "@/lib/api/user";
+import { AllSessionsResponse, AutoInputGenderManager, AutoInputSexManager, DestroyAllSessionsAction, DestroySessionAction, DestroySessionData, GetAllSessionsAction, GetPersonalInfoAction, getUaFriendly, UpdatePersonalInfoFormAction, UserPersonalInfo, UserSession } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
@@ -15,16 +15,19 @@ import AutoInput from "@/components/input/autoInput";
 import { AutoInputSearchResult } from "@/lib/components/autoInput";
 import { AutoInputStatesManager, CountrySearchResult, AutoInputCountriesManager } from "@/lib/api/geo";
 import { firstOrUndefined } from "@/lib/utils";
-import "@/styles/furpanel/user.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import Modal from "@/components/modal";
 import Button from "@/components/input/button";
+import LoadingPanel from "@/components/loadingPanel";
+import "@/styles/furpanel/user.css";
+import "@/styles/table.css";
 
 export default function UserPage() {
   const t = useTranslations();
+  const formatter = useFormatter();
   const router = useRouter();
-  const {showModal} = useModalUpdate();
+  const {showModal, hideModal} = useModalUpdate();
   const {userLoading, userDisplay} = useUser();
 
   // Main logic
@@ -55,28 +58,63 @@ export default function UserPage() {
 
   // Sessions loading
   useEffect(()=> {
-    if (sessions) return;
+    if (sessions !== undefined) return;
     setSessionsLoading (true);
     runRequest(new GetAllSessionsAction ())
     .then ((result) => setSessions((result as AllSessionsResponse).sessions))
-    .catch((err)=>showModal(
-      t("common.error"), 
-      <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
-    )).finally(()=>setSessionsLoading(false));
+    .catch((err)=>{
+      showModal(
+        t("common.error"), 
+        <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
+      );
+      setSessions([]);
+    }).finally(()=>setSessionsLoading(false));
   })
 
   const destroyAllSessions = () => {
     if (!sessions) return;
     setSessionsLoading (true);
     runRequest(new DestroyAllSessionsAction ())
-    .then (()=>setSessions(undefined))
+    .then (()=>{})
     .catch((err)=>showModal(
       t("common.error"), 
       <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
     )).finally(()=>{
       setSessionsLoading(false);
       setDestroyConfirmModalOpen(false);
+      router.replace("/logout");
     });
+  }
+
+  const promptDestroySession = (sessionId: string) => {
+    showModal(
+      t("furpanel.user.sessions.actions.terminate_session"), 
+      <>
+        <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_session")}</span>
+        <div className="bottom-toolbar">
+            <Button title={t("common.cancel")} className="danger" onClick={()=>hideModal()}
+                iconName={ICONS.CANCEL} busy={sessionsLoading}>{t("common.cancel")}</Button>
+            <div className="spacer"></div>
+            <Button title={t("common.CRUD.delete")} onClick={()=>destroySession(sessionId)}
+                iconName={ICONS.DELETE} busy={sessionsLoading}>{t("common.CRUD.delete")}</Button>    
+        </div>
+      </>
+    )
+  }
+
+  const destroySession = (sessionId: string) => {
+    if (!sessions) return;
+    setSessionsLoading (true);
+    const sessionData: DestroySessionData = {sessionId: sessionId};
+    runRequest(new DestroySessionAction (), undefined, sessionData)
+    .then (()=>{
+      hideModal();
+      setSessions(undefined);
+    })
+    .catch((err)=>showModal(
+      t("common.error"), 
+      <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
+    )).finally(()=>setSessionsLoading(false));
   }
 
   // Password change logic
@@ -210,9 +248,51 @@ export default function UserPage() {
                 {t("furpanel.user.sections.sessions")}
               </span>
             </div>
-            <Button onClick={()=>setDestroyConfirmModalOpen(true)}>
-              {t("furpanel.user.sessions.actions.terminate_all_sessions")}
-            </Button>
+            <div className="table-container rounded-m" style={{width: '100%', overflowX: 'scroll'}}>
+              <table className="rounded-m" style={{width: '100%'}}>
+                <tbody>
+                  <tr>
+                    <th>
+                      {t("furpanel.user.sessions.headers.number")}
+                    </th>
+                    <th>
+                      {t("furpanel.user.sessions.headers.created")}
+                    </th>
+                    <th>
+                      {t("furpanel.user.sessions.headers.user_agent")}
+                    </th>
+                    <th>
+                      {t("furpanel.user.sessions.headers.last_usage")}
+                    </th>
+                    <th></th>
+                  </tr>
+                  {sessionsLoading && <tr><td><LoadingPanel/></td></tr>}
+                  {sessions?.map((session, si) => <tr key={si}>
+                    <td>
+                      <span className="title average">{si+1}</span>
+                    </td>
+                    <td>
+                      <span className="title average">{formatter.dateTime(new Date(session.createdAt))}</span>
+                    </td>
+                    <td>
+                      <span className="descriptive average color-subtitle">{getUaFriendly(session.userAgent)}</span>
+                    </td>
+                    <td>
+                      <span className="title average">{formatter.dateTime(new Date(session.lastUsageAt))}</span>
+                    </td>
+                    <td className="horizontal-list flex-center">
+                        <Button onClick={(e)=>promptDestroySession(session.sessionId)} iconName={ICONS.CLOSE} title={t("furpanel.user.sessions.actions.terminate_session")}/>
+                    </td>
+                  </tr>)}
+                </tbody>
+              </table>
+            </div>
+            <div className="horizontal-list">
+              <div className="spacer"></div>
+              <Button className="danger" iconName={ICONS.CLOSE} onClick={()=>setDestroyConfirmModalOpen(true)}>
+                {t("furpanel.user.sessions.actions.terminate_all_sessions")}
+              </Button>
+            </div>
           </div>
           {/* New password */}
           <div className="vertical-list gap-2mm">
@@ -241,7 +321,7 @@ export default function UserPage() {
                   iconName={ICONS.CANCEL} busy={sessionsLoading}>{t("common.cancel")}</Button>
               <div className="spacer"></div>
               <Button title={t("common.CRUD.delete")} onClick={()=>destroyAllSessions()}
-                  iconName={ICONS.DELETE} busy={sessionsLoading}>{t("common.CRUD.delete")}</Button>    
+                  iconName={ICONS.DELETE} busy={sessionsLoading}>{t("furpanel.user.sessions.actions.terminate_all_sessions")}</Button>    
           </div>
       </Modal>
     </>;

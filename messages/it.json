@@ -405,10 +405,18 @@
       },
       "sessions": {
         "actions": {
-          "terminate_all_sessions": "Termina tutte"
+          "terminate_all_sessions": "Termina tutte",
+          "terminate_session": "Termina sessione"
         },
         "messages": {
-          "confirm_terminate_all_sessions": "Terminare tutte le sessioni? Verrai disconnesso da tutti i dispositivi."
+          "confirm_terminate_all_sessions": "Terminare tutte le sessioni? Verrai disconnesso da tutti i dispositivi.",
+          "confirm_terminate_session": "Terminare la sessione selezionata? Il tuo account sarà disconnesso da quel dispositivo."
+        },
+        "headers": {
+          "number": "Num",
+          "created": "Creazione",
+          "user_agent": "Informazioni",
+          "last_usage": "Ultimo uso"
         }
       }
     },
