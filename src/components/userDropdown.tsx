@@ -1,6 +1,6 @@
 "use client"
 import {useLocale, useTranslations} from 'next-intl';
-import {Link, routing, useRouter} from '@/i18n/routing';
+import {Link, routing, useRouter, usePathname} from '@/i18n/routing';
 import { MouseEvent, useState } from 'react';
 import Icon, { ICONS } from '@/components/icon';
 import UserPicture from '@/components/userPicture';
@@ -10,6 +10,7 @@ import { UserData } from '@/lib/api/user';
 import Button from '@/components/input/button';
 import LoadingPanel from './loadingPanel';
 import "@/styles/components/userDropDown.css";
+import { mapLanguageToFlag } from '@/lib/utils';
 
 export default function UserDropDown ({userData, loading}: Readonly<{userData?: UserData, loading: boolean}>) { 
     const [isOpen, setOpen] = useState(false);
@@ -17,6 +18,7 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
     const t = useTranslations('common');
     const router = useRouter();
     const locale = useLocale();
+    const path = usePathname();
     
     const logout = () => {
         runRequest(new LogoutApiAction())
@@ -61,8 +63,9 @@ export default function UserDropDown ({userData, loading}: Readonly<{userData?: 
                 </a>}
                 {/* Language selector */}
                 <hr/>
-                {routing.locales.map((lng, index)=> <Link href="/" className='title small rounded-s vertical-align-middle horizontal-list'
+                {routing.locales.map((lng, index)=> <Link href={path} className='title small rounded-s vertical-align-middle horizontal-list'
                     key={index} locale={lng}>
+                    {mapLanguageToFlag(lng)}&nbsp;
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' iconName={ICONS.CHECK}></Icon>}
                 </Link>)}

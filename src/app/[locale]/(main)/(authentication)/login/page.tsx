@@ -14,12 +14,12 @@ import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
+import Button from "@/components/input/button";
 
 export default function Login() {
   const t = useTranslations("authentication");
   const [error, setError] = useState <String | undefined> (undefined);
   const [loading, setLoading] = useState(false);
-  const {updateUser, setUpdateUser} = useUser();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -44,9 +44,6 @@ export default function Login() {
     const sessionExpiry = new Date (new Date().getTime () + SESSION_DURATION * 24 * 60 * 60 * 1000);
     setCookie (TOKEN_STORAGE_NAME, body.accessToken, sessionExpiry);
     router.replace(`/logging?${params.toString()}`);
-    setTimeout(()=>{
-      setUpdateUser(true);
-    }, 500);
   }
 
   useTitle(t("login.title"));
@@ -68,10 +65,13 @@ export default function Login() {
       {t(`login.messages.${params.get("status")}.description`)}
     </NoticeBox>}
     <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onBeforeSubmit={()=>onLoad()}
-      onSuccess={(data)=>manageSuccess(data as LoginResponse)} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("login.login")}}
+      onSuccess={(data)=>manageSuccess(data as LoginResponse)} onFail={(err) => manageError(err)} hideSave
       resetOnFail={false} resetOnSuccess={false}>
       <JanInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")}/>
       <JanInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")}/>
+      <div className="toolbar-bottom">
+        <Button type="submit" iconName={ICONS.KEY} busy={loading}>{t("login.login")}</Button>
+      </div>
     </DataForm>
     <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.register_here')}</Link>
     <Link href={`/recover?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.recover')}</Link>

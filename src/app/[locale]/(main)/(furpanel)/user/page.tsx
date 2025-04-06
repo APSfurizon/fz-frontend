@@ -12,7 +12,6 @@ import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
 import JanInput from "@/components/input/janInput";
 import AutoInput from "@/components/input/autoInput";
-import { AutoInputSearchResult } from "@/lib/components/autoInput";
 import { AutoInputStatesManager, CountrySearchResult, AutoInputCountriesManager } from "@/lib/api/geo";
 import { firstOrUndefined } from "@/lib/utils";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
@@ -248,40 +247,36 @@ export default function UserPage() {
                 {t("furpanel.user.sections.sessions")}
               </span>
             </div>
-            <div className="table-container rounded-m" style={{width: '100%', overflowX: 'scroll'}}>
+            <div className="table-container rounded-m title" style={{width: '100%', overflowX: 'scroll'}}>
               <table className="rounded-m" style={{width: '100%'}}>
                 <tbody>
                   <tr>
-                    <th>
-                      {t("furpanel.user.sessions.headers.number")}
-                    </th>
-                    <th>
+                    <th className="title average">
                       {t("furpanel.user.sessions.headers.created")}
                     </th>
-                    <th>
+                    <th className="title average">
                       {t("furpanel.user.sessions.headers.user_agent")}
                     </th>
-                    <th>
+                    <th className="title average">
                       {t("furpanel.user.sessions.headers.last_usage")}
                     </th>
-                    <th></th>
+                    <th className="title average"></th>
                   </tr>
                   {sessionsLoading && <tr><td><LoadingPanel/></td></tr>}
                   {sessions?.map((session, si) => <tr key={si}>
                     <td>
-                      <span className="title average">{si+1}</span>
+                      <span className="title small">{formatter.dateTime(new Date(session.createdAt), {dateStyle: "medium"})}</span>
                     </td>
                     <td>
-                      <span className="title average">{formatter.dateTime(new Date(session.createdAt))}</span>
+                      <span className="descriptive small color-subtitle">{getUaFriendly(session.userAgent)}</span>
                     </td>
                     <td>
-                      <span className="descriptive average color-subtitle">{getUaFriendly(session.userAgent)}</span>
+                      <span className="title small">{formatter.dateTime(new Date(session.lastUsageAt), {dateStyle: "medium"})}</span>
                     </td>
-                    <td>
-                      <span className="title average">{formatter.dateTime(new Date(session.lastUsageAt))}</span>
-                    </td>
-                    <td className="horizontal-list flex-center">
-                        <Button onClick={(e)=>promptDestroySession(session.sessionId)} iconName={ICONS.CLOSE} title={t("furpanel.user.sessions.actions.terminate_session")}/>
+                    <td className="align-center">
+                        <Button onClick={(e)=>promptDestroySession(session.sessionId)} 
+                          iconName={ICONS.CLOSE} title={t("furpanel.user.sessions.actions.terminate_session")}
+                          style={{display: 'inline'}}/>
                     </td>
                   </tr>)}
                 </tbody>

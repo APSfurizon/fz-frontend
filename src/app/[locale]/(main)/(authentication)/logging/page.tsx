@@ -8,11 +8,11 @@ import { useEffect } from "react";
 export default function Logging() {
     const t = useTranslations("authentication");
     const router = useRouter();
-    const {setUserDisplay} = useUser();
+    const {setUpdateUser} = useUser();
     const params = useSearchParams();
 
     useEffect(()=>{
-        setUserDisplay(undefined);
+        setUpdateUser(true);
         router.replace(params.get("continue") ?? "/home");
         router.refresh();
     }, [])

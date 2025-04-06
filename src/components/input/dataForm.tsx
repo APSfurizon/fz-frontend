@@ -103,6 +103,7 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
             </FormContext.Provider>
             {!hideSave && (
             <div className="toolbar-bottom">
+                <div className="spacer"></div>
                 <Button type="submit" disabled={disableSave} iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
             </div>
             )}

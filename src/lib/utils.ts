@@ -1,4 +1,5 @@
 import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
+import { getFlagEmoji } from "./components/userPicture";
 import { API_BASE_URL, API_IMAGE_URL, APP_VERSION, CHANGELOGS_ENABLED, MEMBERSHIP_STARTING_YEAR, READ_CHANGELOG_STORAGE_NAME } from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
@@ -137,4 +138,13 @@ export function errorCodeToApiError (err: string):ApiErrorResponse {
 
 export function resultSelf<A,R> (arg1: A): R {
     return arg1 as any as R;
+}
+
+export function mapLanguageToFlag(lang: string) {
+    switch (lang){
+        case "en":
+            return getFlagEmoji("gb");
+        default:
+            return getFlagEmoji(lang)
+    }
 }
