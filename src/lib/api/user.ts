@@ -2,9 +2,9 @@ import { ICONS } from "@/components/icon";
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded, filterSearchResult, SearchType } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams, nullifyEmptyString } from "../utils";
-import { getAutoInputPermissions } from "./admin/role";
-import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse } from "./global";
+import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest } from "./global";
 import { MediaData } from "./media";
+import { UAParser } from "ua-parser-js";
 
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
     propic: MediaData
@@ -308,4 +308,42 @@ export class AutoInputGenderManager implements AutoInputManager {
     }
 
     isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+}
+
+export function getUaFriendly(userAgent: string) {
+    const ua = UAParser(userAgent);
+    return `${ua.browser} - ${ua.os}`
+}
+
+export interface UserSession {
+    sessionId: string,
+    userAgent: string,
+    createdAt: string,
+    lastUsageAt: string
+}
+
+export interface AllSessionsResponse extends ApiResponse {
+    sessions: UserSession[]
+}
+
+export class GetAllSessionsAction implements ApiAction<AllSessionsResponse, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    urlAction = "users/me/sessions";
+}
+
+export interface DestroySessionData extends ApiRequest {
+    sessionId: string
+}
+
+export class DestroySessionAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "authentication/destroy-session";
+}
+
+export class DestroyAllSessionsAction implements ApiAction<Boolean, ApiErrorResponse> {
+    authenticated = true;
+    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    urlAction = "authentication/destroy-all-sessions";
 }

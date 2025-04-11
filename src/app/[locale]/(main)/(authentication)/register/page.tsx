@@ -18,6 +18,7 @@ import "@/styles/authentication/register.css";
 import { firstOrUndefined } from "@/lib/utils";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { AutoInputGenderManager, AutoInputSexManager } from "@/lib/api/user";
+import Button from "@/components/input/button";
 
 export default function Register() {
 
@@ -83,7 +84,7 @@ export default function Register() {
     </div>
     {error && <span className="error-container title small center">{t(`register.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
     <DataForm checkFn={checkForm} className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new RegisterFormAction}
-      onSuccess={manageSuccess} onFail={(err) => manageError(err)} saveButton={{iconName: ICONS.KEY, text: t("register.register")}}
+      onSuccess={manageSuccess} onFail={(err) => manageError(err)} hideSave
       disableSave={!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch}
       resetOnFail={false}>
       {/* Ask user for username and password */}
@@ -170,9 +171,12 @@ export default function Register() {
       </div>
       <NoticeBox theme={NoticeTheme.FAQ} title={t("register.question.description_title")} className="descriptive">{t("register.question.description")}</NoticeBox>
       <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>{t.rich("register.form.disclaimer_tos.label", {
-          terms: (chunks) => <Link href={t("register.form.disclaimer_tos.link")} className="highlight underlined">{chunks}</Link>
+          terms: (chunks) => <Link target="_blank" href={t("register.form.disclaimer_tos.link")} className="highlight underlined">{chunks}</Link>
         })}</Checkbox>
       <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}>{t("register.form.disclaimer_data_protection.label")}</Checkbox>
+      <div className="toolbar-bottom">
+        <Button type="submit" iconName={ICONS.KEY} busy={loading}>{t("register.register")}</Button>
+      </div>
     </DataForm>
     <div>
       <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('register.login_here')}</Link>

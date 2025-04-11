@@ -120,7 +120,7 @@ div.autocomplete-input {
 
     .selected-value.single {
         flex: 1;
-        border-radius: .2em;
+        border-radius: .25em;
     }
 
     :has(.single) .spacer {

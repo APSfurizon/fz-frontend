@@ -1,11 +1,11 @@
-import { ChangeEvent, CSSProperties, MouseEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, MouseEvent, useEffect, useState } from "react";
 import Icon, { ICONS } from "../icon";
 import "@/styles/components/janInput.css";
 import { useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 
-export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, initialValue }: Readonly<{
+export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, initialValue, autocomplete }: Readonly<{
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -28,6 +28,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     required?: boolean,
     style?: CSSProperties,
     initialValue?: string | number,
+    autocomplete?: HTMLInputAutoCompleteAttribute | undefined
   }>) {
 
     /* States */
@@ -91,6 +92,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
                     onClick={onClick}
                     minLength={minLength}
                     maxLength={maxLength}
+                    autoComplete={autocomplete}
                 />
                 <span className={`${busy || isPassword ? "icon-container" : ""}`}>
                     {(busy) && (

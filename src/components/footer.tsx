@@ -20,7 +20,7 @@ export default function Footer () {
             <a href="https://furizon.net/join-furizon-staff/" target="_blank" rel="noopener noreferrer">{t('footer.volunteers')}</a>
             <a href="https://furizon.net/contact/" target="_blank" rel="noopener noreferrer">{t('footer.contact_us')}</a>
           </div>
-          <div className="horizontal-list gap-4mm normal title flex-center flex-align-center">
+          <div className="horizontal-list gap-4mm normal title flex-center">
             <a href="https://www.youtube.com/@apsfurizon7425" target="_blank" rel="noopener noreferrer">
               <Image className="footer-logo-youtube" src="/images/footer/youtube-brands-solid.svg" alt="Youtube logo" width={32} height={32}></Image>
             </a>

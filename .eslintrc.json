@@ -4,6 +4,7 @@
     "spellcheck"
   ],
   "rules": {
-    "deprecation/deprecation": 1
+    "deprecation/deprecation": 1,
+    "max-len": "warn"
   }
 }
