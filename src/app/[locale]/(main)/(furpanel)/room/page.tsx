@@ -49,9 +49,9 @@ export default function RoomPage() {
    // Room creation
    const createRoom = () => {
     if (userLoading) return;
-
+    const roomName = t("furpanel.room.default_name", {name: userDisplay?.display?.fursonaName}).substring(0, 63);
     const roomData: RoomCreateData = {
-      name: t("furpanel.room.default_name", {name: userDisplay?.display?.fursonaName})
+      name: roomName
     };
 
     setActionLoading(true);
