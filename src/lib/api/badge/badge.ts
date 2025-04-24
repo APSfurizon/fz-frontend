@@ -13,23 +13,23 @@ export interface BadgeStatusApiResponse extends ApiResponse {
     canBringFursuitsToEvent: boolean
 }
 
-export class GetBadgeStatusAction implements ApiAction<BadgeStatusApiResponse, ApiErrorResponse> {
+export class GetBadgeStatusAction extends ApiAction<BadgeStatusApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "badge/";
 }
 
 export interface BadgeUploadResponse extends MediaData, ApiResponse {}
 
-export class UploadBadgeAction implements ApiAction<BadgeUploadResponse, ApiErrorResponse> {
+export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "badge/user/upload";
 }
 
-export class DeleteBadgeAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class DeleteBadgeAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.DELETE;
+    method = RequestType.DELETE;
     urlAction = "badge/user/";
 }
 
@@ -49,8 +49,8 @@ export class BadgeDataChangeDTOBuilder implements FormDTOBuilder<BadgeDataChange
     }
 }
 
-export class BadgeDataChangeFormAction implements FormApiAction<BadgeDataChangeData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class BadgeDataChangeFormAction extends FormApiAction<BadgeDataChangeData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new BadgeDataChangeDTOBuilder ();
     urlAction = "badge/update-user-badge-info";

@@ -1,33 +1,33 @@
 import { ApiAction, ApiErrorResponse, RequestType } from "../global";
 
-export class GetRenderedCommonBadgesApiAction implements ApiAction<any, ApiErrorResponse> {
+export class GetRenderedCommonBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/export/badges/user";
     rawResponse?: boolean = true;
 }
 
-export class GetRenderedFursuitBadgesApiAction implements ApiAction<any, ApiErrorResponse> {
+export class GetRenderedFursuitBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/export/badges/fursuits";
     rawResponse?: boolean = true;
 }
 
-export class RemindBadgesApiAction implements ApiAction<any, ApiErrorResponse> {
+export class RemindBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/mail-reminders/user-badge-upload";
 }
 
-export class RemindFursuitBadgesApiAction implements ApiAction<any, ApiErrorResponse> {
+export class RemindFursuitBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/mail-reminders/fursuit-badge-upload";
 }
 
-export class RemindOrderLinkApiAction implements ApiAction<any, ApiErrorResponse> {
+export class RemindOrderLinkApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/mail-reminders/order-linking";
 }

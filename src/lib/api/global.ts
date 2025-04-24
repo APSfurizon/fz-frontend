@@ -41,13 +41,13 @@ export function isDetailedError (err: ApiErrorResponse | ApiDetailedErrorRespons
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
  */
-export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorResponse> {
-    authenticated: boolean,
-    method: RequestType,
-    urlAction: string,
-    rawResponse?: boolean,
-    onSuccess?: (status: number, body?: U) => void,
-    onFail?: (status: number, body?: V) => void
+export abstract class ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorResponse> {
+    abstract authenticated: boolean;
+    abstract method: RequestType;
+    abstract urlAction: string;
+    rawResponse?: boolean;
+    onSuccess?: (status: number, body?: U) => void;
+    onFail?: (status: number, body?: V) => void;
 }
 
 export function getToken (): string | null {

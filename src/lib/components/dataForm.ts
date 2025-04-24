@@ -4,8 +4,8 @@ import { ApiResponse, ApiErrorResponse, ApiRequest, ApiAction, RequestType } fro
  * Describes which endpoint the be called, the type of body, type of response and type of error response
  * coming from a form
  */
-export interface FormApiAction<T extends ApiRequest, U extends ApiResponse | Boolean, V extends ApiErrorResponse> extends ApiAction<U, V> {
-    dtoBuilder: FormDTOBuilder<T>,
+export abstract class FormApiAction<T extends ApiRequest, U extends ApiResponse | Boolean, V extends ApiErrorResponse> extends ApiAction<U, V> {
+    dtoBuilder!: FormDTOBuilder<T>
 }
 
 /**
@@ -20,8 +20,8 @@ export class DummyDTOBuilder implements FormDTOBuilder<any>{
     mapToDTO = (data: FormData) => {return {}}
 }
 
-export class DummyFormAction implements FormApiAction<any, Boolean, ApiErrorResponse> {
-    method!: RequestType.GET;
+export class DummyFormAction extends FormApiAction<any, Boolean, ApiErrorResponse> {
+    method = RequestType.GET;
     authenticated = true;
     dtoBuilder = new DummyDTOBuilder ();
     urlAction = "";

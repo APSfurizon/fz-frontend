@@ -14,8 +14,8 @@ export class RecoverDTOBuilder implements FormDTOBuilder<RecoverApiData> {
     }
 }
 
-export class RecoverFormAction implements FormApiAction<RecoverApiData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class RecoverFormAction extends FormApiAction<RecoverApiData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new RecoverDTOBuilder ();
     urlAction = "authentication/pw/reset";
@@ -36,8 +36,8 @@ export class ResetPasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApi
     }
 }
 
-export class ResetPasswordFormAction implements FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class ResetPasswordFormAction extends FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new ResetPasswordDTOBuilder ();
     urlAction = "authentication/pw/change";

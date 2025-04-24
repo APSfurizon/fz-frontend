@@ -17,9 +17,9 @@ export interface GetUserAdminViewResponse extends ApiResponse {
 /**
  * Uses path param: users/view/id
  */
-export class GetUserAdminViewAction implements ApiAction<GetUserAdminViewResponse, ApiErrorResponse> {
+export class GetUserAdminViewAction extends ApiAction<GetUserAdminViewResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "users/view";
 }
 
@@ -27,15 +27,15 @@ export interface UserIdRequestData {
     userId: number,
 }
 
-export class BanUserAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class BanUserAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "authentication/ban";
 }
 
 
-export class UnbanUserAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class UnbanUserAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "authentication/unban";
 }

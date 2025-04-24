@@ -20,15 +20,15 @@ export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
     canExportHotelList: false
 }
 
-export class GetAdminCapabilitiesApiAction implements ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {
+export class GetAdminCapabilitiesApiAction extends ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/capabilities";
 }
 
-export class ExportHotelRoomsApiAction implements ApiAction<any, ApiErrorResponse> {
+export class ExportHotelRoomsApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "admin/export/hotel-user-list";
     rawResponse?: boolean = true;
 }

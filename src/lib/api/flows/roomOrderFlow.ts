@@ -47,9 +47,9 @@ export interface RoomStoreItemsApiResponse extends ApiResponse {
 /**
  * Endpoint to list available room types
  */
-export class RoomStoreItemsApiAction implements ApiAction<RoomStoreItemsApiResponse, ApiErrorResponse> {
+export class RoomStoreItemsApiAction extends ApiAction<RoomStoreItemsApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "room/get-room-list-with-quota";
 }
 
@@ -61,8 +61,8 @@ export interface RoomBuyApiData {
 /**
  * Endpoint to try buy or upgrade your room
  */
-export class RoomStoreBuyAction implements ApiAction<ShopLinkResponse, ApiErrorResponse> {
+export class RoomStoreBuyAction extends ApiAction<ShopLinkResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/buy-or-upgrade-room";
 }

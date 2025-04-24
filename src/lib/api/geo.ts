@@ -17,15 +17,15 @@ export interface PlaceApiResponse extends ApiResponse {
     data: Place[]
 }
 
-export class AutoInputCountriesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
+export class AutoInputCountriesApiAction extends ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "states/get-countries";
 }
 
-export class AutoInputStatesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
+export class AutoInputStatesApiAction extends ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "states/by-country";
 }
 

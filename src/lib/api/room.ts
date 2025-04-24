@@ -52,9 +52,9 @@ export interface RoomCreateData {
 
 export interface RoomCreateResponse extends RoomInfo, ApiResponse {}
 
-export class RoomCreateApiAction implements ApiAction<RoomCreateResponse, ApiErrorResponse> {
+export class RoomCreateApiAction extends ApiAction<RoomCreateResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/create";
 }
 
@@ -74,9 +74,9 @@ export interface RoomInfoResponse extends ApiResponse {
     canExchange: boolean
 }
 
-export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorResponse> {
+export class RoomInfoApiAction extends ApiAction<RoomInfoResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "room/info";
 }
 
@@ -96,16 +96,16 @@ export class RoomRenameDTOBuilder implements FormDTOBuilder<RoomRenameData> {
     }
 }
 
-export class RoomRenameFormAction implements FormApiAction<RoomRenameData, ApiResponse, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class RoomRenameFormAction extends FormApiAction<RoomRenameData, ApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomRenameDTOBuilder ();
     urlAction = "room/change-name";
 }
 
-export class RoomDeleteAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class RoomDeleteAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/delete";
 }
 
@@ -136,8 +136,8 @@ export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
     }
 }
 
-export class RoomInviteFormAction implements FormApiAction<RoomInviteApiData, RoomInviteResponse, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class RoomInviteFormAction extends FormApiAction<RoomInviteApiData, RoomInviteResponse, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomInviteDTOBuilder ();
     urlAction = "room/invite";
@@ -151,21 +151,21 @@ export interface GuestIdApiData {
     guestId: number
 }
 
-export class RoomInviteAnswerAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class RoomInviteAnswerAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/invite";
 }
 
-export class RoomKickAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class RoomKickAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/kick";
 }
 
-export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class RoomLeaveAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/leave";
 }
 
@@ -180,8 +180,8 @@ export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeI
     }
 }
 
-export class RoomExchangeFormAction implements FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class RoomExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";
@@ -192,8 +192,8 @@ export interface RoomSetShowInNosecountData {
     showInNosecount: boolean
 }
 
-export class RoomSetShowInNosecountApiAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class RoomSetShowInNosecountApiAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/show-in-nosecount";
 }
