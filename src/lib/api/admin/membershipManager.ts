@@ -1,7 +1,7 @@
 import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { buildSearchParams } from "../../utils";
-import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global";
 import { AutoInputRoomInviteManager, CompleteUserData, toSearchResult, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
 
 export interface MembershipCard {
@@ -31,7 +31,7 @@ export interface GetCardsApiResponse extends ApiResponse {
 
 export class GetCardsApiAction implements ApiAction<GetCardsApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "membership/get-cards";
 }
 
@@ -42,7 +42,7 @@ export interface ChangeCardRegisterStatusApiData {
 
 export class ChangeCardRegisterStatusApiAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "membership/set-membership-card-registration-status";
 }
 
@@ -74,7 +74,7 @@ export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
 }
 
 export class AddCardFormAction implements FormApiAction<AddCardApiData, Boolean, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddCardDTOBuilder ();
     urlAction = "membership/add-card";

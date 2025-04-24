@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import { CACHED_COUNTRIES, CACHED_STATES, CachedCountries, CachedStates } from "../cache/cache";
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, SearchType } from "../components/autoInput";
 import { getFlagEmoji } from "../components/userPicture";
-import { ApiAction, ApiErrorResponse, ApiResponse } from "./global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { TranslatableString } from "../translations";
 
 /**Either a country or a region */
@@ -19,13 +19,13 @@ export interface PlaceApiResponse extends ApiResponse {
 
 export class AutoInputCountriesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "states/get-countries";
 }
 
 export class AutoInputStatesApiAction implements ApiAction<PlaceApiResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "states/by-country";
 }
 

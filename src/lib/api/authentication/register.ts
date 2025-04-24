@@ -1,7 +1,7 @@
 import { CountrySearchResult } from "@/lib/api/geo";
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { nullifyEmptyString } from "../../utils";
-import { ApiErrorResponse, ApiResponse } from "../global";
+import { ApiErrorResponse, ApiResponse, RequestType } from "../global";
 import { UserPersonalInfo } from "../user";
 
 export const extractPhonePrefix = (r?: CountrySearchResult) => {
@@ -56,7 +56,7 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
 }
 
 export class RegisterFormAction implements FormApiAction<RegisterData, RegisterResponse, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = false;
     dtoBuilder = new RegisterDTOBuilder ();
     urlAction = "authentication/register";

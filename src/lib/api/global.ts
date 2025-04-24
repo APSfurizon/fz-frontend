@@ -2,6 +2,14 @@ import { FormApiAction } from "@/lib/components/dataForm"
 import { API_BASE_URL, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { getCookie } from "@/lib/utils";
 
+export enum RequestType {
+    GET = "GET",
+    POST = "POST",
+    PATCH = "PATCH",
+    DELETE = "DELETE",
+    PUT = "PUT"
+}
+
 export interface ApiRequest {}
 
 export interface ApiResponse {
@@ -35,7 +43,7 @@ export function isDetailedError (err: ApiErrorResponse | ApiDetailedErrorRespons
  */
 export interface ApiAction<U extends ApiResponse | Boolean, V extends ApiErrorResponse> {
     authenticated: boolean,
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT",
+    method: RequestType,
     urlAction: string,
     rawResponse?: boolean,
     onSuccess?: (status: number, body?: U) => void,

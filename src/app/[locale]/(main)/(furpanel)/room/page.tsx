@@ -385,6 +385,10 @@ export default function RoomPage() {
           <div className="invite-toolbar horizontal-list gap-4mm">
               <StatusBox>{translate(data.currentRoomInfo.roomData.roomTypeNames, locale)}</StatusBox>
               <StatusBox>{t("furpanel.room.room_number_left", {size: data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length})}</StatusBox>
+              {data.currentRoomInfo.extraDays !== "NONE" && <StatusBox status={"normal"}>
+                  {t("furpanel.booking.items.extra_days")}:&nbsp;
+                  {t(`furpanel.booking.items.extra_days_${data.currentRoomInfo.extraDays}`)}
+                </StatusBox>}
               <div className="spacer" style={{flexGrow: "300"}}></div>
               <div className="horizontal-list flex-space-between gap-4mm" style={{flexGrow: "1"}}>
                 {data.currentRoomInfo.userIsOwner ? <>

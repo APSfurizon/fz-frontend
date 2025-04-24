@@ -1,4 +1,4 @@
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../api/global"
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../api/global"
 import { MediaData } from "../api/media"
 import { UPLOAD_SELECTOR_MAX_SIZE, UPLOAD_SELECTOR_MIN_SIZE } from "../constants"
 
@@ -49,6 +49,6 @@ export interface GetMediaResponse extends ApiResponse {
 
 export class GetMediaAction implements ApiAction<GetMediaResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "badge/upload";
 }

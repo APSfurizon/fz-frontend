@@ -1,13 +1,13 @@
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 
 export class ReloadEventApiAction implements ApiAction<ApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "cache/pretix/reload-struct";
 }
 
 export class ReloadOrdersApiAction implements ApiAction<ApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "cache/pretix/reload-orders";
 }

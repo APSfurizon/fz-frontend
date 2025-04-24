@@ -1,5 +1,5 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
-import { ApiAction, ApiErrorResponse, ApiResponse, runRequest } from "../global"
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global"
 import { UserData } from "../user";
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { CACHED_PERMISSIONS, CachedPermissions } from "@/lib/cache/cache";
@@ -20,7 +20,7 @@ export interface AllRolesResponse extends ApiResponse {
 
 export class GetRolesApiAction implements ApiAction<AllRolesResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "roles/";
 }
 
@@ -43,7 +43,7 @@ export interface RoleDataResponse extends ApiResponse {}
 
 export class GetRoleByIdApiAction implements ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "roles";
 }
 
@@ -79,7 +79,7 @@ export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
 }
 
 export class AddRoleFormAction implements FormApiAction<AddRoleApiData, AddRoleApiResponse, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddRoleDTOBuilder ();
     urlAction = "roles/";
@@ -87,13 +87,13 @@ export class AddRoleFormAction implements FormApiAction<AddRoleApiData, AddRoleA
 
 export class DeleteRolesApiAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "DELETE";
+    method!: RequestType.DELETE;
     urlAction = "roles";
 }
 
 export class UpdateRoleByIdApiAction implements ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "roles";
 }
 
@@ -119,7 +119,7 @@ export interface GetPermissionsResponse extends ApiResponse {
 
 export class GetPermissionsApiAction implements ApiAction<GetPermissionsResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "roles/permissions";
 }
 

@@ -1,5 +1,5 @@
 import { OrderData } from "../booking";
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 import { UserData, UserPersonalInfo } from "../user";
 
 export interface UserAdminViewData {
@@ -19,7 +19,7 @@ export interface GetUserAdminViewResponse extends ApiResponse {
  */
 export class GetUserAdminViewAction implements ApiAction<GetUserAdminViewResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "users/view";
 }
 
@@ -29,13 +29,13 @@ export interface UserIdRequestData {
 
 export class BanUserAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "authentication/ban";
 }
 
 
 export class UnbanUserAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "authentication/unban";
 }

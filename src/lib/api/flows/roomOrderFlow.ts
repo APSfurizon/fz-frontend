@@ -1,5 +1,5 @@
 import { ShopLinkResponse } from "../booking";
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 import { RoomData } from "../room";
 
 export interface PretixItemQuota {
@@ -49,7 +49,7 @@ export interface RoomStoreItemsApiResponse extends ApiResponse {
  */
 export class RoomStoreItemsApiAction implements ApiAction<RoomStoreItemsApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "room/get-room-list-with-quota";
 }
 
@@ -63,6 +63,6 @@ export interface RoomBuyApiData {
  */
 export class RoomStoreBuyAction implements ApiAction<ShopLinkResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/buy-or-upgrade-room";
 }
