@@ -1,5 +1,5 @@
 import { Fursuit, FursuitDetails } from "./badge/fursuits";
-import { ApiAction, ApiErrorResponse, ApiResponse } from "./global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { RoomData } from "./room";
 import { SponsorType, UserData } from "./user";
 
@@ -9,7 +9,7 @@ export interface FursuitCountResponse extends ApiResponse {
 
 export class FursuitCountApiAction implements ApiAction<FursuitCountResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "counts/fursuit";
 }
 
@@ -19,7 +19,7 @@ export interface SponsorCountResponse extends ApiResponse {
 
 export class SponsorCountApiAction implements ApiAction<SponsorCountResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "counts/sponsors";
 }
 
@@ -48,7 +48,7 @@ export interface NoseCountResponse extends ApiResponse {
 
 export class NoseCountApiAction implements ApiAction<NoseCountResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "counts/bopos";
 }
 
@@ -72,7 +72,7 @@ export interface AllEventsResponse extends ApiResponse {
 
 export class GetAllEventsApiAction implements ApiAction<AllEventsResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "events/";
 }
 
@@ -82,6 +82,6 @@ export interface CurrentEventResponse extends ApiResponse {
 
 export class GetCurrentEventApiAction implements ApiAction<CurrentEventResponse, ApiErrorResponse> {
     authenticated = false;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "events/current";
 }

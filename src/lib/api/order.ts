@@ -1,7 +1,7 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams } from "../utils";
-import { ApiErrorResponse, runRequest } from "./global";
+import { ApiErrorResponse, RequestType, runRequest } from "./global";
 import { AutoInputUsersManager, toSearchResult, UserSearchAction, UserSearchResponse } from "./user";
 
 export enum OrderStatus {
@@ -29,7 +29,7 @@ export class OrderExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchange
 }
 
 export class OrderExchangeFormAction implements FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new OrderExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";

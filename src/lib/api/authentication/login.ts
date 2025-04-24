@@ -1,7 +1,7 @@
 import { NoticeTheme } from "@/components/noticeBox";
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "../../constants";
-import { ApiErrorResponse, ApiResponse, ApiAction } from "../global";
+import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "../global";
 
 export const AuthenticationCodes: Record<string, NoticeTheme> = {
     "CONFIRMATION_SUCCESSFUL": NoticeTheme.Success,
@@ -30,7 +30,7 @@ export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
 }
 
 export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new LoginDTOBuilder ();
     urlAction = "authentication/login";
@@ -42,6 +42,6 @@ export interface LogoutResponse extends ApiResponse {
 
 export class LogoutApiAction implements ApiAction<LogoutResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "authentication/logout";
 }

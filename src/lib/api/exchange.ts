@@ -1,6 +1,5 @@
-import { BookingTicketData, OrderData } from "./booking";
-import { RoomTypeInfo } from "./flows/roomOrderFlow";
-import { ApiAction, ApiErrorResponse, ApiResponse } from "./global";
+import { ExtraDaysType, OrderData } from "./booking";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { RoomData } from "./room";
 import { UserData } from "./user";
 
@@ -12,15 +11,15 @@ export interface ExchangeStatusApiResponse extends ApiResponse {
     action: "room" | "order",
     fullOrderExchange?: OrderData,
     sourceRoomExchange?: RoomData,
-    sourceExtraDays: "NONE" | "EARLY" | "LATE" | "BOTH",
+    sourceExtraDays: ExtraDaysType,
     targetRoomInfoHidden: boolean,
     targetRoomExchange: RoomData,
-    targetExtraDays?: "NONE" | "EARLY" | "LATE" | "BOTH",
+    targetExtraDays?: ExtraDaysType,
 }
 
 export class ExchangeStatusApiAction implements ApiAction<ExchangeStatusApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "room/exchange/info";
 }
 
@@ -31,6 +30,6 @@ export interface ExchangeUpdateApiData {
 
 export class ExchangeUpdateApiAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/exchange/update";
 }

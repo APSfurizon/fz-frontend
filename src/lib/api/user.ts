@@ -2,7 +2,7 @@ import { ICONS } from "@/components/icon";
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded, filterSearchResult, SearchType } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams, nullifyEmptyString } from "../utils";
-import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest } from "./global";
+import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest, RequestType } from "./global";
 import { MediaData } from "./media";
 import { UAParser } from "ua-parser-js";
 
@@ -70,7 +70,7 @@ export interface UserDisplayResponse extends ApiResponse {
 
 export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "users/display/me";
 }
 
@@ -80,7 +80,7 @@ export interface UserSearchResponse extends ApiResponse {
 
 export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "users/search/current-event";
 }
 
@@ -172,7 +172,7 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
 }
 
 export class UpdatePersonalInfoFormAction implements FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new UpdatePersonalInfoDTOBuilder ();
     urlAction = "membership/update-personal-user-information";
@@ -180,7 +180,7 @@ export class UpdatePersonalInfoFormAction implements FormApiAction<UserPersonalI
 
 export class GetPersonalInfoAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "membership/get-personal-user-information";
 }
 
@@ -191,7 +191,7 @@ export interface UserOrderLinkingData {
 
 export class UserOrderLinkingAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "orders-workflow/link-order";
 }
 
@@ -328,7 +328,7 @@ export interface AllSessionsResponse extends ApiResponse {
 
 export class GetAllSessionsAction implements ApiAction<AllSessionsResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "users/me/sessions";
 }
 
@@ -338,12 +338,12 @@ export interface DestroySessionData extends ApiRequest {
 
 export class DestroySessionAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "authentication/destroy-session";
 }
 
 export class DestroyAllSessionsAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "authentication/destroy-all-sessions";
 }

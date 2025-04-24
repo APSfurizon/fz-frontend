@@ -1,4 +1,4 @@
-import { ApiResponse, ApiErrorResponse, ApiRequest, ApiAction } from "../api/global"
+import { ApiResponse, ApiErrorResponse, ApiRequest, ApiAction, RequestType } from "../api/global"
 
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
@@ -21,7 +21,7 @@ export class DummyDTOBuilder implements FormDTOBuilder<any>{
 }
 
 export class DummyFormAction implements FormApiAction<any, Boolean, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET"
+    method!: RequestType.GET;
     authenticated = true;
     dtoBuilder = new DummyDTOBuilder ();
     urlAction = "";

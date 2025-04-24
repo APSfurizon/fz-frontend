@@ -1,4 +1,4 @@
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
     canUpgradeUser: boolean,
@@ -22,13 +22,13 @@ export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
 
 export class GetAdminCapabilitiesApiAction implements ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "admin/capabilities";
 }
 
 export class ExportHotelRoomsApiAction implements ApiAction<any, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "admin/export/hotel-user-list";
     rawResponse?: boolean = true;
 }

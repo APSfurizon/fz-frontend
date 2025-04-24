@@ -1,5 +1,5 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { ApiAction, ApiErrorResponse, ApiResponse } from "../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 import { MediaData } from "../media";
 import { UserData, UserDisplayResponse } from "../user";
 import { Fursuit } from "./fursuits";
@@ -15,7 +15,7 @@ export interface BadgeStatusApiResponse extends ApiResponse {
 
 export class GetBadgeStatusAction implements ApiAction<BadgeStatusApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "badge/";
 }
 
@@ -23,13 +23,13 @@ export interface BadgeUploadResponse extends MediaData, ApiResponse {}
 
 export class UploadBadgeAction implements ApiAction<BadgeUploadResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "badge/user/upload";
 }
 
 export class DeleteBadgeAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "DELETE";
+    method!: RequestType.DELETE;
     urlAction = "badge/user/";
 }
 
@@ -50,7 +50,7 @@ export class BadgeDataChangeDTOBuilder implements FormDTOBuilder<BadgeDataChange
 }
 
 export class BadgeDataChangeFormAction implements FormApiAction<BadgeDataChangeData, Boolean, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new BadgeDataChangeDTOBuilder ();
     urlAction = "badge/update-user-badge-info";

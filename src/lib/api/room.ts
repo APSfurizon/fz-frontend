@@ -1,6 +1,7 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { nullifyEmptyString, nullifyEmptyStrings } from "../utils";
-import { ApiErrorResponse, ApiResponse, ApiAction } from "./global";
+import { ExtraDaysType } from "./booking";
+import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
 import { UserData } from "./user";
 
@@ -31,6 +32,7 @@ export interface RoomInfo {
     userIsOwner: boolean,
 
     confirmationSupported: boolean,
+    unconfirmationSupported: boolean,
     canConfirm: boolean,
     canUnconfirm: boolean,
     confirmed: boolean,
@@ -40,7 +42,8 @@ export interface RoomInfo {
     guests: RoomGuestHeader[],
     owner: boolean,
 
-    showInNosecount: boolean
+    showInNosecount: boolean,
+    extraDays: ExtraDaysType
 }
 
 export interface RoomCreateData {
@@ -51,7 +54,7 @@ export interface RoomCreateResponse extends RoomInfo, ApiResponse {}
 
 export class RoomCreateApiAction implements ApiAction<RoomCreateResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/create";
 }
 
@@ -73,7 +76,7 @@ export interface RoomInfoResponse extends ApiResponse {
 
 export class RoomInfoApiAction implements ApiAction<RoomInfoResponse, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "GET";
+    method!: RequestType.GET;
     urlAction = "room/info";
 }
 
@@ -94,7 +97,7 @@ export class RoomRenameDTOBuilder implements FormDTOBuilder<RoomRenameData> {
 }
 
 export class RoomRenameFormAction implements FormApiAction<RoomRenameData, ApiResponse, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomRenameDTOBuilder ();
     urlAction = "room/change-name";
@@ -102,7 +105,7 @@ export class RoomRenameFormAction implements FormApiAction<RoomRenameData, ApiRe
 
 export class RoomDeleteAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/delete";
 }
 
@@ -134,7 +137,7 @@ export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
 }
 
 export class RoomInviteFormAction implements FormApiAction<RoomInviteApiData, RoomInviteResponse, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomInviteDTOBuilder ();
     urlAction = "room/invite";
@@ -150,19 +153,19 @@ export interface GuestIdApiData {
 
 export class RoomInviteAnswerAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/invite";
 }
 
 export class RoomKickAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/kick";
 }
 
 export class RoomLeaveAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/leave";
 }
 
@@ -178,7 +181,7 @@ export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeI
 }
 
 export class RoomExchangeFormAction implements FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST"
+    method!: RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";
@@ -191,6 +194,6 @@ export interface RoomSetShowInNosecountData {
 
 export class RoomSetShowInNosecountApiAction implements ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT" = "POST";
+    method!: RequestType.POST;
     urlAction = "room/show-in-nosecount";
 }
