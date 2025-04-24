@@ -8,7 +8,7 @@ export default function LoadingPanel ({showText = true, className, children}: Re
 }>) {
     const tcommon = useTranslations("common");
 
-    return <div className={`horizontal-list gap-2mm flex-vertical-center ${className ?? ""}`}>
+    return <div aria-busy="true" className={`horizontal-list gap-2mm flex-vertical-center ${className ?? ""}`}>
         <Icon className="loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
         {children ?? <span className="">{showText && tcommon("loading")}</span>}
     </div>

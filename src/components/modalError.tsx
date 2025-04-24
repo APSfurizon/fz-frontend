@@ -19,9 +19,9 @@ export default function ModalError({error, translationRoot, translationKey}: Rea
         }
     }
 
-    return <div className="error vertical-list gap-2mm">
+    return <div className="error vertical-list gap-2mm" aria-live="assertive">
         <span className="title medium">{tcommon("error_header", {count: errors.length})}</span>
-        <ul style={{marginLeft: "1em"}}>
+        <ul style={{marginLeft: "1em"}} aria-relevant="additions text">
             {errors.map((err, index)=><li key={index} className="descriptive small">{err ? t(`${translationKey}.${err}`) : tcommon("unknown_error")}</li>)}
         </ul>
         {!isEmpty(requestId) && <>
