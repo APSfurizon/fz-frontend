@@ -10,6 +10,7 @@ export const ICONS = Object.freeze({
     ARROW_DROP_UP: "arrow_drop_up",
     ARROW_BACK: "arrow_back",
     ARROW_FORWARD: "arrow_forward",
+    BADGE: "badge",
     BED: "bed",
     BEDROOM_PARENT: "bedroom_parent",
     BUG_REPORT: "bug_report",

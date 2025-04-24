@@ -446,7 +446,16 @@
           "print_badges": "Stampa badge",
           "remind_badges": "Notifica badge mancanti",
           "remind_fursuits": "Notifica fursuit mancanti",
-          "errors": {}
+          "errors": {},
+          "print": {
+            "select_mode": "Seleziona modalità stampa",
+            "simple_mode": {
+              "title": "Semplice",
+              "choose_badge": "Scegli il tipo di badge da stampare",
+              "fursuit": "Fursuit",
+              "common": "Comune"
+            }
+          }
         },
         "orders": {
           "title": "Ordini",

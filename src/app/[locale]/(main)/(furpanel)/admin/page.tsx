@@ -10,7 +10,8 @@ import ModalError from "@/components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
 import { runRequest } from "@/lib/api/global";
 import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, ExportHotelRoomsApiAction, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
-import { GetRenderedBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
+import { GetRenderedCommonBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
+import AdvancedPrintingDialog from "./_dialogs/advancedPrinting";
 
 export default function AdminPage() {
   const t = useTranslations();
@@ -89,22 +90,8 @@ export default function AdminPage() {
 
   // - badge
   const [renderBadgesLoading, setRenderBadgesLoading] = useState(false);
-  const renderBadges = (e: MouseEvent<HTMLButtonElement>) => {
-    setRenderBadgesLoading(true);
-    runRequest(new GetRenderedBadgesApiAction())
-    .then ((response) => {
-      const res = response as Response;
-      res.blob().then((badgesBlob) => {
-        const result = URL.createObjectURL(badgesBlob);
-        window.open(result, "_blank");
-        URL.revokeObjectURL(result);
-      })
-    }).catch((err)=>showModal(
-      t("common.error"), 
-      <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors"/>
-    )).finally(()=>setRenderBadgesLoading(false))
-  }
-
+  const [renderBadgesModalOpen, setRenderBadgesModalOpen] = useState(false);
+  
   const [remindBadgesLoading, setRemindBadgesLoading] = useState(false);
   const remindBadges = (e: MouseEvent<HTMLButtonElement>) => {
     setRemindBadgesLoading(true);
@@ -125,7 +112,7 @@ export default function AdminPage() {
     )).finally(()=>setRemindFursuitBadgesLoading(false))
   }
 
-  return (
+  return <>
     <div className="page">
       {/* Pretix area */}
       <div className="admin-section section vertical-list gap-2mm">
@@ -166,7 +153,7 @@ export default function AdminPage() {
             </span>
           </div>
           <div className="horizontal-list gap-2mm flex-wrap">
-            <Button iconName={ICONS.PRINT} onClick={renderBadges} debounce={5000}
+            <Button iconName={ICONS.PRINT} onClick={() => setRenderBadgesModalOpen(true)}
               busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
               {t("furpanel.admin.events.badges.print_badges")}
             </Button>
@@ -256,5 +243,7 @@ export default function AdminPage() {
         </div>
       </div>
     </div>
-  );
+    <AdvancedPrintingDialog open={renderBadgesModalOpen} onClose={()=>setRenderBadgesModalOpen(false)}
+      loading={renderBadgesLoading} setLoading={setRenderBadgesLoading}/>
+  </>;
 }
