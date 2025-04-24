@@ -29,8 +29,8 @@ export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
     }
 }
 
-export class LoginFormAction implements FormApiAction<LoginData, LoginResponse, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class LoginFormAction extends FormApiAction<LoginData, LoginResponse, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new LoginDTOBuilder ();
     urlAction = "authentication/login";
@@ -40,8 +40,8 @@ export interface LogoutResponse extends ApiResponse {
     success: boolean
 }
 
-export class LogoutApiAction implements ApiAction<LogoutResponse, ApiErrorResponse> {
+export class LogoutApiAction extends ApiAction<LogoutResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "authentication/logout";
 }

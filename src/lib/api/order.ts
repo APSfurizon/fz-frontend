@@ -28,8 +28,8 @@ export class OrderExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchange
     }
 }
 
-export class OrderExchangeFormAction implements FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class OrderExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new OrderExchangeInitDTOBuilder ();
     urlAction = "room/exchange/init";

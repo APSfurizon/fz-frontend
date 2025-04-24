@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "chrome",
+            "runtimeExecutable": "C:\\Users\\carul\\AppData\\Local\\Chromium\\Application\\chrome.exe",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "name": "Next.js: debug server-side",
             "type": "node-terminal",
             "request": "launch",

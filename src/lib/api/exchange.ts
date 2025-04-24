@@ -17,9 +17,9 @@ export interface ExchangeStatusApiResponse extends ApiResponse {
     targetExtraDays?: ExtraDaysType,
 }
 
-export class ExchangeStatusApiAction implements ApiAction<ExchangeStatusApiResponse, ApiErrorResponse> {
+export class ExchangeStatusApiAction extends ApiAction<ExchangeStatusApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "room/exchange/info";
 }
 
@@ -28,8 +28,8 @@ export interface ExchangeUpdateApiData {
     confirm: boolean
 }
 
-export class ExchangeUpdateApiAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class ExchangeUpdateApiAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "room/exchange/update";
 }

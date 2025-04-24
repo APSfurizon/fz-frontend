@@ -23,22 +23,22 @@ export class AddFursuitDTOBuilder implements FormDTOBuilder<FormData> {
     }
 }
 
-export class AddFursuitFormAction implements FormApiAction<FormData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class AddFursuitFormAction extends FormApiAction<FormData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddFursuitDTOBuilder ();
     urlAction = "fursuits/add-with-image";
 }
 
-export class EditFursuitFormAction implements FormApiAction<FormData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class EditFursuitFormAction extends FormApiAction<FormData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddFursuitDTOBuilder ();
     urlAction = "fursuits";
 }
 
-export class DeleteFursuitApiAction implements ApiAction<Boolean, ApiErrorResponse> {
-    method!: RequestType.DELETE;
+export class DeleteFursuitApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+    method = RequestType.DELETE;
     authenticated = true;
     urlAction = "fursuits";
 }

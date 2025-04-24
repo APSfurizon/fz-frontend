@@ -18,9 +18,9 @@ export interface AllRolesResponse extends ApiResponse {
     roles: RoleInfo[]
 }
 
-export class GetRolesApiAction implements ApiAction<AllRolesResponse, ApiErrorResponse> {
+export class GetRolesApiAction extends ApiAction<AllRolesResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "roles/";
 }
 
@@ -41,9 +41,9 @@ export interface RoleData {
 
 export interface RoleDataResponse extends ApiResponse {}
 
-export class GetRoleByIdApiAction implements ApiAction<RoleDataResponse, ApiErrorResponse> {
+export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "roles";
 }
 
@@ -78,22 +78,22 @@ export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
     }
 }
 
-export class AddRoleFormAction implements FormApiAction<AddRoleApiData, AddRoleApiResponse, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class AddRoleFormAction extends FormApiAction<AddRoleApiData, AddRoleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddRoleDTOBuilder ();
     urlAction = "roles/";
 }
 
-export class DeleteRolesApiAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class DeleteRolesApiAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.DELETE;
+    method = RequestType.DELETE;
     urlAction = "roles";
 }
 
-export class UpdateRoleByIdApiAction implements ApiAction<RoleDataResponse, ApiErrorResponse> {
+export class UpdateRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "roles";
 }
 
@@ -117,9 +117,9 @@ export interface GetPermissionsResponse extends ApiResponse {
     permissions: string[]
 }
 
-export class GetPermissionsApiAction implements ApiAction<GetPermissionsResponse, ApiErrorResponse> {
+export class GetPermissionsApiAction extends ApiAction<GetPermissionsResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "roles/permissions";
 }
 

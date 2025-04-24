@@ -55,8 +55,8 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
     }
 }
 
-export class RegisterFormAction implements FormApiAction<RegisterData, RegisterResponse, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class RegisterFormAction extends FormApiAction<RegisterData, RegisterResponse, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = false;
     dtoBuilder = new RegisterDTOBuilder ();
     urlAction = "authentication/register";

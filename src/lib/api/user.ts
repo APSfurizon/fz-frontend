@@ -68,9 +68,9 @@ export interface UserDisplayResponse extends ApiResponse {
     permissions?: string[]
 }
 
-export class UserDisplayAction implements ApiAction<UserDisplayResponse, ApiErrorResponse> {
+export class UserDisplayAction extends ApiAction<UserDisplayResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "users/display/me";
 }
 
@@ -78,9 +78,9 @@ export interface UserSearchResponse extends ApiResponse {
     users: UserSearchResult[]
 }
 
-export class UserSearchAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
+export class UserSearchAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "users/search/current-event";
 }
 
@@ -171,16 +171,16 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
     }
 }
 
-export class UpdatePersonalInfoFormAction implements FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class UpdatePersonalInfoFormAction extends FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new UpdatePersonalInfoDTOBuilder ();
     urlAction = "membership/update-personal-user-information";
 }
 
-export class GetPersonalInfoAction implements ApiAction<UserSearchResponse, ApiErrorResponse> {
+export class GetPersonalInfoAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "membership/get-personal-user-information";
 }
 
@@ -189,9 +189,9 @@ export interface UserOrderLinkingData {
     orderSecret: string
 }
 
-export class UserOrderLinkingAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class UserOrderLinkingAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "orders-workflow/link-order";
 }
 
@@ -326,9 +326,9 @@ export interface AllSessionsResponse extends ApiResponse {
     sessions: UserSession[]
 }
 
-export class GetAllSessionsAction implements ApiAction<AllSessionsResponse, ApiErrorResponse> {
+export class GetAllSessionsAction extends ApiAction<AllSessionsResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "users/me/sessions";
 }
 
@@ -336,14 +336,14 @@ export interface DestroySessionData extends ApiRequest {
     sessionId: string
 }
 
-export class DestroySessionAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class DestroySessionAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "authentication/destroy-session";
 }
 
-export class DestroyAllSessionsAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class DestroyAllSessionsAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "authentication/destroy-all-sessions";
 }

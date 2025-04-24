@@ -47,8 +47,8 @@ export interface GetMediaResponse extends ApiResponse {
     media: MediaData[]
 }
 
-export class GetMediaAction implements ApiAction<GetMediaResponse, ApiErrorResponse> {
+export class GetMediaAction extends ApiAction<GetMediaResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "badge/upload";
 }

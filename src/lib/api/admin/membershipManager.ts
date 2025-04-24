@@ -29,9 +29,9 @@ export interface GetCardsApiResponse extends ApiResponse {
     usersAtCurrentEventWithoutCard: CompleteUserData[]
 }
 
-export class GetCardsApiAction implements ApiAction<GetCardsApiResponse, ApiErrorResponse> {
+export class GetCardsApiAction extends ApiAction<GetCardsApiResponse, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "membership/get-cards";
 }
 
@@ -40,9 +40,9 @@ export interface ChangeCardRegisterStatusApiData {
     registered: boolean
 }
 
-export class ChangeCardRegisterStatusApiAction implements ApiAction<Boolean, ApiErrorResponse> {
+export class ChangeCardRegisterStatusApiAction extends ApiAction<Boolean, ApiErrorResponse> {
     authenticated = true;
-    method!: RequestType.POST;
+    method = RequestType.POST;
     urlAction = "membership/set-membership-card-registration-status";
 }
 
@@ -73,8 +73,8 @@ export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
     }
 }
 
-export class AddCardFormAction implements FormApiAction<AddCardApiData, Boolean, ApiErrorResponse> {
-    method!: RequestType.POST;
+export class AddCardFormAction extends FormApiAction<AddCardApiData, Boolean, ApiErrorResponse> {
+    method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddCardDTOBuilder ();
     urlAction = "membership/add-card";

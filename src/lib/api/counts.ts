@@ -7,9 +7,9 @@ export interface FursuitCountResponse extends ApiResponse {
     fursuits: FursuitDetails[]
 }
 
-export class FursuitCountApiAction implements ApiAction<FursuitCountResponse, ApiErrorResponse> {
+export class FursuitCountApiAction extends ApiAction<FursuitCountResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "counts/fursuit";
 }
 
@@ -17,9 +17,9 @@ export interface SponsorCountResponse extends ApiResponse {
     users: Record<SponsorType, UserData[]>;
 }
 
-export class SponsorCountApiAction implements ApiAction<SponsorCountResponse, ApiErrorResponse> {
+export class SponsorCountApiAction extends ApiAction<SponsorCountResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "counts/sponsors";
 }
 
@@ -46,9 +46,9 @@ export interface NoseCountResponse extends ApiResponse {
     dailyFurs: Record<string, UserData[]>
 }
 
-export class NoseCountApiAction implements ApiAction<NoseCountResponse, ApiErrorResponse> {
+export class NoseCountApiAction extends ApiAction<NoseCountResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "counts/bopos";
 }
 
@@ -70,9 +70,9 @@ export interface AllEventsResponse extends ApiResponse {
     events: ConventionEvent[]
 }
 
-export class GetAllEventsApiAction implements ApiAction<AllEventsResponse, ApiErrorResponse> {
+export class GetAllEventsApiAction extends ApiAction<AllEventsResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "events/";
 }
 
@@ -80,8 +80,8 @@ export interface CurrentEventResponse extends ApiResponse {
     events: ConventionEvent[]
 }
 
-export class GetCurrentEventApiAction implements ApiAction<CurrentEventResponse, ApiErrorResponse> {
+export class GetCurrentEventApiAction extends ApiAction<CurrentEventResponse, ApiErrorResponse> {
     authenticated = false;
-    method!: RequestType.GET;
+    method = RequestType.GET;
     urlAction = "events/current";
 }
