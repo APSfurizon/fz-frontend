@@ -94,12 +94,12 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         } else {
             cloneSelectedIds.push (toAdd.id!);
         }
-        setSelectedIds (cloneSelectedIds);
+        setSelectedIds(cloneSelectedIds);
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
         onChange && onChange (selectedValues ?? [], [toAdd], undefined);
-        setTimeout (()=>inputRef.current?.focus(), 100);
+        setTimeout(()=>inputRef.current?.focus(), 100);
     }
     
     /**Remove a item from the selection */
