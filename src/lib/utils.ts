@@ -99,6 +99,10 @@ export function firstOrUndefined(a: any[] | undefined): any | undefined {
     return a && a.length > 0 ? a[0] : undefined;
 }
 
+export function firstOrEmpty(a: any[]): any[] {
+    return a[0] ? [a[0]] : [];
+}
+
 export function extractSearchParams ( uri: string ) {
     // Get everything after the `?`
     const [ , paramString ] = uri.split( '?' );

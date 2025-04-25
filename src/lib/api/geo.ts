@@ -4,6 +4,7 @@ import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded,
 import { getFlagEmoji } from "../components/userPicture";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { TranslatableString } from "../translations";
+import { firstOrEmpty } from "../utils";
 
 /**Either a country or a region */
 export interface Place {
@@ -91,8 +92,10 @@ export class AutoInputCountriesManager implements AutoInputManager {
                             data.id = customIdExtractor(data) as number ?? data.id;
                         }
                     }
+                    return data;
                 })
-                resolve (results.filter (result => filter.applyFilter(result)));
+                const toReturn = countries.filter (result => filter.applyFilter(result));
+                resolve (this.showNumber ? firstOrEmpty(toReturn) : toReturn);
             });
         });
     }
