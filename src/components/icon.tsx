@@ -31,6 +31,7 @@ export const ICONS = Object.freeze({
     DO_NOT_DISTURB_ON: "do_not_disturb_on",
     DOOR_OPEN: "door_open",
     DOWNLOAD: "download",
+    DRAG_HANDLE: "drag_handle",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
     ERROR: "error",
