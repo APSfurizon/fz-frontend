@@ -1,4 +1,4 @@
-import FpTable from "@/components/fpTable";
+import FpTable from "@/components/table/fpTable";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type DebugRowType = {
@@ -29,19 +29,29 @@ const rows: DebugRowType[] = [
         age: 1200
     },
     {
-        name: 'Alexander',
-        description: 'the fake',
+        name: 'Poraccio',
+        description: 'er dragaccio',
         age: 69
     },
     {
         name: 'Mariottide',
         description: 'la bigotta',
         age: 56
+    },
+    {
+        name: 'Cielo celeste',
+        description: 'Oggi a disoneste',
+        age: 56
+    },
+    {
+        name: 'Ma salve mister',
+        description: 'Caffè?',
+        age: 56
     }
 ]
 
 export default function Home() {
     return (
-      <FpTable<DebugRowType> columns={columns} rows={rows}/>
+      <FpTable<DebugRowType> columns={columns} rows={rows} enableRowSelection enableSearch showAddButton showDeleteButton pageSize={6}/>
     );
 }

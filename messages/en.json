@@ -94,6 +94,17 @@
     },
     "input": {
       "validation_fail": "Value not valid"
+    },
+    "table": {
+      "search": {
+        "placeholder": "Search"
+      },
+      "add": {
+        "title": "Add"
+      },
+      "delete": {
+        "title": "Delete"
+      }
     }
   },
   "furpanel": {

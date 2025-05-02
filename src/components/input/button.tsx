@@ -38,7 +38,7 @@ export default function Button ({children, iconName, style, className, busy, onC
             {busy && <Icon className={`medium loading-animation`} iconName={ICONS.PROGRESS_ACTIVITY}></Icon>}
             {!busy && isCooldown && <Icon className={`medium`} iconName={ICONS.SNOOZE}></Icon>}
             {!busy && !isCooldown && iconPresent && <Icon className={`medium`} iconName={iconName}></Icon>}
-            {children && <div className="spacer"></div>}
+            {children && iconName && <div className="spacer"></div>}
             {children && <span className="title normal spacer" style={{fontSize: '15px', textAlign:"left"}}>{children}</span>}
         </button>
     )

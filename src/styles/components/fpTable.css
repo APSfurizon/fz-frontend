@@ -1,22 +1,36 @@
 div.table-container {
     overflow-x: scroll;
+    background-color: var(--table-bg);
+    padding: 0.625em;
+
+    div.table-toolbar {
+        padding-bottom: 0.3125em;
+        
+        div.table-search div.input-container {
+            margin-bottom: 0px;
+        }
+    }
 
     div.table {
-        background-color: var(--table-bg);
-        padding: 0.625em;
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
         div.table-data {
             user-select: none;
             overflow: hidden;
 
             div.table-header-group {
                 display: flex;
+                background-color: var(--table-header-row-bg);
     
                 div.table-header {
                     display: flex;
                     padding: 0.3125em;
                     background-color: var(--table-row-bg);
-                    overflow: hidden;
+
+                    div.header-data {
+                        overflow: hidden;
+                    }
     
                     div.table-header-resizer {
                         min-width: 5px;
@@ -39,7 +53,7 @@ div.table-container {
             }
 
             div.table-header-group div.table-header:not(:first-child) {
-                border-left: 1px solid var(--table-border);
+                border-left: 0.1em solid var(--table-border);
             }
     
             div.table-row {
@@ -53,12 +67,33 @@ div.table-container {
                 }
             }
 
+            div.table-row.selectable {
+                transition-duration: 60ms;
+            }
+
+            div.table-row.selectable:not(.row-selected):hover {
+                background-color: var(--table-row-bg-hover);
+            }
+
+            div.table-row.row-selected {
+                background-color: var(--table-row-bg-selected);
+            }
+
             div.table-row:not(:last-child) {
-                border-bottom: 1px solid var(--table-border);
+                border-bottom: 0.1em solid var(--table-border);
             }
 
             div.table-row div.table-cell:not(:first-child) {
-                border-left: 1px solid var(--table-border);
+                border-left: 0.1em solid var(--table-border);
+            }
+        }
+        
+        div.table-pages {
+            button.page-change {
+                aspect-ratio: 1;
+                span.title {
+                    text-align: center !important;
+                }
             }
         }
     }

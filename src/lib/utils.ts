@@ -152,3 +152,11 @@ export function mapLanguageToFlag(lang: string) {
             return getFlagEmoji(lang)
     }
 }
+
+export function getCountArray(size: number, zeroBased: boolean = false) {
+    const toReturn: number[] = [];
+    for (let i = 0; i<size; i++){
+        toReturn.push(i + (zeroBased ? 0 : 1))
+    }
+    return toReturn;
+}
