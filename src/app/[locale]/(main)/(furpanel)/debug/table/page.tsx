@@ -1,10 +1,13 @@
+"use client"
 import FpTable from "@/components/table/fpTable";
 import { ColumnDef } from "@tanstack/react-table";
+import { Row } from "@tanstack/react-table";
 
 export type DebugRowType = {
     name: string,
     description: string,
-    age: number
+    age: number,
+    extra?: string
 }
 
 const columns: ColumnDef<DebugRowType>[] = [
@@ -31,7 +34,8 @@ const rows: DebugRowType[] = [
     {
         name: 'Poraccio',
         description: 'er dragaccio',
-        age: 69
+        age: 69,
+        extra: "veramente non ha soldi questo"
     },
     {
         name: 'Mariottide',
@@ -50,8 +54,16 @@ const rows: DebugRowType[] = [
     }
 ]
 
+const hasDetails = (row: Row<DebugRowType>) => {
+    return !!row.original.extra;
+}
+
+const getDetails = (row: Row<DebugRowType>) => {
+    return <span>{row.original.extra}</span>
+}
+
 export default function Home() {
     return (
-      <FpTable<DebugRowType> columns={columns} rows={rows} enableRowSelection enableSearch showAddButton showDeleteButton pageSize={6}/>
+      <FpTable<DebugRowType> columns={columns} rows={rows} enableRowSelection enableSearch showAddButton showDeleteButton enablePagination pageSize={3} hasDetails={hasDetails} getDetails={getDetails}/>
     );
 }

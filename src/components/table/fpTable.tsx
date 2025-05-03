@@ -1,14 +1,14 @@
 "use client"
-import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, SortingState, Table, useReactTable } from "@tanstack/react-table";
+import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, useReactTable } from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import JanInput from "../input/janInput";
 import { useTranslations } from "next-intl";
 import Button from "../input/button";
 import { getCountArray } from "@/lib/utils";
 
-const MIN_COLUMN_SIZE = 20;
+const MIN_COLUMN_SIZE = 50;
 const DEFAULT_PAGE_SIZE = 30;
 
 export default function FpTable<T> ({
@@ -24,7 +24,10 @@ export default function FpTable<T> ({
     onAdd,
     onDelete,
     enablePagination=false,
-    pageSize = DEFAULT_PAGE_SIZE
+    pageSize = DEFAULT_PAGE_SIZE,
+    hasDetails,
+    getDetails,
+    onSelectionChange
 }: Readonly<{
     rows: T[],
     columns: ColumnDef<T>[],
@@ -38,8 +41,20 @@ export default function FpTable<T> ({
     onAdd?: React.MouseEventHandler,
     onDelete?: React.MouseEventHandler,
     enablePagination?: boolean,
-    pageSize?: number
+    pageSize?: number,
+    hasDetails?: (row: Row<T>) => boolean,
+    getDetails?: (row: Row<T>) => React.ReactNode,
+    onSelectionChange?: (e: RowSelectionState) => void
 }>) {
+    const EXPAND_DETAILS_COLUMN: ColumnDef<T> = useMemo(()=>({
+        id: "details_action",
+        enableResizing: false,
+        size: 50,
+        minSize: 50,
+        maxSize: 50 
+    }), []);
+
+    const [tableColumns, setTableColumns] = useState(columns);
     const tableRef = useRef<HTMLDivElement>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState<any>([]);
@@ -47,8 +62,9 @@ export default function FpTable<T> ({
         pageIndex: 0, //initial page index
         pageSize: pageSize, //default page size
       });
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const tableWrapper = customWrapper ?? useReactTable({
-        columns,
+        columns: tableColumns,
         data: rows,
         columnResizeMode: 'onChange',
         enableRowSelection,
@@ -59,7 +75,8 @@ export default function FpTable<T> ({
         state: {
             sorting,
             globalFilter,
-            pagination: enablePagination ? pagination : undefined
+            pagination: enablePagination ? pagination : undefined,
+            rowSelection,
         },
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,
@@ -68,27 +85,53 @@ export default function FpTable<T> ({
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
         globalFilterFn: 'includesString',
-        onPaginationChange: setPagination 
+        onPaginationChange: setPagination,
+        onRowSelectionChange: setRowSelection,
+        getRowCanExpand: hasDetails
     });
+
+    const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton, [enableSearch, showAddButton, showDeleteButton]);
 
     const t = useTranslations('components');
 
-    /**First time render */
+    /**First */
+    useEffect(()=>{
+        if (tableWrapper.getCanSomeRowsExpand()) {
+            const toReturn = [...columns];
+            
+            toReturn.splice(0, 0, EXPAND_DETAILS_COLUMN);
+            setTableColumns(toReturn);
+        }
+    }, [columns]);
+
+    /**First time table render */
     useEffect(()=>{
         if (!tableRef.current) return;
         const headers = tableWrapper.getFlatHeaders();
-        const autofillWidth = tableRef.current.clientWidth / headers.length;
+        let extra = 0;
+        let columnCount = headers.length;
+        if (headers.find(header => header.column.id === EXPAND_DETAILS_COLUMN.id)) {
+            extra += EXPAND_DETAILS_COLUMN.size ?? MIN_COLUMN_SIZE;
+            columnCount--;
+        }
+        const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 5);
         let sizingStartToSet: Record<string, number> = {};
         for (let  i = 0; i < headers.length; i++) {
             const header = headers[i];
+            if (header.column.id === EXPAND_DETAILS_COLUMN.id) continue;
             sizingStartToSet[header.id] = Math.max(autofillWidth, MIN_COLUMN_SIZE);
         }
         tableWrapper.setColumnSizing(sizingStartToSet);
-    }, [tableRef.current])
+    }, [tableRef.current, tableColumns])
 
     useEffect(() => {
-            setPagination(prev => ({...prev, pageSize: pageSize}));
+        setPagination(prev => ({...prev, pageSize: pageSize}));
     }, [pageSize]);
+
+    /* Row selection change */
+    useEffect(()=>{
+        onSelectionChange && onSelectionChange(rowSelection);
+    }, [rowSelection])
 
     const columnSizeVars = useMemo(() => {
         const headers = tableWrapper.getFlatHeaders();
@@ -102,9 +145,7 @@ export default function FpTable<T> ({
         }
         return colSizes;
     }, [tableWrapper.getState().columnSizingInfo, tableWrapper.getState().columnSizing]);
-
-    const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton, [enableSearch, showAddButton, showDeleteButton]);
-
+    
     return <div className="table-container title rounded-m">
         {enableToolbar && <div className="table-toolbar horizontal-list gap-2mm">
             <div className="spacer"></div>
@@ -142,29 +183,36 @@ export default function FpTable<T> ({
                     </div>
                 )}
                 {/**Rows */}
-                {tableWrapper.getRowModel().rows.map(row =>
+                {tableWrapper.getRowModel().rows.map(row =><Fragment key={row.id}>
                     <div className={"table-row "
                         + (row.getIsSelected() || row.getIsSomeSelected() ? "row-selected" : "")
                         + " "
                         + (row.getCanSelect() ? "selectable" : "")} 
-                        key={row.id} onClick={row.getToggleSelectedHandler()}>
+                        onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
                             {row.getVisibleCells().map(cell =>
                                 <div className="table-cell" key={cell.id} style={{width: `var(--col-${cell.column.id}-size)`}}>
+                                    {EXPAND_DETAILS_COLUMN.id == cell.column.id && row.getCanExpand() && 
+                                        <div className="table-expand" onClick={row.getToggleExpandedHandler()}>
+                                        <Icon iconName={row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/></div>}
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </div>
                             )}
                     </div>
+                    {row.getIsExpanded() && getDetails && <div className="row-expanded">
+                        {getDetails(row)}
+                    </div>}
+                </Fragment>
                 )}
             </div>
             {enablePagination && <div className="table-pages horizontal-list gap-4mm">
                 <div className="spacer"></div>
                 <Button className="page-change" disabled={!tableWrapper.getCanPreviousPage()}
                     iconName={ICONS.ARROW_BACK} onClick={tableWrapper.previousPage}></Button>
-                {getCountArray(tableWrapper.getPageCount(), true).map((i)=><>
-                    <Button className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`} 
-                        key={`page-${i}`} onClick={()=>tableWrapper.setPageIndex(i)}
-                        disabled={pagination.pageIndex == i}>{i+1}</Button>
-                </>)}
+                {getCountArray(tableWrapper.getPageCount(), true).map((i)=><Button key={i}
+                    className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`} 
+                    onClick={()=>tableWrapper.setPageIndex(i)}
+                    disabled={pagination.pageIndex == i}>{i+1}
+                </Button>)}
                 <Button className="page-change" disabled={!tableWrapper.getCanNextPage()}
                     iconName={ICONS.ARROW_FORWARD} onClick={tableWrapper.nextPage}></Button>
                 <div className="spacer"></div>
