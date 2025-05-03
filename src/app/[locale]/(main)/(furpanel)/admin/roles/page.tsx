@@ -8,11 +8,12 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/ap
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useEffect, useState } from "react";
-import "@/styles/table.css";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
 import Modal from "@/components/modal";
 import DataForm from "@/components/input/dataForm";
 import JanInput from "@/components/input/janInput";
+import FpTable from "@/components/table/fpTable";
+import { ColumnDef, createColumnHelper, Row, Table, TableOptions } from "@tanstack/react-table";
 
 export default function RolesListPage () {
 
@@ -21,7 +22,7 @@ export default function RolesListPage () {
     const {showModal} = useModalUpdate();
 
     const [loading, setLoading] = useState(false);
-    const [roles, setRoles] = useState<RoleInfo[]> ();
+    const [roles, setRoles] = useState<RoleInfo[]> ([]);
 
     useEffect(()=>{
         loadRoles();
@@ -29,7 +30,7 @@ export default function RolesListPage () {
 
     const loadRoles = () => {
         if (loading) return;
-        setRoles(undefined);
+        setRoles([]);
         setLoading(true);
         runRequest (new GetRolesApiAction())
         .then((response)=>setRoles((response as AllRolesResponse).roles))
@@ -93,6 +94,43 @@ export default function RolesListPage () {
         });
     }
 
+    const initialTableConfig: Partial<TableOptions<RoleInfo>> = useMemo(()=>{
+        return {
+            getRowId: (originalRow: RoleInfo, index: number, parent?: Row<RoleInfo> | undefined) => String(originalRow.roleId)
+        }
+    }, []);
+
+    const columnHelper = createColumnHelper<RoleInfo>();
+
+    const columns: ColumnDef<RoleInfo>[] = useMemo(()=>{
+        return [
+            columnHelper.accessor('roleDisplayName', {
+                header: t("furpanel.admin.users.security.roles.columns.name")
+            }),
+            columnHelper.accessor('roleInternalName', {
+                header: t("furpanel.admin.users.security.roles.columns.internal_name")
+            }),
+            columnHelper.accessor('permissionsNumber', {
+                header: t("furpanel.admin.users.security.roles.columns.permission_count")
+            }),
+            columnHelper.accessor('permanentUsersNumber', {
+                header: t("furpanel.admin.users.security.roles.columns.members_count")
+            }),
+            columnHelper.accessor('temporaryUsersNumber', {
+                header: t("furpanel.admin.users.security.roles.columns.temporary_members_count")
+            }),
+            columnHelper.display({
+                id: 'actions',
+                enableResizing: false,
+                maxSize: 88,
+                size: 88,
+                cell: props => <div className="horizontal-list gap-2mm">
+                        <Button onClick={(e)=>editRole(props.row.original)} iconName={ICONS.EDIT} title={t("common.CRUD.edit")}/>
+                        <Button className="danger" onClick={(e)=>promptDeleteRole(e, props.row.original)} iconName={ICONS.DELETE} title={t("common.CRUD.delete")}/>
+                    </div>
+            })
+        ];
+    }, []);
 
     return <>
     <div className="page">
@@ -106,37 +144,9 @@ export default function RolesListPage () {
             <Button iconName={ICONS.REFRESH} onClick={()=>loadRoles()} debounce={3000}>{t("common.reload")}</Button>
             <Button iconName={ICONS.ADD} onClick={promptCreateRole} >{t("common.CRUD.add")}</Button>
         </div>
-        {/* Roles table */}
-        <div className="table-container rounded-m">
-            <div className="table rounded-m">
-                {loading && <div className="row"><LoadingPanel className="data"/></div>}
-                {roles?.map((role, ri) => <div key={ri} onClick={()=>editRole(role)}
-                    className="row horizontal-list flex-vertical-center gap-2mm clickable">
-                        <div className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
-                            <div className="data">
-                                <span className="title average">{role.roleDisplayName}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive average color-subtitle">{role.roleInternalName}</span>
-                            </div>
-                            <div className="spacer"></div>
-                            <div className="data">
-                                <span className="descriptive small">{t("furpanel.admin.users.security.roles.list.permissions", {count: role.permissionsNumber})}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive small">{t("furpanel.admin.users.security.roles.list.members", {count: role.permanentUsersNumber})}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive small">{t("furpanel.admin.users.security.roles.list.temporary", {count: role.temporaryUsersNumber})}</span>
-                            </div>
-                        </div>
-                    <div className="spacer"></div>
-                    <div className="data">
-                        <Button onClick={(e)=>promptDeleteRole(e, role)} iconName={ICONS.DELETE} title={t("common.CRUD.delete")}/>
-                    </div>
-                </div>)}
-            </div>
-        </div>
+        
+        {loading && <div className="row"><LoadingPanel className="data"/></div>}
+        <FpTable<RoleInfo> rows={roles} columns={columns} tableOptions={initialTableConfig}></FpTable>
     </div>
     {/* Role creation modal */}
     <Modal open={addRoleModalOpen} onClose={()=>setAddRoleModalOpen(false)}

@@ -602,7 +602,14 @@
               "add_role": "Aggiungi ruolo",
               "purge_temporary_roles": "Rimuovi membri temporanei"
             },
-            "errors": {}
+            "errors": {},
+            "columns": {
+              "name": "Nome",
+              "internal_name": "Nome interno",
+              "permission_count": "Permessi",
+              "members_count": "Membri",
+              "temporary_members_count": "Membri temporanei"
+            }
           }
         }
       }

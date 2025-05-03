@@ -603,7 +603,14 @@
               "add_role": "Add role",
               "purge_temporary_roles": "Purge temporary members"
             },
-            "errors": {}
+            "errors": {},
+            "columns": {
+              "name": "Name",
+              "internal_name": "Internal name",
+              "permission_count": "Permissions",
+              "members_count": "Members",
+              "temporary_members_count": "Temporary members"
+            }
           }
         }
       }

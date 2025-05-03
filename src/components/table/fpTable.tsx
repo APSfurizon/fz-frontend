@@ -1,5 +1,5 @@
 "use client"
-import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, useReactTable } from "@tanstack/react-table";
+import { ColumnDef, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions, useReactTable } from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
 import { CSSProperties, Fragment, MutableRefObject, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import Button from "../input/button";
 import { getCountArray } from "@/lib/utils";
 
-const MIN_COLUMN_SIZE = 50;
+const MIN_COLUMN_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 30;
 
 export default function FpTable<T> ({
@@ -28,7 +28,8 @@ export default function FpTable<T> ({
     hasDetails,
     getDetails,
     onSelectionChange,
-    tableConfigRef
+    tableConfigRef,
+    tableOptions
 }: Readonly<{
     rows: T[],
     columns: ColumnDef<T>[],
@@ -46,14 +47,22 @@ export default function FpTable<T> ({
     hasDetails?: (row: Row<T>) => boolean,
     getDetails?: (row: Row<T>) => React.ReactNode,
     onSelectionChange?: (e: RowSelectionState) => void,
-    tableConfigRef?: MutableRefObject<Table<T> | undefined>
+    tableConfigRef?: MutableRefObject<Table<T> | undefined>,
+    tableOptions?: Partial<TableOptions<T>>
 }>) {
-    const EXPAND_DETAILS_COLUMN: ColumnDef<T> = useMemo(()=>({
+    const columnHelper = createColumnHelper<T>();
+
+    const EXPAND_DETAILS_COLUMN: ColumnDef<T> = useMemo(()=>columnHelper.display({
         id: "details_action",
         enableResizing: false,
         size: 50,
         minSize: 50,
-        maxSize: 50 
+        maxSize: 50,
+        cell: props => props.row.getCanExpand() && (
+            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()}>
+                <Icon className="medium" iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/>
+            </div>
+        )
     }), []);
 
     const [tableColumns, setTableColumns] = useState(columns);
@@ -66,6 +75,7 @@ export default function FpTable<T> ({
       });
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const tableWrapper = initialWrapper ?? useReactTable({
+        ...tableOptions,
         columns: tableColumns,
         data: rows,
         columnResizeMode: 'onChange',
@@ -119,10 +129,10 @@ export default function FpTable<T> ({
         const headers = tableWrapper.getFlatHeaders();
         let extra = 0;
         let columnCount = headers.length;
-        if (headers.find(header => header.column.id === EXPAND_DETAILS_COLUMN.id)) {
-            extra += EXPAND_DETAILS_COLUMN.size ?? MIN_COLUMN_SIZE;
+        headers.filter(h=>!h.column.getCanResize()).forEach(h=>{
             columnCount--;
-        }
+            extra += h.column.getSize()
+        })
         const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 5);
         let sizingStartToSet: Record<string, number> = {};
         for (let  i = 0; i < headers.length; i++) {
@@ -130,6 +140,7 @@ export default function FpTable<T> ({
             if (header.column.id === EXPAND_DETAILS_COLUMN.id) continue;
             sizingStartToSet[header.id] = Math.max(autofillWidth, MIN_COLUMN_SIZE);
         }
+        console.log(sizingStartToSet);
         tableWrapper.setColumnSizing(sizingStartToSet);
     }, [tableRef.current, tableColumns])
 
@@ -201,9 +212,6 @@ export default function FpTable<T> ({
                         onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
                             {row.getVisibleCells().map(cell =>
                                 <div className="table-cell" key={cell.id} style={{width: `var(--col-${cell.column.id}-size)`}}>
-                                    {EXPAND_DETAILS_COLUMN.id == cell.column.id && row.getCanExpand() && 
-                                        <div className="table-expand" onClick={row.getToggleExpandedHandler()}>
-                                        <Icon className="medium" iconName={row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/></div>}
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </div>
                             )}
