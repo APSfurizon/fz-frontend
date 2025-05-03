@@ -1,5 +1,4 @@
 div.table-container {
-    overflow-x: scroll;
     background-color: var(--table-bg);
     padding: 0.625em;
 
@@ -14,6 +13,8 @@ div.table-container {
     div.table {
         display: flex;
         flex-direction: column;
+        overflow-x: scroll;
+        max-width: 100%;
 
         div.table-data {
             user-select: none;
@@ -102,16 +103,22 @@ div.table-container {
                 background-color: var(--table-row-bg);
             }
         }
-        
-        div.table-pages {
-            button.page-change {
-                aspect-ratio: 1;
-                span.title {
-                    text-align: center !important;
-                }
+    }
+
+    div.table-pages {
+        margin-top: 0.5em;
+        button.page-change {
+            aspect-ratio: 1;
+            width: 10mm;
+            span.title {
+                text-align: center !important;
             }
         }
     }
-    
 }
 
+@media (max-width:400px) {
+    div.table-pages button.page-change:not(.page-arrow) {
+        display: none;
+    }
+}

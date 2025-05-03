@@ -1,7 +1,8 @@
 "use client"
 import FpTable from "@/components/table/fpTable";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Table } from "@tanstack/react-table";
 import { Row } from "@tanstack/react-table";
+import { MouseEvent, useRef, useState } from "react";
 
 export type DebugRowType = {
     name: string,
@@ -25,7 +26,7 @@ const columns: ColumnDef<DebugRowType>[] = [
     }
 ];
 
-const rows: DebugRowType[] = [
+const defaultRows: DebugRowType[] = [
     {
         name: 'Alexander',
         description: 'the great',
@@ -63,7 +64,32 @@ const getDetails = (row: Row<DebugRowType>) => {
 }
 
 export default function Home() {
+    const [rows, setRows] = useState(defaultRows);
+
+    const tableRef = useRef<Table<DebugRowType>>();
+
+    const onAddRow = (e: MouseEvent) => {
+        const toSet = [{
+            name: "new",
+            description: "light",
+            age: 0
+        }, ...rows];
+        setRows(toSet);
+    }
+
+    const onDelete = (e: MouseEvent) => {
+        if (!tableRef.current) return;
+        const rows = tableRef.current.getRowModel().flatRows;
+        const idsToDelete = tableRef.current.getSelectedRowModel().flatRows.map(row=>row.id);
+        const toSet = [...rows].filter(row=>!idsToDelete.includes(row.id)).map(row=>row.original);
+        setRows(toSet);
+        tableRef.current.resetRowSelection();
+    };
+
     return (
-      <FpTable<DebugRowType> columns={columns} rows={rows} enableRowSelection enableSearch showAddButton showDeleteButton enablePagination pageSize={3} hasDetails={hasDetails} getDetails={getDetails}/>
+      <FpTable<DebugRowType> columns={columns} rows={rows} enableRowSelection
+        enableSearch showAddButton showDeleteButton enablePagination pageSize={1}
+        hasDetails={hasDetails} getDetails={getDetails} onAdd={onAddRow} onDelete={onDelete}
+        tableConfigRef={tableRef} enableMultiRowSelection/>
     );
 }

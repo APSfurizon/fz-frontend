@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, useReactTable } from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
-import { CSSProperties, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, Fragment, MutableRefObject, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import JanInput from "../input/janInput";
 import { useTranslations } from "next-intl";
 import Button from "../input/button";
@@ -14,7 +14,7 @@ const DEFAULT_PAGE_SIZE = 30;
 export default function FpTable<T> ({
     rows,
     columns,
-    customWrapper,
+    initialWrapper,
     tableStyle,
     enableRowSelection=false,
     enableMultiRowSelection=false,
@@ -27,11 +27,12 @@ export default function FpTable<T> ({
     pageSize = DEFAULT_PAGE_SIZE,
     hasDetails,
     getDetails,
-    onSelectionChange
+    onSelectionChange,
+    tableConfigRef
 }: Readonly<{
     rows: T[],
     columns: ColumnDef<T>[],
-    customWrapper?: Table<T>,
+    initialWrapper?: Table<T>,
     tableStyle?: CSSProperties,
     enableRowSelection?: boolean | ((row: Row<T>) => boolean),
     enableMultiRowSelection?: boolean | ((row: Row<T>) => boolean),
@@ -44,7 +45,8 @@ export default function FpTable<T> ({
     pageSize?: number,
     hasDetails?: (row: Row<T>) => boolean,
     getDetails?: (row: Row<T>) => React.ReactNode,
-    onSelectionChange?: (e: RowSelectionState) => void
+    onSelectionChange?: (e: RowSelectionState) => void,
+    tableConfigRef?: MutableRefObject<Table<T> | undefined>
 }>) {
     const EXPAND_DETAILS_COLUMN: ColumnDef<T> = useMemo(()=>({
         id: "details_action",
@@ -63,7 +65,7 @@ export default function FpTable<T> ({
         pageSize: pageSize, //default page size
       });
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const tableWrapper = customWrapper ?? useReactTable({
+    const tableWrapper = initialWrapper ?? useReactTable({
         columns: tableColumns,
         data: rows,
         columnResizeMode: 'onChange',
@@ -89,6 +91,8 @@ export default function FpTable<T> ({
         onRowSelectionChange: setRowSelection,
         getRowCanExpand: hasDetails
     });
+
+    useImperativeHandle(tableConfigRef, () => tableWrapper);
 
     const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton, [enableSearch, showAddButton, showDeleteButton]);
 
@@ -152,7 +156,8 @@ export default function FpTable<T> ({
             {enableSearch && <JanInput className="table-search" placeholder={t("table.search.placeholder")}
                 onChange={(e)=> tableWrapper.setGlobalFilter(String(e.target.value))}/>}
             {showAddButton && <Button iconName={ICONS.ADD} onClick={onAdd} title={t("table.add.title")}/>}
-            {showDeleteButton && <Button iconName={ICONS.DELETE} onClick={onDelete} title={t("table.delete.title")}/>}
+            {showDeleteButton && <Button iconName={ICONS.DELETE} onClick={onDelete} title={t("table.delete.title")}
+                disabled={!tableWrapper.getIsSomeRowsSelected()}/>}
         </div>}
         <div className="table rounded-s gap-2mm" style={{...columnSizeVars, width: '100%', ...tableStyle}} ref={tableRef}>
             <div className="table-data rounded-s" style={{width: tableWrapper.getTotalSize()}}>
@@ -204,19 +209,19 @@ export default function FpTable<T> ({
                 </Fragment>
                 )}
             </div>
-            {enablePagination && <div className="table-pages horizontal-list gap-4mm">
-                <div className="spacer"></div>
-                <Button className="page-change" disabled={!tableWrapper.getCanPreviousPage()}
-                    iconName={ICONS.ARROW_BACK} onClick={tableWrapper.previousPage}></Button>
-                {getCountArray(tableWrapper.getPageCount(), true).map((i)=><Button key={i}
-                    className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`} 
-                    onClick={()=>tableWrapper.setPageIndex(i)}
-                    disabled={pagination.pageIndex == i}>{i+1}
-                </Button>)}
-                <Button className="page-change" disabled={!tableWrapper.getCanNextPage()}
-                    iconName={ICONS.ARROW_FORWARD} onClick={tableWrapper.nextPage}></Button>
-                <div className="spacer"></div>
-            </div>}
         </div>
+        {enablePagination && <div className="table-pages horizontal-list gap-4mm">
+            <div className="spacer"></div>
+            <Button className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
+                iconName={ICONS.ARROW_BACK} onClick={tableWrapper.previousPage}></Button>
+            {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i)=><Button key={i}
+                className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`} 
+                onClick={()=>tableWrapper.setPageIndex(i)}
+                disabled={pagination.pageIndex == i}>{i+1}
+            </Button>)}
+            <Button className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
+                iconName={ICONS.ARROW_FORWARD} onClick={tableWrapper.nextPage}></Button>
+            <div className="spacer"></div>
+        </div>}
     </div>
 }

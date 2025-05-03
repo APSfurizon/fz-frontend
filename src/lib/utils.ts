@@ -153,10 +153,17 @@ export function mapLanguageToFlag(lang: string) {
     }
 }
 
-export function getCountArray(size: number, zeroBased: boolean = false) {
+export function getCountArray(index: number, limit: number, min: number, max: number) {
     const toReturn: number[] = [];
-    for (let i = 0; i<size; i++){
-        toReturn.push(i + (zeroBased ? 0 : 1))
+    const half = Math.floor(limit / 2);
+    let start = index - half;
+    let diffStart = Math.abs(start - Math.max(start, min));
+    let end = index + 1 + half + diffStart;
+    let diffEnd = Math.abs(end - Math.min(end, max));
+    start -= diffEnd;
+
+    for (let i = Math.max(start, min); i<Math.min(end, max); i++){
+        toReturn.push(i)
     }
     return toReturn;
 }
