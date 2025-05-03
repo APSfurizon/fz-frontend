@@ -98,7 +98,7 @@ export default function FpTable<T> ({
 
     const t = useTranslations('components');
 
-    /**First */
+    /** Column change */
     useEffect(()=>{
         if (tableWrapper.getCanSomeRowsExpand()) {
             const toReturn = [...columns];
@@ -107,6 +107,11 @@ export default function FpTable<T> ({
             setTableColumns(toReturn);
         }
     }, [columns]);
+
+    /** Rows change */
+    useEffect(()=>{
+        tableWrapper.resetRowSelection();
+    }, [rows]);
 
     /**First time table render */
     useEffect(()=>{
@@ -198,7 +203,7 @@ export default function FpTable<T> ({
                                 <div className="table-cell" key={cell.id} style={{width: `var(--col-${cell.column.id}-size)`}}>
                                     {EXPAND_DETAILS_COLUMN.id == cell.column.id && row.getCanExpand() && 
                                         <div className="table-expand" onClick={row.getToggleExpandedHandler()}>
-                                        <Icon iconName={row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/></div>}
+                                        <Icon className="medium" iconName={row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/></div>}
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </div>
                             )}
