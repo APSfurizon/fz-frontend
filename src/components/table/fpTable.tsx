@@ -203,6 +203,12 @@ export default function FpTable<T> ({
                         ))}
                     </div>
                 )}
+                {/**No data */}
+                {!tableWrapper.getRowModel().rows || tableWrapper.getRowModel().rows.length == 0 && <div className="table-row">
+                    <div className="table-cell" style={{width: tableRef.current?.clientWidth, textAlign: 'center'}}>
+                        <span className="title">{t("table.no_data")}</span>
+                    </div>
+                </div>}
                 {/**Rows */}
                 {tableWrapper.getRowModel().rows.map(row =><Fragment key={row.id}>
                     <div className={"table-row "

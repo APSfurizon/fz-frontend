@@ -7,17 +7,19 @@ import { AddRoleApiResponse, AddRoleFormAction, AllRolesResponse, DeleteRolesApi
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MouseEvent, useEffect, useMemo, useState } from "react";
 import Modal from "@/components/modal";
 import DataForm from "@/components/input/dataForm";
 import JanInput from "@/components/input/janInput";
 import FpTable from "@/components/table/fpTable";
 import { ColumnDef, createColumnHelper, Row, Table, TableOptions } from "@tanstack/react-table";
+import { getParentDirectory } from "@/lib/utils";
 
 export default function RolesListPage () {
 
     const router = useRouter();
+    const path = usePathname();
     const t = useTranslations();
     const {showModal} = useModalUpdate();
 
@@ -57,7 +59,7 @@ export default function RolesListPage () {
 
     const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
         showModal(
-            t("common.error"), 
+            t("common.error"),
             <ModalError error={err} translationRoot="furpanel"
                 translationKey="admin.users.security.roles.errors"/>
         );
@@ -135,7 +137,7 @@ export default function RolesListPage () {
     return <>
     <div className="page">
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-            <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
+            <a href={getParentDirectory(path)}><Icon iconName={ICONS.ARROW_BACK}/></a>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">{t("furpanel.admin.users.security.roles.title")}</span>
             </div>

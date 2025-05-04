@@ -15,11 +15,11 @@ export interface MembershipCard {
 }
 
 export interface UserCardData {
-    membershipCard: MembershipCard
+    membershipCard?: MembershipCard
     userInfo: UserPersonalInfo,
     email: string,
     user: UserData,
-    fromOrderCode: string,
+    fromOrderCode?: string,
     duplicate: boolean
 }
 
@@ -78,4 +78,15 @@ export class AddCardFormAction extends FormApiAction<AddCardApiData, Boolean, Ap
     authenticated = true;
     dtoBuilder = new AddCardDTOBuilder ();
     urlAction = "membership/add-card";
+}
+
+export function convertCardlessUser(userData: CompleteUserData): UserCardData {
+    return {
+        duplicate: false,
+        email: userData.email,
+        user: userData.user.user,
+        fromOrderCode: userData.user.orderCode,
+        membershipCard: undefined,
+        userInfo: userData.personalInfo
+    }
 }

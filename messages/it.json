@@ -104,7 +104,8 @@
       },
       "delete": {
         "title": "Elimina"
-      }
+      },
+      "no_data": "Nessun dato presente"
     }
   },
   "furpanel": {
@@ -498,8 +499,16 @@
         "errors": {
           "NO_DATA": "Non ci sono tessere per l'anno indicato.",
           "PERMISSION_NOT_FOUND": "Non hai i permessi necessari.",
-          "CARD_MISSING": "Tessera non presente",
+          "CARD_MISSING": "Tessera mancante",
           "CARD_DUPLICATE": "Tessera duplicata"
+        },
+        "columns": {
+          "user": "Utente",
+          "name": "Nome",
+          "order_code": "Ordine",
+          "card_number": "Numero tessera",
+          "anomalies": "Anomalie",
+          "registered": "Registrato"
         }
       },
       "users": {

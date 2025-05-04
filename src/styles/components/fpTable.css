@@ -34,9 +34,8 @@ div.table-container {
                     }
     
                     div.table-header-resizer {
-                        min-width: 5px;
+                        min-width: 25px;
                         min-height: 20px;
-                        overflow: visible;
                         cursor: ew-resize;
 
                         i.mdi {

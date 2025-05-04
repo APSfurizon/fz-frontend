@@ -104,7 +104,8 @@
       },
       "delete": {
         "title": "Delete"
-      }
+      },
+      "no_data": "No data found"
     }
   },
   "furpanel": {
@@ -499,8 +500,16 @@
         "errors": {
           "NO_DATA": "No membership cards were found for the year selected.",
           "PERMISSION_NOT_FOUND": "You don't have the permission to do that.",
-          "CARD_MISSING": "Card not present",
+          "CARD_MISSING": "Card missing",
           "CARD_DUPLICATE": "Duplicate card"
+        },
+        "columns": {
+          "user": "User",
+          "name": "Name",
+          "order_code": "Order",
+          "card_number": "Card number",
+          "anomalies": "Anomalies",
+          "registered": "Registered"
         }
       },
       "users": {

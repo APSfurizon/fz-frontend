@@ -3,14 +3,14 @@ import Button from "@/components/input/button";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import Icon, { ICONS } from "@/components/icon";
 import ToolLink from "@/components/toolLink";
-import { RoleData, RoleOutputData } from "@/lib/api/admin/role";
+import { RoleData } from "@/lib/api/admin/role";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { getParentDirectory } from "@/lib/utils";
 
 export default function RoleEditorLayout ({children}: Readonly<{children: React.ReactNode}>) {
-    const router = useRouter();
+    const path = usePathname();
     const t = useTranslations();
 
     // Get context
@@ -18,7 +18,7 @@ export default function RoleEditorLayout ({children}: Readonly<{children: React.
 
     return <>
     <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-        <Link href="/admin/roles"><Icon iconName={ICONS.ARROW_BACK}/></Link>
+        <Link href={getParentDirectory(getParentDirectory(path))}><Icon iconName={ICONS.ARROW_BACK}/></Link>
         <div className="horizontal-list gap-2mm">
             <span className="title medium">
                 {entity?.displayName ?? entity?.internalName ?? ""}

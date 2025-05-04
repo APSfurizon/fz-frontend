@@ -3,26 +3,29 @@ import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
-import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, GetCardsApiAction, GetCardsApiResponse, UserCardData } from "@/lib/api/admin/membershipManager";
+import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse, UserCardData } from "@/lib/api/admin/membershipManager";
 import { runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useMemo, useState } from "react";
 import Checkbox from "@/components/input/checkbox";
 import UserPicture from "@/components/userPicture";
-import "@/styles/table.css";
+//import "@/styles/table.css";
 import "@/styles/furpanel/admin/membership.css";
-import { copyContent, years } from "@/lib/utils";
+import { copyContent, getParentDirectory, years } from "@/lib/utils";
 import JanInput from "@/components/input/janInput";
 import DataForm from "@/components/input/dataForm";
 import AutoInput from "@/components/input/autoInput";
 import LoadingPanel from "@/components/loadingPanel";
+import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
+import FpTable from "@/components/table/fpTable";
 
 export default function MembershipView({params}: {params: Promise<{ year: number }>}) {
 
     const [selectedYear, setSelectedYear] = useState<number>();
     const router = useRouter();
+    const path = usePathname();
     const t = useTranslations();
     const {showModal, hideModal} = useModalUpdate();
 
@@ -104,10 +107,101 @@ export default function MembershipView({params}: {params: Promise<{ year: number
         }).finally(()=>setLoading(false));
     }, [cardsData])
 
+    // User card table logic
+    const columnHelper = createColumnHelper<UserCardData>();
+
+    const rows = useMemo(()=> [...cardsData?.cards ?? [], ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map(wc=>convertCardlessUser(wc))], [cardsData]);
+
+    const columns: ColumnDef<UserCardData, any>[] = [
+        columnHelper.accessor('user', {
+            id: 'user',
+            header: t("furpanel.admin.membership_manager.columns.user"),
+            cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
+                <UserPicture userData={props.row.original.user} hideEffect></UserPicture>
+                <span className="title small">{props.row.original.user.fursonaName}</span>
+            </div>
+        }),
+        columnHelper.accessor(data => `${data.userInfo.firstName} ${data.userInfo.lastName}`, {
+            id: 'name',
+            header: t("furpanel.admin.membership_manager.columns.name"),
+        }),
+        columnHelper.accessor('fromOrderCode', {
+            id: 'orderCode',
+            header: t("furpanel.admin.membership_manager.columns.order_code"),
+        }),
+        columnHelper.accessor(data => `${(data.membershipCard?.cardNo ?? '').padStart(7, '0')}`, {
+            id: 'cardNumber',
+            header: t("furpanel.admin.membership_manager.columns.card_number"),
+        }),
+        columnHelper.display({
+            id: 'anomalies',
+            header: t("furpanel.admin.membership_manager.columns.anomalies"),
+            cell: props => <div className="horizontal-list flex-vertical-center">
+                    {props.row.original.duplicate && <>
+                        <Icon iconName={ICONS.FILE_COPY}/>
+                        <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}</span>
+                    </>}
+                    {!props.row.original.membershipCard && <>
+                        <Icon iconName={ICONS.ERROR}/>
+                        <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_MISSING")}</span>
+                    </>}
+                </div>
+        }),
+        columnHelper.accessor('membershipCard.registered' ,{
+            id: 'registered',
+            header: t("furpanel.admin.membership_manager.columns.registered"),
+            cell: props => <>
+                {props.row.original.membershipCard
+                    ? <Checkbox initialValue={props.row.original.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,
+                        checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
+                        setBusy: Dispatch<SetStateAction<boolean>>)=>markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
+                            {t("furpanel.admin.membership_manager.table.headers.registered")}
+                    </Checkbox>
+                    : undefined
+                }
+            </>
+        })
+    ]
+
+    const hasDetails = (row: Row<UserCardData>) => true;
+
+    const showDetails = (row: Row<UserCardData>) => <>
+        <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em"}}>
+            <div className="horizontal-list flex-wrap gap-4mm">
+                <JanInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={row.original.userInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={row.original.userInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.sex.label")} readOnly initialValue={row.original.userInfo.sex} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.email.label")} readOnly initialValue={row.original.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                {row.original.userInfo.fiscalCode && 
+                    <JanInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")} readOnly initialValue={row.original.userInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+            </div>
+            <hr></hr>
+            <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
+            <div className="horizontal-list flex-wrap gap-4mm">
+                <JanInput className="hoverable" label={t("authentication.register.form.birth_country.label")} readOnly initialValue={row.original.userInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                {row.original.userInfo.birthRegion &&
+                    <JanInput className="hoverable" label={t("authentication.register.form.birth_region.label")} readOnly initialValue={row.original.userInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                <JanInput className="hoverable" label={t("authentication.register.form.birth_city.label")} readOnly initialValue={row.original.userInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.birthday.label")} readOnly initialValue={row.original.userInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+            </div>
+            <hr></hr>
+            <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
+            <div className="horizontal-list flex-wrap gap-4mm">
+                <JanInput className="hoverable" label={t("authentication.register.form.residence_country.label")} readOnly initialValue={row.original.userInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                {row.original.userInfo.residenceRegion &&
+                        <JanInput className="hoverable" label={t("authentication.register.form.residence_region.label")} readOnly initialValue={row.original.userInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
+                <JanInput className="hoverable" label={t("authentication.register.form.residence_city.label")} readOnly initialValue={row.original.userInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.residence_zip_code.label")} readOnly initialValue={row.original.userInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.residence_address.label")} readOnly initialValue={row.original.userInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+                <JanInput className="hoverable" label={t("authentication.register.form.phone_number.label")} readOnly initialValue={(row.original.userInfo.prefixPhoneNumber ?? "") + (row.original.userInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
+            </div>
+        </div>
+    </>
+
     return <>
         <div className="page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <a href="#" onClick={()=>router.back()}><Icon iconName={ICONS.ARROW_BACK}/></a>
+                <a href={getParentDirectory(getParentDirectory(path))}><Icon iconName={ICONS.ARROW_BACK}/></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.membership_manager.header", {yearStart: Number(selectedYear)})}</span>
                     <select className="title average" value={selectedYear ?? ""} onChange={(e)=>router.push(e.target.value)}>
@@ -130,128 +224,11 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                     {t("furpanel.admin.membership_manager.actions.show_extra_cards")}
                 </Checkbox>
             </div>
-            <div className="table-container rounded-m">
-                <div className="table rounded-m">
-                    {loading && <div className="row"><LoadingPanel className="data"/></div>}
-                    {(cardsData?.cards?.length ?? 0) <= 0 && <div className="data">
-                        <span>{t("furpanel.admin.membership_manager.errors.NO_DATA")}</span>
-                    </div>}
-                    {/* Cards render */}
-                    {cardsData?.cards?.filter(c=>(c.duplicate && showDuplicate) || (!c.duplicate && !hideValid))
-                        .map((data, index)=><details className="row" key={index}>
-                        <summary className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
-                            {data.duplicate ? <Icon iconName={ICONS.FILE_COPY}></Icon>
-                            : <>
-                                <Icon className="open" iconName={ICONS.ARROW_DROP_DOWN}></Icon>
-                                <Icon className="close" iconName={ICONS.ARROW_DROP_UP}></Icon>
-                            </>
-                            }
-                            <div className="data horizontal-list flex-vertical-center gap-2mm">
-                                <UserPicture userData={data.user} hideEffect></UserPicture>
-                                <span className="title small">{data.user.fursonaName}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive average">{data.userInfo.firstName} {data.userInfo.lastName}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive average">{data.fromOrderCode}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive "># {(""+data.membershipCard.cardNo).padStart(7, '0')}</span>
-                            </div>
-                            <div className="spacer"></div>
-                            <div className="data">
-                            {data.duplicate
-                            ?   <span className="highlight">{t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}</span>
-                            :   <Checkbox initialValue={data.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,
-                                    checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
-                                    setBusy: Dispatch<SetStateAction<boolean>>)=>markAsRegistered(event, checked, setChecked, setBusy, data.membershipCard.cardId)}>
-                                        {t("furpanel.admin.membership_manager.table.headers.registered")}
-                                </Checkbox>
-                            }
-                            </div>
-                        </summary>
-                        {/* Copyable data */}
-                        <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em"}}>
-                            <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={data.userInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={data.userInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.sex.label")} readOnly initialValue={data.userInfo.sex} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.email.label")} readOnly initialValue={data.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                {data.userInfo.fiscalCode && 
-                                    <JanInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")} readOnly initialValue={data.userInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                            </div>
-                            <hr></hr>
-                            <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
-                            <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={t("authentication.register.form.birth_country.label")} readOnly initialValue={data.userInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                {data.userInfo.birthRegion &&
-                                    <JanInput className="hoverable" label={t("authentication.register.form.birth_region.label")} readOnly initialValue={data.userInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                                <JanInput className="hoverable" label={t("authentication.register.form.birth_city.label")} readOnly initialValue={data.userInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.birthday.label")} readOnly initialValue={data.userInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                            </div>
-                            <hr></hr>
-                            <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
-                            <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_country.label")} readOnly initialValue={data.userInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                {data.userInfo.residenceRegion &&
-                                        <JanInput className="hoverable" label={t("authentication.register.form.residence_region.label")} readOnly initialValue={data.userInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_city.label")} readOnly initialValue={data.userInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_zip_code.label")} readOnly initialValue={data.userInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_address.label")} readOnly initialValue={data.userInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.phone_number.label")} readOnly initialValue={(data.userInfo.prefixPhoneNumber ?? "") + (data.userInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                            </div>
-                        </div>
-                    </details>)}
-                    {/* Cardless users */}
-                    {showMissing && cardsData?.usersAtCurrentEventWithoutCard?.map((data, index)=><details className="row" key={index}>
-                        <summary className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
-                            <Icon iconName={ICONS.ERROR}></Icon>
-                            <div className="data horizontal-list flex-vertical-center gap-2mm">
-                                <UserPicture userData={data.user.user} hideEffect></UserPicture>
-                                <span className="title small">{data.user.user.fursonaName}</span>
-                            </div>
-                            <div className="data">
-                                <span className="descriptive average">{data.user.orderCode}</span>
-                            </div>
-                            <div className="spacer"></div>
-                            <div className="data">
-                                <span className="highlight">{t("furpanel.admin.membership_manager.errors.CARD_MISSING")}</span>
-                            </div>
-                        </summary>
-                        {/* Copyable data */}
-                        <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em"}}>
-                            <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={data.personalInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={data.personalInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.email.label")} readOnly initialValue={data.email} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                {data.personalInfo.fiscalCode && 
-                                    <JanInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")} readOnly initialValue={data.personalInfo.fiscalCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                            </div>
-                            <hr></hr>
-                            <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
-                            <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={t("authentication.register.form.birth_country.label")} readOnly initialValue={data.personalInfo.birthCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                {data.personalInfo.birthRegion &&
-                                    <JanInput className="hoverable" label={t("authentication.register.form.birth_region.label")} readOnly initialValue={data.personalInfo.birthRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                                <JanInput className="hoverable" label={t("authentication.register.form.birth_city.label")} readOnly initialValue={data.personalInfo.birthCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.birthday.label")} readOnly initialValue={data.personalInfo.birthday} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                            </div>
-                            <hr></hr>
-                            <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
-                            <div className="horizontal-list flex-wrap gap-4mm">
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_country.label")} readOnly initialValue={data.personalInfo.residenceCountry} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                {data.personalInfo.residenceRegion &&
-                                        <JanInput className="hoverable" label={t("authentication.register.form.residence_region.label")} readOnly initialValue={data.personalInfo.residenceRegion} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>}
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_city.label")} readOnly initialValue={data.personalInfo.residenceCity} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_zip_code.label")} readOnly initialValue={data.personalInfo.residenceZipCode} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.residence_address.label")} readOnly initialValue={data.personalInfo.residenceAddress} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                                <JanInput className="hoverable" label={t("authentication.register.form.phone_number.label")} readOnly initialValue={(data.personalInfo.prefixPhoneNumber ?? "") + (data.personalInfo.phoneNumber ?? "")} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
-                            </div>
-                        </div>
-                    </details>)}
-                </div>
-            </div>
+            
+            {loading && <div className="row"><LoadingPanel className="data"/></div>}
+            {cardsData && cardsData?.cards && 
+                <FpTable<UserCardData> columns={columns} rows={rows} enableSearch hasDetails={hasDetails} getDetails={showDetails}
+                    enablePagination pageSize={20}/>}
         </div>
         {/* Add card */}
         <Modal icon={ICONS.ADD} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)} 
