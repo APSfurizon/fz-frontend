@@ -1,13 +1,11 @@
 "use client"
 import { EntityEditorProvider } from "@/components/context/entityEditorProvider";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
-import { GetRoleByIdApiAction, RoleData, RoleOutputData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
-import { ApiResponse, runRequest } from "@/lib/api/global";
-import { resultSelf } from "@/lib/utils";
+import { GetRoleByIdApiAction, RoleData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
+import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
-import { notFound, useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ViewRoleLayout ({params, children}: Readonly<{params: Promise<{id: number}>, children: React.ReactNode}>) {

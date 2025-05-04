@@ -94,6 +94,18 @@
     },
     "input": {
       "validation_fail": "Value not valid"
+    },
+    "table": {
+      "search": {
+        "placeholder": "Search"
+      },
+      "add": {
+        "title": "Add"
+      },
+      "delete": {
+        "title": "Delete"
+      },
+      "no_data": "No data found"
     }
   },
   "furpanel": {
@@ -488,8 +500,16 @@
         "errors": {
           "NO_DATA": "No membership cards were found for the year selected.",
           "PERMISSION_NOT_FOUND": "You don't have the permission to do that.",
-          "CARD_MISSING": "Card not present",
+          "CARD_MISSING": "Card missing",
           "CARD_DUPLICATE": "Duplicate card"
+        },
+        "columns": {
+          "user": "User",
+          "name": "Name",
+          "order_code": "Order",
+          "card_number": "Card number",
+          "anomalies": "Anomalies",
+          "registered": "Registered"
         }
       },
       "users": {
@@ -592,7 +612,14 @@
               "add_role": "Add role",
               "purge_temporary_roles": "Purge temporary members"
             },
-            "errors": {}
+            "errors": {},
+            "columns": {
+              "name": "Name",
+              "internal_name": "Internal name",
+              "permission_count": "Permissions",
+              "members_count": "Members",
+              "temporary_members_count": "Temporary members"
+            }
           }
         }
       }

@@ -119,10 +119,14 @@
 
   /* Table */
   --table-bg: #d6d6d6;
-  --table-border: #fff;
+  --table-border: #d3d3d3;
+  --table-header-row-bg: #c2c2c28c;
   --table-row-bg: #ffffff8c;
   --table-row-bg-hover: #ffffffdc;
+  --table-row-bg-selected: #eb9616dc;
   --table-header-separator: #ffffff4d;
+  --table-header-pinned-bg: #E8E8E8;
+  --table-cell-pinned-bg: #F7F7F7;
 
   /* Booking page */
   --booking-countdown-bg: #000000d8;
@@ -276,10 +280,14 @@
 
     /* Table */
     --table-bg: #242C38;
-    --table-border: #fff;
+    --table-border: #ffffff32;
+    --table-header-row-bg: #31313142;
     --table-row-bg: #ffffff19;
     --table-row-bg-hover: #ffffff3d;
+    --table-row-bg-selected: #eb96163d;
     --table-header-separator: #ffffff4d;
+    --table-header-pinned-bg: #3D424B;
+    --table-cell-pinned-bg: #4C545E;
 
     /* Booking page */
     --booking-countdown-bg: #000000d8;

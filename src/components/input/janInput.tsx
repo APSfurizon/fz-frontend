@@ -73,7 +73,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>
-            <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>
+            {label && <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>}
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                 {prefix && <span className="title small color-subtitle">
                     {prefix}

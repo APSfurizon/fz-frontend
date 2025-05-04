@@ -94,6 +94,18 @@
     },
     "input": {
       "validation_fail": "Valore non valido"
+    },
+    "table": {
+      "search": {
+        "placeholder": "Cerca"
+      },
+      "add": {
+        "title": "Aggiungi"
+      },
+      "delete": {
+        "title": "Elimina"
+      },
+      "no_data": "Nessun dato presente"
     }
   },
   "furpanel": {
@@ -487,8 +499,16 @@
         "errors": {
           "NO_DATA": "Non ci sono tessere per l'anno indicato.",
           "PERMISSION_NOT_FOUND": "Non hai i permessi necessari.",
-          "CARD_MISSING": "Tessera non presente",
+          "CARD_MISSING": "Tessera mancante",
           "CARD_DUPLICATE": "Tessera duplicata"
+        },
+        "columns": {
+          "user": "Utente",
+          "name": "Nome",
+          "order_code": "Ordine",
+          "card_number": "Numero tessera",
+          "anomalies": "Anomalie",
+          "registered": "Registrato"
         }
       },
       "users": {
@@ -591,7 +611,14 @@
               "add_role": "Aggiungi ruolo",
               "purge_temporary_roles": "Rimuovi membri temporanei"
             },
-            "errors": {}
+            "errors": {},
+            "columns": {
+              "name": "Nome",
+              "internal_name": "Nome interno",
+              "permission_count": "Permessi",
+              "members_count": "Membri",
+              "temporary_members_count": "Membri temporanei"
+            }
           }
         }
       }

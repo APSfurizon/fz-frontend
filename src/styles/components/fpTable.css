@@ -1,0 +1,139 @@
+div.table-container {
+    background-color: var(--table-bg);
+    padding: 0.625em;
+
+    div.table-toolbar {
+        padding-bottom: 0.3125em;
+        
+        div.table-search div.input-container {
+            margin-bottom: 0px;
+        }
+    }
+
+    div.table {
+        display: flex;
+        flex-direction: column;
+        overflow-x: scroll;
+        max-width: 100%;
+
+        div.table-data {
+            user-select: none;
+
+            div.table-header-group {
+                display: flex;
+                background-color: var(--table-header-row-bg);
+    
+                div.table-header {
+                    display: flex;
+                    padding: 0.3125em;
+                    background-color: var(--table-row-bg);
+
+                    div.header-data {
+                        overflow: hidden;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                    }
+    
+                    div.table-header-resizer {
+                        min-width: 25px;
+                        min-height: 20px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        cursor: ew-resize;
+
+                        i.mdi {
+                            color: var(--text-subtitle);
+                            transition-duration: 300ms;
+                            opacity: 0.25;
+                        }
+                    }
+                }
+
+                div.table-header:hover div.table-header-resizer i.mdi,
+                div.table-header div.table-header-resizer.resizing i.mdi {
+                    opacity: 1;
+                }
+
+                div.table-header.pinned {
+                    background-color: var(--table-header-pinned-bg);
+                }
+            }
+
+            div.table-header-group div.table-header:not(:first-child) {
+                border-left: 0.1em solid var(--table-border);
+            }
+    
+            div.table-row {
+                display: flex;
+                background-color: var(--table-row-bg);
+
+                div.table-cell {
+                    background-color: var(--table-row-bg);
+                    padding: 0.3125em;
+                    overflow: hidden;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+
+                    div.table-expand {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                    }
+                }
+
+                div.table-cell.pinned {
+                    background-color: var(--table-cell-pinned-bg);
+                }
+            }
+
+            div.table-row.selectable {
+                transition-duration: 60ms;
+            }
+
+            div.table-row.selectable:not(.row-selected):hover {
+                background-color: var(--table-row-bg-hover);
+            }
+
+            div.table-row.row-selected {
+                background-color: var(--table-row-bg-selected);
+            }
+
+            div.table-row:not(:last-child) {
+                border-bottom: 0.1em solid var(--table-border);
+            }
+
+            div.table-row div.table-cell:not(:first-child) {
+                border-left: 0.1em solid var(--table-border);
+            }
+
+            div.row-expanded {
+                display: flex;
+                padding: 0.3125em;
+                background-color: var(--table-row-bg);
+            }
+        }
+    }
+
+    div.table-pages {
+        margin-top: 0.5em;
+        button.page-change {
+            aspect-ratio: 1;
+            width: 10mm;
+            span.title {
+                text-align: center !important;
+            }
+        }
+    }
+}
+
+@media (max-width:400px) {
+    div.table-pages button.page-change:not(.page-arrow) {
+        display: none;
+    }
+}
