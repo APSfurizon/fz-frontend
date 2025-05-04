@@ -90,6 +90,9 @@ export default function Home() {
       <FpTable<DebugRowType> columns={columns} rows={rows} enableRowSelection
         enableSearch showAddButton showDeleteButton enablePagination pageSize={10}
         hasDetails={hasDetails} getDetails={getDetails} onAdd={onAddRow} onDelete={onDelete}
-        tableConfigRef={tableRef} enableMultiRowSelection/>
+        tableConfigRef={tableRef} enableMultiRowSelection pinnedColumns={{
+            left: [],
+            right: ['age']
+        }}/>
     );
 }

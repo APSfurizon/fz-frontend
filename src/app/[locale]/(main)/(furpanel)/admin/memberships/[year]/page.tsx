@@ -110,7 +110,11 @@ export default function MembershipView({params}: {params: Promise<{ year: number
     // User card table logic
     const columnHelper = createColumnHelper<UserCardData>();
 
-    const rows = useMemo(()=> [...cardsData?.cards ?? [], ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map(wc=>convertCardlessUser(wc))], [cardsData]);
+    const rows = useMemo(()=> {
+        return [...cardsData?.cards ?? [], ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map(wc=>convertCardlessUser(wc))]
+            .filter(cd => (showDuplicate && cd.duplicate) || (showMissing && !cd.membershipCard) ||
+                (!hideValid && cd.membershipCard && !cd.duplicate));
+    }, [cardsData, showMissing, showDuplicate, hideValid]);
 
     const columns: ColumnDef<UserCardData, any>[] = [
         columnHelper.accessor('user', {
@@ -136,13 +140,13 @@ export default function MembershipView({params}: {params: Promise<{ year: number
         columnHelper.display({
             id: 'anomalies',
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
-            cell: props => <div className="horizontal-list flex-vertical-center">
+            cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
                     {props.row.original.duplicate && <>
                         <Icon iconName={ICONS.FILE_COPY}/>
                         <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}</span>
                     </>}
                     {!props.row.original.membershipCard && <>
-                        <Icon iconName={ICONS.ERROR}/>
+                        <Icon iconName={ICONS.QUESTION_MARK}/>
                         <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_MISSING")}</span>
                     </>}
                 </div>
@@ -228,7 +232,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             {loading && <div className="row"><LoadingPanel className="data"/></div>}
             {cardsData && cardsData?.cards && 
                 <FpTable<UserCardData> columns={columns} rows={rows} enableSearch hasDetails={hasDetails} getDetails={showDetails}
-                    enablePagination pageSize={20}/>}
+                    enablePagination pageSize={20} pinnedColumns={{left: [], right: ['registered']}}/>}
         </div>
         {/* Add card */}
         <Modal icon={ICONS.ADD} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)} 

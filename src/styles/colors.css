@@ -125,6 +125,8 @@
   --table-row-bg-hover: #ffffffdc;
   --table-row-bg-selected: #eb9616dc;
   --table-header-separator: #ffffff4d;
+  --table-header-pinned-bg: #E8E8E8;
+  --table-cell-pinned-bg: #F7F7F7;
 
   /* Booking page */
   --booking-countdown-bg: #000000d8;
@@ -284,6 +286,8 @@
     --table-row-bg-hover: #ffffff3d;
     --table-row-bg-selected: #eb96163d;
     --table-header-separator: #ffffff4d;
+    --table-header-pinned-bg: #3D424B;
+    --table-cell-pinned-bg: #4C545E;
 
     /* Booking page */
     --booking-countdown-bg: #000000d8;

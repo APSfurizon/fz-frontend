@@ -148,7 +148,7 @@ export default function RolesListPage () {
         </div>
         
         {loading && <div className="row"><LoadingPanel className="data"/></div>}
-        <FpTable<RoleInfo> rows={roles} columns={columns} tableOptions={initialTableConfig}></FpTable>
+        <FpTable<RoleInfo> rows={roles} columns={columns} tableOptions={initialTableConfig} pinnedColumns={{left: [], right: ['actions']}}></FpTable>
     </div>
     {/* Role creation modal */}
     <Modal open={addRoleModalOpen} onClose={()=>setAddRoleModalOpen(false)}

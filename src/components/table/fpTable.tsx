@@ -1,5 +1,5 @@
 "use client"
-import { ColumnDef, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions, useReactTable } from "@tanstack/react-table";
+import { Column, ColumnDef, ColumnPinningState, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions, useReactTable } from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
 import { CSSProperties, Fragment, MutableRefObject, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
@@ -29,7 +29,8 @@ export default function FpTable<T> ({
     getDetails,
     onSelectionChange,
     tableConfigRef,
-    tableOptions
+    tableOptions,
+    pinnedColumns
 }: Readonly<{
     rows: T[],
     columns: ColumnDef<T>[],
@@ -48,7 +49,8 @@ export default function FpTable<T> ({
     getDetails?: (row: Row<T>) => React.ReactNode,
     onSelectionChange?: (e: RowSelectionState) => void,
     tableConfigRef?: MutableRefObject<Table<T> | undefined>,
-    tableOptions?: Partial<TableOptions<T>>
+    tableOptions?: Partial<TableOptions<T>>,
+    pinnedColumns?: ColumnPinningState
 }>) {
     const columnHelper = createColumnHelper<T>();
 
@@ -74,10 +76,15 @@ export default function FpTable<T> ({
         pageSize: pageSize, //default page size
       });
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+    const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
+        left: [],
+        right: [],
+    });
+    const [data, setData] = useState<T[]>([]);
     const tableWrapper = initialWrapper ?? useReactTable({
         ...tableOptions,
         columns: tableColumns,
-        data: rows,
+        data,
         columnResizeMode: 'onChange',
         enableRowSelection,
         enableMultiRowSelection,
@@ -89,6 +96,7 @@ export default function FpTable<T> ({
             globalFilter,
             pagination: enablePagination ? pagination : undefined,
             rowSelection,
+            columnPinning,
         },
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,
@@ -99,10 +107,33 @@ export default function FpTable<T> ({
         globalFilterFn: 'includesString',
         onPaginationChange: setPagination,
         onRowSelectionChange: setRowSelection,
-        getRowCanExpand: hasDetails
+        getRowCanExpand: hasDetails,
+        onColumnPinningChange: setColumnPinning
     });
 
     useImperativeHandle(tableConfigRef, () => tableWrapper);
+
+    const getCommonPinningStyles = (column: Column<T>): CSSProperties => {
+        const isPinned = column.getIsPinned()
+        const isLastLeftPinnedColumn =
+          isPinned === 'left' && column.getIsLastColumn('left')
+        const isFirstRightPinnedColumn =
+          isPinned === 'right' && column.getIsFirstColumn('right')
+      
+        return {
+          boxShadow: isLastLeftPinnedColumn
+            ? '-4px 0 4px -4px gray inset'
+            : isFirstRightPinnedColumn
+              ? '4px 0 4px -4px gray inset'
+              : undefined,
+          left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+          right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+          position: isPinned ? 'sticky' : 'relative',
+          width: column.getSize(),
+          zIndex: isPinned ? 1 : 0,
+          opacity: isPinned ? 0.95 : undefined
+        }
+      }
 
     const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton, [enableSearch, showAddButton, showDeleteButton]);
 
@@ -116,12 +147,20 @@ export default function FpTable<T> ({
             toReturn.splice(0, 0, EXPAND_DETAILS_COLUMN);
             setTableColumns(toReturn);
         }
-    }, [columns]);
+    }, [columns, data]);
 
     /** Rows change */
     useEffect(()=>{
         tableWrapper.resetRowSelection();
+        tableWrapper.resetExpanded();
+        setData(rows);
     }, [rows]);
+
+    /** Columns pinning change */
+    useEffect(()=>{
+        if (!pinnedColumns) return;
+        setColumnPinning(pinnedColumns)
+    }, [pinnedColumns]);
 
     /**First time table render */
     useEffect(()=>{
@@ -140,7 +179,6 @@ export default function FpTable<T> ({
             if (header.column.id === EXPAND_DETAILS_COLUMN.id) continue;
             sizingStartToSet[header.id] = Math.max(autofillWidth, MIN_COLUMN_SIZE);
         }
-        console.log(sizingStartToSet);
         tableWrapper.setColumnSizing(sizingStartToSet);
     }, [tableRef.current, tableColumns])
 
@@ -181,14 +219,16 @@ export default function FpTable<T> ({
                 {tableWrapper.getHeaderGroups().map((headerGroup) =>
                     <div className="table-header-group" key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
-                            <div className="table-header average" key={header.id} style={{width: `var(--header-${header?.id}-size)`}}>
+                            <div className={`table-header average ${header.column.getIsPinned() ? "pinned" : ""}`} key={header.id}
+                                style={{width: `var(--header-${header?.id}-size)`, ...getCommonPinningStyles(header.column)}}>
                                 <div className="header-data" onClick={header.column.getToggleSortingHandler()}>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                     {header.column.getIsSorted() && <Icon iconName={{
                                         asc: ICONS.ARROW_DROP_UP,
                                         desc: ICONS.ARROW_DROP_DOWN,
                                     }[header.column.getIsSorted() as string]!}/>}
-                                    
+                                    {header.column.getIsPinned() && <a onClick={()=>header.column.pin(false)}>
+                                        <Icon className="small" iconName={ICONS.KEEP}/></a>}
                                 </div>
                                 <div className="spacer"></div>
                                 {(header.column.columnDef.enableResizing ?? true) &&
@@ -205,7 +245,8 @@ export default function FpTable<T> ({
                 )}
                 {/**No data */}
                 {!tableWrapper.getRowModel().rows || tableWrapper.getRowModel().rows.length == 0 && <div className="table-row">
-                    <div className="table-cell" style={{width: tableRef.current?.clientWidth, textAlign: 'center'}}>
+                    <div className="table-cell" style={{width: tableRef.current?.clientWidth, textAlign: 'center',
+                        position: 'sticky', left: '0px'}}>
                         <span className="title">{t("table.no_data")}</span>
                     </div>
                 </div>}
@@ -217,7 +258,8 @@ export default function FpTable<T> ({
                         + (row.getCanSelect() ? "selectable" : "")} 
                         onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
                             {row.getVisibleCells().map(cell =>
-                                <div className="table-cell" key={cell.id} style={{width: `var(--col-${cell.column.id}-size)`}}>
+                                <div className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`} key={cell.id}
+                                    style={{width: `var(--col-${cell.column.id}-size)`, ...getCommonPinningStyles(cell.column)}}>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </div>
                             )}
