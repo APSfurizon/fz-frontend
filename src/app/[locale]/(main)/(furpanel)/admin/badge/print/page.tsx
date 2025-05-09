@@ -9,7 +9,7 @@ import {
 } from "@/lib/api/admin/advancedPrint";
 import { runRequest } from "@/lib/api/global";
 import useTitle from "@/lib/api/hooks/useTitle";
-import { buildSearchParams, getParentDirectory } from "@/lib/utils";
+import { buildSearchParams, getParentDirectory, isEmpty } from "@/lib/utils";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -83,12 +83,16 @@ export default function AdvancedBadgePrint() {
         setPrintLoading(true);
         const regularBadgeCodes = regularBadgeRows.map(row => row.user.userId).join(",");
         const fursuitBadgeCodes = fursuitBadgeRows.map(row => row.fursuit.id).join(",");
-        Promise.all([
-            runRequest(new GetRenderedCommonBadgesApiAction(), undefined, undefined,
-                buildSearchParams({ "userIds": [regularBadgeCodes] })),
-            runRequest(new GetRenderedFursuitBadgesApiAction(), undefined, undefined,
-                buildSearchParams({ "fursuitIds": [fursuitBadgeCodes] }))
-        ])
+        const promises: Promise<any>[] = [];
+        if (!isEmpty(regularBadgeCodes)) {
+            promises.push(runRequest(new GetRenderedCommonBadgesApiAction(), undefined, undefined,
+            buildSearchParams({ "userIds": [regularBadgeCodes] })));
+        }
+        if (!isEmpty(fursuitBadgeCodes)) {
+            promises.push(runRequest(new GetRenderedFursuitBadgesApiAction(), undefined, undefined,
+                buildSearchParams({ "fursuitIds": [fursuitBadgeCodes] })));
+        }
+        Promise.all(promises)
             .then(responses => responses.forEach(response => {
                 const res = response as Response;
                 res.blob().then((badgesBlob) => {
