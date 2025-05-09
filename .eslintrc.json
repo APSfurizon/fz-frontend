@@ -1,10 +1,24 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "plugin:deprecation/recommended"],
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:deprecation/recommended"
+  ],
   "plugins": [
     "spellcheck"
   ],
+  "parser": "@typescript-eslint/parser", // Uses TypeScript parser for ESLint
+  "parserOptions": {
+    "project": "./tsconfig.json" // Ensures TypeScript is linted according to the project's tsconfig.json
+  },
   "rules": {
     "deprecation/deprecation": 1,
-    "max-len": "warn"
+    "max-len": [
+      "warn",
+      {
+        "code": 120
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

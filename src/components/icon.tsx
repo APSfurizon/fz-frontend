@@ -93,6 +93,7 @@ export const ICONS = Object.freeze({
     STAR: "star",
     SYNC: "sync",
     TRANSGENDER: "transgender",
+    TUNE: "tune",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
 });

@@ -467,6 +467,38 @@
               "choose_badge": "Choose the badge type to print",
               "fursuit": "Fursuit",
               "common": "Common"
+            },
+            "advanced_mode": {
+              "title": "Advanced printing",
+              "regular": {
+                "columns": {
+                  "user": "User",
+                  "serial": "Serial",
+                  "sponsorship": "Sponsorship"
+                },
+                "title": "User badges"
+              },
+              "search": {
+                "label": "Search badges",
+                "help": "Press enter to search",
+                "serial": {
+                  "placeholder": "Search by serial ranges"
+                },
+                "order_code": {
+                  "placeholder": "Search by order"
+                }
+              },
+              "print": "Print",
+              "Search": "Search",
+              "fursuit": {
+                "title": "Fursuit badges",
+                "columns": {
+                  "species": "Species",
+                  "sona_name": "Fursona name",
+                  "serial": "Serial",
+                  "sponsorship": "Sponsorship"
+                }
+              }
             }
           }
         },

@@ -7,6 +7,7 @@ import ModalError from "@/components/modalError";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
 import { ApiAction, runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 
 enum StepType {
@@ -15,7 +16,7 @@ enum StepType {
     ADVANCED_SETTINGS,
 }
 
-export default function AdvancedPrintingDialog ({
+export default function BadgePrintingDialog ({
     open,
     onClose,
     loading,
@@ -29,6 +30,7 @@ export default function AdvancedPrintingDialog ({
     const t = useTranslations();
     const {showModal} = useModalUpdate();
     const [step, setStep] = useState(StepType.CHOOSE_PRINT_MODE);
+    const router = useRouter();
 
     const closeModal = () => {
         setStep(StepType.CHOOSE_PRINT_MODE);
@@ -66,7 +68,7 @@ export default function AdvancedPrintingDialog ({
             <span className="title">{t("furpanel.admin.events.badges.print.select_mode")}</span>
             <div className="horizontal-list gap-4mm">
                 <Button busy={loading} onClick={()=>setStep(StepType.SIMPLE)} iconName={ICONS.CHECK_CIRCLE}>{t("furpanel.admin.events.badges.print.simple_mode.title")}</Button>
-                <Button busy={loading} disabled>{t("common.coming_soon")}</Button>
+                <Button busy={loading} onClick={()=>router.push('admin/badge/print')} iconName={ICONS.TUNE}>{t("furpanel.admin.events.badges.print.advanced_mode.title")}</Button>
             </div>
         </>}
         {step == StepType.SIMPLE && <>
