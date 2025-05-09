@@ -1,6 +1,9 @@
-import { ApiDetailedErrorResponse, ApiErrorDetail, ApiErrorResponse } from "./api/global";
+import { ApiErrorResponse } from "./api/global";
 import { getFlagEmoji } from "./components/userPicture";
-import { API_BASE_URL, API_IMAGE_URL, APP_VERSION, CHANGELOGS_ENABLED, MEMBERSHIP_STARTING_YEAR, READ_CHANGELOG_STORAGE_NAME } from "./constants";
+import { 
+    API_IMAGE_URL, APP_VERSION, CHANGELOGS_ENABLED, 
+    MEMBERSHIP_STARTING_YEAR, READ_CHANGELOG_STORAGE_NAME
+} from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
             HOUR_TS = 1000 * 60 * 60,
@@ -56,13 +59,14 @@ export function buildSearchParams (init: Record<string, string | string[]>): URL
     return params;
 }
 
-export function setCookie(cookieName: string, value: string, expiry: Date, path: string = "/", sameSite: string  = "lax") {
+export function setCookie(cookieName: string, value: string, expiry: Date,
+        path: string = "/", sameSite: string  = "lax") {
     document.cookie = `${cookieName}=${value};expires=${expiry.toUTCString()};path=${path};sameSite=${sameSite}`;
 }
 
 export function getCookie(cookieName: string) {
-    let name = cookieName + "=";
-    let ca = document.cookie.split(';');
+    const name = cookieName + "=";
+    const ca = document.cookie.split(';');
     for(let i = 0; i < ca.length; i++) {
       let c = ca[i];
       while (c.charAt(0) == ' ') {
@@ -157,9 +161,9 @@ export function getCountArray(index: number, limit: number, min: number, max: nu
     const toReturn: number[] = [];
     const half = Math.floor(limit / 2);
     let start = index - half;
-    let diffStart = Math.abs(start - Math.max(start, min));
-    let end = index + 1 + half + diffStart;
-    let diffEnd = Math.abs(end - Math.min(end, max));
+    const diffStart = Math.abs(start - Math.max(start, min));
+    const end = index + 1 + half + diffStart;
+    const diffEnd = Math.abs(end - Math.min(end, max));
     start -= diffEnd;
 
     for (let i = Math.max(start, min); i<Math.min(end, max); i++){

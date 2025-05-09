@@ -3,14 +3,16 @@ import Icon, { ICONS } from "@/components/icon";
 import Button from "@/components/input/button";
 import JanInput from "@/components/input/janInput";
 import FpTable from "@/components/table/fpTable";
-import { BadgeSearchData, FursuitBadge, RegularBadge } from "@/lib/api/admin/advancedPrint";
+import { BadgeSearchData, FursuitBadge, RegularBadge, SearchFursuitBadgesResponse,
+    SearchRegularBadgesResponse } from "@/lib/api/admin/advancedPrint";
 import { ApiAction, runRequest } from "@/lib/api/global";
 import { isEmpty } from "@/lib/utils";
 import { ColumnDef, Table } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { Dispatch, MouseEvent, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 
-export default function BadgeTable<T extends FursuitBadge | RegularBadge, U extends any> ({
+export default function BadgeTable<T extends FursuitBadge | RegularBadge,
+    U extends SearchRegularBadgesResponse | SearchFursuitBadgesResponse> ({
     rows,
     setRows,
     columns,
@@ -57,7 +59,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge, U exte
         })
     }
 
-    const onDeleteRegularBadges = (e: MouseEvent<HTMLButtonElement>) => {
+    const onDeleteRegularBadges = () => {
         if(!table.current) return;
         const selected = table.current.getSelectedRowModel();
         const idsToDelete = selected.flatRows.map(bdg=>getRowId(bdg.original));
@@ -70,12 +72,14 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge, U exte
                     <span className="title small">{title}</span>
                 </div>
                 <div className="horizontal-list gap-2mm">
-                    <JanInput style={{flexGrow: 1}} placeholder={t("furpanel.admin.events.badges.print.advanced_mode.search.serial.placeholder")}
+                    <JanInput style={{flexGrow: 1}}
+                        placeholder={t("furpanel.admin.events.badges.print.advanced_mode.search.serial.placeholder")}
                         onKeyDown={e=>e.key === "Enter" && searchBadges()}
                         onChange={e=>setBadgeSearchQuery({serialQuery: e.target.value})}
                         initialValue={badgeSearchQuery?.serialQuery}
                         disabled={badgeLoading}/>
-                    <JanInput style={{flexGrow: 1}} placeholder={t("furpanel.admin.events.badges.print.advanced_mode.search.order_code.placeholder")}
+                    <JanInput style={{flexGrow: 1}}
+                        placeholder={t("furpanel.admin.events.badges.print.advanced_mode.search.order_code.placeholder")}
                         onKeyDown={e=>e.key === "Enter" && searchBadges()}
                         onChange={e=>setBadgeSearchQuery({orderQuery: e.target.value})}
                         initialValue={badgeSearchQuery?.orderQuery}
@@ -87,7 +91,9 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge, U exte
                             {t("furpanel.admin.events.badges.print.advanced_mode.Search")}
                     </Button>
                 </div>
-                <span className="descriptive tiny color-subtitle">{t("furpanel.admin.events.badges.print.advanced_mode.search.help")}</span>
+                <span className="descriptive tiny color-subtitle">
+                    {t("furpanel.admin.events.badges.print.advanced_mode.search.help")}
+                </span>
                 
                 <FpTable<T> columns={columns} rows={rows} showDeleteButton
                     enablePagination enableRowSelection enableMultiRowSelection sort={[{id: "serial", desc: false}]}
