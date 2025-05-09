@@ -466,6 +466,38 @@
               "choose_badge": "Scegli il tipo di badge da stampare",
               "fursuit": "Fursuit",
               "common": "Comune"
+            },
+            "advanced_mode": {
+              "title": "Stampa avanzata",
+              "regular": {
+                "columns": {
+                  "user": "Utente",
+                  "serial": "Seriale",
+                  "sponsorship": "Sponsor"
+                },
+                "title": "Badge utenti"
+              },
+              "search": {
+                "label": "Cerca badge",
+                "help": "Premere invio per cercare",
+                "serial": {
+                  "placeholder": "Cerca intervalli di seriali"
+                },
+                "order_code": {
+                  "placeholder": "Cerca per ordine"
+                }
+              },
+              "print": "Stampa",
+              "Search": "Cerca",
+              "fursuit": {
+                "title": "Badge fursuit",
+                "columns": {
+                  "species": "Specie",
+                  "sona_name": "Nome fursona",
+                  "serial": "Seriale",
+                  "sponsorship": "Sponsor"
+                }
+              }
             }
           }
         },

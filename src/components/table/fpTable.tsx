@@ -30,7 +30,8 @@ export default function FpTable<T> ({
     onSelectionChange,
     tableConfigRef,
     tableOptions,
-    pinnedColumns
+    pinnedColumns,
+    sort = []
 }: Readonly<{
     rows: T[],
     columns: ColumnDef<T>[],
@@ -50,7 +51,8 @@ export default function FpTable<T> ({
     onSelectionChange?: (e: RowSelectionState) => void,
     tableConfigRef?: MutableRefObject<Table<T> | undefined>,
     tableOptions?: Partial<TableOptions<T>>,
-    pinnedColumns?: ColumnPinningState
+    pinnedColumns?: ColumnPinningState,
+    sort?: SortingState
 }>) {
     const columnHelper = createColumnHelper<T>();
 
@@ -162,6 +164,12 @@ export default function FpTable<T> ({
         setColumnPinning(pinnedColumns)
     }, [pinnedColumns]);
 
+    /** Columns sorting change */
+    useEffect(()=>{
+        if (!sort) return;
+        setSorting(sort)
+    }, [sort]);
+
     /**First time table render */
     useEffect(()=>{
         if (!tableRef.current) return;
@@ -211,7 +219,7 @@ export default function FpTable<T> ({
                 onChange={(e)=> tableWrapper.setGlobalFilter(String(e.target.value))}/>}
             {showAddButton && <Button iconName={ICONS.ADD} onClick={onAdd} title={t("table.add.title")}/>}
             {showDeleteButton && <Button iconName={ICONS.DELETE} onClick={onDelete} title={t("table.delete.title")}
-                disabled={!tableWrapper.getIsSomeRowsSelected()}/>}
+                disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()}/>}
         </div>}
         <div className="table rounded-s gap-2mm" style={{...columnSizeVars, width: '100%', ...tableStyle}} ref={tableRef}>
             <div className="table-data rounded-s" style={{width: tableWrapper.getTotalSize()}}>

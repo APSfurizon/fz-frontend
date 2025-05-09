@@ -1,13 +1,14 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { ApiAction, ApiErrorResponse, RequestType } from "../global";
 import { MediaData } from "../media";
+import { SponsorType } from "../user";
 
 export interface FursuitDetails {
     id: number,
     name: string,
     species: string,
     propic?: MediaData,
-    sponsorship: string
+    sponsorship: SponsorType
 }
 
 export interface Fursuit {

@@ -1,11 +1,35 @@
-import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, MouseEvent, useEffect, useState } from "react";
+import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, KeyboardEvent, MouseEvent, useEffect, useState } from "react";
 import Icon, { ICONS } from "../icon";
 import "@/styles/components/janInput.css";
 import { useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 
-export default function JanInput ({busy=false, className, disabled=false, fieldName, hasError=false, helpText, inputStyle, inputType="text", label, labelStyle, minLength, maxLength, onChange, onClick, pattern, placeholder, prefix, readOnly=false, required=false, style, initialValue, autocomplete }: Readonly<{
+export default function JanInput ({
+    busy=false,
+    className,
+    disabled=false,
+    fieldName,
+    hasError=false,
+    helpText,
+    inputStyle,
+    inputType="text",
+    label,
+    labelStyle,
+    minLength,
+    maxLength,
+    onChange,
+    onClick,
+    onKeyDown,
+    pattern,
+    placeholder,
+    prefix,
+    readOnly=false,
+    required=false,
+    style,
+    initialValue,
+    autocomplete
+}: Readonly<{
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -20,7 +44,8 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     minLength?: number,
     maxLength?: number,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
-    onClick?: (e: MouseEvent<HTMLInputElement>) => void
+    onClick?: (e: MouseEvent<HTMLInputElement>) => void,
+    onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void,
     pattern?: RegExp,
     placeholder?: string,
     prefix?: string,
@@ -29,8 +54,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
     style?: CSSProperties,
     initialValue?: string | number,
     autocomplete?: HTMLInputAutoCompleteAttribute | undefined
-  }>) {
-
+}>) {
     /* States */
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
@@ -90,6 +114,7 @@ export default function JanInput ({busy=false, className, disabled=false, fieldN
                     value={inputValue ?? ""}
                     onChange={handleChange}
                     onClick={onClick}
+                    onKeyDown={onKeyDown}
                     minLength={minLength}
                     maxLength={maxLength}
                     autoComplete={autocomplete}

@@ -104,7 +104,7 @@ export default function RolesListPage () {
 
     const columnHelper = createColumnHelper<RoleInfo>();
 
-    const columns: ColumnDef<RoleInfo>[] = useMemo(()=>{
+    const columns: ColumnDef<RoleInfo, any>[] = useMemo(()=>{
         return [
             columnHelper.accessor('roleDisplayName', {
                 header: t("furpanel.admin.users.security.roles.columns.name")

@@ -11,7 +11,7 @@ import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pre
 import { runRequest } from "@/lib/api/global";
 import { AdminCapabilitesResponse, EMPTY_CAPABILITIES, ExportHotelRoomsApiAction, GetAdminCapabilitiesApiAction } from "@/lib/api/admin/admin";
 import { GetRenderedCommonBadgesApiAction, RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction } from "@/lib/api/admin/badge";
-import AdvancedPrintingDialog from "./_dialogs/advancedPrinting";
+import BadgePrintingDialog from "./_dialogs/badgePrinting";
 
 export default function AdminPage() {
   const t = useTranslations();
@@ -243,7 +243,7 @@ export default function AdminPage() {
         </div>
       </div>
     </div>
-    <AdvancedPrintingDialog open={renderBadgesModalOpen} onClose={()=>setRenderBadgesModalOpen(false)}
+    <BadgePrintingDialog open={renderBadgesModalOpen} onClose={()=>setRenderBadgesModalOpen(false)}
       loading={renderBadgesLoading} setLoading={setRenderBadgesLoading}/>
   </>;
 }
