@@ -4,7 +4,16 @@ import "@/styles/components/checkbox.css";
 import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 
-export default function Checkbox ({initialValue, children, className, busy, disabled, fieldName, onClick, style}: Readonly<{
+export default function Checkbox ({
+    initialValue,
+    children,
+    className,
+    busy,
+    disabled,
+    fieldName,
+    onClick,
+    style
+}: Readonly<{
     initialValue?: boolean,
     children?: React.ReactNode,
     className?: string,
@@ -20,12 +29,11 @@ export default function Checkbox ({initialValue, children, className, busy, disa
     const [lastInitialValue, setLastInitialValue] = useState<boolean> ();
     const [busyState, setBusyState] = useState(busy ?? false);
     const { reset = false } = useFormContext();
-    const clickPresent = onClick != undefined;
 
     const clickEvent = (event: MouseEvent<HTMLButtonElement>) => {
         if (!disabled && !busyState) {
             setChecked(!checked);
-            clickPresent && onClick(event, !checked, setChecked, setBusyState);
+            if (onClick != undefined) onClick(event, !checked, setChecked, setBusyState);
         }
     }
 
@@ -42,7 +50,7 @@ export default function Checkbox ({initialValue, children, className, busy, disa
 
     return <>
         <input type="hidden" name={fieldName} value={""+checked}></input>
-        <button type="button" onClick={clickEvent}
+        <button type="button" onClick={clickEvent} style={{...style}}
             disabled={disabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
                 {busyState 
