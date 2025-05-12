@@ -15,30 +15,29 @@ export interface Fursuit {
     bringingToEvent: boolean,
     ownerId: number,
     showInFursuitCount: boolean,
+    showOwner: boolean,
     fursuit: FursuitDetails
 }
 
 export class AddFursuitDTOBuilder implements FormDTOBuilder<FormData> {
-    mapToDTO = (data: FormData) => {
-        return data;
-    }
+    mapToDTO = (data: FormData) => data;
 }
 
-export class AddFursuitFormAction extends FormApiAction<FormData, Boolean, ApiErrorResponse> {
+export class AddFursuitFormAction extends FormApiAction<FormData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddFursuitDTOBuilder ();
     urlAction = "fursuits/add-with-image";
 }
 
-export class EditFursuitFormAction extends FormApiAction<FormData, Boolean, ApiErrorResponse> {
+export class EditFursuitFormAction extends FormApiAction<FormData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddFursuitDTOBuilder ();
     urlAction = "fursuits";
 }
 
-export class DeleteFursuitApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class DeleteFursuitApiAction extends ApiAction<boolean, ApiErrorResponse> {
     method = RequestType.DELETE;
     authenticated = true;
     urlAction = "fursuits";

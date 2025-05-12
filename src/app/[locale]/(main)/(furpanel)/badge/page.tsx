@@ -5,7 +5,8 @@ import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
 import useTitle from "@/lib/api/hooks/useTitle";
 import { useFormatter, useTranslations } from "next-intl";
-import { BadgeStatusApiResponse, DeleteBadgeAction, BadgeDataChangeFormAction, GetBadgeStatusAction } from "@/lib/api/badge/badge";
+import { BadgeStatusApiResponse, DeleteBadgeAction, BadgeDataChangeFormAction, GetBadgeStatusAction }
+  from "@/lib/api/badge/badge";
 import Upload from "@/components/input/upload";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import StatusBox from "@/components/statusBox";
@@ -40,7 +41,7 @@ export default function BadgePage() {
   const uploadBadge = (blob?: Blob) => {
     if (!blob) return;
     const dataToUpload: FormData = new FormData();
-    dataToUpload.append("image", blob);+
+    dataToUpload.append("image", blob);
     setLoading(true);
     runRequest(new UploadBadgeAction(), undefined, dataToUpload)
     .then(()=>{
@@ -54,7 +55,7 @@ export default function BadgePage() {
   }
 
   // Badge deletion
-  const promptBadgeDelete = (id: number) => {
+  const promptBadgeDelete = () => {
     showModal(t("furpanel.badge.messages.confirm_deletion.title"),
       <div className="vertical-list gap-2mm">
         <span>{t("furpanel.badge.messages.confirm_deletion.description")}</span>
@@ -63,14 +64,14 @@ export default function BadgePage() {
             onClick={hideModal}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
           <Button type="submit" className="success" iconName={ICONS.CHECK}
-            onClick={()=>deleteBadge(id)}>{t("common.confirm")}</Button>
+            onClick={()=>deleteBadge()}>{t("common.confirm")}</Button>
         </div>
       </div>,
       ICONS.DELETE
     );
   }
 
-  const deleteBadge = (id: number) => {
+  const deleteBadge = () => {
     hideModal();
     setLoading(true);
     runRequest(new DeleteBadgeAction())
@@ -124,10 +125,6 @@ export default function BadgePage() {
       e.append("delete-image", ""+(deleteFursuitImage && !fursuitBlob))
     }
     return e;
-  }
-
-  const checkFursuitBadge = (e: FormData, form: HTMLFormElement): boolean => {
-    return true;
   }
 
   const removeCurrentImage = () => {
@@ -208,7 +205,12 @@ export default function BadgePage() {
       <span className="title medium horizontal-list gap-2mm">
         {t("furpanel.badge.your_badges")}
         {badgeStatus && <StatusBox status="warning">
-          {t("furpanel.badge.deadline", {badgeDeadline: formatter.dateTime(new Date(badgeStatus.badgeEditingDeadline), {dateStyle: "medium"})})}
+          {t("furpanel.badge.deadline",
+            {
+              badgeDeadline: formatter.dateTime(new Date(badgeStatus.badgeEditingDeadline),
+                {dateStyle: "medium"})
+            }
+          )}
           </StatusBox>
         }
         {loading && <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>}
@@ -226,7 +228,10 @@ export default function BadgePage() {
           <div className="fursona-change rounded-m horizontal-list flex-vertical-center gap-2mm flex-wrap">
             <div className="vertical-list">
               <span className="title"><b>{t("furpanel.badge.name")}</b>: {badgeStatus?.mainBadge?.fursonaName}</span>
-              <span className="title bold"><b>{t("furpanel.badge.locale")}</b>: {badgeStatus?.mainBadge?.locale && getFlagEmoji(badgeStatus?.mainBadge?.locale)}</span>
+              <span className="title bold">
+                <b>{t("furpanel.badge.locale")}</b>:&nbsp;
+                {badgeStatus?.mainBadge?.locale && getFlagEmoji(badgeStatus?.mainBadge?.locale)}
+              </span>
             </div>
             <div className="spacer"></div>
             <Button busy={loading} iconName={ICONS.EDIT_SQUARE} onClick={()=>setChangeDataModalOpen (true)}>
@@ -243,7 +248,9 @@ export default function BadgePage() {
       <div className="fursuit-section rounded-m vertical-list gap-2mm">
         <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
           <Icon iconName={ICONS.PETS}></Icon>
-          <span className="title average">{t("furpanel.badge.your_fursuits", {amount: badgeStatus?.fursuits.length ?? 0})}</span>
+          <span className="title average">
+            {t("furpanel.badge.your_fursuits", {amount: badgeStatus?.fursuits.length ?? 0})}
+          </span>
           {loading && <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>}
           <div className="spacer"></div>
           <Button iconName={ICONS.ADD_CIRCLE} title={t("common.CRUD.add")} onClick={promptAddFursuit}>
@@ -251,7 +258,8 @@ export default function BadgePage() {
         </div>
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
-          {badgeStatus?.fursuits.map((fursuitData: Fursuit, index: number)=><div key={index} className="fursuit gap-2mm rounded-l">
+          {badgeStatus?.fursuits.map((fursuitData: Fursuit, index: number)=>
+          <div key={index} className="fursuit gap-2mm rounded-l">
             <div className="main-data gap-2mm">
               <Image unoptimized className="fursuit-image rounded-s" width={500} height={500} alt="" quality={100}
                 src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}>
@@ -270,6 +278,10 @@ export default function BadgePage() {
                   {fursuitData.showInFursuitCount && <span className="title tiny">
                     <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
                     {t("furpanel.badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
+                  </span>}
+                  {fursuitData.showOwner && <span className="title tiny">
+                    <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                    {t("furpanel.badge.input.show_owner.label", {eventName: EVENT_NAME})}
                   </span>}
                 </div>
               </div>
@@ -297,15 +309,22 @@ export default function BadgePage() {
     </div>
 
     {/* Badge data edit modal */}
-    <Modal title={t("furpanel.badge.actions.edit_badge")} open={changeDataModalOpen} onClose={()=>setChangeDataModalOpen(false)} busy={loading}>
+    <Modal title={t("furpanel.badge.actions.edit_badge")} 
+      open={changeDataModalOpen}
+      onClose={()=>setChangeDataModalOpen(false)}
+      busy={loading}>
         <DataForm action={new BadgeDataChangeFormAction} loading={loading} setLoading={setLoading} hideSave
           className="gap-2mm" onFail={onChangeFail} onSuccess={onChangeSuccess} >
-          <JanInput inputType="text" fieldName="fursonaName" initialValue={changeDataModalOpen ? badgeStatus?.mainBadge?.fursonaName : ""}
-            label={t("furpanel.badge.input.new_name.label")} placeholder={t("furpanel.badge.input.new_name.placeholder")}>
-          </JanInput>
+          <JanInput inputType="text"
+            fieldName="fursonaName"
+            initialValue={changeDataModalOpen ? badgeStatus?.mainBadge?.fursonaName : ""}
+            label={t("furpanel.badge.input.new_name.label")}
+            placeholder={t("furpanel.badge.input.new_name.placeholder")}/>
           <AutoInput fieldName="locale" required={true} minDecodeSize={2}
-            manager={new AutoInputCountriesManager} label={t("furpanel.badge.input.new_locale.label")} 
-            placeholder={t("furpanel.badge.input.new_locale.placeholder")} helpText={t("furpanel.badge.input.new_locale.help")}
+            manager={new AutoInputCountriesManager}
+            label={t("furpanel.badge.input.new_locale.label")} 
+            placeholder={t("furpanel.badge.input.new_locale.placeholder")}
+            helpText={t("furpanel.badge.input.new_locale.help")}
             initialData={badgeStatus?.mainBadge?.locale ? [badgeStatus?.mainBadge?.locale] : undefined}/>
           <div className="horizontal-list gap-4mm">
             <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={loading} 
@@ -341,6 +360,10 @@ export default function BadgePage() {
           <Checkbox fieldName="show-in-fursuit-count" 
             initialValue={editMode ? currentFursuit?.showInFursuitCount : true}>
             {t("furpanel.badge.input.show_in_fursuit_count.label", {eventName: EVENT_NAME})}
+          </Checkbox>
+          <Checkbox fieldName="show-owner" 
+            initialValue={editMode ? currentFursuit?.showOwner : false}>
+            {t("furpanel.badge.input.show_owner.label", {eventName: EVENT_NAME})}
           </Checkbox>
           <div className="horizontal-list gap-4mm margin-top-2mm">
             <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={loading}

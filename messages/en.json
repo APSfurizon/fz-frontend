@@ -242,6 +242,9 @@
         },
         "show_in_fursuit_count": {
           "label": "Show in fursuit count"
+        },
+        "show_owner": {
+          "label": "Show in my profile"
         }
       },
       "messages": {
