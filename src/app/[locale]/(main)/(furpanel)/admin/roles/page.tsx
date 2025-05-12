@@ -3,17 +3,18 @@ import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
-import { AddRoleApiResponse, AddRoleFormAction, AllRolesResponse, DeleteRolesApiAction, GetRolesApiAction, RoleInfo } from "@/lib/api/admin/role";
+import { AddRoleApiResponse, AddRoleFormAction, AllRolesResponse,
+    DeleteRolesApiAction, GetRolesApiAction, RoleInfo } from "@/lib/api/admin/role";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { MouseEvent, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import Modal from "@/components/modal";
 import DataForm from "@/components/input/dataForm";
 import JanInput from "@/components/input/janInput";
 import FpTable from "@/components/table/fpTable";
-import { ColumnDef, createColumnHelper, Row, Table, TableOptions } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { getParentDirectory } from "@/lib/utils";
 
 export default function RolesListPage () {
@@ -49,7 +50,7 @@ export default function RolesListPage () {
     /* Role creation logic */
     const [addRoleModalOpen, setAddRoleModalOpen] = useState(false);
     
-    const promptCreateRole = (e: MouseEvent<HTMLButtonElement>) => {
+    const promptCreateRole = () => {
         setAddRoleModalOpen(true);
     }
 
@@ -96,15 +97,15 @@ export default function RolesListPage () {
         });
     }
 
-    const initialTableConfig: Partial<TableOptions<RoleInfo>> = useMemo(()=>{
+    const [initialTableConfig] = useState(()=>{
         return {
-            getRowId: (originalRow: RoleInfo, index: number, parent?: Row<RoleInfo> | undefined) => String(originalRow.roleId)
+            getRowId: (originalRow: RoleInfo) => String(originalRow.roleId)
         }
-    }, []);
+    });
 
     const columnHelper = createColumnHelper<RoleInfo>();
 
-    const columns: ColumnDef<RoleInfo, any>[] = useMemo(()=>{
+    const [columns] = useState(()=>{
         return [
             columnHelper.accessor('roleDisplayName', {
                 header: t("furpanel.admin.users.security.roles.columns.name")
@@ -127,12 +128,17 @@ export default function RolesListPage () {
                 maxSize: 88,
                 size: 88,
                 cell: props => <div className="horizontal-list gap-2mm">
-                        <Button onClick={(e)=>editRole(props.row.original)} iconName={ICONS.EDIT} title={t("common.CRUD.edit")}/>
-                        <Button className="danger" onClick={(e)=>promptDeleteRole(e, props.row.original)} iconName={ICONS.DELETE} title={t("common.CRUD.delete")}/>
+                        <Button onClick={()=>editRole(props.row.original)}
+                            iconName={ICONS.EDIT}
+                            title={t("common.CRUD.edit")}/>
+                        <Button className="danger"
+                            onClick={(e)=>promptDeleteRole(e, props.row.original)}
+                            iconName={ICONS.DELETE}
+                            title={t("common.CRUD.delete")}/>
                     </div>
             })
         ];
-    }, []);
+    });
 
     return <>
     <div className="page">
@@ -148,7 +154,10 @@ export default function RolesListPage () {
         </div>
         
         {loading && <div className="row"><LoadingPanel className="data"/></div>}
-        <FpTable<RoleInfo> rows={roles} columns={columns} tableOptions={initialTableConfig} pinnedColumns={{left: [], right: ['actions']}}></FpTable>
+        <FpTable<RoleInfo> rows={roles}
+            columns={columns}
+            tableOptions={initialTableConfig}
+            pinnedColumns={{left: [], right: ['actions']}}/>
     </div>
     {/* Role creation modal */}
     <Modal open={addRoleModalOpen} onClose={()=>setAddRoleModalOpen(false)}
