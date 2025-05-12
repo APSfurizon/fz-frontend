@@ -2,7 +2,7 @@
 import { Column, ColumnDef, ColumnPinningState, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions, useReactTable } from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
-import { CSSProperties, Fragment, MutableRefObject, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import JanInput from "../input/janInput";
 import { useTranslations } from "next-intl";
 import Button from "../input/button";
@@ -31,10 +31,10 @@ export default function FpTable<T> ({
     tableConfigRef,
     tableOptions,
     pinnedColumns,
-    sort = []
+    sort
 }: Readonly<{
     rows: T[],
-    columns: ColumnDef<T>[],
+    columns: ColumnDef<T, any>[],
     initialWrapper?: Table<T>,
     tableStyle?: CSSProperties,
     enableRowSelection?: boolean | ((row: Row<T>) => boolean),
@@ -64,26 +64,28 @@ export default function FpTable<T> ({
         maxSize: 50,
         cell: props => props.row.getCanExpand() && (
             <div className="table-expand" onClick={props.row.getToggleExpandedHandler()}>
-                <Icon className="medium" iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/>
+                <Icon className="medium"
+                    iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/>
             </div>
         )
     }), []);
-
+    
     const [tableColumns, setTableColumns] = useState(columns);
     const tableRef = useRef<HTMLDivElement>(null);
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>(sort || []);
     const [globalFilter, setGlobalFilter] = useState<any>([]);
     const [pagination, setPagination] = useState({
-        pageIndex: 0, //initial page index
-        pageSize: pageSize, //default page size
+        pageIndex: 0,
+        pageSize, //default page size
       });
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
+    const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(pinnedColumns || {
         left: [],
         right: [],
     });
     const [data, setData] = useState<T[]>([]);
-    const tableWrapper = initialWrapper ?? useReactTable({
+
+    const reactTable = useReactTable({
         ...tableOptions,
         columns: tableColumns,
         data,
@@ -96,7 +98,7 @@ export default function FpTable<T> ({
         state: {
             sorting,
             globalFilter,
-            pagination: enablePagination ? pagination : undefined,
+            pagination: pagination,
             rowSelection,
             columnPinning,
         },
@@ -107,11 +109,12 @@ export default function FpTable<T> ({
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
         globalFilterFn: 'includesString',
-        onPaginationChange: setPagination,
+        onPaginationChange: enablePagination ? setPagination : undefined,
         onRowSelectionChange: setRowSelection,
         getRowCanExpand: hasDetails,
         onColumnPinningChange: setColumnPinning
     });
+    const [tableWrapper] = useState(initialWrapper ?? reactTable);
 
     useImperativeHandle(tableConfigRef, () => tableWrapper);
 
@@ -137,7 +140,8 @@ export default function FpTable<T> ({
         }
       }
 
-    const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton, [enableSearch, showAddButton, showDeleteButton]);
+    const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton,
+        [enableSearch, showAddButton, showDeleteButton]);
 
     const t = useTranslations('components');
 
@@ -158,18 +162,6 @@ export default function FpTable<T> ({
         setData(rows);
     }, [rows]);
 
-    /** Columns pinning change */
-    useEffect(()=>{
-        if (!pinnedColumns) return;
-        setColumnPinning(pinnedColumns)
-    }, [pinnedColumns]);
-
-    /** Columns sorting change */
-    useEffect(()=>{
-        if (!sort) return;
-        setSorting(sort)
-    }, [sort]);
-
     /**First time table render */
     useEffect(()=>{
         if (!tableRef.current) return;
@@ -181,7 +173,7 @@ export default function FpTable<T> ({
             extra += h.column.getSize()
         })
         const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 5);
-        let sizingStartToSet: Record<string, number> = {};
+        const sizingStartToSet: Record<string, number> = {};
         for (let  i = 0; i < headers.length; i++) {
             const header = headers[i];
             if (header.column.id === EXPAND_DETAILS_COLUMN.id) continue;
@@ -190,13 +182,9 @@ export default function FpTable<T> ({
         tableWrapper.setColumnSizing(sizingStartToSet);
     }, [tableRef.current, tableColumns])
 
-    useEffect(() => {
-        setPagination(prev => ({...prev, pageSize: pageSize}));
-    }, [pageSize]);
-
     /* Row selection change */
     useEffect(()=>{
-        onSelectionChange && onSelectionChange(rowSelection);
+        if (onSelectionChange) onSelectionChange(rowSelection);
     }, [rowSelection])
 
     const columnSizeVars = useMemo(() => {
@@ -211,7 +199,7 @@ export default function FpTable<T> ({
         }
         return colSizes;
     }, [tableWrapper.getState().columnSizingInfo, tableWrapper.getState().columnSizing]);
-    
+
     return <div className="table-container title rounded-m">
         {enableToolbar && <div className="table-toolbar horizontal-list gap-2mm">
             <div className="spacer"></div>
@@ -221,14 +209,19 @@ export default function FpTable<T> ({
             {showDeleteButton && <Button iconName={ICONS.DELETE} onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()}/>}
         </div>}
-        <div className="table rounded-s gap-2mm" style={{...columnSizeVars, width: '100%', ...tableStyle}} ref={tableRef}>
+        <div className="table rounded-s gap-2mm" ref={tableRef}
+            style={{...columnSizeVars, width: '100%', ...tableStyle}}>
             <div className="table-data rounded-s" style={{width: tableWrapper.getTotalSize()}}>
                 {/**Header groups */}
                 {tableWrapper.getHeaderGroups().map((headerGroup) =>
                     <div className="table-header-group" key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
-                            <div className={`table-header average ${header.column.getIsPinned() ? "pinned" : ""}`} key={header.id}
-                                style={{width: `var(--header-${header?.id}-size)`, ...getCommonPinningStyles(header.column)}}>
+                            <div key={header.id}
+                                className={`table-header average ${header.column.getIsPinned() ? "pinned" : ""}`}
+                                style={{
+                                    width: `var(--header-${header?.id}-size)`,
+                                    ...getCommonPinningStyles(header.column)
+                                }}>
                                 <div className="header-data" onClick={header.column.getToggleSortingHandler()}>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                     {header.column.getIsSorted() && <Icon iconName={{
