@@ -31,3 +31,9 @@ export class RemindOrderLinkApiAction extends ApiAction<any, ApiErrorResponse> {
     method = RequestType.GET;
     urlAction = "admin/mail-reminders/order-linking";
 }
+
+export class RemindRoomsNotFullApiAction extends ApiAction<any, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "admin/mail-reminders/room-not-full";
+}

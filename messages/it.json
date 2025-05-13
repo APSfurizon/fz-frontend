@@ -509,6 +509,10 @@
           "remind_order_linking": "Notifica ordini disconnessi",
           "export_rooms": "Esporta stanze hotel",
           "errors": {}
+        },
+        "rooms": {
+          "title": "Stanze",
+          "remind_rooms_not_full": "Notifica stanze non riempite"
         }
       },
       "membership_manager": {

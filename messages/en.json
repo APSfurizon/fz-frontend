@@ -510,6 +510,10 @@
           "remind_order_linking": "Remind unlinked orders",
           "export_rooms": "Export hotel rooms",
           "errors": {}
+        },
+        "rooms": {
+          "title": "Rooms",
+          "remind_rooms_not_full": "Remind rooms not full"
         }
       },
       "membership_manager": {

@@ -2,7 +2,7 @@
 import FpTable from "@/components/table/fpTable";
 import { ColumnDef, Table } from "@tanstack/react-table";
 import { Row } from "@tanstack/react-table";
-import { MouseEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import * as tableUtil from "@/lib/components/table/fpTable";
 
 export type DebugRowType = {
@@ -67,9 +67,9 @@ const getDetails = (row: Row<DebugRowType>) => {
 export default function Home() {
     const [rows, setRows] = useState(defaultRows);
 
-    const tableRef = useRef<Table<DebugRowType>>();
+    const tableRef = useRef<Table<DebugRowType>>(null);
 
-    const onAddRow = (e: MouseEvent) => {
+    const onAddRow = () => {
         const toSet = [{
             name: "new",
             description: "light",
@@ -78,7 +78,7 @@ export default function Home() {
         setRows(toSet);
     }
 
-    const onDelete = (e: MouseEvent) => {
+    const onDelete = () => {
         if (!tableRef.current) return;
         const rows = tableUtil.getAllRows(tableRef.current);
         const idsToDelete = tableUtil.getSelectedRows(tableRef.current).map(row=>row.id);

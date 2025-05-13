@@ -1,8 +1,11 @@
 "use client"
-import { Column, ColumnDef, ColumnPinningState, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions, useReactTable } from "@tanstack/react-table";
+import { Column, ColumnDef, ColumnPinningState, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel,
+    getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions,
+    useReactTable} from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
-import { CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef,
+    useState } from "react";
 import JanInput from "../input/janInput";
 import { useTranslations } from "next-intl";
 import Button from "../input/button";
@@ -29,6 +32,7 @@ export default function FpTable<T> ({
     getDetails,
     onSelectionChange,
     tableConfigRef,
+    tableElementRef,
     tableOptions,
     pinnedColumns,
     sort
@@ -49,7 +53,8 @@ export default function FpTable<T> ({
     hasDetails?: (row: Row<T>) => boolean,
     getDetails?: (row: Row<T>) => React.ReactNode,
     onSelectionChange?: (e: RowSelectionState) => void,
-    tableConfigRef?: MutableRefObject<Table<T> | undefined>,
+    tableConfigRef?: MutableRefObject<Table<T> | null>,
+    tableElementRef?: MutableRefObject<HTMLDivElement | null>,
     tableOptions?: Partial<TableOptions<T>>,
     pinnedColumns?: ColumnPinningState,
     sort?: SortingState
@@ -117,6 +122,7 @@ export default function FpTable<T> ({
     const [tableWrapper] = useState(initialWrapper ?? reactTable);
 
     useImperativeHandle(tableConfigRef, () => tableWrapper);
+    useImperativeHandle(tableElementRef, () => tableRef.current!);
 
     const getCommonPinningStyles = (column: Column<T>): CSSProperties => {
         const isPinned = column.getIsPinned()

@@ -34,7 +34,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
     const t = useTranslations();
     const [badgeSearchQuery, setBadgeSearchQuery] = useState<BadgeSearchData>();
     const [badgeLoading, setBadgeLoading] = useState(false);
-    const table = useRef<Table<T>> ();
+    const table = useRef<Table<T>> (null);
 
     const searchBadges = () => {
         if (!badgeSearchQuery ||
