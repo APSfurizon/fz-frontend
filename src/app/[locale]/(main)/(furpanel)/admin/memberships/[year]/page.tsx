@@ -3,12 +3,14 @@ import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
-import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse, UserCardData } from "@/lib/api/admin/membershipManager";
+import { AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction,
+    ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse,
+    UserCardData } from "@/lib/api/admin/membershipManager";
 import { runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import Checkbox from "@/components/input/checkbox";
 import UserPicture from "@/components/userPicture";
 //import "@/styles/table.css";
@@ -27,7 +29,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
     const router = useRouter();
     const path = usePathname();
     const t = useTranslations();
-    const {showModal, hideModal} = useModalUpdate();
+    const {showModal} = useModalUpdate();
 
     // Logic
     const [loading, setLoading] = useState(false);
@@ -51,7 +53,10 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             .catch((err)=>{
                 showModal(
                     t("common.error"), 
-                    <ModalError error={err} translationRoot="furpanel" translationKey="admin.membership_manager.errors"></ModalError>
+                    <ModalError error={err}
+                        translationRoot="furpanel"
+                        translationKey="admin.membership_manager.errors"
+                    />
                 );
                 setChecked(!checked);
             })
@@ -70,7 +75,10 @@ export default function MembershipView({params}: {params: Promise<{ year: number
         setAddModalOpen(false);
         showModal(
             t("common.error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="admin.membership_manager.errors"></ModalError>
+            <ModalError error={err}
+                translationRoot="furpanel"
+                translationKey="admin.membership_manager.errors"
+            />
         );
     }
 
@@ -108,16 +116,19 @@ export default function MembershipView({params}: {params: Promise<{ year: number
     }, [cardsData])
 
     // User card table logic
+    const tableRef = useRef<HTMLDivElement>(null);
+
     const columnHelper = createColumnHelper<UserCardData>();
 
     const rows = useMemo(()=> {
-        return [...cardsData?.cards ?? [], ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map(wc=>convertCardlessUser(wc))]
-            .filter(cd => (showDuplicate && cd.duplicate) || (showMissing && !cd.membershipCard) ||
+        return [...cardsData?.cards ?? [],
+            ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map(wc=>convertCardlessUser(wc))
+            ].filter(cd => (showDuplicate && cd.duplicate) || (showMissing && !cd.membershipCard) ||
                 (!hideValid && cd.membershipCard && !cd.duplicate));
     }, [cardsData, showMissing, showDuplicate, hideValid]);
 
     const columns: ColumnDef<UserCardData, any>[] = [
-        columnHelper.accessor('user', {
+        columnHelper.accessor('user.fursonaName', {
             id: 'user',
             header: t("furpanel.admin.membership_manager.columns.user"),
             cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
@@ -143,11 +154,15 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
                     {props.row.original.duplicate && <>
                         <Icon iconName={ICONS.FILE_COPY}/>
-                        <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}</span>
+                        <span className="highlight small">
+                            {t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}
+                        </span>
                     </>}
                     {!props.row.original.membershipCard && <>
                         <Icon iconName={ICONS.QUESTION_MARK}/>
-                        <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_MISSING")}</span>
+                        <span className="highlight small">
+                            {t("furpanel.admin.membership_manager.errors.CARD_MISSING")}
+                        </span>
                     </>}
                 </div>
         }),
@@ -156,9 +171,10 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             header: t("furpanel.admin.membership_manager.columns.registered"),
             cell: props => <>
                 {props.row.original.membershipCard
-                    ? <Checkbox initialValue={props.row.original.membershipCard.registered} onClick={(event: MouseEvent<HTMLButtonElement>,
-                        checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
-                        setBusy: Dispatch<SetStateAction<boolean>>)=>markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
+                    ? <Checkbox initialValue={props.row.original.membershipCard.registered}
+                        onClick={(event: MouseEvent<HTMLButtonElement>,
+                            checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
+                            setBusy: Dispatch<SetStateAction<boolean>>)=>markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
                             {t("furpanel.admin.membership_manager.table.headers.registered")}
                     </Checkbox>
                     : undefined
@@ -167,10 +183,10 @@ export default function MembershipView({params}: {params: Promise<{ year: number
         })
     ]
 
-    const hasDetails = (row: Row<UserCardData>) => true;
+    const hasDetails = () => true;
 
     const showDetails = (row: Row<UserCardData>) => <>
-        <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em"}}>
+        <div className="vertical-list flex-wrap" style={{gap: ".4em", padding: "0.625em", maxWidth: tableRef.current?.clientWidth}}>
             <div className="horizontal-list flex-wrap gap-4mm">
                 <JanInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={row.original.userInfo.firstName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
                 <JanInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={row.original.userInfo.lastName} onClick={(e)=>copyContent(e.currentTarget)}></JanInput>
@@ -232,7 +248,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
             {loading && <div className="row"><LoadingPanel className="data"/></div>}
             {cardsData && cardsData?.cards && 
                 <FpTable<UserCardData> columns={columns} rows={rows} enableSearch hasDetails={hasDetails} getDetails={showDetails}
-                    enablePagination pageSize={20} pinnedColumns={{left: [], right: ['registered']}}/>}
+                    enablePagination pageSize={20} pinnedColumns={{left: [], right: ['registered']}} tableElementRef={tableRef}/>}
         </div>
         {/* Add card */}
         <Modal icon={ICONS.ADD} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)} 

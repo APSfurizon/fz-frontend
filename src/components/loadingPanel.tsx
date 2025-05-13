@@ -3,7 +3,7 @@ import Icon, { ICONS } from "@/components/icon";
 
 export default function LoadingPanel ({showText = true, className, children}: Readonly<{
     showText?: boolean,
-    className?: String,
+    className?: string,
     children?: React.ReactNode
 }>) {
     const tcommon = useTranslations("common");

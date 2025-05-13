@@ -7,6 +7,7 @@ export interface AdminCapabilitesResponse extends ApiResponse {
     canRefreshPretixCache: boolean,
     canRemindOrderLinking: boolean,
     canRemindBadgeUploads: boolean,
+    canRemindRoomsNotFull: boolean,
     canExportHotelList: boolean
 }
 
@@ -17,6 +18,7 @@ export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
     canRefreshPretixCache: false,
     canRemindOrderLinking: false,
     canRemindBadgeUploads: false,
+    canRemindRoomsNotFull: false,
     canExportHotelList: false
 }
 
