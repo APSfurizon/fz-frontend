@@ -64,7 +64,7 @@ export default function ExchangeConfirm() {
 
   // Exchange confirm
   const updateExchangeStatus = (confirm: boolean) => {
-    let data: ExchangeUpdateApiData = {
+    const data: ExchangeUpdateApiData = {
       exchangeId: parseInt(params.get("id") ?? "0"),
       confirm: confirm
     }

@@ -3,7 +3,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "@/styles/misc/nosecount.css";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import { AllEventsResponse, FursuitCountApiAction, FursuitCountResponse, GetAllEventsApiAction, NoseCountApiAction, NoseCountResponse, SponsorCountApiAction, SponsorCountResponse } from "@/lib/api/counts";
+import { AllEventsResponse, FursuitCountApiAction, FursuitCountResponse, GetAllEventsApiAction, NoseCountApiAction,
+    NoseCountResponse, SponsorCountApiAction, SponsorCountResponse } from "@/lib/api/counts";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
 import UserPicture from "@/components/userPicture";
@@ -13,6 +14,8 @@ import useTitle from "@/lib/api/hooks/useTitle";
 import ModalError from "@/components/modalError";
 import Link from "next/link";
 import LoadingPanel from "@/components/loadingPanel";
+import { ExtraDays } from "@/lib/api/user";
+import StatusBox from "@/components/statusBox";
 
 export default function NosecountPage({ params }: {params: Promise<{slug: string[]}>}) {
     const MODE_FURSUIT = "fursuits";
@@ -69,7 +72,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         if (!allEvents || !selectedEvent) return;
         // find the event
         const event = allEvents?.events
-            .find((event, index)=>event.slug.toLowerCase() === (selectedEvent ?? "").toLowerCase());
+            .find((event)=>event.slug.toLowerCase() === (selectedEvent ?? "").toLowerCase());
         // Set event id or default to current
         if (event) {
             setEventId(event.id);
@@ -141,7 +144,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
     }, [roomsData])
 
     useTitle(t("misc.nosecount.title"));
-
+    
     const options = <>
         {/* Rendering options */}
         <div className="options-list horizontal-list flex-wrap gap-4mm">
@@ -171,12 +174,12 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SUPER_SPONSOR?.map((user, index)=>
-                <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname></UserPicture>)}
+                <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname/>)}
         </div>
         {sponsorData?.users.SPONSOR && <p className="title large">{t("common.sponsorships.sponsor")}</p>}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {sponsorData?.users.SPONSOR?.map((user, index)=>
-                <UserPicture size={96} key={`s-${index}`} userData={user} showFlag showNickname></UserPicture>)}
+                <UserPicture size={96} key={`s-${index}`} userData={user} showFlag showNickname/>)}
         </div>
         </>}
 
@@ -186,7 +189,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
         {options}
         <div className="user-list horizontal-list flex-wrap gap-4mm">
             {fursuitData?.fursuits.map((fursuit, index)=>
-                <UserPicture size={96} key={index} fursuitData={fursuit} showFlag showNickname></UserPicture>
+                <UserPicture size={96} key={index} fursuitData={fursuit} showFlag showNickname/>
             )}
         </div>
         </>}
@@ -211,17 +214,32 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
                         {translate(roomType.roomData.roomTypeNames, locale)}
                     </p>
                     {/* Room */}
-                    {roomType.rooms.map((room, ri)=><div key={`ri-${hi}-${rti}-${ri}`} className="room-container vertical-list gap-2mm">
-                        <p key={`rh${hi}-${rti}-${ri}`} className="title large bold horizontal-list gap-2mm flex-vertical-center">
-                            <Icon iconName={ICONS.BED}></Icon>
-                            {room.roomName}
-                        </p>
-                        <div key={`rgl-${hi}-${rti}-${ri}`} className="horizontal-list flex-wrap gap-4mm room-guests">
-                            {room.guests.map((user, ui)=><>
-                                <UserPicture size={96} key={`rgl-${hi}-${rti}-${ri}-${ui}`} userData={user} showFlag showNickname></UserPicture>
-                            </>)}
-                        </div>
-                        <hr></hr>
+                    {roomType.rooms.map((room, ri)=><div key={`ri-${hi}-${rti}-${ri}`}
+                        className="room-container vertical-list gap-2mm flex-wrap">
+                            <p key={`rh${hi}-${rti}-${ri}`}
+                                className="title large bold horizontal-list gap-2mm flex-vertical-center">
+                                    <Icon iconName={ICONS.BED}></Icon>
+                                    {room.roomName}
+                                    { room.roomExtraDays != ExtraDays.NONE && <div className="horizontal-list gap-2mm">
+                                        {[ExtraDays.EARLY, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
+                                            {t(`furpanel.booking.items.extra_days_${ExtraDays.EARLY}`)}
+                                            </StatusBox>}
+                                        {[ExtraDays.LATE, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
+                                            {t(`furpanel.booking.items.extra_days_${ExtraDays.LATE}`)}
+                                            </StatusBox>}
+                                    </div>}
+                            </p>
+                            <div key={`rgl-${hi}-${rti}-${ri}`}
+                                className="horizontal-list flex-wrap gap-4mm room-guests">
+                                    {room.guests.map((guest, ui)=><>
+                                        <UserPicture size={96}
+                                            key={`rgl-${hi}-${rti}-${ri}-${ui}`}
+                                            userData={guest.user}
+                                            showFlag
+                                            showNickname/>
+                                    </>)}
+                            </div>
+                            <hr></hr>
                     </div>)}
                 </div>)}
             </div>)}
@@ -236,7 +254,7 @@ export default function NosecountPage({ params }: {params: Promise<{slug: string
                 <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
                 {t("misc.nosecount.daily_furs")}
             </p>
-            {Object.keys(roomsData.dailyFurs).map((day, di)=> <div className="daily-day">
+            {Object.keys(roomsData.dailyFurs).map((day, di)=> <div className="daily-day" key={di}>
                     <p className="title">{formatter.dateTime(new Date(day), {dateStyle: "medium"})}</p>
                     <div className="user-list horizontal-list flex-wrap gap-4mm">
                         {roomsData.dailyFurs[day]?.map((user, ui) => 
