@@ -1,8 +1,10 @@
 import { ICONS } from "@/components/icon";
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded, filterSearchResult, SearchType } from "../components/autoInput";
+import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded,
+    filterSearchResult, SearchType } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams, nullifyEmptyString } from "../utils";
-import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest, RequestType } from "./global";
+import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest,
+    RequestType } from "./global";
 import { MediaData } from "./media";
 import { UAParser } from "ua-parser-js";
 
@@ -14,6 +16,13 @@ export enum SponsorType {
     NONE = "NONE",
     SPONSOR = "SPONSOR",
     SUPER = "SUPER_SPONSOR"
+}
+
+export enum ExtraDays {
+    NONE = "NONE",
+    EARLY = "EARLY",
+    LATE = "LATE",
+    BOTH = "BOTH"
 }
 
 export type UserRole = {
@@ -92,7 +101,7 @@ export class AutoInputUsersManager implements AutoInputManager {
     codeOnly: boolean = false;
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const params = buildSearchParams({"id": filter.filteredIds.map(num=>""+num)})
             runRequest (new UserSearchAction(), ["by-id"], undefined, params).then (results => {
                 const users = (results as UserSearchResponse).users.map(usr=>toSearchResult(usr));
@@ -102,7 +111,7 @@ export class AutoInputUsersManager implements AutoInputManager {
     }
 
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "is-admin-search": additionalValues[0] ?? false})).then (results => {
                 const searchResult = results as UserSearchResponse;
                 const users = searchResult.users.map(usr=>toSearchResult(usr));
@@ -113,7 +122,7 @@ export class AutoInputUsersManager implements AutoInputManager {
         });
     }
 
-    isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent (): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }
 
 export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
@@ -131,22 +140,25 @@ export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
  */
 export class AutoInputRoomInviteManager extends AutoInputUsersManager {
 
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "filter-not-in-room": "true"})).then (results => {
-                const searchResult = results as UserSearchResponse;
-                const users = searchResult.users.map(usr=>toSearchResult(usr));
-                resolve (
-                    filterLoaded(users, filter, filterOut)
-                );
+    searchByValues (value: string, locale?: string, filter?: AutoInputFilter,
+        filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+            return new Promise((resolve) => {
+                runRequest (new UserSearchAction(), undefined, undefined,
+                    buildSearchParams({"name": value, "filter-not-in-room": "true"}))
+                    .then (results => {
+                        const searchResult = results as UserSearchResponse;
+                        const users = searchResult.users.map(usr=>toSearchResult(usr));
+                        resolve (
+                            filterLoaded(users, filter, filterOut)
+                        );
+                    });
             });
-        });
     }
 }
 
 export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonalInfo> {
     mapToDTO = (data: FormData) => {
-        let toReturn: UserPersonalInfo = {
+        const toReturn: UserPersonalInfo = {
             firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
             lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
             sex:                nullifyEmptyString(data.get('sex')?.toString ()),
@@ -189,14 +201,14 @@ export interface UserOrderLinkingData {
     orderSecret: string
 }
 
-export class UserOrderLinkingAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class UserOrderLinkingAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "orders-workflow/link-order";
 }
 
 export function getAutoInputSexes () {
-    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+    return new Promise<AutoInputSearchResult[]> ((resolve) => {
         resolve([
             createSearchResult({code: "M",
                 translatedDescription: {"it": "Maschio", "en": "Male"},
@@ -211,7 +223,7 @@ export function getAutoInputSexes () {
 }
 
 export function getAutoInputGenders () {
-    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
+    return new Promise<AutoInputSearchResult[]> ((resolve) => {
         resolve([
             createSearchResult({code: "CisMan",
                 translatedDescription: {"it": "Uomo cis", "en": "cis Man"}

@@ -1,7 +1,7 @@
-import { ExtraDaysType, OrderData } from "./booking";
+import { OrderData } from "./booking";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { RoomData } from "./room";
-import { UserData } from "./user";
+import { UserData, ExtraDays } from "./user";
 
 export interface ExchangeStatusApiResponse extends ApiResponse {
     sourceUser: UserData,
@@ -11,10 +11,10 @@ export interface ExchangeStatusApiResponse extends ApiResponse {
     action: "room" | "order",
     fullOrderExchange?: OrderData,
     sourceRoomExchange?: RoomData,
-    sourceExtraDays: ExtraDaysType,
+    sourceExtraDays: ExtraDays,
     targetRoomInfoHidden: boolean,
     targetRoomExchange: RoomData,
-    targetExtraDays?: ExtraDaysType,
+    targetExtraDays?: ExtraDays,
 }
 
 export class ExchangeStatusApiAction extends ApiAction<ExchangeStatusApiResponse, ApiErrorResponse> {
@@ -28,7 +28,7 @@ export interface ExchangeUpdateApiData {
     confirm: boolean
 }
 
-export class ExchangeUpdateApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class ExchangeUpdateApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "room/exchange/update";
