@@ -4,7 +4,7 @@ import { useUser } from "@/components/context/userProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function adminLayout({children}: Readonly<{children: React.ReactNode;}>){
+export default function AdminLayout({children}: Readonly<{children: React.ReactNode;}>){
     const router = useRouter();
     const {userLoading, userDisplay} = useUser();
 

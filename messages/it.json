@@ -575,7 +575,7 @@
               "room_type": "Tipo stanza"
             },
             "actions": {
-              "ban": "Espelli",
+              "ban": "Ban",
               "unban": "Riammetti",
               "view_order": "Vedi ordine"
             },

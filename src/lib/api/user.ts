@@ -111,8 +111,9 @@ export class AutoInputUsersManager implements AutoInputManager {
     }
 
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+        const params = [...(additionalValues || [])]
         return new Promise((resolve) => {
-            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "is-admin-search": additionalValues[0] ?? false})).then (results => {
+            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "is-admin-search": params[0] ?? false})).then (results => {
                 const searchResult = results as UserSearchResponse;
                 const users = searchResult.users.map(usr=>toSearchResult(usr));
                 resolve (

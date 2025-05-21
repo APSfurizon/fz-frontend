@@ -1,7 +1,7 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 import { MediaData } from "../media";
-import { UserData, UserDisplayResponse } from "../user";
+import { UserData } from "../user";
 import { Fursuit } from "./fursuits";
 
 export interface BadgeStatusApiResponse extends ApiResponse {

@@ -11,7 +11,7 @@ import { EVENT_BANNER, EVENT_LOGO } from "@/lib/constants";
 import { getCountdown } from "@/lib/utils";
 import { useFormatter, useNow, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 
 export default function Countdown({data}: Readonly<{data?: BookingOrderUiData}>) {
     const t = useTranslations();
@@ -27,7 +27,7 @@ export default function Countdown({data}: Readonly<{data?: BookingOrderUiData}>)
     const isOpen = openDiff <= 0;
 
     /**UI Events */
-    const requestShopLink = (e: MouseEvent<HTMLElement>) => {
+    const requestShopLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new ShopLinkApiAction())

@@ -127,7 +127,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                 (!hideValid && cd.membershipCard && !cd.duplicate));
     }, [cardsData, showMissing, showDuplicate, hideValid]);
 
-    const columns: ColumnDef<UserCardData, any>[] = [
+    const columns: ColumnDef<UserCardData, any>[] = useMemo (()=>[
         columnHelper.accessor('user.fursonaName', {
             id: 'user',
             header: t("furpanel.admin.membership_manager.columns.user"),
@@ -181,7 +181,7 @@ export default function MembershipView({params}: {params: Promise<{ year: number
                 }
             </>
         })
-    ]
+    ], []);
 
     const hasDetails = () => true;
 

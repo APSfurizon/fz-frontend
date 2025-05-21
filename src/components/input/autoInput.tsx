@@ -5,15 +5,36 @@ import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "@/lib/
 import { useLocale, useTranslations } from "next-intl";
 import "@/styles/components/autoInput.css";
 import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
-import { translateNullable } from "@/lib/translations";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { useFormContext } from "./dataForm";
 
-/**
- * 
- * @returns 
- */
-export default function AutoInput ({className, disabled=false, fieldName, filterIn, filterOut, helpText, idExtractor, initialData, inputStyle, label, labelStyle, manager, max=5, minDecodeSize=3, multiple=false, noDelay=false, onChange, param, paramRequired=false, placeholder, required = false, requiredIfPresent = false, style, emptyIfUnselected = false}: Readonly<{
+export default function AutoInput ({
+    className,
+    disabled=false,
+    fieldName,
+    filterIn,
+    filterOut,
+    helpText,
+    idExtractor,
+    initialData,
+    inputStyle,
+    label,
+    labelStyle,
+    manager,
+    max=5,
+    minDecodeSize=3,
+    multiple=false,
+    noDelay=false,
+    onChange,
+    onSelect,
+    param,
+    paramRequired=false,
+    placeholder,
+    required = false,
+    requiredIfPresent = false,
+    style,
+    emptyIfUnselected = false
+}: Readonly<{
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -37,6 +58,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
     /**Do not throttle input events before launching a search request */
     noDelay?: boolean,
     onChange?: (values: AutoInputSearchResult[], newValues?: AutoInputSearchResult[], removedValue?: AutoInputSearchResult) => void,
+    onSelect?: (item: AutoInputSearchResult) => void,
     param?: any,
     /**Param is required for the component to be enabled */
     paramRequired?: boolean,
@@ -88,7 +110,8 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
 
     /**Adds a new item to the selection */
     const addItem = (toAdd: AutoInputSearchResult) => {
-        let cloneSelectedIds = [...selectedIds];
+        if (onSelect) onSelect(toAdd);
+        const cloneSelectedIds = [...selectedIds];
         if (manager.codeOnly) {
             cloneSelectedIds.push (toAdd.code!);
         } else {
@@ -98,22 +121,22 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
-        onChange && onChange (selectedValues ?? [], [toAdd], undefined);
+        if (onChange) onChange(selectedValues ?? [], [toAdd], undefined);
         setTimeout(()=>inputRef.current?.focus(), 100);
     }
     
     /**Remove a item from the selection */
     const removeItem = (toRemove: AutoInputSearchResult) => {
-        let identifier = manager.codeOnly ? toRemove.code! : toRemove.id!;
+        const identifier = manager.codeOnly ? toRemove.code! : toRemove.id!;
         if (selectedIds.includes (identifier)) {
-            let newSelectedIds = [...selectedIds ?? []];
+            const newSelectedIds = [...selectedIds ?? []];
             newSelectedIds.splice (selectedIds.indexOf (identifier), 1);
-            let newSelectedValues = [...selectedValues ?? []];
+            const newSelectedValues = [...selectedValues ?? []];
             newSelectedValues.splice (selectedValues.indexOf (toRemove), 1);
             setSelectedIds(newSelectedIds);
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
-            onChange && onChange (selectedValues ?? [], undefined, toRemove);    
+            if (onChange) onChange(selectedValues ?? [], undefined, toRemove);    
         }
     }
 
@@ -129,7 +152,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         manager.searchByValues(searchString.trim(), locale, filterIn, excludeFilter, param).then (results => {
             setSearchResults(results);
             setSearchError(results.length == 0);
-        }).catch(err=>{
+        }).catch(()=>{
             setSearchError(true);
         }).finally(()=> {
             setIsLoading(false);
@@ -177,7 +200,7 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
         clearTimeout (searchTimeoutHandle);
     };
 
-    const onBlur = (e: ChangeEvent<HTMLInputElement>) => {
+    const onBlur = () => {
         setIsFocused(false);
         setSearchError(false);
         setSearchResults([]);
@@ -202,14 +225,14 @@ export default function AutoInput ({className, disabled=false, fieldName, filter
                 } else {
                     setSelectedIds (values.map(val=>val.id!));
                 }
-                onChange && onChange (values ?? [], values, undefined);
+                if (onChange) onChange(values ?? [], values, undefined);
             });
         } else if (reset) {
             setSelectedValues([]);
             setSelectedIds([]);
             setSearchInput("");
             setSearchResults([]);
-            onChange && onChange ([], [], undefined);
+            if (onChange) onChange([], [], undefined);
         }
         setWaitForParam(false);
         setLatestInitialData(initialData);
