@@ -99,7 +99,7 @@ export default function FpInput ({
     if (isPassword && visiblePassword) finalType = "text";
 
     const isDisabled = disabled || globalDisabled;
-    const isRequired = required && !isDisabled;
+    const isRequired = required && !isDisabled && !readOnly;
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>

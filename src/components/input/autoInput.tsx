@@ -294,7 +294,7 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
 
     const renderedValue = idExtractor ? selectedValues.map(val => idExtractor(val)) : valueToSet ?? [];
     const isDisabled = disabled || globalDisabled;
-    const isRequired = (required || forceRequired) && !isDisabled || !readOnly;
+    const isRequired = (required || forceRequired) && !isDisabled && !readOnly;
 
     const checkChange = () => {
         setIsValid ((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
