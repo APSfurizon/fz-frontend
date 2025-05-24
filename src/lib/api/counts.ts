@@ -82,9 +82,7 @@ export class GetAllEventsApiAction extends ApiAction<AllEventsResponse, ApiError
     urlAction = "events/";
 }
 
-export interface CurrentEventResponse extends ApiResponse {
-    events: ConventionEvent[]
-}
+export interface CurrentEventResponse extends ConventionEvent, ApiResponse { }
 
 export class GetCurrentEventApiAction extends ApiAction<CurrentEventResponse, ApiErrorResponse> {
     authenticated = false;

@@ -106,7 +106,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         if (!selectedYear || isNaN(selectedYear) || cardsData) return;
         setLoading(true);
         runRequest(new GetCardsApiAction(), undefined, undefined, new URLSearchParams({ "year": "" + selectedYear }))
-            .then((value) => setCardsData(value as GetCardsApiResponse))
+            .then((value) => setCardsData(value))
             .catch((err) => {
                 showModal(
                     t("common.error"),

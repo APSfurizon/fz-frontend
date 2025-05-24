@@ -189,7 +189,7 @@ export default function BadgePage() {
     closeAddFursuitModal();
     closeDeleteFursuit();
     runRequest(new GetBadgeStatusAction())
-      .then((data) => setBadgeStatus(data as BadgeStatusApiResponse))
+      .then((data) => setBadgeStatus(data))
       .catch((err) => {
         showModal(
           t("common.error"),

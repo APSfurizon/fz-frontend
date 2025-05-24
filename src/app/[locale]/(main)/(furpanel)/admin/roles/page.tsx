@@ -38,7 +38,7 @@ export default function RolesListPage() {
         setRoles([]);
         setLoading(true);
         runRequest(new GetRolesApiAction())
-            .then((response) => setRoles((response as AllRolesResponse).roles))
+            .then((response) => setRoles(response.roles))
             .catch((err) => showModal(
                 t("common.error"),
                 <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors" />

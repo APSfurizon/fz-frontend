@@ -50,7 +50,7 @@ export interface RoomCreateData {
     name: string
 }
 
-export interface RoomCreateResponse extends RoomInfo, ApiResponse {}
+export interface RoomCreateResponse extends RoomInfo, ApiResponse { }
 
 export class RoomCreateApiAction extends ApiAction<RoomCreateResponse, ApiErrorResponse> {
     authenticated = true;
@@ -84,13 +84,13 @@ export interface RoomEditData {
     roomId: number
 }
 
-export interface RoomRenameData extends RoomCreateData, RoomEditData {}
+export interface RoomRenameData extends RoomCreateData, RoomEditData { }
 
 export class RoomRenameDTOBuilder implements FormDTOBuilder<RoomRenameData> {
     mapToDTO = (data: FormData) => {
         let toReturn: RoomRenameData = {
-            roomId: parseInt (data.get('roomId')!.toString ()),
-            name: data.get('name')?.toString () ?? ""
+            roomId: parseInt(data.get('roomId')!.toString()),
+            name: data.get('name')?.toString() ?? ""
         };
         return toReturn;
     }
@@ -99,11 +99,11 @@ export class RoomRenameDTOBuilder implements FormDTOBuilder<RoomRenameData> {
 export class RoomRenameFormAction extends FormApiAction<RoomRenameData, ApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new RoomRenameDTOBuilder ();
+    dtoBuilder = new RoomRenameDTOBuilder();
     urlAction = "room/change-name";
 }
 
-export class RoomDeleteAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class RoomDeleteAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "room/delete";
@@ -127,8 +127,8 @@ export interface RoomInviteResponse extends ApiResponse {
 export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: RoomInviteApiData = {
-            roomId: parseInt (data.get('roomId')!.toString ()),
-            userIds: data.get('invitedUsers')!.toString ().split(',').map(val=>parseInt(val)),
+            roomId: parseInt(data.get('roomId')!.toString()),
+            userIds: data.get('invitedUsers')!.toString().split(',').map(val => parseInt(val)),
             force: (data.get('force')! ?? "").toString().toLowerCase() === "true",
             forceExit: (data.get('forceExit')! ?? "").toString().toLowerCase() === "true"
         };
@@ -139,7 +139,7 @@ export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
 export class RoomInviteFormAction extends FormApiAction<RoomInviteApiData, RoomInviteResponse, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new RoomInviteDTOBuilder ();
+    dtoBuilder = new RoomInviteDTOBuilder();
     urlAction = "room/invite";
 }
 
@@ -151,19 +151,19 @@ export interface GuestIdApiData {
     guestId: number
 }
 
-export class RoomInviteAnswerAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class RoomInviteAnswerAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "room/invite";
 }
 
-export class RoomKickAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class RoomKickAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "room/kick";
 }
 
-export class RoomLeaveAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class RoomLeaveAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "room/leave";
@@ -172,7 +172,7 @@ export class RoomLeaveAction extends ApiAction<Boolean, ApiErrorResponse> {
 export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeInitApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: OrderExchangeInitApiData = {
-            sourceUserId: parseInt(data.get('userId')!.toString ()),
+            sourceUserId: parseInt(data.get('userId')!.toString()),
             destUserId: parseInt(data.get('recipientId')!.toString()),
             action: "room"
         };
@@ -183,7 +183,7 @@ export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeI
 export class RoomExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new RoomExchangeInitDTOBuilder ();
+    dtoBuilder = new RoomExchangeInitDTOBuilder();
     urlAction = "room/exchange/init";
 }
 
@@ -192,7 +192,7 @@ export interface RoomSetShowInNosecountData {
     showInNosecount: boolean
 }
 
-export class RoomSetShowInNosecountApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class RoomSetShowInNosecountApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "room/show-in-nosecount";

@@ -28,7 +28,7 @@ export class GetAdminCapabilitiesApiAction extends ApiAction<AdminCapabilitesRes
     urlAction = "admin/capabilities";
 }
 
-export class ExportHotelRoomsApiAction extends ApiAction<any, ApiErrorResponse> {
+export class ExportHotelRoomsApiAction extends ApiAction<Response, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "admin/export/hotel-user-list";

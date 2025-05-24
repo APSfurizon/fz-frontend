@@ -62,8 +62,8 @@ export default function RoomPage() {
 
     setActionLoading(true);
 
-    runRequest(new RoomCreateApiAction(), undefined, roomData, undefined)
-      .then((data) => { if ((data as RoomCreateResponse).roomId) setData(undefined); })
+    runRequest(new RoomCreateApiAction(), undefined, roomData)
+      .then((data) => { if (data.roomId) setData(undefined); })
       .catch((err) => commonFail(err))
       .finally(() => setActionLoading(false));
   }
@@ -89,7 +89,7 @@ export default function RoomPage() {
       roomId: roomId
     };
     setModalLoading(true);
-    runRequest(new RoomDeleteAction(), undefined, roomData, undefined)
+    runRequest(new RoomDeleteAction(), undefined, roomData)
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -118,7 +118,7 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomInviteAnswerAction(), ["accept"], guestData, undefined)
+    runRequest(new RoomInviteAnswerAction(), ["accept"], guestData)
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -134,7 +134,7 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomInviteAnswerAction(), ["refuse"], guestData, undefined)
+    runRequest(new RoomInviteAnswerAction(), ["refuse"], guestData)
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -160,7 +160,7 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomInviteAnswerAction(), ["cancel"], guestData, undefined)
+    runRequest(new RoomInviteAnswerAction(), ["cancel"], guestData)
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -171,7 +171,7 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomKickAction(), undefined, guestData, undefined)
+    runRequest(new RoomKickAction())
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -187,7 +187,7 @@ export default function RoomPage() {
 
   const leaveRoom = () => {
     setModalLoading(true);
-    runRequest(new RoomLeaveAction(), undefined, undefined, undefined)
+    runRequest(new RoomLeaveAction())
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -268,9 +268,8 @@ export default function RoomPage() {
     setLoading(true);
     runRequest(new RoomInfoApiAction())
       .then(result => {
-        const dataResult = result as RoomInfoResponse
-        setShowInNosecount(dataResult.currentRoomInfo?.showInNosecount);
-        setData(dataResult);
+        setShowInNosecount(result.currentRoomInfo?.showInNosecount);
+        setData(result);
       }).catch((err) => showModal(
         t("common.error"),
         <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>
@@ -441,7 +440,7 @@ export default function RoomPage() {
     {/* Rename modal */}
     <Modal title={t("furpanel.room.actions.rename")} icon={ICONS.EDIT_SQUARE} open={renameModalOpen} onClose={() => setRenameModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
-        <DataForm action={new RoomRenameFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
+        <DataForm action={new RoomRenameFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
           onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess>
           <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId ?? ""}></input>
           <FpInput inputType="text" fieldName="name" required busy={modalLoading} label={t("furpanel.room.input.rename_new_name.label")}
@@ -458,7 +457,7 @@ export default function RoomPage() {
     {/* Invite modal */}
     <Modal title={t("furpanel.room.actions.invite")} icon={ICONS.PERSON_ADD} open={inviteModalOpen} onClose={() => setInviteModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
-        <DataForm action={new RoomInviteFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
+        <DataForm action={new RoomInviteFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
           onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!inviteModalOpen}>
           <input type="hidden" name="roomId" value={data?.currentRoomInfo?.roomId ?? ""}></input>
           <AutoInput fieldName="invitedUsers" manager={new AutoInputRoomInviteManager()} multiple={true} disabled={modalLoading}
@@ -593,7 +592,7 @@ export default function RoomPage() {
 
     {/* Room exchange modal */}
     <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("furpanel.room.actions.exchange_room")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
-      <DataForm action={new RoomExchangeFormAction} method="POST" loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
+      <DataForm action={new RoomExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!exchangeModalOpen}>
         <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
         <AutoInput fieldName="recipientId" manager={new AutoInputRoomInviteManager()} multiple={false} disabled={modalLoading}

@@ -7,7 +7,7 @@ export type OrderStatusType = "CANCELED" | "PENDING" | "PAID" | "EXPIRED";
 export type SponsorshipType = "NONE" | "SPONSOR" | "SUPER_SPONSOR";
 export type ExtraDaysType = "NONE" | "EARLY" | "LATE" | "BOTH";
 
-export function mapOrderStatusToStatusBox (s: OrderStatusType): StatusBoxStyle {
+export function mapOrderStatusToStatusBox(s: OrderStatusType): StatusBoxStyle {
     switch (s) {
         case "CANCELED":
         case "EXPIRED":
@@ -44,7 +44,7 @@ export interface BookingOrderResponse extends ApiResponse {
     canExchange: boolean,
     order: OrderData,
     errors: ("SERVER_ERROR" | "MEMBERSHIP_MULTIPLE_DONE" | "MEMBERSHIP_MISSING" |
-         "ORDER_MULTIPLE_DONE" | "ORDER_SECRET_NOT_MATCH" | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE")[]
+        "ORDER_MULTIPLE_DONE" | "ORDER_SECRET_NOT_MATCH" | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE")[]
 }
 
 export interface BookingTicketData {
@@ -62,13 +62,13 @@ export interface BookingOrderUiData extends BookingTicketData {
     shouldRetry: boolean
 };
 
-export function calcTicketData (order: OrderData): BookingTicketData {
+export function calcTicketData(order: OrderData): BookingTicketData {
     /**Order text and daily days*/
     let ticketName: string = "";
     let dailyDays: Date[] | undefined;
     if (order.dailyTicket) {
         ticketName = "daily_ticket";
-        dailyDays = order.dailyDays.map(dt=>new Date(dt)).sort((a,b)=>a.getTime()-b.getTime());
+        dailyDays = order.dailyDays.map(dt => new Date(dt)).sort((a, b) => a.getTime() - b.getTime());
     } else {
         ticketName = order.sponsorship.toLowerCase() + "_ticket";
     }
@@ -108,7 +108,7 @@ export class OrderRetryLinkApiAction extends ApiAction<ShopLinkResponse, ApiErro
     urlAction = "orders-workflow/get-order-retry-payment-link";
 }
 
-export class ConfirmMembershipDataApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class ConfirmMembershipDataApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "membership/mark-persona-user-information-as-updated";

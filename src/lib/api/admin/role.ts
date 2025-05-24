@@ -39,7 +39,7 @@ export interface RoleData {
     roleAdmincountPriority: number
 }
 
-export interface RoleDataResponse extends ApiResponse {}
+export interface RoleDataResponse extends ApiResponse { }
 
 export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
@@ -72,7 +72,7 @@ export interface AddRoleApiResponse extends ApiResponse {
 export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
     mapToDTO = (data: FormData) => {
         let toReturn: AddRoleApiData = {
-            internalName: data.get("internalName")!.toString ()
+            internalName: data.get("internalName")!.toString()
         };
         return toReturn;
     }
@@ -81,11 +81,11 @@ export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
 export class AddRoleFormAction extends FormApiAction<AddRoleApiData, AddRoleApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new AddRoleDTOBuilder ();
+    dtoBuilder = new AddRoleDTOBuilder();
     urlAction = "roles/";
 }
 
-export class DeleteRolesApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class DeleteRolesApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
     urlAction = "roles";
@@ -123,18 +123,18 @@ export class GetPermissionsApiAction extends ApiAction<GetPermissionsResponse, A
     urlAction = "roles/permissions";
 }
 
-export function getAutoInputPermissions (): Promise<AutoInputSearchResult[]> {
-    return new Promise<AutoInputSearchResult[]> ((resolve, reject) => {
-        CACHED_PERMISSIONS.get ().then ((data) => {
+export function getAutoInputPermissions(): Promise<AutoInputSearchResult[]> {
+    return new Promise<AutoInputSearchResult[]>((resolve, reject) => {
+        CACHED_PERMISSIONS.get().then((data) => {
             const parsed = data as GetPermissionsResponse;
-            resolve (parsed.permissions.map ((permission, index) => {
+            resolve(parsed.permissions.map((permission, index) => {
                 const toReturn = new AutoInputSearchResult();
                 toReturn.id = index;
                 toReturn.code = permission;
                 toReturn.description = permission;
                 return toReturn;
             }));
-        }).catch ((err) => {reject (err)});
+        }).catch((err) => { reject(err) });
     });
 }
 
@@ -144,23 +144,23 @@ export function getAutoInputPermissions (): Promise<AutoInputSearchResult[]> {
 export class AutoInputPermissionsManager implements AutoInputManager {
     codeOnly: boolean = true;
 
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputPermissions ().then (results => {
-                resolve (filterLoaded(results, filter));
+            getAutoInputPermissions().then(results => {
+                resolve(filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputPermissions ().then (results => {
-                resolve (
+            getAutoInputPermissions().then(results => {
+                resolve(
                     filterLoaded(results, filter, filterOut)
                 );
             });
         });
     }
 
-    isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
 }

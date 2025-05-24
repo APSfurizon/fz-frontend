@@ -1,13 +1,13 @@
 import { ApiAction, ApiErrorResponse, RequestType } from "../global";
 
-export class GetRenderedCommonBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
+export class GetRenderedCommonBadgesApiAction extends ApiAction<Response, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "admin/export/badges/user";
     rawResponse?: boolean = true;
 }
 
-export class GetRenderedFursuitBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
+export class GetRenderedFursuitBadgesApiAction extends ApiAction<Response, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "admin/export/badges/fursuits";

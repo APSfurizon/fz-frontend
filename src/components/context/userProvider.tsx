@@ -12,34 +12,31 @@ interface UserUpdateType {
 
 const UserContext = createContext<UserUpdateType>(undefined as any);
 
-export function HeaderProvider ({children}: Readonly<{children: React.ReactNode}>) {
+export function HeaderProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const [updateUser, setUpdateUser] = useState(false);
     const [userLoading, setUserLoading] = useState(false);
     const [userDisplay, setUserDisplay] = useState<UserDisplayResponse>();
-    
-    const handleUserUpdate = (doUpdate: boolean) => {
-            setUserLoading(true);
-            if (doUpdate) {
-                runRequest(new UserDisplayAction()).then((data)=> {
-                    setUserDisplay(data as UserDisplayResponse);
-                })
-                .catch(()=>{})
-                .finally(()=>{
-                    setUserLoading(false);
-                });
-                setUpdateUser(false);
-            }
-        }
-    
-        useEffect(()=> {
-            handleUserUpdate(updateUser);
-        }, [updateUser]);
-    
-        useEffect(()=> {
-            handleUserUpdate(true);
-        }, []);
 
-    return <UserContext.Provider value={{updateUser, setUpdateUser, userDisplay, setUserDisplay, userLoading}}>{children}</UserContext.Provider>;
+    const handleUserUpdate = (doUpdate: boolean) => {
+        setUserLoading(true);
+        if (doUpdate) {
+            runRequest(new UserDisplayAction())
+                .then((data) => setUserDisplay(data))
+                .catch(() => { })
+                .finally(() => setUserLoading(false));
+            setUpdateUser(false);
+        }
+    }
+
+    useEffect(() => {
+        handleUserUpdate(updateUser);
+    }, [updateUser]);
+
+    useEffect(() => {
+        handleUserUpdate(true);
+    }, []);
+
+    return <UserContext.Provider value={{ updateUser, setUpdateUser, userDisplay, setUserDisplay, userLoading }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => {

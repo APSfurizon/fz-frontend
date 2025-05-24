@@ -1,10 +1,14 @@
 import { ICONS } from "@/components/icon";
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded,
-    filterSearchResult, SearchType } from "../components/autoInput";
+import {
+    AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded,
+    filterSearchResult, SearchType
+} from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams, nullifyEmptyString } from "../utils";
-import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest,
-    RequestType } from "./global";
+import {
+    ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest,
+    RequestType
+} from "./global";
 import { MediaData } from "./media";
 import { UAParser } from "ua-parser-js";
 
@@ -43,7 +47,7 @@ export type UserData = {
 }
 
 export type CompleteUserData = {
-    user: {user: UserData, orderCode?: string},
+    user: { user: UserData, orderCode?: string },
     email: string,
     personalInfo: UserPersonalInfo,
     isBanned?: boolean
@@ -102,39 +106,38 @@ export class UserSearchAction extends ApiAction<UserSearchResponse, ApiErrorResp
 export class AutoInputUsersManager implements AutoInputManager {
     codeOnly: boolean = false;
 
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            const params = buildSearchParams({"id": filter.filteredIds.map(num=>""+num)})
-            runRequest (new UserSearchAction(), ["by-id"], undefined, params).then (results => {
-                const users = (results as UserSearchResponse).users.map(usr=>toSearchResult(usr));
-                resolve (filterLoaded(users, filter));
+            const params = buildSearchParams({ "id": filter.filteredIds.map(num => "" + num) })
+            runRequest(new UserSearchAction(), ["by-id"], undefined, params).then(results => {
+                const users = results.users.map(usr => toSearchResult(usr));
+                resolve(filterLoaded(users, filter));
             });
         });
     }
 
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         const params = [...(additionalValues || [])]
         return new Promise((resolve) => {
-            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "is-admin-search": params[0] ?? false})).then (results => {
-                const searchResult = results as UserSearchResponse;
-                const users = searchResult.users.map(usr=>toSearchResult(usr));
-                resolve (
+            runRequest(new UserSearchAction(), undefined, undefined, buildSearchParams({ "name": value, "is-admin-search": params[0] ?? false })).then(results => {
+                const users = results.users.map(usr => toSearchResult(usr));
+                resolve(
                     filterLoaded(users, filter, filterOut)
                 );
             });
         });
     }
 
-    isPresent (): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
+    isPresent(): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }
 
-export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
+export function toSearchResult(usr: UserSearchResult): AutoInputSearchResult {
     const toReturn = new AutoInputSearchResult();
     toReturn.id = usr.id,
-    toReturn.code = usr.code,
-    toReturn.icon = usr.icon,
-    toReturn.description = usr.description,
-    toReturn.imageUrl = usr.propic?.mediaUrl ?? null
+        toReturn.code = usr.code,
+        toReturn.icon = usr.icon,
+        toReturn.description = usr.description,
+        toReturn.imageUrl = usr.propic?.mediaUrl ?? null
     return toReturn;
 }
 
@@ -143,44 +146,43 @@ export function toSearchResult (usr: UserSearchResult): AutoInputSearchResult {
  */
 export class AutoInputRoomInviteManager extends AutoInputUsersManager {
 
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter,
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter,
         filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-            return new Promise((resolve) => {
-                runRequest (new UserSearchAction(), undefined, undefined,
-                    buildSearchParams({"name": value, "filter-not-in-room": "true"}))
-                    .then (results => {
-                        const searchResult = results as UserSearchResponse;
-                        const users = searchResult.users.map(usr=>toSearchResult(usr));
-                        resolve (
-                            filterLoaded(users, filter, filterOut)
-                        );
-                    });
-            });
+        return new Promise((resolve) => {
+            runRequest(new UserSearchAction(), undefined, undefined,
+                buildSearchParams({ "name": value, "filter-not-in-room": "true" }))
+                .then(results => {
+                    const users = results.users.map(usr => toSearchResult(usr));
+                    resolve(
+                        filterLoaded(users, filter, filterOut)
+                    );
+                });
+        });
     }
 }
 
 export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonalInfo> {
     mapToDTO = (data: FormData) => {
         const toReturn: UserPersonalInfo = {
-            firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
-            lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
-            sex:                nullifyEmptyString(data.get('sex')?.toString ()),
-            gender:             nullifyEmptyString(data.get('gender')?.toString ()),
-            allergies:          nullifyEmptyString(data.get('allergies')?.toString ()),
-            fiscalCode:         nullifyEmptyString(data.get('fiscalCode')?.toString ()),
-            birthCity:          nullifyEmptyString(data.get('birthCity')?.toString ()),
-            birthRegion:        nullifyEmptyString(data.get('birthRegion')?.toString ()),
-            birthCountry:       nullifyEmptyString(data.get('birthCountry')?.toString ()),
-            birthday:           nullifyEmptyString(data.get('birthday')?.toString ()),
-            residenceAddress:   nullifyEmptyString(data.get('residenceAddress')?.toString ()),
-            residenceZipCode:   nullifyEmptyString(data.get('residenceZipCode')?.toString ()),
-            residenceCity:      nullifyEmptyString(data.get('residenceCity')?.toString ()),
-            residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
-            residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
-            prefixPhoneNumber:  nullifyEmptyString(data.get('phonePrefix')?.toString ()),
-            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ()),
-            userId:             parseInt(data.get('userId')?.toString () ?? "0"),
-            id:                 parseInt(data.get('id')?.toString () ?? "0")
+            firstName: nullifyEmptyString(data.get('firstName')?.toString()),
+            lastName: nullifyEmptyString(data.get('lastName')?.toString()),
+            sex: nullifyEmptyString(data.get('sex')?.toString()),
+            gender: nullifyEmptyString(data.get('gender')?.toString()),
+            allergies: nullifyEmptyString(data.get('allergies')?.toString()),
+            fiscalCode: nullifyEmptyString(data.get('fiscalCode')?.toString()),
+            birthCity: nullifyEmptyString(data.get('birthCity')?.toString()),
+            birthRegion: nullifyEmptyString(data.get('birthRegion')?.toString()),
+            birthCountry: nullifyEmptyString(data.get('birthCountry')?.toString()),
+            birthday: nullifyEmptyString(data.get('birthday')?.toString()),
+            residenceAddress: nullifyEmptyString(data.get('residenceAddress')?.toString()),
+            residenceZipCode: nullifyEmptyString(data.get('residenceZipCode')?.toString()),
+            residenceCity: nullifyEmptyString(data.get('residenceCity')?.toString()),
+            residenceRegion: nullifyEmptyString(data.get('residenceRegion')?.toString()),
+            residenceCountry: nullifyEmptyString(data.get('residenceCountry')?.toString()),
+            prefixPhoneNumber: nullifyEmptyString(data.get('phonePrefix')?.toString()),
+            phoneNumber: nullifyEmptyString(data.get('phoneNumber')?.toString()),
+            userId: parseInt(data.get('userId')?.toString() ?? "0"),
+            id: parseInt(data.get('id')?.toString() ?? "0")
         };
         return toReturn;
     }
@@ -189,11 +191,13 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
 export class UpdatePersonalInfoFormAction extends FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new UpdatePersonalInfoDTOBuilder ();
+    dtoBuilder = new UpdatePersonalInfoDTOBuilder();
     urlAction = "membership/update-personal-user-information";
 }
 
-export class GetPersonalInfoAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+export interface GetPersonalInfoResponse extends UserPersonalInfo, ApiResponse { }
+
+export class GetPersonalInfoAction extends ApiAction<GetPersonalInfoResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "membership/get-personal-user-information";
@@ -210,68 +214,85 @@ export class UserOrderLinkingAction extends ApiAction<boolean, ApiErrorResponse>
     urlAction = "orders-workflow/link-order";
 }
 
-export function getAutoInputSexes () {
-    return new Promise<AutoInputSearchResult[]> ((resolve) => {
+export function getAutoInputSexes() {
+    return new Promise<AutoInputSearchResult[]>((resolve) => {
         resolve([
-            createSearchResult({code: "M",
-                translatedDescription: {"it": "Maschio", "en": "Male"},
+            createSearchResult({
+                code: "M",
+                translatedDescription: { "it": "Maschio", "en": "Male" },
                 icon: ICONS.MALE
             }),
-            createSearchResult({code: "F",
-                translatedDescription: {"it": "Femmina", "en": "Female"},
+            createSearchResult({
+                code: "F",
+                translatedDescription: { "it": "Femmina", "en": "Female" },
                 icon: ICONS.FEMALE
             }),
         ])
     });
 }
 
-export function getAutoInputGenders () {
-    return new Promise<AutoInputSearchResult[]> ((resolve) => {
+export function getAutoInputGenders() {
+    return new Promise<AutoInputSearchResult[]>((resolve) => {
         resolve([
-            createSearchResult({code: "CisMan",
-                translatedDescription: {"it": "Uomo cis", "en": "cis Man"}
+            createSearchResult({
+                code: "CisMan",
+                translatedDescription: { "it": "Uomo cis", "en": "cis Man" }
             }),
-            createSearchResult({code: "CisWoman",
-                translatedDescription: {"it": "Donna cis", "en": "cis Woman"}
+            createSearchResult({
+                code: "CisWoman",
+                translatedDescription: { "it": "Donna cis", "en": "cis Woman" }
             }),
-            createSearchResult({code: "TransMan",
-                translatedDescription: {"it": "Uomo trans", "en": "trans Man"}
+            createSearchResult({
+                code: "TransMan",
+                translatedDescription: { "it": "Uomo trans", "en": "trans Man" }
             }),
-            createSearchResult({code: "TransWoman",
-                translatedDescription: {"it": "Donna trans", "en": "trans Woman"}
+            createSearchResult({
+                code: "TransWoman",
+                translatedDescription: { "it": "Donna trans", "en": "trans Woman" }
             }),
-            createSearchResult({code: "Agender",
-                translatedDescription: {"it": "Agender", "en": "Agender"}
+            createSearchResult({
+                code: "Agender",
+                translatedDescription: { "it": "Agender", "en": "Agender" }
             }),
-            createSearchResult({code: "BiGender",
-                translatedDescription: {"it": "Bigender", "en": "Bigender"}
+            createSearchResult({
+                code: "BiGender",
+                translatedDescription: { "it": "Bigender", "en": "Bigender" }
             }),
-            createSearchResult({code: "Genderfluid",
-                translatedDescription: {"it": "Genderfluid", "en": "Genderfluid"}
+            createSearchResult({
+                code: "Genderfluid",
+                translatedDescription: { "it": "Genderfluid", "en": "Genderfluid" }
             }),
-            createSearchResult({code: "Questioning",
-                translatedDescription: {"it": "Questioning", "en": "Questioning"}
+            createSearchResult({
+                code: "Questioning",
+                translatedDescription: { "it": "Questioning", "en": "Questioning" }
             }),
-            createSearchResult({code: "Queer",
-                translatedDescription: {"it": "Queer", "en": "Queer"}
+            createSearchResult({
+                code: "Queer",
+                translatedDescription: { "it": "Queer", "en": "Queer" }
             }),
-            createSearchResult({code: "NonBinary",
-                translatedDescription: {"it": "Non binario", "en": "Non-binary"}
+            createSearchResult({
+                code: "NonBinary",
+                translatedDescription: { "it": "Non binario", "en": "Non-binary" }
             }),
-            createSearchResult({code: "DemiBoy",
-                translatedDescription: {"it": "Demiboy", "en": "Demiboy"}
+            createSearchResult({
+                code: "DemiBoy",
+                translatedDescription: { "it": "Demiboy", "en": "Demiboy" }
             }),
-            createSearchResult({code: "DemiGirl",
-                translatedDescription: {"it": "Demigirl", "en": "Demigirl"}
+            createSearchResult({
+                code: "DemiGirl",
+                translatedDescription: { "it": "Demigirl", "en": "Demigirl" }
             }),
-            createSearchResult({code: "Intersex",
-                translatedDescription: {"it": "Intersex", "en": "Intersex"}
+            createSearchResult({
+                code: "Intersex",
+                translatedDescription: { "it": "Intersex", "en": "Intersex" }
             }),
-            createSearchResult({code: "NoAnswer",
-                translatedDescription: {"it": "Preferisco non rispondere", "en": "I prefer not to say"}
+            createSearchResult({
+                code: "NoAnswer",
+                translatedDescription: { "it": "Preferisco non rispondere", "en": "I prefer not to say" }
             }),
-            createSearchResult({code: "NotListed",
-                translatedDescription: {"it": "Non in lista", "en": "Not in this list"}
+            createSearchResult({
+                code: "NotListed",
+                translatedDescription: { "it": "Non in lista", "en": "Not in this list" }
             })
         ])
     });
@@ -280,49 +301,49 @@ export function getAutoInputGenders () {
 export class AutoInputSexManager implements AutoInputManager {
     codeOnly: boolean = true;
 
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            getAutoInputSexes ().then (results => {
-                resolve (filterLoaded(results, filter));
+            getAutoInputSexes().then(results => {
+                resolve(filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            getAutoInputSexes ().then (results => {
-                resolve (
+            getAutoInputSexes().then(results => {
+                resolve(
                     filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
                 );
             });
         });
     }
 
-    isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
 }
 
 export class AutoInputGenderManager implements AutoInputManager {
     codeOnly: boolean = true;
 
-    loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputGenders ().then (results => {
-                resolve (filterLoaded(results, filter));
+            getAutoInputGenders().then(results => {
+                resolve(filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve, reject) => {
-            getAutoInputGenders ().then (results => {
-                resolve (
+            getAutoInputGenders().then(results => {
+                resolve(
                     filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
                 );
             });
         });
     }
 
-    isPresent (additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
 }
 
 export function getUaFriendly(userAgent: string) {
@@ -351,13 +372,13 @@ export interface DestroySessionData extends ApiRequest {
     sessionId: string
 }
 
-export class DestroySessionAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class DestroySessionAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "authentication/destroy-session";
 }
 
-export class DestroyAllSessionsAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class DestroyAllSessionsAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "authentication/destroy-all-sessions";
