@@ -100,3 +100,14 @@ export class ViewOrderLinkApiAction extends ApiAction<ViewOrderLinkResponse, Api
     method = RequestType.GET;
     urlAction = "orders-workflow/generate-pretix-control-order-link";
 }
+
+export interface ShowInNosecountApiInput {
+    userId: number,
+    showInNosecount: boolean
+}
+
+export class ShowInNosecountApiAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "users/show-in-nosecount";
+}

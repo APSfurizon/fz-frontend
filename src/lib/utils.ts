@@ -172,8 +172,9 @@ export function getCountArray(index: number, limit: number, min: number, max: nu
     return toReturn;
 }
 
-export function getParentDirectory (path: string) {
+export function getParentDirectory (path: string, repetition: number = 1): string {
     let toReturn = path;
     if (!toReturn.endsWith("/")) toReturn += "/";
-    return toReturn + ".."
+    toReturn += ".."
+    return repetition > 1 ? getParentDirectory(toReturn, --repetition) : toReturn;
 }

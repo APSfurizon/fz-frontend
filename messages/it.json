@@ -96,8 +96,8 @@
       "validation_fail": "Valore non valido"
     },
     "table": {
-      "search": {
-        "placeholder": "Cerca"
+      "filter": {
+        "placeholder": "Filtra"
       },
       "add": {
         "title": "Aggiungi"
@@ -592,7 +592,25 @@
             "errors": {
               "unknown_user": "Utente non trovato",
               "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
-            }
+            },
+            "cards_table": {
+              "issue_year": "Anno emissione"
+            },
+            "membership_cards": "Tessere socio",
+            "badge": "Badge",
+            "badges": {
+              "fursona_name": "Nome fursona",
+              "locale": "Localizzazione",
+              "delete_badge_picture": "Elimina immagine",
+              "hide_from_nosecount": "Nascondi dal nosecount",
+              "show_from_nosecount": "Mostra nel nosecount"
+            },
+            "fursuit_table": {
+              "picture": "Fotografia",
+              "name": "Nome",
+              "species": "Specie"
+            },
+            "fursuits": "Fursuit"
           }
         },
         "security": {

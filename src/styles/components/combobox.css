@@ -1,5 +1,5 @@
 @import url('../colors.css');
-@import url('./janInput.css');
+@import url('./fpInput.css');
 
 /* Error style */
 div.input-container:has(input.input-field.danger),
@@ -15,7 +15,7 @@ div.jan-input.success>div.input-container:has(input.input-field:user-valid) {
 }
 
 div.jan-input {
-    
+
     select.input-field {
         flex: 1;
         color: var(--text-input-color);
@@ -41,7 +41,7 @@ div.jan-input {
         outline: none;
         border: none;
     }
-    
+
     /* Disabled style */
     div.input-container:has(select.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);

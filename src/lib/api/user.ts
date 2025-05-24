@@ -8,6 +8,8 @@ import { ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse
 import { MediaData } from "./media";
 import { UAParser } from "ua-parser-js";
 
+export const REG_ITALIAN_FISCAL_CODE = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi;
+
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
     propic: MediaData
 }
@@ -279,7 +281,7 @@ export class AutoInputSexManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds (filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             getAutoInputSexes ().then (results => {
                 resolve (filterLoaded(results, filter));
             });
@@ -287,7 +289,7 @@ export class AutoInputSexManager implements AutoInputManager {
     }
 
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             getAutoInputSexes ().then (results => {
                 resolve (
                     filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)

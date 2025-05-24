@@ -15,12 +15,27 @@ import { useFormContext } from '@/components/input/dataForm';
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-export default function Upload ({children, cropTitle, initialMedia, fieldName, isRequired=false, label, helpText, loading=false, readonly=false, requireCrop = false, viewSize=96, cropAspectRatio = "square", setBlob, onDelete}: Readonly<{
+export default function Upload ({
+    children,
+    cropTitle,
+    initialMedia,
+    fieldName,
+    required=false,
+    label,
+    helpText,
+    loading=false,
+    readonly=false,
+    requireCrop = false,
+    viewSize=96,
+    cropAspectRatio = "square",
+    setBlob,
+    onDelete
+}: Readonly<{
     children?: React.ReactNode,
     cropTitle?: string,
     initialMedia?: MediaData,
     fieldName?: string,
-    isRequired?: boolean,
+    required?: boolean,
     label?: string,
     helpText?: string,
     loading: boolean,
@@ -45,7 +60,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
     const [previewUrl, setPreviewUrl] = useState<string>();
 
     // Reset logic
-    const { reset = false } = useFormContext();
+    const { reset = false, globalDisabled = false } = useFormContext();
 
     /**Loads the initial value media */
     useEffect(()=>{
@@ -75,7 +90,7 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
                     onFileUpload (image);
                 }
                 setError(false);
-            }).catch((message: String)=>{
+            }).catch((message: string)=>{
                 showModal (t("common.error"), <span className='error'>{t(`components.upload.${message}`)}</span>)
                 setError(true);
             })
@@ -146,14 +161,16 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
      */
     const onDeleteRequest = () => {
         if (media) {
-            onDelete && onDelete(media.mediaId);
+            if(onDelete) onDelete(media.mediaId);
         } else if (previewUrl) {
             URL.revokeObjectURL(previewUrl);
             setPreviewUrl(undefined);
-            setBlob && setBlob(undefined);
+            if(setBlob) setBlob(undefined);
         }
     }
-    
+
+    const isRequired = !globalDisabled && required;
+
     return <>
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} defaultValue={previewUrl ?? ""} required={isRequired}></input>
         <div>
@@ -170,11 +187,11 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
                 <div className="vertical-list gap-2mm">
                     {/* Upload button */}
                     {!media && <Button title={t('components.upload.open')} onClick={()=>openFileDialog()}
-                        iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>
+                        iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || globalDisabled} busy={loading}>
                         {!media && t('components.upload.open')}</Button>}
                     {/* Delete button */}
                     {(media || previewUrl) && <Button title={t('components.upload.delete')} className="danger"
-                        onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly}
+                        onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly || globalDisabled}
                         busy={loading}>{t('components.upload.delete')}</Button>}
                 </div>
                 {children}
@@ -201,10 +218,12 @@ export default function Upload ({children, cropTitle, initialMedia, fieldName, i
             </div>
             <div className="bottom-toolbar">
                 <Button title={t('common.cancel')} className="danger" onClick={()=>onCropCanceled()}
-                    iconName={ICONS.CANCEL} disabled={readonly} busy={loading}>{t('common.cancel')}</Button>
+                    iconName={ICONS.CANCEL} disabled={readonly || globalDisabled}
+                    busy={loading}>{t('common.cancel')}</Button>
                 <div className="spacer"></div>
                 <Button title={t('components.upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
-                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly} busy={loading}>{!media && t('components.upload.upload')}</Button>    
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || globalDisabled}
+                     busy={loading}>{!media && t('components.upload.upload')}</Button>    
             </div>
         </Modal>
     </>

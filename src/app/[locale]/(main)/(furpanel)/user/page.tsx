@@ -10,7 +10,7 @@ import { AllSessionsResponse, AutoInputGenderManager, AutoInputSexManager, Destr
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
-import JanInput from "@/components/input/janInput";
+import FpInput from "@/components/input/fpInput";
 import AutoInput from "@/components/input/autoInput";
 import { AutoInputStatesManager, CountrySearchResult, AutoInputCountriesManager } from "@/lib/api/geo";
 import { firstOrUndefined } from "@/lib/utils";
@@ -148,10 +148,10 @@ export default function UserPage() {
               <input type="hidden" name="id" value={personalInformation?.id ?? ""}></input>
               <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
               <div className="form-pair horizontal-list gap-4mm">
-                <JanInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.first_name.label")} placeholder={t("authentication.register.form.first_name.placeholder")}
                   initialValue={personalInformation?.firstName}/>
-                <JanInput fieldName="lastName" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="lastName" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.last_name.label")} placeholder={t("authentication.register.form.last_name.placeholder")}
                   initialValue={personalInformation?.lastName}/>
               </div>
@@ -166,7 +166,7 @@ export default function UserPage() {
                   initialData={personalInformation?.gender ? [personalInformation?.gender] : undefined}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
-                <JanInput fieldName="allergies" required={false} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="allergies" required={false} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.allergies.label")} placeholder={t("authentication.register.form.allergies.placeholder")}
                   initialValue={personalInformation?.allergies}/>
               </div>
@@ -176,12 +176,12 @@ export default function UserPage() {
                   manager={new AutoInputCountriesManager} onChange={(values, newValues, removedValue) => setBirthCountry ((firstOrUndefined(newValues) as CountrySearchResult)?.code)}
                   label={t("authentication.register.form.birth_country.label")} placeholder={t("authentication.register.form.birth_country.placeholder")}
                   initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}/>
-                <JanInput fieldName="birthday" required={true} inputType="date" busy={personalInfoLoading}
+                <FpInput fieldName="birthday" required={true} inputType="date" busy={personalInfoLoading}
                 label={t("authentication.register.form.birthday.label")} initialValue={personalInformation?.birthday}/>
               </div>
               {/* Show only if birth country is Italy */}
               <div className="form-pair horizontal-list gap-4mm">
-                <JanInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text"
+                <FpInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text"
                   pattern={/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi} busy={personalInfoLoading} disabled={!fiscalCodeRequired}
                   label={t("authentication.register.form.fiscal_code.label")} placeholder={t("authentication.register.form.fiscal_code.placeholder")}
                   initialValue={fiscalCodeRequired ? personalInformation?.fiscalCode : ""}/>
@@ -191,7 +191,7 @@ export default function UserPage() {
                   param={birthCountry} paramRequired requiredIfPresent label={t("authentication.register.form.birth_region.label")}
                   placeholder={t("authentication.register.form.birth_region.placeholder")}
                   initialData={personalInformation?.birthRegion ? [personalInformation?.birthRegion] : undefined}/>
-                <JanInput fieldName="birthCity" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="birthCity" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.birth_city.label")} placeholder={t("authentication.register.form.birth_city.placeholder")}
                   initialValue={personalInformation?.birthCity}/>
               </div>
@@ -208,15 +208,15 @@ export default function UserPage() {
                   initialData={personalInformation?.residenceRegion ? [personalInformation?.residenceRegion] : undefined}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
-                <JanInput fieldName="residenceCity" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="residenceCity" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.residence_city.label")} placeholder={t("authentication.register.form.residence_city.placeholder")}
                   initialValue={personalInformation?.residenceCity}/>
-                <JanInput fieldName="residenceZipCode" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="residenceZipCode" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.residence_zip_code.label")} placeholder={t("authentication.register.form.residence_zip_code.placeholder")}
                   initialValue={personalInformation?.residenceZipCode}/>
               </div>
               <div className="form-pair horizontal-list gap-4mm">
-                <JanInput fieldName="residenceAddress" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="residenceAddress" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.residence_address.label")} placeholder={t("authentication.register.form.residence_address.placeholder")}
                   initialValue={personalInformation?.residenceAddress}/>
               </div>
@@ -228,7 +228,7 @@ export default function UserPage() {
                   placeholder={t("authentication.register.form.phone_prefix.placeholder")}
                   idExtractor={(r) => (r as CountrySearchResult).phonePrefix ?? ""}
                   initialData={personalInformation?.prefixPhoneNumber ? [personalInformation?.prefixPhoneNumber] : undefined}/>
-                <JanInput fieldName="phoneNumber" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="phoneNumber" required={true} inputType="text" busy={personalInfoLoading}
                   label={t("authentication.register.form.phone_number.label")} placeholder={t("authentication.register.form.phone_number.placeholder")}
                   style={{flex: "2"}} initialValue={personalInformation?.phoneNumber} prefix={phonePrefix}/>
               </div>
@@ -298,10 +298,10 @@ export default function UserPage() {
             </div>
             <DataForm className="login-form gap-4mm" loading={passwordChangeLoading} setLoading={setPasswordChangeLoading}
               action={new ResetPasswordFormAction} onFail={(err) => passwordChangeError(err)} disableSave={!passwordMatch}>
-              <JanInput fieldName="password" required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.new_password.label")}
+              <FpInput fieldName="password" required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.new_password.label")}
                 placeholder={t("authentication.recover_confirm.input.new_password.placeholder")} helpText={t("authentication.recover_confirm.input.new_password.help")}
                 onChange={(e) => setPassword(e.currentTarget.value)} autocomplete="new-password"/>
-              <JanInput required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.confirm_password.label")}
+              <FpInput required={true} inputType="password" busy={passwordChangeLoading} label={t("authentication.recover_confirm.input.confirm_password.label")}
                   placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}
                   autocomplete="current-password"/>
             </DataForm>

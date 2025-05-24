@@ -1,5 +1,6 @@
-import Icon, { ICONS } from "../icon";
-import { useState, MouseEvent, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef, createContext, useContext } from "react";
+import { ICONS } from "../icon";
+import { useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
+    createContext, useContext } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
 import { FormApiAction } from "@/lib/components/dataForm";
@@ -14,7 +15,8 @@ export interface SaveButtonData {
 // Context management
 interface FormUpdate {
     reset: boolean,
-    setReset: (b: boolean) => void
+    setReset: (b: boolean) => void,
+    globalDisabled: boolean
 }
 
 const FormContext = createContext<FormUpdate | undefined>(undefined);
@@ -22,17 +24,38 @@ const FormContext = createContext<FormUpdate | undefined>(undefined);
 export const useFormContext = () => {
     const context = useContext(FormContext);
     if (!context) {
-      return {reset: null, setReset: () => {}};
+      return {reset: null, setReset: () => {}, globalDisabled: false};
     }
     return context;
 };
   
 
-export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, children, checkFn, className, disabled, disableSave=false, endpoint, hideSave=false, loading, method="POST", editFormData, setLoading, style, saveButton, resetOnFail=true, resetOnSuccess=false, restPathParams, shouldReset=false}: Readonly<{
+export default function DataForm ({
+    action,
+    onSuccess,
+    onFail,
+    onBeforeSubmit,
+    children,
+    checkFn,
+    className,
+    disabled=false,
+    disableSave=false,
+    endpoint,
+    hideSave=false,
+    loading,
+    editFormData,
+    setLoading,
+    style,
+    saveButton,
+    resetOnFail=true,
+    resetOnSuccess=false,
+    restPathParams,
+    shouldReset=false
+}: Readonly<{
     action?: FormApiAction<any, any, any>,
-    onSuccess?: (data: Boolean | ApiResponse) => any,
+    onSuccess?: (data: boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
-    onBeforeSubmit?: Function,
+    onBeforeSubmit?: () => void,
     editFormData?: (data: FormData) => FormData,
     checkFn?: (e: FormData, form: HTMLFormElement) => boolean,
     children?: React.ReactNode,
@@ -42,7 +65,6 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     hideSave?: boolean,
     disableSave?: boolean,
     loading?: boolean,
-    method?: string,
     setLoading?: Dispatch<SetStateAction<boolean>>,
     style?: CSSProperties,
     saveButton?: SaveButtonData,
@@ -81,15 +103,15 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
                 return;
             }
         }
-        onBeforeSubmit && onBeforeSubmit();
-        setLoading && setLoading (true);
+        if (onBeforeSubmit) onBeforeSubmit();
+        if (setLoading) setLoading (true);
         runFormRequest(action, restPathParams, formData)
             .then((responseData) => onSuccess && onSuccess (responseData))
             .catch((errorData) => {
-                onFail && onFail (errorData);
-                if (resetOnFail) {setReset(true);}
+                if (onFail) onFail (errorData);
+                if (resetOnFail) setReset(true);
             }).finally(()=>{
-                setLoading && setLoading(false);
+                if (setLoading) setLoading(false);
                 if (resetOnSuccess) {setReset(true);}
             });
         e.preventDefault();
@@ -97,14 +119,23 @@ export default function DataForm ({action, onSuccess, onFail, onBeforeSubmit, ch
     }
 
     return <>
-        <form ref={inputRef} className={`data-form vertical-list ${className ?? ""}`} method={method} action={endpoint} aria-disabled={disabled} onSubmit={onFormSubmit}>
-            <FormContext.Provider value={{reset, setReset}}>
+        <form ref={inputRef}
+            className={`data-form vertical-list ${className ?? ""}`}
+            action={endpoint}
+            onSubmit={onFormSubmit}
+            style={{...style}}>
+            <FormContext.Provider value={{reset, setReset, globalDisabled: disabled}}>
                 {children}
             </FormContext.Provider>
             {!hideSave && (
             <div className="toolbar-bottom">
                 <div className="spacer"></div>
-                <Button type="submit" disabled={disableSave} iconName={saveButton.iconName} busy={loading}>{saveButton.text}</Button>
+                <Button type="submit"
+                    disabled={disableSave}
+                    iconName={saveButton.iconName}
+                    busy={loading}>
+                        {saveButton.text}
+                </Button>
             </div>
             )}
         </form>

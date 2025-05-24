@@ -1,11 +1,11 @@
-import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, KeyboardEvent, MouseEvent, useEffect, useState } from "react";
+import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "../icon";
-import "@/styles/components/janInput.css";
+import "@/styles/components/fpInput.css";
 import { useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 
-export default function JanInput ({
+export default function FpInput ({
     busy=false,
     className,
     disabled=false,
@@ -23,6 +23,7 @@ export default function JanInput ({
     onKeyDown,
     pattern,
     placeholder,
+    icon,
     prefix,
     readOnly=false,
     required=false,
@@ -48,6 +49,7 @@ export default function JanInput ({
     onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void,
     pattern?: RegExp,
     placeholder?: string,
+    icon?: string,
     prefix?: string,
     readOnly?: boolean,
     required?: boolean,
@@ -59,7 +61,8 @@ export default function JanInput ({
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { reset = false } = useFormContext();
+    const { reset = false, globalDisabled = false } = useFormContext();
+    const inputRef = useRef<HTMLInputElement>(null);
     const t = useTranslations("components");
 
     // Detect reset
@@ -86,31 +89,38 @@ export default function JanInput ({
     /* Change handling */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
-        onChange && onChange(e);
-        pattern && patternValidity(e);
+        if (onChange) onChange(e);
+        if (pattern) patternValidity(e);
     };
     
     /* Calc input type */
     let finalType = inputType;
-    let isPassword = inputType === "password";
+    const isPassword = inputType === "password";
     if (isPassword && visiblePassword) finalType = "text";
+
+    const isDisabled = disabled || globalDisabled;
+    const isRequired = required && !isDisabled;
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>
             {label && <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>}
-            <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
+            <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
+                onClick={()=>inputRef.current?.focus()}>
                 {prefix && <span className="title small color-subtitle">
                     {prefix}
                 </span>}
+                {icon && <Icon style={{marginLeft: '0.25em', marginRight: '0'}}
+                    className="average"
+                    iconName={icon}/>}
                 <input
                     readOnly={readOnly}
-                    required={required}
+                    required={isRequired}
                     name={fieldName}
                     className={`input-field title ${hasError ? "danger" : ""}`}
                     style={{...inputStyle}}
                     placeholder={placeholder ?? ""}
                     type={finalType}
-                    disabled={disabled}
+                    disabled={isDisabled}
                     value={inputValue ?? ""}
                     onChange={handleChange}
                     onClick={onClick}
@@ -118,6 +128,7 @@ export default function JanInput ({
                     minLength={minLength}
                     maxLength={maxLength}
                     autoComplete={autocomplete}
+                    ref={inputRef}
                 />
                 <span className={`${busy || isPassword ? "icon-container" : ""}`}>
                     {(busy) && (
@@ -125,12 +136,16 @@ export default function JanInput ({
                     )}
                     {!(busy) && (isPassword) && (
                         <a style={{cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}>
-                            <Icon className="medium" iconName={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}></Icon>
+                            <Icon className="medium"
+                                iconName={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}/>
                         </a>
                     )}
                 </span>
             </div>
-            {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
+            {helpText && helpText.length > 0 && 
+                <span className="help-text tiny descriptive color-subtitle">
+                    {helpText}
+            </span>}
         </div>
     </>
 }

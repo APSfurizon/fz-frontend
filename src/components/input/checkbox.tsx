@@ -28,10 +28,10 @@ export default function Checkbox ({
     const [checked, setChecked] = useState(initialValue ?? false);
     const [lastInitialValue, setLastInitialValue] = useState<boolean> ();
     const [busyState, setBusyState] = useState(busy ?? false);
-    const { reset = false } = useFormContext();
-
+    const { reset = false, globalDisabled = false } = useFormContext();
+    const isDisabled = disabled || globalDisabled;
     const clickEvent = (event: MouseEvent<HTMLButtonElement>) => {
-        if (!disabled && !busyState) {
+        if (!isDisabled && !busyState) {
             setChecked(!checked);
             if (onClick != undefined) onClick(event, !checked, setChecked, setBusyState);
         }
@@ -51,7 +51,7 @@ export default function Checkbox ({
     return <>
         <input type="hidden" name={fieldName} value={""+checked}></input>
         <button type="button" onClick={clickEvent} style={{...style}}
-            disabled={disabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
+            disabled={isDisabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
                 {busyState 
                 ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
