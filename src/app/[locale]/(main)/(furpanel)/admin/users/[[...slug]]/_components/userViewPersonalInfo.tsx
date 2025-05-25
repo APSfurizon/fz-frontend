@@ -1,7 +1,7 @@
-import { useWrappedRouter } from "@/components/hooks/useWrappedRouter";
 import { ICONS } from "@/components/icon";
 import AutoInput from "@/components/input/autoInput";
 import Button from "@/components/input/button";
+import { ChangesGuard } from "@/components/input/changesGuard";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
@@ -10,14 +10,16 @@ import { AutoInputGenderManager, AutoInputSexManager, REG_ITALIAN_FISCAL_CODE, U
     UserPersonalInfo } from "@/lib/api/user";
 import { firstOrUndefined } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { MutableRefObject, useImperativeHandle, useRef, useState } from "react";
 
 export default function UserViewPersonalInfo({
     personalInformation,
-    reloadData
+    reloadData,
+    changed,
 }: Readonly<{
     personalInformation: UserPersonalInfo,
-    reloadData?: () => void
+    reloadData?: () => void,
+    changed?: MutableRefObject<boolean | null>
 }>) {
     const [inEdit, setInEdit] = useState(false);
     const t = useTranslations();
@@ -28,8 +30,13 @@ export default function UserViewPersonalInfo({
     const [residenceCountry, setResidenceCountry] = useState<string>();
     const [phonePrefix, setPhonePrefix] = useState<string>();
     const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
+    // Edit logic
+    const isChangedRef = useRef<boolean>(null);
+    useImperativeHandle(changed, ()=>isChangedRef.current ?? false);
 
     return <>
+        <ChangesGuard shouldBlock={isChangedRef.current ?? false}
+            confirmMessage={t("common.CRUD.discard_changes.description")}/>
         <DataForm className="vertical-list gap-2mm"
             action={new UpdatePersonalInfoFormAction}
             loading={personalInfoLoading}
@@ -37,6 +44,8 @@ export default function UserViewPersonalInfo({
             onSuccess={() => { if (reloadData) reloadData() }}
             disableSave={!inEdit}
             formRef={formRef}
+            initialEntity={personalInformation}
+            entityChanged={isChangedRef}
             additionalButtons={<>
                 <Button iconName={inEdit ? ICONS.CANCEL : ICONS.EDIT}
                     type="button"

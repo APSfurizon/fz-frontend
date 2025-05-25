@@ -53,7 +53,10 @@
       "update": "Aggiorna",
       "edit": "Modifica",
       "delete": "Elimina",
-      "save": "Salva"
+      "save": "Salva",
+      "discard_changes": {
+        "description": "Le modifiche verranno scartate"
+      }
     },
     "sponsorships": {
       "sponsor": "Sponsor",

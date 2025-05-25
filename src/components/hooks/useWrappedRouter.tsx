@@ -1,12 +1,8 @@
 import { useRouter } from 'next/navigation';
 
-export function useWrappedRouter({
-  confirmMessage,
-  shouldBlock
-} : Readonly<{
+export function useWrappedRouter(
   confirmMessage: string,
-  shouldBlock: boolean
-}>) {
+  shouldBlock: boolean) {
   const router = useRouter();
 
   const confirmNavigation = (): boolean => {

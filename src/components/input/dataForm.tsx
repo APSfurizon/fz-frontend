@@ -3,11 +3,12 @@ import {
     useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
     createContext, useContext,
     MutableRefObject,
-    useImperativeHandle
+    useImperativeHandle,
+    useMemo
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
-import { FormApiAction, InterRequest } from "@/lib/components/dataForm";
+import { FormApiAction, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
 
@@ -20,7 +21,8 @@ export interface SaveButtonData {
 interface FormUpdate {
     reset: boolean,
     setReset: (b: boolean) => void,
-    globalDisabled: boolean
+    globalDisabled: boolean,
+    onFormChange: (fieldName?: string) => void
 }
 
 const FormContext = createContext<FormUpdate | undefined>(undefined);
@@ -28,7 +30,7 @@ const FormContext = createContext<FormUpdate | undefined>(undefined);
 export const useFormContext = () => {
     const context = useContext(FormContext);
     if (!context) {
-        return { reset: null, setReset: () => { }, globalDisabled: false };
+        return { reset: null, setReset: () => { }, globalDisabled: false, onFormChange: () => {} };
     }
     return context;
 };
@@ -36,6 +38,8 @@ export const useFormContext = () => {
 
 export default function DataForm<T extends FormApiAction<any, any, any>>({
     additionalButtons,
+    action,
+    onChange,
     onSuccess,
     onFail,
     onBeforeSubmit,
@@ -57,9 +61,12 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     resetOnSuccess = false,
     restPathParams,
     shouldReset = false,
+    initialEntity,
     entityChanged
 }: Readonly<{
     additionalButtons?: React.ReactNode,
+    action?: T,
+    onChange?: (newEntity: InferRequest<T>, fieldName: string) => void,
     onSuccess?: (data: boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: () => void,
@@ -81,7 +88,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     resetOnSuccess?: boolean,
     restPathParams?: string[],
     shouldReset?: boolean,
-    initialEntity?: InterRequest<T>,
+    initialEntity?: InferRequest<T>,
     entityChanged?: MutableRefObject<boolean | null>,
 }>) {
     const [reset, setReset] = useState(false);
@@ -89,6 +96,12 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     const inputRef = useRef<HTMLFormElement>(null);
     useImperativeHandle(formRef, () => inputRef.current!);
 
+    // Entity change logic
+    const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
+    const isEntityChanged = useMemo(()=>!!initialEntity &&
+        JSON.stringify(initialEntity) !== JSON.stringify(currentEntity), [currentEntity]);
+    useImperativeHandle(entityChanged, () => isEntityChanged);
+    
     if (saveButton === undefined) saveButton = {
         text: t('dataForm.save'),
         iconName: ICONS.SAVE
@@ -131,6 +144,13 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         e.stopPropagation();
     }
 
+    const onFormChange = (fieldName?: string) => {
+        if (!fieldName || !formRef?.current)  return;
+        const entity: InferRequest<T> = action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
+        setCurrentEntity(entity);
+        if (onChange) onChange(entity, fieldName);
+    };
+
     const showBottomToolbar = !hideSave || !hideReset || !!additionalButtons;
 
     return <>
@@ -140,7 +160,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
             onSubmit={onFormSubmit}
             onReset={() => setReset(true)}
             style={{ ...style }}>
-            <FormContext.Provider value={{ reset, setReset, globalDisabled: disabled }}>
+            <FormContext.Provider value={{ reset, setReset, globalDisabled: disabled, onFormChange }}>
                 {children}
             </FormContext.Provider>
             {showBottomToolbar && (
@@ -150,7 +170,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                         disabled={disableSave}
                         iconName={saveButton.iconName}
                         busy={loading}>
-                        {saveButton.text}
+                        {saveButton.text}{isEntityChanged ? "*" : ""}
                     </Button>}
                     {!hideReset && <Button type="reset"
                         iconName={saveButton.iconName}

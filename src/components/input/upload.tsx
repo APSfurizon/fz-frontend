@@ -60,7 +60,7 @@ export default function Upload ({
     const [previewUrl, setPreviewUrl] = useState<string>();
 
     // Reset logic
-    const { reset = false, globalDisabled = false } = useFormContext();
+    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
 
     /**Loads the initial value media */
     useEffect(()=>{
@@ -101,6 +101,7 @@ export default function Upload ({
         setCropDialogOpen(false);
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         setPreviewUrl(undefined);
+        onFormChange(fieldName);
     };
 
     /**
@@ -140,6 +141,7 @@ export default function Upload ({
                     setBlob(scaledBlob);
                 }
                 setError(false);
+                onFormChange(fieldName);
             }).catch(()=>{
                 setError(true);
                 if (previewUrl) URL.revokeObjectURL(previewUrl);

@@ -9,8 +9,8 @@ export abstract class FormApiAction<T extends ApiRequest, U extends ApiResponse 
         dtoBuilder!: FormDTOBuilder<T>
     }
 
-export type InterRequest<A> = A extends FormApiAction<infer T, any, any> ? T : never; 
-export type InterResponse<A> = A extends FormApiAction<any, infer T, any> ? T : never;
+export type InferRequest<A> = A extends FormApiAction<infer T, any, any> ? T : never; 
+export type InferResponse<A> = A extends FormApiAction<any, infer T, any> ? T : never;
 
 export type FormApiActionFactory<T extends FormApiAction<any, any, any>> = new () => T;
 

@@ -61,7 +61,7 @@ export default function FpInput ({
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { reset = false, globalDisabled = false } = useFormContext();
+    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
     const inputRef = useRef<HTMLInputElement>(null);
     const t = useTranslations("components");
 
@@ -91,6 +91,7 @@ export default function FpInput ({
         setInputValue(e.target.value);
         if (onChange) onChange(e);
         if (pattern) patternValidity(e);
+        onFormChange(fieldName);
     };
     
     /* Calc input type */

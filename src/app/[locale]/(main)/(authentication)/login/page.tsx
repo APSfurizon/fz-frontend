@@ -6,10 +6,9 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/l
 import { AuthenticationCodes, LoginFormAction, LoginResponse } from "@/lib/api/authentication/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
-import { useUser } from "@/components/context/userProvider";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
@@ -18,7 +17,7 @@ import Button from "@/components/input/button";
 
 export default function Login() {
   const t = useTranslations("authentication");
-  const [error, setError] = useState<String | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const params = useSearchParams();

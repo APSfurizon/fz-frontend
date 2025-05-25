@@ -53,7 +53,10 @@
       "update": "Update",
       "edit": "Edit",
       "delete": "Delete",
-      "save": "Save"
+      "save": "Save",
+      "discard_changes": {
+        "description": "Any unsaved change will be discarded"
+      }
     },
     "sponsorships": {
       "sponsor": "Sponsor",

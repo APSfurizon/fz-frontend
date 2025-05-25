@@ -100,7 +100,7 @@ export default function AutoInput ({
     const [waitForParam, setWaitForParam] = useState(false);
 
     /* reset */
-    const { reset = false, globalDisabled = false } = useFormContext();
+    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -125,6 +125,7 @@ export default function AutoInput ({
         setSearchInput("");
         setSearchResults([]);
         if (onChange) onChange(selectedValues ?? [], [toAdd], undefined);
+        onFormChange(fieldName);
         setTimeout(()=>inputRef.current?.focus(), 100);
     }
     
@@ -140,7 +141,8 @@ export default function AutoInput ({
             setSelectedIds(newSelectedIds);
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
-            if (onChange) onChange(selectedValues ?? [], undefined, toRemove);    
+            if (onChange) onChange(selectedValues ?? [], undefined, toRemove);
+            onFormChange(fieldName);
         }
     }
 
@@ -237,6 +239,7 @@ export default function AutoInput ({
             setSearchInput("");
             setSearchResults([]);
             if (onChange) onChange([], [], undefined);
+            onFormChange(fieldName);
         }
         setWaitForParam(false);
         setLatestInitialData(initialData);
