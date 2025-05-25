@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
-import { FormApiAction } from "@/lib/components/dataForm";
+import { FormApiAction, InterRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
 
@@ -34,9 +34,8 @@ export const useFormContext = () => {
 };
 
 
-export default function DataForm({
+export default function DataForm<T extends FormApiAction<any, any, any>>({
     additionalButtons,
-    action,
     onSuccess,
     onFail,
     onBeforeSubmit,
@@ -57,10 +56,10 @@ export default function DataForm({
     resetOnFail = true,
     resetOnSuccess = false,
     restPathParams,
-    shouldReset = false
+    shouldReset = false,
+    entityChanged
 }: Readonly<{
     additionalButtons?: React.ReactNode,
-    action?: FormApiAction<any, any, any>,
     onSuccess?: (data: boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: () => void,
@@ -82,6 +81,8 @@ export default function DataForm({
     resetOnSuccess?: boolean,
     restPathParams?: string[],
     shouldReset?: boolean,
+    initialEntity?: InterRequest<T>,
+    entityChanged?: MutableRefObject<boolean | null>,
 }>) {
     const [reset, setReset] = useState(false);
     const t = useTranslations('components');

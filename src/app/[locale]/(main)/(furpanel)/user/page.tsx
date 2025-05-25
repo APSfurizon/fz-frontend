@@ -2,7 +2,7 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { useTranslations } from "next-intl";
 import DataForm from "@/components/input/dataForm";
 import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";

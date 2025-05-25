@@ -3,7 +3,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import React, { MouseEvent, useEffect, useState } from "react";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
 import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";

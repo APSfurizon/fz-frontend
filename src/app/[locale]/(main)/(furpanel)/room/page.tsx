@@ -3,7 +3,7 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/ap
 import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { useModalUpdate } from "@/components/context/modalProvider";

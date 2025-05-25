@@ -4,7 +4,7 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError, runRequest
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction, ExchangeUpdateApiData } from "@/lib/api/exchange";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";

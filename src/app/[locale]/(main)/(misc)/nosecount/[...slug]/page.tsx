@@ -12,7 +12,7 @@ import { translate } from "@/lib/translations";
 import UserPicture from "@/components/userPicture";
 import Icon, { ICONS } from "@/components/icon";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import ModalError from "@/components/modalError";
 import Link from "next/link";
 import LoadingPanel from "@/components/loadingPanel";

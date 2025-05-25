@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { useUser } from "@/components/context/userProvider";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";

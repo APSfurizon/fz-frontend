@@ -8,7 +8,7 @@ import Link from "next/link";
 import DataForm from "@/components/input/dataForm";
 import Icon, { ICONS } from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import AutoInput from "@/components/input/autoInput";
 import { extractPhonePrefix, RegisterFormAction } from "@/lib/api/authentication/register";

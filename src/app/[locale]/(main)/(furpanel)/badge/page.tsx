@@ -3,7 +3,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { useFormatter, useTranslations } from "next-intl";
 import { BadgeStatusApiResponse, DeleteBadgeAction, BadgeDataChangeFormAction, GetBadgeStatusAction }
   from "@/lib/api/badge/badge";

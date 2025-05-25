@@ -4,7 +4,7 @@ import { ICONS } from "@/components/icon";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ModalError from "@/components/modalError";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
