@@ -5,7 +5,8 @@ import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
-import { AutoInputGenderManager, AutoInputSexManager, REG_ITALIAN_FISCAL_CODE, UpdatePersonalInfoFormAction, UserPersonalInfo } from "@/lib/api/user";
+import { AutoInputGenderManager, AutoInputSexManager, REG_ITALIAN_FISCAL_CODE, UpdatePersonalInfoFormAction,
+    UserPersonalInfo } from "@/lib/api/user";
 import { firstOrUndefined } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";

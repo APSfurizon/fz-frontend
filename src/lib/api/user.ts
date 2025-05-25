@@ -133,11 +133,11 @@ export class AutoInputUsersManager implements AutoInputManager {
 
 export function toSearchResult(usr: UserSearchResult): AutoInputSearchResult {
     const toReturn = new AutoInputSearchResult();
-    toReturn.id = usr.id,
-        toReturn.code = usr.code,
-        toReturn.icon = usr.icon,
-        toReturn.description = usr.description,
-        toReturn.imageUrl = usr.propic?.mediaUrl ?? null
+    toReturn.id = usr.id;
+    toReturn.code = usr.code;
+    toReturn.icon = usr.icon;
+    toReturn.description = usr.description;
+    toReturn.imageUrl = usr.propic?.mediaUrl ?? null;
     return toReturn;
 }
 
@@ -309,7 +309,7 @@ export class AutoInputSexManager implements AutoInputManager {
         });
     }
 
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
             getAutoInputSexes().then(results => {
                 resolve(
@@ -319,22 +319,22 @@ export class AutoInputSexManager implements AutoInputManager {
         });
     }
 
-    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }
 
 export class AutoInputGenderManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             getAutoInputGenders().then(results => {
                 resolve(filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
             getAutoInputGenders().then(results => {
                 resolve(
                     filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut)
@@ -343,7 +343,7 @@ export class AutoInputGenderManager implements AutoInputManager {
         });
     }
 
-    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }
 
 export function getUaFriendly(userAgent: string) {

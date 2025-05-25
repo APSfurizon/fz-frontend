@@ -10,7 +10,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Modal from "@/components/modal";
 import RoomInvite from "@/components/room/roomInvite";
 import {
-  GuestIdApiData, RoomCreateApiAction, RoomCreateData, RoomCreateResponse,
+  GuestIdApiData, RoomCreateApiAction, RoomCreateData,
   RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuestHeader,
   RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction,
   RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameFormAction,
@@ -171,7 +171,7 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomKickAction())
+    runRequest(new RoomKickAction(), undefined, guestData)
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
