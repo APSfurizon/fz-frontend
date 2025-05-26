@@ -182,7 +182,9 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
             prefixPhoneNumber: nullifyEmptyString(data.get('phonePrefix')?.toString()),
             phoneNumber: nullifyEmptyString(data.get('phoneNumber')?.toString()),
             userId: parseInt(data.get('userId')?.toString() ?? "0"),
-            id: parseInt(data.get('id')?.toString() ?? "0")
+            id: parseInt(data.get('id')?.toString() ?? "0"),
+            lastUpdatedEventId: undefined,
+            note: undefined
         };
         return toReturn;
     }

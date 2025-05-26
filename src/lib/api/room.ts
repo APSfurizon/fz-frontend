@@ -1,5 +1,4 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { nullifyEmptyString, nullifyEmptyStrings } from "../utils";
 import { ExtraDaysType } from "./booking";
 import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
@@ -43,7 +42,9 @@ export interface RoomInfo {
     owner: boolean,
 
     showInNosecount: boolean,
-    extraDays: ExtraDaysType
+    extraDays: ExtraDaysType,
+
+    eventId: number
 }
 
 export interface RoomCreateData {
@@ -71,7 +72,8 @@ export interface RoomInfoResponse extends ApiResponse {
     invitations: RoomInvitation[],
     buyOrUpgradeRoomSupported: boolean,
     canBuyOrUpgradeRoom: boolean,
-    canExchange: boolean
+    canExchange: boolean,
+    allowedModifications: boolean
 }
 
 export class RoomInfoApiAction extends ApiAction<RoomInfoResponse, ApiErrorResponse> {
@@ -88,7 +90,7 @@ export interface RoomRenameData extends RoomCreateData, RoomEditData { }
 
 export class RoomRenameDTOBuilder implements FormDTOBuilder<RoomRenameData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: RoomRenameData = {
+        const toReturn: RoomRenameData = {
             roomId: parseInt(data.get('roomId')!.toString()),
             name: data.get('name')?.toString() ?? ""
         };
@@ -126,7 +128,7 @@ export interface RoomInviteResponse extends ApiResponse {
 
 export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: RoomInviteApiData = {
+        const toReturn: RoomInviteApiData = {
             roomId: parseInt(data.get('roomId')!.toString()),
             userIds: data.get('invitedUsers')!.toString().split(',').map(val => parseInt(val)),
             force: (data.get('force')! ?? "").toString().toLowerCase() === "true",
@@ -171,7 +173,7 @@ export class RoomLeaveAction extends ApiAction<boolean, ApiErrorResponse> {
 
 export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeInitApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: OrderExchangeInitApiData = {
+        const toReturn: OrderExchangeInitApiData = {
             sourceUserId: parseInt(data.get('userId')!.toString()),
             destUserId: parseInt(data.get('recipientId')!.toString()),
             action: "room"
@@ -180,7 +182,7 @@ export class RoomExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeI
     }
 }
 
-export class RoomExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
+export class RoomExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new RoomExchangeInitDTOBuilder();

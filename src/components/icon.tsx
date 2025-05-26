@@ -72,6 +72,7 @@ export const ICONS = Object.freeze({
     PERSON: "person",
     PERSON_ADD: "person_add",
     PERSON_BOOK: "person_book",
+    PERSON_REMOVE: "person_remove",
     PERSON_SEARCH: "person_search",
     PETS: "pets",
     PHOTO_CAMERA: "photo_camera",

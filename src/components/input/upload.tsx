@@ -174,7 +174,12 @@ export default function Upload ({
     const isRequired = !globalDisabled && required;
 
     return <>
-        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName} defaultValue={previewUrl ?? ""} required={isRequired}></input>
+        {label && <input tabIndex={-1}
+            className="suppressed-input"
+            type="text"
+            name={fieldName}
+            defaultValue={previewUrl ?? ""}
+            required={isRequired}/>}
         <div>
             {label && <label htmlFor={fieldName} className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
                 {label}

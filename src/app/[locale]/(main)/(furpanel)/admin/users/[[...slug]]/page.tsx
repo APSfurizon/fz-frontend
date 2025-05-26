@@ -9,8 +9,8 @@ import { AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
@@ -19,7 +19,7 @@ import UserViewFursuitsTable from "./_components/userViewFursuitsTable";
 import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
-import { useWrappedRouter } from "@/components/hooks/useWrappedRouter";
+import UserViewRooms from "./_components/rooms/userViewRooms";
 
 export default function AdminUsersPage ({ params }: {params: Promise<{slug: string[]}>}) {
     const [userId, setUserId] = useState<number> ();
@@ -30,9 +30,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
     const t = useTranslations();
     const {showModal} = useModalUpdate();
     const path = usePathname();
-    const isPersonalDataChanged = useRef<boolean>(null);
-    const router = useWrappedRouter(t("common.CRUD.discard_changes.description"),
-        isPersonalDataChanged.current ?? false);
+    const router = useRouter();
     
     // Main Logic
     
@@ -102,13 +100,16 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
             {/* Orders */}
             <span className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</span>
             <UserViewOrdersTable userData={userData}/>
+            {/* Rooms */}
+            <span className="title medium">{t("furpanel.admin.users.accounts.view.rooms")}</span>
+            <UserViewRooms userData={userData} reloadData={reloadData}/>
             {/* Membership cards */}
             <span className="title medium">{t("furpanel.admin.users.accounts.view.membership_cards")}</span>
             <UserViewCardsTable userData={userData}/>
             {/* Personal info */}
             <span className="title medium">{t("furpanel.admin.users.accounts.view.personal_info")}</span>
             <UserViewPersonalInfo personalInformation={userData.personalInfo}
-                reloadData={reloadData} changed={isPersonalDataChanged}/>
+                reloadData={reloadData}/>
             {/* Security */}
             <span className="title medium">{t("furpanel.admin.users.security.title")}</span>
             <UserViewSecurity userData={userData} reloadData={reloadData}/>

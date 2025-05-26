@@ -1,8 +1,8 @@
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
+import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { buildSearchParams } from "../utils";
 import { ApiErrorResponse, RequestType, runRequest } from "./global";
-import { AutoInputUsersManager, toSearchResult, UserSearchAction, UserSearchResponse } from "./user";
+import { AutoInputUsersManager, toSearchResult, UserSearchAction } from "./user";
 
 export enum OrderStatus {
     CANCELED = "CANCELED",
@@ -19,7 +19,7 @@ export interface OrderExchangeInitApiData {
 
 export class OrderExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchangeInitApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: OrderExchangeInitApiData = {
+        const toReturn: OrderExchangeInitApiData = {
             sourceUserId: parseInt(data.get('userId')!.toString()),
             destUserId: parseInt(data.get('recipientId')!.toString()),
             action: "order"
@@ -28,7 +28,7 @@ export class OrderExchangeInitDTOBuilder implements FormDTOBuilder<OrderExchange
     }
 }
 
-export class OrderExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, Boolean, ApiErrorResponse> {
+export class OrderExchangeFormAction extends FormApiAction<OrderExchangeInitApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new OrderExchangeInitDTOBuilder();
@@ -39,8 +39,8 @@ export class OrderExchangeFormAction extends FormApiAction<OrderExchangeInitApiD
  * Defines the search service for users without orders
  */
 export class AutoInputOrderExchangeManager extends AutoInputUsersManager {
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
             runRequest(new UserSearchAction(), undefined, undefined,
                 buildSearchParams({ "name": value, "filter-not-made-an-order": "true" })).then(results => {
                     const users = results.users.map(usr => toSearchResult(usr));

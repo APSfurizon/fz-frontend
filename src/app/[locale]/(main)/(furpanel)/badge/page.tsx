@@ -220,7 +220,8 @@ export default function BadgePage() {
         <div className="vertical-list flex-vertical-center">
           <DataForm hideSave loading={loading} setLoading={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop loading={loading}
-              setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}>
+              setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}
+              readonly={!badgeStatus?.allowedModifications}>
             </Upload>
           </DataForm>
         </div>
@@ -234,8 +235,9 @@ export default function BadgePage() {
               </span>
             </div>
             <div className="spacer"></div>
-            <Button busy={loading} iconName={ICONS.EDIT_SQUARE} onClick={() => setChangeDataModalOpen(true)}>
-              {t("furpanel.badge.actions.edit_badge")}
+            <Button busy={loading} iconName={ICONS.EDIT_SQUARE} onClick={() => setChangeDataModalOpen(true)}
+              disabled={!badgeStatus?.allowedModifications}>
+                {t("furpanel.badge.actions.edit_badge")}
             </Button>
           </div>
           <div className="spacer"></div>
@@ -290,12 +292,14 @@ export default function BadgePage() {
               <div className="fursuit-actions gap-2mm">
                 <Button className="danger" iconName={ICONS.DELETE} busy={loading}
                   onClick={() => promptDeleteFursuit(fursuitData)}
-                  title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuitData.fursuit.name })}>
+                  title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuitData.fursuit.name })}
+                  disabled={!badgeStatus.allowedModifications}>
                   {t("common.CRUD.delete")}
                 </Button>
                 <div className="spacer"></div>
                 <Button iconName={ICONS.EDIT_SQUARE} onClick={() => promptEditFursuit(fursuitData)}
-                  busy={loading} title={t("furpanel.badge.actions.edit_fursuit", { name: fursuitData.fursuit.name })}>
+                  busy={loading} title={t("furpanel.badge.actions.edit_fursuit", { name: fursuitData.fursuit.name })}
+                  disabled={!badgeStatus.allowedModifications}>
                   {t("common.CRUD.edit")}
                 </Button>
               </div>
@@ -353,7 +357,10 @@ export default function BadgePage() {
         <FpInput inputType="text" fieldName="species" initialValue={editMode ? currentFursuit?.fursuit.species : ""}
           label={t("furpanel.badge.input.fursuit_species.label")} placeholder={t("furpanel.badge.input.fursuit_species.placeholder")}>
         </FpInput>
-        <Checkbox fieldName="bring-to-current-event" disabled={!(editMode && currentFursuit?.bringingToEvent) && !badgeStatus?.canBringFursuitsToEvent}
+        <Checkbox fieldName="bring-to-current-event" 
+          disabled={!(editMode && currentFursuit?.bringingToEvent) &&
+            !badgeStatus?.canBringFursuitsToEvent ||
+            !badgeStatus?.allowEditBringFursuitToEvent}
           initialValue={editMode ? currentFursuit?.bringingToEvent : false}>
           {t("furpanel.badge.input.bring_to_event.label", { eventName: EVENT_NAME })}
         </Checkbox>
@@ -362,7 +369,7 @@ export default function BadgePage() {
           {t("furpanel.badge.input.show_in_fursuit_count.label", { eventName: EVENT_NAME })}
         </Checkbox>
         <Checkbox fieldName="show-owner"
-          initialValue={editMode ? currentFursuit?.showOwner : false}>
+          initialValue={editMode ? currentFursuit?.showOwner : true}>
           {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
         </Checkbox>
         <div className="horizontal-list gap-4mm margin-top-2mm">

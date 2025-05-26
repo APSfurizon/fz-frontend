@@ -16,7 +16,16 @@ export function nullifyEmptyStrings (values?: (string | undefined)[]) {
 }
 
 export function nullifyEmptyString (value?: string) {
-    return value ? value.length > 0 ? value.trim() : undefined : undefined;
+    return value && value.length > 0 ? value.trim() : undefined;
+}
+
+export function stripProperties (toChange: any, fields: string[]) {
+    const toReturn = {...toChange};
+    for (const fieldName of Object.keys(toChange)) {
+        if (toReturn[fieldName] === null || fields.includes(fieldName))
+            toReturn[fieldName] = undefined;
+    }
+    return toReturn;
 }
 
 export function getCountdown (ts: number): number[] {

@@ -328,7 +328,7 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
                                 style={{...inputStyle}}
                                 placeholder={placeholder ?? ""}
                                 type="text"
-                                disabled={isDisabled || (paramRequired && !param) || (!isRequired && requiredIfPresent)}
+                                disabled={isDisabled || (paramRequired && !param) || (!isRequired && requiredIfPresent) || readOnly}
                                 onChange={onSearchTextChange}
                                 onFocus={()=>setIsFocused (true)}
                                 onBlur={onBlur}

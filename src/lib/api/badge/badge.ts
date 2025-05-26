@@ -10,7 +10,9 @@ export interface BadgeStatusApiResponse extends ApiResponse {
     mainBadge?: UserData,
     fursuits: Fursuit[],
     maxFursuits: number,
-    canBringFursuitsToEvent: boolean
+    canBringFursuitsToEvent: boolean,
+    allowedModifications: boolean,
+    allowEditBringFursuitToEvent: boolean
 }
 
 export class GetBadgeStatusAction extends ApiAction<BadgeStatusApiResponse, ApiErrorResponse> {
@@ -30,7 +32,7 @@ export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorRe
 export class DeleteBadgeAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
-    urlAction = "badge/user/";
+    urlAction = "badge/user";
 }
 
 export interface BadgeDataChangeData {
@@ -42,6 +44,7 @@ export interface BadgeDataChangeData {
 export class BadgeDataChangeDTOBuilder implements FormDTOBuilder<BadgeDataChangeData> {
     mapToDTO = (data: FormData) => {
         return {
+            userId: parseInt(data.get('userId')?.toString () ?? ""),
             fursonaName: data.get('fursonaName')?.toString () ?? "",
             locale: data.get('locale')?.toString() ?? ""
         };

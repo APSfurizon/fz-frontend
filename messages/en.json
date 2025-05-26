@@ -619,7 +619,16 @@
               "name": "Name",
               "species": "Species"
             },
-            "fursuits": "Fursuits"
+            "fursuits": "Fursuits",
+            "rooms_table": {
+              "event_name": "Event",
+              "room_name": "Name",
+              "actions": {
+                "add_guest": "Add guest",
+                "remove_guest": "Remove guest"
+              }
+            },
+            "rooms": "Rooms"
           }
         },
         "security": {

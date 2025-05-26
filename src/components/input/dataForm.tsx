@@ -3,8 +3,7 @@ import {
     useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
     createContext, useContext,
     MutableRefObject,
-    useImperativeHandle,
-    useMemo
+    useImperativeHandle
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
@@ -35,6 +34,9 @@ export const useFormContext = () => {
     return context;
 };
 
+export function compareFormObjects (a?: object, b?: object): boolean {
+    return Object.entries(a ?? {}).sort().toString() === Object.entries(b ?? {}).sort().toString();
+}
 
 export default function DataForm<T extends FormApiAction<any, any, any>>({
     additionalButtons,
@@ -61,12 +63,11 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     resetOnSuccess = false,
     restPathParams,
     shouldReset = false,
-    initialEntity,
-    entityChanged
+    initialEntity
 }: Readonly<{
     additionalButtons?: React.ReactNode,
     action?: T,
-    onChange?: (newEntity: InferRequest<T>, fieldName: string) => void,
+    onChange?: (different: boolean, newEntity: InferRequest<T> | undefined) => void,
     onSuccess?: (data: boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: () => void,
@@ -88,8 +89,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     resetOnSuccess?: boolean,
     restPathParams?: string[],
     shouldReset?: boolean,
-    initialEntity?: InferRequest<T>,
-    entityChanged?: MutableRefObject<boolean | null>,
+    initialEntity?: InferRequest<T>
 }>) {
     const [reset, setReset] = useState(false);
     const t = useTranslations('components');
@@ -98,9 +98,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
 
     // Entity change logic
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
-    const isEntityChanged = useMemo(()=>!!initialEntity &&
-        JSON.stringify(initialEntity) !== JSON.stringify(currentEntity), [currentEntity]);
-    useImperativeHandle(entityChanged, () => isEntityChanged);
+    const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
     
     if (saveButton === undefined) saveButton = {
         text: t('dataForm.save'),
@@ -117,6 +115,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         if (reset) {
             setReset(false);
         }
+        setCurrentEntity(initialEntity ? {...initialEntity} : undefined);
     }, [reset]);
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -148,8 +147,16 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         if (!fieldName || !formRef?.current)  return;
         const entity: InferRequest<T> = action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
         setCurrentEntity(entity);
-        if (onChange) onChange(entity, fieldName);
     };
+
+    useEffect (()=>{
+        const isChanged = !initialEntity
+            ? true
+            : !compareFormObjects(initialEntity, currentEntity);
+        console.log(initialEntity, currentEntity, "isChanged: " + isChanged, "initialEntity: " + !!initialEntity, "!compare: " + compareFormObjects(initialEntity, currentEntity));
+        setEntityChanged(isChanged);
+        if(onChange) onChange(isChanged, currentEntity);
+    }, [currentEntity])
 
     const showBottomToolbar = !hideSave || !hideReset || !!additionalButtons;
 

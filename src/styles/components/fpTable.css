@@ -17,7 +17,6 @@ div.table-container {
         max-width: 100%;
 
         div.table-data {
-            user-select: none;
             max-height: calc(2.6em*20);
 
             div.table-header-group {

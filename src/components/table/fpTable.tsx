@@ -72,7 +72,7 @@ export default function FpTable<T>({
         minSize: 50,
         maxSize: 50,
         cell: props => props.row.getCanExpand() && (
-            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()}>
+            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()} style={{userSelect: "none"}}>
                 <Icon className="medium"
                     iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN} />
             </div>

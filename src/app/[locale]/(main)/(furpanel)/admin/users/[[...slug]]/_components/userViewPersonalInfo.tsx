@@ -1,28 +1,28 @@
+import { useUser } from "@/components/context/userProvider";
 import { ICONS } from "@/components/icon";
 import AutoInput from "@/components/input/autoInput";
 import Button from "@/components/input/button";
-import { ChangesGuard } from "@/components/input/changesGuard";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
+import { Permissions } from "@/lib/api/permission";
 import { AutoInputGenderManager, AutoInputSexManager, REG_ITALIAN_FISCAL_CODE, UpdatePersonalInfoFormAction,
     UserPersonalInfo } from "@/lib/api/user";
-import { firstOrUndefined } from "@/lib/utils";
+import { firstOrUndefined, stripProperties } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { MutableRefObject, useImperativeHandle, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 export default function UserViewPersonalInfo({
     personalInformation,
-    reloadData,
-    changed,
+    reloadData
 }: Readonly<{
     personalInformation: UserPersonalInfo,
     reloadData?: () => void,
-    changed?: MutableRefObject<boolean | null>
 }>) {
     const [inEdit, setInEdit] = useState(false);
     const t = useTranslations();
+    const {userDisplay} = useUser();
     // Personal info logic
     const formRef = useRef<HTMLFormElement>(null);
     const [personalInfoLoading, setPersonalInfoLoading] = useState(false);
@@ -30,13 +30,17 @@ export default function UserViewPersonalInfo({
     const [residenceCountry, setResidenceCountry] = useState<string>();
     const [phonePrefix, setPhonePrefix] = useState<string>();
     const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
-    // Edit logic
-    const isChangedRef = useRef<boolean>(null);
-    useImperativeHandle(changed, ()=>isChangedRef.current ?? false);
 
+    const restPathParams = useMemo(()=>{
+            if (userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false) {
+                return [String(personalInformation.userId)];
+            } else {
+                return undefined;
+            }
+        }, [userDisplay])
+
+    // Edit logic
     return <>
-        <ChangesGuard shouldBlock={isChangedRef.current ?? false}
-            confirmMessage={t("common.CRUD.discard_changes.description")}/>
         <DataForm className="vertical-list gap-2mm"
             action={new UpdatePersonalInfoFormAction}
             loading={personalInfoLoading}
@@ -44,8 +48,8 @@ export default function UserViewPersonalInfo({
             onSuccess={() => { if (reloadData) reloadData() }}
             disableSave={!inEdit}
             formRef={formRef}
-            initialEntity={personalInformation}
-            entityChanged={isChangedRef}
+            initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
+            restPathParams={restPathParams}
             additionalButtons={<>
                 <Button iconName={inEdit ? ICONS.CANCEL : ICONS.EDIT}
                     type="button"

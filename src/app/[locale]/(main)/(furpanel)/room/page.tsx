@@ -301,7 +301,8 @@ export default function RoomPage() {
           {data?.currentRoomInfo?.userIsOwner &&
             <Button iconName={!showInNosecount ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}
               title={!showInNosecount ? t("furpanel.room.actions.show_in_nosecount") : t("furpanel.room.actions.hide_in_nosecount")}
-              debounce={500} onClick={() => setVisibility(!showInNosecount)}>
+              debounce={500} onClick={() => setVisibility(!showInNosecount)}
+              disabled={!data?.allowedModifications}>
             </Button>}
           {data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
             <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={() => setBuyModalOpen(true)}>
@@ -355,8 +356,17 @@ export default function RoomPage() {
               {
                 data.currentRoomInfo.userIsOwner && <>
                   <div className="actions-container horizontal-list flex-wrap gap-4mm flex-space-between" style={{ flexGrow: "1" }}>
-                    <Button iconName={ICONS.EDIT_SQUARE} onClick={() => promptRoomRename()}>{t("furpanel.room.actions.rename")}</Button>
-                    <Button className="danger" iconName={ICONS.DELETE} onClick={() => promptRoomDelete()}>{t("furpanel.room.actions.delete")}</Button>
+                    <Button iconName={ICONS.EDIT_SQUARE}
+                      onClick={() => promptRoomRename()}
+                      disabled={!data.allowedModifications}>
+                        {t("furpanel.room.actions.rename")}
+                    </Button>
+                    <Button className="danger"
+                      iconName={ICONS.DELETE}
+                      onClick={() => promptRoomDelete()}
+                      disabled={!data.allowedModifications}>
+                        {t("furpanel.room.actions.delete")}
+                    </Button>
                   </div>
                 </>
               }
@@ -366,7 +376,7 @@ export default function RoomPage() {
             <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
               {data?.currentRoomInfo.guests.map((guest, key) => <div key={key}
                 className={`guest-container vertical-list gap-2mm ${guest.roomGuest.confirmed === false ? "invited" : ""}`}>
-                <UserPicture size={64} userData={guest.user} showNickname showFlag></UserPicture>
+                <UserPicture size={64} userData={guest.user} showNickname showFlag/>
                 {data.currentRoomInfo.roomOwner.userId === guest.user.userId && <StatusBox>{t("furpanel.room.status_owner")}</StatusBox>}
                 {[OrderStatus.CANCELED, OrderStatus.EXPIRED, OrderStatus.PENDING].includes(guest.orderStatus) &&
                   <StatusBox status="warning">{t(`common.order_status.${guest.orderStatus}`)}</StatusBox>
@@ -375,16 +385,17 @@ export default function RoomPage() {
                   <StatusBox status="warning">{t("furpanel.room.status_invited")}</StatusBox>
                 }
 
-                {data.currentRoomInfo.userIsOwner && guest.user.userId !== data.currentRoomInfo.roomOwner.userId && <>
-                  <a className="action-kick" href="#" onClick={() => {
-                    if (guest.roomGuest.confirmed)
-                      promptKickGuest(guest);
-                    else
-                      promptCancelInvite(guest)
-                  }}>
-                    <Icon className="medium" iconName={ICONS.CLOSE}></Icon>
-                  </a>
-                </>}
+                {data.currentRoomInfo.userIsOwner && guest.user.userId !== data.currentRoomInfo.roomOwner.userId && 
+                  data.allowedModifications && <>
+                    <a className="action-kick" href="#" onClick={() => {
+                      if (guest.roomGuest.confirmed)
+                        promptKickGuest(guest);
+                      else
+                        promptCancelInvite(guest)
+                    }}>
+                      <Icon className="medium" iconName={ICONS.CLOSE}></Icon>
+                    </a>
+                  </>}
               </div>)}
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
