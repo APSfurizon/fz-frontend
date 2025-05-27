@@ -164,7 +164,7 @@ export default function BadgePage() {
       return;
     }
     setLoading(true);
-    runRequest(new DeleteFursuitApiAction(), ["" + currentFursuit.fursuit.id])
+    runRequest(new DeleteFursuitApiAction(), [String(currentFursuit.fursuit.id)])
       .then(() => {
         setBadgeStatus(undefined);
       }).catch((err) => {

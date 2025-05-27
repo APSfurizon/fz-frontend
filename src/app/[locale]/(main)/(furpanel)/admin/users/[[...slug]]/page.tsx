@@ -15,7 +15,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
 import UserViewBadge from "./_components/userViewBadge";
-import UserViewFursuitsTable from "./_components/userViewFursuitsTable";
+import UserViewFursuitsTable from "./_components/fursuits/userViewFursuitsTable";
 import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
@@ -96,7 +96,7 @@ export default function AdminUsersPage ({ params }: {params: Promise<{slug: stri
             <UserViewBadge userData={userData} reloadData={reloadData}/>
             {/* Fursuits */}
             <span className="title medium">{t("furpanel.admin.users.accounts.view.fursuits")}</span>
-            <UserViewFursuitsTable userData={userData}/>
+            <UserViewFursuitsTable userData={userData} reloadData={reloadData}/>
             {/* Orders */}
             <span className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</span>
             <UserViewOrdersTable userData={userData}/>
