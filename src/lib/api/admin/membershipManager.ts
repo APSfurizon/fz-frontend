@@ -2,7 +2,7 @@ import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../comp
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { buildSearchParams } from "../../utils";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global";
-import { AutoInputRoomInviteManager, CompleteUserData, toSearchResult, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
+import { AutoInputRoomInviteManager, CompleteUserData, toSearchResult, UserData, UserPersonalInfo, UserSearchAction } from "../user";
 
 export interface MembershipCard {
     cardId: number,
@@ -48,7 +48,7 @@ export class ChangeCardRegisterStatusApiAction extends ApiAction<boolean, ApiErr
 
 export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
     searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             runRequest(new UserSearchAction(), undefined, undefined,
                 buildSearchParams({ "name": value, "filter-no-membership-card-for-year": additionalValues[0] }))
                 .then(results => {
@@ -67,14 +67,14 @@ export interface AddCardApiData {
 
 export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: AddCardApiData = {
+        const toReturn: AddCardApiData = {
             userId: parseInt(data.get('userId')!.toString()),
         };
         return toReturn;
     }
 }
 
-export class AddCardFormAction extends FormApiAction<AddCardApiData, Boolean, ApiErrorResponse> {
+export class AddCardFormAction extends FormApiAction<AddCardApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddCardDTOBuilder();

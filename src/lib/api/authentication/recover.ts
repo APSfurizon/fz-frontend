@@ -7,14 +7,14 @@ export interface RecoverApiData {
 
 export class RecoverDTOBuilder implements FormDTOBuilder<RecoverApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: RecoverApiData = {
+        const toReturn: RecoverApiData = {
             email: data.get('email')?.toString (),
         };
         return toReturn;
     }
 }
 
-export class RecoverFormAction extends FormApiAction<RecoverApiData, Boolean, ApiErrorResponse> {
+export class RecoverFormAction extends FormApiAction<RecoverApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new RecoverDTOBuilder ();
@@ -28,7 +28,7 @@ export interface ChangePasswordApiData {
 
 export class ResetPasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: ChangePasswordApiData = {
+        const toReturn: ChangePasswordApiData = {
             password: data.get('password')?.toString (),
             resetPwId: data.get('resetPwId')?.toString (),
         };
@@ -36,7 +36,7 @@ export class ResetPasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApi
     }
 }
 
-export class ResetPasswordFormAction extends FormApiAction<ChangePasswordApiData, Boolean, ApiErrorResponse> {
+export class ResetPasswordFormAction extends FormApiAction<ChangePasswordApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new ResetPasswordDTOBuilder ();
