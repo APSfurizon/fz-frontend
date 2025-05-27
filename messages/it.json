@@ -624,7 +624,10 @@
               "room_name": "Nome",
               "actions": {
                 "add_guest": {
-                  "title": "Aggiungi ospite"
+                  "title": "Aggiungi ospite",
+                  "select_guest": {
+                    "label": "Seleziona l'utente da aggiungere come ospite"
+                  }
                 },
                 "remove_guest": {
                   "title": "Rimuovi ospite",

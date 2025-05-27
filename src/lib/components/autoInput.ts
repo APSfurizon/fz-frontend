@@ -1,4 +1,4 @@
-import { TranslatableInputEntity, TranslatableString, translateNullable } from "@/lib/translations";
+import { TranslatableInputEntity, translateNullable } from "@/lib/translations";
 
 export class AutoInputSearchResult extends TranslatableInputEntity {}
 
@@ -56,7 +56,7 @@ export type SearchRank = {
 }
 
 export function filterSearchResult(query: string, searchType: SearchType, results: AutoInputSearchResult[], locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
-    let value = query.trim().toLowerCase();
+    const value = query.trim().toLowerCase();
     const filteredResults = results.filter ((result) => (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result)));
     return applySearch(value, searchType, filteredResults, locale);
 }
@@ -89,9 +89,9 @@ export function applySearch (query: string, searchType: SearchType, results: Aut
         default:
             return results.filter(result => {
                 const translatedDescription = translateNullable(result.translatedDescription, locale)?.toLowerCase();
-                result.description?.toLowerCase().includes(query) ||
-                result.code?.toLowerCase().includes(query) ||
-                translatedDescription?.includes(query)
+                return result.description?.toLowerCase().includes(query) ||
+                    result.code?.toLowerCase().includes(query) ||
+                    translatedDescription?.includes(query)
             });
     }
 }

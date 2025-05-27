@@ -10,6 +10,7 @@ import FpTable from "@/components/table/fpTable";
 import Button from "@/components/input/button";
 import { ICONS } from "@/components/icon";
 import RemoveGuestModal from "./removeGuestModal";
+import AddGuestModal from "./addGuestModal";
 
 const roomInfo = (obj: CellContext<RoomInfoResponse, unknown>) => obj.row.original.currentRoomInfo;
 
@@ -81,6 +82,7 @@ export default function UserViewRooms ({
                 : <div className="horizontal-list gap-2mm">
                     <Button iconName={ICONS.PERSON_ADD}
                         title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
+                        onClick={() => promptAddGuest(props.row.original)}
                         disabled={roomInfo(props).guests.length >= roomInfo(props).roomData.roomCapacity}/>
                     <Button iconName={ICONS.PERSON_REMOVE}
                         className="danger"
@@ -96,6 +98,7 @@ export default function UserViewRooms ({
     const [currentRow, setCurrentRow] = useState<RoomInfoResponse>();
 
     const promptRemGuest = (row: RoomInfoResponse) => {
+        setAddGuestModalOpen(false);
         setCurrentRow(row);
         setRemGuestModalOpen(true);
     }
@@ -105,10 +108,26 @@ export default function UserViewRooms ({
         setRemGuestModalOpen(false);
     }
 
+    // Guest add logic
+    const [addGuestModalOpen, setAddGuestModalOpen] = useState(false);
+
+    const promptAddGuest = (row: RoomInfoResponse) => {
+        setRemGuestModalOpen(false);
+        setCurrentRow(row);
+        setAddGuestModalOpen(true);
+    }
+
+    const closeAddGuestModal = () => {
+        setCurrentRow(undefined);
+        setAddGuestModalOpen(false);
+    }
+
     return <>
         <FpTable<RoomInfoResponse> rows={roomRows} columns={roomColumns}
             hasDetails={() => true} getDetails={getDetails} pinnedColumns={{right: ["actions"]}}/>
         <RemoveGuestModal roomInfo={currentRow} open={remGuestModalOpen} onClose={closeRemGuestModal}
+            reloadData={reloadData}/>
+        <AddGuestModal roomInfo={currentRow} open={addGuestModalOpen} onClose={closeAddGuestModal}
             reloadData={reloadData}/>
     </>
 } 

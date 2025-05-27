@@ -119,26 +119,33 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     }, [reset]);
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-        if (!action) throw new Error("dataform must have an action to be submitted")
-        const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
-        if (checkFn) {
-            if (!checkFn(formData, e.currentTarget)) {
-                e.preventDefault();
-                e.stopPropagation();
-                return;
+        try {
+            if (!action) throw new Error("dataform must have an action to be submitted")
+            const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
+            if (checkFn) {
+                if (!checkFn(formData, e.currentTarget)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
             }
+            if (onBeforeSubmit) onBeforeSubmit();
+            if (setLoading) setLoading(true);
+            runFormRequest(action, restPathParams, formData)
+                .then((responseData) => onSuccess && onSuccess(responseData))
+                .catch((errorData) => {
+                    if (onFail) onFail(errorData);
+                    if (resetOnFail) setReset(true);
+                }).finally(() => {
+                    if (setLoading) setLoading(false);
+                    if (resetOnSuccess) { setReset(true); }
+                });
+        } catch (e) {
+            console.error (e);
+            if (setLoading) setLoading(false);
+            if (onFail) onFail(e ?? "unknown");
         }
-        if (onBeforeSubmit) onBeforeSubmit();
-        if (setLoading) setLoading(true);
-        runFormRequest(action, restPathParams, formData)
-            .then((responseData) => onSuccess && onSuccess(responseData))
-            .catch((errorData) => {
-                if (onFail) onFail(errorData);
-                if (resetOnFail) setReset(true);
-            }).finally(() => {
-                if (setLoading) setLoading(false);
-                if (resetOnSuccess) { setReset(true); }
-            });
+        
         e.preventDefault();
         e.stopPropagation();
     }

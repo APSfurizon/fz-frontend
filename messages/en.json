@@ -625,7 +625,10 @@
               "room_name": "Name",
               "actions": {
                 "add_guest": {
-                  "title": "Add guest"
+                  "title": "Add guest",
+                  "select_guest": {
+                    "label": "Select the user to add as guest"
+                  }
                 },
                 "remove_guest": {
                   "title": "Remove guest",
