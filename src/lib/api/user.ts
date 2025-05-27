@@ -15,7 +15,7 @@ import { UAParser } from "ua-parser-js";
 export const REG_ITALIAN_FISCAL_CODE = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi;
 
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
-    propic: MediaData
+    propic?: MediaData
 }
 
 export enum SponsorType {
@@ -137,7 +137,7 @@ export function toSearchResult(usr: UserSearchResult): AutoInputSearchResult {
     toReturn.code = usr.code;
     toReturn.icon = usr.icon;
     toReturn.description = usr.description;
-    toReturn.imageUrl = usr.propic?.mediaUrl ?? null;
+    toReturn.imageUrl = usr.propic?.mediaUrl ?? undefined;
     return toReturn;
 }
 

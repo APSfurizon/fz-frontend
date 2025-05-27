@@ -6,6 +6,7 @@
     font-style: normal;
     font-weight: 100 700;
     src: url('/fonts/MaterialSymbolsRoundedFilled.woff2') format('woff2');
+    font-display: block;
 }
 
 /* Importing Flag emoji fallback font */

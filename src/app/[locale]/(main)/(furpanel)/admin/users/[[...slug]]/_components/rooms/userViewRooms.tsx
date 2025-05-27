@@ -9,7 +9,7 @@ import { translate } from "@/lib/translations";
 import FpTable from "@/components/table/fpTable";
 import Button from "@/components/input/button";
 import { ICONS } from "@/components/icon";
-import Modal from "@/components/modal";
+import RemoveGuestModal from "./removeGuestModal";
 
 const roomInfo = (obj: CellContext<RoomInfoResponse, unknown>) => obj.row.original.currentRoomInfo;
 
@@ -29,9 +29,11 @@ export default function UserViewRooms ({
         return eventRecord
     }, [userData]);
 
-    const roomRows = useMemo(()=> [...(userData.otherRooms || []), userData.currentRoomdata]
-        .filter(rd => rd.currentRoomInfo.roomData.roomCapacity > 0),
-        [userData.otherRooms, userData.currentRoomdata]);
+    const roomRows = useMemo(()=> {
+        const rooms = [...(userData.otherRooms || [])];
+        if (userData.currentRoomdata) rooms.push (userData.currentRoomdata);
+        return rooms.filter(rd => !!rd && rd.currentRoomInfo?.roomData.roomCapacity > 0)
+        }, [userData.otherRooms, userData.currentRoomdata]);
 
     const getDetails = (row: Row<RoomInfoResponse>) => <UserViewRoomDetails data={row.original}/>
     
@@ -78,12 +80,12 @@ export default function UserViewRooms ({
                 ? undefined
                 : <div className="horizontal-list gap-2mm">
                     <Button iconName={ICONS.PERSON_ADD}
-                        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest")}
+                        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
                         disabled={roomInfo(props).guests.length >= roomInfo(props).roomData.roomCapacity}/>
                     <Button iconName={ICONS.PERSON_REMOVE}
                         className="danger"
-                        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest")}
-                        onClick={promptRemGuest}
+                        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
+                        onClick={() => promptRemGuest(props.row.original)}
                         disabled={roomInfo(props).guests.length == 0}/>
                 </div>
         })
@@ -106,11 +108,7 @@ export default function UserViewRooms ({
     return <>
         <FpTable<RoomInfoResponse> rows={roomRows} columns={roomColumns}
             hasDetails={() => true} getDetails={getDetails} pinnedColumns={{right: ["actions"]}}/>
-
-        <Modal open={remGuestModalOpen}
-            onClose={closeRemGuestModal}
-            title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest")}>
-
-        </Modal>
+        <RemoveGuestModal roomInfo={currentRow} open={remGuestModalOpen} onClose={closeRemGuestModal}
+            reloadData={reloadData}/>
     </>
 } 

@@ -624,8 +624,15 @@
               "event_name": "Event",
               "room_name": "Name",
               "actions": {
-                "add_guest": "Add guest",
-                "remove_guest": "Remove guest"
+                "add_guest": {
+                  "title": "Add guest"
+                },
+                "remove_guest": {
+                  "title": "Remove guest",
+                  "select_guest": {
+                    "label": "Select the guest to remove from the room"
+                  }
+                }
               }
             },
             "rooms": "Rooms"

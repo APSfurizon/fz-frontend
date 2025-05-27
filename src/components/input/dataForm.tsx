@@ -153,7 +153,6 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         const isChanged = !initialEntity
             ? true
             : !compareFormObjects(initialEntity, currentEntity);
-        console.log(initialEntity, currentEntity, "isChanged: " + isChanged, "initialEntity: " + !!initialEntity, "!compare: " + compareFormObjects(initialEntity, currentEntity));
         setEntityChanged(isChanged);
         if(onChange) onChange(isChanged, currentEntity);
     }, [currentEntity])

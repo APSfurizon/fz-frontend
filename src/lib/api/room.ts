@@ -2,7 +2,7 @@ import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
 import { ExtraDaysType } from "./booking";
 import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
-import { UserData } from "./user";
+import { SponsorType, UserData } from "./user";
 
 export interface RoomGuestHeader {
     roomGuest: RoomGuest,
@@ -165,6 +165,19 @@ export class RoomKickAction extends ApiAction<boolean, ApiErrorResponse> {
     urlAction = "room/kick";
 }
 
+export class RoomKickFormDTOBuilder implements FormDTOBuilder<GuestIdApiData> {
+    mapToDTO = (data: FormData): GuestIdApiData => ({
+        guestId: parseInt(data.get("guestId")?.toString() ?? "")
+    })
+}
+
+export class RoomKickFormAction extends FormApiAction<GuestIdApiData, boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    dtoBuilder = new RoomKickFormDTOBuilder ();
+    urlAction = "room/kick";
+}
+
 export class RoomLeaveAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
@@ -199,3 +212,40 @@ export class RoomSetShowInNosecountApiAction extends ApiAction<boolean, ApiError
     method = RequestType.POST;
     urlAction = "room/show-in-nosecount";
 }
+
+export const EMPTY_ROOM_INFO: RoomInfoResponse = {
+    hasOrder: false,
+    canCreateRoom: false,
+    allowedModifications: false,
+    buyOrUpgradeRoomSupported: false,
+    canBuyOrUpgradeRoom: false,
+    canExchange: false,
+    editingRoomEndTime: new Date().toString(),
+    invitations: [],
+    currentRoomInfo: {
+        roomId: 0,
+        roomName: "",
+        roomOwner: {
+            userId: 1,
+            sponsorship: SponsorType.NONE
+        },
+        guests: [],
+        userIsOwner: false,
+        confirmationSupported: false,
+        unconfirmationSupported: false,
+        canConfirm: false,
+        canUnconfirm: false,
+        confirmed: false,
+        roomData: {
+            roomCapacity: 0,
+            roomInternalName: "",
+            roomPretixItemId: 0,
+            roomTypeNames: {}
+        },
+        owner: false,
+        canInvite: false,
+        showInNosecount: false,
+        eventId: 0,
+        extraDays: "NONE"
+    }
+};

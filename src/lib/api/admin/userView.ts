@@ -1,3 +1,4 @@
+import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, SearchType } from "@/lib/components/autoInput";
 import { BadgeStatusApiResponse } from "../badge/badge";
 import { SponsorshipType } from "../booking";
 import { ConventionEvent } from "../counts";
@@ -6,7 +7,7 @@ import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global
 import { OrderStatus } from "../order";
 import { Permissions } from "../permission";
 import { RoomInfoResponse } from "../room";
-import { ExtraDays, UserPersonalInfo } from "../user";
+import { ExtraDays, UserData, UserPersonalInfo } from "../user";
 import { MembershipCard } from "./membershipManager";
 import { RoleData } from "./role";
 
@@ -56,7 +57,7 @@ export interface GetUserAdminViewResponse extends ApiResponse {
     email: string,
     banned: boolean,
     orders: FullOrder[]
-    currentRoomdata: RoomInfoResponse,
+    currentRoomdata?: RoomInfoResponse,
     exchanges: ExchangeStatusApiResponse,
     otherRooms: RoomInfoResponse[],
     showInNousecount: boolean,
@@ -110,4 +111,28 @@ export class ShowInNosecountApiAction extends ApiAction<boolean, ApiErrorRespons
     authenticated = true;
     method = RequestType.POST;
     urlAction = "users/show-in-nosecount";
+}
+
+export class AutoInputCustomUserManager implements AutoInputManager {
+    private users: AutoInputSearchResult[] = [];
+
+    constructor(users: UserData[]) {
+       this.users = users.map(u => {
+        return new AutoInputSearchResult (u.userId, undefined, u.fursonaName, undefined, u.propic?.mediaUrl);
+       });
+    }
+    
+    codeOnly = false;
+
+    loadByIds(filter: AutoInputFilter) {
+        return Promise.resolve(filterLoaded(this.users, filter))
+    };
+
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
+        return Promise.resolve(filterSearchResult(value, SearchType.RANKED, this.users, locale, filter, filterOut));
+    };
+
+    isPresent() {
+        return Promise.resolve(this.users && this.users.length > 0);
+    }
 }

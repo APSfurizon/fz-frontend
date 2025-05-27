@@ -623,8 +623,15 @@
               "event_name": "Evento",
               "room_name": "Nome",
               "actions": {
-                "add_guest": "Aggiungi ospite",
-                "remove_guest": "Rimuovi ospite"
+                "add_guest": {
+                  "title": "Aggiungi ospite"
+                },
+                "remove_guest": {
+                  "title": "Rimuovi ospite",
+                  "select_guest": {
+                    "label": "Seleziona l'ospite da rimuovere dalla stanza"
+                  }
+                }
               }
             },
             "rooms": "Stanze"
