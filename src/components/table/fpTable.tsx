@@ -1,12 +1,16 @@
 "use client"
-import { Column, ColumnDef, ColumnPinningState, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel,
+import {
+    Column, ColumnDef, ColumnPinningState, createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel,
     getPaginationRowModel, getSortedRowModel, Row, RowSelectionState, SortingState, Table, TableOptions,
-    useReactTable} from "@tanstack/react-table";
+    useReactTable
+} from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
 import Icon, { ICONS } from "../icon";
-import { CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef,
-    useState } from "react";
-import JanInput from "../input/janInput";
+import {
+    CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef,
+    useState
+} from "react";
+import FpInput from "../input/fpInput";
 import { useTranslations } from "next-intl";
 import Button from "../input/button";
 import { getCountArray } from "@/lib/utils";
@@ -14,19 +18,19 @@ import { getCountArray } from "@/lib/utils";
 const MIN_COLUMN_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 30;
 
-export default function FpTable<T> ({
+export default function FpTable<T>({
     rows,
     columns,
     initialWrapper,
     tableStyle,
-    enableRowSelection=false,
-    enableMultiRowSelection=false,
-    enableSearch=false,
-    showAddButton=false,
-    showDeleteButton=false,
+    enableRowSelection = false,
+    enableMultiRowSelection = false,
+    enableSearch = false,
+    showAddButton = false,
+    showDeleteButton = false,
     onAdd,
     onDelete,
-    enablePagination=false,
+    enablePagination = false,
     pageSize = DEFAULT_PAGE_SIZE,
     hasDetails,
     getDetails,
@@ -61,20 +65,20 @@ export default function FpTable<T> ({
 }>) {
     const columnHelper = createColumnHelper<T>();
 
-    const EXPAND_DETAILS_COLUMN: ColumnDef<T> = useMemo(()=>columnHelper.display({
+    const EXPAND_DETAILS_COLUMN: ColumnDef<T> = useMemo(() => columnHelper.display({
         id: "details_action",
         enableResizing: false,
         size: 50,
         minSize: 50,
         maxSize: 50,
         cell: props => props.row.getCanExpand() && (
-            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()}>
+            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()} style={{userSelect: "none"}}>
                 <Icon className="medium"
-                    iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN}/>
+                    iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN} />
             </div>
         )
     }), []);
-    
+
     const [tableColumns, setTableColumns] = useState(columns);
     const tableRef = useRef<HTMLDivElement>(null);
     const [sorting, setSorting] = useState<SortingState>(sort || []);
@@ -82,7 +86,7 @@ export default function FpTable<T> ({
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize, //default page size
-      });
+    });
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(pinnedColumns || {
         left: [],
@@ -127,60 +131,60 @@ export default function FpTable<T> ({
     const getCommonPinningStyles = (column: Column<T>): CSSProperties => {
         const isPinned = column.getIsPinned()
         const isLastLeftPinnedColumn =
-          isPinned === 'left' && column.getIsLastColumn('left')
+            isPinned === 'left' && column.getIsLastColumn('left')
         const isFirstRightPinnedColumn =
-          isPinned === 'right' && column.getIsFirstColumn('right')
-      
-        return {
-          boxShadow: isLastLeftPinnedColumn
-            ? '-4px 0 4px -4px gray inset'
-            : isFirstRightPinnedColumn
-              ? '4px 0 4px -4px gray inset'
-              : undefined,
-          left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-          right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-          position: isPinned ? 'sticky' : 'relative',
-          width: column.getSize(),
-          zIndex: isPinned ? 1 : 0,
-          opacity: isPinned ? 0.95 : undefined
-        }
-      }
+            isPinned === 'right' && column.getIsFirstColumn('right')
 
-    const enableToolbar = useMemo(()=>enableSearch || showAddButton || showDeleteButton,
+        return {
+            boxShadow: isLastLeftPinnedColumn
+                ? '-4px 0 4px -4px gray inset'
+                : isFirstRightPinnedColumn
+                    ? '4px 0 4px -4px gray inset'
+                    : undefined,
+            left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+            right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+            position: isPinned ? 'sticky' : 'relative',
+            width: column.getSize(),
+            zIndex: isPinned ? 1 : 0,
+            opacity: isPinned ? 0.95 : undefined
+        }
+    }
+
+    const enableToolbar = useMemo(() => enableSearch || showAddButton || showDeleteButton,
         [enableSearch, showAddButton, showDeleteButton]);
 
     const t = useTranslations('components');
 
     /** Column change */
-    useEffect(()=>{
+    useEffect(() => {
         if (tableWrapper.getCanSomeRowsExpand()) {
             const toReturn = [...columns];
-            
+
             toReturn.splice(0, 0, EXPAND_DETAILS_COLUMN);
             setTableColumns(toReturn);
         }
     }, [columns, data]);
 
     /** Rows change */
-    useEffect(()=>{
+    useEffect(() => {
         tableWrapper.resetRowSelection();
         tableWrapper.resetExpanded();
         setData(rows);
     }, [rows]);
 
     /**First time table render */
-    useEffect(()=>{
+    useEffect(() => {
         if (!tableRef.current) return;
         const headers = tableWrapper.getFlatHeaders();
         let extra = 0;
         let columnCount = headers.length;
-        headers.filter(h=>!h.column.getCanResize()).forEach(h=>{
+        headers.filter(h => !h.column.getCanResize()).forEach(h => {
             columnCount--;
             extra += h.column.getSize()
         })
         const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 5);
         const sizingStartToSet: Record<string, number> = {};
-        for (let  i = 0; i < headers.length; i++) {
+        for (let i = 0; i < headers.length; i++) {
             const header = headers[i];
             if (header.column.id === EXPAND_DETAILS_COLUMN.id) continue;
             sizingStartToSet[header.id] = Math.max(autofillWidth, MIN_COLUMN_SIZE);
@@ -189,7 +193,7 @@ export default function FpTable<T> ({
     }, [tableRef.current, tableColumns])
 
     /* Row selection change */
-    useEffect(()=>{
+    useEffect(() => {
         if (onSelectionChange) onSelectionChange(rowSelection);
     }, [rowSelection])
 
@@ -209,15 +213,17 @@ export default function FpTable<T> ({
     return <div className="table-container title rounded-m">
         {enableToolbar && <div className="table-toolbar horizontal-list gap-2mm">
             <div className="spacer"></div>
-            {enableSearch && <JanInput className="table-search" placeholder={t("table.search.placeholder")}
-                onChange={(e)=> tableWrapper.setGlobalFilter(String(e.target.value))}/>}
-            {showAddButton && <Button iconName={ICONS.ADD} onClick={onAdd} title={t("table.add.title")}/>}
+            {enableSearch && <FpInput className="table-search"
+                placeholder={t("table.filter.placeholder")}
+                onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
+                icon={ICONS.FILTER_LIST} />}
+            {showAddButton && <Button iconName={ICONS.ADD} onClick={onAdd} title={t("table.add.title")} />}
             {showDeleteButton && <Button iconName={ICONS.DELETE} onClick={onDelete} title={t("table.delete.title")}
-                disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()}/>}
+                disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
         </div>}
         <div className="table rounded-s gap-2mm" ref={tableRef}
-            style={{...columnSizeVars, width: '100%', ...tableStyle}}>
-            <div className="table-data rounded-s" style={{width: tableWrapper.getTotalSize()}}>
+            style={{ ...columnSizeVars, width: '100%', ...tableStyle }}>
+            <div className="table-data rounded-s" style={{ width: tableWrapper.getTotalSize() }}>
                 {/**Header groups */}
                 {tableWrapper.getHeaderGroups().map((headerGroup) =>
                     <div className="table-header-group" key={headerGroup.id}>
@@ -233,9 +239,9 @@ export default function FpTable<T> ({
                                     {header.column.getIsSorted() && <Icon iconName={{
                                         asc: ICONS.ARROW_DROP_UP,
                                         desc: ICONS.ARROW_DROP_DOWN,
-                                    }[header.column.getIsSorted() as string]!}/>}
-                                    {header.column.getIsPinned() && <a onClick={()=>header.column.pin(false)}>
-                                        <Icon className="small" iconName={ICONS.KEEP}/></a>}
+                                    }[header.column.getIsSorted() as string]!} />}
+                                    {header.column.getIsPinned() && <a onClick={() => header.column.pin(false)}>
+                                        <Icon className="small" iconName={ICONS.KEEP} /></a>}
                                 </div>
                                 <div className="spacer"></div>
                                 {(header.column.columnDef.enableResizing ?? true) &&
@@ -243,7 +249,7 @@ export default function FpTable<T> ({
                                         onDoubleClick={() => header.column.resetSize()}
                                         onMouseDown={header.getResizeHandler()}
                                         onTouchStart={header.getResizeHandler()}>
-                                            <Icon iconName={ICONS.DRAG_HANDLE}/>
+                                        <Icon iconName={ICONS.DRAG_HANDLE} />
                                     </div>
                                 }
                             </div>
@@ -252,24 +258,26 @@ export default function FpTable<T> ({
                 )}
                 {/**No data */}
                 {!tableWrapper.getRowModel().rows || tableWrapper.getRowModel().rows.length == 0 && <div className="table-row">
-                    <div className="table-cell" style={{width: tableRef.current?.clientWidth, textAlign: 'center',
-                        position: 'sticky', left: '0px'}}>
+                    <div className="table-cell" style={{
+                        width: tableRef.current?.clientWidth, textAlign: 'center',
+                        position: 'sticky', left: '0px'
+                    }}>
                         <span className="title">{t("table.no_data")}</span>
                     </div>
                 </div>}
                 {/**Rows */}
-                {tableWrapper.getRowModel().rows.map(row =><Fragment key={row.id}>
+                {tableWrapper.getRowModel().rows.map(row => <Fragment key={row.id}>
                     <div className={"table-row "
                         + (row.getIsSelected() || row.getIsSomeSelected() ? "row-selected" : "")
                         + " "
-                        + (row.getCanSelect() ? "selectable" : "")} 
+                        + (row.getCanSelect() ? "selectable" : "")}
                         onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
-                            {row.getVisibleCells().map(cell =>
-                                <div className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`} key={cell.id}
-                                    style={{width: `var(--col-${cell.column.id}-size)`, ...getCommonPinningStyles(cell.column)}}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </div>
-                            )}
+                        {row.getVisibleCells().map(cell =>
+                            <div className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`} key={cell.id}
+                                style={{ width: `var(--col-${cell.column.id}-size)`, ...getCommonPinningStyles(cell.column) }}>
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </div>
+                        )}
                     </div>
                     {row.getIsExpanded() && getDetails && <div className="row-expanded">
                         {getDetails(row)}
@@ -282,10 +290,10 @@ export default function FpTable<T> ({
             <div className="spacer"></div>
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
                 iconName={ICONS.ARROW_BACK} onClick={tableWrapper.previousPage}></Button>
-            {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i)=><Button key={i}
-                className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`} 
-                onClick={()=>tableWrapper.setPageIndex(i)}
-                disabled={pagination.pageIndex == i}>{i+1}
+            {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i) => <Button key={i}
+                className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`}
+                onClick={() => tableWrapper.setPageIndex(i)}
+                disabled={pagination.pageIndex == i}>{i + 1}
             </Button>)}
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
                 iconName={ICONS.ARROW_FORWARD} onClick={tableWrapper.nextPage}></Button>

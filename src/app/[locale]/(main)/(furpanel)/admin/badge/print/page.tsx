@@ -8,7 +8,7 @@ import {
     SearchRegularBadgesApiAction, SearchRegularBadgesResponse
 } from "@/lib/api/admin/advancedPrint";
 import { runRequest } from "@/lib/api/global";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import { buildSearchParams, getParentDirectory, isEmpty } from "@/lib/utils";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
@@ -86,7 +86,7 @@ export default function AdvancedBadgePrint() {
         const promises: Promise<any>[] = [];
         if (!isEmpty(regularBadgeCodes)) {
             promises.push(runRequest(new GetRenderedCommonBadgesApiAction(), undefined, undefined,
-            buildSearchParams({ "userIds": [regularBadgeCodes] })));
+                buildSearchParams({ "userIds": [regularBadgeCodes] })));
         }
         if (!isEmpty(fursuitBadgeCodes)) {
             promises.push(runRequest(new GetRenderedFursuitBadgesApiAction(), undefined, undefined,

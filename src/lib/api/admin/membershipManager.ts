@@ -2,7 +2,7 @@ import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../comp
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { buildSearchParams } from "../../utils";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global";
-import { AutoInputRoomInviteManager, CompleteUserData, toSearchResult, UserData, UserPersonalInfo, UserSearchAction, UserSearchResponse } from "../user";
+import { AutoInputRoomInviteManager, CompleteUserData, toSearchResult, UserData, UserPersonalInfo, UserSearchAction } from "../user";
 
 export interface MembershipCard {
     cardId: number,
@@ -40,22 +40,23 @@ export interface ChangeCardRegisterStatusApiData {
     registered: boolean
 }
 
-export class ChangeCardRegisterStatusApiAction extends ApiAction<Boolean, ApiErrorResponse> {
+export class ChangeCardRegisterStatusApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     urlAction = "membership/set-membership-card-registration-status";
 }
 
 export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
-    searchByValues (value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
-            runRequest (new UserSearchAction(), undefined, undefined, buildSearchParams({"name": value, "filter-no-membership-card-for-year": additionalValues[0]})).then (results => {
-                const searchResult = results as UserSearchResponse;
-                const users = searchResult.users.map(usr=>toSearchResult(usr));
-                resolve (
-                    filterLoaded(users, filter, filterOut)
-                );
-            });
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
+            runRequest(new UserSearchAction(), undefined, undefined,
+                buildSearchParams({ "name": value, "filter-no-membership-card-for-year": additionalValues[0] }))
+                .then(results => {
+                    const users = results.users.map(usr => toSearchResult(usr));
+                    resolve(
+                        filterLoaded(users, filter, filterOut)
+                    );
+                });
         });
     }
 }
@@ -66,17 +67,17 @@ export interface AddCardApiData {
 
 export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: AddCardApiData = {
-            userId: parseInt(data.get('userId')!.toString ()),
+        const toReturn: AddCardApiData = {
+            userId: parseInt(data.get('userId')!.toString()),
         };
         return toReturn;
     }
 }
 
-export class AddCardFormAction extends FormApiAction<AddCardApiData, Boolean, ApiErrorResponse> {
+export class AddCardFormAction extends FormApiAction<AddCardApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new AddCardDTOBuilder ();
+    dtoBuilder = new AddCardDTOBuilder();
     urlAction = "membership/add-card";
 }
 

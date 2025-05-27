@@ -29,7 +29,7 @@ div.jan-input {
         background: var(--text-input-bg);
         outline: 1px solid var(--text-input-border-normal);
     }
-    
+
     input.input-field {
         flex: 1;
         color: var(--text-input-color);
@@ -42,6 +42,11 @@ div.jan-input {
         outline: none;
     }
 
+    input.input-field::placeholder::before {
+        content: var(--placeholder-content);
+        font-family: 'Material Symbols Rounded';
+    }
+
     /* Focus style */
     div.input-container:has(input.input-field:focus) {
         outline-width: 2px;
@@ -51,7 +56,7 @@ div.jan-input {
         outline: none;
         border: none;
     }
-    
+
     /* Disabled style */
     div.input-container:has(input.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);

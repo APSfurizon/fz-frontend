@@ -34,7 +34,7 @@ export default function ComboBox({
 
     function getMappedItems (items: (ComboboxGroup|ComboboxItem)[]): Record<string, InputEntity> {
         let mappedItems: Record<string, InputEntity> = {};
-        for (let item of items) {
+        for (const item of items) {
             if (item instanceof ComboboxGroup) {
                 mappedItems = {...mappedItems, ...getMappedItems(item.items)};
             } else if (item instanceof ComboboxItem) {
@@ -65,9 +65,11 @@ export default function ComboBox({
         return <>
             {items.map((item, idx)=>{
                 if (item instanceof ComboboxGroup) {
-                    return <optgroup key={idx} label={item.getDescription()} className="title average color-subtitle reset">
+                    return <optgroup key={idx}
+                        label={item.getDescription()}
+                        className="title average color-subtitle reset">
                             {renderItems(item.items)}
-                        </optgroup>
+                    </optgroup>
                 } else if (item instanceof ComboboxItem) {
                     return <option key={idx} value={itemExtractor(item)} className="title small">
                             {item.getDescription()}
@@ -84,7 +86,7 @@ export default function ComboBox({
         if (!mappedItems || selectedValue === undefined) return;
         const valueToSet = mappedItems[selectedValue]
         setSelectedItem(valueToSet);
-        onChange && onChange(valueToSet);
+        if(onChange) onChange(valueToSet);
     }
 
     return <>
@@ -95,7 +97,8 @@ export default function ComboBox({
                 defaultValue={selectedItem ? itemExtractor(selectedItem) : ""} required={required}></input>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                 <select disabled={readOnly || disabled} required={required} aria-readonly={readOnly}
-                    defaultValue={selectedItem && itemExtractor(selectedItem)} style={{...inputStyle}} onChange={onSelect}
+                    defaultValue={selectedItem && itemExtractor(selectedItem)}
+                    style={{...inputStyle}} onChange={onSelect}
                     className={`input-field title ${hasError ? "danger" : ""}`}>
                         <option className="title average italic" value="">{placeholder}</option>
                         {renderItems(items)}

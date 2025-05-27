@@ -20,19 +20,19 @@ enum STEPS {
     REVIEW
 }
 
-export default function RoomOrderFlow ({style, className, isOpen, modalLoading, setModalLoading, close}: Readonly<{
+export default function RoomOrderFlow({ style, className, isOpen, modalLoading, setModalLoading, close }: Readonly<{
     style?: CSSProperties,
     className?: string,
     isOpen: boolean,
     modalLoading: boolean,
     setModalLoading: Dispatch<SetStateAction<boolean>>,
     close: Function
-  }>) {
+}>) {
     const t = useTranslations();
     const locale = useLocale();
     const formatter = useFormatter();
-    const {showModal, hideModal} = useModalUpdate();
-    const {userDisplay, userLoading} = useUser();
+    const { showModal, hideModal } = useModalUpdate();
+    const { userDisplay, userLoading } = useUser();
     const router = useRouter();
 
     /* Data about rooms availability */
@@ -48,27 +48,27 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
     const [warningAccepted, setWarningAccepted] = useState(false);
 
     /* Latest error */
-    const [latestError, setLatestError ] = useState<ApiErrorResponse>();
+    const [latestError, setLatestError] = useState<ApiErrorResponse>();
 
     /* Rooms data refresh */
-    useEffect(()=>{
+    useEffect(() => {
         if (roomsData || !isOpen) return;
         setSelectedType(undefined);
         setModalLoading(true);
         runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
-        .then(data=>setRoomsData(data as RoomStoreItemsApiResponse))
-        .catch((err)=>{
-            showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>,
-                ICONS.ERROR
-            );
-            setRoomsData(undefined);
-        }).finally(()=>setModalLoading(false));
+            .then(data => setRoomsData(data))
+            .catch((err) => {
+                showModal(
+                    t("common.error"),
+                    <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>,
+                    ICONS.ERROR
+                );
+                setRoomsData(undefined);
+            }).finally(() => setModalLoading(false));
     }, [roomsData, isOpen]);
 
     /* Reset upon closure */
-    useEffect(()=>{
+    useEffect(() => {
         if (!isOpen) {
             setStep(STEPS.START);
             setSelectedType(undefined);
@@ -78,7 +78,7 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
 
     const selectRoomType = (type: RoomTypeInfo) => {
         if (getRemainingRoomType(type) > 0)
-        setSelectedType(type);
+            setSelectedType(type);
     }
 
     const changeOrder = () => {
@@ -91,76 +91,78 @@ export default function RoomOrderFlow ({style, className, isOpen, modalLoading, 
         }
 
         runRequest(new RoomStoreBuyAction(), undefined, roomBuyData, undefined)
-        .then((result)=>{router.push((result as ShopLinkResponse).link); close();})
-        .catch((err)=>setLatestError(err))
-        .finally(()=>{setModalLoading(false);});
+            .then((result) => {
+                router.push(result.link);
+                close();
+            }).catch((err) => setLatestError(err))
+            .finally(() => { setModalLoading(false); });
     }
 
-    switch(step) {
+    switch (step) {
         case STEPS.START:
             return <>
-            <div className="horizontal-list flex-vertical-center">
-                <span className="title">{t("furpanel.room.order_flow.select_type")}</span>
-                <div className="spacer"></div>
-                <Button iconName={ICONS.REFRESH} onClick={()=>setRoomsData(null)} debounce={3000}>{t("common.reload")}</Button>
-            </div>
-            
-            <div className="vertical-list gap-4mm room-container">
-                <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.room.order_flow.messages.quota_warning.title")}>
-                    {t("furpanel.room.order_flow.messages.quota_warning.description")}
-                </NoticeBox>
-                {modalLoading && <LoadingPanel/>}
-                {/* Room type selection */}
-                {roomsData?.rooms?.map((roomInfo, index)=>
-                    <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`} 
-                    key={index} onClick={()=>selectRoomType(roomInfo)}>
-                        {selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId && 
-                        <Icon className="large" iconName={ICONS.CHECK_CIRCLE}></Icon>}
-                        <div className="vertical-list">
-                            <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
-                            <span>{formatter.number(parseFloat(roomInfo.price)-parseFloat(roomsData.priceOfCurrentRoom ?? "0"), {style: 'currency', currency: EVENT_CURRENCY})}</span>
-                            <span className="descriptive color-subtitle">{t("furpanel.room.order_flow.quota_left", {size: getRemainingRoomType(roomInfo)})}</span>
-                        </div>
-                    </a>
-                )}
-                {!roomsData?.rooms || roomsData?.rooms?.length == 0 && <span className="title">{t("furpanel.room.order_flow.no_room_type")}</span>}
-            </div>
-            <div className="horizontal-list gap-4mm">
-                <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={()=>close()}>{t("common.cancel")}</Button>
-                <div className="spacer"></div>
-                <Button iconName={ICONS.ARROW_FORWARD} disabled={!selectedType} busy={modalLoading} onClick={()=>setStep(step+1)}>{t("common.next")}</Button>
-            </div>
+                <div className="horizontal-list flex-vertical-center">
+                    <span className="title">{t("furpanel.room.order_flow.select_type")}</span>
+                    <div className="spacer"></div>
+                    <Button iconName={ICONS.REFRESH} onClick={() => setRoomsData(null)} debounce={3000}>{t("common.reload")}</Button>
+                </div>
+
+                <div className="vertical-list gap-4mm room-container">
+                    <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.room.order_flow.messages.quota_warning.title")}>
+                        {t("furpanel.room.order_flow.messages.quota_warning.description")}
+                    </NoticeBox>
+                    {modalLoading && <LoadingPanel />}
+                    {/* Room type selection */}
+                    {roomsData?.rooms?.map((roomInfo, index) =>
+                        <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`}
+                            key={index} onClick={() => selectRoomType(roomInfo)}>
+                            {selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId &&
+                                <Icon className="large" iconName={ICONS.CHECK_CIRCLE}></Icon>}
+                            <div className="vertical-list">
+                                <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
+                                <span>{formatter.number(parseFloat(roomInfo.price) - parseFloat(roomsData.priceOfCurrentRoom ?? "0"), { style: 'currency', currency: EVENT_CURRENCY })}</span>
+                                <span className="descriptive color-subtitle">{t("furpanel.room.order_flow.quota_left", { size: getRemainingRoomType(roomInfo) })}</span>
+                            </div>
+                        </a>
+                    )}
+                    {!roomsData?.rooms || roomsData?.rooms?.length == 0 && <span className="title">{t("furpanel.room.order_flow.no_room_type")}</span>}
+                </div>
+                <div className="horizontal-list gap-4mm">
+                    <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => close()}>{t("common.cancel")}</Button>
+                    <div className="spacer"></div>
+                    <Button iconName={ICONS.ARROW_FORWARD} disabled={!selectedType} busy={modalLoading} onClick={() => setStep(step + 1)}>{t("common.next")}</Button>
+                </div>
             </>;
         case STEPS.REVIEW:
             return <>
-            {latestError && <ModalError error={latestError} translationRoot="furpanel" translationKey="room.errors"></ModalError>}
-            <span>{t("furpanel.room.order_flow.your_selection")}</span>
-            <div className="room-container">
-                {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>
-                    <div className="vertical-list">
-                        <span className="title">{translate(selectedType.data.roomTypeNames, locale)}</span>
-                        <span>{formatter.number(parseFloat(selectedType.price)-parseFloat(roomsData?.priceOfCurrentRoom ?? "0"), {style: 'currency', currency: EVENT_CURRENCY})}</span>
-                        <span className="descriptive color-subtitle">{t("furpanel.room.order_flow.quota_left", {size: getRemainingRoomType(selectedType)})}</span>
-                    </div>
-                </a>}
-            </div>
-
-            <div className="vertical-list gap-4mm">
-                <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.room.order_flow.messages.order_notice.title")}>
-                    <Checkbox onClick={(e, c)=>setWarningAccepted(c)}>
-                        {t("furpanel.room.order_flow.messages.order_notice.description")}
-                    </Checkbox>
-                </NoticeBox>
-                <div className="horizontal-list gap-4mm">
-                    <Button className="danger" iconName={ICONS.ARROW_BACK} busy={modalLoading} onClick={()=>{setStep(step-1); setLatestError(undefined);}}>
-                        {t("common.back")}
-                    </Button>
-                    <div className="spacer"></div>
-                    <Button iconName={ICONS.SHOPPING_CART_CHECKOUT} disabled={!selectedType || !warningAccepted} busy={modalLoading} onClick={changeOrder}>
-                        {t("furpanel.room.order_flow.complete_order")}
-                    </Button>
+                {latestError && <ModalError error={latestError} translationRoot="furpanel" translationKey="room.errors"></ModalError>}
+                <span>{t("furpanel.room.order_flow.your_selection")}</span>
+                <div className="room-container">
+                    {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>
+                        <div className="vertical-list">
+                            <span className="title">{translate(selectedType.data.roomTypeNames, locale)}</span>
+                            <span>{formatter.number(parseFloat(selectedType.price) - parseFloat(roomsData?.priceOfCurrentRoom ?? "0"), { style: 'currency', currency: EVENT_CURRENCY })}</span>
+                            <span className="descriptive color-subtitle">{t("furpanel.room.order_flow.quota_left", { size: getRemainingRoomType(selectedType) })}</span>
+                        </div>
+                    </a>}
                 </div>
-            </div>
+
+                <div className="vertical-list gap-4mm">
+                    <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.room.order_flow.messages.order_notice.title")}>
+                        <Checkbox onClick={(e, c) => setWarningAccepted(c)}>
+                            {t("furpanel.room.order_flow.messages.order_notice.description")}
+                        </Checkbox>
+                    </NoticeBox>
+                    <div className="horizontal-list gap-4mm">
+                        <Button className="danger" iconName={ICONS.ARROW_BACK} busy={modalLoading} onClick={() => { setStep(step - 1); setLatestError(undefined); }}>
+                            {t("common.back")}
+                        </Button>
+                        <div className="spacer"></div>
+                        <Button iconName={ICONS.SHOPPING_CART_CHECKOUT} disabled={!selectedType || !warningAccepted} busy={modalLoading} onClick={changeOrder}>
+                            {t("furpanel.room.order_flow.complete_order")}
+                        </Button>
+                    </div>
+                </div>
             </>;
     }
 }

@@ -4,7 +4,7 @@ div.table-container {
 
     div.table-toolbar {
         padding-bottom: 0.3125em;
-        
+
         div.table-search div.input-container {
             margin-bottom: 0px;
         }
@@ -17,12 +17,12 @@ div.table-container {
         max-width: 100%;
 
         div.table-data {
-            user-select: none;
+            max-height: calc(2.6em*20);
 
             div.table-header-group {
                 display: flex;
                 background-color: var(--table-header-row-bg);
-    
+
                 div.table-header {
                     display: flex;
                     padding: 0.3125em;
@@ -34,7 +34,7 @@ div.table-container {
                         flex-wrap: wrap;
                         align-items: center;
                     }
-    
+
                     div.table-header-resizer {
                         min-width: 25px;
                         min-height: 20px;
@@ -64,7 +64,7 @@ div.table-container {
             div.table-header-group div.table-header:not(:first-child) {
                 border-left: 0.1em solid var(--table-border);
             }
-    
+
             div.table-row {
                 display: flex;
                 background-color: var(--table-row-bg);
@@ -122,9 +122,11 @@ div.table-container {
 
     div.table-pages {
         margin-top: 0.5em;
+
         button.page-change {
             aspect-ratio: 1;
             width: 10mm;
+
             span.title {
                 text-align: center !important;
             }

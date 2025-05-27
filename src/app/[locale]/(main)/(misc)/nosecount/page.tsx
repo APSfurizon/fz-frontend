@@ -4,14 +4,14 @@ import { runRequest } from "@/lib/api/global";
 import { useRouter } from "next/navigation"
 import { useEffect } from "react";
 
-export default function NosecountRoot () {
+export default function NosecountRoot() {
     const router = useRouter();
-    useEffect(()=>{
+    useEffect(() => {
         runRequest(new GetCurrentEventApiAction())
-        .then((result)=>{
-            const event = result as ConventionEvent;
-            router.push(`/nosecount/${event.slug}`)
-        }).catch (()=>router.back());
+            .then((result) => {
+                const event = result;
+                router.push(`/nosecount/${event.slug}`)
+            }).catch(() => router.back());
     }, []);
     return <></>
 }

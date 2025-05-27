@@ -53,7 +53,10 @@
       "update": "Update",
       "edit": "Edit",
       "delete": "Delete",
-      "save": "Save"
+      "save": "Save",
+      "discard_changes": {
+        "description": "Any unsaved change will be discarded"
+      }
     },
     "sponsorships": {
       "sponsor": "Sponsor",
@@ -96,8 +99,8 @@
       "validation_fail": "Value not valid"
     },
     "table": {
-      "search": {
-        "placeholder": "Search"
+      "filter": {
+        "placeholder": "Filter"
       },
       "add": {
         "title": "Add"
@@ -106,6 +109,11 @@
         "title": "Delete"
       },
       "no_data": "No data found"
+    },
+    "common": {
+      "CRUD": {
+        "reset": "Reset"
+      }
     }
   },
   "furpanel": {
@@ -593,7 +601,44 @@
             "errors": {
               "unknown_user": "User not found",
               "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
-            }
+            },
+            "membership_cards": "Membership cards",
+            "cards_table": {
+              "issue_year": "Issued year"
+            },
+            "badge": "Badge",
+            "badges": {
+              "fursona_name": "Fursona name",
+              "locale": "Locale",
+              "delete_badge_picture": "Delete picture",
+              "hide_from_nosecount": "Hide from nosecount",
+              "show_from_nosecount": "Show in nosecount"
+            },
+            "fursuit_table": {
+              "picture": "Photo",
+              "name": "Name",
+              "species": "Species"
+            },
+            "fursuits": "Fursuits",
+            "rooms_table": {
+              "event_name": "Event",
+              "room_name": "Name",
+              "actions": {
+                "add_guest": {
+                  "title": "Add guest",
+                  "select_guest": {
+                    "label": "Select the user to add as guest"
+                  }
+                },
+                "remove_guest": {
+                  "title": "Remove guest",
+                  "select_guest": {
+                    "label": "Select the guest to remove from the room"
+                  }
+                }
+              }
+            },
+            "rooms": "Rooms"
           }
         },
         "security": {

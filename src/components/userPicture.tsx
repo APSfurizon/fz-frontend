@@ -71,14 +71,14 @@ export default function UserPicture ({
                     src={getImageUrl(pictureData?.propic?.mediaUrl) ?? getImageUrl(fursuitPictureData?.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
                     alt={t('common.header.alt_profile_picture')} quality={100} width={size ?? 32} height={size ?? 32}>
                 </Image>
+                {pictureData?.locale && showFlag && <span className="flag medium">
+                    {getFlagEmoji(pictureData?.locale.toLowerCase())}
+                </span>}
             </div>
             { showNickname && (
                 <span className="title semibold nickname small" style={{maxWidth: size}}>
                     {isLoading && <LoadingPanel/>}
                     {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ''}
-                    {pictureData?.locale && showFlag && <span className="flag">
-                        {getFlagEmoji(pictureData?.locale.toLowerCase())}
-                    </span>}
                 </span>
             )}
             { extraDays != ExtraDays.NONE && <div className="vertical-list gap-2mm">

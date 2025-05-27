@@ -1,18 +1,18 @@
 "use client"
 import DataForm from "@/components/input/dataForm";
 import Icon, { ICONS } from "@/components/icon";
-import JanInput from "@/components/input/janInput";
+import FpInput from "@/components/input/fpInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/lib/api/hooks/useTitle";
+import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 
 export default function RecoverConfirm() {
   const t = useTranslations("authentication");
-  const [error, setError] = useState <String | undefined> (undefined);
+  const [error, setError] = useState<String | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
@@ -24,7 +24,7 @@ export default function RecoverConfirm() {
   }
 
   const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    if(!isDetailedError (err)) {
+    if (!isDetailedError(err)) {
       setError("network_error");
     } else {
       const errRes = err as ApiDetailedErrorResponse;
@@ -51,17 +51,16 @@ export default function RecoverConfirm() {
       </span>
     </div>
     {error && <span className="error-container title small center">{t(`recover_confirm.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-    
+
     <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading}
-      action={new ResetPasswordFormAction} onFail={(err) => manageError(err)} onBeforeSubmit={onLoading} 
+      action={new ResetPasswordFormAction} onFail={(err) => manageError(err)} onBeforeSubmit={onLoading}
       onSuccess={manageSuccess} disableSave={!passwordMatch}>
       <input type="hidden" name="resetPwId" value={params.get("id") ?? ""}></input>
-      <JanInput fieldName="password" required={true} inputType="password" busy={loading} label={t("recover_confirm.input.new_password.label")}
+      <FpInput fieldName="password" required={true} inputType="password" busy={loading} label={t("recover_confirm.input.new_password.label")}
         placeholder={t("recover_confirm.input.new_password.placeholder")} helpText={t("recover_confirm.input.new_password.help")}
-        onChange={(e) => setPassword(e.currentTarget.value)}/>
-      <JanInput required={true} inputType="password" busy={loading} label={t("recover_confirm.input.confirm_password.label")}
-          placeholder={t("recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
+        onChange={(e) => setPassword(e.currentTarget.value)} />
+      <FpInput required={true} inputType="password" busy={loading} label={t("recover_confirm.input.confirm_password.label")}
+        placeholder={t("recover_confirm.input.confirm_password.placeholder")} onChange={(e) => setConfirmPassword(e.currentTarget.value)} />
     </DataForm>
   </>;
 }
-  
