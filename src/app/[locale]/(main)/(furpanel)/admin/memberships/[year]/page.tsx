@@ -134,9 +134,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             id: 'user',
             header: t("furpanel.admin.membership_manager.columns.user"),
             cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
-                <UserPicture userData={props.row.original.user} hideEffect></UserPicture>
+                <UserPicture userData={props.row.original.user}></UserPicture>
                 <span className="title small">{props.row.original.user.fursonaName}</span>
             </div>
+        }),
+        columnHelper.accessor("user.sponsorship", {
+            id: 'sponsorship',
+            header: t("furpanel.admin.membership_manager.columns.sponsorship"),
         }),
         columnHelper.accessor(data => `${data.userInfo.firstName} ${data.userInfo.lastName}`, {
             id: 'name',

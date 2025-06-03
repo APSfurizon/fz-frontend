@@ -556,7 +556,8 @@
           "order_code": "Order",
           "card_number": "Card number",
           "anomalies": "Anomalies",
-          "registered": "Registered"
+          "registered": "Registered",
+          "sponsorship": "Sponsorship"
         }
       },
       "users": {

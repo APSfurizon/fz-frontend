@@ -555,7 +555,8 @@
           "order_code": "Ordine",
           "card_number": "Numero tessera",
           "anomalies": "Anomalie",
-          "registered": "Registrato"
+          "registered": "Registrato",
+          "sponsorship": "Sponsor"
         }
       },
       "users": {
