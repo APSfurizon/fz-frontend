@@ -142,7 +142,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             id: 'sponsorship',
             header: t("furpanel.admin.membership_manager.columns.sponsorship"),
         }),
-        columnHelper.accessor(data => `${data.userInfo.firstName} ${data.userInfo.lastName}`, {
+        columnHelper.accessor(data => `${data.userInfo.lastName} ${data.userInfo.firstName}`, {
             id: 'name',
             header: t("furpanel.admin.membership_manager.columns.name"),
         }),
