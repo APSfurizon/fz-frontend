@@ -522,6 +522,19 @@
         "rooms": {
           "title": "Rooms",
           "remind_rooms_not_full": "Remind rooms not full"
+        },
+        "config": {
+          "title": "Configuration",
+          "event_settings": {
+            "title": "Event settings",
+            "input": {
+              "booking_start": "Booking start date",
+              "early_booking_start": "Early booking date start",
+              "reservation_edit_deadline": "Reservation edit deadline",
+              "badge_upload_deadline": "Badge editing deadline",
+              "room_edit_deadline": "Room edit deadline"
+            }
+          }
         }
       },
       "membership_manager": {
