@@ -26,11 +26,12 @@ body {
   margin: 0;
 }
 
-span, i {
+span,
+i {
   color: var(--foreground);
 }
 
-html > body > div.page-wrapper {
+html>body>div.page-wrapper {
   position: relative;
   min-height: 100vh;
 }
@@ -40,7 +41,7 @@ a {
   text-decoration: none;
 }
 
-a.hoverable{
+a.hoverable {
   cursor: pointer;
 }
 
@@ -50,6 +51,16 @@ a.hoverable:hover {
 
 *:disabled {
   filter: grayscale(0.7) brightness(0.8);
+}
+
+.suppressed-input {
+  max-width: 0px;
+  max-height: 0px;
+  margin: 0;
+  padding: 0px;
+  outline: none;
+  border: none;
+  position: absolute;
 }
 
 /* Scrollbar styles */
@@ -79,6 +90,4 @@ a.hoverable:hover {
   }
 }
 
-@media screen and (max-width: 480px) {
-  
-}
+@media screen and (max-width: 480px) {}

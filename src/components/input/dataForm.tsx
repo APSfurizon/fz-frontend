@@ -183,7 +183,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                         disabled={disableSave}
                         iconName={saveButton.iconName}
                         busy={loading}>
-                        {saveButton.text}{isEntityChanged ? "*" : ""}
+                        {saveButton.text}{isEntityChanged && !!initialEntity ? "*" : ""}
                     </Button>}
                     {!hideReset && <Button type="reset"
                         iconName={saveButton.iconName}

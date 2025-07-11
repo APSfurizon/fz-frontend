@@ -1,4 +1,4 @@
-import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute, KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "../icon";
 import "@/styles/components/fpInput.css";
 import { useTranslations } from "next-intl";
@@ -39,7 +39,7 @@ export default function FpInput ({
     fieldName?: string,
     helpText?: string,
     inputStyle?: CSSProperties,
-    inputType?: "text" | "email" | "password" | "number" | "date" | "tel",
+    inputType?: HTMLInputTypeAttribute,
     label?: string,
     labelStyle?: CSSProperties,
     minLength?: number,
