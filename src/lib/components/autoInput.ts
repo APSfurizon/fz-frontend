@@ -55,10 +55,13 @@ export type SearchRank = {
     rank: number
 }
 
-export function filterSearchResult(query: string, searchType: SearchType, results: AutoInputSearchResult[], locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
-    const value = query.trim().toLowerCase();
-    const filteredResults = results.filter ((result) => (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result)));
-    return applySearch(value, searchType, filteredResults, locale);
+export function filterSearchResult(query: string, searchType: SearchType, results: AutoInputSearchResult[], locale?: string,
+    filter?: AutoInputFilter,filterOut?: AutoInputFilter) {
+        const value = query.trim().toLowerCase();
+        const filteredResults = results.filter ((result) => {
+            return (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result))
+        });
+        return applySearch(value, searchType, filteredResults, locale);
 }
 
 /**

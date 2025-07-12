@@ -25,7 +25,7 @@ export interface RegisterResponse extends ApiResponse {
 
 export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
     mapToDTO = (data: FormData) => {
-        let personalUserInformation: UserPersonalInfo = {
+        const personalUserInformation: UserPersonalInfo = {
             firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
             lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
             sex:                nullifyEmptyString(data.get('sex')?.toString ()),
@@ -42,10 +42,11 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
             residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
             residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
             prefixPhoneNumber:  nullifyEmptyString(data.get('phonePrefix')?.toString ()),
-            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ())
+            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ()),
+            telegramUsername:   nullifyEmptyString(data.get('telegramUsername')?.toString ())
         };
 
-        let toReturn: RegisterData = {
+        const toReturn: RegisterData = {
             email: data.get('email')?.toString (),
             password: data.get('password')?.toString (),
             fursonaName: data.get('fursonaName')?.toString(),

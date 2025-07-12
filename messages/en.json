@@ -900,7 +900,8 @@
         "section": {
           "birth_data": "Birth data",
           "personal_info": "Personal info",
-          "residence_data": "Residential data"
+          "residence_data": "Residential data",
+          "contact_data": "Contact data"
         },
         "disclaimer_tos": {
           "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>.",
@@ -916,10 +917,15 @@
         "gender": {
           "label": "Gender",
           "placeholder": "Enter your gender"
+        },
+        "telegram_username": {
+          "label": "Telegram username",
+          "placeholder": "Enter your telegram username",
+          "help": "We need the @username in order to contact you when needed"
         }
       },
       "question": {
-        "description": "Italy's laws make this data necessary to perform any sort of purchase and membership subscription. Be sure to check the privacy policy.",
+        "description": "Italian laws make this data necessary to perform any sort of purchase and membership subscription. Be sure to check the privacy policy.",
         "description_title": "Why are you asking this data?"
       },
       "login_here": "or log in here",

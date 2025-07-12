@@ -73,8 +73,9 @@ export interface UserPersonalInfo {
     prefixPhoneNumber?: string;
     phoneNumber?: string;
     lastUpdatedEventId?: number;
-    userId?: number,
-    note?: string,
+    userId?: number;
+    note?: string;
+    telegramUsername?: string;
 }
 
 export interface UserDisplayResponse extends ApiResponse {
@@ -184,7 +185,8 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
             userId: parseInt(data.get('userId')?.toString() ?? "0"),
             id: parseInt(data.get('id')?.toString() ?? "0"),
             lastUpdatedEventId: undefined,
-            note: undefined
+            note: undefined,
+            telegramUsername: nullifyEmptyString(data.get('telegramUsername')?.toString()),
         };
         return toReturn;
     }
@@ -335,7 +337,8 @@ export class AutoInputGenderManager implements AutoInputManager {
         });
     }
 
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter,
+        filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
             getAutoInputGenders().then(results => {
                 resolve(
