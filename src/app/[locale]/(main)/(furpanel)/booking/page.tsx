@@ -2,13 +2,15 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import Icon, { ICONS } from "@/components/icon";
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
-import { useTranslations, useFormatter, useNow, useLocale } from "next-intl";
-import { EVENT_BANNER, EVENT_LOGO, GROUP_CHAT_URL } from "@/lib/constants";
+import { useTranslations, useFormatter, useLocale } from "next-intl";
+import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData, ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction, OrderRetryLinkApiAction, ShopLinkApiAction, ShopLinkResponse } from "@/lib/api/booking";
+import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
+    ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction,
+    OrderRetryLinkApiAction } from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
 import { useQRCode } from 'next-qrcode';
 import ModalError from "@/components/modalError";
@@ -71,12 +73,6 @@ export default function BookingPage() {
     /**UI variables */
     /**If editing's locked */
     let isEditLocked = undefined;
-    /**If the store's open */
-    let isOpen = undefined;
-    /**MS Difference between current date and the store opening date*/
-    let openDiff = undefined;
-    /**Divided by units of time */
-    let countdown = undefined;
 
     useEffect(() => {
         if (!!!bookingData) {
@@ -91,7 +87,8 @@ export default function BookingPage() {
             return;
         }
         /**If user has a valid and paid order */
-        const hasOrder = !!bookingData && bookingData?.order && ["PENDING", "PAID", "CANCELED"].includes(bookingData?.order?.orderStatus);
+        const hasOrder = !!bookingData && bookingData?.order &&
+            ["PENDING", "PAID", "CANCELED"].includes(bookingData?.order?.orderStatus);
 
         /**Ticket data*/
         const ticketData: BookingTicketData = hasOrder ? calcTicketData(bookingData.order) : {
@@ -120,7 +117,7 @@ export default function BookingPage() {
         </div>)
     }
 
-    const requestOrderEditLink = (e: MouseEvent<HTMLElement>) => {
+    const requestOrderEditLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new OrderEditLinkApiAction())
@@ -131,7 +128,7 @@ export default function BookingPage() {
             )).finally(() => setActionLoading(false));
     }
 
-    const requestRetryPaymentLink = (e: MouseEvent<HTMLElement>) => {
+    const requestRetryPaymentLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new OrderRetryLinkApiAction())
@@ -142,11 +139,11 @@ export default function BookingPage() {
             )).finally(() => setActionLoading(false));
     }
 
-    const confirmMembershipData = (e: MouseEvent<HTMLElement>) => {
+    const confirmMembershipData = () => {
         if (actionLoading) return;
         setActionLoading(true);
         runRequest(new ConfirmMembershipDataApiAction())
-            .then((result) => setBookingData(undefined))
+            .then(() => setBookingData(undefined))
             .catch((err) => showModal(
                 t("common.error"),
                 <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
@@ -163,10 +160,14 @@ export default function BookingPage() {
             {isLoading || !!!pageData ? <LoadingPanel /> : <>
                 <Countdown data={pageData}></Countdown>
                 {pageData?.shouldUpdateInfo && <>
-                    <NoticeBox title={t("furpanel.booking.messages.review_info.title")} theme={NoticeTheme.Error} className="vertical-list gap-2mm">
+                    <NoticeBox title={t("furpanel.booking.messages.review_info.title")}
+                        theme={NoticeTheme.Error} className="vertical-list gap-2mm">
                         {t("furpanel.booking.messages.review_info.description")}
                         <span className="horizontal-list gap-2mm" style={{ marginTop: ".5em" }}>
-                            <Button className="success" busy={actionLoading} onClick={confirmMembershipData} iconName={ICONS.CHECK}>{t("furpanel.booking.actions.confirm_info")}</Button>
+                            <Button className="success"
+                                busy={actionLoading}
+                                onClick={confirmMembershipData}
+                                iconName={ICONS.CHECK}>{t("furpanel.booking.actions.confirm_info")}</Button>
                             <Button className="warning" busy={actionLoading} onClick={() => {
                                 router.push("/user");
                             }} iconName={ICONS.OPEN_IN_NEW}>{t("furpanel.booking.actions.review_info")}</Button>
@@ -238,7 +239,7 @@ export default function BookingPage() {
                                 <NoticeBox theme={NoticeTheme.FAQ} customIcon={ICONS.GROUPS} title={t("furpanel.booking.messages.invite_group.title")}>
                                     {t.rich("furpanel.booking.messages.invite_group.description",
                                         {
-                                            link: (chunks) => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
+                                            link: () => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
                                                 {GROUP_CHAT_URL}</a>
                                         })}
                                 </NoticeBox>}
