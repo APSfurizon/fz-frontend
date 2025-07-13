@@ -43,7 +43,7 @@ div.autocomplete-input {
         outline: none;
         border: none;
     }
-    
+
     /* Disabled style */
     div.input-container:has(input.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);
@@ -53,7 +53,7 @@ div.autocomplete-input {
     input.input-field:disabled {
         color: var(--text-input-color-disabled);
     }
-    
+
     /* Error style */
     div.input-container:has(input.input-field.danger) {
         outline-color: var(--text-input-border-danger);
@@ -103,7 +103,7 @@ div.autocomplete-input {
         background-color: var(--autocomplete-selected-value-bg-hover);
     }
 
-    .search-result > span {
+    .search-result>span {
         color: var(--text-input-color);
     }
 
@@ -116,6 +116,7 @@ div.autocomplete-input {
         border-radius: 1000px;
         overflow: hidden;
         gap: 0.3125em;
+        transition-duration: 120ms;
     }
 
     .selected-value.single {
@@ -128,9 +129,9 @@ div.autocomplete-input {
     }
 
     .selected-value:hover {
-        background-color: var(--autocomplete-selected-value-hover-bg); 
+        background-color: var(--autocomplete-selected-value-hover-bg);
     }
- 
+
     .selected-value img {
         border-radius: 1000px;
         max-width: 17pt;

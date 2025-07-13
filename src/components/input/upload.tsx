@@ -1,7 +1,8 @@
 "use client"
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { EMPTY_PROFILE_PICTURE_SRC, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WIDTH, FULL_UPLOAD_MAX_HEIGHT  } from '@/lib/constants';
+import { EMPTY_PROFILE_PICTURE_SRC, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WIDTH,
+    FULL_UPLOAD_MAX_HEIGHT  } from '@/lib/constants';
 import { ICONS } from '@/components/icon';
 import Image from 'next/image';
 import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
@@ -23,7 +24,7 @@ export default function Upload ({
     required=false,
     label,
     helpText,
-    loading=false,
+    busy=false,
     readonly=false,
     requireCrop = false,
     viewSize=96,
@@ -38,7 +39,7 @@ export default function Upload ({
     required?: boolean,
     label?: string,
     helpText?: string,
-    loading: boolean,
+    busy: boolean,
     requireCrop?: boolean,
     readonly?: boolean,
     viewSize?: number,
@@ -60,18 +61,18 @@ export default function Upload ({
     const [previewUrl, setPreviewUrl] = useState<string>();
 
     // Reset logic
-    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
 
     /**Loads the initial value media */
     useEffect(()=>{
-        if (!areEquals(initialMedia, lastInitialMedia) || reset) {
+        if (!areEquals(initialMedia, lastInitialMedia) || formReset) {
             setError(false);
             if (previewUrl) URL.revokeObjectURL(previewUrl);
             setPreviewUrl(undefined);
             setLastInitialMedia (initialMedia);
             setMedia(initialMedia);
         }
-    }, [initialMedia, reset])
+    }, [initialMedia, formReset])
 
     const openFileDialog = () => {
         inputRef.current?.click();
@@ -171,7 +172,9 @@ export default function Upload ({
         }
     }
 
-    const isRequired = !globalDisabled && required;
+    const isRequired = !formDisabled && required;
+
+    const isBusy = busy || formLoading;
 
     return <>
         {label && <input tabIndex={-1}
@@ -181,30 +184,40 @@ export default function Upload ({
             defaultValue={previewUrl ?? ""}
             required={isRequired}/>}
         <div>
-            {label && <label htmlFor={fieldName} className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
+            {label && <label htmlFor={fieldName}
+                className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
                 {label}
             </label>}
             <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
                 <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
-                    <Image unoptimized className="upload-picture" src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                    <Image unoptimized className="upload-picture"
+                        src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
                         alt={t('components.upload.alt_preview_image')} width={viewSize} height={viewSize} quality={100}
-                        style={{aspectRatio: "1", maxWidth: viewSize, maxHeight: viewSize, minWidth: viewSize, minHeight: viewSize, objectFit: "cover"}}>
+                        style={{
+                            aspectRatio: "1",
+                            maxWidth: viewSize,
+                            maxHeight: viewSize,
+                            minWidth: viewSize,
+                            minHeight: viewSize,
+                            objectFit: "cover"}}>
                     </Image>
                 </div>
                 <div className="vertical-list gap-2mm">
                     {/* Upload button */}
                     {!media && <Button title={t('components.upload.open')} onClick={()=>openFileDialog()}
-                        iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || globalDisabled} busy={loading}>
+                        iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || formDisabled} busy={isBusy}>
                         {!media && t('components.upload.open')}</Button>}
                     {/* Delete button */}
                     {(media || previewUrl) && <Button title={t('components.upload.delete')} className="danger"
-                        onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly || globalDisabled}
-                        busy={loading}>{t('components.upload.delete')}</Button>}
+                        onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly || formDisabled}
+                        busy={isBusy}>{t('components.upload.delete')}</Button>}
                 </div>
                 {children}
             </div>
         </div>
-        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
+        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
+            {helpText}
+        </span>}
 
         {/* Form data */}
         <div className="suppressed-input">
@@ -214,7 +227,11 @@ export default function Upload ({
         {/* Crop dialog */}
         <Modal style={{overflow: "visible"}} open={cropDialogOpen} title={cropTitle ?? t("components.upload.crop")}
             onClose={()=> onCropCanceled()} zIndex={505}>
-            <Cropper src={previewUrl} initialAspectRatio={1} guides={false} aspectRatio={cropAspectRatio == 'square' ? 1 : undefined} ref={cropperRef}
+            <Cropper src={previewUrl}
+                initialAspectRatio={1}
+                guides={false}
+                aspectRatio={cropAspectRatio == 'square' ? 1 : undefined}
+                ref={cropperRef}
                 zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100} style={{maxHeight: '75vh'}}>
             </Cropper>
             <div className="horizontal-list gap-2mm">
@@ -225,12 +242,12 @@ export default function Upload ({
             </div>
             <div className="bottom-toolbar">
                 <Button title={t('common.cancel')} className="danger" onClick={()=>onCropCanceled()}
-                    iconName={ICONS.CANCEL} disabled={readonly || globalDisabled}
-                    busy={loading}>{t('common.cancel')}</Button>
+                    iconName={ICONS.CANCEL} disabled={readonly || formDisabled}
+                    busy={isBusy}>{t('common.cancel')}</Button>
                 <div className="spacer"></div>
                 <Button title={t('components.upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
-                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || globalDisabled}
-                     busy={loading}>{!media && t('components.upload.upload')}</Button>    
+                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || formDisabled}
+                     busy={isBusy}>{!media && t('components.upload.upload')}</Button>    
             </div>
         </Modal>
     </>

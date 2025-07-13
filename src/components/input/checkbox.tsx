@@ -28,8 +28,8 @@ export default function Checkbox ({
     const [checked, setChecked] = useState(initialValue ?? false);
     const [lastInitialValue, setLastInitialValue] = useState<boolean> ();
     const [busyState, setBusyState] = useState(busy ?? false);
-    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
-    const isDisabled = disabled || globalDisabled;
+    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const isDisabled = disabled || formDisabled;
     const clickEvent = (event: MouseEvent<HTMLButtonElement>) => {
         if (!isDisabled && !busyState) {
             setChecked(prev => !prev);
@@ -38,24 +38,24 @@ export default function Checkbox ({
         }
     }
 
-    useEffect(()=>setBusyState(busy ?? false), [busy]);
-
     useEffect(()=>{
-        if (initialValue !== undefined && (!areEquals(lastInitialValue, initialValue) || reset)) {
+        if (initialValue !== undefined && (!areEquals(lastInitialValue, initialValue) || formReset)) {
             setChecked(initialValue);
-        } else if (reset) {
+        } else if (formReset) {
             setChecked(false);
             onFormChange(fieldName);
         }
         setLastInitialValue(initialValue);
-    }, [initialValue, reset])
+    }, [initialValue, formReset])
+
+    const isBusy = busyState || formLoading || busy
 
     return <>
         <input type="hidden" name={fieldName} value={String(checked)}></input>
         <button type="button" onClick={clickEvent} style={{...style}}
             disabled={isDisabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
-                {busyState 
+                {isBusy 
                 ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
                 : <Icon className="medium" iconName={checked ? ICONS.CHECK : ICONS.CLOSE}></Icon>
                 }

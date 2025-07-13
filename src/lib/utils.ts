@@ -135,7 +135,8 @@ export function padStart(x: number) {
     return (""+x).padStart(2, "0");
 }
 
-export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3).fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
+export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3)
+    .fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
 
 export function getImageUrl (src?: string): string | undefined {
     return src && src.length > 0 ? new URL(src, API_IMAGE_URL).href : undefined;

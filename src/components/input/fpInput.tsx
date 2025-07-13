@@ -72,14 +72,14 @@ export default function FpInput ({
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
     const inputRef = useRef<HTMLInputElement>(null);
     const t = useTranslations("components");
 
     // Detect reset
     useEffect(()=>{
         setInputValue(initialValue ?? "");
-    }, [reset]);
+    }, [formReset]);
 
     useEffect(()=>{
         if (!areEquals(initialValue, lastInitialValue)) {
@@ -110,8 +110,9 @@ export default function FpInput ({
     const isPassword = inputType === "password";
     if (isPassword && visiblePassword) finalType = "text";
 
-    const isDisabled = disabled || globalDisabled;
+    const isDisabled = disabled || formDisabled;
     const isRequired = required && !isDisabled && !readOnly;
+    const isBusy = busy || formLoading;
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>
@@ -143,11 +144,11 @@ export default function FpInput ({
                     ref={inputRef}
                     onFocus={scrollToFocus}
                 />
-                <span className={`${busy || isPassword ? "icon-container" : ""}`}>
-                    {(busy) && (
+                <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
+                    {(isBusy) && (
                         <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
                     )}
-                    {!(busy) && (isPassword) && (
+                    {!(isBusy) && (isPassword) && (
                         <a style={{cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}>
                             <Icon className="medium"
                                 iconName={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}/>

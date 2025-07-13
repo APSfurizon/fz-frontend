@@ -4,11 +4,11 @@ import Button from "@/components/input/button";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import { ICONS } from "@/components/icon";
 import Modal from "@/components/modal";
-import { RoleData, RoleMember, RoleOutputData, RoleOutputMember } from "@/lib/api/admin/role";
+import { RoleData, RoleMember } from "@/lib/api/admin/role";
 import { AutoInputUsersManager, SponsorType } from "@/lib/api/user";
-import { AutoInputFilter, AutoInputSearchResult } from "@/lib/components/autoInput";
+import { AutoInputChangedParams, AutoInputFilter, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useTranslations } from "next-intl";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import "@/styles/table.css";
 import Image from "next/image";
@@ -34,14 +34,6 @@ function flattenSearchResult(searchResult: AutoInputSearchResult): RoleMember {
             propic: searchResult.imageUrl ? flattenedMedia : undefined
         }
     }
-}
-
-const EMPTY_ROLE_MEMBER: RoleMember = {
-    displayData: {
-        userId: 0,
-        sponsorship: SponsorType.NONE
-    },
-    tempRole: false
 }
 
 export default function RoleMembersEditor () {
@@ -82,14 +74,12 @@ export default function RoleMembersEditor () {
         setEntity(newEntity);
     }
 
-    const selectMember = (values: AutoInputSearchResult[], newValues?: AutoInputSearchResult[], removedValue?: AutoInputSearchResult) => {
-        const value = newValues && newValues.length > 0 ? flattenSearchResult(newValues[0]) : undefined;
+    const selectMember = (p : AutoInputChangedParams) => {
+        const value = p.newValues && p.newValues.length > 0 ? flattenSearchResult(p.newValues[0]) : undefined;
         patchSelectedUserTemp(value);
     }
 
-    const setTemporary = (event: MouseEvent<HTMLButtonElement>, checked: boolean,
-        setChecked: Dispatch<SetStateAction<boolean>>,
-        setBusy: Dispatch<SetStateAction<boolean>>) => {
+    const setTemporary = (event: MouseEvent<HTMLButtonElement>, checked: boolean) => {
             setTemporaryUserTemp(checked);
     }
 
@@ -121,8 +111,12 @@ export default function RoleMembersEditor () {
     return <>
     <div className="horizontal-list gap-2mm">
         <div className="spacer"></div>
-        <Button className="danger" iconName={ICONS.HOURGLASS_DISABLED} onClick={()=>{purgeTemporaryMembers()}}>{t("furpanel.admin.users.security.roles.actions.purge_temporary_roles")}</Button>
-        <Button iconName={ICONS.ADD} onClick={()=>{setAddMemberOpen(true)}}>{t("common.CRUD.add")}</Button>
+        <Button className="danger" iconName={ICONS.HOURGLASS_DISABLED} onClick={()=>{purgeTemporaryMembers()}}>
+            {t("furpanel.admin.users.security.roles.actions.purge_temporary_roles")}
+        </Button>
+        <Button iconName={ICONS.ADD} onClick={()=>{setAddMemberOpen(true)}}>
+            {t("common.CRUD.add")}
+        </Button>
     </div>
     {/* Permissions table */}
     <div className="table-container rounded-m">
@@ -143,7 +137,7 @@ export default function RoleMembersEditor () {
                     </Checkbox>
                 </div>
                 <div className="data">
-                    <Button iconName={ICONS.DELETE} onClick={() => removeMember(roleMember.displayData.userId)}></Button>
+                    <Button iconName={ICONS.DELETE} onClick={() => removeMember(roleMember.displayData.userId)}/>
                 </div>
             </div>)}
         </div>

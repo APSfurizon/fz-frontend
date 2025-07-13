@@ -139,7 +139,7 @@
           "description": "Dal {lockDate} non sarà più possibile modificare l'ordine."
         },
         "editing_locked": {
-          "title": "Modifica bloccata",
+          "title": "Modifiche bloccate",
           "description": "Dal {lockDate} non è più possibile modificare l'ordine."
         },
         "review_info": {
