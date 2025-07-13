@@ -43,7 +43,7 @@ export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySea
                 toReturn.description = `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`;
                 toReturn.icon = getFlagEmoji(place.code);
                 toReturn.phonePrefix = place.phonePrefix;
-                toReturn.translatedDescription = place.translatedDescription;
+                toReturn.translatedDescription = place.translatedDescription
                 return toReturn;
             }));
         }).catch ((err) => {reject (err)});
@@ -82,23 +82,24 @@ export class AutoInputCountriesManager implements AutoInputManager {
         this.showNumber = showNumber ?? false;
     }
 
-    loadByIds (filter: AutoInputFilter, customIdExtractor?: (r: AutoInputSearchResult) => string | number): Promise<CountrySearchResult[]> {
-        return new Promise((resolve) => {
-            getAutoInputCountries (this.showNumber).then (results => {
-                const countries = results.map(data=>{
-                    if (customIdExtractor) {
-                        if (this.codeOnly) {
-                            data.code = customIdExtractor(data) as string ?? data.code;
-                        } else {
-                            data.id = customIdExtractor(data) as number ?? data.id;
+    loadByIds (filter: AutoInputFilter,
+        customIdExtractor?: (r: AutoInputSearchResult) => string | number): Promise<CountrySearchResult[]> {
+            return new Promise((resolve) => {
+                getAutoInputCountries (this.showNumber).then (results => {
+                    const countries = results.map(data=>{
+                        if (customIdExtractor) {
+                            if (this.codeOnly) {
+                                data.code = customIdExtractor(data) as string ?? data.code;
+                            } else {
+                                data.id = customIdExtractor(data) as number ?? data.id;
+                            }
                         }
-                    }
-                    return data;
-                })
-                const toReturn = countries.filter (result => filter.applyFilter(result));
-                resolve (this.showNumber ? firstOrEmpty(toReturn) : toReturn);
+                        return data;
+                    })
+                    const toReturn = countries.filter (result => filter.applyFilter(result));
+                    resolve (this.showNumber ? firstOrEmpty(toReturn) : toReturn);
+                });
             });
-        });
     }
 
     searchByValues (value: string, locale?: string, filter?: AutoInputFilter,

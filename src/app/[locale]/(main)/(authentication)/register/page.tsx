@@ -174,7 +174,7 @@ export default function Register() {
           minDecodeSize={2}
           manager={new AutoInputCountriesManager}
           onChange={
-            (values, newValues) => setBirthCountry((firstOrUndefined(newValues) as AutoInputSearchResult)?.code)
+            (p) => setBirthCountry((firstOrUndefined(p.newValues) as AutoInputSearchResult)?.code)
           }
           label={t("register.form.birth_country.label")}
           placeholder={t("register.form.birth_country.placeholder")}
@@ -218,7 +218,7 @@ export default function Register() {
           minDecodeSize={2}
           manager={new AutoInputCountriesManager}
           onChange={
-            (values, newValue) => setResidenceCountry((firstOrUndefined(newValue) as AutoInputSearchResult)?.code)
+            (p) => setResidenceCountry((firstOrUndefined(p.newValues) as AutoInputSearchResult)?.code)
           }
           label={t("register.form.residence_country.label")}
           placeholder={t("register.form.residence_country.placeholder")}
@@ -265,7 +265,7 @@ export default function Register() {
           placeholder={t("register.form.phone_prefix.placeholder")}
           idExtractor={(r) => extractPhonePrefix(r as CountrySearchResult)}
           onChange={
-            (values, newValue) => setPhonePrefix(extractPhonePrefix(firstOrUndefined(newValue) as CountrySearchResult))
+            (p) => setPhonePrefix(extractPhonePrefix(firstOrUndefined(p.newValues) as CountrySearchResult))
           }
           emptyIfUnselected/>
         <FpInput fieldName="phoneNumber"
