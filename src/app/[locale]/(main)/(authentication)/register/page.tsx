@@ -99,20 +99,17 @@ export default function Register() {
         required
         inputType="text"
         helpText={t("register.form.nickname.help")}
-        busy={loading}
         label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")}/>
-      <FpInput fieldName="email" required={true} inputType="email" busy={loading} label={t("register.form.email.label")}
+      <FpInput fieldName="email" required={true} inputType="email" label={t("register.form.email.label")}
         placeholder={t("register.form.email.placeholder")} onChange={(e) => setEmail(e.target.value)} />
-      <FpInput required={true} inputType="email" busy={loading} label={t("register.form.confirm_email.label")}
+      <FpInput required={true} inputType="email" label={t("register.form.confirm_email.label")}
         placeholder={t("register.form.confirm_email.placeholder")} onChange={(e) => setConfirmEmail(e.target.value)}
         className={`${emailMatch ? 'success' : 'danger'}`} />
-
       <FpInput fieldName="password"
         minLength={6}
         required={true}
         inputType="password"
         helpText={t("register.form.password.help")}
-        busy={loading}
         label={t("register.form.password.label")}
         placeholder={t("register.form.password.placeholder")}
         onChange={(e) => setPassword(e.currentTarget.value)}/>
@@ -121,7 +118,6 @@ export default function Register() {
         required={true}
         inputType="password"
         helpText={t("register.form.confirm_password.help")}
-        busy={loading}
         label={t("register.form.confirm_password.label")}
         placeholder={t("register.form.confirm_password.placeholder")}
         onChange={
@@ -135,13 +131,11 @@ export default function Register() {
         <FpInput fieldName="firstName"
           required
           inputType="text"
-          busy={loading}
           label={t("register.form.first_name.label")}
           placeholder={t("register.form.first_name.placeholder")}/>
         <FpInput fieldName="lastName"
           required={true}
           inputType="text"
-          busy={loading}
           label={t("register.form.last_name.label")}
           placeholder={t("register.form.last_name.placeholder")}/>
       </div>
@@ -156,7 +150,6 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         <FpInput fieldName="allergies"
           inputType="text"
-          busy={loading}
           label={t("register.form.allergies.label")}
           placeholder={t("register.form.allergies.placeholder")} />
       </div>
@@ -167,7 +160,6 @@ export default function Register() {
         <FpInput fieldName="birthday"
           required
           inputType="date"
-          busy={loading}
           label={t("register.form.birthday.label")}/>
         <AutoInput fieldName="birthCountry"
           required
@@ -189,7 +181,6 @@ export default function Register() {
           inputType="text"
           disabled={!fiscalCodeRequired}
           pattern={/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi}
-          busy={loading}
           label={t("register.form.fiscal_code.label")}
           placeholder={t("register.form.fiscal_code.placeholder")} />
       </div>
@@ -206,7 +197,6 @@ export default function Register() {
         <FpInput fieldName="birthCity"
           required
           inputType="text"
-          busy={loading}
           label={t("register.form.birth_city.label")}
           placeholder={t("register.form.birth_city.placeholder")} />
       </div>
@@ -237,13 +227,11 @@ export default function Register() {
         <FpInput fieldName="residenceCity"
           required
           inputType="text"
-          busy={loading}
           label={t("register.form.residence_city.label")}
           placeholder={t("register.form.residence_city.placeholder")}/>
         <FpInput fieldName="residenceZipCode"
           required
           inputType="text"
-          busy={loading}
           label={t("register.form.residence_zip_code.label")}
           placeholder={t("register.form.residence_zip_code.placeholder")}/>
       </div>
@@ -251,7 +239,6 @@ export default function Register() {
         <FpInput fieldName="residenceAddress"
           required
           inputType="text"
-          busy={loading}
           label={t("register.form.residence_address.label")}
           placeholder={t("register.form.residence_address.placeholder")}/>
       </div>
@@ -271,7 +258,6 @@ export default function Register() {
         <FpInput fieldName="phoneNumber"
           required={true}
           inputType="text"
-          busy={loading}
           label={t("register.form.phone_number.label")}
           placeholder={t("register.form.phone_number.placeholder")}
           style={{ flex: "2" }}
@@ -279,7 +265,7 @@ export default function Register() {
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         {/* Telegram username */}
-        <FpInput fieldName="telegramUsername" required inputType="text" busy={loading}
+        <FpInput fieldName="telegramUsername" required inputType="text" 
             pattern={/^[a-zA-Z0-9_]{5,32}$/gmi}
             label={t("register.form.telegram_username.label")}
             placeholder={t("register.form.telegram_username.placeholder")}
@@ -301,7 +287,7 @@ export default function Register() {
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={ICONS.KEY} busy={loading}>{t("register.register")}</Button>
+        <Button type="submit" iconName={ICONS.KEY} >{t("register.register")}</Button>
       </div>
     </DataForm>
     <div>
