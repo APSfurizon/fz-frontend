@@ -43,7 +43,7 @@ export function getAutoInputCountries (showNumber?: boolean): Promise<CountrySea
                 toReturn.description = `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`;
                 toReturn.icon = getFlagEmoji(place.code);
                 toReturn.phonePrefix = place.phonePrefix;
-                toReturn.translatedDescription = place.translatedDescription
+                toReturn.translatedDescription = place.translatedDescription;
                 return toReturn;
             }));
         }).catch ((err) => {reject (err)});
