@@ -4,6 +4,7 @@ import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
 import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
 import "@/styles/components/combobox.css";
+import { useLocale } from "next-intl";
 
 export default function ComboBox({
     items, className, style, labelStyle, label, hasError = false,
@@ -28,6 +29,7 @@ export default function ComboBox({
     itemExtractor?: (entity: InputEntity) => string|number,
     hasError?: boolean
 }>) {
+    const locale = useLocale();
     const [selectedItem, setSelectedItem] = useState<InputEntity> ();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [mappedItems, setMappedItems] = useState<Record<string, InputEntity>> ();
@@ -72,7 +74,7 @@ export default function ComboBox({
                     </optgroup>
                 } else if (item instanceof ComboboxItem) {
                     return <option key={idx} value={itemExtractor(item)} className="title small">
-                            {item.getDescription()}
+                            {item.getDescription(locale)}
                     </option>
                 } else {
                     return null;
@@ -84,15 +86,15 @@ export default function ComboBox({
     const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
         if (!mappedItems || selectedValue === undefined) return;
-        const valueToSet = mappedItems[selectedValue]
+        const valueToSet = mappedItems[selectedValue];
         setSelectedItem(valueToSet);
         if(onChange) onChange(valueToSet);
     }
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>
-            <label className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
-                style={{...labelStyle}}>{label}</label>
+            {label && <label className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
+                style={{...labelStyle}}>{label}</label>}
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
                 defaultValue={selectedItem ? itemExtractor(selectedItem) : ""} required={required}></input>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
@@ -100,7 +102,7 @@ export default function ComboBox({
                     defaultValue={selectedItem && itemExtractor(selectedItem)}
                     style={{...inputStyle}} onChange={onSelect}
                     className={`input-field title ${hasError ? "danger" : ""}`}>
-                        <option className="title average italic" value="">{placeholder}</option>
+                        <option disabled={required} className="title average italic" value="">{placeholder}</option>
                         {renderItems(items)}
                 </select>
             </div>

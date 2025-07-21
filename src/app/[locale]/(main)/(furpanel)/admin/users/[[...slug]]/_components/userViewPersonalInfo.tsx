@@ -31,6 +31,7 @@ export default function UserViewPersonalInfo({
     const [phonePrefix, setPhonePrefix] = useState<string>();
     const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
 
+    // Handle admin changing personal user info
     const restPathParams = useMemo(()=>{
             if (userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false) {
                 return [String(personalInformation.userId)];
@@ -53,6 +54,7 @@ export default function UserViewPersonalInfo({
             additionalButtons={<>
                 <Button iconName={inEdit ? ICONS.CANCEL : ICONS.EDIT}
                     type="button"
+                    busy={personalInfoLoading}
                     onClick={() => setInEdit(prev => {
                         if (prev) formRef.current?.reset();
                         return !prev;
@@ -65,12 +67,12 @@ export default function UserViewPersonalInfo({
             <input type="hidden" name="id" value={personalInformation?.id ?? ""}></input>
             <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
             <div className="form-pair horizontal-list gap-4mm">
-                <FpInput fieldName="firstName" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="firstName" required inputType="text"
                     label={t("authentication.register.form.first_name.label")}
                     placeholder={t("authentication.register.form.first_name.placeholder")}
                     initialValue={personalInformation?.firstName}
                     readOnly={!inEdit} />
-                <FpInput fieldName="lastName" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="lastName" required inputType="text"
                     label={t("authentication.register.form.last_name.label")}
                     placeholder={t("authentication.register.form.last_name.placeholder")}
                     initialValue={personalInformation?.lastName}
@@ -91,7 +93,7 @@ export default function UserViewPersonalInfo({
                     readOnly={!inEdit} />
             </div>
             <div className="form-pair horizontal-list gap-4mm">
-                <FpInput fieldName="allergies" required={false} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="allergies" required={false} inputType="text"
                     label={t("authentication.register.form.allergies.label")}
                     placeholder={t("authentication.register.form.allergies.placeholder")}
                     initialValue={personalInformation?.allergies}
@@ -99,22 +101,33 @@ export default function UserViewPersonalInfo({
             </div>
             <span className="title average">{t("authentication.register.form.section.birth_data")}</span>
             <div className="form-pair horizontal-list gap-4mm">
-                <AutoInput fieldName="birthCountry" required={true} minDecodeSize={2} multiple={false}
+                <AutoInput fieldName="birthCountry"
+                    required
+                    minDecodeSize={2}
+                    multiple={false}
                     manager={new AutoInputCountriesManager}
-                    onChange={(values, newValues) => setBirthCountry((firstOrUndefined(newValues) as CountrySearchResult)?.code)}
+                    onChange={(p) => setBirthCountry((firstOrUndefined(p.newValues) as CountrySearchResult)?.code)}
                     label={t("authentication.register.form.birth_country.label")}
                     placeholder={t("authentication.register.form.birth_country.placeholder")}
                     initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}
                     readOnly={!inEdit} />
-                <FpInput fieldName="birthday" required={true} inputType="date" busy={personalInfoLoading}
-                    label={t("authentication.register.form.birthday.label")} initialValue={personalInformation?.birthday}
+                <FpInput fieldName="birthday"
+                    required
+                    inputType="date"
+                    label={t("authentication.register.form.birthday.label")}
+                    initialValue={personalInformation?.birthday}
                     readOnly={!inEdit} />
             </div>
             {/* Show only if birth country is Italy */}
             <div className="form-pair horizontal-list gap-4mm">
-                <FpInput fieldName="fiscalCode" required={fiscalCodeRequired} minLength={16} maxLength={16} inputType="text"
-                    pattern={REG_ITALIAN_FISCAL_CODE} busy={personalInfoLoading} disabled={!fiscalCodeRequired}
-                    label={t("authentication.register.form.fiscal_code.label")} placeholder={t("authentication.register.form.fiscal_code.placeholder")}
+                <FpInput fieldName="fiscalCode"
+                    required={fiscalCodeRequired}
+                    minLength={16}
+                    maxLength={16}
+                    inputType="text"
+                    pattern={REG_ITALIAN_FISCAL_CODE} disabled={!fiscalCodeRequired}
+                    label={t("authentication.register.form.fiscal_code.label")}
+                    placeholder={t("authentication.register.form.fiscal_code.placeholder")}
                     initialValue={fiscalCodeRequired ? personalInformation?.fiscalCode : ""}
                     readOnly={!inEdit} />
             </div>
@@ -126,7 +139,7 @@ export default function UserViewPersonalInfo({
                     placeholder={t("authentication.register.form.birth_region.placeholder")}
                     initialData={personalInformation?.birthRegion ? [personalInformation?.birthRegion] : undefined}
                     readOnly={!inEdit} />
-                <FpInput fieldName="birthCity" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="birthCity" required inputType="text"
                     label={t("authentication.register.form.birth_city.label")}
                     placeholder={t("authentication.register.form.birth_city.placeholder")}
                     initialValue={personalInformation?.birthCity}
@@ -134,10 +147,10 @@ export default function UserViewPersonalInfo({
             </div>
             <span className="title average">{t("authentication.register.form.section.residence_data")}</span>
             <div className="form-pair horizontal-list gap-4mm">
-                <AutoInput fieldName="residenceCountry" required={true} minDecodeSize={2}
+                <AutoInput fieldName="residenceCountry" required minDecodeSize={2}
                     manager={new AutoInputCountriesManager}
                     label={t("authentication.register.form.residence_country.label")}
-                    onChange={(values, newValues) => setResidenceCountry((firstOrUndefined(newValues) as CountrySearchResult)?.code)}
+                    onChange={(p) => setResidenceCountry((firstOrUndefined(p.newValues) as CountrySearchResult)?.code)}
                     placeholder={t("authentication.register.form.residence_country.placeholder")}
                     initialData={personalInformation?.residenceCountry ? [personalInformation?.residenceCountry] : undefined}
                     readOnly={!inEdit} />
@@ -149,39 +162,50 @@ export default function UserViewPersonalInfo({
                     readOnly={!inEdit} />
             </div>
             <div className="form-pair horizontal-list gap-4mm">
-                <FpInput fieldName="residenceCity" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="residenceCity" required inputType="text"
                     label={t("authentication.register.form.residence_city.label")}
                     placeholder={t("authentication.register.form.residence_city.placeholder")}
                     initialValue={personalInformation?.residenceCity}
                     readOnly={!inEdit} />
-                <FpInput fieldName="residenceZipCode" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="residenceZipCode" required inputType="text"
                     label={t("authentication.register.form.residence_zip_code.label")}
                     placeholder={t("authentication.register.form.residence_zip_code.placeholder")}
                     initialValue={personalInformation?.residenceZipCode}
                     readOnly={!inEdit} />
             </div>
             <div className="form-pair horizontal-list gap-4mm">
-                <FpInput fieldName="residenceAddress" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="residenceAddress" required inputType="text"
                     label={t("authentication.register.form.residence_address.label")}
                     placeholder={t("authentication.register.form.residence_address.placeholder")}
                     initialValue={personalInformation?.residenceAddress}
                     readOnly={!inEdit} />
             </div>
+            <span className="title average">{t("authentication.register.form.section.contact_data")}</span>
             <div className="form-pair horizontal-list gap-4mm">
                 {/* Phone number */}
-                <AutoInput fieldName="phonePrefix" required={true} minDecodeSize={2}
+                <AutoInput fieldName="phonePrefix" required minDecodeSize={2}
                     manager={new AutoInputCountriesManager(true)}
                     label={t("authentication.register.form.phone_prefix.label")}
-                    onChange={(values, newValue) => setPhonePrefix(extractPhonePrefix(firstOrUndefined(newValue) as CountrySearchResult))}
+                    onChange={(p) => setPhonePrefix(
+                        extractPhonePrefix(firstOrUndefined(p.newValues) as CountrySearchResult))}
                     placeholder={t("authentication.register.form.phone_prefix.placeholder")}
                     idExtractor={(r) => (r as CountrySearchResult).phonePrefix ?? ""}
                     initialData={personalInformation?.prefixPhoneNumber ? [personalInformation?.prefixPhoneNumber] : undefined}
                     readOnly={!inEdit} />
-                <FpInput fieldName="phoneNumber" required={true} inputType="text" busy={personalInfoLoading}
+                <FpInput fieldName="phoneNumber" required inputType="text"
                     label={t("authentication.register.form.phone_number.label")}
                     placeholder={t("authentication.register.form.phone_number.placeholder")}
                     style={{ flex: "2" }} initialValue={personalInformation?.phoneNumber} prefix={phonePrefix}
                     readOnly={!inEdit} />
+            </div>
+            <div className="form-pair horizontal-list gap-4mm">
+                {/* Telegram username */}
+                <FpInput fieldName="telegramUsername" required inputType="text"
+                    pattern={/^[a-zA-Z0-9_]{5,32}$/gmi}
+                    label={t("authentication.register.form.telegram_username.label")}
+                    placeholder={t("authentication.register.form.telegram_username.placeholder")}
+                    helpText={t("authentication.register.form.telegram_username.help")}
+                    initialValue={personalInformation?.telegramUsername} readOnly={!inEdit}/>
             </div>
         </DataForm>
     </>

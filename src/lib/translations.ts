@@ -12,12 +12,13 @@ export function translate(data: Record<string, string>, locale: string, fallback
     
 }
 
-export function translateNullable(data?: Record<string, string>, locale?: string, fallback: boolean = true): string | undefined {
-    if (fallback) {
-        return data && locale ? data[locale] ?? data["en"] ?? Object.values(data)[0] : undefined;
-    } else {
-        return data && locale ? data[locale] ?? undefined : undefined;
-    }
+export function translateNullable(data?: Record<string, string>, locale?: string,
+    fallback: boolean = true): string | undefined {
+        if (fallback) {
+            return data && locale ? data[locale] ?? data["en"] ?? Object.values(data)[0] : undefined;
+        } else {
+            return data && locale ? data[locale] ?? undefined : undefined;
+        }
 }
 
 export class TranslatableInputEntity extends InputEntity {

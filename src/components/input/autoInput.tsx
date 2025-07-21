@@ -1,7 +1,7 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "../icon";
 import Image from "next/image";
-import { AutoInputFilter, AutoInputSearchResult, AutoInputManager } from "@/lib/components/autoInput";
+import { AutoInputFilter, AutoInputSearchResult, AutoInputManager, AutoInputChangedParams } from "@/lib/components/autoInput";
 import { useLocale, useTranslations } from "next-intl";
 import "@/styles/components/autoInput.css";
 import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { useFormContext } from "./dataForm";
 
 export default function AutoInput ({
+    busy=false,
     className,
     disabled=false,
     fieldName,
@@ -36,6 +37,7 @@ export default function AutoInput ({
     style,
     emptyIfUnselected = false
 }: Readonly<{
+    busy?: boolean,
     className?: string,
     disabled?: boolean;
     hasError?: boolean;
@@ -58,7 +60,7 @@ export default function AutoInput ({
     multiple?: boolean,
     /**Do not throttle input events before launching a search request */
     noDelay?: boolean,
-    onChange?: (values: AutoInputSearchResult[], newValues?: AutoInputSearchResult[], removedValue?: AutoInputSearchResult) => void,
+    onChange?: (params: AutoInputChangedParams) => void,
     onSelect?: (item: AutoInputSearchResult) => void,
     param?: any,
     /**Param is required for the component to be enabled */
@@ -100,7 +102,7 @@ export default function AutoInput ({
     const [waitForParam, setWaitForParam] = useState(false);
 
     /* reset */
-    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -124,14 +126,14 @@ export default function AutoInput ({
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
-        if (onChange) onChange(selectedValues ?? [], [toAdd], undefined);
+        if (onChange) onChange({values: selectedValues ?? [], newValues: [toAdd], removedValue: undefined});
         onFormChange(fieldName);
         setTimeout(()=>inputRef.current?.focus(), 100);
     }
     
     /**Remove a item from the selection */
     const removeItem = (toRemove: AutoInputSearchResult) => {
-        if (readOnly) return;
+        if (readOnly || isBusy) return;
         const identifier = manager.codeOnly ? toRemove.code! : toRemove.id!;
         if (selectedIds.includes (identifier)) {
             const newSelectedIds = [...selectedIds ?? []];
@@ -141,7 +143,7 @@ export default function AutoInput ({
             setSelectedIds(newSelectedIds);
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
-            if (onChange) onChange(selectedValues ?? [], undefined, toRemove);
+            if (onChange) onChange({values: selectedValues ?? [], newValues: undefined, removedValue: toRemove});
             onFormChange(fieldName);
         }
     }
@@ -218,32 +220,36 @@ export default function AutoInput ({
     }
 
     useEffect(()=> {
-        if ((initialData !== undefined && (!areEquals(initialData, latestInitialData) || reset)) || (waitForParam && param)) {
-            if (!param && paramRequired) {
-                setWaitForParam(true);
-                return;
-            }
-            manager.loadByIds(new AutoInputFilter(manager.codeOnly ? [] : initialData as number[], manager.codeOnly ? initialData as string[] : []), idExtractor, [param])
-            .then((values)=>{
-                setSelectedValues (values);
-                if (manager.codeOnly) {
-                    setSelectedIds (values.map(val=>val.code!));
-                } else {
-                    setSelectedIds (values.map(val=>val.id!));
+        if ((initialData !== undefined && (!areEquals(initialData, latestInitialData) || formReset)) ||
+            (waitForParam && param)) {
+                if (!param && paramRequired) {
+                    setWaitForParam(true);
+                    return;
                 }
-                if (onChange) onChange(values ?? [], values, undefined);
-            });
-        } else if (reset) {
+                manager.loadByIds(
+                    new AutoInputFilter(manager.codeOnly ? [] : initialData as number[],
+                        manager.codeOnly ? initialData as string[] : []),
+                    idExtractor,
+                    [param]).then((values)=>{
+                    setSelectedValues (values);
+                    if (manager.codeOnly) {
+                        setSelectedIds (values.map(val=>val.code!));
+                    } else {
+                        setSelectedIds (values.map(val=>val.id!));
+                    }
+                    if (onChange) onChange({values: values ?? [], newValues: values, removedValue: undefined});
+                });
+        } else if (formReset) {
             setSelectedValues([]);
             setSelectedIds([]);
             setSearchInput("");
             setSearchResults([]);
-            if (onChange) onChange([], [], undefined);
+            if (onChange) onChange({values: [], newValues: [], removedValue: undefined});
             onFormChange(fieldName);
         }
         setWaitForParam(false);
         setLatestInitialData(initialData);
-    }, [initialData, param, reset]);
+    }, [initialData, param, formReset]);
 
     /**
      * Renders each search result
@@ -254,7 +260,6 @@ export default function AutoInput ({
     const renderResult = (element: AutoInputSearchResult, index: number) => {
         return <div key={index}
             className="search-result horizontal-list flex-vertical-center rounded-s"
-            style={{color:'#fff',display:'flex'}}
             onMouseDown={()=>{addItem(element)}}>
             {element.imageUrl !== undefined &&
                 <Image unoptimized
@@ -273,11 +278,15 @@ export default function AutoInput ({
         </div>;
     }
 
-    const valueToSet: (string | number | undefined)[] = selectedValues.map(value => manager.codeOnly ? value.code! : value.id!);
+    const valueToSet: (string | number | undefined)[] = selectedValues.map(
+        value => manager.codeOnly ? value.code! : value.id!
+    );
 
-const renderSelected = (element: AutoInputSearchResult, index: number) => {
+    const renderSelected = (element: AutoInputSearchResult, index: number) => {
+        const selectedClass = "selected-value horizontal-list flex-vertical-center" +
+            ((selectedIds.length == 1 && !multiple) ? " single" : "");
         return <a key={index}
-            className={`selected-value horizontal-list flex-vertical-center ${selectedIds.length == 1 && !multiple ? "single" : ""}`}>
+            className={selectedClass}>
                 {element.imageUrl !== undefined &&
                     <Image unoptimized
                         src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!}
@@ -296,8 +305,9 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
     }
 
     const renderedValue = idExtractor ? selectedValues.map(val => idExtractor(val)) : valueToSet ?? [];
-    const isDisabled = disabled || globalDisabled;
+    const isDisabled = disabled || formDisabled;
     const isRequired = (required || forceRequired) && !isDisabled && !readOnly;
+    const isBusy = busy || formLoading || isLoading;
 
     const checkChange = () => {
         setIsValid ((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
@@ -316,7 +326,7 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
                 type="text"
                 name={fieldName}
                 value={renderedValue.join(",") ?? ""}
-                required={forceRequired} onChange={checkChange}></input>
+                required={forceRequired} onChange={checkChange}/>
             <div style={{position: 'relative'}}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                     {selectedValues?.map ((element, index) => renderSelected(element, index))}
@@ -328,7 +338,11 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
                                 style={{...inputStyle}}
                                 placeholder={placeholder ?? ""}
                                 type="text"
-                                disabled={isDisabled || (paramRequired && !param) || (!isRequired && requiredIfPresent) || readOnly}
+                                disabled={
+                                    isDisabled ||
+                                    (paramRequired && !param) ||
+                                    (!isRequired && requiredIfPresent)
+                                    || readOnly}
                                 onChange={onSearchTextChange}
                                 onFocus={()=>setIsFocused (true)}
                                 onBlur={onBlur}
@@ -336,22 +350,29 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
                                 readOnly={readOnly}/>
                         ) || <div className="spacer"></div>
                     }
-                    {
-                        multiple && valueToSet.length < maxSelections && 
-                        <span className="icon-container">
-                            { isLoading && isFocused
+                    { (isBusy || valueToSet.length < maxSelections) && <span className="icon-container">
+                        {isBusy
                             ? <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
                             : <Icon className="medium" iconName={ICONS.SEARCH}></Icon>
-                            }
-                        </span>
-                    }
+                        }
+                    </span>}
                 </div>
                 {
                     isFocused && valueToSet.length < maxSelections && (
-                    <div tabIndex={0} className="search-result-container rounded-m" style={{position:'absolute',marginTop:"5px",flexDirection:'column',width:"100%",maxHeight: "200px",overflowY: "auto",}}>
+                    <div tabIndex={0}
+                        className="search-result-container rounded-m"
+                        style={{
+                            position: "absolute",
+                            marginTop: "5px",
+                            flexDirection: "column",
+                            width: "100%",
+                            maxHeight: "200px",
+                            overflowY: "auto"}}>
                         {
                             searchInput.length < minDecodeSize
-                            ? <span className="title tiny color-subtitle">{t('autoinput.guide', {minSize: minDecodeSize})}</span>
+                            ? <span className="title tiny color-subtitle">
+                                {t('autoinput.guide', {minSize: minDecodeSize})}
+                            </span>
                             : !searchError
                                 ? searchResults.length > 0 
                                     ? searchResults.map((element, index) => renderResult(element, index))
@@ -363,6 +384,8 @@ const renderSelected = (element: AutoInputSearchResult, index: number) => {
                 }
             </div>
         </div>
-        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">{helpText}</span>}
+        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
+            {helpText}
+        </span>}
     </>
 }

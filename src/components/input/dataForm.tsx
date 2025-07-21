@@ -18,10 +18,11 @@ export interface SaveButtonData {
 
 // Context management
 interface FormUpdate {
-    reset: boolean,
-    setReset: (b: boolean) => void,
-    globalDisabled: boolean,
-    onFormChange: (fieldName?: string) => void
+    formReset: boolean,
+    setFormReset: (b: boolean) => void,
+    formDisabled: boolean,
+    onFormChange: (fieldName?: string) => void,
+    formLoading: boolean
 }
 
 const FormContext = createContext<FormUpdate | undefined>(undefined);
@@ -29,7 +30,13 @@ const FormContext = createContext<FormUpdate | undefined>(undefined);
 export const useFormContext = () => {
     const context = useContext(FormContext);
     if (!context) {
-        return { reset: null, setReset: () => { }, globalDisabled: false, onFormChange: () => {} };
+        return {
+            formReset: null,
+            setFormReset: () => { },
+            formDisabled: false,
+            onFormChange: () => {},
+            formLoading: false
+        };
     }
     return context;
 };
@@ -173,7 +180,13 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
             onSubmit={onFormSubmit}
             onReset={() => setReset(true)}
             style={{ ...style }}>
-            <FormContext.Provider value={{ reset, setReset, globalDisabled: disabled, onFormChange }}>
+            <FormContext.Provider value={{
+                formReset: reset,
+                setFormReset: setReset,
+                formDisabled: disabled,
+                onFormChange,
+                formLoading: loading ?? false
+            }}>
                 {children}
             </FormContext.Provider>
             {showBottomToolbar && (
@@ -183,7 +196,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                         disabled={disableSave}
                         iconName={saveButton.iconName}
                         busy={loading}>
-                        {saveButton.text}{isEntityChanged ? "*" : ""}
+                        {saveButton.text}{isEntityChanged && !!initialEntity ? "*" : ""}
                     </Button>}
                     {!hideReset && <Button type="reset"
                         iconName={saveButton.iconName}

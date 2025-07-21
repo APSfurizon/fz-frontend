@@ -60,3 +60,12 @@ div.jan-input {
         letter-spacing: 0.5px;
     }
 }
+
+.suppressed-input {
+    max-width: 0px;
+    max-height: 0px;
+    margin: 0;
+    padding: 0px;
+    outline: none;
+    border: none;
+}

@@ -1,9 +1,20 @@
-import { ChangeEvent, CSSProperties, HTMLInputAutoCompleteAttribute, KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, FocusEvent, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute,
+    KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import Icon, { ICONS } from "../icon";
 import "@/styles/components/fpInput.css";
 import { useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
+import { UAParser } from "ua-parser-js";
+
+function scrollToFocus (e: FocusEvent<HTMLInputElement>) {
+    const isMobile = navigator.userAgent
+        ? new UAParser(navigator.userAgent).getResult().device.type === "mobile"
+        : false;
+    if (!isMobile) return;
+    const element = e.target;
+    element.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
+}
 
 export default function FpInput ({
     busy=false,
@@ -39,7 +50,7 @@ export default function FpInput ({
     fieldName?: string,
     helpText?: string,
     inputStyle?: CSSProperties,
-    inputType?: "text" | "email" | "password" | "number" | "date" | "tel",
+    inputType?: HTMLInputTypeAttribute,
     label?: string,
     labelStyle?: CSSProperties,
     minLength?: number,
@@ -61,14 +72,14 @@ export default function FpInput ({
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { reset = false, globalDisabled = false, onFormChange } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
     const inputRef = useRef<HTMLInputElement>(null);
     const t = useTranslations("components");
 
     // Detect reset
     useEffect(()=>{
         setInputValue(initialValue ?? "");
-    }, [reset]);
+    }, [formReset]);
 
     useEffect(()=>{
         if (!areEquals(initialValue, lastInitialValue)) {
@@ -99,8 +110,9 @@ export default function FpInput ({
     const isPassword = inputType === "password";
     if (isPassword && visiblePassword) finalType = "text";
 
-    const isDisabled = disabled || globalDisabled;
+    const isDisabled = disabled || formDisabled;
     const isRequired = required && !isDisabled && !readOnly;
+    const isBusy = busy || formLoading;
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{...style}}>
@@ -130,12 +142,13 @@ export default function FpInput ({
                     maxLength={maxLength}
                     autoComplete={autocomplete}
                     ref={inputRef}
+                    onFocus={scrollToFocus}
                 />
-                <span className={`${busy || isPassword ? "icon-container" : ""}`}>
-                    {(busy) && (
+                <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
+                    {(isBusy) && (
                         <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
                     )}
-                    {!(busy) && (isPassword) && (
+                    {!(isBusy) && (isPassword) && (
                         <a style={{cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}>
                             <Icon className="medium"
                                 iconName={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}/>

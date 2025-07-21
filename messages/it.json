@@ -139,7 +139,7 @@
           "description": "Dal {lockDate} non sarà più possibile modificare l'ordine."
         },
         "editing_locked": {
-          "title": "Modifica bloccata",
+          "title": "Modifiche bloccate",
           "description": "Dal {lockDate} non è più possibile modificare l'ordine."
         },
         "review_info": {
@@ -899,7 +899,8 @@
         "section": {
           "birth_data": "Dati di nascita",
           "personal_info": "Dati personali",
-          "residence_data": "Dati di residenza"
+          "residence_data": "Dati di residenza",
+          "contact_data": "Dati di contatto"
         },
         "disclaimer_tos": {
           "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
@@ -915,10 +916,15 @@
         "gender": {
           "label": "Genere",
           "placeholder": "Inserisci il tuo genere"
+        },
+        "telegram_username": {
+          "label": "Nome utente Telegram",
+          "placeholder": "Inserisci il tuo nome utente di telegram",
+          "help": "Abbiamo bisogno del tuo @nomeutente per contattarti, se necessario"
         }
       },
       "question": {
-        "description": "La legislatura Italiana rende questi dati necessari per qualsiasi acquisto e tesseramento.",
+        "description": "La legislatura Italiana rende questi dati necessari per qualsiasi acquisto e tesseramento. Per ulteriori informazioni, consultare i termini e condizioni.",
         "description_title": "Perché chiediamo questi dati?"
       },
       "login_here": "oppure accedi",

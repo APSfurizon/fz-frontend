@@ -6,8 +6,6 @@ import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import FpInput from "@/components/input/fpInput";
 import StatusBox from "@/components/statusBox";
-import AutoInput from "@/components/input/autoInput";
-import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
 //import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
 import Upload from "@/components/input/upload";
