@@ -16,6 +16,10 @@ div.jan-input.success>div.input-container:has(input.input-field:user-valid) {
 
 div.jan-input {
 
+    div.input-container {
+        background: var(--text-input-bg);
+    }
+
     select.input-field {
         flex: 1;
         color: var(--text-input-color);
@@ -50,6 +54,7 @@ div.jan-input {
 
     select.input-field:disabled {
         color: var(--text-input-color-disabled);
+        background-color: transparent;
     }
 
     /* Handle autofilled data */

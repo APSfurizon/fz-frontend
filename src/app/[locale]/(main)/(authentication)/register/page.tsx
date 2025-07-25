@@ -16,8 +16,10 @@ import Checkbox from "@/components/input/checkbox";
 import "@/styles/authentication/register.css";
 import { firstOrUndefined } from "@/lib/utils";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
-import { AutoInputGenderManager, AutoInputSexManager } from "@/lib/api/user";
+import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAnswers } from "@/lib/api/user";
 import Button from "@/components/input/button";
+import FpSelect from "@/components/input/fpSelect";
+import { inputEntityCodeExtractor } from "@/lib/components/input";
 
 export default function Register() {
 
@@ -200,6 +202,25 @@ export default function Register() {
           label={t("register.form.birth_city.label")}
           placeholder={t("register.form.birth_city.placeholder")} />
       </div>
+      <span className="title average">{t("register.form.section.identity_data")}</span>
+        <div className="form-pair horizontal-list gap-4mm">
+            <FpSelect fieldName="idType" required
+              items={idTypeAnswers}
+              label={t("register.form.id_type.label")}
+              itemExtractor={inputEntityCodeExtractor}
+              placeholder={t("register.form.id_type.placeholder")}/>
+            <FpInput fieldName="idNumber" required inputType="text"
+              label={t("register.form.id_number.label")}
+              placeholder={t("register.form.id_number.placeholder")}/>
+        </div>
+        <div className="form-pair horizontal-list gap-4mm">
+            <FpInput fieldName="idIssuer" required inputType="text"
+              label={t("register.form.id_issuer.label")}
+              placeholder={t("register.form.id_issuer.placeholder")}/>
+            <FpInput fieldName="idExpiry" required inputType="date"
+              label={t("register.form.id_expiry.label")}
+              placeholder={t("register.form.id_expiry.placeholder")}/>
+        </div>
       <hr></hr>
       <span className="title medium bold highlight">{t("register.form.section.residence_data")}</span>
       <div className="form-pair horizontal-list gap-4mm">
@@ -266,10 +287,15 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         {/* Telegram username */}
         <FpInput fieldName="telegramUsername" required inputType="text" 
-            pattern={/^[a-zA-Z0-9_]{5,32}$/gmi}
-            label={t("register.form.telegram_username.label")}
-            placeholder={t("register.form.telegram_username.placeholder")}
-            helpText={t("register.form.telegram_username.help")}/>
+          pattern={/^@?[a-z0-9_]{5,32}$/i}
+          label={t("register.form.telegram_username.label")}
+          placeholder={t("register.form.telegram_username.placeholder")}
+          helpText={t("register.form.telegram_username.help")}/>
+        <FpSelect fieldName="shirtSize" required
+          items={shirtSizeAnswers}
+          label={t("register.form.shirt_size.label")}
+          itemExtractor={inputEntityCodeExtractor}
+          placeholder={t("register.form.shirt_size.placeholder")}/>
       </div>
       <NoticeBox theme={NoticeTheme.FAQ}
         title={t("register.question.description_title")}

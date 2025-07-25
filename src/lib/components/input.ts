@@ -14,7 +14,7 @@ export class InputEntity {
     icon?: string;
     imageUrl?: string;
     iconCSS?: CSSProperties;
-    public getDescription (locale?: string): string {
+    public getDescription (): string {
         return this.description
         ?? this.id?.toString()
         ?? this.code

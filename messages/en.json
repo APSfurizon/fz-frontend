@@ -901,7 +901,8 @@
           "birth_data": "Birth data",
           "personal_info": "Personal info",
           "residence_data": "Residential data",
-          "contact_data": "Contact data"
+          "contact_data": "Contact data",
+          "identity_data": "Identity data"
         },
         "disclaimer_tos": {
           "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>.",
@@ -922,6 +923,26 @@
           "label": "Telegram username",
           "placeholder": "Enter your telegram username",
           "help": "We need the @username in order to contact you when needed"
+        },
+        "id_type": {
+          "label": "Document type",
+          "placeholder": "Select a document type"
+        },
+        "id_number": {
+          "label": "Document code",
+          "placeholder": "Enter the document number/code"
+        },
+        "id_issuer": {
+          "label": "Document issuer",
+          "placeholder": "Enter the document's issuer"
+        },
+        "id_expiry": {
+          "label": "Document expiry",
+          "placeholder": "Enter the document expiry date"
+        },
+        "shirt_size": {
+          "placeholder": "Select your shirt size",
+          "label": "Shirt size"
         }
       },
       "question": {
