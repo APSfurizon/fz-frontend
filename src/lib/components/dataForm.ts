@@ -1,4 +1,5 @@
 import { ApiResponse, ApiErrorResponse, ApiRequest, ApiAction, RequestType } from "../api/global"
+import { nullifyEmptyString } from "../utils";
 
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
@@ -23,7 +24,7 @@ export interface FormDTOBuilder<T> {
 }
 
 export class DummyDTOBuilder implements FormDTOBuilder<any>{
-    mapToDTO = (data: FormData) => {return {}}
+    mapToDTO = () => {return {}}
 }
 
 export class DummyFormAction extends FormApiAction<any, boolean, ApiErrorResponse> {
@@ -31,4 +32,8 @@ export class DummyFormAction extends FormApiAction<any, boolean, ApiErrorRespons
     authenticated = true;
     dtoBuilder = new DummyDTOBuilder ();
     urlAction = "";
+}
+
+export function getData (data: FormData, key: string) {
+    return nullifyEmptyString(data.get(key)?.toString());
 }

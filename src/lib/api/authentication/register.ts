@@ -1,6 +1,5 @@
 import { CountrySearchResult } from "@/lib/api/geo";
-import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { nullifyEmptyString } from "../../utils";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
 import { ApiErrorResponse, ApiResponse, RequestType } from "../global";
 import { UserPersonalInfo } from "../user";
 
@@ -26,30 +25,35 @@ export interface RegisterResponse extends ApiResponse {
 export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
     mapToDTO = (data: FormData) => {
         const personalUserInformation: UserPersonalInfo = {
-            firstName:          nullifyEmptyString(data.get('firstName')?.toString ()),
-            lastName:           nullifyEmptyString(data.get('lastName')?.toString ()),
-            sex:                nullifyEmptyString(data.get('sex')?.toString ()),
-            gender:             nullifyEmptyString(data.get('gender')?.toString ()),
-            allergies:          nullifyEmptyString(data.get('allergies')?.toString ()),
-            fiscalCode:         nullifyEmptyString(data.get('fiscalCode')?.toString ()),
-            birthCity:          nullifyEmptyString(data.get('birthCity')?.toString ()),
-            birthRegion:        nullifyEmptyString(data.get('birthRegion')?.toString ()),
-            birthCountry:       nullifyEmptyString(data.get('birthCountry')?.toString ()),
-            birthday:           nullifyEmptyString(data.get('birthday')?.toString ()),
-            residenceAddress:   nullifyEmptyString(data.get('residenceAddress')?.toString ()),
-            residenceZipCode:   nullifyEmptyString(data.get('residenceZipCode')?.toString ()),
-            residenceCity:      nullifyEmptyString(data.get('residenceCity')?.toString ()),
-            residenceRegion:    nullifyEmptyString(data.get('residenceRegion')?.toString ()),
-            residenceCountry:   nullifyEmptyString(data.get('residenceCountry')?.toString ()),
-            prefixPhoneNumber:  nullifyEmptyString(data.get('phonePrefix')?.toString ()),
-            phoneNumber:        nullifyEmptyString(data.get('phoneNumber')?.toString ()),
-            telegramUsername:   nullifyEmptyString(data.get('telegramUsername')?.toString ())
+            firstName:          getData(data, 'firstName'),
+            lastName:           getData(data, 'lastName'),
+            sex:                getData(data, 'sex'),
+            gender:             getData(data, 'gender'),
+            allergies:          getData(data, 'allergies'),
+            fiscalCode:         getData(data, 'fiscalCode'),
+            birthCity:          getData(data, 'birthCity'),
+            birthRegion:        getData(data, 'birthRegion'),
+            birthCountry:       getData(data, 'birthCountry'),
+            birthday:           getData(data, 'birthday'),
+            residenceAddress:   getData(data, 'residenceAddress'),
+            residenceZipCode:   getData(data, 'residenceZipCode'),
+            residenceCity:      getData(data, 'residenceCity'),
+            residenceRegion:    getData(data, 'residenceRegion'),
+            residenceCountry:   getData(data, 'residenceCountry'),
+            prefixPhoneNumber:  getData(data, 'phonePrefix'),
+            phoneNumber:        getData(data, 'phoneNumber'),
+            telegramUsername:   getData(data, 'telegramUsername'),
+            idType:             getData(data, "idType"),
+            idNumber:           getData(data, "idNumber"),
+            idIssuer:           getData(data, "idIssuer"),
+            idExpiry:           getData(data, "idExpiry"),
+            shirtSize:          getData(data, "shirtSize")
         };
 
         const toReturn: RegisterData = {
-            email: data.get('email')?.toString (),
-            password: data.get('password')?.toString (),
-            fursonaName: data.get('fursonaName')?.toString(),
+            email:              data.get('email')?.toString (),
+            password:           data.get('password')?.toString (),
+            fursonaName:        data.get('fursonaName')?.toString(),
             personalUserInformation: personalUserInformation
         };
         return toReturn;

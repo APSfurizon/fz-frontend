@@ -188,3 +188,8 @@ export function getParentDirectory (path: string, repetition: number = 1): strin
     toReturn += ".."
     return repetition > 1 ? getParentDirectory(toReturn, --repetition) : toReturn;
 }
+
+export function toEnum<T>(data: any, t: T) {
+    if (!data) return undefined;
+    return t[data as keyof typeof t];
+}

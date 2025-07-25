@@ -9,8 +9,8 @@ import StatusBox from "@/components/statusBox";
 import Modal from "@/components/modal";
 //import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
 import Upload from "@/components/input/upload";
-import ComboBox from "@/components/input/combobox";
-import { ComboboxGroup, ComboboxItem } from "@/lib/components/combobox";
+import FpSelect from "@/components/input/fpSelect";
+import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 
 export default function Home() {
@@ -21,20 +21,20 @@ export default function Home() {
 
   const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
 
-  const group1 = new ComboboxGroup([
-    new ComboboxItem(1, "aa", "aLetter", "pencil", undefined, undefined, { "it": "ciao", "en": "Hello" }),
-    new ComboboxItem(2, "bb", "bLetter", "rocket", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  const group1 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "pencil", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "rocket", undefined, undefined, { "it": "razzo", "en": "Rocket" })
   ], "gouppone", { "it": "Gruppo", "en": "Group" })
-  const item3 = new ComboboxItem(3, "cc", "cLetter", "book", undefined, undefined, { "it": "Libro", "en": "Book" });
+  const item3 = new SelectItem(3, "cc", "cLetter", "book", undefined, undefined, { "it": "Libro", "en": "Book" });
 
-  const selectItems: (ComboboxItem | ComboboxGroup)[] = [
+  const selectItems: (SelectItem | SelectGroup)[] = [
     group1, item3
   ]
 
   return (
     <div className="page">
       <div className="container">
-        <Upload loading={false} label="Profile picture" requireCrop={true} cropAspectRatio="square"></Upload>
+        <Upload busy={false} label="Profile picture" requireCrop={true} cropAspectRatio="square"></Upload>
       </div>
       <Button className="danger" onClick={() => setBusy(false)} iconName={ICONS.ADD_CIRCLE}>Busy off</Button>
       <Button busy={isBusy} onClick={() => { setBusy(true); }} iconName={ICONS.EDIT}>Busy on</Button>
@@ -68,7 +68,7 @@ export default function Home() {
         <span>a modal</span>
       </Modal>
       <Button onClick={() => { setOpen(true); }} iconName={ICONS.BED}>Modal</Button>
-      <ComboBox fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></ComboBox>
+      <FpSelect fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></FpSelect>
     </div>
   );
 }

@@ -16,10 +16,14 @@ div.jan-input.success>div.input-container:has(input.input-field:user-valid) {
 
 div.jan-input {
 
+    div.input-container {
+        background: var(--text-input-bg);
+    }
+
     select.input-field {
         flex: 1;
         color: var(--text-input-color);
-        background: var(--text-input-bg);
+        background-color: transparent;
         min-height: 1.625em;
         padding: 0.75em 0.625em;
         display: flex;

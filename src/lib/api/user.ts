@@ -3,14 +3,15 @@ import {
     AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded,
     filterSearchResult, SearchType
 } from "../components/autoInput";
-import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { buildSearchParams, nullifyEmptyString } from "../utils";
+import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
+import { buildSearchParams } from "../utils";
 import {
     ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest,
     RequestType
 } from "./global";
 import { MediaData } from "./media";
 import { UAParser } from "ua-parser-js";
+import { SelectItem } from "../components/fpSelect";
 
 export const REG_ITALIAN_FISCAL_CODE = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi;
 
@@ -76,6 +77,11 @@ export interface UserPersonalInfo {
     userId?: number;
     note?: string;
     telegramUsername?: string;
+    idType?: string;
+    idNumber?: string;
+    idExpiry?: string;
+    idIssuer?: string;
+    shirtSize?: string;
 }
 
 export interface UserDisplayResponse extends ApiResponse {
@@ -165,28 +171,33 @@ export class AutoInputRoomInviteManager extends AutoInputUsersManager {
 export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonalInfo> {
     mapToDTO = (data: FormData) => {
         const toReturn: UserPersonalInfo = {
-            firstName: nullifyEmptyString(data.get('firstName')?.toString()),
-            lastName: nullifyEmptyString(data.get('lastName')?.toString()),
-            sex: nullifyEmptyString(data.get('sex')?.toString()),
-            gender: nullifyEmptyString(data.get('gender')?.toString()),
-            allergies: nullifyEmptyString(data.get('allergies')?.toString()),
-            fiscalCode: nullifyEmptyString(data.get('fiscalCode')?.toString()),
-            birthCity: nullifyEmptyString(data.get('birthCity')?.toString()),
-            birthRegion: nullifyEmptyString(data.get('birthRegion')?.toString()),
-            birthCountry: nullifyEmptyString(data.get('birthCountry')?.toString()),
-            birthday: nullifyEmptyString(data.get('birthday')?.toString()),
-            residenceAddress: nullifyEmptyString(data.get('residenceAddress')?.toString()),
-            residenceZipCode: nullifyEmptyString(data.get('residenceZipCode')?.toString()),
-            residenceCity: nullifyEmptyString(data.get('residenceCity')?.toString()),
-            residenceRegion: nullifyEmptyString(data.get('residenceRegion')?.toString()),
-            residenceCountry: nullifyEmptyString(data.get('residenceCountry')?.toString()),
-            prefixPhoneNumber: nullifyEmptyString(data.get('phonePrefix')?.toString()),
-            phoneNumber: nullifyEmptyString(data.get('phoneNumber')?.toString()),
-            userId: parseInt(data.get('userId')?.toString() ?? "0"),
-            id: parseInt(data.get('id')?.toString() ?? "0"),
+            firstName:          getData(data, "firstName"),
+            lastName:           getData(data, "lastName"),
+            sex:                getData(data, "sex"),
+            gender:             getData(data, "gender"),
+            allergies:          getData(data, "allergies"),
+            fiscalCode:         getData(data, "fiscalCode"),
+            birthCity:          getData(data, "birthCity"),
+            birthRegion:        getData(data, "birthRegion"),
+            birthCountry:       getData(data, "birthCountry"),
+            birthday:           getData(data, "birthday"),
+            residenceAddress:   getData(data, "residenceAddress"),
+            residenceZipCode:   getData(data, "residenceZipCode"),
+            residenceCity:      getData(data, "residenceCity"),
+            residenceRegion:    getData(data, "residenceRegion"),
+            residenceCountry:   getData(data, "residenceCountry"),
+            prefixPhoneNumber:  getData(data ,"phonePrefix"),
+            phoneNumber:        getData(data, "phoneNumber"),
+            userId:             parseInt(data.get("userId")?.toString() ?? "0"),
+            id:                 parseInt(data.get("id")?.toString() ?? "0"),
             lastUpdatedEventId: undefined,
-            note: undefined,
-            telegramUsername: nullifyEmptyString(data.get('telegramUsername')?.toString()),
+            note:               undefined,
+            telegramUsername:   getData(data, "telegramUsername"),
+            idType:             getData(data, "idType"),
+            idNumber:           getData(data, "idNumber"),
+            idIssuer:           getData(data, "idIssuer"),
+            idExpiry:           getData(data, "idExpiry"),
+            shirtSize:          getData(data, "shirtSize")
         };
         return toReturn;
     }
@@ -301,6 +312,46 @@ export function getAutoInputGenders() {
         ])
     });
 }
+
+export const idTypeAnswers = [
+    new SelectItem(undefined,
+        "id_card",
+        "Id card",
+        ICONS.ID_CARD,
+        undefined,
+        undefined,
+        { "it": "Carta d'identità", "en": "Identity Card" }
+    ),
+    new SelectItem(
+        undefined,
+        "driver_license",
+        "Driver license",
+        ICONS.DIRECTIONS_CAR,
+        undefined,
+        undefined,
+        { "it": "Patente", "en": "Driver license" }
+    ),
+    new SelectItem(
+        undefined,
+        "passport",
+        "Passport", 
+        ICONS.PERSON_BOOK,
+        undefined,
+        undefined,
+        { "it": "Passaporto", "en": "Passport" }
+    )
+];
+
+export const shirtSizeAnswers = ['xs', 's', 'm', 'l', 'xl', 'xxl', '3xl']
+.map(sz => new SelectItem(
+    undefined,
+    sz,
+    sz.toUpperCase(),
+    undefined,
+    undefined,
+    undefined,
+    undefined
+));
 
 export class AutoInputSexManager implements AutoInputManager {
     codeOnly: boolean = true;

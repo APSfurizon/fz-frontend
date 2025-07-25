@@ -2,16 +2,18 @@ import { useUser } from "@/components/context/userProvider";
 import { ICONS } from "@/components/icon";
 import AutoInput from "@/components/input/autoInput";
 import Button from "@/components/input/button";
+import FpSelect from "@/components/input/fpSelect";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { Permissions } from "@/lib/api/permission";
-import { AutoInputGenderManager, AutoInputSexManager, REG_ITALIAN_FISCAL_CODE, UpdatePersonalInfoFormAction,
+import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, REG_ITALIAN_FISCAL_CODE, shirtSizeAnswers, UpdatePersonalInfoFormAction,
     UserPersonalInfo } from "@/lib/api/user";
 import { firstOrUndefined, stripProperties } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
+import { inputEntityCodeExtractor } from "@/lib/components/input";
 
 export default function UserViewPersonalInfo({
     personalInformation,
@@ -145,6 +147,33 @@ export default function UserViewPersonalInfo({
                     initialValue={personalInformation?.birthCity}
                     readOnly={!inEdit} />
             </div>
+            <span className="title average">{t("authentication.register.form.section.identity_data")}</span>
+            <div className="form-pair horizontal-list gap-4mm">
+                <FpSelect fieldName="idType" required
+                    items={idTypeAnswers}
+                    itemExtractor={inputEntityCodeExtractor}
+                    label={t("authentication.register.form.id_type.label")}
+                    placeholder={t("authentication.register.form.id_type.placeholder")}
+                    initialValue={personalInformation?.idType}
+                    readOnly={!inEdit} />
+                <FpInput fieldName="idNumber" required inputType="text"
+                    label={t("authentication.register.form.id_number.label")}
+                    placeholder={t("authentication.register.form.id_number.placeholder")}
+                    initialValue={personalInformation?.idNumber}
+                    readOnly={!inEdit} />
+            </div>
+            <div className="form-pair horizontal-list gap-4mm">
+                <FpInput fieldName="idIssuer" required inputType="text"
+                    label={t("authentication.register.form.id_issuer.label")}
+                    placeholder={t("authentication.register.form.id_issuer.placeholder")}
+                    initialValue={personalInformation?.idIssuer}
+                    readOnly={!inEdit} />
+                <FpInput fieldName="idExpiry" required inputType="date"
+                    label={t("authentication.register.form.id_expiry.label")}
+                    placeholder={t("authentication.register.form.id_expiry.placeholder")}
+                    initialValue={personalInformation?.idExpiry}
+                    readOnly={!inEdit} />
+            </div>
             <span className="title average">{t("authentication.register.form.section.residence_data")}</span>
             <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="residenceCountry" required minDecodeSize={2}
@@ -201,11 +230,18 @@ export default function UserViewPersonalInfo({
             <div className="form-pair horizontal-list gap-4mm">
                 {/* Telegram username */}
                 <FpInput fieldName="telegramUsername" required inputType="text"
-                    pattern={/^[a-zA-Z0-9_]{5,32}$/gmi}
+                    pattern={/^@?[a-z0-9_]{5,32}$/i}
                     label={t("authentication.register.form.telegram_username.label")}
                     placeholder={t("authentication.register.form.telegram_username.placeholder")}
                     helpText={t("authentication.register.form.telegram_username.help")}
                     initialValue={personalInformation?.telegramUsername} readOnly={!inEdit}/>
+                <FpSelect fieldName="shirtSize" required
+                    items={shirtSizeAnswers}
+                    itemExtractor={inputEntityCodeExtractor}
+                    label={t("authentication.register.form.shirt_size.label")}
+                    placeholder={t("authentication.register.form.shirt_size.placeholder")}
+                    initialValue={personalInformation?.shirtSize}
+                    readOnly={!inEdit} />
             </div>
         </DataForm>
     </>
