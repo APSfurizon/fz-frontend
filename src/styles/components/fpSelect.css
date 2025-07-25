@@ -23,7 +23,7 @@ div.jan-input {
     select.input-field {
         flex: 1;
         color: var(--text-input-color);
-        background-color: transparent;
+        background: var(--text-input-bg);
         min-height: 1.625em;
         padding: 0.75em 0.625em;
         display: flex;
@@ -54,6 +54,7 @@ div.jan-input {
 
     select.input-field:disabled {
         color: var(--text-input-color-disabled);
+        background-color: transparent;
     }
 
     /* Handle autofilled data */
