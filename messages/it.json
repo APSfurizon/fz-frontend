@@ -900,7 +900,8 @@
           "birth_data": "Dati di nascita",
           "personal_info": "Dati personali",
           "residence_data": "Dati di residenza",
-          "contact_data": "Dati di contatto"
+          "contact_data": "Dati di contatto",
+          "identity_data": "Identità"
         },
         "disclaimer_tos": {
           "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
@@ -921,6 +922,26 @@
           "label": "Nome utente Telegram",
           "placeholder": "Inserisci il tuo nome utente di telegram",
           "help": "Abbiamo bisogno del tuo @nomeutente per contattarti, se necessario"
+        },
+        "id_type": {
+          "label": "Tipo documento",
+          "placeholder": "Seleziona un tipo documento"
+        },
+        "id_number": {
+          "label": "Codice documento",
+          "placeholder": "Inserisci il codice/numero documento"
+        },
+        "id_issuer": {
+          "label": "Ente emittente",
+          "placeholder": "Inserisci l'emittente del documento"
+        },
+        "id_expiry": {
+          "label": "Scadenza documento",
+          "placeholder": "Inserisci la data scadenza documento"
+        },
+        "shirt_size": {
+          "placeholder": "Seleziona la dimensione maglietta",
+          "label": "Dimensione maglietta"
         }
       },
       "question": {

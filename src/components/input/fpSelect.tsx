@@ -1,19 +1,20 @@
-import { ComboboxGroup, ComboboxItem } from "@/lib/components/combobox";
+import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
 import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
-import "@/styles/components/combobox.css";
+import "@/styles/components/fpSelect.css";
 import { useLocale } from "next-intl";
+import { useFormContext } from "./dataForm";
 
-export default function ComboBox({
+export default function FpSelect({
     items, className, style, labelStyle, label, hasError = false,
     onChange, placeholder, readOnly = false, required = false,
     disabled = false, initialValue = "", fieldName, inputStyle,
     itemExtractor = inputEntityIdExtractor
 }: Readonly<{
     fieldName: string,
-    items: (ComboboxGroup|ComboboxItem)[],
+    items: (SelectGroup|SelectItem)[],
     className?: string,
     style?: CSSProperties,
     labelStyle?: CSSProperties,
@@ -33,13 +34,15 @@ export default function ComboBox({
     const [selectedItem, setSelectedItem] = useState<InputEntity> ();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [mappedItems, setMappedItems] = useState<Record<string, InputEntity>> ();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const isDisabled = formDisabled || disabled || formLoading;
 
-    function getMappedItems (items: (ComboboxGroup|ComboboxItem)[]): Record<string, InputEntity> {
+    function getMappedItems (items: (SelectGroup|SelectItem)[]): Record<string, InputEntity> {
         let mappedItems: Record<string, InputEntity> = {};
         for (const item of items) {
-            if (item instanceof ComboboxGroup) {
+            if (item instanceof SelectGroup) {
                 mappedItems = {...mappedItems, ...getMappedItems(item.items)};
-            } else if (item instanceof ComboboxItem) {
+            } else if (item instanceof SelectItem) {
                 const extractedId = itemExtractor(item);
                 if (!extractedId) continue;
                 mappedItems[extractedId] = item;
@@ -48,6 +51,7 @@ export default function ComboBox({
         return mappedItems;
     }
 
+    // Re-map items when they change
     useEffect (()=>{
         if (!items) {
             setSelectedItem(undefined);
@@ -57,22 +61,25 @@ export default function ComboBox({
     }, [items])
 
     useEffect(()=>{
-        if (mappedItems && !areEquals(initialValue, lastInitialValue)) {
+        if (mappedItems && initialValue !== undefined && (!areEquals(initialValue, lastInitialValue) || formReset)) {
             setSelectedItem(mappedItems[initialValue]);
+            setLastInitialValue(initialValue);
+        } else if (formReset) {
+            setSelectedItem(undefined);
+            onFormChange(fieldName);
         }
-        setLastInitialValue(initialValue);
-    }, [initialValue]);
+    }, [initialValue, mappedItems]);
 
-    const renderItems = (items: (ComboboxGroup|ComboboxItem)[]) => {
+    const renderItems = (items: (SelectGroup|SelectItem)[]) => {
         return <>
             {items.map((item, idx)=>{
-                if (item instanceof ComboboxGroup) {
+                if (item instanceof SelectGroup) {
                     return <optgroup key={idx}
                         label={item.getDescription()}
                         className="title average color-subtitle reset">
                             {renderItems(item.items)}
                     </optgroup>
-                } else if (item instanceof ComboboxItem) {
+                } else if (item instanceof SelectItem) {
                     return <option key={idx} value={itemExtractor(item)} className="title small">
                             {item.getDescription(locale)}
                     </option>
@@ -89,6 +96,7 @@ export default function ComboBox({
         const valueToSet = mappedItems[selectedValue];
         setSelectedItem(valueToSet);
         if(onChange) onChange(valueToSet);
+        if (onFormChange) onFormChange(fieldName);
     }
 
     return <>
@@ -98,8 +106,8 @@ export default function ComboBox({
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
                 defaultValue={selectedItem ? itemExtractor(selectedItem) : ""} required={required}></input>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
-                <select disabled={readOnly || disabled} required={required} aria-readonly={readOnly}
-                    defaultValue={selectedItem && itemExtractor(selectedItem)}
+                <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
+                    value={selectedItem && itemExtractor(selectedItem)}
                     style={{...inputStyle}} onChange={onSelect}
                     className={`input-field title ${hasError ? "danger" : ""}`}>
                         <option disabled={required} className="title average italic" value="">{placeholder}</option>
