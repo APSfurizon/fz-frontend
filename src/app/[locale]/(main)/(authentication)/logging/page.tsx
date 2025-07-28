@@ -8,23 +8,23 @@ import { useEffect } from "react";
 export default function Logging() {
     const t = useTranslations("authentication");
     const router = useRouter();
-    const {setUpdateUser} = useUser();
+    const { setUpdateUser } = useUser();
     const params = useSearchParams();
 
-    useEffect(()=>{
+    useEffect(() => {
         setUpdateUser(true);
         router.replace(params.get("continue") ?? "/home");
         router.refresh();
     }, [])
 
     return <>
-    <div className="horizontal-list gap-4mm flex-center">
-        <span className="title-pair">
-            <Icon iconName="design_services"></Icon>
-            <span className="titular bold highlight">furpanel</span>
-            <span> - </span>
-            <span className="titular bold">{t('logging_in.title').toLowerCase()}</span>
-        </span>
-    </div>
+        <div className="horizontal-list gap-4mm flex-center">
+            <span className="title-pair">
+                <Icon icon="design_services"></Icon>
+                <span className="titular bold highlight">furpanel</span>
+                <span> - </span>
+                <span className="titular bold">{t('logging_in.title').toLowerCase()}</span>
+            </span>
+        </div>
     </>;
 }

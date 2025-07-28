@@ -44,7 +44,7 @@ export default function RecoverConfirm() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon iconName={ICONS.DESIGN_SERVICES}></Icon>
+        <Icon icon={ICONS.DESIGN_SERVICES}></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('recover_confirm.title').toLowerCase()}</span>

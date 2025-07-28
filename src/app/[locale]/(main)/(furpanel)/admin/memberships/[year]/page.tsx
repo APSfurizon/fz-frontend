@@ -159,13 +159,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
             cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
                 {props.row.original.duplicate && <>
-                    <Icon iconName={ICONS.FILE_COPY} />
+                    <Icon icon={ICONS.FILE_COPY} />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}
                     </span>
                 </>}
                 {!props.row.original.membershipCard && <>
-                    <Icon iconName={ICONS.QUESTION_MARK} />
+                    <Icon icon={ICONS.QUESTION_MARK} />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_MISSING")}
                     </span>
@@ -227,7 +227,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     return <>
         <div className="page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(getParentDirectory(path))}><Icon iconName={ICONS.ARROW_BACK} /></a>
+                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon={ICONS.ARROW_BACK} /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}</span>
                     <select className="title average" value={selectedYear ?? ""} onChange={(e) => router.push(e.target.value)}>

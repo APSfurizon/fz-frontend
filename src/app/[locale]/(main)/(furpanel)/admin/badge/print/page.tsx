@@ -109,7 +109,7 @@ export default function AdvancedBadgePrint() {
 
     return <div className="page">
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-            <Link href={getParentDirectory(getParentDirectory(path))}><Icon iconName={ICONS.ARROW_BACK} /></Link>
+            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon={ICONS.ARROW_BACK} /></Link>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</span>
             </div>

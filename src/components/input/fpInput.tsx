@@ -1,5 +1,7 @@
-import { ChangeEvent, CSSProperties, FocusEvent, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute,
-    KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import {
+    ChangeEvent, CSSProperties, FocusEvent, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute,
+    KeyboardEvent, MouseEvent, useEffect, useRef, useState
+} from "react";
 import Icon, { ICONS } from "../icon";
 import "@/styles/components/fpInput.css";
 import { useTranslations } from "next-intl";
@@ -7,24 +9,24 @@ import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 import { UAParser } from "ua-parser-js";
 
-function scrollToFocus (e: FocusEvent<HTMLInputElement>) {
+function scrollToFocus(e: FocusEvent<HTMLInputElement>) {
     const isMobile = navigator.userAgent
         ? new UAParser(navigator.userAgent).getResult().device.type === "mobile"
         : false;
     if (!isMobile) return;
     const element = e.target;
-    element.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
+    element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' });
 }
 
-export default function FpInput ({
-    busy=false,
+export default function FpInput({
+    busy = false,
     className,
-    disabled=false,
+    disabled = false,
     fieldName,
-    hasError=false,
+    hasError = false,
     helpText,
     inputStyle,
-    inputType="text",
+    inputType = "text",
     label,
     labelStyle,
     minLength,
@@ -36,8 +38,8 @@ export default function FpInput ({
     placeholder,
     icon,
     prefix,
-    readOnly=false,
-    required=false,
+    readOnly = false,
+    required = false,
     style,
     initialValue,
     autocomplete
@@ -77,17 +79,17 @@ export default function FpInput ({
     const t = useTranslations("components");
 
     // Detect reset
-    useEffect(()=>{
+    useEffect(() => {
         setInputValue(initialValue ?? "");
     }, [formReset]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!areEquals(initialValue, lastInitialValue)) {
             setInputValue(initialValue ?? "")
         }
         setLastInitialValue(initialValue);
     }, [initialValue]);
-    
+
     /* Pattern validity */
     const patternValidity = (e: ChangeEvent<HTMLInputElement>) => {
         if (!pattern?.test(e.target.value)) {
@@ -104,7 +106,7 @@ export default function FpInput ({
         if (pattern) patternValidity(e);
         onFormChange(fieldName);
     };
-    
+
     /* Calc input type */
     let finalType = inputType;
     const isPassword = inputType === "password";
@@ -115,22 +117,22 @@ export default function FpInput ({
     const isBusy = busy || formLoading;
 
     return <>
-        <div className={`jan-input ${className ?? ""}`} style={{...style}}>
-            {label && <label className="title semibold small margin-bottom-1mm" style={{...labelStyle}}>{label}</label>}
+        <div className={`jan-input ${className ?? ""}`} style={{ ...style }}>
+            {label && <label className="title semibold small margin-bottom-1mm" style={{ ...labelStyle }}>{label}</label>}
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
-                onClick={()=>inputRef.current?.focus()}>
+                onClick={() => inputRef.current?.focus()}>
                 {prefix && <span className="title small color-subtitle">
                     {prefix}
                 </span>}
-                {icon && <Icon style={{marginLeft: '0.25em', marginRight: '0'}}
+                {icon && <Icon style={{ marginLeft: '0.25em', marginRight: '0' }}
                     className="average"
-                    iconName={icon}/>}
+                    icon={icon} />}
                 <input
                     readOnly={readOnly}
                     required={isRequired}
                     name={fieldName}
                     className={`input-field title ${hasError ? "danger" : ""}`}
-                    style={{...inputStyle}}
+                    style={{ ...inputStyle }}
                     placeholder={placeholder ?? ""}
                     type={finalType}
                     disabled={isDisabled}
@@ -146,20 +148,20 @@ export default function FpInput ({
                 />
                 <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
                     {(isBusy) && (
-                        <Icon className="medium loading-animation" iconName={ICONS.PROGRESS_ACTIVITY}></Icon>
+                        <Icon className="medium loading-animation" icon={ICONS.PROGRESS_ACTIVITY}></Icon>
                     )}
                     {!(isBusy) && (isPassword) && (
-                        <a style={{cursor:'pointer'}} onClick={()=>setVisiblePassword(!visiblePassword)}>
+                        <a style={{ cursor: 'pointer' }} onClick={() => setVisiblePassword(!visiblePassword)}>
                             <Icon className="medium"
-                                iconName={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}/>
+                                icon={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF} />
                         </a>
                     )}
                 </span>
             </div>
-            {helpText && helpText.length > 0 && 
+            {helpText && helpText.length > 0 &&
                 <span className="help-text tiny descriptive color-subtitle">
                     {helpText}
-            </span>}
+                </span>}
         </div>
     </>
 }

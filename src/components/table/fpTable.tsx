@@ -72,9 +72,9 @@ export default function FpTable<T>({
         minSize: 50,
         maxSize: 50,
         cell: props => props.row.getCanExpand() && (
-            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()} style={{userSelect: "none"}}>
+            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()} style={{ userSelect: "none" }}>
                 <Icon className="medium"
-                    iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN} />
+                    icon={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN} />
             </div>
         )
     }), []);
@@ -236,12 +236,12 @@ export default function FpTable<T>({
                                 }}>
                                 <div className="header-data" onClick={header.column.getToggleSortingHandler()}>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
-                                    {header.column.getIsSorted() && <Icon iconName={{
+                                    {header.column.getIsSorted() && <Icon icon={{
                                         asc: ICONS.ARROW_DROP_UP,
                                         desc: ICONS.ARROW_DROP_DOWN,
                                     }[header.column.getIsSorted() as string]!} />}
                                     {header.column.getIsPinned() && <a onClick={() => header.column.pin(false)}>
-                                        <Icon className="small" iconName={ICONS.KEEP} /></a>}
+                                        <Icon className="small" icon={ICONS.KEEP} /></a>}
                                 </div>
                                 <div className="spacer"></div>
                                 {(header.column.columnDef.enableResizing ?? true) &&
@@ -249,7 +249,7 @@ export default function FpTable<T>({
                                         onDoubleClick={() => header.column.resetSize()}
                                         onMouseDown={header.getResizeHandler()}
                                         onTouchStart={header.getResizeHandler()}>
-                                        <Icon iconName={ICONS.DRAG_HANDLE} />
+                                        <Icon icon={ICONS.DRAG_HANDLE} />
                                     </div>
                                 }
                             </div>

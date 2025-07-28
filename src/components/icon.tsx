@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import "@/styles/components/icon.css";
 
-export const ICONS = Object.freeze({
+export const ICONS = {
     ACCOUNT_CIRCLE: "account_circle",
     ACCOUNT_CIRCLE_OFF: "account_circle_off",
     ADD: "add",
@@ -101,10 +101,12 @@ export const ICONS = Object.freeze({
     TUNE: "tune",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
-});
+} as const;
 
-export default function Icon ({iconName, style, className}: Readonly<{
-    iconName: string, style?: CSSProperties, className?: string;
+export type MaterialIcon = keyof typeof ICONS;
+
+export default function Icon ({icon, style, className}: Readonly<{
+    icon: string | MaterialIcon, style?: CSSProperties, className?: string;
 }>) {
-    return (<i className={`mdi ${className ?? ""}`} style={{...style}}>{iconName}</i>)
+    return (<i className={`mdi ${className ?? ""}`} style={{...style}}>{icon}</i>)
 }

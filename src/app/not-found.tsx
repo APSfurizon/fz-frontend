@@ -6,10 +6,10 @@ export default function NotFound() {
     return (
         <html lang="en">
             <body>
-                <div className={"main-dialog rounded-m pad"} style={{marginTop: "10mm"}}>
+                <div className={"main-dialog rounded-m pad"} style={{ marginTop: "10mm" }}>
                     <Image className="footer-logo" src="/images/logo-dark.png" alt="Furizon logo" width={256} height={60}></Image>
                     <div className="horizontal-list flex-vertical-center gap-2mm">
-                        <Icon className="xx-large" iconName={ICONS.FIND_IN_PAGE}></Icon>
+                        <Icon className="xx-large" icon={ICONS.FIND_IN_PAGE}></Icon>
                         <p>
                             <span className="title bold medium">
                                 Not found

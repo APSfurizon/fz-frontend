@@ -206,13 +206,13 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             <div className="vertical-list gap-4mm">
                 {roomsData.hotels.map((hotel, hi) => <div key={hi} className="hotel-container">
                     <p className="title medium horizontal-list gap-2mm flex-vertical-center">
-                        <Icon iconName={ICONS.LOCATION_CITY}></Icon>
+                        <Icon icon={ICONS.LOCATION_CITY}></Icon>
                         {translate(hotel.displayName, locale)}
                     </p>
                     {/* Room type */}
                     {hotel.roomTypes.map((roomType, rti) => <div key={`rt${hi}-${rti}`} className="room-type-container">
                         <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                            <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+                            <Icon icon={ICONS.BEDROOM_PARENT}></Icon>
                             {translate(roomType.roomData.roomTypeNames, locale)}
                         </p>
                         {/* Room */}
@@ -220,7 +220,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                             className="room-container vertical-list gap-2mm flex-wrap">
                             <p key={`rh${hi}-${rti}-${ri}`}
                                 className="title large bold horizontal-list gap-2mm flex-vertical-center">
-                                <Icon iconName={ICONS.BED}></Icon>
+                                <Icon icon={ICONS.BED}></Icon>
                                 {room.roomName}
                                 {room.roomExtraDays != ExtraDays.NONE && <div className="horizontal-list gap-2mm">
                                     {[ExtraDays.EARLY, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
@@ -253,7 +253,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             {/* Rendering daily furs */}
             {Object.keys(roomsData.dailyFurs).length > 0 && <>
                 <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                    <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+                    <Icon icon={ICONS.BEDROOM_PARENT}></Icon>
                     {t("misc.nosecount.daily_furs")}
                 </p>
                 {Object.keys(roomsData.dailyFurs).map((day, di) => <div className="daily-day" key={di}>

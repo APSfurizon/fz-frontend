@@ -10,6 +10,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Modal from "@/components/modal";
 import RoomInvite from "@/components/room/roomInvite";
 import {
+  EMPTY_ROOM_INFO,
   GuestIdApiData, RoomCreateApiAction, RoomCreateData,
   RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuestHeader,
   RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction,
@@ -270,10 +271,14 @@ export default function RoomPage() {
       .then(result => {
         setShowInNosecount(result.currentRoomInfo?.showInNosecount);
         setData(result);
-      }).catch((err) => showModal(
-        t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>
-      )).finally(() => setLoading(false));
+      }).catch((err) => {
+        showModal(
+          t("common.error"),
+          <ModalError error={err}
+            translationRoot="furpanel"
+            translationKey="room.errors"/>);
+          setData(EMPTY_ROOM_INFO);
+        }).finally(() => setLoading(false));
   }, [data]);
 
   /********************/
@@ -295,7 +300,7 @@ export default function RoomPage() {
       {/* Your room */}
       <div className="actions-panel rounded-m vertical-list gap-2mm">
         <span className="title small horizontal-list gap-2mm flex-vertical-center flex-wrap">
-          <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+          <Icon icon={ICONS.BEDROOM_PARENT}></Icon>
           {t("furpanel.room.your_room")}
           <div className="spacer"></div>
           {data?.currentRoomInfo?.userIsOwner &&
@@ -319,7 +324,7 @@ export default function RoomPage() {
         {data && !data.currentRoomInfo && <>
           <div className="room-invite actions-panel rounded-m">
             <span className="title small horizontal-list gap-2mm flex-vertical-center">
-              <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+              <Icon icon={ICONS.BEDROOM_PARENT}></Icon>
               {data.canCreateRoom ? t("furpanel.room.can_create") : t("furpanel.room.no_room")}
             </span>
             <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap" style={{ marginTop: "1em" }}>
@@ -328,9 +333,11 @@ export default function RoomPage() {
                   <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={() => createRoom()}>{t("furpanel.room.actions.create_a_room")}</Button>
                   <span className="title small">{t("furpanel.room.or")}</span>
                   <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={() => setBuyModalOpen(true)}>{t("furpanel.room.actions.upgrade_room")}</Button>
+                  {data.exchangeSupported && <>
                   <span className="title small">{t("furpanel.room.or")}</span>
                   <Button className="danger" iconName={ICONS.SEND} onClick={() => promptRoomExchange()}
                     disabled={!!data && !data.canExchange}>{t("furpanel.room.actions.exchange")}</Button>
+                    </>}
                 </>
                 : data.hasOrder
                   ? <>
@@ -350,7 +357,7 @@ export default function RoomPage() {
         {data?.currentRoomInfo && <>
           <div className="room-invite vertical-list gap-4mm rounded-s">
             <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
-              <Icon iconName={ICONS.BED}></Icon>
+              <Icon icon={ICONS.BED}></Icon>
               <span className="limit-view">{data?.currentRoomInfo.roomName}</span>
               <div className="spacer" style={{ flexGrow: "300" }}></div>
               {
@@ -393,14 +400,20 @@ export default function RoomPage() {
                       else
                         promptCancelInvite(guest)
                     }}>
-                      <Icon className="medium" iconName={ICONS.CLOSE}></Icon>
+                      <Icon className="medium" icon={ICONS.CLOSE}></Icon>
                     </a>
                   </>}
               </div>)}
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
-              <StatusBox>{translate(data.currentRoomInfo.roomData.roomTypeNames, locale)}</StatusBox>
-              <StatusBox>{t("furpanel.room.room_number_left", { size: data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length })}</StatusBox>
+              {Object.keys (data.currentRoomInfo.roomData.roomTypeNames).length > 0
+                && <StatusBox>
+                    {translate(data.currentRoomInfo.roomData.roomTypeNames, locale)}
+              </StatusBox>}
+              <StatusBox>
+                {t("furpanel.room.room_number_left",
+                  { size: data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length })}
+              </StatusBox>
               {data.currentRoomInfo.extraDays !== "NONE" && <StatusBox status={"normal"}>
                 {t("furpanel.booking.items.extra_days")}:&nbsp;
                 {t(`furpanel.booking.items.extra_days_${data.currentRoomInfo.extraDays}`)}
@@ -411,20 +424,32 @@ export default function RoomPage() {
                   {/* Owner actions */}
                   <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
                     onClick={() => promptRoomInvite()}>{t("furpanel.room.actions.invite")}</Button>
-                  {data.currentRoomInfo.confirmed === false ? data.currentRoomInfo.confirmationSupported && <>
-                    <Button iconName={ICONS.CHECK_CIRCLE} disabled={!data.currentRoomInfo.canConfirm}
-                      onClick={() => promptRoomInvite()}>{t("furpanel.room.actions.confirm_room")}</Button>
-                  </> : data.currentRoomInfo.confirmationSupported && <>
-                    <Button iconName={ICONS.CANCEL} disabled={!data.currentRoomInfo.canUnconfirm}
-                      onClick={() => promptRoomInvite()}>{t("furpanel.room.actions.unconfirm_room")}</Button>
-                  </>}
-                  <Button className="danger" iconName={ICONS.SEND} onClick={() => promptRoomExchange()}
+                  {data.currentRoomInfo.confirmationSupported &&
+                    !data.currentRoomInfo.confirmed &&
+                    <Button iconName={ICONS.CHECK_CIRCLE}
+                      disabled={!data.currentRoomInfo.canConfirm}
+                      onClick={() => promptRoomInvite()}>
+                        {t("furpanel.room.actions.confirm_room")}
+                    </Button>}
+                  {data.currentRoomInfo.unconfirmationSupported &&
+                    data.currentRoomInfo.confirmed &&
+                    <Button iconName={ICONS.CANCEL}
+                      disabled={!data.currentRoomInfo.canUnconfirm}
+                      onClick={() => promptRoomInvite()}>
+                        {t("furpanel.room.actions.unconfirm_room")}
+                    </Button>}
+                  {data.exchangeSupported && <Button className="danger"
+                    iconName={ICONS.SEND}
+                    onClick={() => promptRoomExchange()}
                     disabled={!!data && !data.canExchange}>
-                    {t("furpanel.room.actions.exchange")}
-                  </Button>
+                      {t("furpanel.room.actions.exchange")}
+                  </Button>}
                 </> : <>
                   {/* Guest actions */}
-                  <Button iconName={ICONS.DOOR_OPEN} onClick={() => promptRoomLeave()}>{t("furpanel.room.actions.leave")}</Button>
+                  <Button iconName={ICONS.DOOR_OPEN}
+                    onClick={() => promptRoomLeave()}>
+                      {t("furpanel.room.actions.leave")}
+                  </Button>
                 </>}
               </div>
             </div>
@@ -437,7 +462,7 @@ export default function RoomPage() {
       {data?.invitations && data.invitations.length > 0 && <>
         <div className="actions-panel rounded-m vertical-list gap-2mm">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
-            <Icon iconName={ICONS.MAIL}></Icon>
+            <Icon icon={ICONS.MAIL}></Icon>
             {t("furpanel.room.invite.header", { amount: 1 })}
           </span>
           {

@@ -117,7 +117,7 @@ export default function RoomOrderFlow({ style, className, isOpen, modalLoading, 
                         <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`}
                             key={index} onClick={() => selectRoomType(roomInfo)}>
                             {selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId &&
-                                <Icon className="large" iconName={ICONS.CHECK_CIRCLE}></Icon>}
+                                <Icon className="large" icon={ICONS.CHECK_CIRCLE}></Icon>}
                             <div className="vertical-list">
                                 <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
                                 <span>{formatter.number(parseFloat(roomInfo.price) - parseFloat(roomsData.priceOfCurrentRoom ?? "0"), { style: 'currency', currency: EVENT_CURRENCY })}</span>

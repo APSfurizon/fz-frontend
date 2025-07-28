@@ -213,7 +213,7 @@ export default function BadgePage() {
           )}
         </StatusBox>
         }
-        {loading && <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>}
+        {loading && <Icon icon={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>}
       </span>
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
@@ -237,7 +237,7 @@ export default function BadgePage() {
             <div className="spacer"></div>
             <Button busy={loading} iconName={ICONS.EDIT_SQUARE} onClick={() => setChangeDataModalOpen(true)}
               disabled={!badgeStatus?.allowedModifications}>
-                {t("furpanel.badge.actions.edit_badge")}
+              {t("furpanel.badge.actions.edit_badge")}
             </Button>
           </div>
           <div className="spacer"></div>
@@ -249,11 +249,11 @@ export default function BadgePage() {
       {/* Fursuits */}
       <div className="fursuit-section rounded-m vertical-list gap-2mm">
         <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
-          <Icon iconName={ICONS.PETS}></Icon>
+          <Icon icon={ICONS.PETS}></Icon>
           <span className="title average">
             {t("furpanel.badge.your_fursuits", { amount: badgeStatus?.fursuits.length ?? 0 })}
           </span>
-          {loading && <Icon iconName={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>}
+          {loading && <Icon icon={ICONS.PROGRESS_ACTIVITY} className="loading-animation"></Icon>}
           <div className="spacer"></div>
           <Button iconName={ICONS.ADD_CIRCLE} title={t("common.CRUD.add")} onClick={promptAddFursuit}>
             {t("common.CRUD.add")}</Button>
@@ -274,15 +274,15 @@ export default function BadgePage() {
                   </div>
                   <div className="vertical-list gap-2mm">
                     {fursuitData.bringingToEvent && <span className="title tiny">
-                      <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                      <Icon className="average" icon={ICONS.CHECK_CIRCLE}></Icon>
                       {t("furpanel.badge.input.bring_to_event.label", { eventName: EVENT_NAME })}
                     </span>}
                     {fursuitData.showInFursuitCount && <span className="title tiny">
-                      <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                      <Icon className="average" icon={ICONS.CHECK_CIRCLE}></Icon>
                       {t("furpanel.badge.input.show_in_fursuit_count.label", { eventName: EVENT_NAME })}
                     </span>}
                     {fursuitData.showOwner && <span className="title tiny">
-                      <Icon className="average" iconName={ICONS.CHECK_CIRCLE}></Icon>
+                      <Icon className="average" icon={ICONS.CHECK_CIRCLE}></Icon>
                       {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
                     </span>}
                   </div>
@@ -357,7 +357,7 @@ export default function BadgePage() {
         <FpInput inputType="text" fieldName="species" initialValue={editMode ? currentFursuit?.fursuit.species : ""}
           label={t("furpanel.badge.input.fursuit_species.label")} placeholder={t("furpanel.badge.input.fursuit_species.placeholder")}>
         </FpInput>
-        <Checkbox fieldName="bring-to-current-event" 
+        <Checkbox fieldName="bring-to-current-event"
           disabled={!(editMode && currentFursuit?.bringingToEvent) &&
             !badgeStatus?.canBringFursuitsToEvent ||
             !badgeStatus?.allowEditBringFursuitToEvent}

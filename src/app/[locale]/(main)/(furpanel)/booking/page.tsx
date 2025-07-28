@@ -1,7 +1,7 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
-import Icon, { ICONS } from "@/components/icon";
+import { ICONS } from "@/components/icon";
 import React, { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
@@ -10,7 +10,8 @@ import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
     ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction,
-    OrderRetryLinkApiAction } from "@/lib/api/booking";
+    OrderRetryLinkApiAction, 
+    qrCodeOptions} from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
 import { useQRCode } from 'next-qrcode';
 import ModalError from "@/components/modalError";
@@ -24,6 +25,7 @@ import AutoInput from "@/components/input/autoInput";
 import LoadingPanel from "@/components/loadingPanel";
 import "@/styles/furpanel/booking.css";
 import Countdown from "./countdown";
+import OrderItem from "./_components/orderItem";
 
 export default function BookingPage() {
     const t = useTranslations();
@@ -108,15 +110,6 @@ export default function BookingPage() {
         });
     }, [bookingData]);
 
-    /**UI generation */
-    const orderItem = (name: string | React.ReactNode, iconName: string, subtitle?: string | React.ReactNode) => {
-        return (<div className="item vertical-list flex-vertical-center">
-            <Icon className="x-large" iconName={iconName}></Icon>
-            <span className="descriptive small item-name">{name}</span>
-            {subtitle && <span className="descriptive tiny item-subtitle">{subtitle}</span>}
-        </div>)
-    }
-
     const requestOrderEditLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
@@ -155,6 +148,8 @@ export default function BookingPage() {
         isEditLocked = Math.max(pageData.editBookEndDate.getTime() - new Date().getTime(), 0) <= 0;
     }
 
+    const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
+
     return <>
         <div className="page">
             {isLoading || !!!pageData ? <LoadingPanel /> : <>
@@ -191,42 +186,63 @@ export default function BookingPage() {
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                             {/* Ticket item */}
-                            {orderItem(
-                                t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
+                            <OrderItem icon={"LOCAL_ACTIVITY"}
+                                title={
+                                    t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                     sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
-                                }),
-                                ICONS.LOCAL_ACTIVITY,
-                                pageData.isDaily ? t("furpanel.booking.items.daily_days", { days: pageData.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ") }) : undefined)}
+                                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>})}
+                                description={pageData.isDaily
+                                    ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays })
+                                    : undefined}/>
                             {/* Membership item */}
-                            {bookingData!.hasActiveMembershipForEvent && orderItem(t("furpanel.booking.items.membership_card"), ICONS.ID_CARD)}
+                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}
+                                title={t("furpanel.booking.items.membership_card")}/>}
                             {/* Extra days */}
-                            {bookingData!.order.extraDays !== "NONE" && orderItem(t("furpanel.booking.items.extra_days"), ICONS.CALENDAR_ADD_ON, t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`))}
+                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon={"CALENDAR_ADD_ON"}
+                                title={t("furpanel.booking.items.extra_days")}
+                                description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)}/>}
                             {/* Room */}
-                            {bookingData!.order.room && orderItem(`${t("furpanel.booking.items.room")} ${translate(bookingData!.order.room.roomTypeNames, locale)}`, ICONS.BED,
-                                t("furpanel.booking.items.room_capacity", { capacity: bookingData!.order.room.roomCapacity }))}
+                            {bookingData!.order.room && <OrderItem icon={"BED"}
+                                title={[t("furpanel.booking.items.room"),
+                                    translate(bookingData!.order.room.roomTypeNames, locale) ?? ""].join(" ")}
+                                description={t("furpanel.booking.items.room_capacity",
+                                    { capacity: bookingData!.order.room.roomCapacity })}/>}
                         </div>
 
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                             {pageData?.shouldRetry && <>
-                                <Button className="action-button" iconName={ICONS.REPLAY} busy={actionLoading} onClick={requestRetryPaymentLink}>
-                                    {t("furpanel.booking.retry_payment")}
+                                <Button className="action-button"
+                                    iconName={ICONS.REPLAY}
+                                    busy={actionLoading}
+                                    onClick={requestRetryPaymentLink}>
+                                        {t("furpanel.booking.retry_payment")}
                                 </Button>
                             </>}
                             {bookingData?.order?.checkinSecret &&
-                                <Button iconName={ICONS.QR_CODE} onClick={() => setSecretModalOpen(true)} title={t("furpanel.booking.actions.show_qr")}>
-                                    {t("furpanel.booking.actions.show_qr")}
+                                <Button iconName={ICONS.QR_CODE}
+                                    onClick={() => setSecretModalOpen(true)}
+                                    title={t("furpanel.booking.actions.show_qr")}>
+                                        {t("furpanel.booking.actions.show_qr")}
                                 </Button>
                             }
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
-                            <div className="horizontal-list gap-4mm flex-wrap flex-space-between" style={{ flexGrow: "1" }}>
-                                <Button className="action-button" disabled={isEditLocked} iconName={ICONS.OPEN_IN_NEW} busy={actionLoading} onClick={requestOrderEditLink}>
-                                    {t("furpanel.booking.edit_booking")}
-                                </Button>
-                                <Button className="action-button danger" disabled={isEditLocked} iconName={ICONS.SEND} busy={actionLoading} onClick={() => promptExchange()}>
-                                    {t("furpanel.booking.actions.exchange_order")}
-                                </Button>
+                            <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
+                                style={{ flexGrow: "1" }}>
+                                    <Button className="action-button"
+                                        disabled={isEditLocked}
+                                        iconName={ICONS.OPEN_IN_NEW}
+                                        busy={actionLoading}
+                                        onClick={requestOrderEditLink}>
+                                            {t("furpanel.booking.edit_booking")}
+                                    </Button>
+                                    <Button className="action-button danger"
+                                        disabled={isEditLocked}
+                                        iconName={ICONS.SEND}
+                                        busy={actionLoading}
+                                        onClick={() => promptExchange()}>
+                                            {t("furpanel.booking.actions.exchange_order")}
+                                    </Button>
                             </div>
                         </div>
 
@@ -276,29 +292,22 @@ export default function BookingPage() {
             </DataForm>
         </Modal>
         {/* QR Secret modal */}
-        <Modal open={secretModalOpen} icon={ICONS.QR_CODE} title={t("furpanel.booking.reservation_qr")} onClose={() => setSecretModalOpen(false)}>
+        <Modal open={secretModalOpen}
+            icon={ICONS.QR_CODE}
+            title={t("furpanel.booking.reservation_qr")}
+            onClose={() => setSecretModalOpen(false)}>
             <div className="horizontal-list" style={{ justifyContent: "center" }}>
-                <Canvas
-                    text={bookingData?.order?.checkinSecret ?? "a"}
-                    options={{
-                        type: 'image/webp',
-                        quality: 0.25,
-                        errorCorrectionLevel: 'H',
-                        margin: 3,
-                        scale: 4,
-                        width: 200,
-                        color: {
-                            dark: '#000000',
-                            light: '#FFFFFF',
-                        }
-                    }}
-                    logo={{
-                        src: '/images/favicon.png',
-                        options: {
-                            width: 30
-                        }
-                    }}
-                />
+                <div className="rounded-l" style={{overflow: "hidden"}}>
+                    <Canvas text={bookingData?.order?.checkinSecret ?? "a"}
+                        options={qrCodeOptions}
+                        logo={{
+                            src: '/images/favicon.png',
+                            options: {
+                                width: 30
+                            }
+                        }}
+                    />
+                </div>
             </div>
             <span className="descriptive small">{t("furpanel.booking.messages.reservation_qr")}</span>
         </Modal>

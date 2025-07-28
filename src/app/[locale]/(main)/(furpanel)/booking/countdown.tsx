@@ -49,17 +49,17 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
             style={{ backgroundImage: `url(${EVENT_BANNER})`, backgroundSize: 'cover' }}>
             <img className="event-logo"
                 alt={t("furpanel.booking.event_logo")}
-                src={EVENT_LOGO}/>
+                src={EVENT_LOGO} />
             {/* Countdown view */}
             {!isOpen && data?.showCountdown && !data.hasOrder && countdown
                 ? <p className="countdown title bold title large rounded-s center">
                     {countdown[0] > 0
                         ? t.rich("furpanel.booking.coundown_days", { days: countdown[0] })
-                        : t.rich("furpanel.booking.coundown_clock", { 
+                        : t.rich("furpanel.booking.coundown_clock", {
                             hours: countdown[1],
                             minutes: countdown[2],
                             seconds: countdown[3],
-                            b: (chunks) => <b className="small">{chunks}</b> 
+                            b: (chunks) => <b className="small">{chunks}</b>
                         })
                     }
                 </p>
@@ -70,8 +70,8 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                         onClick={requestShopLink}>
                         <div className="vertical-list flex-vertical-center">
                             <span className="title large">
-                                {data?.shouldUpdateInfo && 
-                                    <Icon style={{ marginRight: ".2em" }} iconName={ICONS.LOCK}/>}
+                                {data?.shouldUpdateInfo &&
+                                    <Icon style={{ marginRight: ".2em" }} icon={ICONS.LOCK} />}
                                 {t("furpanel.booking.book_now")}
                             </span>
                             {data?.shouldUpdateInfo && <>

@@ -9,8 +9,8 @@ export enum NoticeTheme {
     Error
 }
 
-export default function NoticeBox ({title, theme, customIcon, children, headerStyle, style, className}: 
-Readonly<{title?: string, theme: NoticeTheme, customIcon?: string, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string}>) {
+export default function NoticeBox({ title, theme, customIcon, children, headerStyle, style, className }:
+    Readonly<{ title?: string, theme: NoticeTheme, customIcon?: string, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string }>) {
     let icon = null;
     let classStyle = null;
     switch (theme) {
@@ -32,9 +32,9 @@ Readonly<{title?: string, theme: NoticeTheme, customIcon?: string, children: Rea
             break;
     }
     return (
-        <div className={`notice-box ${className}`} style={{...style}}>
-            <div className="header vertical-align-middle" style={{...headerStyle}}>
-                <Icon className="medium" iconName={customIcon ?? icon}></Icon>
+        <div className={`notice-box ${className}`} style={{ ...style }}>
+            <div className="header vertical-align-middle" style={{ ...headerStyle }}>
+                <Icon className="medium" icon={customIcon ?? icon}></Icon>
                 <span className="title">{title}</span>
             </div>
             <div className="answer descriptive">
