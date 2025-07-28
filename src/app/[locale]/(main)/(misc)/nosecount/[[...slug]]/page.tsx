@@ -198,7 +198,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                         userData={data.user}
                         extraDays={data.extraDays}
                         showFlag
-                        showNickname/>)}
+                        showNickname />)}
             </div>
             {/* Rendering daily furs */}
             {Object.keys(roomsData.dailyFurs).length > 0 && <>

@@ -1,8 +1,10 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import Image from "next/image";
-import { AutoInputFilter, AutoInputSearchResult, AutoInputManager,
-    AutoInputChangedParams } from "@/lib/components/autoInput";
+import {
+    AutoInputFilter, AutoInputSearchResult, AutoInputManager,
+    AutoInputChangedParams
+} from "@/lib/components/autoInput";
 import { useLocale, useTranslations } from "next-intl";
 import "@/styles/components/autoInput.css";
 import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";

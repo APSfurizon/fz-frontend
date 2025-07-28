@@ -88,7 +88,7 @@ export const ICONS = {
     ROTATE_LEFT: "rotate_left",
     ROTATE_RIGHT: "rotate_right",
     SAVE: "save",
-    SEARCH:"search",
+    SEARCH: "search",
     SECURITY: "security",
     SEND: "send",
     SETTINGS: "settings",
@@ -105,8 +105,8 @@ export const ICONS = {
 
 export type MaterialIcon = keyof typeof ICONS;
 
-export default function Icon ({icon, style, className}: Readonly<{
+export default function Icon({ icon, style, className }: Readonly<{
     icon: MaterialIcon, style?: CSSProperties, className?: string;
 }>) {
-    return (<i className={`mdi ${className ?? ""}`} style={{...style}}>{icon}</i>)
+    return (<i className={`mdi ${className ?? ""}`} style={{ ...style }}>{icon}</i>)
 }

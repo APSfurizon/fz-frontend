@@ -5,8 +5,10 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
-import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction,
-  ExchangeUpdateApiData } from "@/lib/api/exchange";
+import {
+  ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction,
+  ExchangeUpdateApiData
+} from "@/lib/api/exchange";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
 import Button from "@/components/input/button";
@@ -33,7 +35,7 @@ export default function ExchangeConfirm() {
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
         <Icon className="large" icon={"PACKAGE_2"}></Icon>
         {t.rich("authentication.exchange_confirm.room.room_title", {
-          user: () => <><UserPicture userData={userData}/>{userData.fursonaName}</>,
+          user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
         })}
       </span>
       <div className="horizontal-list item-content flex-vertical-center gap-2mm rounded-m">
@@ -138,9 +140,10 @@ export default function ExchangeConfirm() {
                 <Icon className="large" icon={"LOCAL_ACTIVITY"}></Icon>
                 {t.rich("authentication.exchange_confirm.order.order_title", {
                   user: () => <>
-                    <UserPicture userData={exchangeData.sourceUser}/>
+                    <UserPicture userData={exchangeData.sourceUser} />
                     {exchangeData.sourceUser.fursonaName}
-                </>})}
+                  </>
+                })}
               </span>
               <div className="descriptive vertical-list item-content gap-2mm rounded-m">
                 {/* Ticket name */}
