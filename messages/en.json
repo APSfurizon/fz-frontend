@@ -197,7 +197,9 @@
         "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
           "title": "Shared order",
           "description": "Your order appears to be shared with more users. Please, contact support to rectify the situation."
-        }
+        },
+        "TELEGRAM_USERNAME_EMPTY": "No telegram username provided",
+        "ID_ISSUER_EMPTY": "No ID Card issuer provided"
       },
       "actions": {
         "review_info": "Review informations",

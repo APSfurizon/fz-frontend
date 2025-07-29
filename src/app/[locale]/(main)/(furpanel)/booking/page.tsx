@@ -159,6 +159,7 @@ export default function BookingPage() {
                         theme={NoticeTheme.Error} className="vertical-list gap-2mm">
                         {t("furpanel.booking.messages.review_info.description")}
                         <span className="horizontal-list gap-2mm" style={{ marginTop: ".5em" }}>
+                            <div className="spacer"></div>
                             <Button className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
@@ -247,17 +248,24 @@ export default function BookingPage() {
                         </div>
 
                         <div className="vertical-list gap-2mm">
-                            <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ} title={isEditLocked ? t("furpanel.booking.messages.editing_locked.title") : t("furpanel.booking.messages.editing_locked_warning.title")}>
-                                {t(isEditLocked ? "furpanel.booking.messages.editing_locked.description" : "furpanel.booking.messages.editing_locked_warning.description", { lockDate: formatter.dateTime(pageData.editBookEndDate) })}
+                            <NoticeBox theme={isEditLocked ? NoticeTheme.Warning : NoticeTheme.FAQ}
+                                title={isEditLocked
+                                    ? t("furpanel.booking.messages.editing_locked.title")
+                                    : t("furpanel.booking.messages.editing_locked_warning.title")}>
+                                {t(isEditLocked
+                                    ? "furpanel.booking.messages.editing_locked.description"
+                                    : "furpanel.booking.messages.editing_locked_warning.description",
+                                    { lockDate: formatter.dateTime(pageData.editBookEndDate) })}
                             </NoticeBox>
 
                             {GROUP_CHAT_URL &&
-                                <NoticeBox theme={NoticeTheme.FAQ} customIcon={ICONS.GROUPS} title={t("furpanel.booking.messages.invite_group.title")}>
-                                    {t.rich("furpanel.booking.messages.invite_group.description",
-                                        {
-                                            link: () => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
-                                                {GROUP_CHAT_URL}</a>
-                                        })}
+                                <NoticeBox theme={NoticeTheme.FAQ}
+                                    customIcon={ICONS.GROUPS}
+                                    title={t("furpanel.booking.messages.invite_group.title")}>
+                                        {t.rich("furpanel.booking.messages.invite_group.description",
+                                        {link: () => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
+                                            {GROUP_CHAT_URL}
+                                        </a>})}
                                 </NoticeBox>}
                         </div>
 
@@ -265,7 +273,9 @@ export default function BookingPage() {
                         {bookingData?.errors && <>
                             <div className="errors-container vertical-list gap-4mm">
                                 {bookingData.errors.map((errorCode, index) => {
-                                    return <NoticeBox key={index} theme={NoticeTheme.Warning} title={t(`furpanel.booking.errors.${errorCode}.title`)}>
+                                    return <NoticeBox key={index}
+                                        theme={NoticeTheme.Warning}
+                                        title={t(`furpanel.booking.errors.${errorCode}.title`)}>
                                         {t(`furpanel.booking.errors.${errorCode}.description`)}
                                     </NoticeBox>;
                                 })}

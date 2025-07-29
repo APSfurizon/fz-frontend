@@ -125,5 +125,5 @@ export class OrderRetryLinkApiAction extends ApiAction<ShopLinkResponse, ApiErro
 export class ConfirmMembershipDataApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
-    urlAction = "membership/mark-person-user-information-as-updated";
+    urlAction = "membership/mark-personal-user-information-as-updated";
 }

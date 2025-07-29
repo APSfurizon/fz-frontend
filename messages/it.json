@@ -197,7 +197,9 @@
         "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
           "title": "Ordine condiviso",
           "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
-        }
+        },
+        "TELEGRAM_USERNAME_EMPTY": "Non è stato inserito alcun nome utente Telegram",
+        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'itentità"
       },
       "actions": {
         "review_info": "Rivedi informazioni",
