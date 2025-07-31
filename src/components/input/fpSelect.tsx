@@ -13,7 +13,7 @@ export default function FpSelect({
     disabled = false, initialValue = "", fieldName, inputStyle,
     itemExtractor = inputEntityIdExtractor
 }: Readonly<{
-    fieldName: string,
+    fieldName?: string,
     items: (SelectGroup|SelectItem)[],
     className?: string,
     style?: CSSProperties,
@@ -61,7 +61,7 @@ export default function FpSelect({
     }, [items])
 
     useEffect(()=>{
-        if (mappedItems && initialValue !== undefined && (!areEquals(initialValue, lastInitialValue) || formReset)) {
+        if (mappedItems && Object.keys(mappedItems ?? {}).length > 0 && initialValue !== undefined && (!areEquals(initialValue, lastInitialValue) || formReset)) {
             setSelectedItem(mappedItems[initialValue]);
             setLastInitialValue(initialValue);
         } else if (formReset) {

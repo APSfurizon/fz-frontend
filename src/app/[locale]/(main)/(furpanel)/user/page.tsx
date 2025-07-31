@@ -1,6 +1,6 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations } from "next-intl";
@@ -42,7 +42,7 @@ export default function UserPage() {
   const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(
     t("common.error"),
     <ModalError error={err} translationRoot="authentication" translationKey="login.errors"></ModalError>,
-    ICONS.ERROR
+    "ERROR"
   );
 
   useTitle(t("furpanel.user.title"));
@@ -52,7 +52,7 @@ export default function UserPage() {
       {/* User area */}
       <div className="section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-          <Icon className="x-large" icon={ICONS.PERSON}></Icon>
+          <Icon className="x-large" icon={"PERSON"}></Icon>
           <span className="title medium">{t("furpanel.user.sections.user")}</span>
         </div>
         {/* Personal info manager */}
@@ -71,7 +71,7 @@ export default function UserPage() {
       {/* User area */}
       <div className="section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-          <Icon className="x-large" icon={ICONS.SECURITY}></Icon>
+          <Icon className="x-large" icon={"SECURITY"}></Icon>
           <span className="title medium">{t("furpanel.user.sections.security")}</span>
         </div>
         <div className="vertical-list gap-2mm">

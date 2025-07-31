@@ -3,7 +3,6 @@ import { useTranslations } from 'next-intl';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { EMPTY_PROFILE_PICTURE_SRC, PROFILE_UPLOAD_MAX_SIZE, FULL_UPLOAD_MAX_WIDTH,
     FULL_UPLOAD_MAX_HEIGHT  } from '@/lib/constants';
-import { ICONS } from '@/components/icon';
 import Image from 'next/image';
 import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
 import Button from '@/components/input/button';
@@ -39,7 +38,7 @@ export default function Upload ({
     required?: boolean,
     label?: string,
     helpText?: string,
-    busy: boolean,
+    busy?: boolean,
     requireCrop?: boolean,
     readonly?: boolean,
     viewSize?: number,
@@ -205,11 +204,11 @@ export default function Upload ({
                 <div className="vertical-list gap-2mm">
                     {/* Upload button */}
                     {!media && <Button title={t('components.upload.open')} onClick={()=>openFileDialog()}
-                        iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || formDisabled} busy={isBusy}>
+                        iconName={"CLOUD_UPLOAD"} disabled={readonly || formDisabled} busy={isBusy}>
                         {!media && t('components.upload.open')}</Button>}
                     {/* Delete button */}
                     {(media || previewUrl) && <Button title={t('components.upload.delete')} className="danger"
-                        onClick={()=>onDeleteRequest()} iconName={ICONS.DELETE} disabled={readonly || formDisabled}
+                        onClick={()=>onDeleteRequest()} iconName={"DELETE"} disabled={readonly || formDisabled}
                         busy={isBusy}>{t('components.upload.delete')}</Button>}
                 </div>
                 {children}
@@ -235,18 +234,18 @@ export default function Upload ({
                 zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100} style={{maxHeight: '75vh'}}>
             </Cropper>
             <div className="horizontal-list gap-2mm">
-                <Button iconName={ICONS.ROTATE_LEFT} onClick={()=>cropperRef.current?.cropper.rotate(-45)}></Button>
-                <Button iconName={ICONS.ROTATE_RIGHT} onClick={()=>cropperRef.current?.cropper.rotate(45)}></Button>
+                <Button iconName={"ROTATE_LEFT"} onClick={()=>cropperRef.current?.cropper.rotate(-45)}></Button>
+                <Button iconName={"ROTATE_RIGHT"} onClick={()=>cropperRef.current?.cropper.rotate(45)}></Button>
                 <div className="spacer"></div>
-                <Button iconName={ICONS.RESET_SETTINGS} onClick={()=>cropperRef.current?.cropper.reset()}></Button>
+                <Button iconName={"RESET_SETTINGS"} onClick={()=>cropperRef.current?.cropper.reset()}></Button>
             </div>
             <div className="bottom-toolbar">
                 <Button title={t('common.cancel')} className="danger" onClick={()=>onCropCanceled()}
-                    iconName={ICONS.CANCEL} disabled={readonly || formDisabled}
+                    iconName={"CANCEL"} disabled={readonly || formDisabled}
                     busy={isBusy}>{t('common.cancel')}</Button>
                 <div className="spacer"></div>
                 <Button title={t('components.upload.upload')} onClick={()=>onFileUpload(imageToCrop!)}
-                    iconName={ICONS.CLOUD_UPLOAD} disabled={readonly || formDisabled}
+                    iconName={"CLOUD_UPLOAD"} disabled={readonly || formDisabled}
                      busy={isBusy}>{!media && t('components.upload.upload')}</Button>    
             </div>
         </Modal>

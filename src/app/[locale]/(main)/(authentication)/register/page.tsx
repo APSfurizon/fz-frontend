@@ -5,7 +5,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import DataForm from "@/components/input/dataForm";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
 import useTitle from "@/components/hooks/useTitle";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
@@ -77,7 +77,7 @@ export default function Register() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon icon="design_services"></Icon>
+        <Icon icon="DESIGN_SERVICES"></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('register.title').toLowerCase()}</span>
@@ -313,7 +313,7 @@ export default function Register() {
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={ICONS.KEY} >{t("register.register")}</Button>
+        <Button type="submit" iconName={"KEY"} >{t("register.register")}</Button>
       </div>
     </DataForm>
     <div>

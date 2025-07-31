@@ -2,7 +2,7 @@ import {
     ChangeEvent, CSSProperties, FocusEvent, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute,
     KeyboardEvent, MouseEvent, useEffect, useRef, useState
 } from "react";
-import Icon, { ICONS } from "../icon";
+import Icon, { MaterialIcon } from "../icon";
 import "@/styles/components/fpInput.css";
 import { useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";
@@ -62,7 +62,7 @@ export default function FpInput({
     onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void,
     pattern?: RegExp,
     placeholder?: string,
-    icon?: string,
+    icon?: MaterialIcon,
     prefix?: string,
     readOnly?: boolean,
     required?: boolean,
@@ -148,12 +148,12 @@ export default function FpInput({
                 />
                 <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
                     {(isBusy) && (
-                        <Icon className="medium loading-animation" icon={ICONS.PROGRESS_ACTIVITY}></Icon>
+                        <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
                     )}
                     {!(isBusy) && (isPassword) && (
                         <a style={{ cursor: 'pointer' }} onClick={() => setVisiblePassword(!visiblePassword)}>
                             <Icon className="medium"
-                                icon={visiblePassword ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF} />
+                                icon={visiblePassword ? "VISIBILITY" : "VISIBILITY_OFF"} />
                         </a>
                     )}
                 </span>

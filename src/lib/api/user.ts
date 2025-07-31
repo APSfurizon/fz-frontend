@@ -1,4 +1,3 @@
-import { ICONS } from "@/components/icon";
 import {
     AutoInputFilter, AutoInputManager, AutoInputSearchResult, createSearchResult, filterLoaded,
     filterSearchResult, SearchType
@@ -171,33 +170,33 @@ export class AutoInputRoomInviteManager extends AutoInputUsersManager {
 export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonalInfo> {
     mapToDTO = (data: FormData) => {
         const toReturn: UserPersonalInfo = {
-            firstName:          getData(data, "firstName"),
-            lastName:           getData(data, "lastName"),
-            sex:                getData(data, "sex"),
-            gender:             getData(data, "gender"),
-            allergies:          getData(data, "allergies"),
-            fiscalCode:         getData(data, "fiscalCode"),
-            birthCity:          getData(data, "birthCity"),
-            birthRegion:        getData(data, "birthRegion"),
-            birthCountry:       getData(data, "birthCountry"),
-            birthday:           getData(data, "birthday"),
-            residenceAddress:   getData(data, "residenceAddress"),
-            residenceZipCode:   getData(data, "residenceZipCode"),
-            residenceCity:      getData(data, "residenceCity"),
-            residenceRegion:    getData(data, "residenceRegion"),
-            residenceCountry:   getData(data, "residenceCountry"),
-            prefixPhoneNumber:  getData(data ,"phonePrefix"),
-            phoneNumber:        getData(data, "phoneNumber"),
-            userId:             parseInt(data.get("userId")?.toString() ?? "0"),
-            id:                 parseInt(data.get("id")?.toString() ?? "0"),
+            firstName: getData(data, "firstName"),
+            lastName: getData(data, "lastName"),
+            sex: getData(data, "sex"),
+            gender: getData(data, "gender"),
+            allergies: getData(data, "allergies"),
+            fiscalCode: getData(data, "fiscalCode"),
+            birthCity: getData(data, "birthCity"),
+            birthRegion: getData(data, "birthRegion"),
+            birthCountry: getData(data, "birthCountry"),
+            birthday: getData(data, "birthday"),
+            residenceAddress: getData(data, "residenceAddress"),
+            residenceZipCode: getData(data, "residenceZipCode"),
+            residenceCity: getData(data, "residenceCity"),
+            residenceRegion: getData(data, "residenceRegion"),
+            residenceCountry: getData(data, "residenceCountry"),
+            prefixPhoneNumber: getData(data, "phonePrefix"),
+            phoneNumber: getData(data, "phoneNumber"),
+            userId: parseInt(data.get("userId")?.toString() ?? "0"),
+            id: parseInt(data.get("id")?.toString() ?? "0"),
             lastUpdatedEventId: undefined,
-            note:               undefined,
-            telegramUsername:   getData(data, "telegramUsername"),
-            idType:             getData(data, "idType"),
-            idNumber:           getData(data, "idNumber"),
-            idIssuer:           getData(data, "idIssuer"),
-            idExpiry:           getData(data, "idExpiry"),
-            shirtSize:          getData(data, "shirtSize")
+            note: undefined,
+            telegramUsername: getData(data, "telegramUsername"),
+            idType: getData(data, "idType"),
+            idNumber: getData(data, "idNumber"),
+            idIssuer: getData(data, "idIssuer"),
+            idExpiry: getData(data, "idExpiry"),
+            shirtSize: getData(data, "shirtSize")
         };
         return toReturn;
     }
@@ -235,12 +234,12 @@ export function getAutoInputSexes() {
             createSearchResult({
                 code: "M",
                 translatedDescription: { "it": "Maschio", "en": "Male" },
-                icon: ICONS.MALE
+                icon: "MALE"
             }),
             createSearchResult({
                 code: "F",
                 translatedDescription: { "it": "Femmina", "en": "Female" },
-                icon: ICONS.FEMALE
+                icon: "FEMALE"
             }),
         ])
     });
@@ -317,7 +316,7 @@ export const idTypeAnswers = [
     new SelectItem(undefined,
         "id_card",
         "Id card",
-        ICONS.ID_CARD,
+        "ID_CARD",
         undefined,
         undefined,
         { "it": "Carta d'identità", "en": "Identity Card" }
@@ -326,7 +325,7 @@ export const idTypeAnswers = [
         undefined,
         "driver_license",
         "Driver license",
-        ICONS.DIRECTIONS_CAR,
+        "DIRECTIONS_CAR",
         undefined,
         undefined,
         { "it": "Patente", "en": "Driver license" }
@@ -334,8 +333,8 @@ export const idTypeAnswers = [
     new SelectItem(
         undefined,
         "passport",
-        "Passport", 
-        ICONS.PERSON_BOOK,
+        "Passport",
+        "PERSON_BOOK",
         undefined,
         undefined,
         { "it": "Passaporto", "en": "Passport" }
@@ -343,15 +342,15 @@ export const idTypeAnswers = [
 ];
 
 export const shirtSizeAnswers = ['xs', 's', 'm', 'l', 'xl', 'xxl', '3xl']
-.map(sz => new SelectItem(
-    undefined,
-    sz,
-    sz.toUpperCase(),
-    undefined,
-    undefined,
-    undefined,
-    undefined
-));
+    .map(sz => new SelectItem(
+        undefined,
+        sz,
+        sz.toUpperCase(),
+        undefined,
+        undefined,
+        undefined,
+        undefined
+    ));
 
 export class AutoInputSexManager implements AutoInputManager {
     codeOnly: boolean = true;

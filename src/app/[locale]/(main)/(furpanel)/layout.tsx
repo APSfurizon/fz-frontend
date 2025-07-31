@@ -1,11 +1,14 @@
 "use client"
 import { useTranslations } from 'next-intl';
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import ToolLink from "@/components/toolLink";
-import { APP_GIT_PROJECT, APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, READ_CHANGELOG_STORAGE_NAME, ROOM_ENABLED, TOKEN_STORAGE_NAME, UPLOAD_ENABLED } from '@/lib/constants';
+import {
+    APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, ROOM_ENABLED,
+    TOKEN_STORAGE_NAME, UPLOAD_ENABLED, READ_CHANGELOG_STORAGE_NAME
+} from '@/lib/constants';
 import { useModalUpdate } from '@/components/context/modalProvider';
 import Modal from '@/components/modal';
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import "@/styles/furpanel/layout.css";
 import { useUser } from '@/components/context/userProvider';
 import { hasPermission, Permissions } from '@/lib/api/permission';
@@ -35,14 +38,16 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             showModal(t("common.changelog.title"),
                 <span>
                     {t.rich("common.changelog.description", {
-                        a: (chunks) => <a target='_blank' href={APP_GIT_PROJECT_RELEASE.toString()}>{APP_GIT_PROJECT_RELEASE.toString()}</a>
+                        a: () => <a target='_blank' href={APP_GIT_PROJECT_RELEASE.toString()}>
+                            {APP_GIT_PROJECT_RELEASE.toString()}
+                        </a>
                     })}
                 </span>,
-                ICONS.FEATURED_SEASONAL_AND_GIFTS);
+                "FEATURED_SEASONAL_AND_GIFTS");
         }
     }, [])
 
-    const toolClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    const toolClick = () => {
         setToolListExpanded(false);
     }
 
@@ -58,17 +63,44 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 <div className="spacer"></div>
                 <div className={`tools-list horizontal-list flex-wrap gap-4mm ${toolListExpanded ? "expanded" : ""}`}
                     style={{ justifyContent: 'flex-end' }}>
-                    {BOOKING_ENABLED && <ToolLink onClick={toolClick} href="/booking" iconName={ICONS.LOCAL_ACTIVITY}>{t('furpanel.booking.title')}</ToolLink>}
-                    {BADGE_ENABLED && <ToolLink onClick={toolClick} href="/badge" iconName={ICONS.PERSON_BOOK}>{t('furpanel.badge.title')}</ToolLink>}
-                    {ROOM_ENABLED && <ToolLink onClick={toolClick} href="/room" iconName={ICONS.BED}>{t('furpanel.room.title')}</ToolLink>}
-                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick} href="/upload-area" iconName={ICONS.PHOTO_CAMERA}>{t('furpanel.upload_area.title')}</ToolLink>}
-                    <ToolLink onClick={toolClick} href="/user" iconName={ICONS.PERSON}>{t('furpanel.user.title')}</ToolLink>
-                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick} href="/admin" iconName={ICONS.SECURITY}>{t('furpanel.admin.title')}</ToolLink>}
-                    {DEBUG_ENABLED && <ToolLink href="/debug" iconName={ICONS.BUG_REPORT}>{t('furpanel.debug.title')}</ToolLink>}
+                    {BOOKING_ENABLED && <ToolLink onClick={toolClick}
+                        href="/booking"
+                        iconName={"LOCAL_ACTIVITY"}>
+                        {t('furpanel.booking.title')}
+                    </ToolLink>}
+                    {BADGE_ENABLED && <ToolLink onClick={toolClick}
+                        href="/badge"
+                        iconName={"PERSON_BOOK"}>
+                        {t('furpanel.badge.title')}
+                    </ToolLink>}
+                    {ROOM_ENABLED && <ToolLink onClick={toolClick}
+                        href="/room"
+                        iconName={"BED"}>
+                        {t('furpanel.room.title')}
+                    </ToolLink>}
+                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick}
+                        href="/upload-area"
+                        iconName={"PHOTO_CAMERA"}>
+                        {t('furpanel.upload_area.title')}
+                    </ToolLink>}
+                    <ToolLink onClick={toolClick}
+                        href="/user"
+                        iconName={"PERSON"}>
+                        {t('furpanel.user.title')}
+                    </ToolLink>
+                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
+                        href="/admin"
+                        iconName={"SECURITY"}>
+                        {t('furpanel.admin.title')}
+                    </ToolLink>}
+                    {DEBUG_ENABLED && <ToolLink href="/debug"
+                        iconName={"BUG_REPORT"}>
+                        {t('furpanel.debug.title')}
+                    </ToolLink>}
                 </div>
                 <span>
                     <a href="#" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
-                        <Icon icon={toolListExpanded ? ICONS.CLOSE : ICONS.MENU}></Icon>
+                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}></Icon>
                     </a>
                 </span>
             </div>

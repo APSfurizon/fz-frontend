@@ -1,8 +1,8 @@
 'use client'
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import Button from "@/components/input/button";
-import Icon, { ICONS } from "@/components/icon";
-import { useEffect, useState } from "react";
+import Icon from "@/components/icon";
+import { useEffect, useMemo, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
@@ -11,11 +11,12 @@ import Modal from "@/components/modal";
 import RoomInvite from "@/components/room/roomInvite";
 import {
   EMPTY_ROOM_INFO,
-  GuestIdApiData, RoomCreateApiAction, RoomCreateData,
+  GuestIdApiData, RoomConfirmAction, RoomCreateApiAction, RoomCreateData,
   RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuestHeader,
   RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction,
   RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameFormAction,
-  RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData
+  RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData,
+  RoomUnconfirmAction
 } from "@/lib/api/room";
 import UserPicture from "@/components/userPicture";
 import StatusBox from "@/components/statusBox";
@@ -48,6 +49,7 @@ export default function RoomPage() {
   // Room related states
   /* Room data */
   const [data, setData] = useState<RoomInfoResponse>();
+  const isEditExpired = useMemo(() => data && new Date(data.editingRoomEndTime).getTime() - Date.now() < 0, [data]);
 
   /************************/
   /** Room editing logic **/
@@ -209,8 +211,40 @@ export default function RoomPage() {
     const successBody = <span>
       {t("furpanel.room.messages.exchange_invite_sent.description")}
     </span>;
-    showModal(t("furpanel.room.messages.exchange_invite_sent.title"), successBody, ICONS.CHECK_CIRCLE);
+    showModal(t("furpanel.room.messages.exchange_invite_sent.title"), successBody, "CHECK_CIRCLE");
     commonSuccess();
+  }
+
+  // confirm room modal
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
+  const promptRoomConfirm = () => {
+    if (!data) return;
+    setConfirmModalOpen(true);
+  }
+
+  const confirmRoom = () => {
+    setModalLoading(true);
+    runRequest(new RoomConfirmAction())
+      .then(() => commonSuccess())
+      .catch((err) => commonFail(err))
+      .finally(() => setModalLoading(false));
+  }
+
+  // un-confirm room modal
+  const [unconfirmModalOpen, setUnconfirmModalOpen] = useState(false);
+
+  const promptRoomUnconfirm = () => {
+    if (!data) return;
+    setUnconfirmModalOpen(true);
+  }
+
+  const unconfirmRoom = () => {
+  setModalLoading(true);
+  runRequest(new RoomUnconfirmAction())
+    .then(() => commonSuccess())
+    .catch((err) => commonFail(err))
+    .finally(() => setModalLoading(false));
   }
 
   // Room nosecount visibility
@@ -244,6 +278,8 @@ export default function RoomPage() {
     setKickModalOpen(false);
     setLeaveModalOpen(false);
     setExchangeModalOpen(false);
+    setConfirmModalOpen(false);
+    setUnconfirmModalOpen(false);
     setData(undefined);
   }
 
@@ -257,6 +293,8 @@ export default function RoomPage() {
     setKickModalOpen(false);
     setLeaveModalOpen(false);
     setExchangeModalOpen(false);
+    setConfirmModalOpen(false);
+    setUnconfirmModalOpen(false);
     showModal(
       t("common.error"),
       <ModalError error={err} translationRoot={translationRoot ?? "furpanel"} translationKey={translationKey ?? "room.errors"}></ModalError>
@@ -290,9 +328,15 @@ export default function RoomPage() {
       {/* Room deadline */}
       {data?.editingRoomEndTime && <>
         <NoticeBox theme={NoticeTheme.Warning}
-          title={t(`furpanel.room.messages.${true ? "room_edit_deadline" : "room_edit_deadline_end"}.title`)}>
-          {t(`furpanel.room.messages.${true ? "room_edit_deadline" : "room_edit_deadline_end"}.description`,
-            { lockDate: formatter.dateTime(new Date(data?.editingRoomEndTime), { dateStyle: "medium" }) })}
+          title={isEditExpired 
+            ? t("furpanel.room.messages.room_edit_deadline_end.title")
+            : t("furpanel.room.messages.room_edit_deadline.title")}>
+          {isEditExpired
+            ? t(`furpanel.room.messages.room_edit_deadline_end.description`,
+              { lockDate: formatter.dateTime(new Date(data?.editingRoomEndTime), { dateStyle: "medium" }) })
+            : t(`furpanel.room.messages.room_edit_deadline.description`,
+              { lockDate: formatter.dateTime(new Date(data?.editingRoomEndTime), { dateStyle: "medium" }) })
+          }
         </NoticeBox>
       </>}
 
@@ -300,21 +344,23 @@ export default function RoomPage() {
       {/* Your room */}
       <div className="actions-panel rounded-m vertical-list gap-2mm">
         <span className="title small horizontal-list gap-2mm flex-vertical-center flex-wrap">
-          <Icon icon={ICONS.BEDROOM_PARENT}></Icon>
+          <Icon icon={"BEDROOM_PARENT"}></Icon>
           {t("furpanel.room.your_room")}
           <div className="spacer"></div>
           {data?.currentRoomInfo?.userIsOwner &&
-            <Button iconName={!showInNosecount ? ICONS.VISIBILITY : ICONS.VISIBILITY_OFF}
-              title={!showInNosecount ? t("furpanel.room.actions.show_in_nosecount") : t("furpanel.room.actions.hide_in_nosecount")}
+            <Button iconName={!showInNosecount ? "VISIBILITY" : "VISIBILITY_OFF"}
+              title={!showInNosecount
+                ? t("furpanel.room.actions.show_in_nosecount")
+                : t("furpanel.room.actions.hide_in_nosecount")}
               debounce={500} onClick={() => setVisibility(!showInNosecount)}
               disabled={!data?.allowedModifications}>
             </Button>}
           {data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
-            <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} onClick={() => setBuyModalOpen(true)}>
+            <Button iconName={"SHOPPING_CART"} busy={actionLoading} onClick={() => setBuyModalOpen(true)}>
               {t("furpanel.room.actions.upgrade_room")}
             </Button>
           }
-          <Button iconName={ICONS.REFRESH} title={t("common.reload")} onClick={() => setData(undefined)} debounce={3000}></Button>
+          <Button iconName={"REFRESH"} title={t("common.reload")} onClick={() => setData(undefined)} debounce={3000}></Button>
         </span>
 
         {/* Loading */}
@@ -324,29 +370,29 @@ export default function RoomPage() {
         {data && !data.currentRoomInfo && <>
           <div className="room-invite actions-panel rounded-m">
             <span className="title small horizontal-list gap-2mm flex-vertical-center">
-              <Icon icon={ICONS.BEDROOM_PARENT}></Icon>
+              <Icon icon={"BEDROOM_PARENT"}></Icon>
               {data.canCreateRoom ? t("furpanel.room.can_create") : t("furpanel.room.no_room")}
             </span>
             <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap" style={{ marginTop: "1em" }}>
               {data.canCreateRoom == true
                 ? <>
-                  <Button iconName={ICONS.ADD_CIRCLE} busy={actionLoading} onClick={() => createRoom()}>{t("furpanel.room.actions.create_a_room")}</Button>
+                  <Button iconName={"ADD_CIRCLE"} busy={actionLoading} onClick={() => createRoom()}>{t("furpanel.room.actions.create_a_room")}</Button>
                   <span className="title small">{t("furpanel.room.or")}</span>
-                  <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={() => setBuyModalOpen(true)}>{t("furpanel.room.actions.upgrade_room")}</Button>
+                  <Button iconName={"SHOPPING_CART"} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={() => setBuyModalOpen(true)}>{t("furpanel.room.actions.upgrade_room")}</Button>
                   {data.exchangeSupported && <>
                   <span className="title small">{t("furpanel.room.or")}</span>
-                  <Button className="danger" iconName={ICONS.SEND} onClick={() => promptRoomExchange()}
+                  <Button className="danger" iconName={"SEND"} onClick={() => promptRoomExchange()}
                     disabled={!!data && !data.canExchange}>{t("furpanel.room.actions.exchange")}</Button>
                     </>}
                 </>
                 : data.hasOrder
                   ? <>
-                    <Button iconName={ICONS.SHOPPING_CART} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={() => setBuyModalOpen(true)}>{t("furpanel.room.actions.buy_a_room")}</Button>
+                    <Button iconName={"SHOPPING_CART"} busy={actionLoading} disabled={!data.buyOrUpgradeRoomSupported || !data.canBuyOrUpgradeRoom || !data.hasOrder} onClick={() => setBuyModalOpen(true)}>{t("furpanel.room.actions.buy_a_room")}</Button>
                     <span className="title small">{t("furpanel.room.or_get_invited")}</span>
                   </>
                   : <>
                     <span>{t("furpanel.room.no_order")}</span>
-                    <ToolLink href={"/booking"} iconName={ICONS.LOCAL_ACTIVITY} className="active">{t("furpanel.booking.title")}</ToolLink>
+                    <ToolLink href={"/booking"} iconName={"LOCAL_ACTIVITY"} className="active">{t("furpanel.booking.title")}</ToolLink>
                   </>
               }
             </div>
@@ -357,19 +403,19 @@ export default function RoomPage() {
         {data?.currentRoomInfo && <>
           <div className="room-invite vertical-list gap-4mm rounded-s">
             <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
-              <Icon icon={ICONS.BED}></Icon>
+              <Icon icon={"BED"}></Icon>
               <span className="limit-view">{data?.currentRoomInfo.roomName}</span>
               <div className="spacer" style={{ flexGrow: "300" }}></div>
               {
                 data.currentRoomInfo.userIsOwner && <>
                   <div className="actions-container horizontal-list flex-wrap gap-4mm flex-space-between" style={{ flexGrow: "1" }}>
-                    <Button iconName={ICONS.EDIT_SQUARE}
+                    <Button iconName={"EDIT_SQUARE"}
                       onClick={() => promptRoomRename()}
                       disabled={!data.allowedModifications}>
                         {t("furpanel.room.actions.rename")}
                     </Button>
                     <Button className="danger"
-                      iconName={ICONS.DELETE}
+                      iconName={"DELETE"}
                       onClick={() => promptRoomDelete()}
                       disabled={!data.allowedModifications}>
                         {t("furpanel.room.actions.delete")}
@@ -400,7 +446,7 @@ export default function RoomPage() {
                       else
                         promptCancelInvite(guest)
                     }}>
-                      <Icon className="medium" icon={ICONS.CLOSE}></Icon>
+                      <Icon className="medium" icon={"CLOSE"}></Icon>
                     </a>
                   </>}
               </div>)}
@@ -422,31 +468,31 @@ export default function RoomPage() {
               <div className="horizontal-list flex-space-between gap-4mm" style={{ flexGrow: "1" }}>
                 {data.currentRoomInfo.userIsOwner ? <>
                   {/* Owner actions */}
-                  <Button iconName={ICONS.PERSON_ADD} disabled={!data.currentRoomInfo.canInvite}
+                  <Button iconName={"PERSON_ADD"} disabled={!data.currentRoomInfo.canInvite}
                     onClick={() => promptRoomInvite()}>{t("furpanel.room.actions.invite")}</Button>
                   {data.currentRoomInfo.confirmationSupported &&
                     !data.currentRoomInfo.confirmed &&
-                    <Button iconName={ICONS.CHECK_CIRCLE}
+                    <Button iconName={"CHECK_CIRCLE"}
                       disabled={!data.currentRoomInfo.canConfirm}
-                      onClick={() => promptRoomInvite()}>
+                      onClick={() => promptRoomConfirm()}>
                         {t("furpanel.room.actions.confirm_room")}
                     </Button>}
                   {data.currentRoomInfo.unconfirmationSupported &&
                     data.currentRoomInfo.confirmed &&
-                    <Button iconName={ICONS.CANCEL}
+                    <Button iconName={"CANCEL"}
                       disabled={!data.currentRoomInfo.canUnconfirm}
-                      onClick={() => promptRoomInvite()}>
+                      onClick={() => promptRoomUnconfirm()}>
                         {t("furpanel.room.actions.unconfirm_room")}
                     </Button>}
                   {data.exchangeSupported && <Button className="danger"
-                    iconName={ICONS.SEND}
+                    iconName={"SEND"}
                     onClick={() => promptRoomExchange()}
                     disabled={!!data && !data.canExchange}>
                       {t("furpanel.room.actions.exchange")}
                   </Button>}
                 </> : <>
                   {/* Guest actions */}
-                  <Button iconName={ICONS.DOOR_OPEN}
+                  <Button iconName={"DOOR_OPEN"}
                     onClick={() => promptRoomLeave()}>
                       {t("furpanel.room.actions.leave")}
                   </Button>
@@ -462,7 +508,7 @@ export default function RoomPage() {
       {data?.invitations && data.invitations.length > 0 && <>
         <div className="actions-panel rounded-m vertical-list gap-2mm">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
-            <Icon icon={ICONS.MAIL}></Icon>
+            <Icon icon={"MAIL"}></Icon>
             {t("furpanel.room.invite.header", { amount: 1 })}
           </span>
           {
@@ -474,7 +520,7 @@ export default function RoomPage() {
     </div>
 
     {/* Rename modal */}
-    <Modal title={t("furpanel.room.actions.rename")} icon={ICONS.EDIT_SQUARE} open={renameModalOpen} onClose={() => setRenameModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("furpanel.room.actions.rename")} icon={"EDIT_SQUARE"} open={renameModalOpen} onClose={() => setRenameModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomRenameFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
           onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess>
@@ -482,16 +528,16 @@ export default function RoomPage() {
           <FpInput inputType="text" fieldName="name" required busy={modalLoading} label={t("furpanel.room.input.rename_new_name.label")}
             placeholder={t("furpanel.room.input.rename_new_name.placeholder")} minLength={2} maxLength={254}></FpInput>
           <div className="horizontal-list gap-4mm">
-            <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setRenameModalOpen(false)}>{t("common.cancel")}</Button>
+            <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setRenameModalOpen(false)}>{t("common.cancel")}</Button>
             <div className="spacer"></div>
-            <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{t("common.confirm")}</Button>
+            <Button type="submit" className="success" iconName={"CHECK"} busy={modalLoading}>{t("common.confirm")}</Button>
           </div>
         </DataForm>
       </>}
     </Modal>
 
     {/* Invite modal */}
-    <Modal title={t("furpanel.room.actions.invite")} icon={ICONS.PERSON_ADD} open={inviteModalOpen} onClose={() => setInviteModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("furpanel.room.actions.invite")} icon={"PERSON_ADD"} open={inviteModalOpen} onClose={() => setInviteModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomInviteFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={commonSuccess}
           onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!inviteModalOpen}>
@@ -507,9 +553,9 @@ export default function RoomPage() {
             </>
           }
           <div className="horizontal-list gap-4mm">
-            <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setInviteModalOpen(false)}>{t("common.cancel")}</Button>
+            <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setInviteModalOpen(false)}>{t("common.cancel")}</Button>
             <div className="spacer"></div>
-            <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{t("common.confirm")}</Button>
+            <Button type="submit" className="success" iconName={"CHECK"} busy={modalLoading}>{t("common.confirm")}</Button>
           </div>
         </DataForm>
       </>}
@@ -529,9 +575,9 @@ export default function RoomPage() {
           })}
         </span>
         <div className="horizontal-list gap-4mm">
-          <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setInviteAcceptModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setInviteAcceptModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button className="success" iconName={ICONS.CHECK} busy={modalLoading} onClick={() => acceptInvite(currentInvitation.invitation.guestId)}>{t("common.confirm")}</Button>
+          <Button className="success" iconName={"CHECK"} busy={modalLoading} onClick={() => acceptInvite(currentInvitation.invitation.guestId)}>{t("common.confirm")}</Button>
         </div>
       </>}
     </Modal>
@@ -550,15 +596,15 @@ export default function RoomPage() {
           })}
         </span>
         <div className="horizontal-list gap-4mm">
-          <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setInviteRefuseModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setInviteRefuseModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button iconName={ICONS.DO_NOT_DISTURB_ON} busy={modalLoading} onClick={() => refuseInvite(currentInvitation.invitation.guestId)}>{t("furpanel.room.actions.refuse")}</Button>
+          <Button iconName={"DO_NOT_DISTURB_ON"} busy={modalLoading} onClick={() => refuseInvite(currentInvitation.invitation.guestId)}>{t("furpanel.room.actions.refuse")}</Button>
         </div>
       </>}
     </Modal>
 
     {/* Delete modal */}
-    <Modal title={t("furpanel.room.messages.confirm_delete.title")} icon={ICONS.DELETE} open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} busy={modalLoading}>
+    <Modal title={t("furpanel.room.messages.confirm_delete.title")} icon={"DELETE"} open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <span className="descriptive small">{t.rich("furpanel.room.messages.confirm_delete.description", {
           roomName: data.currentRoomInfo.roomName,
@@ -566,9 +612,9 @@ export default function RoomPage() {
         })}
         </span>
         <div className="horizontal-list gap-4mm">
-          <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setDeleteModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setDeleteModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button className="success" iconName={ICONS.CHECK} busy={modalLoading} onClick={() => deleteRoom(data.currentRoomInfo.roomId)}>{t("furpanel.room.actions.delete")}</Button>
+          <Button className="success" iconName={"CHECK"} busy={modalLoading} onClick={() => deleteRoom(data.currentRoomInfo.roomId)}>{t("furpanel.room.actions.delete")}</Button>
         </div>
       </>}
     </Modal>
@@ -582,9 +628,9 @@ export default function RoomPage() {
         })}
         </span>
         <div className="horizontal-list gap-4mm">
-          <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setInviteCancelModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setInviteCancelModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={() => cancelInvite(selectedGuest.roomGuest.guestId)}>{t("furpanel.room.actions.revoke_invite")}</Button>
+          <Button className="success" iconName={"CLOSE"} busy={modalLoading} onClick={() => cancelInvite(selectedGuest.roomGuest.guestId)}>{t("furpanel.room.actions.revoke_invite")}</Button>
         </div>
       </>}
     </Modal>
@@ -598,9 +644,9 @@ export default function RoomPage() {
         })}
         </span>
         <div className="horizontal-list gap-4mm">
-          <Button className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setKickModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setKickModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button className="success" iconName={ICONS.CLOSE} busy={modalLoading} onClick={() => kickGuest(selectedGuest.roomGuest.guestId)}>{t("furpanel.room.actions.kick")}</Button>
+          <Button className="success" iconName={"CLOSE"} busy={modalLoading} onClick={() => kickGuest(selectedGuest.roomGuest.guestId)}>{t("furpanel.room.actions.kick")}</Button>
         </div>
       </>}
     </Modal>
@@ -614,20 +660,26 @@ export default function RoomPage() {
         })}
         </span>
         <div className="horizontal-list gap-4mm">
-          <Button iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setLeaveModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button iconName={"CANCEL"} busy={modalLoading} onClick={() => setLeaveModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button className="danger" iconName={ICONS.CHECK} busy={modalLoading} onClick={() => leaveRoom()}>{t("furpanel.room.actions.leave")}</Button>
+          <Button className="danger" iconName={"CHECK"} busy={modalLoading} onClick={() => leaveRoom()}>{t("furpanel.room.actions.leave")}</Button>
         </div>
       </>}
     </Modal>
 
     {/* Room buy modal */}
-    <Modal icon={ICONS.BEDROOM_PARENT} open={buyModalOpen} title={data?.currentRoomInfo ? t("furpanel.room.actions.upgrade_room") : t("furpanel.room.actions.buy_a_room")} onClose={() => setBuyModalOpen(false)} busy={modalLoading}>
-      <RoomOrderFlow isOpen={buyModalOpen} modalLoading={modalLoading} setModalLoading={setModalLoading} close={() => setBuyModalOpen(false)}></RoomOrderFlow>
+    <Modal icon={"BEDROOM_PARENT"}
+      open={buyModalOpen}
+      title={data?.currentRoomInfo ? t("furpanel.room.actions.upgrade_room") : t("furpanel.room.actions.buy_a_room")}
+      onClose={() => setBuyModalOpen(false)} busy={modalLoading}>
+        <RoomOrderFlow isOpen={buyModalOpen}
+          modalLoading={modalLoading}
+          setModalLoading={setModalLoading}
+          close={() => setBuyModalOpen(false)}/>
     </Modal>
 
     {/* Room exchange modal */}
-    <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("furpanel.room.actions.exchange_room")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+    <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.room.actions.exchange_room")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={roomExchangeSuccess}
         onFail={commonFail} hideSave className="vertical-list gap-2mm" resetOnSuccess shouldReset={!exchangeModalOpen}>
         <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
@@ -635,11 +687,71 @@ export default function RoomPage() {
           label={t("furpanel.room.input.exchange_user.label")} placeholder={t("furpanel.room.input.exchange_user.placeholder")} style={{ maxWidth: "500px" }}
           required />
         <div className="horizontal-list gap-4mm">
-          <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+          <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{t("common.confirm")}</Button>
+          <Button type="submit" className="success" iconName={"CHECK"} busy={modalLoading}>{t("common.confirm")}</Button>
         </div>
       </DataForm>
+    </Modal>
+
+    {/* Room confirm modal */}
+    <Modal icon={"CHECK_CIRCLE"}
+      open={confirmModalOpen}
+      title={t("furpanel.room.actions.confirm_room")}
+      onClose={() => setConfirmModalOpen(false)}
+      busy={modalLoading}>
+        {data?.currentRoomInfo && <>
+          <span className="descriptive small">
+            {t.rich("furpanel.room.messages.confirm_confirmation.description", {
+              roomName: data.currentRoomInfo.roomName,
+              room: (chunks) => <b className="highlight">{chunks}</b>
+            })}
+          </span>
+          <div className="horizontal-list gap-4mm">
+            <Button iconName={"CANCEL"}
+              busy={modalLoading}
+              onClick={() => setConfirmModalOpen(false)}>
+              {t("common.cancel")}
+            </Button>
+            <div className="spacer"/>
+            <Button className="success"
+              iconName={"CHECK"}
+              busy={modalLoading}
+              onClick={() => confirmRoom()}>
+                {t("furpanel.room.actions.confirm_room")}
+            </Button>
+          </div>
+        </>}
+    </Modal>
+
+    {/* Room unconfirm modal */}
+    <Modal icon={"CHECK_CIRCLE"}
+      open={unconfirmModalOpen}
+      title={t("furpanel.room.actions.confirm_room")}
+      onClose={() => setUnconfirmModalOpen(false)}
+      busy={modalLoading}>
+        {data?.currentRoomInfo && <>
+          <span className="descriptive small">
+            {t.rich("furpanel.room.messages.confirm_unconfirmation.description", {
+              roomName: data.currentRoomInfo.roomName,
+              room: (chunks) => <b className="highlight">{chunks}</b>
+            })}
+          </span>
+          <div className="horizontal-list gap-4mm">
+            <Button iconName={"CANCEL"}
+              busy={modalLoading}
+              onClick={() => setUnconfirmModalOpen(false)}>
+              {t("common.cancel")}
+            </Button>
+            <div className="spacer"/>
+            <Button className="danger"
+              iconName={"CHECK"}
+              busy={modalLoading}
+              onClick={() => unconfirmRoom()}>
+                {t("furpanel.room.actions.unconfirm_room")}
+            </Button>
+          </div>
+        </>}
     </Modal>
   </>;
 }

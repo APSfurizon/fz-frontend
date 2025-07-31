@@ -1,6 +1,6 @@
 "use client";
 
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import Button from "@/components/input/button";
 import UserPicture from "@/components/userPicture";
 import {
@@ -109,7 +109,7 @@ export default function AdvancedBadgePrint() {
 
     return <div className="page">
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon={ICONS.ARROW_BACK} /></Link>
+            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon={"ARROW_BACK"} /></Link>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</span>
             </div>
@@ -124,7 +124,7 @@ export default function AdvancedBadgePrint() {
                 searchAction={new SearchRegularBadgesApiAction()}
                 getRowId={(row) => "" + row.user.userId}
                 getRowsFromResult={(result) => result.userBadges}
-                icon={ICONS.PERSON_BOOK} />
+                icon={"PERSON_BOOK"} />
 
             {/* Fursuit badges */}
             <BadgeTable<FursuitBadge, SearchFursuitBadgesResponse>
@@ -135,10 +135,10 @@ export default function AdvancedBadgePrint() {
                 searchAction={new SearchFursuitBadgesApiAction()}
                 getRowId={(row) => "" + row.fursuit.id}
                 getRowsFromResult={(result) => result.fursuitBadges}
-                icon={ICONS.PETS} />
+                icon={"PETS"} />
             <div className="horizontal-list">
                 <div className="spacer"></div>
-                <Button iconName={ICONS.PRINT} disabled={!canPrint} busy={printLoading} onClick={runPrint}>
+                <Button iconName={"PRINT"} disabled={!canPrint} busy={printLoading} onClick={runPrint}>
                     {t("furpanel.admin.events.badges.print.advanced_mode.print")}
                 </Button>
             </div>

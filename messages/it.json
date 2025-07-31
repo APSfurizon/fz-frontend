@@ -213,7 +213,6 @@
     "badge": {
       "title": "Badge",
       "your_badges": "I tuoi badge",
-      "deadline": "Data limite: {badgeDeadline}",
       "your_fursuits": "{amount, plural, =1 {La tua} other {Le tue}} fursuit",
       "name": "Nome",
       "locale": "Paese",
@@ -273,6 +272,14 @@
         "fursuit_badge": {
           "title": "Vuoi portare la tua suit a furizon?",
           "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, cosicchè Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
+        },
+        "badge_edit_deadline_end": {
+          "title": "Modifiche badge bloccate",
+          "description": "Dal {lockDate}, le modifiche badge sono state bloccate."
+        },
+        "badge_edit_deadline": {
+          "title": "Deadline modifica badge",
+          "description": "Le modifiche al badge verranno bloccate il giorno {lockDate}."
         }
       },
       "errors": {
@@ -325,6 +332,12 @@
         "exchange_invite_sent": {
           "title": "Invito inviato",
           "description": "Verrete contattati via email per confermare lo scambio."
+        },
+        "confirm_confirmation": {
+          "description": "Vuoi confermare <room>{roomName}</room>?"
+        },
+        "confirm_unconfirmation": {
+          "description": "Vuoi revocare la conferma di <room>{roomName}</room>?"
         }
       },
       "errors": {
@@ -370,7 +383,7 @@
         "delete": "Elimina",
         "kick": "Rimuovi ospite",
         "revoke_invite": "Revoca invito",
-        "confirm_room": "Conferma",
+        "confirm_room": "Conferma stanza",
         "unconfirm_room": "Revoca conferma",
         "exchange": "Scambia",
         "exchange_room": "Scambia stanza",
@@ -964,14 +977,17 @@
       "sections": {
         "fursuits": "Incontra i fursuiter",
         "sponsors": "Un grazie di ❤️ ai nostri sponsor",
-        "nosecount": "Chi verrà a Furizon? Vieni a scoprirlo nel <b>nosecount!</b>"
+        "nosecount": "Scopri gli ospiti nel <b>nosecount!</b>"
       },
       "links": {
         "fursuits": "Fursuit",
         "sponsors": "Sponsor"
       },
       "daily_furs": "Giornalieri",
-      "total_count": "{count, plural, =1 {UN ospite} other {# ospiti}}"
+      "total_count": "{count, plural, =1 {UN ospite} other {# ospiti}}",
+      "input": {
+        "select_event": "Seleziona evento"
+      }
     }
   }
 }

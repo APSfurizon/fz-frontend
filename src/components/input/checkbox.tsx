@@ -1,4 +1,4 @@
-import Icon, { ICONS } from "../icon";
+import Icon from "../icon";
 import { useState, MouseEvent, CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
 import "@/styles/components/checkbox.css";
 import { areEquals } from "@/lib/utils";
@@ -56,8 +56,8 @@ export default function Checkbox({
             disabled={isDisabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
                 {isBusy
-                    ? <Icon className="medium loading-animation" icon={ICONS.PROGRESS_ACTIVITY}></Icon>
-                    : <Icon className="medium" icon={checked ? ICONS.CHECK : ICONS.CLOSE}></Icon>
+                    ? <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
+                    : <Icon className="medium" icon={checked ? "CHECK" : "CLOSE"}></Icon>
                 }
 
             </div>

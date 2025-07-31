@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { Link, routing, useRouter, usePathname } from '@/i18n/routing';
 import { MouseEvent, useState } from 'react';
-import Icon, { ICONS } from '@/components/icon';
+import Icon from '@/components/icon';
 import UserPicture from '@/components/userPicture';
 import { runRequest } from '@/lib/api/global';
 import { LogoutApiAction } from '@/lib/api/authentication/login';
@@ -42,14 +42,14 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                 onClick={() => setOpen(!isOpen)} onBlur={() => { if (!isHover) setOpen(false) }}
                 onPointerOver={() => setHover(true)} onPointerLeave={() => setHover(false)}>
                 {loading && <LoadingPanel />}
-                {!userData && !loading && <Button onClick={loginClick} iconName={ICONS.KEY}>
+                {!userData && !loading && <Button onClick={loginClick} iconName={"KEY"}>
                     {t('header.login')}
                 </Button>}
                 {userData && <>
                     <UserPicture userData={userData}></UserPicture>
                     <span className="title average semibold nickname">{userData.fursonaName}</span>
                 </>}
-                <Icon style={{ fontSize: "24px" }} icon={(isOpen) ? ICONS.ARROW_DROP_UP : ICONS.ARROW_DROP_DOWN}></Icon>
+                <Icon style={{ fontSize: "24px" }} icon={(isOpen) ? "ARROW_DROP_UP" : "ARROW_DROP_DOWN"}></Icon>
             </div>
             <div className={`vertical-list dropdown-container rounded-m ${(isOpen) && 'open'}`} onClick={optionClick}
                 onPointerOver={() => setHover(true)} onPointerLeave={() => setHover(false)}>
@@ -67,7 +67,7 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                     key={index} locale={lng}>
                     {mapLanguageToFlag(lng)}&nbsp;
                     {t(`header.dropdown.language.${lng}`)}
-                    {lng === locale && <Icon className='medium' icon={ICONS.CHECK}></Icon>}
+                    {lng === locale && <Icon className='medium' icon={"CHECK"}></Icon>}
                 </Link>)}
             </div>
         </div>

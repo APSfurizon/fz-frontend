@@ -1,6 +1,6 @@
 "use client"
 import AutoInput from "@/components/input/autoInput";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import ModalError from "@/components/modalError";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
@@ -74,7 +74,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
     return <>
         <div className="page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <Link href={getParentDirectory(path, userId ? 2 : 1)}><Icon icon={ICONS.ARROW_BACK} /></Link>
+                <Link href={getParentDirectory(path, userId ? 2 : 1)}><Icon icon={"ARROW_BACK"} /></Link>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.users.accounts.view.title")}</span>
                 </div>

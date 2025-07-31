@@ -1,5 +1,4 @@
 import { useUser } from "@/components/context/userProvider";
-import { ICONS } from "@/components/icon";
 import AutoInput from "@/components/input/autoInput";
 import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
@@ -8,8 +7,10 @@ import FpInput from "@/components/input/fpInput";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { Permissions } from "@/lib/api/permission";
-import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, REG_ITALIAN_FISCAL_CODE, shirtSizeAnswers, UpdatePersonalInfoFormAction,
-    UserPersonalInfo } from "@/lib/api/user";
+import {
+    AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, REG_ITALIAN_FISCAL_CODE, shirtSizeAnswers, UpdatePersonalInfoFormAction,
+    UserPersonalInfo
+} from "@/lib/api/user";
 import { firstOrUndefined, stripProperties } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
@@ -24,7 +25,7 @@ export default function UserViewPersonalInfo({
 }>) {
     const [inEdit, setInEdit] = useState(false);
     const t = useTranslations();
-    const {userDisplay} = useUser();
+    const { userDisplay } = useUser();
     // Personal info logic
     const formRef = useRef<HTMLFormElement>(null);
     const [personalInfoLoading, setPersonalInfoLoading] = useState(false);
@@ -34,13 +35,13 @@ export default function UserViewPersonalInfo({
     const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
 
     // Handle admin changing personal user info
-    const restPathParams = useMemo(()=>{
-            if (userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false) {
-                return [String(personalInformation.userId)];
-            } else {
-                return undefined;
-            }
-        }, [userDisplay])
+    const restPathParams = useMemo(() => {
+        if (userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false) {
+            return [String(personalInformation.userId)];
+        } else {
+            return undefined;
+        }
+    }, [userDisplay])
 
     // Edit logic
     return <>
@@ -54,7 +55,7 @@ export default function UserViewPersonalInfo({
             initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
             restPathParams={restPathParams}
             additionalButtons={<>
-                <Button iconName={inEdit ? ICONS.CANCEL : ICONS.EDIT}
+                <Button iconName={inEdit ? "CANCEL" : "EDIT"}
                     type="button"
                     busy={personalInfoLoading}
                     onClick={() => setInEdit(prev => {
@@ -234,7 +235,7 @@ export default function UserViewPersonalInfo({
                     label={t("authentication.register.form.telegram_username.label")}
                     placeholder={t("authentication.register.form.telegram_username.placeholder")}
                     helpText={t("authentication.register.form.telegram_username.help")}
-                    initialValue={personalInformation?.telegramUsername} readOnly={!inEdit}/>
+                    initialValue={personalInformation?.telegramUsername} readOnly={!inEdit} />
                 <FpSelect fieldName="shirtSize" required
                     items={shirtSizeAnswers}
                     itemExtractor={inputEntityCodeExtractor}

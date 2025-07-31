@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 
 export default function LoadingPanel({ showText = true, className, children }: Readonly<{
     showText?: boolean,
@@ -9,7 +9,7 @@ export default function LoadingPanel({ showText = true, className, children }: R
     const tcommon = useTranslations("common");
 
     return <div aria-busy="true" className={`horizontal-list gap-2mm flex-vertical-center ${className ?? ""}`}>
-        <Icon className="loading-animation" icon={ICONS.PROGRESS_ACTIVITY}></Icon>
+        <Icon className="loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
         {children ?? <span className="">{showText && tcommon("loading")}</span>}
     </div>
 }

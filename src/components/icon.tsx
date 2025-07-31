@@ -106,7 +106,7 @@ export const ICONS = {
 export type MaterialIcon = keyof typeof ICONS;
 
 export default function Icon ({icon, style, className}: Readonly<{
-    icon: string | MaterialIcon, style?: CSSProperties, className?: string;
+    icon: MaterialIcon, style?: CSSProperties, className?: string;
 }>) {
     return (<i className={`mdi ${className ?? ""}`} style={{...style}}>{icon}</i>)
 }

@@ -1,7 +1,7 @@
 "use client"
 import Button from "@/components/input/button";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ModalError from "@/components/modalError";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
@@ -71,7 +71,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                         <div className="vertical-list flex-vertical-center">
                             <span className="title large">
                                 {data?.shouldUpdateInfo &&
-                                    <Icon style={{ marginRight: ".2em" }} icon={ICONS.LOCK} />}
+                                    <Icon style={{ marginRight: ".2em" }} icon={"LOCK"} />}
                                 {t("furpanel.booking.book_now")}
                             </span>
                             {data?.shouldUpdateInfo && <>

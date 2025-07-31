@@ -211,6 +211,22 @@ export class RoomSetShowInNosecountApiAction extends ApiAction<boolean, ApiError
     urlAction = "room/show-in-nosecount";
 }
 
+export interface RoomIdRequest {
+    roomId: number
+}
+
+export class RoomConfirmAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "room/confirm";
+}
+
+export class RoomUnconfirmAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "room/unconfirm";
+}
+
 export const EMPTY_ROOM_INFO: RoomInfoResponse = {
     hasOrder: false,
     canCreateRoom: false,

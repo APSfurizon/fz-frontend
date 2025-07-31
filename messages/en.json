@@ -214,7 +214,6 @@
       "title": "Badge",
       "your_badges": "Your badges",
       "your_fursuits": "Your {amount, plural, =1 {fursuit} other {fursuits}}",
-      "deadline": "Edit deadline: {badgeDeadline}",
       "name": "Name",
       "locale": "Locale",
       "badge_limits": "500x500px max",
@@ -273,6 +272,14 @@
         "fursuit_badge": {
           "title": "Wanna bring your suit to Furizon?",
           "description": "Be sure to check <b>Bring to {eventName}</b>, so that Furizon can organize the fursuit lounge. As of now, you are capable of bringing a total of {maxFursuits, plural, =1 {1 fursuit} other {# fursuits}}. To bring more than that amount, you can buy extra badges by clicking <b>Edit reservation</b> in the Booking tab."
+        },
+        "badge_edit_deadline_end": {
+          "title": "Badge editing locked",
+          "description": "Since {lockDate}, badge editing has been locked."
+        },
+        "badge_edit_deadline": {
+          "title": "Badge editing deadline",
+          "description": "Badge editing will be locked in the following date: {lockDate}."
         }
       },
       "errors": {
@@ -325,6 +332,12 @@
         "exchange_invite_sent": {
           "title": "Invite sent",
           "description": "You will both be contacted via email to confirm the exchange."
+        },
+        "confirm_confirmation": {
+          "description": "Do you want to confirm <room>{roomName}</room>?"
+        },
+        "confirm_unconfirmation": {
+          "description": "Do you want to unconfirm <room>{roomName}</room>?"
         }
       },
       "errors": {
@@ -370,7 +383,7 @@
         "delete": "Delete",
         "kick": "Kick user",
         "revoke_invite": "Revoke invite",
-        "confirm_room": "Confirm",
+        "confirm_room": "Confirm room",
         "unconfirm_room": "Unconfirm",
         "exchange": "Exchange",
         "exchange_room": "Exchange room",
@@ -972,7 +985,10 @@
         "sponsors": "Sponsors"
       },
       "daily_furs": "Attending daily",
-      "total_count": "{count, plural, =1 {ONE attendee} other {# attendees}}"
+      "total_count": "{count, plural, =1 {ONE attendee} other {# attendees}}",
+      "input": {
+        "select_event": "Select event"
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 "use client"
 import { useLocale, useTranslations } from 'next-intl';
 import Image from "next/image";
-import Icon, { ICONS } from './icon';
+import Icon from './icon';
 import { useRouter } from 'next/navigation';
 import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
@@ -51,25 +51,25 @@ export default function Header() {
             </div>
             <span>
                 <a href="#" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
-                    <Icon icon={hamburgerOpen ? ICONS.CLOSE : ICONS.MENU}></Icon>
+                    <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"}></Icon>
                 </a>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <Link href="/home" className="header-link medium">
-                    <Icon style={{ fontSize: "24px" }} icon={ICONS.HOME}></Icon>
+                    <Icon style={{ fontSize: "24px" }} icon={"HOME"}></Icon>
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
                 <Link href={`/nosecount`} className="header-link medium">
-                    <Icon style={{ fontSize: "24px" }} icon={ICONS.GROUPS}></Icon>
+                    <Icon style={{ fontSize: "24px" }} icon={"GROUPS"}></Icon>
                     <span className="title semibold">{t('header.nose_count')}</span>
                 </Link>
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName={ICONS.INFO}></Icon>
+                    <Icon style={{fontSize: "24px"}} iconName={"INFO"}></Icon>
                     <span className="title semibold">{t('header.information')}</span>
                 </a> */}
                 <div className="spacer"></div>
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName={ICONS.BOOKMARK_STAR}></Icon>
+                    <Icon style={{fontSize: "24px"}} iconName={"BOOKMARK_STAR"}></Icon>
                     <span className="title semibold">{t('header.archive')}</span>
                 </a> */}
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>

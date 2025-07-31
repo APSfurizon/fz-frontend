@@ -8,13 +8,12 @@ import { useLocale, useTranslations } from "next-intl";
 import { translate } from "@/lib/translations";
 import FpTable from "@/components/table/fpTable";
 import Button from "@/components/input/button";
-import { ICONS } from "@/components/icon";
 import RemoveGuestModal from "./removeGuestModal";
 import AddGuestModal from "./addGuestModal";
 
 const roomInfo = (obj: CellContext<RoomInfoResponse, unknown>) => obj.row.original.currentRoomInfo;
 
-export default function UserViewRooms ({
+export default function UserViewRooms({
     userData,
     reloadData
 }: Readonly<{
@@ -24,20 +23,20 @@ export default function UserViewRooms ({
     const t = useTranslations();
     const locale = useLocale();
 
-    const events = useMemo(()=> {
+    const events = useMemo(() => {
         const eventRecord: Record<number, ConventionEvent> = {};
-        userData.orders.map(o=>o.orderEvent).forEach(event => eventRecord[event.id] = event);
+        userData.orders.map(o => o.orderEvent).forEach(event => eventRecord[event.id] = event);
         return eventRecord
     }, [userData]);
 
-    const roomRows = useMemo(()=> {
+    const roomRows = useMemo(() => {
         const rooms = [...(userData.otherRooms || [])];
-        if (userData.currentRoomdata) rooms.push (userData.currentRoomdata);
+        if (userData.currentRoomdata) rooms.push(userData.currentRoomdata);
         return rooms.filter(rd => !!rd && rd.currentRoomInfo?.roomData.roomCapacity > 0)
-        }, [userData.otherRooms, userData.currentRoomdata]);
+    }, [userData.otherRooms, userData.currentRoomdata]);
 
-    const getDetails = (row: Row<RoomInfoResponse>) => <UserViewRoomDetails data={row.original}/>
-    
+    const getDetails = (row: Row<RoomInfoResponse>) => <UserViewRoomDetails data={row.original} />
+
     const eventSort = (rowA: Row<RoomInfoResponse>, rowB: Row<RoomInfoResponse>): number => {
         const eventA = new Date(events[rowA.original.currentRoomInfo.eventId].dateFrom);
         const eventB = new Date(events[rowB.original.currentRoomInfo.eventId].dateFrom);
@@ -59,10 +58,10 @@ export default function UserViewRooms ({
     const [roomColumns] = useState([
         roomColHelper.accessor(itm => translate(
             events[itm.currentRoomInfo.eventId].eventNames, locale), {
-                id: "eventName",
-                header: t("furpanel.admin.users.accounts.view.rooms_table.event_name"),
-                sortingFn: eventSort
-            }),
+            id: "eventName",
+            header: t("furpanel.admin.users.accounts.view.rooms_table.event_name"),
+            sortingFn: eventSort
+        }),
         roomColHelper.accessor("currentRoomInfo.roomName", {
             id: "roomName",
             header: t("furpanel.admin.users.accounts.view.rooms_table.room_name"),
@@ -76,20 +75,20 @@ export default function UserViewRooms ({
             header: "",
             maxSize: 90,
             enableResizing: false,
-            cell: props => 
+            cell: props =>
                 !events[props.row.original.currentRoomInfo.eventId].current
-                ? undefined
-                : <div className="horizontal-list gap-2mm">
-                    <Button iconName={ICONS.PERSON_ADD}
-                        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
-                        onClick={() => promptAddGuest(props.row.original)}
-                        disabled={roomInfo(props).guests.length >= roomInfo(props).roomData.roomCapacity}/>
-                    <Button iconName={ICONS.PERSON_REMOVE}
-                        className="danger"
-                        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
-                        onClick={() => promptRemGuest(props.row.original)}
-                        disabled={roomInfo(props).guests.length == 0}/>
-                </div>
+                    ? undefined
+                    : <div className="horizontal-list gap-2mm">
+                        <Button iconName={"PERSON_ADD"}
+                            title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
+                            onClick={() => promptAddGuest(props.row.original)}
+                            disabled={roomInfo(props).guests.length >= roomInfo(props).roomData.roomCapacity} />
+                        <Button iconName={"PERSON_REMOVE"}
+                            className="danger"
+                            title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
+                            onClick={() => promptRemGuest(props.row.original)}
+                            disabled={roomInfo(props).guests.length == 0} />
+                    </div>
         })
     ]);
 
@@ -124,10 +123,10 @@ export default function UserViewRooms ({
 
     return <>
         <FpTable<RoomInfoResponse> rows={roomRows} columns={roomColumns}
-            hasDetails={() => true} getDetails={getDetails} pinnedColumns={{right: ["actions"]}}/>
+            hasDetails={() => true} getDetails={getDetails} pinnedColumns={{ right: ["actions"] }} />
         <RemoveGuestModal roomInfo={currentRow} open={remGuestModalOpen} onClose={closeRemGuestModal}
-            reloadData={reloadData}/>
+            reloadData={reloadData} />
         <AddGuestModal roomInfo={currentRow} open={addGuestModalOpen} onClose={closeAddGuestModal}
-            reloadData={reloadData}/>
+            reloadData={reloadData} />
     </>
 } 

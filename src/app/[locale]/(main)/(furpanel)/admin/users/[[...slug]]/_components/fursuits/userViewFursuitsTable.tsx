@@ -1,4 +1,3 @@
-import { ICONS } from "@/components/icon";
 import Button from "@/components/input/button";
 import FpTable from "@/components/table/fpTable";
 import UserPicture from "@/components/userPicture";
@@ -21,7 +20,7 @@ export default function UserViewFursuitsTable({
     reloadData: () => void
 }>) {
     const t = useTranslations();
-    const {showModal} = useModalUpdate();
+    const { showModal } = useModalUpdate();
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [delModalOpen, setDelModalOpen] = useState(false);
@@ -59,23 +58,23 @@ export default function UserViewFursuitsTable({
         setDeleteLoading(true);
         runRequest(new DeleteFursuitApiAction(),
             [String(fursuit?.fursuit.id)])
-        .catch((err) => {
-            showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"/>);
-        }).finally(() => {
-            closeDeleteFursuit();
-            setDeleteLoading(false);
-            reloadData();
-        })
+            .catch((err) => {
+                showModal(
+                    t("common.error"),
+                    <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors" />);
+            }).finally(() => {
+                closeDeleteFursuit();
+                setDeleteLoading(false);
+                reloadData();
+            })
     }
 
     const fursuitColHelper = createColumnHelper<Fursuit>();
-    const fursuitColumns: ColumnDef<Fursuit, any>[] = useMemo(()=>[
+    const fursuitColumns: ColumnDef<Fursuit, any>[] = useMemo(() => [
         fursuitColHelper.display({
             id: "propic",
             header: t("furpanel.admin.users.accounts.view.fursuit_table.picture"),
-            cell: props => <UserPicture size={120} fursuitData={props.row.original.fursuit}/>
+            cell: props => <UserPicture size={120} fursuitData={props.row.original.fursuit} />
         }),
         fursuitColHelper.accessor('fursuit.name', {
             id: "fursuitName",
@@ -91,10 +90,10 @@ export default function UserViewFursuitsTable({
             enableResizing: false,
             maxSize: 90,
             cell: props => <div className="horizontal-list gap-2mm">
-                <Button iconName={ICONS.EDIT_SQUARE}
-                    onClick={()=>promptEditFursuit(props.row.original)}/>
-                <Button iconName={ICONS.DELETE}
-                    onClick={()=>promptDeleteFursuit(props.row.original)}/>
+                <Button iconName={"EDIT_SQUARE"}
+                    onClick={() => promptEditFursuit(props.row.original)} />
+                <Button iconName={"DELETE"}
+                    onClick={() => promptDeleteFursuit(props.row.original)} />
             </div>
         })
     ], [deleteLoading]);
@@ -103,23 +102,23 @@ export default function UserViewFursuitsTable({
         <FpTable<Fursuit> rows={userData?.badgeData.fursuits}
             columns={fursuitColumns}
             enableSearch
-            pinnedColumns={{right: ["actions"]}}
+            pinnedColumns={{ right: ["actions"] }}
             showAddButton
-            onAdd={promptAddFursuit}/>
+            onAdd={promptAddFursuit} />
         <AddFursuitModal fursuit={fursuit}
             open={addModalOpen}
             onClose={closeEditFursuit}
             reloadData={reloadData}
-            userId={userData.personalInfo.userId!}/>
+            userId={userData.personalInfo.userId!} />
         <Modal open={delModalOpen} onClose={closeDeleteFursuit}
             title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuit?.fursuit.name })} busy={deleteLoading}>
             <span>{t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: fursuit?.fursuit.name })}</span>
             <div className="horizontal-list gap-4mm">
-            <Button className="danger" iconName={ICONS.CANCEL} busy={deleteLoading} onClick={closeDeleteFursuit}>
-                {t("common.cancel")}</Button>
-            <div className="spacer"></div>
-            <Button className="success" iconName={ICONS.CHECK} busy={deleteLoading} onClick={deleteFursuit}>
-                {t("common.confirm")}</Button>
+                <Button className="danger" iconName={"CANCEL"} busy={deleteLoading} onClick={closeDeleteFursuit}>
+                    {t("common.cancel")}</Button>
+                <div className="spacer"></div>
+                <Button className="success" iconName={"CHECK"} busy={deleteLoading} onClick={deleteFursuit}>
+                    {t("common.confirm")}</Button>
             </div>
         </Modal>
     </>;

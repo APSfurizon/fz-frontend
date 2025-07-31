@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import Icon, { ICONS } from "./icon";
+import Icon from "./icon";
 import "@/styles/components/noticeBox.css";
 
 export enum NoticeTheme {
@@ -15,19 +15,19 @@ export default function NoticeBox({ title, theme, customIcon, children, headerSt
     let classStyle = null;
     switch (theme) {
         case NoticeTheme.FAQ:
-            icon = ICONS.HELP;
+            icon = "HELP";
             classStyle = "faq";
             break;
         case NoticeTheme.Success:
-            icon = ICONS.CHECK_CIRCLE;
+            icon = "CHECK_CIRCLE";
             className = "success";
             break;
         case NoticeTheme.Warning:
-            icon = ICONS.ERROR;
+            icon = "ERROR";
             className = "warning";
             break;
         case NoticeTheme.Error:
-            icon = ICONS.CANCEL;
+            icon = "CANCEL";
             className = "error";
             break;
     }

@@ -1,7 +1,6 @@
 'use client'
 import Checkbox from "@/components/input/checkbox";
 import Button from "@/components/input/button";
-import { ICONS } from "@/components/icon";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import FpInput from "@/components/input/fpInput";
@@ -36,8 +35,8 @@ export default function Home() {
       <div className="container">
         <Upload busy={false} label="Profile picture" requireCrop={true} cropAspectRatio="square"></Upload>
       </div>
-      <Button className="danger" onClick={() => setBusy(false)} iconName={ICONS.ADD_CIRCLE}>Busy off</Button>
-      <Button busy={isBusy} onClick={() => { setBusy(true); }} iconName={ICONS.EDIT}>Busy on</Button>
+      <Button className="danger" onClick={() => setBusy(false)} iconName={"ADD_CIRCLE"}>Busy off</Button>
+      <Button busy={isBusy} onClick={() => { setBusy(true); }} iconName={"EDIT"}>Busy on</Button>
       <Checkbox>Wofe</Checkbox>
       <Checkbox busy={isBusy}>Wofe</Checkbox>
       <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
@@ -67,7 +66,7 @@ export default function Home() {
       <Modal title="A title" open={isOpen} onClose={() => setOpen(false)}>
         <span>a modal</span>
       </Modal>
-      <Button onClick={() => { setOpen(true); }} iconName={ICONS.BED}>Modal</Button>
+      <Button onClick={() => { setOpen(true); }} iconName={"BED"}>Modal</Button>
       <FpSelect fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></FpSelect>
     </div>
   );

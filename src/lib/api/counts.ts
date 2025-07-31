@@ -1,7 +1,14 @@
+import { TranslatableString } from "../translations";
 import { FursuitDetails } from "./badge/fursuits";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { RoomData } from "./room";
 import { ExtraDays, SponsorType, UserData } from "./user";
+
+export enum CountViewMode {
+    NORMAL = "all",
+    FURSUIT = "fursuits",
+    SPONSOR = "sponsors"
+}
 
 export interface FursuitCountResponse extends ApiResponse {
     fursuits: FursuitDetails[]
@@ -46,9 +53,14 @@ export interface HotelData {
     roomTypes: NoseRoomHeader[]
 }
 
+export interface RoomlessFur {
+    user: UserData,
+    extraDays: ExtraDays
+}
+
 export interface NoseCountResponse extends ApiResponse {
     hotels: HotelData[],
-    ticketOnlyFurs: UserData[],
+    roomlessFurs: RoomlessFur[],
     dailyFurs: Record<string, UserData[]>
 }
 
@@ -64,7 +76,7 @@ export interface ConventionEvent {
     id: number,
     dateTo: string,
     dateFrom: string,
-    eventNames: Record<string, string>,
+    eventNames: TranslatableString,
     current: boolean,
     organizerAndEventPair: {
         organizer: string,

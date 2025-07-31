@@ -1,10 +1,21 @@
 import { CSSProperties, MouseEvent, useEffect, useState } from "react";
 import "@/styles/components/button.css";
-import Icon, { ICONS } from "../icon";
+import Icon, { MaterialIcon } from "../icon";
 
-export default function Button({ children, iconName, style, className, busy, onClick, disabled, title, type = "button", debounce }: Readonly<{
+export default function Button({
+    children,
+    iconName,
+    style,
+    className,
+    busy,
+    onClick,
+    disabled,
+    title,
+    type = "button",
+    debounce
+}: Readonly<{
     children?: React.ReactNode,
-    iconName?: string,
+    iconName?: MaterialIcon,
     style?: CSSProperties,
     className?: string,
     busy?: boolean,
@@ -35,11 +46,13 @@ export default function Button({ children, iconName, style, className, busy, onC
             disabled={busy || disabledState}
             className={"button rounded-m" + " " + (className ?? "")}
             style={{ ...style, paddingRight: iconPresent ? '0.5em' : undefined }}>
-            {busy && <Icon className={`medium loading-animation`} icon={ICONS.PROGRESS_ACTIVITY}></Icon>}
-            {!busy && isCooldown && <Icon className={`medium`} icon={ICONS.SNOOZE}></Icon>}
+            {busy && <Icon className={`medium loading-animation`} icon={"PROGRESS_ACTIVITY"}></Icon>}
+            {!busy && isCooldown && <Icon className={`medium`} icon={"SNOOZE"}></Icon>}
             {!busy && !isCooldown && iconPresent && <Icon className={`medium`} icon={iconName}></Icon>}
             {children && iconName && <div className="spacer"></div>}
-            {children && <span className="title normal spacer" style={{ fontSize: '15px', textAlign: "left" }}>{children}</span>}
+            {children && <span className="title normal spacer" style={{ fontSize: '15px', textAlign: "left" }}>
+                {children}
+            </span>}
         </button>
     )
 }

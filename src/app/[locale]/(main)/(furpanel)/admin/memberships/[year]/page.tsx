@@ -1,6 +1,6 @@
 "use client"
 import Button from "@/components/input/button";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
 import {
@@ -159,13 +159,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
             cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
                 {props.row.original.duplicate && <>
-                    <Icon icon={ICONS.FILE_COPY} />
+                    <Icon icon={"FILE_COPY"} />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}
                     </span>
                 </>}
                 {!props.row.original.membershipCard && <>
-                    <Icon icon={ICONS.QUESTION_MARK} />
+                    <Icon icon={"QUESTION_MARK"} />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_MISSING")}
                     </span>
@@ -227,7 +227,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     return <>
         <div className="page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon={ICONS.ARROW_BACK} /></a>
+                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon={"ARROW_BACK"} /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}</span>
                     <select className="title average" value={selectedYear ?? ""} onChange={(e) => router.push(e.target.value)}>
@@ -236,8 +236,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                 </div>
 
                 <div className="spacer"></div>
-                <Button iconName={ICONS.REFRESH} onClick={() => setCardsData(undefined)} debounce={3000}>{t("common.reload")}</Button>
-                <Button onClick={() => setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} iconName={ICONS.ADD}>{t("furpanel.admin.membership_manager.actions.add")}</Button>
+                <Button iconName={"REFRESH"} onClick={() => setCardsData(undefined)} debounce={3000}>{t("common.reload")}</Button>
+                <Button onClick={() => setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} iconName={"ADD"}>{t("furpanel.admin.membership_manager.actions.add")}</Button>
             </div>
             <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
                 <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>
@@ -257,17 +257,17 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                     enablePagination pageSize={20} pinnedColumns={{ left: [], right: ['registered'] }} tableElementRef={tableRef} />}
         </div>
         {/* Add card */}
-        <Modal icon={ICONS.ADD} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)}
+        <Modal icon={"ADD"} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)}
             onClose={() => setAddModalOpen(false)} busy={loading}>
             <DataForm action={new AddCardFormAction} loading={loading} setLoading={setLoading} hideSave className="vertical-list gap-2mm" onSuccess={addCardSuccess} onFail={addCardFail}>
                 <AutoInput fieldName="userId" manager={new AutoInputUserAddCardManager} label={t("furpanel.admin.membership_manager.input.user.label")}
                     param={[selectedYear]}></AutoInput>
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={loading} onClick={() => setAddModalOpen(false)}>
+                    <Button type="button" className="danger" iconName={"CANCEL"} busy={loading} onClick={() => setAddModalOpen(false)}>
                         {t("common.cancel")}
                     </Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={ICONS.CHECK} busy={loading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" iconName={"CHECK"} busy={loading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

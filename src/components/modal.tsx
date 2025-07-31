@@ -1,6 +1,6 @@
 "use client"
 import { CSSProperties, useEffect, useState } from "react";
-import Icon, { ICONS } from "./icon";
+import Icon from "./icon";
 import "@/styles/components/modal.css";
 import { useTranslations } from "next-intl";
 import ReactDOM from "react-dom";
@@ -24,7 +24,7 @@ export default function Modal({ children, className, icon, onClose, busy, open, 
                         {icon && <Icon style={{ marginRight: ".25em" }} icon={icon}></Icon>}
                         <p className="header-title title bold medium">{title}</p>
                         <div className="spacer"></div>
-                        <a className="header-close" onClick={(e) => !busy && onClose(e)} title={t("modal.close")}><Icon icon={ICONS.CANCEL}></Icon></a>
+                        <a className="header-close" onClick={(e) => !busy && onClose(e)} title={t("modal.close")}><Icon icon={"CANCEL"}></Icon></a>
                     </div>
                 )
             }

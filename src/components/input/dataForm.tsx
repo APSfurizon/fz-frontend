@@ -1,4 +1,4 @@
-import { ICONS } from "../icon";
+import { MaterialIcon } from "../icon";
 import {
     useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
     createContext, useContext,
@@ -13,7 +13,7 @@ import "@/styles/components/dataForm.css";
 
 export interface SaveButtonData {
     text: string,
-    iconName: string
+    iconName: MaterialIcon
 }
 
 // Context management
@@ -27,21 +27,21 @@ interface FormUpdate {
 
 const FormContext = createContext<FormUpdate | undefined>(undefined);
 
-export const useFormContext = () => {
+export const useFormContext: () => FormUpdate = () => {
     const context = useContext(FormContext);
     if (!context) {
         return {
-            formReset: null,
+            formReset: false,
             setFormReset: () => { },
             formDisabled: false,
-            onFormChange: () => {},
+            onFormChange: () => { },
             formLoading: false
         };
     }
     return context;
 };
 
-export function compareFormObjects (a?: object, b?: object): boolean {
+export function compareFormObjects(a?: object, b?: object): boolean {
     return Object.entries(a ?? {}).sort().toString() === Object.entries(b ?? {}).sort().toString();
 }
 
@@ -106,10 +106,10 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     // Entity change logic
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
     const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
-    
+
     if (saveButton === undefined) saveButton = {
         text: t('dataForm.save'),
-        iconName: ICONS.SAVE
+        iconName: "SAVE"
     };
 
     useEffect(() => {
@@ -122,7 +122,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         if (reset) {
             setReset(false);
         }
-        setCurrentEntity(initialEntity ? {...initialEntity} : undefined);
+        setCurrentEntity(initialEntity ? { ...initialEntity } : undefined);
     }, [reset]);
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -148,27 +148,27 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                     if (resetOnSuccess) { setReset(true); }
                 });
         } catch (e) {
-            console.error (e);
+            console.error(e);
             if (setLoading) setLoading(false);
             if (onFail) onFail(e ?? "unknown");
         }
-        
+
         e.preventDefault();
         e.stopPropagation();
     }
 
     const onFormChange = (fieldName?: string) => {
-        if (!fieldName || !formRef?.current)  return;
+        if (!fieldName || !formRef?.current) return;
         const entity: InferRequest<T> = action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
         setCurrentEntity(entity);
     };
 
-    useEffect (()=>{
+    useEffect(() => {
         const isChanged = !initialEntity
             ? true
             : !compareFormObjects(initialEntity, currentEntity);
         setEntityChanged(isChanged);
-        if(onChange) onChange(isChanged, currentEntity);
+        if (onChange) onChange(isChanged, currentEntity);
     }, [currentEntity])
 
     const showBottomToolbar = !hideSave || !hideReset || !!additionalButtons;

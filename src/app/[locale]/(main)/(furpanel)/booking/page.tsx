@@ -1,17 +1,18 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
-import { ICONS } from "@/components/icon";
 import React, { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import { BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
+import {
+    BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
     ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction,
-    OrderRetryLinkApiAction, 
-    qrCodeOptions} from "@/lib/api/booking";
+    OrderRetryLinkApiAction,
+    qrCodeOptions
+} from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
 import { useQRCode } from 'next-qrcode';
 import ModalError from "@/components/modalError";
@@ -63,7 +64,7 @@ export default function BookingPage() {
         showModal(t("furpanel.booking.messages.exchange_invite_sent.title"),
             <span className="descriptive average">
                 {t("furpanel.booking.messages.exchange_invite_sent.description")}
-            </span>, ICONS.CHECK_CIRCLE);
+            </span>, "CHECK_CIRCLE");
     }
 
     // order QR logic
@@ -84,7 +85,7 @@ export default function BookingPage() {
                 .catch((err) => showModal(
                     t("common.error"),
                     <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
-                    ICONS.ERROR
+                    "ERROR"
                 )).finally(() => setLoading(false));
             return;
         }
@@ -163,10 +164,10 @@ export default function BookingPage() {
                             <Button className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
-                                iconName={ICONS.CHECK}>{t("furpanel.booking.actions.confirm_info")}</Button>
+                                iconName={"CHECK"}>{t("furpanel.booking.actions.confirm_info")}</Button>
                             <Button className="warning" busy={actionLoading} onClick={() => {
                                 router.push("/user");
-                            }} iconName={ICONS.OPEN_IN_NEW}>{t("furpanel.booking.actions.review_info")}</Button>
+                            }} iconName={"OPEN_IN_NEW"}>{t("furpanel.booking.actions.review_info")}</Button>
                         </span>
 
                     </NoticeBox>
@@ -190,60 +191,61 @@ export default function BookingPage() {
                             <OrderItem icon={"LOCAL_ACTIVITY"}
                                 title={
                                     t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
-                                    sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>})}
+                                        sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
+                                        supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
+                                    })}
                                 description={pageData.isDaily
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays })
-                                    : undefined}/>
+                                    : undefined} />
                             {/* Membership item */}
                             {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}
-                                title={t("furpanel.booking.items.membership_card")}/>}
+                                title={t("furpanel.booking.items.membership_card")} />}
                             {/* Extra days */}
                             {bookingData!.order.extraDays !== "NONE" && <OrderItem icon={"CALENDAR_ADD_ON"}
                                 title={t("furpanel.booking.items.extra_days")}
-                                description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)}/>}
+                                description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)} />}
                             {/* Room */}
                             {bookingData!.order.room && <OrderItem icon={"BED"}
                                 title={[t("furpanel.booking.items.room"),
-                                    translate(bookingData!.order.room.roomTypeNames, locale) ?? ""].join(" ")}
+                                translate(bookingData!.order.room.roomTypeNames, locale) ?? ""].join(" ")}
                                 description={t("furpanel.booking.items.room_capacity",
-                                    { capacity: bookingData!.order.room.roomCapacity })}/>}
+                                    { capacity: bookingData!.order.room.roomCapacity })} />}
                         </div>
 
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                             {pageData?.shouldRetry && <>
                                 <Button className="action-button"
-                                    iconName={ICONS.REPLAY}
+                                    iconName={"REPLAY"}
                                     busy={actionLoading}
                                     onClick={requestRetryPaymentLink}>
-                                        {t("furpanel.booking.retry_payment")}
+                                    {t("furpanel.booking.retry_payment")}
                                 </Button>
                             </>}
                             {bookingData?.order?.checkinSecret &&
-                                <Button iconName={ICONS.QR_CODE}
+                                <Button iconName={"QR_CODE"}
                                     onClick={() => setSecretModalOpen(true)}
                                     title={t("furpanel.booking.actions.show_qr")}>
-                                        {t("furpanel.booking.actions.show_qr")}
+                                    {t("furpanel.booking.actions.show_qr")}
                                 </Button>
                             }
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
                             <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
                                 style={{ flexGrow: "1" }}>
-                                    <Button className="action-button"
-                                        disabled={isEditLocked}
-                                        iconName={ICONS.OPEN_IN_NEW}
-                                        busy={actionLoading}
-                                        onClick={requestOrderEditLink}>
-                                            {t("furpanel.booking.edit_booking")}
-                                    </Button>
-                                    <Button className="action-button danger"
-                                        disabled={isEditLocked}
-                                        iconName={ICONS.SEND}
-                                        busy={actionLoading}
-                                        onClick={() => promptExchange()}>
-                                            {t("furpanel.booking.actions.exchange_order")}
-                                    </Button>
+                                <Button className="action-button"
+                                    disabled={isEditLocked}
+                                    iconName={"OPEN_IN_NEW"}
+                                    busy={actionLoading}
+                                    onClick={requestOrderEditLink}>
+                                    {t("furpanel.booking.edit_booking")}
+                                </Button>
+                                <Button className="action-button danger"
+                                    disabled={isEditLocked}
+                                    iconName={"SEND"}
+                                    busy={actionLoading}
+                                    onClick={() => promptExchange()}>
+                                    {t("furpanel.booking.actions.exchange_order")}
+                                </Button>
                             </div>
                         </div>
 
@@ -260,12 +262,14 @@ export default function BookingPage() {
 
                             {GROUP_CHAT_URL &&
                                 <NoticeBox theme={NoticeTheme.FAQ}
-                                    customIcon={ICONS.GROUPS}
+                                    customIcon={"GROUPS"}
                                     title={t("furpanel.booking.messages.invite_group.title")}>
-                                        {t.rich("furpanel.booking.messages.invite_group.description",
-                                        {link: () => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
-                                            {GROUP_CHAT_URL}
-                                        </a>})}
+                                    {t.rich("furpanel.booking.messages.invite_group.description",
+                                        {
+                                            link: () => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
+                                                {GROUP_CHAT_URL}
+                                            </a>
+                                        })}
                                 </NoticeBox>}
                         </div>
 
@@ -287,7 +291,7 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Order exchange modal */}
-        <Modal icon={ICONS.SEND} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
             <span className="descriptive small">{t("furpanel.booking.messages.exchange_explaination")}</span>
             <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
@@ -295,19 +299,19 @@ export default function BookingPage() {
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.room.input.exchange_user.label")} placeholder={t("furpanel.room.input.exchange_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={ICONS.CHECK} busy={modalLoading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" iconName={"CHECK"} busy={modalLoading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>
         {/* QR Secret modal */}
         <Modal open={secretModalOpen}
-            icon={ICONS.QR_CODE}
+            icon={"QR_CODE"}
             title={t("furpanel.booking.reservation_qr")}
             onClose={() => setSecretModalOpen(false)}>
             <div className="horizontal-list" style={{ justifyContent: "center" }}>
-                <div className="rounded-l" style={{overflow: "hidden"}}>
+                <div className="rounded-l" style={{ overflow: "hidden" }}>
                     <Canvas text={bookingData?.order?.checkinSecret ?? "a"}
                         options={qrCodeOptions}
                         logo={{

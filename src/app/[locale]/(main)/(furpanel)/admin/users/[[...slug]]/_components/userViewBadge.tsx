@@ -1,5 +1,4 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { ICONS } from "@/components/icon";
 import AutoInput from "@/components/input/autoInput";
 import Button from "@/components/input/button";
 import DataForm from "@/components/input/dataForm";
@@ -23,7 +22,7 @@ export default function UserViewBadge({
     reloadData: () => void
 }>) {
     const t = useTranslations();
-    const {showModal, hideModal} = useModalUpdate();
+    const { showModal, hideModal } = useModalUpdate();
 
     // Hide from nosecount logic
     const [nosecountSetLoading, setNosecountSetLoading] = useState(false);
@@ -34,11 +33,11 @@ export default function UserViewBadge({
             showInNosecount: show
         }
         runRequest(new ShowInNosecountApiAction(), undefined, data)
-        .then(()=>{reloadData()})
-        .catch((err)=>showModal(
-            t("common.error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors"/>
-        )).finally(()=>setNosecountSetLoading(false));
+            .then(() => { reloadData() })
+            .catch((err) => showModal(
+                t("common.error"),
+                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
+            )).finally(() => setNosecountSetLoading(false));
     }
 
     const [badgeLoading, setBadgeLoading] = useState(false);
@@ -49,16 +48,16 @@ export default function UserViewBadge({
             <div className="vertical-list gap-2mm">
                 <span>{t("furpanel.badge.messages.confirm_deletion.description")}</span>
                 <div className="horizontal-list">
-                <Button type="button" className="danger" iconName={ICONS.CANCEL}
-                    onClick={hideModal}>{t("common.cancel")}</Button>
-                <div className="spacer"></div>
-                <Button type="submit" className="success" iconName={ICONS.CHECK}
-                    onClick={() => deleteBadge(userData.personalInfo.userId!)}>
+                    <Button type="button" className="danger" iconName={"CANCEL"}
+                        onClick={hideModal}>{t("common.cancel")}</Button>
+                    <div className="spacer"></div>
+                    <Button type="submit" className="success" iconName={"CHECK"}
+                        onClick={() => deleteBadge(userData.personalInfo.userId!)}>
                         {t("common.confirm")}
-                </Button>
+                    </Button>
                 </div>
             </div>,
-            ICONS.DELETE
+            "DELETE"
         );
     }
 
@@ -66,14 +65,14 @@ export default function UserViewBadge({
         hideModal();
         setBadgeLoading(true);
         runRequest(new DeleteBadgeAction(), [String(userId)])
-        .then(()=>reloadData())
-        .catch((err)=>showModal(
-            t("common.error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors"/>
-        )).finally(()=>{
-            setBadgeLoading(false);
-            hideModal();
-        });
+            .then(() => reloadData())
+            .catch((err) => showModal(
+                t("common.error"),
+                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
+            )).finally(() => {
+                setBadgeLoading(false);
+                hideModal();
+            });
     }
 
     // Upload badge picture logic
@@ -84,10 +83,10 @@ export default function UserViewBadge({
         setBadgeLoading(true);
         runRequest(new UploadBadgeAction(), [String(userData.badgeData.mainBadge!.userId)], dataToUpload)
             .then(() => {
-            reloadData();
+                reloadData();
             }).catch((err) => showModal(
-            t("common.error"),
-            <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
+                t("common.error"),
+                <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
             )).finally(() => setBadgeLoading(false));
     }
 
@@ -96,52 +95,52 @@ export default function UserViewBadge({
 
     const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
         showModal(
-          t("common.error"),
-          <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors">
-          </ModalError>
+            t("common.error"),
+            <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors">
+            </ModalError>
         )
     }
 
     return <>
-    <div className="horizontal-list gap-4mm flex-wrap">
-        <div>
-            <Upload initialMedia={userData.badgeData.mainBadge?.propic} requireCrop loading={badgeLoading}
-                setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}/>
-        </div>
-        <div className="vertical-list title gap-2mm">
-            <p className="average">
-                <span className="bold">{t("furpanel.admin.users.accounts.view.badges.fursona_name")}:</span>
-                &nbsp;
-                {userData.badgeData.mainBadge?.fursonaName}
-            </p>
-            <p className="average">
-                <span className="bold">{t("furpanel.admin.users.accounts.view.badges.locale")}:</span>
-                &nbsp;
-                {getFlagEmoji(userData.badgeData.mainBadge?.locale ?? 'un')}
-            </p>
-            <div className="spacer"/>
-            <div className="horizontal-list gap-2mm flex-wrap">
-                <Button iconName={userData.showInNousecount ? ICONS.VISIBILITY_OFF : ICONS.VISIBILITY}
-                    busy={nosecountSetLoading}
-                    onClick={()=>toggleShowInNosecount(!userData.showInNousecount)}>
-                    {userData.showInNousecount
-                        ? t("furpanel.admin.users.accounts.view.badges.hide_from_nosecount")
-                        : t("furpanel.admin.users.accounts.view.badges.show_from_nosecount")}
-                </Button>
-                <Button busy={badgeLoading} iconName={ICONS.EDIT_SQUARE} onClick={() => setChangeDataModalOpen(true)}>
-                    {t("furpanel.badge.actions.edit_badge")}
-                </Button>
+        <div className="horizontal-list gap-4mm flex-wrap">
+            <div>
+                <Upload initialMedia={userData.badgeData.mainBadge?.propic} requireCrop busy={badgeLoading}
+                    setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130} />
+            </div>
+            <div className="vertical-list title gap-2mm">
+                <p className="average">
+                    <span className="bold">{t("furpanel.admin.users.accounts.view.badges.fursona_name")}:</span>
+                    &nbsp;
+                    {userData.badgeData.mainBadge?.fursonaName}
+                </p>
+                <p className="average">
+                    <span className="bold">{t("furpanel.admin.users.accounts.view.badges.locale")}:</span>
+                    &nbsp;
+                    {getFlagEmoji(userData.badgeData.mainBadge?.locale ?? 'un')}
+                </p>
+                <div className="spacer" />
+                <div className="horizontal-list gap-2mm flex-wrap">
+                    <Button iconName={userData.showInNousecount ? "VISIBILITY_OFF" : "VISIBILITY"}
+                        busy={nosecountSetLoading}
+                        onClick={() => toggleShowInNosecount(!userData.showInNousecount)}>
+                        {userData.showInNousecount
+                            ? t("furpanel.admin.users.accounts.view.badges.hide_from_nosecount")
+                            : t("furpanel.admin.users.accounts.view.badges.show_from_nosecount")}
+                    </Button>
+                    <Button busy={badgeLoading} iconName={"EDIT_SQUARE"} onClick={() => setChangeDataModalOpen(true)}>
+                        {t("furpanel.badge.actions.edit_badge")}
+                    </Button>
+                </div>
             </div>
         </div>
-    </div>
-    {/* Badge data edit modal */}
-    <Modal title={t("furpanel.badge.actions.edit_badge")}
-        open={changeDataModalOpen}
-        onClose={() => setChangeDataModalOpen(false)}
-        busy={badgeLoading}>
-        <DataForm action={new BadgeDataChangeFormAction} loading={badgeLoading} setLoading={setBadgeLoading} hideSave
-            className="gap-2mm" onFail={onChangeFail} onSuccess={reloadData}>
-                <input type="hidden" name="userId" value={userData.badgeData.mainBadge?.userId}/>
+        {/* Badge data edit modal */}
+        <Modal title={t("furpanel.badge.actions.edit_badge")}
+            open={changeDataModalOpen}
+            onClose={() => setChangeDataModalOpen(false)}
+            busy={badgeLoading}>
+            <DataForm action={new BadgeDataChangeFormAction} loading={badgeLoading} setLoading={setBadgeLoading} hideSave
+                className="gap-2mm" onFail={onChangeFail} onSuccess={reloadData}>
+                <input type="hidden" name="userId" value={userData.badgeData.mainBadge?.userId} />
                 <FpInput inputType="text"
                     fieldName="fursonaName"
                     initialValue={changeDataModalOpen ? userData.badgeData.mainBadge?.fursonaName : ""}
@@ -154,15 +153,15 @@ export default function UserViewBadge({
                     helpText={t("furpanel.badge.input.new_locale.help")}
                     initialData={userData.badgeData.mainBadge?.locale
                         ? [userData.badgeData.mainBadge?.locale]
-                        : undefined}/>
+                        : undefined} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={ICONS.CANCEL} busy={badgeLoading}
-                    onClick={() => setChangeDataModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" iconName={"CANCEL"} busy={badgeLoading}
+                        onClick={() => setChangeDataModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={ICONS.CHECK} busy={badgeLoading}>
-                    {t("common.confirm")}</Button>
+                    <Button type="submit" className="success" iconName={"CHECK"} busy={badgeLoading}>
+                        {t("common.confirm")}</Button>
                 </div>
-        </DataForm>
-    </Modal>
+            </DataForm>
+        </Modal>
     </>;
 }

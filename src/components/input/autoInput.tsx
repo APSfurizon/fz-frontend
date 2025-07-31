@@ -1,7 +1,8 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
-import Icon, { ICONS } from "../icon";
+import Icon from "../icon";
 import Image from "next/image";
-import { AutoInputFilter, AutoInputSearchResult, AutoInputManager, AutoInputChangedParams } from "@/lib/components/autoInput";
+import { AutoInputFilter, AutoInputSearchResult, AutoInputManager,
+    AutoInputChangedParams } from "@/lib/components/autoInput";
 import { useLocale, useTranslations } from "next-intl";
 import "@/styles/components/autoInput.css";
 import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
@@ -274,7 +275,7 @@ export default function AutoInput({
                     {element?.getDescription(locale)}
                 </span>
             </div>
-            <Icon className="medium" icon={ICONS.ADD_CIRCLE} />
+            <Icon className="medium" icon={"ADD_CIRCLE"} />
         </div>;
     }
 
@@ -299,7 +300,7 @@ export default function AutoInput({
                 {element?.getDescription(locale)}
             </span>
             {!readOnly && <span onClick={() => removeItem(element)}>
-                <Icon className="medium delete-selection" icon={ICONS.CANCEL} />
+                <Icon className="medium delete-selection" icon={"CANCEL"} />
             </span>}
         </a>;
     }
@@ -352,8 +353,8 @@ export default function AutoInput({
                     }
                     {(isBusy || valueToSet.length < maxSelections) && <span className="icon-container">
                         {isBusy
-                            ? <Icon className="medium loading-animation" icon={ICONS.PROGRESS_ACTIVITY}></Icon>
-                            : <Icon className="medium" icon={ICONS.SEARCH}></Icon>
+                            ? <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
+                            : <Icon className="medium" icon={"SEARCH"}></Icon>
                         }
                     </span>}
                 </div>
@@ -377,7 +378,9 @@ export default function AutoInput({
                                     : !searchError
                                         ? searchResults.length > 0
                                             ? searchResults.map((element, index) => renderResult(element, index))
-                                            : <span className="title tiny color-subtitle">{t('autoinput.loading_data')}</span>
+                                            : <span className="title tiny color-subtitle">
+                                                {t('autoinput.loading_data')}
+                                            </span>
                                         : <span className="title tiny color-subtitle">{t('autoinput.no_results')}</span>
                             }
                         </div>

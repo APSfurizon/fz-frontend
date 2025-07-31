@@ -1,5 +1,5 @@
 "use client"
-import Icon, { ICONS } from "@/components/icon";
+import Icon, { MaterialIcon } from "@/components/icon";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
 import FpTable from "@/components/table/fpTable";
@@ -31,7 +31,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
         getRowId: (row: T) => string,
         getRowsFromResult: (result: U) => T[],
         title: string,
-        icon: string
+        icon: MaterialIcon
     }>) {
     const t = useTranslations();
     const [badgeSearchQuery, setBadgeSearchQuery] = useState<BadgeSearchData>();
@@ -88,7 +88,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
                 disabled={badgeLoading} />
             <Button busy={badgeLoading}
                 className="margin-bottom-1mm"
-                iconName={ICONS.SEARCH}
+                iconName={"SEARCH"}
                 onClick={searchBadges}>
                 {t("furpanel.admin.events.badges.print.advanced_mode.Search")}
             </Button>
