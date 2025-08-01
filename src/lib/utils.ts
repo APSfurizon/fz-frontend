@@ -88,6 +88,10 @@ export function getCookie(cookieName: string) {
     return "";
 }
 
+export function cssClass(data: Record<string, boolean>) {
+    return Object.keys(data).map(key => data[key] == true ? key : "").join(" ");
+}
+
 export enum DEVICE_TYPE {
     APPLE = "apple",
     ANDROID = "android",

@@ -62,11 +62,13 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
             // Calc headers
             const headers = new Headers();
 
-            if (body instanceof FormData == false) headers.append('Content-type', 'application/json');
+            if (body instanceof FormData == false) headers.append("Content-type", "application/json");
 
             const token = getToken();
 
-            if (action.authenticated && token && token.length > 0) headers.append('Authorization', token);
+            headers.append("Accept-Language", getCookie("NEXT_LOCALE"));
+
+            if (action.authenticated && token && token.length > 0) headers.append("Authorization", token);
 
             // Calc url
             const useSearchParams = !!searchParams;

@@ -56,7 +56,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">
-                        <Icon icon="design_services"></Icon>
+                        <Icon icon="DESIGN_SERVICES"></Icon>
                         <span className="titular bold highlight">furpanel</span>
                     </span>
                 </span>

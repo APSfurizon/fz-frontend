@@ -18,7 +18,7 @@ export default function Login() {
     return <>
         <div className="horizontal-list gap-4mm flex-center">
             <span className="title-pair">
-                <Icon icon="design_services"></Icon>
+                <Icon icon="DESIGN_SERVICES"></Icon>
                 <span className="titular bold highlight">furpanel</span>
                 <span> - </span>
                 <span className="titular bold">{t('logout.title').toLowerCase()}</span>
