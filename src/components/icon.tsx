@@ -101,6 +101,7 @@ export const ICONS = {
     TUNE: "tune",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
+    VITAL_SIGNS: "vital_signs"
 } as const;
 
 export type MaterialIcon = keyof typeof ICONS;
