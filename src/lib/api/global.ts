@@ -14,25 +14,29 @@ export enum RequestType {
 export interface ApiRequest { }
 
 export interface ApiResponse {
-    status?: number,
-    requestId?: string
+    status?: number;
+    requestId?: string;
 }
 
 export interface SimpleApiResponse extends ApiResponse {
-    success: boolean
+    success: boolean;
 }
 
 export interface ApiErrorResponse extends ApiResponse {
-    errorMessage?: string,
+    errorMessage?: string;
 }
 
 export interface ApiDetailedErrorResponse extends ApiErrorResponse {
-    errors: ApiErrorDetail[],
+    errors: ApiErrorDetail[];
 }
 
 export interface ApiErrorDetail {
-    message: string,
-    code: string
+    message: string;
+    code: string;
+}
+
+export interface ApiMessageResponse extends ApiResponse {
+    message: string;
 }
 
 export function isDetailedError(err: ApiErrorResponse | ApiDetailedErrorResponse) {

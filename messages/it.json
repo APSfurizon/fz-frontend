@@ -65,7 +65,8 @@
     "changelog": {
       "title": "Il Furpanel si è aggiornato",
       "description": "Leggi le ultime novità su <a></a>"
-    }
+    },
+    "success": "Successo"
   },
   "components": {
     "autoinput": {
@@ -470,7 +471,7 @@
       "pretix": {
         "title": "Pretix",
         "data": {
-          "title": "Dati negozio",
+          "title": "Server",
           "reload_event": "Ricarica evento",
           "reload_orders": "Ricarica ordini"
         }
@@ -724,6 +725,13 @@
               "temporary_members_count": "Membri temporanei"
             }
           }
+        }
+      },
+      "system": {
+        "title": "Sistema",
+        "server": {
+          "title": "Server",
+          "ping": "Ping"
         }
       }
     }

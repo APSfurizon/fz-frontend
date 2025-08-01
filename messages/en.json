@@ -65,7 +65,8 @@
     "changelog": {
       "title": "Furpanel was updated",
       "description": "Read the changelog at <a></a>"
-    }
+    },
+    "success": "Success"
   },
   "components": {
     "autoinput": {
@@ -470,7 +471,7 @@
       "pretix": {
         "title": "Pretix",
         "data": {
-          "title": "Shop data",
+          "title": "Data",
           "reload_event": "Reload event",
           "reload_orders": "Reload orders",
           "errors": {}
@@ -725,6 +726,13 @@
               "temporary_members_count": "Temporary members"
             }
           }
+        }
+      },
+      "system": {
+        "title": "System",
+        "server": {
+          "title": "Server",
+          "ping": "Ping"
         }
       }
     }
