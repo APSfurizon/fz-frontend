@@ -521,6 +521,19 @@
         "rooms": {
           "title": "Stanze",
           "remind_rooms_not_full": "Notifica stanze non riempite"
+        },
+        "config": {
+          "title": "Configurazione",
+          "event_settings": {
+            "title": "Impostazioni evento",
+            "input": {
+              "booking_start": "Data inizio prenotazioni",
+              "early_booking_start": "Data inizio prenotazioni anticipate",
+              "reservation_edit_deadline": "Deadline modifiche ordine",
+              "badge_upload_deadline": "Deadline modifica badge",
+              "room_edit_deadline": "Data limite modifica stanze"
+            }
+          }
         }
       },
       "membership_manager": {

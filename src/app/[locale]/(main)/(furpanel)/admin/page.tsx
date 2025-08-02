@@ -148,6 +148,12 @@ export default function AdminPage() {
       </FpMacroSection>
       {/* Event area */}
       <FpMacroSection title={t("furpanel.admin.events.title")} icon={ICONS.LOCAL_ACTIVITY}>
+        <FpSection title={t("furpanel.admin.events.config.title")}>
+          <Button iconName={ICONS.SETTINGS} onClick={() => router.push("/admin/event/")}
+            busy={renderBadgesLoading} disabled={!capabilities.canManageEventSettings}>
+            {t("furpanel.admin.events.config.event_settings.title")}
+          </Button>
+        </FpSection>
         <FpSection title={t("furpanel.admin.events.badges.title")}>
           <Button iconName={ICONS.PRINT} onClick={() => setRenderBadgesModalOpen(true)}
             busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
