@@ -5,7 +5,7 @@ import {
     useReactTable
 } from "@tanstack/react-table";
 import "@/styles/components/fpTable.css";
-import Icon, { ICONS } from "../icon";
+import Icon, { MaterialIcon } from "../icon";
 import {
     CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef,
     useState
@@ -72,9 +72,9 @@ export default function FpTable<T>({
         minSize: 50,
         maxSize: 50,
         cell: props => props.row.getCanExpand() && (
-            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()} style={{userSelect: "none"}}>
+            <div className="table-expand" onClick={props.row.getToggleExpandedHandler()} style={{ userSelect: "none" }}>
                 <Icon className="medium"
-                    iconName={props.row.getIsExpanded() ? ICONS.KEYBOARD_ARROW_UP : ICONS.KEYBOARD_ARROW_DOWN} />
+                    icon={props.row.getIsExpanded() ? "KEYBOARD_ARROW_UP" : "KEYBOARD_ARROW_DOWN"} />
             </div>
         )
     }), []);
@@ -216,9 +216,9 @@ export default function FpTable<T>({
             {enableSearch && <FpInput className="table-search"
                 placeholder={t("table.filter.placeholder")}
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
-                icon={ICONS.FILTER_LIST} />}
-            {showAddButton && <Button iconName={ICONS.ADD} onClick={onAdd} title={t("table.add.title")} />}
-            {showDeleteButton && <Button iconName={ICONS.DELETE} onClick={onDelete} title={t("table.delete.title")}
+                icon={"FILTER_LIST"} />}
+            {showAddButton && <Button iconName={"ADD"} onClick={onAdd} title={t("table.add.title")} />}
+            {showDeleteButton && <Button iconName={"DELETE"} onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
         </div>}
         <div className="table rounded-s gap-2mm" ref={tableRef}
@@ -236,12 +236,12 @@ export default function FpTable<T>({
                                 }}>
                                 <div className="header-data" onClick={header.column.getToggleSortingHandler()}>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
-                                    {header.column.getIsSorted() && <Icon iconName={{
-                                        asc: ICONS.ARROW_DROP_UP,
-                                        desc: ICONS.ARROW_DROP_DOWN,
-                                    }[header.column.getIsSorted() as string]!} />}
+                                    {header.column.getIsSorted() && <Icon icon={{
+                                        asc: "ARROW_DROP_UP",
+                                        desc: "ARROW_DROP_DOWN",
+                                    }[header.column.getIsSorted() as string]! as MaterialIcon} />}
                                     {header.column.getIsPinned() && <a onClick={() => header.column.pin(false)}>
-                                        <Icon className="small" iconName={ICONS.KEEP} /></a>}
+                                        <Icon className="small" icon={"KEEP"} /></a>}
                                 </div>
                                 <div className="spacer"></div>
                                 {(header.column.columnDef.enableResizing ?? true) &&
@@ -249,7 +249,7 @@ export default function FpTable<T>({
                                         onDoubleClick={() => header.column.resetSize()}
                                         onMouseDown={header.getResizeHandler()}
                                         onTouchStart={header.getResizeHandler()}>
-                                        <Icon iconName={ICONS.DRAG_HANDLE} />
+                                        <Icon icon={"DRAG_HANDLE"} />
                                     </div>
                                 }
                             </div>
@@ -289,14 +289,14 @@ export default function FpTable<T>({
         {enablePagination && <div className="table-pages horizontal-list gap-4mm">
             <div className="spacer"></div>
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
-                iconName={ICONS.ARROW_BACK} onClick={tableWrapper.previousPage}></Button>
+                iconName={"ARROW_BACK"} onClick={tableWrapper.previousPage}></Button>
             {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i) => <Button key={i}
                 className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`}
                 onClick={() => tableWrapper.setPageIndex(i)}
                 disabled={pagination.pageIndex == i}>{i + 1}
             </Button>)}
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
-                iconName={ICONS.ARROW_FORWARD} onClick={tableWrapper.nextPage}></Button>
+                iconName={"ARROW_FORWARD"} onClick={tableWrapper.nextPage}></Button>
             <div className="spacer"></div>
         </div>}
     </div>

@@ -1,7 +1,7 @@
 import Icon from "@/components/icon"
 import { CSSProperties } from "react"
 
-export default function FpMacroSection ({
+export default function FpMacroSection({
     children,
     icon,
     title,
@@ -14,11 +14,11 @@ export default function FpMacroSection ({
     titleStyle?: CSSProperties,
     style?: CSSProperties
 }>) {
-    return <div style={{...style}} className="admin-section section vertical-list gap-2mm">
+    return <div style={{ ...style }} className="admin-section section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-            {icon && <Icon className="x-large" iconName={icon}></Icon>}
-            <span style={{...titleStyle}} className="title medium">{title}</span>
+            {icon && <Icon className="x-large" icon={icon}></Icon>}
+            <span style={{ ...titleStyle }} className="title medium">{title}</span>
         </div>
         {children}
-    </div> 
+    </div>
 }

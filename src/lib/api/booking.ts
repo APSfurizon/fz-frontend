@@ -2,6 +2,7 @@ import { StatusBoxStyle } from "@/components/statusBox";
 import { ConventionEvent } from "./counts";
 import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
 import { RoomData } from "./room";
+import { QRCodeOptions } from "next-qrcode/dist/useQRCode";
 
 export type OrderStatusType = "CANCELED" | "PENDING" | "PAID" | "EXPIRED";
 export type SponsorshipType = "NONE" | "SPONSOR" | "SUPER_SPONSOR";
@@ -80,6 +81,19 @@ export function calcTicketData(order: OrderData): BookingTicketData {
     }
 }
 
+export const qrCodeOptions: QRCodeOptions = {
+    type: 'image/webp',
+    quality: 0.25,
+    errorCorrectionLevel: 'H',
+    margin: 3,
+    scale: 4,
+    width: 200,
+    color: {
+        dark: '#000000',
+        light: '#FFFFFF',
+    }
+} as const;
+
 export class BookingOrderApiAction extends ApiAction<BookingOrderResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
@@ -111,5 +125,5 @@ export class OrderRetryLinkApiAction extends ApiAction<ShopLinkResponse, ApiErro
 export class ConfirmMembershipDataApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
-    urlAction = "membership/mark-person-user-information-as-updated";
+    urlAction = "membership/mark-personal-user-information-as-updated";
 }

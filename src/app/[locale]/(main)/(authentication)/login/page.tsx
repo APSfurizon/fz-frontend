@@ -1,6 +1,6 @@
 "use client"
 import DataForm from "@/components/input/dataForm";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { AuthenticationCodes, LoginFormAction, LoginResponse } from "@/lib/api/authentication/login";
@@ -50,7 +50,7 @@ export default function Login() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon iconName="design_services"></Icon>
+        <Icon icon="DESIGN_SERVICES"></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('login.title').toLowerCase()}</span>
@@ -69,7 +69,7 @@ export default function Login() {
       <FpInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")} />
       <FpInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")} />
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={ICONS.KEY} busy={loading}>{t("login.login")}</Button>
+        <Button type="submit" iconName={"KEY"} busy={loading}>{t("login.login")}</Button>
       </div>
     </DataForm>
     <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.register_here')}</Link>

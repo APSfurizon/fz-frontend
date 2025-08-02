@@ -1,5 +1,4 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { ICONS } from "@/components/icon";
 import Button from "@/components/input/button";
 import Checkbox from "@/components/input/checkbox";
 import ModalError from "@/components/modalError";
@@ -21,24 +20,24 @@ export default function UserViewOrdersTable({
 }>) {
     const t = useTranslations();
     const locale = useLocale();
-    const {showModal} = useModalUpdate();
+    const { showModal } = useModalUpdate();
     const [viewOrderLoading, setViewOrderLoading] = useState(false);
 
     const viewOrder = (eventId: number, orderCode: string) => {
         setViewOrderLoading(true);
         runRequest(new ViewOrderLinkApiAction(), undefined, undefined,
-            buildSearchParams({"event-id": String(eventId), "order-code": orderCode}))
-        .then ((result) => window.open((result as ViewOrderLinkResponse).link, '_blank'))
-        .catch((err)=>showModal(
-            t("common.error"), 
-            <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
-            ICONS.ERROR
-        )).finally(()=>setViewOrderLoading(false));
+            buildSearchParams({ "event-id": String(eventId), "order-code": orderCode }))
+            .then((result) => window.open((result as ViewOrderLinkResponse).link, '_blank'))
+            .catch((err) => showModal(
+                t("common.error"),
+                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
+                "ERROR"
+            )).finally(() => setViewOrderLoading(false));
     }
 
     const orderColHelper = createColumnHelper<FullOrder>();
     const orderColumns = useMemo(() => [
-        orderColHelper.accessor(itm=>translate(itm.orderEvent.eventNames, locale), {
+        orderColHelper.accessor(itm => translate(itm.orderEvent.eventNames, locale), {
             id: 'eventName',
             header: t("furpanel.admin.users.accounts.view.orders_table.event_name")
         }),
@@ -54,10 +53,10 @@ export default function UserViewOrdersTable({
                     {t(`common.order_status.${props.row.original.orderStatus}`)}
                 </StatusBox>)
         }),
-        orderColHelper.accessor(itm=>itm.daily ? 'daily' : '', {
+        orderColHelper.accessor(itm => itm.daily ? 'daily' : '', {
             id: 'isDaily',
             header: t("furpanel.admin.users.accounts.view.orders_table.is_daily"),
-            cell: props => <Checkbox initialValue={props.row.original.daily} disabled/>
+            cell: props => <Checkbox initialValue={props.row.original.daily} disabled />
         }),
         orderColHelper.accessor('sponsorship', {
             id: 'sponsorship',
@@ -67,26 +66,26 @@ export default function UserViewOrdersTable({
             id: 'extraDays',
             header: t("furpanel.admin.users.accounts.view.orders_table.extra_days"),
         }),
-        orderColHelper.accessor(itm=>itm.roomCapacity > 0 ? `${itm.hotelInternalName} - ${itm.roomInternalName} (${itm.roomCapacity})` : undefined,
-        {
-            id: 'roomType',
-            header: t("furpanel.admin.users.accounts.view.orders_table.room_type"),
-        }),
+        orderColHelper.accessor(itm => itm.roomCapacity > 0 ? `${itm.hotelInternalName} - ${itm.roomInternalName} (${itm.roomCapacity})` : undefined,
+            {
+                id: 'roomType',
+                header: t("furpanel.admin.users.accounts.view.orders_table.room_type"),
+            }),
         orderColHelper.display({
             id: 'actionViewOrder',
             header: '',
-            cell: props => <Button iconName={ICONS.OPEN_IN_NEW}
+            cell: props => <Button iconName={"OPEN_IN_NEW"}
                 key={`${props.row.original.eventId}-${props.row.original.code}`}
-                onClick={()=>viewOrder(props.row.original.eventId, props.row.original.code)}
-                busy={viewOrderLoading}/>,
+                onClick={() => viewOrder(props.row.original.eventId, props.row.original.code)}
+                busy={viewOrderLoading} />,
             maxSize: 50,
             enableResizing: false
         })
     ], [viewOrderLoading]);
 
     return <FpTable<FullOrder> rows={userData?.orders}
-                columns={orderColumns}
-                key={String(viewOrderLoading)}
-                pinnedColumns={{right: ["actionViewOrder"]}}
-                enableSearch/>
+        columns={orderColumns}
+        key={String(viewOrderLoading)}
+        pinnedColumns={{ right: ["actionViewOrder"] }}
+        enableSearch />
 }

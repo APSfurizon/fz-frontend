@@ -11,8 +11,13 @@ button.button {
     transition-duration: 120ms;
 }
 
-button:disabled {
+button:disabled,
+button.off {
     color: var(--foreground);
+}
+
+button.off {
+    filter: grayscale(1);
 }
 
 button.button:hover:not(:disabled) {

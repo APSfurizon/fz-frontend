@@ -1,44 +1,38 @@
 "use client"
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "@/styles/misc/nosecount.css";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import {
-    AllEventsResponse, FursuitCountApiAction, FursuitCountResponse, GetAllEventsApiAction, NoseCountApiAction,
+    CountViewMode,
+    FursuitCountApiAction, FursuitCountResponse, NoseCountApiAction,
     NoseCountResponse, SponsorCountApiAction, SponsorCountResponse
 } from "@/lib/api/counts";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
 import UserPicture from "@/components/userPicture";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
 import ModalError from "@/components/modalError";
-import Link from "next/link";
 import LoadingPanel from "@/components/loadingPanel";
 import { ExtraDays } from "@/lib/api/user";
 import StatusBox from "@/components/statusBox";
+import { useNosecountContext } from "../layout";
 
 export default function NosecountPage({ params }: { params: Promise<{ slug: string[] }> }) {
-    const MODE_FURSUIT = "fursuits";
-    const MODE_SPONSOR = "sponsors"
 
-    const router = useRouter();
-    const [allEvents, setAllEvents] = useState<AllEventsResponse>();
-    const [eventId, setEventId] = useState<number>();
-    const [selectedEvent, setSelectedEvent] = useState<string>();
+    const { event, mode, selectEvent, selectMode } = useNosecountContext();
 
     const [totalCount, setTotalCount] = useState<number>();
 
     // Modes
     const [roomsData, setRoomsData] = useState<NoseCountResponse>();
-    const [fursuitMode, setFursuitMode] = useState(false);
     const [fursuitData, setFursuitData] = useState<FursuitCountResponse>();
-    const [sponsorMode, setSponsorMode] = useState(false);
     const [sponsorData, setSponsorData] = useState<SponsorCountResponse>();
 
     // Main logic
     const [needsLoading, setNeedsLoading] = useState(false);
+    const [setup, setSetup] = useState(false);
     const [error, setError] = useState<ApiErrorResponse | ApiDetailedErrorResponse>();
     const [loading, setLoading] = useState(false);
 
@@ -47,61 +41,31 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
     const locale = useLocale();
 
     useEffect(() => {
-        if (!allEvents) {
-            setLoading(true);
-            runRequest(new GetAllEventsApiAction())
-                .then(events => setAllEvents(events))
-                .catch(err => setError(err))
-                .finally(() => setLoading(false));
-        }
         params.then(data => {
-            const [organizer, eventName, mode] = data.slug;
-            // Handle special modes
-            switch (mode ?? "") {
-                case MODE_FURSUIT:
-                    setFursuitMode(true);
-                    break;
-                case MODE_SPONSOR:
-                    setSponsorMode(true);
-                    break;
+            const [organizer, eventName, viewMode] = data.slug ?? [null, null, null];
+            setSetup(true);
+            if (organizer && eventName) {
+                selectEvent(`${organizer}/${eventName}`);
             }
-            setSelectedEvent(`${organizer}/${eventName}`);
+            selectMode(viewMode ?? CountViewMode.NORMAL);
         });
     }, []);
 
-    // Once events are loaded and an event is selected
     useEffect(() => {
-        if (!allEvents || !selectedEvent) return;
-        // find the event
-        const event = allEvents?.events
-            .find((event) => event.slug.toLowerCase() === (selectedEvent ?? "").toLowerCase());
-        // Set event id or default to current
-        if (event) {
-            setEventId(event.id);
-        } else {
-            const current = allEvents?.events.find(evt => evt.current);
-            setEventId(current?.id);
-            setSelectedEvent(current?.slug);
-            router.push(`nosecount/${current?.slug}`)
-        }
-
-    }, [allEvents, selectedEvent]);
-
-    useEffect(() => {
-        if (!eventId) return;
+        if (!event || !setup) return;
         setNeedsLoading(true);
-    }, [fursuitMode, sponsorMode, eventId])
+    }, [event?.id, mode]);
 
     // Loading logic
     useEffect(() => {
-        if (!needsLoading) return;
+        if (!setup || !needsLoading) return;
         setLoading(true);
         setSponsorData(undefined);
         setFursuitData(undefined);
         setRoomsData(undefined);
         setError(undefined);
-        const searchParams = buildSearchParams({ "event-id": "" + eventId });
-        if (fursuitMode) {
+        const searchParams = buildSearchParams({ "event-id": "" + event?.id });
+        if (mode == CountViewMode.FURSUIT) {
             runRequest(new FursuitCountApiAction(), undefined, undefined, searchParams)
                 .then((result) => setFursuitData(result))
                 .catch((err) => setError(err))
@@ -109,7 +73,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                     setLoading(false);
                     setNeedsLoading(false);
                 });
-        } else if (sponsorMode) {
+        } else if (mode == CountViewMode.SPONSOR) {
             runRequest(new SponsorCountApiAction(), undefined, undefined, searchParams)
                 .then((result) => setSponsorData(result))
                 .catch((err) => setError(err))
@@ -142,38 +106,21 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             day => roomsData.dailyFurs[day].map(user => user.userId)
         ).flat()).size;
 
-        setTotalCount(hotelGuestCount + roomsData.ticketOnlyFurs.length + dailyFursCount);
+        setTotalCount(hotelGuestCount + roomsData.roomlessFurs.length + dailyFursCount);
     }, [roomsData])
 
     useTitle(t("misc.nosecount.title"));
-
-    const options = <>
-        {/* Rendering options */}
-        <div className="options-list horizontal-list flex-wrap gap-4mm">
-            {(fursuitMode || sponsorMode) &&
-                <Link href={`/nosecount/${selectedEvent}/`} className="title bold change-mode">
-                    {t("misc.nosecount.title")}
-                </Link>}
-            {!fursuitMode &&
-                <Link href={`/nosecount/${selectedEvent}/fursuits`} className="title bold change-mode">
-                    {t("misc.nosecount.links.fursuits")}
-                </Link>}
-            {!sponsorMode &&
-                <Link href={`/nosecount/${selectedEvent}/sponsors`} className="title bold change-mode">
-                    {t("misc.nosecount.links.sponsors")}
-                </Link>}
-        </div>
-    </>
 
     return <div className="page">
         {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel /></div>}
         {error && <ModalError translationRoot="misc" translationKey="nosecount.errors" error={error}></ModalError>}
 
         {/* Rendering sponsors */}
-        {sponsorMode && <>
+        {mode == CountViewMode.SPONSOR && <>
             <p className="title x-large bold">{t("misc.nosecount.sections.sponsors")}</p>
-            {options}
-            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
+            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">
+                {t("common.sponsorships.super_sponsor")}
+            </p>}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {sponsorData?.users.SUPER_SPONSOR?.map((user, index) =>
                     <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}
@@ -186,9 +133,8 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         </>}
 
         {/* Rendering fursuits */}
-        {fursuitMode && <>
+        {mode == CountViewMode.FURSUIT && <>
             <p className="title x-large bold">{t("misc.nosecount.sections.fursuits")}</p>
-            {options}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {fursuitData?.fursuits.map((fursuit, index) =>
                     <UserPicture size={96} key={index} fursuitData={fursuit} showFlag showNickname />
@@ -197,22 +143,21 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         </>}
 
         {/* Rendering nosecount */}
-        {roomsData && <>
+        {mode == CountViewMode.NORMAL && roomsData && <>
             <p className="title x-large bold section-title">{t.rich("misc.nosecount.sections.nosecount",
                 { b: (chunks) => <b className="highlight">{chunks}</b> })}</p>
             <p className="title large">{t("misc.nosecount.total_count", { count: totalCount ?? 0 })}</p>
-            {options}
             {/* Hotel */}
             <div className="vertical-list gap-4mm">
                 {roomsData.hotels.map((hotel, hi) => <div key={hi} className="hotel-container">
                     <p className="title medium horizontal-list gap-2mm flex-vertical-center">
-                        <Icon iconName={ICONS.LOCATION_CITY}></Icon>
+                        <Icon icon={"LOCATION_CITY"}></Icon>
                         {translate(hotel.displayName, locale)}
                     </p>
                     {/* Room type */}
                     {hotel.roomTypes.map((roomType, rti) => <div key={`rt${hi}-${rti}`} className="room-type-container">
                         <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                            <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+                            <Icon icon={"BEDROOM_PARENT"}></Icon>
                             {translate(roomType.roomData.roomTypeNames, locale)}
                         </p>
                         {/* Room */}
@@ -220,7 +165,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                             className="room-container vertical-list gap-2mm flex-wrap">
                             <p key={`rh${hi}-${rti}-${ri}`}
                                 className="title large bold horizontal-list gap-2mm flex-vertical-center">
-                                <Icon iconName={ICONS.BED}></Icon>
+                                <Icon icon={"BED"}></Icon>
                                 {room.roomName}
                                 {room.roomExtraDays != ExtraDays.NONE && <div className="horizontal-list gap-2mm">
                                     {[ExtraDays.EARLY, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
@@ -247,13 +192,18 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                 </div>)}
             </div>
             <div className="user-list horizontal-list flex-wrap gap-4mm">
-                {roomsData.ticketOnlyFurs.map((user, index) =>
-                    <UserPicture size={96} key={index} userData={user} showFlag showNickname></UserPicture>)}
+                {roomsData.roomlessFurs.map((data, index) =>
+                    <UserPicture size={96}
+                        key={index}
+                        userData={data.user}
+                        extraDays={data.extraDays}
+                        showFlag
+                        showNickname/>)}
             </div>
             {/* Rendering daily furs */}
             {Object.keys(roomsData.dailyFurs).length > 0 && <>
                 <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                    <Icon iconName={ICONS.BEDROOM_PARENT}></Icon>
+                    <Icon icon={"BEDROOM_PARENT"}></Icon>
                     {t("misc.nosecount.daily_furs")}
                 </p>
                 {Object.keys(roomsData.dailyFurs).map((day, di) => <div className="daily-day" key={di}>

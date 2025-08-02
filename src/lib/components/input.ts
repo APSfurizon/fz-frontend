@@ -1,3 +1,4 @@
+import { MaterialIcon } from "@/components/icon";
 import { CSSProperties } from "react";
 
 /**
@@ -11,7 +12,7 @@ export class InputEntity {
     id?: number;
     code?: string;
     description?: string;
-    icon?: string;
+    icon?: MaterialIcon;
     imageUrl?: string;
     iconCSS?: CSSProperties;
     public getDescription (): string {
@@ -21,7 +22,7 @@ export class InputEntity {
         ?? "";
     }
     constructor(id?: number, code?: string, description?: string,
-        icon?: string, imageUrl?: string, iconCSS?: CSSProperties) {
+        icon?: MaterialIcon, imageUrl?: string, iconCSS?: CSSProperties) {
             this.id = id;
             this.code = code;
             this.description = description;

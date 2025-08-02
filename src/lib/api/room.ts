@@ -31,20 +31,17 @@ export interface RoomInfo {
     userIsOwner: boolean,
 
     confirmationSupported: boolean,
-    unconfirmationSupported: boolean,
     canConfirm: boolean,
+    unconfirmationSupported: boolean,
     canUnconfirm: boolean,
     confirmed: boolean,
 
+    showInNosecount: boolean,
+    eventId: number
     roomData: RoomData,
     canInvite: boolean,
-    guests: RoomGuestHeader[],
-    owner: boolean,
-
-    showInNosecount: boolean,
     extraDays: ExtraDaysType,
-
-    eventId: number
+    guests: RoomGuestHeader[]
 }
 
 export interface RoomCreateData {
@@ -65,15 +62,16 @@ export interface RoomInvitation {
 }
 
 export interface RoomInfoResponse extends ApiResponse {
-    hasOrder: boolean,
-    canCreateRoom: boolean,
-    editingRoomEndTime: string,
     currentRoomInfo: RoomInfo,
-    invitations: RoomInvitation[],
+    hasOrder: boolean,
+    allowedModifications: boolean
+    canCreateRoom: boolean,
     buyOrUpgradeRoomSupported: boolean,
     canBuyOrUpgradeRoom: boolean,
+    exchangeSupported: boolean,
     canExchange: boolean,
-    allowedModifications: boolean
+    editingRoomEndTime: string,
+    invitations: RoomInvitation[]
 }
 
 export class RoomInfoApiAction extends ApiAction<RoomInfoResponse, ApiErrorResponse> {
@@ -213,12 +211,29 @@ export class RoomSetShowInNosecountApiAction extends ApiAction<boolean, ApiError
     urlAction = "room/show-in-nosecount";
 }
 
+export interface RoomIdRequest {
+    roomId: number
+}
+
+export class RoomConfirmAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "room/confirm";
+}
+
+export class RoomUnconfirmAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "room/unconfirm";
+}
+
 export const EMPTY_ROOM_INFO: RoomInfoResponse = {
     hasOrder: false,
     canCreateRoom: false,
     allowedModifications: false,
     buyOrUpgradeRoomSupported: false,
     canBuyOrUpgradeRoom: false,
+    exchangeSupported: false,
     canExchange: false,
     editingRoomEndTime: new Date().toString(),
     invitations: [],
@@ -242,7 +257,6 @@ export const EMPTY_ROOM_INFO: RoomInfoResponse = {
             roomPretixItemId: 0,
             roomTypeNames: {}
         },
-        owner: false,
         canInvite: false,
         showInNosecount: false,
         eventId: 0,

@@ -5,7 +5,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import DataForm from "@/components/input/dataForm";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
 import useTitle from "@/components/hooks/useTitle";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
@@ -77,7 +77,7 @@ export default function Register() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon iconName="design_services"></Icon>
+        <Icon icon="DESIGN_SERVICES"></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('register.title').toLowerCase()}</span>
@@ -101,7 +101,7 @@ export default function Register() {
         required
         inputType="text"
         helpText={t("register.form.nickname.help")}
-        label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")}/>
+        label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")} />
       <FpInput fieldName="email" required={true} inputType="email" label={t("register.form.email.label")}
         placeholder={t("register.form.email.placeholder")} onChange={(e) => setEmail(e.target.value)} />
       <FpInput required={true} inputType="email" label={t("register.form.confirm_email.label")}
@@ -114,7 +114,7 @@ export default function Register() {
         helpText={t("register.form.password.help")}
         label={t("register.form.password.label")}
         placeholder={t("register.form.password.placeholder")}
-        onChange={(e) => setPassword(e.currentTarget.value)}/>
+        onChange={(e) => setPassword(e.currentTarget.value)} />
       <FpInput fieldName="confirmPassword"
         minLength={6}
         required={true}
@@ -125,7 +125,7 @@ export default function Register() {
         onChange={
           (e) => setConfirmPassword(e.currentTarget.value)
         }
-        className={`${passwordMatch ? 'success' : 'danger'}`}/>
+        className={`${passwordMatch ? 'success' : 'danger'}`} />
       <hr></hr>
       {/* Ask user for name data*/}
       <span className="title medium bold highlight">{t("register.form.section.personal_info")}</span>
@@ -134,12 +134,12 @@ export default function Register() {
           required
           inputType="text"
           label={t("register.form.first_name.label")}
-          placeholder={t("register.form.first_name.placeholder")}/>
+          placeholder={t("register.form.first_name.placeholder")} />
         <FpInput fieldName="lastName"
           required={true}
           inputType="text"
           label={t("register.form.last_name.label")}
-          placeholder={t("register.form.last_name.placeholder")}/>
+          placeholder={t("register.form.last_name.placeholder")} />
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="sex" required minDecodeSize={0}
@@ -162,7 +162,7 @@ export default function Register() {
         <FpInput fieldName="birthday"
           required
           inputType="date"
-          label={t("register.form.birthday.label")}/>
+          label={t("register.form.birthday.label")} />
         <AutoInput fieldName="birthCountry"
           required
           minDecodeSize={2}
@@ -203,24 +203,24 @@ export default function Register() {
           placeholder={t("register.form.birth_city.placeholder")} />
       </div>
       <span className="title average">{t("register.form.section.identity_data")}</span>
-        <div className="form-pair horizontal-list gap-4mm">
-            <FpSelect fieldName="idType" required
-              items={idTypeAnswers}
-              label={t("register.form.id_type.label")}
-              itemExtractor={inputEntityCodeExtractor}
-              placeholder={t("register.form.id_type.placeholder")}/>
-            <FpInput fieldName="idNumber" required inputType="text"
-              label={t("register.form.id_number.label")}
-              placeholder={t("register.form.id_number.placeholder")}/>
-        </div>
-        <div className="form-pair horizontal-list gap-4mm">
-            <FpInput fieldName="idIssuer" required inputType="text"
-              label={t("register.form.id_issuer.label")}
-              placeholder={t("register.form.id_issuer.placeholder")}/>
-            <FpInput fieldName="idExpiry" required inputType="date"
-              label={t("register.form.id_expiry.label")}
-              placeholder={t("register.form.id_expiry.placeholder")}/>
-        </div>
+      <div className="form-pair horizontal-list gap-4mm">
+        <FpSelect fieldName="idType" required
+          items={idTypeAnswers}
+          label={t("register.form.id_type.label")}
+          itemExtractor={inputEntityCodeExtractor}
+          placeholder={t("register.form.id_type.placeholder")} />
+        <FpInput fieldName="idNumber" required inputType="text"
+          label={t("register.form.id_number.label")}
+          placeholder={t("register.form.id_number.placeholder")} />
+      </div>
+      <div className="form-pair horizontal-list gap-4mm">
+        <FpInput fieldName="idIssuer" required inputType="text"
+          label={t("register.form.id_issuer.label")}
+          placeholder={t("register.form.id_issuer.placeholder")} />
+        <FpInput fieldName="idExpiry" required inputType="date"
+          label={t("register.form.id_expiry.label")}
+          placeholder={t("register.form.id_expiry.placeholder")} />
+      </div>
       <hr></hr>
       <span className="title medium bold highlight">{t("register.form.section.residence_data")}</span>
       <div className="form-pair horizontal-list gap-4mm">
@@ -249,19 +249,19 @@ export default function Register() {
           required
           inputType="text"
           label={t("register.form.residence_city.label")}
-          placeholder={t("register.form.residence_city.placeholder")}/>
+          placeholder={t("register.form.residence_city.placeholder")} />
         <FpInput fieldName="residenceZipCode"
           required
           inputType="text"
           label={t("register.form.residence_zip_code.label")}
-          placeholder={t("register.form.residence_zip_code.placeholder")}/>
+          placeholder={t("register.form.residence_zip_code.placeholder")} />
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         <FpInput fieldName="residenceAddress"
           required
           inputType="text"
           label={t("register.form.residence_address.label")}
-          placeholder={t("register.form.residence_address.placeholder")}/>
+          placeholder={t("register.form.residence_address.placeholder")} />
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         {/* Phone number */}
@@ -275,32 +275,32 @@ export default function Register() {
           onChange={
             (p) => setPhonePrefix(extractPhonePrefix(firstOrUndefined(p.newValues) as CountrySearchResult))
           }
-          emptyIfUnselected/>
+          emptyIfUnselected />
         <FpInput fieldName="phoneNumber"
           required={true}
           inputType="text"
           label={t("register.form.phone_number.label")}
           placeholder={t("register.form.phone_number.placeholder")}
           style={{ flex: "2" }}
-          prefix={phonePrefix}/>
+          prefix={phonePrefix} />
       </div>
       <div className="form-pair horizontal-list gap-4mm">
         {/* Telegram username */}
-        <FpInput fieldName="telegramUsername" required inputType="text" 
+        <FpInput fieldName="telegramUsername" required inputType="text"
           pattern={/^@?[a-z0-9_]{5,32}$/i}
           label={t("register.form.telegram_username.label")}
           placeholder={t("register.form.telegram_username.placeholder")}
-          helpText={t("register.form.telegram_username.help")}/>
+          helpText={t("register.form.telegram_username.help")} />
         <FpSelect fieldName="shirtSize" required
           items={shirtSizeAnswers}
           label={t("register.form.shirt_size.label")}
           itemExtractor={inputEntityCodeExtractor}
-          placeholder={t("register.form.shirt_size.placeholder")}/>
+          placeholder={t("register.form.shirt_size.placeholder")} />
       </div>
       <NoticeBox theme={NoticeTheme.FAQ}
         title={t("register.question.description_title")}
         className="descriptive">
-          {t("register.question.description")}
+        {t("register.question.description")}
       </NoticeBox>
       <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>
         {t.rich("register.form.disclaimer_tos.label", {
@@ -313,13 +313,13 @@ export default function Register() {
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={ICONS.KEY} >{t("register.register")}</Button>
+        <Button type="submit" iconName={"KEY"} >{t("register.register")}</Button>
       </div>
     </DataForm>
     <div>
       <Link href={`/login?${params.toString()}`}
         className="suggestion title small center color-subtitle underlined">
-          {t('register.login_here')}
+        {t('register.login_here')}
       </Link>
     </div>
   </>;

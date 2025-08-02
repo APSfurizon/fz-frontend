@@ -1,11 +1,12 @@
 "use client"
-import Icon, { ICONS } from "@/components/icon";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError, runRequest } from "@/lib/api/global";
+import Icon from "@/components/icon";
+import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
-import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction, ExchangeUpdateApiData } from "@/lib/api/exchange";
+import { ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction,
+  ExchangeUpdateApiData } from "@/lib/api/exchange";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
 import Button from "@/components/input/button";
@@ -25,23 +26,25 @@ export default function ExchangeConfirm() {
   const locale = useLocale();
   const router = useRouter();
   const params = useSearchParams();
-  const { userDisplay, userLoading } = useUser();
+  const { userDisplay } = useUser();
 
   const renderRoom = (userData: UserData, data: RoomData) => {
     return <>
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-        <Icon className="large" iconName={ICONS.PACKAGE_2}></Icon>
+        <Icon className="large" icon={"PACKAGE_2"}></Icon>
         {t.rich("authentication.exchange_confirm.room.room_title", {
-          user: (chunks) => <><UserPicture userData={userData} />{userData.fursonaName}</>,
+          user: () => <><UserPicture userData={userData}/>{userData.fursonaName}</>,
         })}
       </span>
       <div className="horizontal-list item-content flex-vertical-center gap-2mm rounded-m">
-        <Icon className="xx-large" iconName={ICONS.BEDROOM_PARENT}></Icon>
+        <Icon className="xx-large" icon={"BEDROOM_PARENT"}></Icon>
         <div className="vertical-list">
           <span className="title horizontal-list flex-vertical-center">
             {translate(data.roomTypeNames, locale)}
           </span>
-          <span className="small descriptive color-subtitle">{t("furpanel.booking.items.room_capacity", { capacity: data.roomCapacity })}</span>
+          <span className="small descriptive color-subtitle">
+            {t("furpanel.booking.items.room_capacity", { capacity: data.roomCapacity })}
+          </span>
         </div>
       </div>
     </>;
@@ -95,7 +98,7 @@ export default function ExchangeConfirm() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon iconName="design_services"></Icon>
+        <Icon icon="DESIGN_SERVICES"></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('authentication.exchange_confirm.title').toLowerCase()}</span>
@@ -110,8 +113,8 @@ export default function ExchangeConfirm() {
       <div className="exchange-info rounded-l vertical-list gap-2mm">
         <span className="title bold exchange-title rounded-m horizontal-list gap-2mm flex-vertical-center flex-wrap">
           {t.rich(`authentication.exchange_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
-            source: (chunks) => <><UserPicture userData={exchangeData.sourceUser} />{exchangeData.sourceUser.fursonaName}</>,
-            target: (chunks) => <><UserPicture userData={exchangeData.targetUser} />{exchangeData.targetUser.fursonaName}</>,
+            source: () => <><UserPicture userData={exchangeData.sourceUser} />{exchangeData.sourceUser.fursonaName}</>,
+            target: () => <><UserPicture userData={exchangeData.targetUser} />{exchangeData.targetUser.fursonaName}</>,
           })}
         </span>
         <div className="exchange-items vertical-list gap-4mm">
@@ -132,15 +135,17 @@ export default function ExchangeConfirm() {
           {exchangeData.fullOrderExchange && ticketData && <>
             <div className="item-info vertical-list rounded-m">
               <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-                <Icon className="large" iconName={ICONS.LOCAL_ACTIVITY}></Icon>
+                <Icon className="large" icon={"LOCAL_ACTIVITY"}></Icon>
                 {t.rich("authentication.exchange_confirm.order.order_title", {
-                  user: (chunks) => <><UserPicture userData={exchangeData.sourceUser} />{exchangeData.sourceUser.fursonaName}</>,
-                })}
+                  user: () => <>
+                    <UserPicture userData={exchangeData.sourceUser}/>
+                    {exchangeData.sourceUser.fursonaName}
+                </>})}
               </span>
               <div className="descriptive vertical-list item-content gap-2mm rounded-m">
                 {/* Ticket name */}
                 <span className="horizontal-list gap-2mm">
-                  <Icon iconName={ICONS.LOCAL_ACTIVITY}></Icon>
+                  <Icon icon={"LOCAL_ACTIVITY"}></Icon>
                   {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
                     sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
                     supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
@@ -154,12 +159,12 @@ export default function ExchangeConfirm() {
                 {/* Extra days */}
                 {exchangeData.fullOrderExchange.extraDays && exchangeData.fullOrderExchange.extraDays !== "NONE" &&
                   <span className="horizontal-list gap-2mm">
-                    <Icon iconName={ICONS.CALENDAR_ADD_ON}></Icon>
+                    <Icon icon={"CALENDAR_ADD_ON"}></Icon>
                     {t(`furpanel.booking.items.extra_days_${exchangeData.fullOrderExchange.extraDays}`)}
                   </span>}
                 {/* Room */}
                 {exchangeData.fullOrderExchange.room && <span className="horizontal-list gap-2mm">
-                  <Icon iconName={ICONS.BED}></Icon>
+                  <Icon icon={"BED"}></Icon>
                   {translate(exchangeData.fullOrderExchange.room.roomTypeNames, locale)}
                   &nbsp;
                   ({t("furpanel.booking.items.room_capacity",
@@ -171,9 +176,13 @@ export default function ExchangeConfirm() {
         </div>
       </div>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={ICONS.CHECK} busy={loading} onClick={() => updateExchangeStatus(true)}>{t("common.accept")}</Button>
+        <Button className="success" iconName={"CHECK"} busy={loading} onClick={() => updateExchangeStatus(true)}>
+          {t("common.accept")}
+        </Button>
         <div className="spacer"></div>
-        <Button className="danger" iconName={ICONS.CANCEL} busy={loading} onClick={() => updateExchangeStatus(false)}>{t("common.refuse")}</Button>
+        <Button className="danger" iconName={"CANCEL"} busy={loading} onClick={() => updateExchangeStatus(false)}>
+          {t("common.refuse")}
+        </Button>
       </div>
     </>}
   </>;

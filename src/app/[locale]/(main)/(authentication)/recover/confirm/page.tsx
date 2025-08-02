@@ -1,6 +1,6 @@
 "use client"
 import DataForm from "@/components/input/dataForm";
-import Icon, { ICONS } from "@/components/icon";
+import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
@@ -12,7 +12,7 @@ import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
 
 export default function RecoverConfirm() {
   const t = useTranslations("authentication");
-  const [error, setError] = useState<String | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
@@ -44,7 +44,7 @@ export default function RecoverConfirm() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon iconName={ICONS.DESIGN_SERVICES}></Icon>
+        <Icon icon={"DESIGN_SERVICES"}></Icon>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('recover_confirm.title').toLowerCase()}</span>

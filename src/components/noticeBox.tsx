@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import Icon, { ICONS } from "./icon";
+import Icon from "./icon";
 import "@/styles/components/noticeBox.css";
 
 export enum NoticeTheme {
@@ -9,32 +9,32 @@ export enum NoticeTheme {
     Error
 }
 
-export default function NoticeBox ({title, theme, customIcon, children, headerStyle, style, className}: 
-Readonly<{title?: string, theme: NoticeTheme, customIcon?: string, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string}>) {
+export default function NoticeBox({ title, theme, customIcon, children, headerStyle, style, className }:
+    Readonly<{ title?: string, theme: NoticeTheme, customIcon?: string, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string }>) {
     let icon = null;
     let classStyle = null;
     switch (theme) {
         case NoticeTheme.FAQ:
-            icon = ICONS.HELP;
+            icon = "HELP";
             classStyle = "faq";
             break;
         case NoticeTheme.Success:
-            icon = ICONS.CHECK_CIRCLE;
+            icon = "CHECK_CIRCLE";
             className = "success";
             break;
         case NoticeTheme.Warning:
-            icon = ICONS.ERROR;
+            icon = "ERROR";
             className = "warning";
             break;
         case NoticeTheme.Error:
-            icon = ICONS.CANCEL;
+            icon = "CANCEL";
             className = "error";
             break;
     }
     return (
-        <div className={`notice-box ${className}`} style={{...style}}>
-            <div className="header vertical-align-middle" style={{...headerStyle}}>
-                <Icon className="medium" iconName={customIcon ?? icon}></Icon>
+        <div className={`notice-box ${className}`} style={{ ...style }}>
+            <div className="header vertical-align-middle" style={{ ...headerStyle }}>
+                <Icon className="medium" icon={customIcon ?? icon}></Icon>
                 <span className="title">{title}</span>
             </div>
             <div className="answer descriptive">
