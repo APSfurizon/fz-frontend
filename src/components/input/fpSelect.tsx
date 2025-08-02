@@ -61,14 +61,16 @@ export default function FpSelect({
     }, [items])
 
     useEffect(()=>{
-        if (mappedItems && Object.keys(mappedItems ?? {}).length > 0 && initialValue !== undefined && (!areEquals(initialValue, lastInitialValue) || formReset)) {
-            setSelectedItem(mappedItems[initialValue]);
-            setLastInitialValue(initialValue);
+        if (mappedItems && Object.keys(mappedItems ?? {}).length > 0
+            && initialValue !== undefined
+            && (!areEquals(initialValue, lastInitialValue) || formReset)) {
+                setSelectedItem(mappedItems[initialValue]);
+                setLastInitialValue(initialValue);
         } else if (formReset) {
-            setSelectedItem(undefined);
+            setSelectedItem(mappedItems ? mappedItems[initialValue] : undefined);
             onFormChange(fieldName);
         }
-    }, [initialValue, mappedItems]);
+    }, [initialValue, mappedItems, formReset]);
 
     const renderItems = (items: (SelectGroup|SelectItem)[]) => {
         return <>
