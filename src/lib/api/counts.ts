@@ -1,3 +1,4 @@
+import { createContext, useContext } from "react";
 import { TranslatableString } from "../translations";
 import { FursuitDetails } from "./badge/fursuits";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
@@ -101,3 +102,26 @@ export class GetCurrentEventApiAction extends ApiAction<CurrentEventResponse, Ap
     method = RequestType.GET;
     urlAction = "events/current";
 }
+
+// Context management
+export interface NosecountUpdate {
+    event?: ConventionEvent,
+    mode: CountViewMode,
+    selectEvent: (slug: string) => void,
+    selectMode: (mode: string) => void
+}
+
+export const NosecountContext = createContext<NosecountUpdate | undefined>(undefined);
+
+export const useNosecountContext: () => NosecountUpdate = () => {
+    const context = useContext(NosecountContext);
+    if (!context) {
+        return {
+            event: undefined,
+            mode: CountViewMode.NORMAL,
+            selectEvent: () => { },
+            selectMode: () => { }
+        };
+    }
+    return context;
+};

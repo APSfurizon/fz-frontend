@@ -1,46 +1,23 @@
 "use client"
 import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
-import { ConventionEvent, CountViewMode, GetAllEventsApiAction } from "@/lib/api/counts";
+import { ConventionEvent, CountViewMode, GetAllEventsApiAction, NosecountContext } from "@/lib/api/counts";
 import { runRequest } from "@/lib/api/global";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-// Context management
-interface NosecountUpdate {
-    event?: ConventionEvent,
-    mode: CountViewMode,
-    selectEvent: (slug: string) => void,
-    selectMode: (mode: string) => void
-}
-
-const NosecountContext = createContext<NosecountUpdate | undefined>(undefined);
-
-export const useNosecountContext: () => NosecountUpdate = () => {
-    const context = useContext(NosecountContext);
-    if (!context) {
-        return {
-            event: {} as ConventionEvent,
-            mode: CountViewMode.NORMAL,
-            selectEvent: () => {},
-            selectMode: () => {}
-        };
-    }
-    return context;
-};
-
-export default function NosecountLayout ({children}: Readonly<{children: React.ReactNode}>) {
+export default function NosecountLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     const t = useTranslations();
     const [events, setEvents] = useState<ConventionEvent[]>();
     const [selectedSlug, setSelectedSlug] = useState<string>();
     const [loading, setLoading] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<ConventionEvent>();
     const router = useRouter();
-    const items = useMemo(() => (events || []).map ((evt) => new SelectItem(undefined,
+    const items = useMemo(() => (events || []).map((evt) => new SelectItem(undefined,
         evt.slug,
         undefined,
         undefined,
@@ -56,7 +33,7 @@ export default function NosecountLayout ({children}: Readonly<{children: React.R
         runRequest(new GetAllEventsApiAction())
             .then((result) => setEvents(result.events))
             .catch((e) => console.error(e))
-            .finally(()=>setLoading(false));
+            .finally(() => setLoading(false));
     }, [events]);
 
     /** Fired by child components */
@@ -67,7 +44,7 @@ export default function NosecountLayout ({children}: Readonly<{children: React.R
 
     function selectMode(mode: string) {
         let toSet: CountViewMode = CountViewMode.NORMAL;
-        switch(mode) {
+        switch (mode) {
             case CountViewMode.FURSUIT:
                 toSet = CountViewMode.FURSUIT;
                 break;
@@ -81,13 +58,13 @@ export default function NosecountLayout ({children}: Readonly<{children: React.R
         setViewMode(toSet);
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         if (!events) return;
         if (!selectedSlug) {
             const current = events.find(evt => !!evt.current);
-            if (current) { selectEvent (current.slug); }
+            if (current) { selectEvent(current.slug); }
         } else {
-            setSelectedEvent ((events || []).find(evt => evt.slug == selectedSlug));
+            setSelectedEvent((events || []).find(evt => evt.slug == selectedSlug));
         }
     }, [selectedSlug, events])
 
@@ -106,24 +83,24 @@ export default function NosecountLayout ({children}: Readonly<{children: React.R
 
     return <div className="main-dialog rounded-s">
         <div className="page">
-            <div className="horizontal-list gap-4mm">
+            <div className="horizontal-list gap-4mm flex-wrap">
                 <Button className={(viewMode != CountViewMode.NORMAL ? "off" : "")
                     + " margin-bottom-1mm"}
                     iconName="GROUPS"
-                    onClick={()=>onSelectMode(CountViewMode.NORMAL)}>
-                        {t("misc.nosecount.title")}
+                    onClick={() => onSelectMode(CountViewMode.NORMAL)}>
+                    {t("misc.nosecount.title")}
                 </Button>
                 <Button className={(viewMode != CountViewMode.FURSUIT ? "off" : "")
                     + " margin-bottom-1mm"}
                     iconName="PETS"
-                    onClick={()=>onSelectMode(CountViewMode.FURSUIT)}>
-                        {t("misc.nosecount.links.fursuits")}
+                    onClick={() => onSelectMode(CountViewMode.FURSUIT)}>
+                    {t("misc.nosecount.links.fursuits")}
                 </Button>
                 <Button className={(viewMode != CountViewMode.SPONSOR ? "off" : "")
                     + " margin-bottom-1mm"}
                     iconName="CONSTRUCTION"
-                    onClick={()=>onSelectMode(CountViewMode.SPONSOR)}>
-                        {t("misc.nosecount.links.sponsors")}
+                    onClick={() => onSelectMode(CountViewMode.SPONSOR)}>
+                    {t("misc.nosecount.links.sponsors")}
                 </Button>
                 <div className="spacer"></div>
                 <FpSelect itemExtractor={inputEntityCodeExtractor}
@@ -132,13 +109,13 @@ export default function NosecountLayout ({children}: Readonly<{children: React.R
                     placeholder={t("misc.nosecount.input.select_event")}
                     disabled={(events || []).length == 0}
                     initialValue={selectedEvent?.slug}
-                    onChange={onSelectEvent}/>
+                    onChange={onSelectEvent} />
                 <Button iconName={"REFRESH"}
                     className="margin-bottom-1mm"
                     title={t("common.reload")}
-                    onClick={()=>setEvents(undefined)}
+                    onClick={() => setEvents(undefined)}
                     busy={loading}
-                    debounce={3000}/>
+                    debounce={3000} />
             </div>
             <NosecountContext.Provider value={{
                 event: selectedEvent,
