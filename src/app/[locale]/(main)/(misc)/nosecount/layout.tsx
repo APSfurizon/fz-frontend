@@ -17,13 +17,10 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
     const [loading, setLoading] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<ConventionEvent>();
     const router = useRouter();
-    const items = useMemo(() => (events || []).map((evt) => new SelectItem(undefined,
-        evt.slug,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        evt.eventNames)), [events]);
+    const items = useMemo(() => (events || [])
+        .toSorted((a, b) => new Date(a.dateFrom).getTime() - new Date(b.dateFrom).getTime()).toReversed()
+        .map((evt) => new SelectItem(undefined, evt.slug, undefined, undefined, undefined, undefined, evt.eventNames)),
+        [events]);
 
     const [viewMode, setViewMode] = useState<CountViewMode>(CountViewMode.NORMAL);
 
