@@ -5,7 +5,8 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/ap
 import {
     CountViewMode,
     FursuitCountApiAction, FursuitCountResponse, NoseCountApiAction,
-    NoseCountResponse, SponsorCountApiAction, SponsorCountResponse
+    NoseCountResponse, SponsorCountApiAction, SponsorCountResponse,
+    useNosecountContext
 } from "@/lib/api/counts";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
@@ -17,7 +18,6 @@ import ModalError from "@/components/modalError";
 import LoadingPanel from "@/components/loadingPanel";
 import { ExtraDays } from "@/lib/api/user";
 import StatusBox from "@/components/statusBox";
-import { useNosecountContext } from "../layout";
 
 export default function NosecountPage({ params }: { params: Promise<{ slug: string[] }> }) {
 
