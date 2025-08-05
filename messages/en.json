@@ -203,7 +203,7 @@
       },
       "actions": {
         "review_info": "Review informations",
-        "confirm_info": "Confirm informazions",
+        "confirm_info": "Confirm informations",
         "exchange_order": "Exchange order",
         "show_qr": "Check-in QR code"
       },
