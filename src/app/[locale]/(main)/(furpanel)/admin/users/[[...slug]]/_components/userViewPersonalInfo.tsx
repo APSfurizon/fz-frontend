@@ -74,12 +74,12 @@ export default function UserViewPersonalInfo({
                     label={t("authentication.register.form.first_name.label")}
                     placeholder={t("authentication.register.form.first_name.placeholder")}
                     initialValue={personalInformation?.firstName}
-                    readOnly={!inEdit} />
+                    readOnly={!inEdit}/>
                 <FpInput fieldName="lastName" required inputType="text"
                     label={t("authentication.register.form.last_name.label")}
                     placeholder={t("authentication.register.form.last_name.placeholder")}
                     initialValue={personalInformation?.lastName}
-                    readOnly={!inEdit} />
+                    readOnly={!inEdit}/>
             </div>
             <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="sex" required minDecodeSize={0}
@@ -87,13 +87,13 @@ export default function UserViewPersonalInfo({
                     label={t("authentication.register.form.sex.label")}
                     placeholder={t("authentication.register.form.sex.placeholder")}
                     initialData={personalInformation?.sex ? [personalInformation?.sex] : undefined}
-                    readOnly={!inEdit} />
-                <AutoInput fieldName="gender" required minDecodeSize={0}
+                    readOnly={!inEdit}/>
+                <AutoInput fieldName="gender" minDecodeSize={0}
                     manager={new AutoInputGenderManager}
                     label={t("authentication.register.form.gender.label")}
                     placeholder={t("authentication.register.form.gender.placeholder")}
                     initialData={personalInformation?.gender ? [personalInformation?.gender] : undefined}
-                    readOnly={!inEdit} />
+                    readOnly={!inEdit}/>
             </div>
             <div className="form-pair horizontal-list gap-4mm">
                 <FpInput fieldName="allergies" required={false} inputType="text"
