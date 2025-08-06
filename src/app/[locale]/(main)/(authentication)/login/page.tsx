@@ -56,23 +56,55 @@ export default function Login() {
         <span className="titular bold">{t('login.title').toLowerCase()}</span>
       </span>
     </div>
-    {error && <span className="error-container title small center">{t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}</span>}
-    {params.get("register") && <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
-      {t("login.messages.register_success.description")}
+    <Link href={`/register?${params.toString()}`}
+      className="suggestion title small center color-subtitle underlined">
+        {t('login.create_an_account')}
+    </Link>
+    {error && <span className="error-container title small center">
+      {t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}  
+    </span>}
+    {params.get("register") &&
+      <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
+        {t("login.messages.register_success.description")}
     </NoticeBox>}
-    {Object.keys(AuthenticationCodes).includes(params.get("status") ?? "") && <NoticeBox theme={AuthenticationCodes[params.get("status") ?? "UNKNOWN"]} title={t(`login.messages.${params.get("status")}.title`)}>
-      {t(`login.messages.${params.get("status")}.description`)}
-    </NoticeBox>}
-    <DataForm className="vertical-list login-form" loading={loading} setLoading={setLoading} action={new LoginFormAction} onBeforeSubmit={() => onLoad()}
-      onSuccess={(data) => manageSuccess(data as LoginResponse)} onFail={(err) => manageError(err)} hideSave
-      resetOnFail={false} resetOnSuccess={false}>
-      <FpInput fieldName="email" required={true} inputType="email" busy={loading} label={t("login.label_email")} placeholder={t("login.placeholder_email")} />
-      <FpInput fieldName="password" minLength={6} required={true} inputType="password" busy={loading} label={t("login.label_password")} placeholder={t("login.placeholder_password")} />
-      <div className="toolbar-bottom">
-        <Button type="submit" iconName={"KEY"} busy={loading}>{t("login.login")}</Button>
-      </div>
+    {Object.keys(AuthenticationCodes).includes(params.get("status") ?? "") &&
+      <NoticeBox theme={AuthenticationCodes[params.get("status") ?? "UNKNOWN"]}
+        title={t(`login.messages.${params.get("status")}.title`)}>
+          {t(`login.messages.${params.get("status")}.description`)}
+      </NoticeBox>}
+    <DataForm className="vertical-list login-form"
+      loading={loading}
+      setLoading={setLoading}
+      action={new LoginFormAction}
+      onBeforeSubmit={() => onLoad()}
+      onSuccess={(data) => manageSuccess(data as LoginResponse)}
+      onFail={(err) => manageError(err)} hideSave
+      resetOnFail={false}
+      resetOnSuccess={false}>
+        <FpInput fieldName="email"
+          required
+          inputType="email"
+          label={t("login.label_email")}
+          placeholder={t("login.placeholder_email")}/>
+        <FpInput fieldName="password"
+          minLength={6}
+          required
+          inputType="password"
+          label={t("login.label_password")}
+          placeholder={t("login.placeholder_password")}/>
+        <div className="toolbar-bottom">
+          <Button type="submit"
+            iconName={"KEY"}
+            busy={loading}>
+              {t("login.login")}
+          </Button>
+        </div>
     </DataForm>
-    <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.register_here')}</Link>
-    <Link href={`/recover?${params.toString()}`} className="suggestion title small center color-subtitle underlined">{t('login.recover')}</Link>
+    <div className="horizontal-list">
+      <Link style={{width: '100%'}} href={`/recover?${params.toString()}`}
+        className="suggestion title small center color-subtitle underlined">
+          {t('login.recover')}
+      </Link>
+    </div>
   </>;
 }

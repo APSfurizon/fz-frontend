@@ -1,6 +1,6 @@
 import {
     ChangeEvent, CSSProperties, FocusEvent, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute,
-    KeyboardEvent, MouseEvent, useEffect, useRef, useState
+    KeyboardEvent, MouseEvent, useEffect, useMemo, useRef, useState
 } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import "@/styles/components/fpInput.css";
@@ -115,10 +115,14 @@ export default function FpInput({
     const isDisabled = disabled || formDisabled;
     const isRequired = required && !isDisabled && !readOnly;
     const isBusy = busy || formLoading;
+    const showViewPassword = useMemo(()=>!!inputValue && String(inputValue).length > 0, [inputValue]);
 
     return <>
         <div className={`jan-input ${className ?? ""}`} style={{ ...style }}>
-            {label && <label className="title semibold small margin-bottom-1mm" style={{ ...labelStyle }}>{label}</label>}
+            {label && <label className="title semibold small margin-bottom-1mm"
+                style={{ ...labelStyle }}>
+                    {label}
+            </label>}
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
                 onClick={() => inputRef.current?.focus()}>
                 {prefix && <span className="title small color-subtitle">
@@ -126,7 +130,7 @@ export default function FpInput({
                 </span>}
                 {icon && <Icon style={{ marginLeft: '0.25em', marginRight: '0' }}
                     className="average"
-                    icon={icon} />}
+                    icon={icon}/>}
                 <input
                     readOnly={readOnly}
                     required={isRequired}
@@ -151,7 +155,8 @@ export default function FpInput({
                         <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
                     )}
                     {!(isBusy) && (isPassword) && (
-                        <a style={{ cursor: 'pointer' }} onClick={() => setVisiblePassword(!visiblePassword)}>
+                        <a style={{ cursor: 'pointer', visibility: showViewPassword ? 'visible' : 'hidden' }}
+                            onClick={() => setVisiblePassword(!visiblePassword)}>
                             <Icon className="medium"
                                 icon={visiblePassword ? "VISIBILITY" : "VISIBILITY_OFF"} />
                         </a>
