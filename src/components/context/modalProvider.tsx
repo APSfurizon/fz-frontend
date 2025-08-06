@@ -1,12 +1,13 @@
 import { createContext, useContext, useState } from "react";
+import { MaterialIcon } from "../icon";
 
 interface ModalUpdateType {
     isOpen: boolean;
-    icon?: string;
+    icon?: MaterialIcon;
     title?: string;
     zIndex: number;
     modalChildren: React.ReactNode;
-    showModal: (title: string, data: React.ReactNode, icon?: string, zIndex?: number) => void;
+    showModal: (title: string, data: React.ReactNode, icon?: MaterialIcon, zIndex?: number) => void;
     hideModal: () => void;
 }
 
@@ -14,11 +15,11 @@ const ModalContext = createContext<ModalUpdateType>(undefined as any);
 
 export function ModalProvider ({children}: Readonly<{children: React.ReactNode}>) {
     const [isOpen, setOpen] = useState(false);
-    const [icon, setIcon] = useState<string>();
+    const [icon, setIcon] = useState<MaterialIcon>();
     const [title, setModalTitle] = useState<string>();
     const [zIndex, setZIndex] = useState<number>(500);
     const [modalChildren, setModalChildren] = useState<React.ReactNode>();
-    const showModal = (title: string, data: React.ReactNode, icon?: string, zIndex?: number) => {
+    const showModal = (title: string, data: React.ReactNode, icon?: MaterialIcon, zIndex?: number) => {
         setModalTitle(title);
         setIcon(icon);
         setModalChildren(data);

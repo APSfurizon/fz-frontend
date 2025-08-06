@@ -6,7 +6,7 @@ import ToolLink from "@/components/toolLink";
 import { RoleData } from "@/lib/api/admin/role";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { getParentDirectory } from "@/lib/utils";
 
 export default function RoleEditorLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -26,9 +26,15 @@ export default function RoleEditorLayout({ children }: Readonly<{ children: Reac
                 </span>
             </div>
             <div className="spacer"></div>
-            <ToolLink iconName={"ID_CARD"} href="data">{t("furpanel.admin.users.security.roles.sections.data")}</ToolLink>
-            <ToolLink iconName={"SECURITY"} href="permissions">{t("furpanel.admin.users.security.roles.sections.permissions")}</ToolLink>
-            <ToolLink iconName={"GROUPS"} href="members">{t("furpanel.admin.users.security.roles.sections.members")}</ToolLink>
+            <ToolLink iconName={"ID_CARD"} href="data">
+                {t("furpanel.admin.users.security.roles.sections.data")}
+            </ToolLink>
+            <ToolLink iconName={"SECURITY"} href="permissions">
+                {t("furpanel.admin.users.security.roles.sections.permissions")}
+            </ToolLink>
+            <ToolLink iconName={"GROUPS"} href="members">
+                {t("furpanel.admin.users.security.roles.sections.members")}
+            </ToolLink>
         </div>
         {children}
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">

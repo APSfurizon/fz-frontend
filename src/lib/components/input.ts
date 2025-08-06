@@ -12,7 +12,7 @@ export class InputEntity {
     id?: number;
     code?: string;
     description?: string;
-    icon?: MaterialIcon;
+    icon?: MaterialIcon | string;
     imageUrl?: string;
     iconCSS?: CSSProperties;
     public getDescription (): string {

@@ -1,5 +1,5 @@
 import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
-import Icon from "../icon";
+import Icon, { MaterialIcon } from "../icon";
 import Image from "next/image";
 import { AutoInputFilter, AutoInputSearchResult, AutoInputManager,
     AutoInputChangedParams } from "@/lib/components/autoInput";
@@ -269,7 +269,7 @@ export default function AutoInput({
                     height={32}
                     alt={t('autoinput.alt_result_image', { description: element?.getDescription(locale) })} />
             }
-            {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon!} />}
+            {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon! as MaterialIcon} />}
             <div style={{ flex: 1 }}>
                 <span className="title">
                     {element?.getDescription(locale)}
@@ -295,7 +295,7 @@ export default function AutoInput({
                     height={32}
                     alt={t('autoinput.alt_result_image', { description: element?.getDescription(locale) })} />
             }
-            {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon} />}
+            {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon as MaterialIcon} />}
             <span className="title small" style={{ flex: 1 }}>
                 {element?.getDescription(locale)}
             </span>

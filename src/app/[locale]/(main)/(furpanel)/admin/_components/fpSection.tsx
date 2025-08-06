@@ -1,4 +1,4 @@
-import Icon from "@/components/icon"
+import Icon, { MaterialIcon } from "@/components/icon"
 import { CSSProperties } from "react"
 
 export default function FpSection({
@@ -9,7 +9,7 @@ export default function FpSection({
     style
 }: Readonly<{
     children?: React.ReactNode,
-    icon?: string,
+    icon?: MaterialIcon,
     title?: string,
     titleStyle?: CSSProperties,
     style?: CSSProperties

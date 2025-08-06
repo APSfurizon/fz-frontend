@@ -21,10 +21,10 @@ export default function Home() {
   const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
 
   const group1 = new SelectGroup([
-    new SelectItem(1, "aa", "aLetter", "pencil", undefined, undefined, { "it": "ciao", "en": "Hello" }),
-    new SelectItem(2, "bb", "bLetter", "rocket", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
   ], "gouppone", { "it": "Gruppo", "en": "Group" })
-  const item3 = new SelectItem(3, "cc", "cLetter", "book", undefined, undefined, { "it": "Libro", "en": "Book" });
+  const item3 = new SelectItem(3, "cc", "cLetter", "BED", undefined, undefined, { "it": "Libro", "en": "Book" });
 
   const selectItems: (SelectItem | SelectGroup)[] = [
     group1, item3

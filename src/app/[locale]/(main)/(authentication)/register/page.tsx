@@ -145,7 +145,7 @@ export default function Register() {
         <AutoInput fieldName="sex" required minDecodeSize={0}
           manager={new AutoInputSexManager}
           label={t("register.form.sex.label")} placeholder={t("register.form.sex.placeholder")} />
-        <AutoInput fieldName="gender" required minDecodeSize={0}
+        <AutoInput fieldName="gender" minDecodeSize={0}
           manager={new AutoInputGenderManager}
           label={t("register.form.gender.label")} placeholder={t("register.form.gender.placeholder")} />
       </div>
