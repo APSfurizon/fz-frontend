@@ -155,7 +155,7 @@
           "title": "Gruppo ufficiale",
           "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
         },
-        "exchange_explaination": "Puoi dare via la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio.",
+        "exchange_explaination": "Puoi cedere la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio.",
         "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in."
       },
       "items": {
@@ -741,7 +741,7 @@
     "recover": {
       "title": "Recupero account",
       "actions": {
-        "send_verification": "Verifica"
+        "send_verification": "Invia link di reset"
       },
       "input": {
         "email": {
@@ -754,7 +754,8 @@
           "title": "Recupero account",
           "description": "È stata inviata una mail per recuperare il tuo account."
         }
-      }
+      },
+      "instruction": "Inserisci la tua email per reimpostare la password"
     },
     "recover_confirm": {
       "title": "Cambia password",
@@ -805,8 +806,8 @@
       "placeholder_email": "Inserisci il tuo indirizzo email",
       "label_password": "Password",
       "placeholder_password": "Inserisci la tua password",
-      "register_here": "oppure registrati",
-      "recover": "Recupera accesso",
+      "create_an_account": "Crea un account",
+      "recover": "Ho dimenticato la password",
       "errors": {
         "unknown_error": "Errore sconosciuto",
         "network_error": "Errore di rete",

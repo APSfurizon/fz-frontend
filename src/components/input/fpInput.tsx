@@ -1,6 +1,6 @@
 import {
     ChangeEvent, CSSProperties, FocusEvent, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute,
-    KeyboardEvent, MouseEvent, useEffect, useRef, useState
+    KeyboardEvent, MouseEvent, useEffect, useMemo, useRef, useState
 } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import "@/styles/components/fpInput.css";
@@ -119,6 +119,7 @@ export default function FpInput({
     const isDisabled = disabled || formDisabled;
     const isRequired = required && !isDisabled && !readOnly;
     const isBusy = busy || formLoading;
+    const showViewPassword = useMemo(() => !!inputValue && String(inputValue).length > 0, [inputValue]);
 
     return <>
         <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
@@ -157,7 +158,8 @@ export default function FpInput({
                         <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
                     )}
                     {!(isBusy) && (isPassword) && (
-                        <a style={{ cursor: 'pointer' }} onClick={() => setVisiblePassword(!visiblePassword)}>
+                        <a style={{ cursor: 'pointer', visibility: showViewPassword ? 'visible' : 'hidden' }}
+                            onClick={() => setVisiblePassword(!visiblePassword)}>
                             <Icon className="medium"
                                 icon={visiblePassword ? "VISIBILITY" : "VISIBILITY_OFF"} />
                         </a>
