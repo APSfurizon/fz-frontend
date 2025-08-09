@@ -109,5 +109,5 @@ export type MaterialIcon = keyof typeof ICONS;
 export default function Icon({ icon, style, className }: Readonly<{
     icon: MaterialIcon, style?: CSSProperties, className?: string;
 }>) {
-    return (<i className={`mdi ${className ?? ""}`} style={{ ...style }}>{icon}</i>)
+    return (<i data-nosnippet aria-hidden className={`mdi ${className ?? ""}`} style={{ ...style }}>{icon}</i>)
 }
