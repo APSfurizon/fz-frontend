@@ -417,6 +417,9 @@
             "description": "By checking this, you acknowledge that the requested change to your order cannot be reversed automatically. Please contact support, in case you want to go back."
           }
         }
+      },
+      "quota_viewer": {
+        "available_types": "Available rooms"
       }
     },
     "upload_area": {

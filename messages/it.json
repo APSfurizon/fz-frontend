@@ -417,6 +417,9 @@
             "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere automaticamente annullato. Contatta il supporto in caso di ripensamenti."
           }
         }
+      },
+      "quota_viewer": {
+        "available_types": "Stanze disponibili"
       }
     },
     "upload_area": {
