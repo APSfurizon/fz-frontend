@@ -1,62 +1,121 @@
-.vertical-list, .horizontal-list { display: flex; }
+.vertical-list,
+.horizontal-list {
+    display: flex;
+}
 
-.vertical-list { flex-direction: column; }
+.vertical-list {
+    flex-direction: column;
+}
 
-.horizontal-list { flex-direction: row; }
+.horizontal-list {
+    flex-direction: row;
+}
 
-.spacer { flex-grow: 1; }
+.spacer {
+    flex-grow: 1;
+}
 
-.gap-2mm { gap: 2mm; }
+.gap-2mm {
+    gap: 2mm;
+}
 
-.gap-4mm { gap: 4mm; }
+.gap-4mm {
+    gap: 4mm;
+}
 
-.margin-2mm { margin: 2mm; }
+.margin-2mm {
+    margin: 2mm;
+}
 
-.margin-4mm { margin: 4mm; }
+.margin-4mm {
+    margin: 4mm;
+}
 
-.margin-bottom-1mm { margin-bottom: 1mm; }
+.margin-bottom-1mm {
+    margin-bottom: 1mm;
+}
 
-.margin-bottom-2mm { margin-bottom: 2mm; }
+.margin-bottom-2mm {
+    margin-bottom: 2mm;
+}
 
-.margin-top-1mm { margin-top: 1mm; }
+.margin-top-1mm {
+    margin-top: 1mm;
+}
 
-.margin-top-2mm { margin-top: 2mm; }
+.margin-top-2mm {
+    margin-top: 2mm;
+}
 
-.flex-center { justify-content: center; }
+.flex-center {
+    justify-content: center;
+}
 
-.flex-vertical-center { align-items: center; }
+.flex-vertical-center {
+    align-items: center;
+}
 
-.flex-same-base * { flex-basis: 1 1 0; }
+.flex-vertical-bottom {
+    align-items: end;
+}
 
-.flex-space-around { justify-content: space-around; }
+.flex-same-base * {
+    flex-basis: 1 1 0;
+}
 
-.flex-space-between { justify-content: space-between; }
+.flex-space-around {
+    justify-content: space-around;
+}
 
-.flex-space-evenly { justify-content: space-evenly; }
+.flex-space-between {
+    justify-content: space-between;
+}
 
-.flex-wrap {flex-wrap: wrap;}
+.flex-space-evenly {
+    justify-content: space-evenly;
+}
 
-.vertical-align-middle * {vertical-align: middle;}
+.flex-wrap {
+    flex-wrap: wrap;
+}
 
-.center { text-align: center; }
+.vertical-align-middle * {
+    vertical-align: middle;
+}
 
-.left { text-align: left; }
+.center {
+    text-align: center;
+}
 
-.right { text-align: right; }
+.left {
+    text-align: left;
+}
 
-.rounded-xs { border-radius: 0.15625em; }
+.right {
+    text-align: right;
+}
 
-.rounded-s { border-radius: 0.3125em; }
+.rounded-xs {
+    border-radius: 0.15625em;
+}
 
-.rounded-m { border-radius: 2mm; }
+.rounded-s {
+    border-radius: 0.3125em;
+}
 
-.rounded-l { border-radius: 3mm; }
+.rounded-m {
+    border-radius: 2mm;
+}
 
-.section>*:not(.section-title){
+.rounded-l {
+    border-radius: 3mm;
+}
+
+.section>*:not(.section-title) {
     margin-left: 0.6em;
 }
 
-.section > .section-title {
+.section>.section-title {
     margin-bottom: 0.5em;
 }
 

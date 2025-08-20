@@ -417,6 +417,10 @@
             "description": "By checking this, you acknowledge that the requested change to your order cannot be reversed automatically. Please contact support, in case you want to go back."
           }
         }
+      },
+      "quota_viewer": {
+        "available_types": "Available rooms",
+        "description": "These are the current available room types that you can claim once your room is confirmed."
       }
     },
     "upload_area": {
