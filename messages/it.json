@@ -419,7 +419,8 @@
         }
       },
       "quota_viewer": {
-        "available_types": "Stanze disponibili"
+        "available_types": "Stanze disponibili",
+        "description": "Queste solo le stanze disponibili che puoi ottenere, una volta confermata la stanza."
       }
     },
     "upload_area": {

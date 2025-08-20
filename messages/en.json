@@ -419,7 +419,8 @@
         }
       },
       "quota_viewer": {
-        "available_types": "Available rooms"
+        "available_types": "Available rooms",
+        "description": "These are the current available room types that you can claim once your room is confirmed."
       }
     },
     "upload_area": {
