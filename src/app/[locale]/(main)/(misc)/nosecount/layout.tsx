@@ -58,7 +58,8 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
     useEffect(() => {
         if (!events) return;
         if (!selectedSlug) {
-            const current = events.find(evt => !!evt.current);
+            const current = events.find(evt => !!evt.current)
+                ?? events.toSorted((evt1, evt2) => new Date(evt1.dateFrom).getTime() - new Date(evt2.dateFrom).getTime())[0];
             if (current) { selectEvent(current.slug); }
         } else {
             setSelectedEvent((events || []).find(evt => evt.slug == selectedSlug));
