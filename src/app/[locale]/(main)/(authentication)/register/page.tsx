@@ -14,12 +14,12 @@ import { extractPhonePrefix, RegisterFormAction } from "@/lib/api/authentication
 import { AutoInputSearchResult } from "@/lib/components/autoInput";
 import Checkbox from "@/components/input/checkbox";
 import "@/styles/authentication/register.css";
-import { firstOrUndefined } from "@/lib/utils";
+import { firstOrUndefined, today } from "@/lib/utils";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAnswers } from "@/lib/api/user";
 import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
-import { inputEntityCodeExtractor } from "@/lib/components/input";
+import { inputEntityCodeExtractor, MIN_BIRTHDAY_DATE } from "@/lib/components/input";
 
 export default function Register() {
 
@@ -162,6 +162,8 @@ export default function Register() {
         <FpInput fieldName="birthday"
           required
           inputType="date"
+          min={MIN_BIRTHDAY_DATE}
+          max={today()}
           label={t("register.form.birthday.label")} />
         <AutoInput fieldName="birthCountry"
           required
@@ -217,7 +219,10 @@ export default function Register() {
         <FpInput fieldName="idIssuer" required inputType="text"
           label={t("register.form.id_issuer.label")}
           placeholder={t("register.form.id_issuer.placeholder")} />
-        <FpInput fieldName="idExpiry" required inputType="date"
+        <FpInput fieldName="idExpiry"
+          required
+          inputType="date"
+          min={MIN_BIRTHDAY_DATE}
           label={t("register.form.id_expiry.label")}
           placeholder={t("register.form.id_expiry.placeholder")} />
       </div>

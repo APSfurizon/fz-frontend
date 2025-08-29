@@ -1,24 +1,24 @@
 @import url('../colors.css');
 
-div.jan-input:has(input:required) label::after {
+div.fp-input:has(input:required) label::after {
     content: "*";
     color: red;
 }
 
 /* Error style */
 div.input-container:has(input.input-field.danger),
-div.jan-input.danger>div.input-container,
+div.fp-input.danger>div.input-container,
 div.input-container:has(input.input-field:user-invalid) {
     outline-color: var(--text-input-border-danger);
 }
 
 /* Success style */
 div.input-container:has(input.input-field.success),
-div.jan-input.success>div.input-container:has(input.input-field:user-valid) {
+div.fp-input.success>div.input-container:has(input.input-field:user-valid) {
     outline-color: var(--text-input-border-success);
 }
 
-div.jan-input {
+div.fp-input {
 
     label {
         margin-left: 0.125em;
@@ -84,15 +84,15 @@ div.jan-input {
     }
 }
 
-div.jan-input.hoverable div.input-container {
+div.fp-input.hoverable div.input-container {
     transition-duration: 120ms;
 }
 
-div.jan-input.hoverable:hover div.input-container {
+div.fp-input.hoverable:hover div.input-container {
     outline-color: var(--text-link);
 }
 
-div.jan-input.hoverable:active div.input-container {
+div.fp-input.hoverable:active div.input-container {
     outline-color: var(--highlight);
 }
 

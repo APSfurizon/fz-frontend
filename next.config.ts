@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
 import './src/envConfig.ts'
 import { version } from './package.json';
+import { Header } from "next/dist/lib/load-custom-routes.js";
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -34,7 +35,18 @@ const nextConfig: NextConfig = {
   output: "standalone",
   eslint: {
     dirs: ['app', 'components', 'lib']
-  }
+  },
+  headers: () => Promise.resolve<Header[]>([
+      {
+        source: "/fonts/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age:32536000, immutable"
+          }
+        ]
+      }
+    ])
 };
 
 export default withNextIntl(nextConfig);

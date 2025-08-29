@@ -197,3 +197,10 @@ export function toEnum<T>(data: any, t: T) {
     if (!data) return undefined;
     return t[data as keyof typeof t];
 }
+
+export function today() {
+    const date = new Date();
+    return `${date.getFullYear()}-` +
+        `${String(date.getMonth() + 1).padStart(2, '0')}-`+
+        `${String(date.getDate()).padStart(2, '0')}`;
+}

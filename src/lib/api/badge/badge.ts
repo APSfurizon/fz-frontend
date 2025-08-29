@@ -32,7 +32,7 @@ export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorRe
 export class DeleteBadgeAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
-    urlAction = "badge/user";
+    urlAction = "badge/user/";
 }
 
 export interface BadgeDataChangeData {

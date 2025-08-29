@@ -11,10 +11,10 @@ import {
     AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, REG_ITALIAN_FISCAL_CODE, shirtSizeAnswers, UpdatePersonalInfoFormAction,
     UserPersonalInfo
 } from "@/lib/api/user";
-import { firstOrUndefined, stripProperties } from "@/lib/utils";
+import { firstOrUndefined, stripProperties, today } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
-import { inputEntityCodeExtractor } from "@/lib/components/input";
+import { inputEntityCodeExtractor, MIN_BIRTHDAY_DATE } from "@/lib/components/input";
 
 export default function UserViewPersonalInfo({
     personalInformation,
@@ -74,12 +74,12 @@ export default function UserViewPersonalInfo({
                     label={t("authentication.register.form.first_name.label")}
                     placeholder={t("authentication.register.form.first_name.placeholder")}
                     initialValue={personalInformation?.firstName}
-                    readOnly={!inEdit}/>
+                    readOnly={!inEdit} />
                 <FpInput fieldName="lastName" required inputType="text"
                     label={t("authentication.register.form.last_name.label")}
                     placeholder={t("authentication.register.form.last_name.placeholder")}
                     initialValue={personalInformation?.lastName}
-                    readOnly={!inEdit}/>
+                    readOnly={!inEdit} />
             </div>
             <div className="form-pair horizontal-list gap-4mm">
                 <AutoInput fieldName="sex" required minDecodeSize={0}
@@ -87,13 +87,13 @@ export default function UserViewPersonalInfo({
                     label={t("authentication.register.form.sex.label")}
                     placeholder={t("authentication.register.form.sex.placeholder")}
                     initialData={personalInformation?.sex ? [personalInformation?.sex] : undefined}
-                    readOnly={!inEdit}/>
+                    readOnly={!inEdit} />
                 <AutoInput fieldName="gender" minDecodeSize={0}
                     manager={new AutoInputGenderManager}
                     label={t("authentication.register.form.gender.label")}
                     placeholder={t("authentication.register.form.gender.placeholder")}
                     initialData={personalInformation?.gender ? [personalInformation?.gender] : undefined}
-                    readOnly={!inEdit}/>
+                    readOnly={!inEdit} />
             </div>
             <div className="form-pair horizontal-list gap-4mm">
                 <FpInput fieldName="allergies" required={false} inputType="text"
@@ -117,6 +117,8 @@ export default function UserViewPersonalInfo({
                 <FpInput fieldName="birthday"
                     required
                     inputType="date"
+                    min={MIN_BIRTHDAY_DATE}
+                    max={today()}
                     label={t("authentication.register.form.birthday.label")}
                     initialValue={personalInformation?.birthday}
                     readOnly={!inEdit} />
@@ -157,19 +159,26 @@ export default function UserViewPersonalInfo({
                     placeholder={t("authentication.register.form.id_type.placeholder")}
                     initialValue={personalInformation?.idType}
                     readOnly={!inEdit} />
-                <FpInput fieldName="idNumber" required inputType="text"
+                <FpInput fieldName="idNumber"
+                    required
+                    inputType="text"
                     label={t("authentication.register.form.id_number.label")}
                     placeholder={t("authentication.register.form.id_number.placeholder")}
                     initialValue={personalInformation?.idNumber}
                     readOnly={!inEdit} />
             </div>
             <div className="form-pair horizontal-list gap-4mm">
-                <FpInput fieldName="idIssuer" required inputType="text"
+                <FpInput fieldName="idIssuer"
+                    required
+                    inputType="text"
                     label={t("authentication.register.form.id_issuer.label")}
                     placeholder={t("authentication.register.form.id_issuer.placeholder")}
                     initialValue={personalInformation?.idIssuer}
                     readOnly={!inEdit} />
-                <FpInput fieldName="idExpiry" required inputType="date"
+                <FpInput fieldName="idExpiry"
+                    required
+                    inputType="date"
+                    min={MIN_BIRTHDAY_DATE}
                     label={t("authentication.register.form.id_expiry.label")}
                     placeholder={t("authentication.register.form.id_expiry.placeholder")}
                     initialValue={personalInformation?.idExpiry}

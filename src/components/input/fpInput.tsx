@@ -29,6 +29,8 @@ export default function FpInput({
     inputType = "text",
     label,
     labelStyle,
+    min,
+    max,
     minLength,
     maxLength,
     onChange,
@@ -55,6 +57,8 @@ export default function FpInput({
     inputType?: HTMLInputTypeAttribute,
     label?: string,
     labelStyle?: CSSProperties,
+    min?: number | string,
+    max?: number | string,
     minLength?: number,
     maxLength?: number,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
@@ -117,7 +121,7 @@ export default function FpInput({
     const isBusy = busy || formLoading;
 
     return <>
-        <div className={`jan-input ${className ?? ""}`} style={{ ...style }}>
+        <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
             {label && <label className="title semibold small margin-bottom-1mm" style={{ ...labelStyle }}>{label}</label>}
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
                 onClick={() => inputRef.current?.focus()}>
@@ -142,6 +146,8 @@ export default function FpInput({
                     onKeyDown={onKeyDown}
                     minLength={minLength}
                     maxLength={maxLength}
+                    min={min}
+                    max={max}
                     autoComplete={autocomplete}
                     ref={inputRef}
                     onFocus={scrollToFocus}
