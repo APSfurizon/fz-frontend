@@ -121,7 +121,7 @@ export default function FpInput({
     const isBusy = busy || formLoading;
 
     return <>
-        <div className={`jan-input ${className ?? ""}`} style={{ ...style }}>
+        <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
             {label && <label className="title semibold small margin-bottom-1mm" style={{ ...labelStyle }}>{label}</label>}
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
                 onClick={() => inputRef.current?.focus()}>

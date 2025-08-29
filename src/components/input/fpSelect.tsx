@@ -108,7 +108,7 @@ export default function FpSelect({
     }
 
     return <>
-        <div className={`jan-input ${className ?? ""}`} style={{ ...style }}>
+        <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
             {label && <label className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
                 style={{ ...labelStyle }}>{label}</label>}
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}

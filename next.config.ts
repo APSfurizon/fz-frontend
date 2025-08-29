@@ -36,20 +36,17 @@ const nextConfig: NextConfig = {
   eslint: {
     dirs: ['app', 'components', 'lib']
   },
-  headers: () => new Promise <Header[]>((resolve) => {
-    resolve([
+  headers: () => Promise.resolve<Header[]>([
       {
         source: "/fonts/(.*)",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age:31536000, immutable"
+            value: "public, max-age:32536000, immutable"
           }
         ]
       }
     ])
-  })
-    
 };
 
 export default withNextIntl(nextConfig);
