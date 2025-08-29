@@ -29,6 +29,8 @@ export default function FpInput({
     inputType = "text",
     label,
     labelStyle,
+    min,
+    max,
     minLength,
     maxLength,
     onChange,
@@ -55,6 +57,8 @@ export default function FpInput({
     inputType?: HTMLInputTypeAttribute,
     label?: string,
     labelStyle?: CSSProperties,
+    min?: number | string,
+    max?: number | string,
     minLength?: number,
     maxLength?: number,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
@@ -142,6 +146,8 @@ export default function FpInput({
                     onKeyDown={onKeyDown}
                     minLength={minLength}
                     maxLength={maxLength}
+                    min={min}
+                    max={max}
                     autoComplete={autocomplete}
                     ref={inputRef}
                     onFocus={scrollToFocus}

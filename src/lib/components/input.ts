@@ -1,6 +1,8 @@
 import { MaterialIcon } from "@/components/icon";
 import { CSSProperties } from "react";
 
+export const MIN_BIRTHDAY_DATE = "1900-01-01";
+
 /**
  * Defines an entity that points to a specific object or table in the backend.
  * 

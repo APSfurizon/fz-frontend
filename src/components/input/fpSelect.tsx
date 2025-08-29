@@ -2,7 +2,7 @@ import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useMemo, useState } from "react";
 import "@/styles/components/fpSelect.css";
 import { useLocale } from "next-intl";
 import { useFormContext } from "./dataForm";
@@ -14,7 +14,7 @@ export default function FpSelect({
     itemExtractor = inputEntityIdExtractor
 }: Readonly<{
     fieldName?: string,
-    items: (SelectGroup|SelectItem)[],
+    items: (SelectGroup | SelectItem)[],
     className?: string,
     style?: CSSProperties,
     labelStyle?: CSSProperties,
@@ -27,21 +27,29 @@ export default function FpSelect({
     disabled?: boolean,
     initialValue?: string,
     inputStyle?: CSSProperties,
-    itemExtractor?: (entity: InputEntity) => string|number,
+    itemExtractor?: (entity: InputEntity) => string | number,
     hasError?: boolean
 }>) {
     const locale = useLocale();
-    const [selectedItem, setSelectedItem] = useState<InputEntity> ();
+    const [selectedItem, setSelectedItem] = useState<InputEntity>();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
-    const [mappedItems, setMappedItems] = useState<Record<string, InputEntity>> ();
+    const [mappedItems, setMappedItems] = useState<Record<string, InputEntity>>();
     const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const defaultValue = useMemo(() => required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined, [mappedItems]);
+    const selectDefaultValue = useMemo(() => {
+        if (selectedItem) {
+            return itemExtractor(selectedItem);
+        } else if (defaultValue) {
+            return itemExtractor(defaultValue);
+        }
+    }, [selectedItem, defaultValue]);
     const isDisabled = formDisabled || disabled || formLoading;
 
-    function getMappedItems (items: (SelectGroup|SelectItem)[]): Record<string, InputEntity> {
+    function getMappedItems(items: (SelectGroup | SelectItem)[]): Record<string, InputEntity> {
         let mappedItems: Record<string, InputEntity> = {};
         for (const item of items) {
             if (item instanceof SelectGroup) {
-                mappedItems = {...mappedItems, ...getMappedItems(item.items)};
+                mappedItems = { ...mappedItems, ...getMappedItems(item.items) };
             } else if (item instanceof SelectItem) {
                 const extractedId = itemExtractor(item);
                 if (!extractedId) continue;
@@ -52,7 +60,7 @@ export default function FpSelect({
     }
 
     // Re-map items when they change
-    useEffect (()=>{
+    useEffect(() => {
         if (!items) {
             setSelectedItem(undefined);
             return;
@@ -60,7 +68,7 @@ export default function FpSelect({
         setMappedItems(getMappedItems(items));
     }, [items])
 
-    useEffect(()=>{
+    useEffect(() => {
         if (mappedItems && Object.keys(mappedItems ?? {}).length > 0 && initialValue !== undefined && (!areEquals(initialValue, lastInitialValue) || formReset)) {
             setSelectedItem(mappedItems[initialValue]);
             setLastInitialValue(initialValue);
@@ -70,18 +78,18 @@ export default function FpSelect({
         }
     }, [initialValue, mappedItems]);
 
-    const renderItems = (items: (SelectGroup|SelectItem)[]) => {
+    const renderItems = (items: (SelectGroup | SelectItem)[]) => {
         return <>
-            {items.map((item, idx)=>{
+            {items.map((item, idx) => {
                 if (item instanceof SelectGroup) {
                     return <optgroup key={idx}
                         label={item.getDescription()}
                         className="title average color-subtitle reset">
-                            {renderItems(item.items)}
+                        {renderItems(item.items)}
                     </optgroup>
                 } else if (item instanceof SelectItem) {
                     return <option key={idx} value={itemExtractor(item)} className="title small">
-                            {item.getDescription(locale)}
+                        {item.getDescription(locale)}
                     </option>
                 } else {
                     return null;
@@ -95,23 +103,24 @@ export default function FpSelect({
         if (!mappedItems || selectedValue === undefined) return;
         const valueToSet = mappedItems[selectedValue];
         setSelectedItem(valueToSet);
-        if(onChange) onChange(valueToSet);
+        if (onChange) onChange(valueToSet);
         if (onFormChange) onFormChange(fieldName);
     }
 
     return <>
-        <div className={`jan-input ${className ?? ""}`} style={{...style}}>
+        <div className={`jan-input ${className ?? ""}`} style={{ ...style }}>
             {label && <label className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
-                style={{...labelStyle}}>{label}</label>}
+                style={{ ...labelStyle }}>{label}</label>}
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
-                defaultValue={selectedItem ? itemExtractor(selectedItem) : ""} required={required}></input>
+                defaultValue={selectDefaultValue} required={required}></input>
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
                 <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
                     value={selectedItem && itemExtractor(selectedItem)}
-                    style={{...inputStyle}} onChange={onSelect}
+                    style={{ ...inputStyle }}
+                    onChange={onSelect}
                     className={`input-field title ${hasError ? "danger" : ""}`}>
-                        <option disabled={required} className="title average italic" value="">{placeholder}</option>
-                        {renderItems(items)}
+                    <option disabled={required} className="title average italic" value="">{placeholder}</option>
+                    {renderItems(items)}
                 </select>
             </div>
         </div>
