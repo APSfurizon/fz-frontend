@@ -20,6 +20,7 @@ import BadgePrintingDialog from "./_dialogs/badgePrinting";
 import FpMacroSection from "./_components/fpMacroSection";
 import FpSection from "./_components/fpSection";
 import LoadingPanel from "@/components/loadingPanel";
+import { PingApiAction } from "@/lib/api/admin/system";
 
 export default function AdminPage() {
   const t = useTranslations();
@@ -42,6 +43,22 @@ export default function AdminPage() {
       )).finally(() => setLoading(false));
   }, [])
 
+  // System area logic
+
+  // - Server area
+  const [pingLoading, setPingLoading] = useState(false);
+  const ping = () => {
+    setPingLoading(true);
+    runRequest(new PingApiAction())
+      .then((e) => showModal(
+        t("common.success"),
+        <span>{e.message}</span>
+      )).catch((err) => showModal(
+        t("common.error"),
+        <ModalError error={err} translationRoot="furpanel" translationKey="admin.system.server.errors" />
+      )).finally(() => setPingLoading(false));
+  }
+    
   // Pretix area logic
 
   // - Pretix data
@@ -132,6 +149,15 @@ export default function AdminPage() {
   return <>
     <div className="page">
       {loading && <LoadingPanel />}
+      {/* System area */}
+      <FpMacroSection title={t("furpanel.admin.system.title")} icon={"CONFIRMATION_NUMBER"}>
+        <FpSection title={t("furpanel.admin.system.server.title")}>
+          <Button iconName={"VITAL_SIGNS"} onClick={ping} debounce={5000}
+            busy={pingLoading} disabled={!capabilities.canRefreshPretixCache}>
+            {t("furpanel.admin.system.server.ping")}
+          </Button>
+        </FpSection>
+      </FpMacroSection>
       {/* Pretix area */}
       <FpMacroSection title={t("furpanel.admin.pretix.title")} icon={"CONFIRMATION_NUMBER"}>
         <FpSection title={t("furpanel.admin.pretix.data.title")}>

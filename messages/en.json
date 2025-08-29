@@ -65,7 +65,8 @@
     "changelog": {
       "title": "Furpanel was updated",
       "description": "Read the changelog at <a></a>"
-    }
+    },
+    "success": "Success"
   },
   "components": {
     "autoinput": {
@@ -470,7 +471,7 @@
       "pretix": {
         "title": "Pretix",
         "data": {
-          "title": "Shop data",
+          "title": "Data",
           "reload_event": "Reload event",
           "reload_orders": "Reload orders",
           "errors": {}
@@ -726,6 +727,13 @@
             }
           }
         }
+      },
+      "system": {
+        "title": "System",
+        "server": {
+          "title": "Server",
+          "ping": "Ping"
+        }
       }
     }
   },
@@ -734,7 +742,7 @@
     "recover": {
       "title": "Account recovery",
       "actions": {
-        "send_verification": "Verify"
+        "send_verification": "Send reset url"
       },
       "input": {
         "email": {
@@ -747,7 +755,8 @@
           "title": "Account recovery",
           "description": "An email is being sent to recover your account."
         }
-      }
+      },
+      "instruction": "Enter your email to reset your password"
     },
     "recover_confirm": {
       "title": "Change password",
@@ -807,8 +816,8 @@
       "login": "Log in",
       "placeholder_email": "Enter your email address",
       "placeholder_password": "Enter your password",
-      "register_here": "or register here",
-      "recover": "Recover credentials",
+      "create_an_account": "Create an account",
+      "recover": "I forgot my password",
       "title": "Log in",
       "messages": {
         "register_success": {
