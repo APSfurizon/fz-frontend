@@ -19,8 +19,8 @@
       "dropdown": {
         "logout": "Logout",
         "language": {
-          "it": "Italiano",
-          "en": "English"
+          "it-IT": "Italiano",
+          "en-GB": "English"
         }
       },
       "app-badge": "Download now the official app!"

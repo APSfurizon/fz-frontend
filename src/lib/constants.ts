@@ -34,16 +34,18 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 /**Session duration in days */
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
-export const REGEX_AUTHENTICATED_URLS = /^\/([A-z]{2})?(?:\/(?!(login|logging|logout|recover|register|nosecount|recover\/confirm|api\/og)).+)?$/gmi;
+// eslint-disable-next-line max-len
+export const REGEX_AUTHENTICATED_URLS = /^\/([a-z]{2}(-[A-Z]{2})?)?(?:\/(?!(login|logging|logout|recover|register|nosecount|recover\/confirm|api\/og)).+)?$/gmi;
 /**Urls that need to be skipped if user is authenticated */
-export const REGEX_SKIP_AUTHENTICATED = /^(\/[A-z]{2})?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
+// eslint-disable-next-line max-len
+export const REGEX_SKIP_AUTHENTICATED = /^(\/[a-z]{2}(-[A-Z]{2})?)?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
 /**Logout url */
-export const REGEX_LOGOUT = /^(\/[A-z]{2})?(\/logout(.+)?)$/gmi;
+export const REGEX_LOGOUT = /^(\/[a-z]{2}(-[A-Z]{2})?)?(\/logout(.+)?)$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
 export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? ""
-export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO ?? "https://furizon.net/wp-content/uploads/2024/11/ZenithLogoResized.png";
+export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO;
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
 export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
 export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");

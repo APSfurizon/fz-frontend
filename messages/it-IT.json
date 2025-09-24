@@ -19,8 +19,8 @@
       "dropdown": {
         "logout": "Esci",
         "language": {
-          "it": "Italiano",
-          "en": "English"
+          "it-IT": "Italiano",
+          "en-GB": "English"
         }
       },
       "app-badge": "Scarica ora l'app ufficiale!"
