@@ -1,8 +1,8 @@
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED, SESSION_DURATION, TOKEN_STORAGE_NAME } from './lib/constants';
-import { extractSearchParams } from './lib/utils';
+import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
+  TOKEN_STORAGE_NAME } from './lib/constants';
  
 const intlMiddleware = createMiddleware(routing);
 
@@ -37,7 +37,9 @@ export async function middleware(req: NextRequest) {
     return stripToken(intlMiddleware(req));
   }
 
-  const tokenResult = tokenPresent ? await verifyToken(loginToken?.value ?? loginTokenParam!) : TokenVerification.NOT_VALID;
+  const tokenResult = tokenPresent
+    ? await verifyToken(loginToken?.value ?? loginTokenParam!)
+    : TokenVerification.NOT_VALID;
 
   if (tokenResult == TokenVerification.SUCCESS) {
     if (shouldSkipIfAuthenticated){
@@ -66,7 +68,7 @@ async function verifyToken(token: string): Promise<TokenVerification> {
   let fetchResult: Response | undefined = undefined;
   try {
     fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
-  } catch (err) {
+  } catch {
     return TokenVerification.NETWORK_ERROR;
   }
 
@@ -86,7 +88,6 @@ const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams, stri
 }
 
 const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchParams) => {
-  const pathParams = extractSearchParams(path);
   const newUrl = new URL(path, req.url);
   if (searchParams) {
     searchParams?.forEach((v,k)=>newUrl.searchParams.append(k, v));

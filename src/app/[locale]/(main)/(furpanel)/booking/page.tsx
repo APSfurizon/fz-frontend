@@ -239,13 +239,13 @@ export default function BookingPage() {
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
                                 </Button>
-                                <Button className="action-button danger"
+                                {bookingData?.exchangeSupported && <Button className="action-button danger"
                                     disabled={isEditLocked}
                                     iconName={"SEND"}
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.exchange_order")}
-                                </Button>
+                                </Button>}
                             </div>
                         </div>
 

@@ -1,6 +1,7 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useUser } from "@/components/context/userProvider";
 import Button from "@/components/input/button";
+import FpInput from "@/components/input/fpInput";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
 import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
@@ -70,7 +71,14 @@ export default function UserViewSecurity({
     }
 
     return <>
-        <div className="vertical-list" style={{ padding: "0.625em" }}>
+        <div className="vertical-list gap-2mm" style={{ padding: "0.625em" }}>
+            <div className="horizontal-list gap-2mm">
+                <FpInput fieldName="email"
+                    readOnly
+                    inputType="email"
+                    label={t("authentication.login.label_email")}
+                    initialValue={userData.email} />
+            </div>
             <div className="horizontal-list gap-2mm">
                 {!userData.banned && <Button iconName={"ACCOUNT_CIRCLE_OFF"}
                     onClick={promptBan}

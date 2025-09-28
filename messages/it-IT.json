@@ -471,7 +471,7 @@
       "pretix": {
         "title": "Pretix",
         "data": {
-          "title": "Server",
+          "title": "Dati",
           "reload_event": "Ricarica evento",
           "reload_orders": "Ricarica ordini"
         }

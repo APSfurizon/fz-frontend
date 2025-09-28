@@ -120,14 +120,6 @@ export function firstOrEmpty(a: any[]): any[] {
     return a[0] ? [a[0]] : [];
 }
 
-export function extractSearchParams ( uri: string ) {
-    // Get everything after the `?`
-    const [ , paramString ] = uri.split( '?' );
-  
-    // Return parameters
-    return new URLSearchParams( paramString );
-}
-
 export function stripUrl (uri: string) {
     const url = new URL(uri);
     const params = new URLSearchParams(url.searchParams);
@@ -163,11 +155,12 @@ export function resultSelf<A,R> (arg1: A): R {
 }
 
 export function mapLanguageToFlag(lang: string) {
-    switch (lang){
+    const value = lang.split("-")[1]?.toLowerCase() ?? lang.toLowerCase();
+    switch (value){
         case "en":
             return getFlagEmoji("gb");
         default:
-            return getFlagEmoji(lang)
+            return getFlagEmoji(value)
     }
 }
 
