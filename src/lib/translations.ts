@@ -1,24 +1,29 @@
 import { CSSProperties } from "react";
 import { InputEntity } from "./components/input";
 import { MaterialIcon } from "@/components/icon";
+import { DEFAULT_TRANSLATION_KEY } from "./constants";
 
 export type TranslatableString = Record<string, string>;
 
 export function translate(data: Record<string, string>, locale: string, fallback: boolean = true): string {
+    const key = locale.toLowerCase();
     if (fallback) {
-        return data ? data[locale] ?? data["en"] ?? Object.values(data)[0] : "";
+        return data ? data[key] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0] : "";
     } else {
-        return data ? data[locale] ?? "" : "";
+        return data ? data[key] ?? "" : "";
     }
     
 }
 
 export function translateNullable(data?: Record<string, string>, locale?: string,
     fallback: boolean = true): string | undefined {
+        const key = locale?.toLowerCase();
         if (fallback) {
-            return data && locale ? data[locale] ?? data["en"] ?? Object.values(data)[0] : undefined;
+            return data && key
+                ? data[key] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0]
+                : undefined;
         } else {
-            return data && locale ? data[locale] ?? undefined : undefined;
+            return data && key ? data[key] ?? undefined : undefined;
         }
 }
 

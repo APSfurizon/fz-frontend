@@ -8,6 +8,7 @@ export const APP_VERSION = process.env.version;
 export const APP_GIT = "https://github.com/APSfurizon/";
 export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";
 export const APP_GIT_PROJECT_RELEASE  = new URL("releases/tag/"+APP_VERSION, APP_GIT_PROJECT);
+export const DEFAULT_TRANSLATION_KEY = "en-gb";
 
 export const READ_CHANGELOG_STORAGE_NAME = "fz-read-changelog";
 export const CHANGELOGS_ENABLED = (process.env.NEXT_PUBLIC_CHANGELOGS_ENABLED ?? true) === "true";
