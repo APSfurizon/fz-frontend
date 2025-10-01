@@ -57,7 +57,7 @@ export default function BadgePrintingDialog({
                 closeModal();
             }).catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors" />
+                <ModalError error={err} />
             )).finally(() => setLoading(false))
     }
 

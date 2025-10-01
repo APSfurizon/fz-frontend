@@ -30,10 +30,8 @@ export default function OrderLinkPage() {
         }
         runRequest(new UserOrderLinkingAction(), undefined, userOrderLinkData)
             .then(() => router.replace("/booking"))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="user.linking.errors"></ModalError>
-            )).finally(() => setLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setLoading(false));
     }, [])
 
     return <Modal open={true} busy={loading} onClose={() => { router.replace("/home") }} title={t("furpanel.user.linking.title")} icon={"LOCAL_ACTIVITY"}>

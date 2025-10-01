@@ -37,10 +37,8 @@ export default function UserViewSecurity({
             userId: userData.personalInfo.userId
         }
         runRequest(new BanUserAction(), undefined, body)
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
-            )).finally(() => {
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => {
                 setLoading(false);
                 reloadData();
             });
@@ -61,10 +59,8 @@ export default function UserViewSecurity({
             userId: userData.personalInfo.userId
         }
         runRequest(new UnbanUserAction(), undefined, body)
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
-            )).finally(() => {
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => {
                 setLoading(false);
                 reloadData();
             });

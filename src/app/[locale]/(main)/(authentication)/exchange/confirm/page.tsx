@@ -106,10 +106,7 @@ export default function ExchangeConfirm() {
         <span className="titular bold">{t('authentication.exchange_confirm.title').toLowerCase()}</span>
       </span>
     </div>
-    {error &&
-      <ModalError translationKey="exchange_confirm.errors" translationRoot="authentication" error={error}>
-      </ModalError>
-    }
+    {error && <ModalError error={error} />}
     {loading && <LoadingPanel />}
     {exchangeData && userDisplay && <>
       <div className="exchange-info rounded-l vertical-list gap-2mm">

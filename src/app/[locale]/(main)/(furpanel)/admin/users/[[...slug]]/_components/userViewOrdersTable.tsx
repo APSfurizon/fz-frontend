@@ -28,11 +28,8 @@ export default function UserViewOrdersTable({
         runRequest(new ViewOrderLinkApiAction(), undefined, undefined,
             buildSearchParams({ "event-id": String(eventId), "order-code": orderCode }))
             .then((result) => window.open((result as ViewOrderLinkResponse).link, '_blank'))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
-                "ERROR"
-            )).finally(() => setViewOrderLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />, "ERROR"))
+            .finally(() => setViewOrderLoading(false));
     }
 
     const orderColHelper = createColumnHelper<FullOrder>();

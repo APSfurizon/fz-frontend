@@ -53,10 +53,7 @@ export default function BookingPage() {
 
     const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
         setExchangeModalOpen(false);
-        showModal(
-            t("common.error"),
-            <ModalError error={err} translationRoot={"furpanel"} translationKey={"booking.errors"}></ModalError>
-        );
+        showModal(t("common.error"), <ModalError error={err} />);
     }
 
     const exchangeSuccess = () => {
@@ -82,11 +79,8 @@ export default function BookingPage() {
             setLoading(true);
             runRequest(new BookingOrderApiAction())
                 .then((result) => setBookingData(result))
-                .catch((err) => showModal(
-                    t("common.error"),
-                    <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>,
-                    "ERROR"
-                )).finally(() => setLoading(false));
+                .catch((err) => showModal(t("common.error"), <ModalError error={err} />, "ERROR"))
+                .finally(() => setLoading(false));
             return;
         }
         /**If user has a valid and paid order */
@@ -116,10 +110,8 @@ export default function BookingPage() {
         setActionLoading(true);
         runRequest(new OrderEditLinkApiAction())
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-            )).finally(() => setActionLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setActionLoading(false));
     }
 
     const requestRetryPaymentLink = () => {
@@ -127,10 +119,8 @@ export default function BookingPage() {
         setActionLoading(true);
         runRequest(new OrderRetryLinkApiAction())
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-            )).finally(() => setActionLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setActionLoading(false));
     }
 
     const confirmMembershipData = () => {
@@ -138,10 +128,8 @@ export default function BookingPage() {
         setActionLoading(true);
         runRequest(new ConfirmMembershipDataApiAction())
             .then(() => setBookingData(undefined))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-            )).finally(() => setActionLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setActionLoading(false));
     }
 
     /**Date calculations */

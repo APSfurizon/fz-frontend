@@ -29,11 +29,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, clo
         runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
             .then(data => setRoomsData(data))
             .catch((err) => {
-                showModal(
-                    t("common.error"),
-                    <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>,
-                    "ERROR"
-                );
+                showModal(t("common.error"), <ModalError error={err} />, "ERROR");
                 setRoomsData(undefined);
             }).finally(() => setModalLoading(false));
     }, [roomsData, isOpen]);

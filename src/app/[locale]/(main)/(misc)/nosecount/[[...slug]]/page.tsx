@@ -113,7 +113,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
 
     return <div className="page">
         {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel /></div>}
-        {error && <ModalError translationRoot="misc" translationKey="nosecount.errors" error={error}></ModalError>}
+        {error && <ModalError error={error} />}
 
         {/* Rendering sponsors */}
         {mode == CountViewMode.SPONSOR && <>

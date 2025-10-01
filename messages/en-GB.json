@@ -283,14 +283,7 @@
           "description": "Badge editing will be locked in the following date: {lockDate}."
         }
       },
-      "errors": {
-        "IMAGE_DIMENSION_TOO_BIG": "The provided image is too big",
-        "FURSUIT_NOT_FOUND": "Fursuit not found.",
-        "FURSUIT_BADGES_ENDED": "You don't have any more prints available. Buy more by editing your order.",
-        "FURSUIT_ALREADY_BROUGHT_TO_CURRENT_EVENT": "You already marked this fursuit to be brought.",
-        "FURSUIT_NOT_BROUGHT_TO_CURRENT_EVENT": "You already marked this fursuit to not be brought.",
-        "TOO_MANY_FURSUITS_ARE_YOU_A_MILLIONAIRE": "Wow such money ╰(*°▽°*)╯"
-      }
+      "errors": {}
     },
     "debug": {
       "title": "Debug"
@@ -467,14 +460,12 @@
     },
     "admin": {
       "title": "Admin",
-      "errors": {},
       "pretix": {
         "title": "Pretix",
         "data": {
           "title": "Data",
           "reload_event": "Reload event",
-          "reload_orders": "Reload orders",
-          "errors": {}
+          "reload_orders": "Reload orders"
         }
       },
       "membership": {
@@ -490,7 +481,6 @@
           "print_badges": "Print badges",
           "remind_badges": "Remind missing badges",
           "remind_fursuits": "Remind missing fursuits",
-          "errors": {},
           "print": {
             "select_mode": "Select print mode",
             "simple_mode": {
@@ -536,8 +526,7 @@
         "orders": {
           "title": "Orders",
           "remind_order_linking": "Remind unlinked orders",
-          "export_rooms": "Export hotel rooms",
-          "errors": {}
+          "export_rooms": "Export hotel rooms"
         },
         "rooms": {
           "title": "Rooms",
@@ -565,8 +554,6 @@
           }
         },
         "errors": {
-          "NO_DATA": "No membership cards were found for the year selected.",
-          "PERMISSION_NOT_FOUND": "You don't have the permission to do that.",
           "CARD_MISSING": "Card missing",
           "CARD_DUPLICATE": "Duplicate card"
         },
@@ -791,9 +778,6 @@
         "received": "<source></source> wants to transfer his order to you.",
         "sent": "You requested to transfer your order to <target></target>.",
         "order_title": "<user></user>'s order:"
-      },
-      "errors": {
-        "EXCHANGE_NOT_FOUND": "Exchange not found"
       }
     },
     "logout": {

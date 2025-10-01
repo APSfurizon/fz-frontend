@@ -283,14 +283,7 @@
           "description": "Le modifiche al badge verranno bloccate il giorno {lockDate}."
         }
       },
-      "errors": {
-        "IMAGE_DIMENSION_TOO_BIG": "L'immagine è troppo grande",
-        "FURSUIT_NOT_FOUND": "La fursuit non è stata trovata.",
-        "FURSUIT_BADGES_ENDED": "Hai esaurito le stampe disponibili. Acquistane altre modificando il tuo ordine.",
-        "FURSUIT_ALREADY_BROUGHT_TO_CURRENT_EVENT": "Hai già impostato questo valore.",
-        "FURSUIT_NOT_BROUGHT_TO_CURRENT_EVENT": "Hai già impostato questo valore.",
-        "TOO_MANY_FURSUITS_ARE_YOU_A_MILLIONAIRE": "Che riccanza ╰(*°▽°*)╯"
-      }
+      "errors": {}
     },
     "debug": {
       "title": "Debug"
@@ -467,7 +460,6 @@
     },
     "admin": {
       "title": "Admin",
-      "errors": {},
       "pretix": {
         "title": "Pretix",
         "data": {
@@ -489,7 +481,6 @@
           "print_badges": "Stampa badge",
           "remind_badges": "Notifica badge mancanti",
           "remind_fursuits": "Notifica fursuit mancanti",
-          "errors": {},
           "print": {
             "select_mode": "Seleziona modalità stampa",
             "simple_mode": {
@@ -535,8 +526,7 @@
         "orders": {
           "title": "Ordini",
           "remind_order_linking": "Notifica ordini disconnessi",
-          "export_rooms": "Esporta stanze hotel",
-          "errors": {}
+          "export_rooms": "Esporta stanze hotel"
         },
         "rooms": {
           "title": "Stanze",
@@ -564,8 +554,6 @@
           }
         },
         "errors": {
-          "NO_DATA": "Non ci sono tessere per l'anno indicato.",
-          "PERMISSION_NOT_FOUND": "Non hai i permessi necessari.",
           "CARD_MISSING": "Tessera mancante",
           "CARD_DUPLICATE": "Tessera duplicata"
         },
@@ -716,7 +704,6 @@
               "add_role": "Aggiungi ruolo",
               "purge_temporary_roles": "Rimuovi membri temporanei"
             },
-            "errors": {},
             "columns": {
               "name": "Nome",
               "internal_name": "Nome interno",
@@ -790,9 +777,6 @@
         "received": "<source></source> vuole cederti il suo ordine.",
         "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
         "order_title": "Ordine di <user></user>:"
-      },
-      "errors": {
-        "EXCHANGE_NOT_FOUND": "Scambio non trovato"
       }
     },
     "logout": {

@@ -33,7 +33,7 @@ export default function UserSessions() {
       .catch((err) => {
         showModal(
           t("common.error"),
-          <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
+          <ModalError error={err} />
         );
         setSessions([]);
       }).finally(() => setLoading(false));
@@ -46,10 +46,8 @@ export default function UserSessions() {
     if (!sessions) return;
     setLoading(true);
     runRequest(new DestroyAllSessionsAction())
-      .catch((err) => showModal(
-        t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
-      )).finally(() => {
+      .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .finally(() => {
         setLoading(false);
         setDestroyConfirmModalOpen(false);
         router.replace("/logout");
@@ -81,10 +79,8 @@ export default function UserSessions() {
         hideModal();
         setSessions(undefined);
       })
-      .catch((err) => showModal(
-        t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
-      )).finally(() => setLoading(false));
+      .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .finally(() => setLoading(false));
   }
 
   // Table logic

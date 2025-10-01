@@ -41,7 +41,7 @@ export default function RolesListPage() {
             .then((response) => setRoles(response.roles))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors" />
+                <ModalError error={err} />
             )).finally(() => setLoading(false));
     }
 
@@ -61,11 +61,7 @@ export default function RolesListPage() {
     }
 
     const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(
-            t("common.error"),
-            <ModalError error={err} translationRoot="furpanel"
-                translationKey="admin.users.security.roles.errors" />
-        );
+        showModal(t("common.error"), <ModalError error={err} />);
         setAddRoleModalOpen(false);
     }
 
@@ -90,10 +86,8 @@ export default function RolesListPage() {
         setLoading(true);
         runRequest(new DeleteRolesApiAction(), ["" + roleId])
             .then(() => loadRoles())
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.security.roles.errors" />
-            )).finally(() => {
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => {
                 setLoading(false);
                 closeDeleteRoleModal();
             });

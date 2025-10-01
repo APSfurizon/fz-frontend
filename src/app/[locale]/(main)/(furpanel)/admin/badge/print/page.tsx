@@ -103,7 +103,7 @@ export default function AdvancedBadgePrint() {
             }))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors" />
+                <ModalError error={err} />
             )).finally(() => setPrintLoading(false));
     }
 

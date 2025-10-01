@@ -48,10 +48,8 @@ export default function BadgePage() {
       .then(() => {
         setUpdateUser(true);
         setBadgeStatus(undefined);
-      }).catch((err) => showModal(
-        t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
-      )).finally(() => setLoading(false));
+      }).catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .finally(() => setLoading(false));
     setLoading(true);
   }
 
@@ -79,10 +77,8 @@ export default function BadgePage() {
       .then(() => {
         setUpdateUser(true);
         setBadgeStatus(undefined);
-      }).catch((err) => showModal(
-        t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
-      )).finally(() => setLoading(false));
+      }).catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .finally(() => setLoading(false));
   }
 
   // Change data
@@ -94,13 +90,7 @@ export default function BadgePage() {
     setChangeDataModalOpen(false);
   }
 
-  const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    showModal(
-      t("common.error"),
-      <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors">
-      </ModalError>
-    )
-  }
+  const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />);
 
   // Fursuits
   // Add fursuit
@@ -168,11 +158,8 @@ export default function BadgePage() {
     runRequest(new DeleteFursuitApiAction(), [String(currentFursuit.fursuit.id)])
       .then(() => {
         setBadgeStatus(undefined);
-      }).catch((err) => {
-        showModal(
-          t("common.error"),
-          <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>);
-      }).finally(() => {
+      }).catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .finally(() => {
         closeDeleteFursuit();
         setLoading(false);
       })
@@ -192,9 +179,7 @@ export default function BadgePage() {
     runRequest(new GetBadgeStatusAction())
       .then((data) => setBadgeStatus(data))
       .catch((err) => {
-        showModal(
-          t("common.error"),
-          <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>);
+        showModal(t("common.error"), <ModalError error={err} />);
         setBadgeStatus(null);
       }).finally(() => setLoading(false));
   }, [badgeStatus]);

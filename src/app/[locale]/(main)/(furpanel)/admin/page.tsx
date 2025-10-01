@@ -39,7 +39,7 @@ export default function AdminPage() {
       .then((result) => setCapabilities(result))
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.errors" />
+        <ModalError error={err} />
       )).finally(() => setLoading(false));
   }, [])
 
@@ -55,10 +55,10 @@ export default function AdminPage() {
         <span>{e.message}</span>
       )).catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.system.server.errors" />
+        <ModalError error={err} />
       )).finally(() => setPingLoading(false));
   }
-    
+
   // Pretix area logic
 
   // - Pretix data
@@ -69,7 +69,7 @@ export default function AdminPage() {
       .then(() => { })
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors" />
+        <ModalError error={err} />
       )).finally(() => setReloadEventLoading(false));
   }
 
@@ -80,7 +80,7 @@ export default function AdminPage() {
       .then(() => { })
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.pretix.data.errors" />
+        <ModalError error={err} />
       )).finally(() => setReloadOrdersLoading(false));
   }
   // Event area logic
@@ -92,7 +92,7 @@ export default function AdminPage() {
     runRequest(new RemindOrderLinkApiAction())
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors" />
+        <ModalError error={err} />
       )).finally(() => setRemindOrderLinkLoading(false))
   }
 
@@ -108,7 +108,7 @@ export default function AdminPage() {
         })
       }).catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.orders.errors" />
+        <ModalError error={err} />
       )).finally(() => setExportRoomsLoading(false))
   }
 
@@ -119,7 +119,7 @@ export default function AdminPage() {
     runRequest(new RemindRoomsNotFullApiAction())
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.rooms.errors" />
+        <ModalError error={err} />
       )).finally(() => setRemindRoomsNotFullLoading(false))
   }
   // - badge
@@ -132,7 +132,7 @@ export default function AdminPage() {
     runRequest(new RemindBadgesApiAction())
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors" />
+        <ModalError error={err} />
       )).finally(() => setRemindBadgesLoading(false))
   }
 
@@ -142,7 +142,7 @@ export default function AdminPage() {
     runRequest(new RemindFursuitBadgesApiAction())
       .catch((err) => showModal(
         t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="admin.events.badges.errors" />
+        <ModalError error={err} />
       )).finally(() => setRemindFursuitBadgesLoading(false))
   }
 

@@ -289,8 +289,7 @@ export default function RoomPage() {
     setData(undefined);
   }
 
-  const commonFail = (err: ApiErrorResponse | ApiDetailedErrorResponse,
-    translationRoot?: string, translationKey?: string) => {
+  const commonFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
     setRenameModalOpen(false);
     setDeleteModalOpen(false);
     setInviteModalOpen(false);
@@ -302,12 +301,7 @@ export default function RoomPage() {
     setExchangeModalOpen(false);
     setConfirmModalOpen(false);
     setUnconfirmModalOpen(false);
-    showModal(
-      t("common.error"),
-      <ModalError error={err}
-        translationRoot={translationRoot ?? "furpanel"}
-        translationKey={translationKey ?? "room.errors"} />
-    );
+    showModal(t("common.error"), <ModalError error={err} />);
   }
 
   // Data loading
@@ -319,11 +313,7 @@ export default function RoomPage() {
         setShowInNosecount(result.currentRoomInfo?.showInNosecount);
         setData(result);
       }).catch((err) => {
-        showModal(
-          t("common.error"),
-          <ModalError error={err}
-            translationRoot="furpanel"
-            translationKey="room.errors" />);
+        showModal(t("common.error"), <ModalError error={err} />);
         setData(EMPTY_ROOM_INFO);
       }).finally(() => setLoading(false));
   }, [data]);

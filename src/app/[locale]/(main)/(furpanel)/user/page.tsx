@@ -28,10 +28,7 @@ export default function UserPage() {
     if (personalInformation) return;
     runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
       .then((result) => setPersonalInformation(result))
-      .catch((err) => showModal(
-        t("common.error"),
-        <ModalError error={err} translationRoot="furpanel" translationKey="user.errors"></ModalError>
-      ));
+      .catch((err) => showModal(t("common.error"), <ModalError error={err} />));
   }, [personalInformation])
 
   // Password change logic
@@ -39,11 +36,7 @@ export default function UserPage() {
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
-  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(
-    t("common.error"),
-    <ModalError error={err} translationRoot="authentication" translationKey="login.errors"></ModalError>,
-    "ERROR"
-  );
+  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />, "ERROR");
 
   useTitle(t("furpanel.user.title"));
 

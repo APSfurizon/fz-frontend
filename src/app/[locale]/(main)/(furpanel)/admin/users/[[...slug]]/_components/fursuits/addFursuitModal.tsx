@@ -56,13 +56,7 @@ export default function AddFursuitModal({
         reloadData();
     }
 
-    const onFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(
-            t("common.error"),
-            <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors">
-            </ModalError>
-        )
-    }
+    const onFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />);
 
     return <Modal open={open} onClose={beforeClose}
         title={editMode

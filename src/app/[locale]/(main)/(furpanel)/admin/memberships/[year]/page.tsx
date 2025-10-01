@@ -53,13 +53,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         }
         runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
             .catch((err) => {
-                showModal(
-                    t("common.error"),
-                    <ModalError error={err}
-                        translationRoot="furpanel"
-                        translationKey="admin.membership_manager.errors"
-                    />
-                );
+                showModal(t("common.error"), <ModalError error={err} />);
                 setChecked(!checked);
             })
             .finally(() => setBusy(false));
@@ -75,13 +69,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
     const addCardFail = (err: any) => {
         setAddModalOpen(false);
-        showModal(
-            t("common.error"),
-            <ModalError error={err}
-                translationRoot="furpanel"
-                translationKey="admin.membership_manager.errors"
-            />
-        );
+        showModal(t("common.error"), <ModalError error={err} />);
     }
 
     // Select year
@@ -108,11 +96,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         runRequest(new GetCardsApiAction(), undefined, undefined, new URLSearchParams({ "year": "" + selectedYear }))
             .then((value) => setCardsData(value))
             .catch((err) => {
-                showModal(
-                    t("common.error"),
-                    <ModalError error={err} translationRoot="furpanel" translationKey="admin.membership_manager.errors">
-                    </ModalError>
-                );
+                showModal(t("common.error"), <ModalError error={err} />);
                 setCardsData(null);
             }).finally(() => setLoading(false));
     }, [cardsData])

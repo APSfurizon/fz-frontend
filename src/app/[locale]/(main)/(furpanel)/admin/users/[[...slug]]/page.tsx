@@ -61,10 +61,8 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         setLoading(true);
         runRequest(new GetUserAdminViewAction(), [String(userId)])
             .then(data => setUserData(data as GetUserAdminViewResponse))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
-            )).finally(() => setLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setLoading(false));
     }, [userId, userData]);
 
     const onUserSelect = (item: AutoInputSearchResult) => {
@@ -86,8 +84,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 param={[true]}
                 onSelect={onUserSelect}>
             </AutoInput>
-            {error && <ModalError translationRoot="furpanel" translationKey="admin.users.errors" error={error}>
-            </ModalError>}
+            {error && <ModalError error={error} />}
             {loading && <LoadingPanel />}
             {/** User data render */}
             {userData && <>

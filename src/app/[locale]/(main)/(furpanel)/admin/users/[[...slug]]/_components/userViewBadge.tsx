@@ -36,7 +36,7 @@ export default function UserViewBadge({
             .then(() => { reloadData() })
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
+                <ModalError error={err} />
             )).finally(() => setNosecountSetLoading(false));
     }
 
@@ -66,10 +66,8 @@ export default function UserViewBadge({
         setBadgeLoading(true);
         runRequest(new DeleteBadgeAction(), [String(userId)])
             .then(() => reloadData())
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="admin.users.errors" />
-            )).finally(() => {
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => {
                 setBadgeLoading(false);
                 hideModal();
             });
@@ -82,24 +80,15 @@ export default function UserViewBadge({
         dataToUpload.append("image", blob);
         setBadgeLoading(true);
         runRequest(new UploadBadgeAction(), [String(userData.badgeData.mainBadge!.userId)], dataToUpload)
-            .then(() => {
-                reloadData();
-            }).catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors"></ModalError>
-            )).finally(() => setBadgeLoading(false));
+            .then(() => reloadData())
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setBadgeLoading(false));
     }
 
     // Change data
     const [changeDataModalOpen, setChangeDataModalOpen] = useState(false);
 
-    const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(
-            t("common.error"),
-            <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors">
-            </ModalError>
-        )
-    }
+    const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />)
 
     return <>
         <div className="horizontal-list gap-4mm flex-wrap">

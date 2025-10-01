@@ -58,11 +58,8 @@ export default function UserViewFursuitsTable({
         setDeleteLoading(true);
         runRequest(new DeleteFursuitApiAction(),
             [String(fursuit?.fursuit.id)])
-            .catch((err) => {
-                showModal(
-                    t("common.error"),
-                    <ModalError error={err} translationRoot="furpanel" translationKey="badge.errors" />);
-            }).finally(() => {
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => {
                 closeDeleteFursuit();
                 setDeleteLoading(false);
                 reloadData();

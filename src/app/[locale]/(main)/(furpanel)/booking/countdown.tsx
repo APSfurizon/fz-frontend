@@ -32,10 +32,8 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
         setActionLoading(true);
         runRequest(new ShopLinkApiAction())
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ModalError error={err} translationRoot="furpanel" translationKey="booking.errors"></ModalError>
-            )).finally(() => setActionLoading(false));
+            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .finally(() => setActionLoading(false));
     }
 
     return data ? <>
