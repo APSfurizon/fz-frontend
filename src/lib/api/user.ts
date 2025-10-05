@@ -233,12 +233,12 @@ export function getAutoInputSexes() {
         resolve([
             createSearchResult({
                 code: "M",
-                translatedDescription: { "it": "Maschio", "en": "Male" },
+                translatedDescription: { "it-it": "Maschio", "en-gb": "Male" },
                 icon: "MALE"
             }),
             createSearchResult({
                 code: "F",
-                translatedDescription: { "it": "Femmina", "en": "Female" },
+                translatedDescription: { "it-it": "Femmina", "en-gb": "Female" },
                 icon: "FEMALE"
             }),
         ])
@@ -250,63 +250,63 @@ export function getAutoInputGenders() {
         resolve([
             createSearchResult({
                 code: "CisMan",
-                translatedDescription: { "it": "Uomo cis", "en": "cis Man" }
+                translatedDescription: { "it-it": "Uomo cis", "en-gb": "cis Man" }
             }),
             createSearchResult({
                 code: "CisWoman",
-                translatedDescription: { "it": "Donna cis", "en": "cis Woman" }
+                translatedDescription: { "it-it": "Donna cis", "en-gb": "cis Woman" }
             }),
             createSearchResult({
                 code: "TransMan",
-                translatedDescription: { "it": "Uomo trans", "en": "trans Man" }
+                translatedDescription: { "it-it": "Uomo trans", "en-gb": "trans Man" }
             }),
             createSearchResult({
                 code: "TransWoman",
-                translatedDescription: { "it": "Donna trans", "en": "trans Woman" }
+                translatedDescription: { "it-it": "Donna trans", "en-gb": "trans Woman" }
             }),
             createSearchResult({
                 code: "Agender",
-                translatedDescription: { "it": "Agender", "en": "Agender" }
+                translatedDescription: { "it-it": "Agender", "en-gb": "Agender" }
             }),
             createSearchResult({
                 code: "BiGender",
-                translatedDescription: { "it": "Bigender", "en": "Bigender" }
+                translatedDescription: { "it-it": "Bigender", "en-gb": "Bigender" }
             }),
             createSearchResult({
                 code: "Genderfluid",
-                translatedDescription: { "it": "Genderfluid", "en": "Genderfluid" }
+                translatedDescription: { "it-it": "Genderfluid", "en-gb": "Genderfluid" }
             }),
             createSearchResult({
                 code: "Questioning",
-                translatedDescription: { "it": "Questioning", "en": "Questioning" }
+                translatedDescription: { "it-it": "Questioning", "en-gb": "Questioning" }
             }),
             createSearchResult({
                 code: "Queer",
-                translatedDescription: { "it": "Queer", "en": "Queer" }
+                translatedDescription: { "it-it": "Queer", "en-gb": "Queer" }
             }),
             createSearchResult({
                 code: "NonBinary",
-                translatedDescription: { "it": "Non binario", "en": "Non-binary" }
+                translatedDescription: { "it-it": "Non binario", "en-gb": "Non-binary" }
             }),
             createSearchResult({
                 code: "DemiBoy",
-                translatedDescription: { "it": "Demiboy", "en": "Demiboy" }
+                translatedDescription: { "it-it": "Demiboy", "en-gb": "Demiboy" }
             }),
             createSearchResult({
                 code: "DemiGirl",
-                translatedDescription: { "it": "Demigirl", "en": "Demigirl" }
+                translatedDescription: { "it-it": "Demigirl", "en-gb": "Demigirl" }
             }),
             createSearchResult({
                 code: "Intersex",
-                translatedDescription: { "it": "Intersex", "en": "Intersex" }
+                translatedDescription: { "it-it": "Intersex", "en-gb": "Intersex" }
             }),
             createSearchResult({
                 code: "NoAnswer",
-                translatedDescription: { "it": "Preferisco non rispondere", "en": "I prefer not to say" }
+                translatedDescription: { "it-it": "Preferisco non rispondere", "en-gb": "I prefer not to say" }
             }),
             createSearchResult({
                 code: "NotListed",
-                translatedDescription: { "it": "Non in lista", "en": "Not in this list" }
+                translatedDescription: { "it-it": "Non in lista", "en-gb": "Not in this list" }
             })
         ])
     });
@@ -319,7 +319,7 @@ export const idTypeAnswers = [
         "ID_CARD",
         undefined,
         undefined,
-        { "it": "Carta d'identità", "en": "Identity Card" }
+        { "it-it": "Carta d'identità", "en-gb": "Identity Card" }
     ),
     new SelectItem(
         undefined,
@@ -328,7 +328,7 @@ export const idTypeAnswers = [
         "DIRECTIONS_CAR",
         undefined,
         undefined,
-        { "it": "Patente", "en": "Driver license" }
+        { "it-it": "Patente", "en-gb": "Driver license" }
     ),
     new SelectItem(
         undefined,
@@ -337,7 +337,7 @@ export const idTypeAnswers = [
         "PERSON_BOOK",
         undefined,
         undefined,
-        { "it": "Passaporto", "en": "Passport" }
+        { "it-it": "Passaporto", "en-gb": "Passport" }
     )
 ];
 
