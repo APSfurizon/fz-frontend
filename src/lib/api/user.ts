@@ -3,7 +3,7 @@ import {
     filterSearchResult, SearchType
 } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
-import { buildSearchParams } from "../utils";
+import { buildSearchParams, setCookie } from "../utils";
 import {
     ApiErrorResponse, ApiResponse, ApiAction, runRequest, SimpleApiResponse, ApiRequest,
     RequestType
@@ -42,6 +42,7 @@ export type UserData = {
     orderCode?: string,
     fursonaName?: string,
     locale?: string,
+    language?: string,
     propic?: MediaData,
     sponsorship: SponsorType
 }
@@ -437,4 +438,20 @@ export class DestroyAllSessionsAction extends ApiAction<boolean, ApiErrorRespons
     authenticated = true;
     method = RequestType.POST;
     urlAction = "authentication/destroy-all-sessions";
+}
+
+export class ChangeLanguageAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "users/changeLanguage";
+}
+
+export function changeLanguage(language: string, userDisplay?: UserData) {
+    return new Promise((resolve) => resolve(!!userDisplay
+        ? runRequest(new ChangeLanguageAction(), undefined, { languageCode: language })
+        : Promise.resolve(null)))
+        .then(() => {
+            setCookie("NEXT_LOCALE", language, new Date(Date.now() + (1000 * 3600 * 24 * 365)));
+            location.reload();
+        });
 }

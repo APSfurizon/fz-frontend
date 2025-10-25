@@ -10,5 +10,6 @@
         "javascript",
         "typescript"
     ],
-    "eslint.nodePath": "./node_modules/eslint"
+    "eslint.nodePath": "./node_modules/eslint",
+    "i18n-ally.pathMatcher": "{locale}.json"
 }

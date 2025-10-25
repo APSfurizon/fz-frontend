@@ -1,11 +1,17 @@
 import createMiddleware from 'next-intl/middleware';
-import {routing} from './i18n/routing';
+import { routing } from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
-  TOKEN_STORAGE_NAME } from './lib/constants';
- 
+import {
+  API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
+  TOKEN_STORAGE_NAME
+} from './lib/constants';
+
 const intlMiddleware = createMiddleware(routing);
 
+type TokenResult = {
+  status: TokenVerification;
+  language?: string
+}
 enum TokenVerification {
   SUCCESS,
   NOT_VALID,
@@ -31,35 +37,42 @@ export async function middleware(req: NextRequest) {
   const strippedParams = new URLSearchParams(params);
   strippedParams.delete("continue");
   strippedParams.delete(TOKEN_STORAGE_NAME);
-  const continueParams = new URLSearchParams({"continue": `${path}?${strippedParams.toString()}`});
+  const continueParams = new URLSearchParams({ "continue": `${path}?${strippedParams.toString()}` });
+
+  const intlMiddlewareResult = await intlMiddleware(req);
+  // Goddamn next-intl putting the url rewrite even when strictly said not to
+  intlMiddlewareResult.headers.set('x-middleware-rewrite', req.nextUrl.toString());
 
   if (isLogout) {
-    return stripToken(intlMiddleware(req));
+    return stripToken(intlMiddlewareResult);
   }
 
-  const tokenResult = tokenPresent
+  const tokenResult: TokenResult = tokenPresent
     ? await verifyToken(loginToken?.value ?? loginTokenParam!)
-    : TokenVerification.NOT_VALID;
+    : { status: TokenVerification.NOT_VALID };
 
-  if (tokenResult == TokenVerification.SUCCESS) {
-    if (shouldSkipIfAuthenticated){
+  if (tokenResult.status == TokenVerification.SUCCESS) {
+    if (tokenResult.language) {
+      intlMiddlewareResult.cookies.set("NEXT_LOCALE", tokenResult.language, intlMiddlewareResult.cookies.get("NEXT_LOCALE"));
+    }
+    if (shouldSkipIfAuthenticated) {
       return redirectToUrl(params.get("continue") ?? "/home", req);
     } else {
-      return intlMiddleware(req);
+      return intlMiddlewareResult;
     }
   } else {
     if (needsAuthentication) {
-      return redirectToLogin(req, continueParams, tokenResult == TokenVerification.NOT_VALID);
+      return redirectToLogin(req, continueParams, tokenResult.status == TokenVerification.NOT_VALID);
     } else {
-      if (tokenResult == TokenVerification.NOT_VALID)
-        return stripToken(intlMiddleware(req));
-      else 
-        return intlMiddleware(req);
+      if (tokenResult.status == TokenVerification.NOT_VALID)
+        return stripToken(intlMiddlewareResult);
+      else
+        return intlMiddlewareResult;
     }
   }
 }
 
-async function verifyToken(token: string): Promise<TokenVerification> {
+async function verifyToken(token: string): Promise<TokenResult> {
   // Try validating the request
   const headers = new Headers({
     'Content-type': 'application/json',
@@ -67,12 +80,16 @@ async function verifyToken(token: string): Promise<TokenVerification> {
   });
   let fetchResult: Response | undefined = undefined;
   try {
-    fetchResult = await fetch(`${API_BASE_URL}users/me`, {method: 'GET', headers: headers});
+    fetchResult = await fetch(`${API_BASE_URL}users/me`, { method: 'GET', headers: headers });
   } catch {
-    return TokenVerification.NETWORK_ERROR;
+    return { status: TokenVerification.NETWORK_ERROR }
   }
-
-  return fetchResult && fetchResult.ok ? TokenVerification.SUCCESS : TokenVerification.NOT_VALID;
+  const body = await fetchResult.json();
+  return fetchResult && fetchResult.ok
+    ? {
+      status: TokenVerification.SUCCESS,
+      language: String(body["language"])?.replace("_", "-")
+    } : { status: TokenVerification.NOT_VALID };
 }
 
 const stripToken = (res: NextResponse): NextResponse => {
@@ -82,30 +99,21 @@ const stripToken = (res: NextResponse): NextResponse => {
 
 const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams, strip: boolean) => {
   const url = new URL(`/login`, req.url);
-  continueParams.forEach((v, k)=>url.searchParams.append(k, v));
-  const response = NextResponse.redirect(url, {status: 303});
+  continueParams.forEach((v, k) => url.searchParams.append(k, v));
+  const response = NextResponse.redirect(url, { status: 303 });
   return strip ? stripToken(response) : response;
 }
 
 const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchParams) => {
   const newUrl = new URL(path, req.url);
   if (searchParams) {
-    searchParams?.forEach((v,k)=>newUrl.searchParams.append(k, v));
+    searchParams?.forEach((v, k) => newUrl.searchParams.append(k, v));
   }
-  return NextResponse.redirect(newUrl, {status: 303});
+  return NextResponse.redirect(newUrl, { status: 303 });
 }
- 
+
 export const config = {
   matcher: [
-    // Enable a redirect to a matching locale at the root
-    '/',
-
-    // Set a cookie to remember the previous locale for
-    // all requests that have a locale prefix
-    '/(it-IT|en-GB)/:path*',
-
-    // Enable redirects that add missing locales
-    // (e.g. `/pathnames` -> `/en/pathnames`)
-    '/((?!_next|_vercel|.*\\..*).*)'
+    '/((?!_next|_vercel|images|.*\\..*).*)',
   ]
 };

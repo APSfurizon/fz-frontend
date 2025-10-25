@@ -36,12 +36,12 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
 // eslint-disable-next-line max-len
-export const REGEX_AUTHENTICATED_URLS = /^\/([a-z]{2}(-[A-Z]{2})?)?(?:\/(?!(login|logging|logout|recover|register|nosecount|recover\/confirm|api\/og)).+)?$/gmi;
+export const REGEX_AUTHENTICATED_URLS = /^(?:\/(?!(login|logging|logout|recover|register|nosecount|recover\/confirm|api\/og)).+)?$/gmi;
 /**Urls that need to be skipped if user is authenticated */
 // eslint-disable-next-line max-len
-export const REGEX_SKIP_AUTHENTICATED = /^(\/[a-z]{2}(-[A-Z]{2})?)?(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
+export const REGEX_SKIP_AUTHENTICATED = /^(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/gmi;
 /**Logout url */
-export const REGEX_LOGOUT = /^(\/[a-z]{2}(-[A-Z]{2})?)?(\/logout(.+)?)$/gmi;
+export const REGEX_LOGOUT = /^(\/logout(.+)?)$/gmi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";

@@ -63,8 +63,8 @@ export default function UserSessions() {
           <Button title={t("common.cancel")} className="danger" onClick={() => hideModal()}
             iconName={"CANCEL"} busy={loading}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button title={t("common.CRUD.delete")} onClick={() => destroySession(sessionId)}
-            iconName={"DELETE"} busy={loading}>{t("common.CRUD.delete")}</Button>
+          <Button title={t("furpanel.user.sessions.actions.terminate_session")} onClick={() => destroySession(sessionId)}
+            iconName={"CLOSE"} busy={loading}>{t("furpanel.user.sessions.actions.terminate_session")}</Button>
         </div>
       </>
     )
@@ -138,7 +138,7 @@ export default function UserSessions() {
         <div className="spacer" />
         <Button title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
           onClick={() => destroyAllSessions()}
-          iconName={"DELETE"}
+          iconName={"CLOSE"}
           busy={loading}>
           {t("furpanel.user.sessions.actions.terminate_all_sessions")}
         </Button>
