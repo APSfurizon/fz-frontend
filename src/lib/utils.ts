@@ -1,26 +1,26 @@
 import { ApiErrorResponse } from "./api/global";
 import { getFlagEmoji } from "./components/userPicture";
-import { 
-    API_IMAGE_URL, APP_VERSION, CHANGELOGS_ENABLED, 
+import {
+    API_IMAGE_URL, APP_VERSION, CHANGELOGS_ENABLED,
     MEMBERSHIP_STARTING_YEAR, READ_CHANGELOG_STORAGE_NAME
 } from "./constants";
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
-            HOUR_TS = 1000 * 60 * 60,
-            MINUTE_TS = 1000 * 60,
-            SECOND_TS = 1000;
+    HOUR_TS = 1000 * 60 * 60,
+    MINUTE_TS = 1000 * 60,
+    SECOND_TS = 1000;
 
 
-export function nullifyEmptyStrings (values?: (string | undefined)[]) {
+export function nullifyEmptyStrings(values?: (string | undefined)[]) {
     return values?.map(s => nullifyEmptyString(s));
 }
 
-export function nullifyEmptyString (value?: string) {
+export function nullifyEmptyString(value?: string) {
     return value && value.length > 0 ? value.trim() : undefined;
 }
 
-export function stripProperties (toChange: any, fields: string[]) {
-    const toReturn = {...toChange};
+export function stripProperties(toChange: any, fields: string[]) {
+    const toReturn = { ...toChange };
     for (const fieldName of Object.keys(toChange)) {
         if (toReturn[fieldName] === null || fields.includes(fieldName))
             toReturn[fieldName] = undefined;
@@ -28,7 +28,7 @@ export function stripProperties (toChange: any, fields: string[]) {
     return toReturn;
 }
 
-export function getCountdown (ts: number): number[] {
+export function getCountdown(ts: number): number[] {
     let base = ts;
     const days = Math.floor(base / DAY_TS);
     base -= days * DAY_TS;
@@ -40,11 +40,11 @@ export function getCountdown (ts: number): number[] {
     return [days, hours, minutes, seconds];
 }
 
-export function isEmpty (str?: string) {
-    return !str || str.length === 0;
+export function isEmpty(str?: string) {
+    return !str || !str.length;
 }
 
-export function copyContent (e: HTMLElement | HTMLInputElement) {
+export function copyContent(e: HTMLElement | HTMLInputElement) {
     if (e.textContent) {
         navigator.clipboard.writeText(e.textContent);
         return true;
@@ -56,11 +56,11 @@ export function copyContent (e: HTMLElement | HTMLInputElement) {
     }
 }
 
-export function buildSearchParams (init: Record<string, string | string[]>): URLSearchParams {
+export function buildSearchParams(init: Record<string, string | string[]>): URLSearchParams {
     const params = new URLSearchParams();
     Object.keys(init).forEach(key => {
-        if (init[key] instanceof Array){
-            init[key].forEach(value =>params.append(key, value));
+        if (init[key] instanceof Array) {
+            init[key].forEach(value => params.append(key, value));
         } else {
             params.append(key, init[key])
         }
@@ -69,21 +69,21 @@ export function buildSearchParams (init: Record<string, string | string[]>): URL
 }
 
 export function setCookie(cookieName: string, value: string, expiry: Date,
-        path: string = "/", sameSite: string  = "lax") {
+    path: string = "/", sameSite: string = "lax") {
     document.cookie = `${cookieName}=${value};expires=${expiry.toUTCString()};path=${path};sameSite=${sameSite}`;
 }
 
 export function getCookie(cookieName: string) {
     const name = cookieName + "=";
     const ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
     return "";
 }
@@ -98,7 +98,7 @@ export enum DEVICE_TYPE {
     GENERIC = "generic"
 }
 
-export function getDeviceType (): DEVICE_TYPE {
+export function getDeviceType(): DEVICE_TYPE {
     const UA = navigator.userAgent;
     if (/\b(Android)\b/i.test(UA))
         return DEVICE_TYPE.ANDROID;
@@ -108,7 +108,7 @@ export function getDeviceType (): DEVICE_TYPE {
         return DEVICE_TYPE.GENERIC;
 }
 
-export function areEquals (a: any, b: any): boolean {
+export function areEquals(a: any, b: any): boolean {
     return JSON.stringify(a) === JSON.stringify(b);
 }
 
@@ -120,43 +120,43 @@ export function firstOrEmpty(a: any[]): any[] {
     return a[0] ? [a[0]] : [];
 }
 
-export function stripUrl (uri: string) {
+export function stripUrl(uri: string) {
     const url = new URL(uri);
     const params = new URLSearchParams(url.searchParams);
-    params.forEach((v, k)=>url.searchParams.delete(k));
+    params.forEach((v, k) => url.searchParams.delete(k));
     return url.toString();
 }
 
 export function padStart(x: number) {
-    return (""+x).padStart(2, "0");
+    return ("" + x).padStart(2, "0");
 }
 
 export const years = Array(((new Date().getUTCFullYear()) - MEMBERSHIP_STARTING_YEAR) + 3)
-    .fill(0).map((i, index)=>index).map((i)=>MEMBERSHIP_STARTING_YEAR+i);
+    .fill(0).map((i, index) => index).map((i) => MEMBERSHIP_STARTING_YEAR + i);
 
-export function getImageUrl (src?: string): string | undefined {
+export function getImageUrl(src?: string): string | undefined {
     return src && src.length > 0 ? new URL(src, API_IMAGE_URL).href : undefined;
 }
 
-export function shouldShowChangelog (): boolean {
+export function shouldShowChangelog(): boolean {
     const readVersion = localStorage.getItem(READ_CHANGELOG_STORAGE_NAME);
     const lastVersion = nullifyEmptyString(readVersion ?? "");
     return CHANGELOGS_ENABLED && (!lastVersion || lastVersion !== APP_VERSION);
 }
 
-export function errorCodeToApiError (err: string):ApiErrorResponse {
+export function errorCodeToApiError(err: string): ApiErrorResponse {
     return {
         errorMessage: err
     };
 }
 
-export function resultSelf<A,R> (arg1: A): R {
+export function resultSelf<A, R>(arg1: A): R {
     return arg1 as any as R;
 }
 
 export function mapLanguageToFlag(lang: string) {
     const value = lang.split("-")[1]?.toLowerCase() ?? lang.toLowerCase();
-    switch (value){
+    switch (value) {
         case "en":
             return getFlagEmoji("gb");
         default:
@@ -173,13 +173,13 @@ export function getCountArray(index: number, limit: number, min: number, max: nu
     const diffEnd = Math.abs(end - Math.min(end, max));
     start -= diffEnd;
 
-    for (let i = Math.max(start, min); i<Math.min(end, max); i++){
+    for (let i = Math.max(start, min); i < Math.min(end, max); i++) {
         toReturn.push(i)
     }
     return toReturn;
 }
 
-export function getParentDirectory (path: string, repetition: number = 1): string {
+export function getParentDirectory(path: string, repetition: number = 1): string {
     let toReturn = path;
     if (!toReturn.endsWith("/")) toReturn += "/";
     toReturn += ".."
@@ -194,6 +194,6 @@ export function toEnum<T>(data: any, t: T) {
 export function today() {
     const date = new Date();
     return `${date.getFullYear()}-` +
-        `${String(date.getMonth() + 1).padStart(2, '0')}-`+
+        `${String(date.getMonth() + 1).padStart(2, '0')}-` +
         `${String(date.getDate()).padStart(2, '0')}`;
 }

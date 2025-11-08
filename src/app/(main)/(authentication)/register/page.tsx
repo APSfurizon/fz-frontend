@@ -55,13 +55,7 @@ export default function Register() {
 
   const emailMatch = confirmEmail === email;
 
-  const checkForm = () => {
-    if (!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  const checkForm = () => tosAccepted && privacyAccepted && passwordMatch && emailMatch;
 
   const manageSuccess = () => setTimeout(() => {
     const newParams = new URLSearchParams(params);
