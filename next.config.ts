@@ -33,20 +33,17 @@ const nextConfig: NextConfig = {
     version
   },
   output: "standalone",
-  eslint: {
-    dirs: ['app', 'components', 'lib']
-  },
   headers: () => Promise.resolve<Header[]>([
-      {
-        source: "/fonts/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=32536000, immutable"
-          }
-        ]
-      }
-    ])
+    {
+      source: "/fonts/(.*)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=32536000, immutable"
+        }
+      ]
+    }
+  ])
 };
 
 export default withNextIntl(nextConfig);
