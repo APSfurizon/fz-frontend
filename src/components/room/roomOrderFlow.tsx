@@ -58,11 +58,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
         runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
             .then(data => setRoomsData(data))
             .catch((err) => {
-                showModal(
-                    t("common.error"),
-                    <ModalError error={err} translationRoot="furpanel" translationKey="room.errors"></ModalError>,
-                    "ERROR"
-                );
+                showModal(t("common.error"), <ModalError error={err} />, "ERROR");
                 setRoomsData(undefined);
             }).finally(() => setModalLoading(false));
     }, [roomsData, isOpen]);
@@ -156,9 +152,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
             </>;
         case STEPS.REVIEW:
             return <>
-                {latestError && <ModalError error={latestError}
-                    translationRoot="furpanel"
-                    translationKey="room.errors" />}
+                {latestError && <ModalError error={latestError} />}
                 <span>{t("furpanel.room.order_flow.your_selection")}</span>
                 <div className="room-container">
                     {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>

@@ -24,16 +24,14 @@ export default function ToolLink({
     className?: string,
     onClick?: MouseEventHandler;
 }>) {
-    const path = usePathname();
-    const locale = useLocale();
-    const currentPath = "https://localhost" + path.replaceAll(`/${locale}`, "");
+    const currentPath = `https://localhost${usePathname()}`;
     const resolved = new URL(href.toString(), currentPath).href;
     const activeClass = currentPath.includes(resolved) ? "active" : "";
     return <Link href={href}
         onClick={onClick}
         className={`tool-link rounded-m ${activeClass} ${className ?? ""}`}
         style={{ ...style }}>
-            {iconName !== undefined && <Icon icon={iconName} style={{ ...iconStyle }}></Icon>}
-            <span className="title small semibold">{children}</span>
+        {iconName !== undefined && <Icon icon={iconName} style={{ ...iconStyle }}></Icon>}
+        <span className="title small semibold">{children}</span>
     </Link>
 }

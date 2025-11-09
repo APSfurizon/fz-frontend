@@ -1,6 +1,6 @@
 {
   "name": "furizon-furpanel",
-  "version": "1.0.4",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,25 +9,27 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/env": "^15.1.5",
+    "@next/env": "16.0.1",
     "@tanstack/react-table": "^8.21.3",
-    "next": "^15.1.4",
-    "next-intl": "^3.23.5",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.1",
+    "next": "16.0.1",
+    "next-intl": "4.5.0",
     "next-qrcode": "^2.5.1",
     "next-translate": "^2.6.2",
-    "react": "^18.2.0",
+    "react": "19.2.0",
     "react-cropper": "^2.3.3",
-    "react-dom": "^18.2.0",
+    "react-dom": "19.2.0",
     "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.0",
-    "eslint-plugin-deprecation": "^3.0.0",
-    "eslint-plugin-spellcheck": "^0.0.20",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2"
   }
 }

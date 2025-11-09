@@ -1,0 +1,990 @@
+{
+  "common": {
+    "footer": {
+      "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italia",
+      "code_of_conduct": "Codice di Condotta",
+      "contact_us": "Contattaci",
+      "society_name": "Associazione di Promozione Sociale Furizon",
+      "volunteers": "Volontari",
+      "link_code_of_conduct": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-IT_rev25-04-2023.pdf"
+    },
+    "header": {
+      "home": "Home",
+      "nose_count": "Nose count",
+      "information": "Informazioni",
+      "archive": "Archivio",
+      "login": "Accedi",
+      "alt_logo": "Logo di furizon",
+      "alt_profile_picture": "Foto profilo",
+      "dropdown": {
+        "logout": "Esci",
+        "language": {
+          "it-IT": "Italiano",
+          "en-GB": "English"
+        }
+      },
+      "app-badge": "Scarica ora l'app ufficiale!"
+    },
+    "reload": "Ricarica",
+    "loading": "Caricamento...",
+    "confirm": "Conferma",
+    "cancel": "Annulla",
+    "accept": "Accetta",
+    "refuse": "Rifiuta",
+    "error": "Errore",
+    "next": "Avanti",
+    "back": "Indietro",
+    "unknown_error": "Errore sconosciuto",
+    "order_status": {
+      "CANCELED": "Ordine cancellato",
+      "PENDING": "Ordine in attesa",
+      "PAID": "Ordine pagato",
+      "EXPIRED": "Ordine scaduto"
+    },
+    "error_header": "Si {count, plural, =1 {è verificato un errore} other {sono verificati # errori}}:",
+    "request_id": "ID richiesta:",
+    "util": {
+      "hoverable": "Clicca per copiare"
+    },
+    "coming_soon": "Presto in arrivo...",
+    "source_code": "Codice sorgente: ",
+    "CRUD": {
+      "add": "Aggiungi",
+      "update": "Aggiorna",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "save": "Salva",
+      "discard_changes": {
+        "description": "Le modifiche verranno scartate"
+      }
+    },
+    "sponsorships": {
+      "sponsor": "Sponsor",
+      "super_sponsor": "Super Sponsor"
+    },
+    "changelog": {
+      "title": "Il Furpanel si è aggiornato",
+      "description": "Leggi le ultime novità su <a></a>"
+    },
+    "success": "Successo"
+  },
+  "components": {
+    "autoinput": {
+      "no_results": "Nessun risultato.",
+      "alt_result_image": "Immagine di {description}",
+      "guide": "Inserisci almeno {minSize, plural, =1 {un carattere} other {# caratteri}}",
+      "loading_data": "Caricamento dati..."
+    },
+    "dataForm": {
+      "save": "Salva"
+    },
+    "modal": {
+      "close": "Chiudi"
+    },
+    "upload": {
+      "alt_preview_image": "Anteprima dell'immagine caricata",
+      "upload_size_too_small": "L'immagine è troppo piccola",
+      "upload_size_too_big": "L'immagine è troppo grande",
+      "select_image": "Seleziona immagine",
+      "loading_uploads": "Caricamento...",
+      "file_not_valid": "File non valido",
+      "open": "Apri...",
+      "delete": "Elimina",
+      "upload": "Carica",
+      "crop": "Ritaglia",
+      "errors": {
+        "UNKNOWN": "Errore sconosciuto"
+      }
+    },
+    "input": {
+      "validation_fail": "Valore non valido"
+    },
+    "table": {
+      "filter": {
+        "placeholder": "Filtra"
+      },
+      "add": {
+        "title": "Aggiungi"
+      },
+      "delete": {
+        "title": "Elimina"
+      },
+      "no_data": "Nessun dato presente"
+    },
+    "common": {
+      "CRUD": {
+        "reset": "Ripristina"
+      }
+    }
+  },
+  "furpanel": {
+    "home": {
+      "header": "Ti diamo il benvenuto nel <highlighted>furpanel!</highlighted>"
+    },
+    "booking": {
+      "title": "Prenotazione",
+      "your_booking": "La tua prenotazione",
+      "coundown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
+      "coundown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
+      "book_now": "Prenota",
+      "review_info_first": "Rivedi i tuoi dati personali",
+      "edit_booking": "Modifica prenotazione",
+      "retry_payment": "Riprova pagamento",
+      "messages": {
+        "countdown": {
+          "title": "Conto alla rovescia",
+          "description": "La vendita dei biglietti inizierà dal {openingDate}"
+        },
+        "editing_locked_warning": {
+          "title": "Avviso blocco modifiche",
+          "description": "Dal {lockDate} non sarà più possibile modificare l'ordine."
+        },
+        "editing_locked": {
+          "title": "Modifiche bloccate",
+          "description": "Dal {lockDate} non è più possibile modificare l'ordine."
+        },
+        "review_info": {
+          "title": "Revisione dati personali",
+          "description": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono per rilasciarti la tessera associativa e per motivi assicurativi."
+        },
+        "exchange_invite_sent": {
+          "title": "Invito inviato",
+          "description": "Verrete contattati via email per confermare lo scambio."
+        },
+        "invite_group": {
+          "title": "Gruppo ufficiale",
+          "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
+        },
+        "exchange_explaination": "Puoi cedere la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio.",
+        "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in."
+      },
+      "items": {
+        "code": "codice",
+        "membership_card": "Tessera associativa",
+        "room": "Stanza d'albergo",
+        "room_capacity": "Capacità: {capacity, plural, =1 {singola} other {# ospiti}}",
+        "daily_ticket": "Biglietto giornaliero",
+        "daily_days": "Giorni: {days}",
+        "none_ticket": "Biglietto",
+        "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
+        "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
+        "extra_days": "Giorni extra",
+        "extra_days_BOTH": "Early & Late",
+        "extra_days_EARLY": "Early",
+        "extra_days_LATE": "Late"
+      },
+      "errors": {
+        "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",
+        "SERVER_ERROR": {
+          "title": "Errore server",
+          "description": "Non è stato possibile recuperare alcuna informazione sull'evento. Provare più tardi"
+        },
+        "MEMBERSHIP_MULTIPLE_DONE": {
+          "title": "Tessere multiple",
+          "description": "Risultano attive due tessere in contemporanea. Contattare il supporto per ulteriori informazioni."
+        },
+        "MEMBERSHIP_MISSING": {
+          "title": "Tessera associativa mancante",
+          "description": "Per partecipare ad un evento Furizon, devi avere una tessera valida. Ogni tessera ha validità fino al 30 settembre."
+        },
+        "ORDER_MULTIPLE_DONE": {
+          "title": "Ordini multipli",
+          "description": "Sono stati acquistati più ordini per lo stesso account. Contattare il supporto per rettificare la situazione."
+        },
+        "ORDER_SECRET_NOT_MATCH": {
+          "title": "Ordine non valido",
+          "description": "Non è stato possibile autenticizzare la veridicità del tuo ordine. Contattare il supporto per ulteriori informazioni."
+        },
+        "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
+          "title": "Ordine condiviso",
+          "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
+        },
+        "TELEGRAM_USERNAME_EMPTY": "Non è stato inserito alcun nome utente Telegram",
+        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'itentità"
+      },
+      "actions": {
+        "review_info": "Rivedi informazioni",
+        "confirm_info": "Conferma informazioni",
+        "exchange_order": "Scambia ordine",
+        "show_qr": "QR per il check-in"
+      },
+      "reservation_qr": "Codice QR per il check-in",
+      "event_logo": "Logo evento"
+    },
+    "badge": {
+      "title": "Badge",
+      "your_badges": "I tuoi badge",
+      "your_fursuits": "{amount, plural, =1 {La tua} other {Le tue}} fursuit",
+      "name": "Nome",
+      "locale": "Paese",
+      "badge_limits": "Massimo 500x500px",
+      "actions": {
+        "upload_badge": "Carica il tuo badge",
+        "edit_badge": "Modifica dati badge",
+        "add_fursuit": "Aggiungi fursuit",
+        "edit_fursuit": "Modifica badge di {name}"
+      },
+      "input": {
+        "new_name": {
+          "label": "Nuovo nome",
+          "placeholder": "Inserisci un nuovo nome",
+          "help": "Verrà usato sul sito per identificare il tuo account"
+        },
+        "new_locale": {
+          "label": "Paese",
+          "placeholder": "Cerca un paese",
+          "help": "La bandiera comparirà sul tuo badge"
+        },
+        "fursuit_image": {
+          "label": "Foto",
+          "help": "Deve essere una fotografia"
+        },
+        "fursuit_name": {
+          "label": "Nome",
+          "placeholder": "Il nome del fursona"
+        },
+        "fursuit_species": {
+          "label": "Specie",
+          "placeholder": "Inserisci la specie animale"
+        },
+        "bring_to_event": {
+          "label": "Porta a {eventName}"
+        },
+        "show_in_fursuit_count": {
+          "label": "Mostra nel fursuit count"
+        },
+        "show_owner": {
+          "label": "Mostra nel mio profilo"
+        }
+      },
+      "messages": {
+        "what_to_upload": {
+          "title": "Cosa caricare qui?",
+          "description": "Qualsiasi immagine caricata qua verrà stampata sul tuo badge personale e verrà usata come foto profilo in tutto il sito. Ogni caricamento è visionato e può essere rimosso dallo staff di Furizon. È vietata qualsiasi forma di contenuti espliciti, incluso pup play o cub."
+        },
+        "confirm_deletion": {
+          "title": "Conferma eliminazione",
+          "description": "Vuoi eliminare l'immagine attuale?"
+        },
+        "confirm_fursuit_deletion": {
+          "title": "Elimina fursuit di {name}",
+          "description": "Vuoi eliminare la fursuit di {name}?"
+        },
+        "fursuit_badge": {
+          "title": "Vuoi portare la tua suit a furizon?",
+          "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, cosicchè Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
+        },
+        "badge_edit_deadline_end": {
+          "title": "Modifiche badge bloccate",
+          "description": "Dal {lockDate}, le modifiche badge sono state bloccate."
+        },
+        "badge_edit_deadline": {
+          "title": "Deadline modifica badge",
+          "description": "Le modifiche al badge verranno bloccate il giorno {lockDate}."
+        }
+      },
+      "errors": {}
+    },
+    "debug": {
+      "title": "Debug"
+    },
+    "room": {
+      "title": "Stanza",
+      "messages": {
+        "room_edit_deadline": {
+          "title": "Scadenza modifiche stanze",
+          "description": "Hai tempo fino al {lockDate} per modificare la tua stanza."
+        },
+        "room_edit_deadline_end": {
+          "title": "Modifiche stanze bloccate",
+          "description": "Dal {lockDate}, la modifica della stanza non è più consentita."
+        },
+        "accept_invite": {
+          "title": "Accettare invito?",
+          "description": "Entrerai nella stanza <room>{roomName}</room> di {nickname}."
+        },
+        "refuse_invite": {
+          "title": "Rifiutare invito?",
+          "description": "Rifiuterai l'invito nella stanza <room>{roomName}</room> di {nickname}."
+        },
+        "confirm_delete": {
+          "title": "Conferma eliminazione",
+          "description": "Vuoi eliminare <room>{roomName}</room>? Gli ospiti verranno notificati."
+        },
+        "confirm_invite_cancel": {
+          "title": "Revoca invito",
+          "description": "Vuoi revocare l'invito in stanza per {guestName}? L'utente verrà notificato via email"
+        },
+        "confirm_kick": {
+          "title": "Rimuovi ospite",
+          "description": "Vuoi rimuovere {guestName} dalla tua stanza?"
+        },
+        "confirm_leave": {
+          "title": "Lascia stanza",
+          "description": "Vuoi uscire dalla stanza <room>{roomName}</room>?"
+        },
+        "exchange_invite_sent": {
+          "title": "Invito inviato",
+          "description": "Verrete contattati via email per confermare lo scambio."
+        },
+        "confirm_confirmation": {
+          "description": "Vuoi confermare <room>{roomName}</room>?"
+        },
+        "confirm_unconfirmation": {
+          "description": "Vuoi revocare la conferma di <room>{roomName}</room>?"
+        }
+      },
+      "errors": {
+        "ORDER_NOT_FOUND": "Ordine non trovato.",
+        "ORDER_NOT_PAID": "Ordine non pagato.",
+        "ROOM_FULL": "La stanza è già piena.",
+        "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
+      },
+      "input": {
+        "rename_new_name": {
+          "label": "Nuovo nome",
+          "placeholder": "Inserisci un nuovo nome stanza"
+        },
+        "invite": {
+          "label": "Invita qualcuno in stanza",
+          "placeholder": "Cerca un utente",
+          "help": "Puoi invitare solo utenti con un ordine pagato, eccetto biglietti giornalieri"
+        },
+        "force_join": {
+          "label": "Forza invito"
+        },
+        "force_exit": {
+          "label": "Forza uscita da altre stanze"
+        },
+        "exchange_user": {
+          "label": "Destinatario",
+          "placeholder": "Cerca un destinatario"
+        }
+      },
+      "invite": {
+        "header": "Hai ricevuto {amount, plural, =1 {un invito} other {# inviti}}.",
+        "title": "{nickname} ti invita nella stanza <room>{roomName}.</room>"
+      },
+      "actions": {
+        "buy_a_room": "Acquista stanza",
+        "upgrade_room": "Upgrade",
+        "create_a_room": "Crea una stanza",
+        "refuse": "Rifiuta",
+        "accept": "Accetta",
+        "rename": "Rinomina",
+        "invite": "Invita",
+        "create": "Crea",
+        "delete": "Elimina",
+        "kick": "Rimuovi ospite",
+        "revoke_invite": "Revoca invito",
+        "confirm_room": "Conferma stanza",
+        "unconfirm_room": "Revoca conferma",
+        "exchange": "Scambia",
+        "exchange_room": "Scambia stanza",
+        "leave": "Lascia",
+        "show_in_nosecount": "Mostra nel nosecount",
+        "hide_in_nosecount": "Nascondi dal nosecount"
+      },
+      "your_room": "La tua stanza",
+      "or": "oppure",
+      "or_get_invited": "oppure fatti invitare",
+      "no_order": "Prima acquista un biglietto.",
+      "no_room": "Non sei in una stanza, per ora.",
+      "can_create": "Hai comprato una stanza, creala per poterla personalizzare.",
+      "status_owner": "Gestore",
+      "status_invited": "Invitato",
+      "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
+      "default_name": "Stanza di {name}",
+      "order_flow": {
+        "quota_left": "{size, plural, =0 {Esaurito} =1 {Una rimasta} other {# rimaste}}",
+        "select_type": "Seleziona una stanza",
+        "no_room_type": "Non ci sono altri tipi di stanze al momento.",
+        "your_selection": "La tua selezione",
+        "complete_order": "Completa ordine",
+        "messages": {
+          "quota_warning": {
+            "title": "Avviso sulla disponibilità",
+            "description": "La disponibilità di una stanza potrebbe variare, ricarica per recuperarne la disponibilità più aggiornata."
+          },
+          "order_notice": {
+            "title": "Avviso sull'ordine",
+            "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere automaticamente annullato. Contatta il supporto in caso di ripensamenti."
+          }
+        }
+      },
+      "quota_viewer": {
+        "available_types": "Stanze disponibili",
+        "description": "Queste sono le stanze disponibili che puoi ottenere, una volta confermata la stanza."
+      }
+    },
+    "upload_area": {
+      "title": "Upload"
+    },
+    "user": {
+      "title": "Utente",
+      "sections": {
+        "user": "Utente",
+        "user_info": "Informazioni personali",
+        "security": "Sicurezza",
+        "security_password": "Password",
+        "sessions": "Sessioni attive"
+      },
+      "linking": {
+        "title": "Recupero ordine",
+        "description": "Attendi mentre colleghiamo l'ordine al tuo account...",
+        "errors": {
+          "SERVER_ERROR": "Errore server",
+          "ORDER_SECRET_NOT_MATCH": "Il codice Ordine non è corretto",
+          "ORDER_MULTIPLE_DONE": "Errore ordine multiplo",
+          "ORDER_NOT_FOUND": "Ordine non trovato"
+        }
+      },
+      "sessions": {
+        "actions": {
+          "terminate_all_sessions": "Termina tutte",
+          "terminate_session": "Termina sessione"
+        },
+        "messages": {
+          "confirm_terminate_all_sessions": "Terminare tutte le sessioni? Verrai disconnesso da tutti i dispositivi.",
+          "confirm_terminate_session": "Terminare la sessione selezionata? Il tuo account sarà disconnesso da quel dispositivo."
+        },
+        "headers": {
+          "created": "Creazione",
+          "user_agent": "Dispositivo",
+          "last_usage": "Ultimo uso"
+        }
+      },
+      "errors": {
+        "UNAUTHENTICATED": "Autenticazione mancante"
+      }
+    },
+    "admin": {
+      "title": "Admin",
+      "pretix": {
+        "title": "Pretix",
+        "data": {
+          "title": "Dati",
+          "reload_event": "Ricarica evento",
+          "reload_orders": "Ricarica ordini"
+        }
+      },
+      "membership": {
+        "title": "Associazione",
+        "cards": {
+          "title": "Tessere"
+        }
+      },
+      "events": {
+        "title": "Eventi",
+        "badges": {
+          "title": "Badge",
+          "print_badges": "Stampa badge",
+          "remind_badges": "Notifica badge mancanti",
+          "remind_fursuits": "Notifica fursuit mancanti",
+          "print": {
+            "select_mode": "Seleziona modalità stampa",
+            "simple_mode": {
+              "title": "Semplice",
+              "choose_badge": "Scegli il tipo di badge da stampare",
+              "fursuit": "Fursuit",
+              "common": "Comune"
+            },
+            "advanced_mode": {
+              "title": "Stampa avanzata",
+              "regular": {
+                "columns": {
+                  "user": "Utente",
+                  "serial": "Seriale",
+                  "sponsorship": "Sponsor"
+                },
+                "title": "Badge utenti"
+              },
+              "search": {
+                "label": "Cerca badge",
+                "help": "Premere invio per cercare",
+                "serial": {
+                  "placeholder": "Cerca intervalli di seriali"
+                },
+                "order_code": {
+                  "placeholder": "Cerca per ordine"
+                }
+              },
+              "print": "Stampa",
+              "Search": "Cerca",
+              "fursuit": {
+                "title": "Badge fursuit",
+                "columns": {
+                  "species": "Specie",
+                  "sona_name": "Nome fursona",
+                  "serial": "Seriale",
+                  "sponsorship": "Sponsor"
+                }
+              }
+            }
+          }
+        },
+        "orders": {
+          "title": "Ordini",
+          "remind_order_linking": "Notifica ordini disconnessi",
+          "export_rooms": "Esporta stanze hotel"
+        },
+        "rooms": {
+          "title": "Stanze",
+          "remind_rooms_not_full": "Notifica stanze non riempite"
+        }
+      },
+      "membership_manager": {
+        "title": "Gestione tessere",
+        "header": "Tessere del ",
+        "actions": {
+          "add": "Aggiungi tessera",
+          "show_missing_cards": "Mostra mancanti",
+          "show_extra_cards": "Mostra duplicate",
+          "hide_valid": "Nascondi valide"
+        },
+        "input": {
+          "user": {
+            "label": "Seleziona utente"
+          }
+        },
+        "table": {
+          "headers": {
+            "user": "Utente",
+            "registered": "Registrato"
+          }
+        },
+        "errors": {
+          "CARD_MISSING": "Tessera mancante",
+          "CARD_DUPLICATE": "Tessera duplicata"
+        },
+        "columns": {
+          "user": "Utente",
+          "name": "Nome",
+          "order_code": "Ordine",
+          "card_number": "Numero tessera",
+          "anomalies": "Anomalie",
+          "registered": "Registrato",
+          "sponsorship": "Sponsor"
+        }
+      },
+      "users": {
+        "title": "Utenti",
+        "accounts": {
+          "title": "Account",
+          "view": {
+            "title": "Visualizza utenti",
+            "input": {
+              "selected_user": {
+                "label": "Utente selezionato",
+                "placeholder": "Cerca un utente"
+              }
+            },
+            "personal_info": "Dati personali",
+            "security": "Sicurezza",
+            "orders": "Ordini",
+            "orders_table": {
+              "event_name": "Evento",
+              "order_code": "Codice ordine",
+              "order_status": "Stato",
+              "is_daily": "Giornaliero",
+              "sponsorship_type": "Sponsor",
+              "extra_days": "Giorni extra",
+              "room_type": "Tipo stanza"
+            },
+            "actions": {
+              "ban": "Ban",
+              "unban": "Riammetti",
+              "view_order": "Vedi ordine"
+            },
+            "messages": {
+              "confirm_ban": {
+                "title": "Conferma espulsione",
+                "description": "L'account verrà disconnesso da tutti i dispositivi e sarà impedito l'accesso."
+              },
+              "confirm_unban": {
+                "title": "Conferma riammissione?",
+                "description": "All'account sarà di nuovo permesso di accedere."
+              }
+            },
+            "errors": {
+              "unknown_user": "Utente non trovato",
+              "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
+            },
+            "cards_table": {
+              "issue_year": "Anno emissione"
+            },
+            "membership_cards": "Tessere socio",
+            "badge": "Badge",
+            "badges": {
+              "fursona_name": "Nome fursona",
+              "locale": "Localizzazione",
+              "delete_badge_picture": "Elimina immagine",
+              "hide_from_nosecount": "Nascondi dal nosecount",
+              "show_from_nosecount": "Mostra nel nosecount"
+            },
+            "fursuit_table": {
+              "picture": "Fotografia",
+              "name": "Nome",
+              "species": "Specie"
+            },
+            "fursuits": "Fursuit",
+            "rooms_table": {
+              "event_name": "Evento",
+              "room_name": "Nome",
+              "actions": {
+                "add_guest": {
+                  "title": "Aggiungi ospite",
+                  "select_guest": {
+                    "label": "Seleziona l'utente da aggiungere come ospite"
+                  }
+                },
+                "remove_guest": {
+                  "title": "Rimuovi ospite",
+                  "select_guest": {
+                    "label": "Seleziona l'ospite da rimuovere dalla stanza"
+                  }
+                }
+              }
+            },
+            "rooms": "Stanze"
+          }
+        },
+        "security": {
+          "title": "Sicurezza",
+          "roles": {
+            "title": "Ruoli",
+            "list": {
+              "permissions": "{count, plural, =1 {# permesso} other {# permessi}}",
+              "temporary": "{count, plural, =1 {# membro temporaneo} other {# membri temporanei}}",
+              "members": "{count, plural, =1 {# membro} other {# membri}}"
+            },
+            "input": {
+              "internal_name": {
+                "label": "Nome interno"
+              },
+              "display_name": {
+                "label": "Nome visualizzato"
+              },
+              "show_admin_count": {
+                "label": "Mostra nel admin count"
+              },
+              "admin_count_priority": {
+                "label": "Priorità admin count"
+              },
+              "add_permission": {
+                "label": "Aggiungi permesso"
+              },
+              "add_member": {
+                "label": "Aggiungi membro di ruolo"
+              },
+              "select_user": {
+                "label": "Seleziona utente"
+              },
+              "temporary_member": {
+                "label": "Temporaneo",
+                "help": "Terrà il ruolo solamente per l'evento attuale."
+              }
+            },
+            "sections": {
+              "data": "Anagrafica",
+              "permissions": "Permessi",
+              "members": "Membri"
+            },
+            "messages": {
+              "discard_changes": "Le modifiche non salvate verranno scartate.",
+              "confirm_deletion": "Eliminare il ruolo {roleName}? Rimuoverà {members} membri e {tempMembers} membri temporanei.",
+              "add_role": "Prima di tutto, inserisci il codice di riferimento",
+              "duplicate_user": {
+                "title": "Membro duplicato",
+                "description": "Non puoi inserire un membro più volte nello stesso ruolo"
+              }
+            },
+            "actions": {
+              "delete_role": "Elimina ruolo",
+              "add_role": "Aggiungi ruolo",
+              "purge_temporary_roles": "Rimuovi membri temporanei"
+            },
+            "columns": {
+              "name": "Nome",
+              "internal_name": "Nome interno",
+              "permission_count": "Permessi",
+              "members_count": "Membri",
+              "temporary_members_count": "Membri temporanei"
+            }
+          }
+        }
+      },
+      "system": {
+        "title": "Sistema",
+        "server": {
+          "title": "Server",
+          "ping": "Ping"
+        }
+      }
+    }
+  },
+  "authentication": {
+    "title": "autenticazione",
+    "recover": {
+      "title": "Recupero account",
+      "actions": {
+        "send_verification": "Invia link di reset"
+      },
+      "input": {
+        "email": {
+          "label": "Email",
+          "placeholder": "Inserisci il tuo indirizzo email"
+        }
+      },
+      "messages": {
+        "email_success": {
+          "title": "Recupero account",
+          "description": "È stata inviata una mail per recuperare il tuo account."
+        }
+      },
+      "instruction": "Inserisci la tua email per reimpostare la password"
+    },
+    "recover_confirm": {
+      "title": "Cambia password",
+      "actions": {
+        "change_password": "Cambia password"
+      },
+      "input": {
+        "new_password": {
+          "label": "Nuova password",
+          "placeholder": "Crea una nuova password",
+          "help": "Deve essere lunga almeno 6 caratteri"
+        },
+        "confirm_password": {
+          "label": "Conferma password",
+          "placeholder": "Conferma la tua password"
+        }
+      },
+      "errors": {
+        "pw_reset_not_found": "Codice non valido",
+        "pw_chage_same_password": "La password è uguale alla precedente",
+        "unknown_error": "Errore sconosciuto"
+      }
+    },
+    "exchange_confirm": {
+      "title": "Conferma scambio",
+      "room": {
+        "received": "<source></source> vuole scambiare stanza con te.",
+        "sent": "Hai chiesto <target></target> di scambiare stanze.",
+        "room_title": "Stanza di <user></user>:"
+      },
+      "order": {
+        "received": "<source></source> vuole cederti il suo ordine.",
+        "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
+        "order_title": "Ordine di <user></user>:"
+      }
+    },
+    "logout": {
+      "title": "Esci"
+    },
+    "login": {
+      "title": "Accesso",
+      "login": "Accedi",
+      "create_account": "Crea un account",
+      "label_email": "Email",
+      "placeholder_email": "Inserisci il tuo indirizzo email",
+      "label_password": "Password",
+      "placeholder_password": "Inserisci la tua password",
+      "create_an_account": "Crea un account",
+      "recover": "Ho dimenticato la password",
+      "errors": {
+        "unknown_error": "Errore sconosciuto",
+        "network_error": "Errore di rete",
+        "email_not_registered": "Utente non trovato",
+        "invalid_credentials": "Credenziali errate",
+        "invalid_input": "Dati non validi",
+        "already_logged_in": "Hai già effettuato l'accesso",
+        "confirmation_still_pending": "Conferma l'email prima di accedere",
+        "authentication_is_disabled": "Account disabilitato."
+      },
+      "messages": {
+        "register_success": {
+          "title": "Registrazione effettuata",
+          "description": "Controlla le mail per verificare il tuo account."
+        },
+        "CONFIRMATION_SUCCESSFUL": {
+          "title": "Registrazione confermata",
+          "description": "Email confermata con successo, adesso è possibile accedere."
+        },
+        "CONFIRMATION_NOT_FOUND": {
+          "title": "Codice non trovato",
+          "description": "Codice non trovato o scaduto"
+        }
+      }
+    },
+    "register": {
+      "errors": {
+        "email_already_registered": "Questa email è già stata usata",
+        "network_error": "Errore di rete",
+        "unknown_error": "Errore sconosciuto",
+        "invalid_input": "Dati non validi",
+        "region_not_provided": "Provincia non fornita"
+      },
+      "form": {
+        "allergies": {
+          "label": "Allergie",
+          "placeholder": "Hai qualche allergia?"
+        },
+        "birth_city": {
+          "label": "Comune di nascita",
+          "placeholder": "Es: Bari"
+        },
+        "birth_country": {
+          "label": "Paese",
+          "placeholder": "Es: Italia"
+        },
+        "birth_region": {
+          "label": "Provincia",
+          "placeholder": "Es: Bari"
+        },
+        "birthday": {
+          "label": "Data di nascita"
+        },
+        "confirm_password": {
+          "help": "Deve combaciare con la password",
+          "label": "Conferma password",
+          "placeholder": "Conferma la tua password"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "esempio@furroso.com"
+        },
+        "confirm_email": {
+          "label": "Conferma email",
+          "placeholder": "esempio@furroso.com"
+        },
+        "first_name": {
+          "label": "Nome",
+          "placeholder": "Inserisci il tuo nome"
+        },
+        "fiscal_code": {
+          "label": "Codice fiscale",
+          "placeholder": "Inserisci il codice fiscale"
+        },
+        "last_name": {
+          "label": "Cognome",
+          "placeholder": "Inserisci il tuo cognome"
+        },
+        "nickname": {
+          "help": "Il nome del tuo fursona principle. Non sarà usato per l'accesso",
+          "label": "Nickname",
+          "placeholder": "Es: il nome del tuo fursona"
+        },
+        "password": {
+          "help": "Deve essere lunga almeno 6 caratteri",
+          "label": "Password",
+          "placeholder": "Inserisci una password"
+        },
+        "phone_prefix": {
+          "label": "Prefisso telefonico",
+          "placeholder": "Esempio: Italy (+39)"
+        },
+        "phone_number": {
+          "label": "Telefono",
+          "placeholder": "Esempio: 3331234567"
+        },
+        "residence_address": {
+          "label": "Indirizzo",
+          "placeholder": "Esempio: Via San Pelo, 125"
+        },
+        "residence_city": {
+          "label": "Città",
+          "placeholder": "Esempio: Roma"
+        },
+        "residence_country": {
+          "label": "Paese",
+          "placeholder": "Es: Italia"
+        },
+        "residence_region": {
+          "label": "Provincia",
+          "placeholder": "Esempio: Barletta Andria Trani"
+        },
+        "residence_zip_code": {
+          "label": "Codice postale",
+          "placeholder": "Esempio: 70122"
+        },
+        "section": {
+          "birth_data": "Dati di nascita",
+          "personal_info": "Dati personali",
+          "residence_data": "Dati di residenza",
+          "contact_data": "Dati di contatto",
+          "identity_data": "Identità"
+        },
+        "disclaimer_tos": {
+          "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
+        },
+        "disclaimer_data_protection": {
+          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
+        },
+        "sex": {
+          "label": "Sesso",
+          "placeholder": "Inserisci il tuo sesso"
+        },
+        "gender": {
+          "label": "Genere",
+          "placeholder": "Inserisci il tuo genere"
+        },
+        "telegram_username": {
+          "label": "Nome utente Telegram",
+          "placeholder": "Inserisci il tuo nome utente di telegram",
+          "help": "Abbiamo bisogno del tuo @nomeutente per contattarti, se necessario"
+        },
+        "id_type": {
+          "label": "Tipo documento",
+          "placeholder": "Seleziona un tipo documento"
+        },
+        "id_number": {
+          "label": "Codice documento",
+          "placeholder": "Inserisci il codice/numero documento"
+        },
+        "id_issuer": {
+          "label": "Ente emittente",
+          "placeholder": "Inserisci l'emittente del documento"
+        },
+        "id_expiry": {
+          "label": "Scadenza documento",
+          "placeholder": "Inserisci la data scadenza documento"
+        },
+        "shirt_size": {
+          "placeholder": "Seleziona la dimensione maglietta",
+          "label": "Dimensione maglietta"
+        }
+      },
+      "question": {
+        "description": "La legislatura Italiana rende questi dati necessari per qualsiasi acquisto e tesseramento. Per ulteriori informazioni, consultare i termini e condizioni.",
+        "description_title": "Perché chiediamo questi dati?"
+      },
+      "login_here": "oppure accedi",
+      "register": "Registrati",
+      "title": "Registrazione"
+    },
+    "logging_in": {
+      "title": "Accesso in corso"
+    }
+  },
+  "misc": {
+    "nosecount": {
+      "title": "Tutti",
+      "sections": {
+        "fursuits": "Incontra i fursuiter",
+        "sponsors": "Un grazie di ❤️ ai nostri sponsor",
+        "nosecount": "Scopri gli ospiti nel <b>nosecount!</b>"
+      },
+      "links": {
+        "fursuits": "Fursuit",
+        "sponsors": "Sponsor"
+      },
+      "daily_furs": "Giornalieri",
+      "total_count": "{count, plural, =1 {UN ospite} other {# ospiti}}",
+      "input": {
+        "select_event": "Seleziona evento"
+      }
+    }
+  }
+}

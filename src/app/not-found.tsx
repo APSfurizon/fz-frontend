@@ -10,9 +10,9 @@ export default function NotFound() {
                         src="/images/logo-dark.png"
                         alt="Furizon logo"
                         width={256}
-                        height={60}/>
+                        height={60} />
                     <div className="horizontal-list flex-vertical-center gap-2mm">
-                        <Icon className="xx-large" icon={"FIND_IN_PAGE"}/>
+                        <Icon className="xx-large" icon={"FIND_IN_PAGE"} />
                         <p>
                             <span className="title bold medium">
                                 Not found

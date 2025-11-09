@@ -7,10 +7,10 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: '*',
             allow: '/',
             disallow: [
-                '/debug', '/*/debug',
-                '/admin', '/*/admin',
-                '/recover', "/*/recover",
-                "/user/order/link", "/*/user/order/link"
+                '/debug',
+                '/admin',
+                '/recover',
+                "/user/order/link",
             ],
         },
         sitemap: `https://${APP_HOSTNAME}/sitemap.xml`,

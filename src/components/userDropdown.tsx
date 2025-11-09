@@ -6,7 +6,7 @@ import Icon from '@/components/icon';
 import UserPicture from '@/components/userPicture';
 import { runRequest } from '@/lib/api/global';
 import { LogoutApiAction } from '@/lib/api/authentication/login';
-import { UserData } from '@/lib/api/user';
+import { changeLanguage, UserData } from '@/lib/api/user';
 import Button from '@/components/input/button';
 import LoadingPanel from './loadingPanel';
 import "@/styles/components/userDropDown.css";
@@ -57,14 +57,10 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                 {userData && <a href='#' onClick={() => logout()} className='title small rounded-s vertical-align-middle'>
                     {t('header.dropdown.logout')}
                 </a>}
-                {/* Login */}
-                {!userData && !loading && <a href='/login' className='title small rounded-s vertical-align-middle'>
-                    {t('header.login')}
-                </a>}
                 {/* Language selector */}
                 <hr />
-                {routing.locales.map((lng, index) => <Link href={path} className='title small rounded-s vertical-align-middle horizontal-list'
-                    key={index} locale={lng}>
+                {routing.locales.map((lng, index) => <Link href="#" className='title small rounded-s vertical-align-middle horizontal-list'
+                    key={index} onClick={() => changeLanguage(lng, userData)}>
                     {mapLanguageToFlag(lng)}&nbsp;
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' icon={"CHECK"}></Icon>}

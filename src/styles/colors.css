@@ -2,14 +2,14 @@
   --background: #eeeeee;
   --foreground: #111111;
   --highlight: #eb9616;
-  
+
   --text-subtitle: #494949;
   --text-link: #2b6ec5;
   --text-status-error: #e44f4f;
   --main-dialog-background: #f1f1f1;
 
   --hoverable-bg: #2a2b3f;
-  
+
   /* Footer */
   --footer-bg: #e7e7e7;
   /* Header */
@@ -18,9 +18,9 @@
   --header-link-hover-bg: #ffffff10;
 
   /* Button */
-  --button-bg-normal: linear-gradient(0deg, #9ac4f5 0%, #69bcf3 100%);
-  --button-bg-hover: linear-gradient(0deg, #b1d1f5 0%, #94cdf3 100%);
-  --button-bg-down: linear-gradient(0deg, #49aee9 0%, #549ccc 100%);
+  --button-bg-normal: linear-gradient(0deg, #69bcf3 0%, #7bb4f5 100%);
+  --button-bg-hover: linear-gradient(0deg, #94cdf3 0%, #8bbffa 100%);
+  --button-bg-down: linear-gradient(0deg, #549ccc 0%, #49aee9 100%);
 
   --button-danger-bg-normal: linear-gradient(0deg, #d65050 0%, #e74d4d 100%);
   --button-danger-bg-hover: linear-gradient(0deg, #e29b9b 0%, #ee7777 100%);
@@ -53,7 +53,7 @@
   --tool-link-hambuger-hover-bg: #ffffff40;
 
   /* User profile picture */
-  --profile-picture-border-normal: #E9E9E9;
+  --profile-picture-border-normal: #ffffff;
   --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
   --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
   --profile-picture-shadow: #242C38;
@@ -74,7 +74,7 @@
 
   --notice-box-header-bg-error: #FF000019;
   --notice-box-header-border-error: #EC2F2F;
-  
+
   /* Input Field */
   --text-input-bg: #ffffff;
   --text-input-bg-disabled: #e4e4e4;
@@ -82,9 +82,9 @@
   --text-input-color-disabled: #7d8b96;
   --text-input-border-normal: #11191F;
   --text-input-border-disabled: #747b80;
-  --text-input-border-danger:  #EC2F2F;
-  --text-input-border-success:  #35ec2f;
-  
+  --text-input-border-danger: #EC2F2F;
+  --text-input-border-success: #35ec2f;
+
   /* Auto Complete */
   --autocomplete-color: #1a1a1a;
   --autocomplete-danger-normal: #EC2F2F;
@@ -92,7 +92,7 @@
   --autocomplete-danger-down: #833232;
   --autocomplete-selected-value-bg: #c3d6f1;
   --autocomplete-selected-value-bg-hover: #a1badd;
-  
+
   /* Lista */
   --suggestion-box-bg: #c3d6f1;
   --suggestion-box-bg-hover: #c3d6f1;
@@ -164,14 +164,14 @@
     --background: #11191F;
     --foreground: #ededed;
     --highlight: #ECA02F;
-    
-    --text-subtitle: #9a9a9a;
+
+    --text-subtitle: #cccccc;
     --text-link: #2395D6;
     --text-status-error: #e44f4f;
-    --main-dialog-background: #141E26;
+    --main-dialog-background: #152029;
 
     --hoverable-bg: #2a2b3f;
-    
+
     /* Footer */
     --footer-bg: #1C1A25;
     /* Header */
@@ -236,7 +236,7 @@
 
     --notice-box-header-bg-error: #FF000019;
     --notice-box-header-border-error: #EC2F2F;
-    
+
     /* Input Field */
     --text-input-bg: #242C38;
     --text-input-bg-disabled: #374355;
@@ -244,17 +244,16 @@
     --text-input-color-disabled: #7d8b96;
     --text-input-border-normal: #4D5E6B;
     --text-input-border-disabled: #11191F;
-    --text-input-border-danger:  #EC2F2F;
-    --text-input-border-success:  #35ec2f;
-    
+    --text-input-border-danger: #EC2F2F;
+    --text-input-border-success: #35ec2f;
+
     /* Auto Complete */
     --autocomplete-color: #fff;
     --autocomplete-danger-normal: #EC2F2F;
     --autocomplete-danger-hover: #cf6c6c;
     --autocomplete-danger-down: #833232;
     --autocomplete-selected-value-bg: #4D5D75;
-    --autocomplete-selected-value-hover-bg: #5d708d;
-    
+
     /* Lista */
     --suggestion-box-bg: #ffffff1a;
 

@@ -10,10 +10,11 @@ div.upload-container {
 
     div.image-container {
         outline: 1px solid var(--upload-border);
+        overflow: hidden;
     }
 
     div.image-container.danger {
-        outline: 1px solid var(--upload-border-danger);    
+        outline: 1px solid var(--upload-border-danger);
     }
 
     img.upload-picture {
@@ -50,8 +51,8 @@ div.crop-container {
     width: 100%;
 }
 
-div.crop-container > img,
-div.crop-container > canvas {
+div.crop-container>img,
+div.crop-container>canvas {
     margin-top: 2em;
     margin-bottom: 2em;
     outline: 2px solid var(--upload-border);
