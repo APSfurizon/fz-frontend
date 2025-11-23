@@ -1,0 +1,14 @@
+@mixin sizes {
+    $sizes: (
+        'small': 80px,
+        'medium': 100px,
+        'large': 150px
+    );
+
+    @each $size-name, $size-value in $sizes {
+        &--size-#{$size-name} {
+            width: $size-value;
+            height: auto;
+        }
+    }
+}
