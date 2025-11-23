@@ -1,5 +1,6 @@
 form.login-form {
     gap: 1.25em;
+    min-width: 18em;
 }
 
 form .toolbar-bottom {

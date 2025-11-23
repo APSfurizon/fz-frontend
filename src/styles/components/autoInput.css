@@ -130,10 +130,6 @@ div.autocomplete-input {
         display: none;
     }
 
-    .selected-value:hover {
-        background-color: var(--autocomplete-selected-value-hover-bg);
-    }
-
     .selected-value img {
         border-radius: 1000px;
         max-width: 17pt;

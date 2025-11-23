@@ -73,10 +73,10 @@ export default function FpSelect({
             setSelectedItem(mappedItems[initialValue]);
             setLastInitialValue(initialValue);
         } else if (formReset) {
-            setSelectedItem(undefined);
+            setSelectedItem(mappedItems ? mappedItems[initialValue] : undefined);
             onFormChange(fieldName);
         }
-    }, [initialValue, mappedItems]);
+    }, [initialValue, mappedItems, formReset]);
 
     const renderItems = (items: (SelectGroup | SelectItem)[]) => {
         return <>

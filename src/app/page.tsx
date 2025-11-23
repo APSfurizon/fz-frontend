@@ -1,5 +1,6 @@
+'use client'
 import { redirect } from "next/navigation";
 
-export default function Home() {
-  redirect('/en');
+export default function AppPage() {
+  redirect('/home');
 }

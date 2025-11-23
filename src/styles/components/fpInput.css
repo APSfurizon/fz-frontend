@@ -42,11 +42,6 @@ div.fp-input {
         outline: none;
     }
 
-    input.input-field::placeholder::before {
-        content: var(--placeholder-content);
-        font-family: 'Material Symbols Rounded';
-    }
-
     /* Focus style */
     div.input-container:has(input.input-field:focus) {
         outline-width: 2px;
