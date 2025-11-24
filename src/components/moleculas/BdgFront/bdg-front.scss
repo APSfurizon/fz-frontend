@@ -1,0 +1,9 @@
+@use '../../../styles/mixin';
+
+.bdg-front {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    @include mixin.sizes;
+}

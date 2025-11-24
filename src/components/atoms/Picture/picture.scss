@@ -1,0 +1,19 @@
+@use '../../../styles/mixin';
+
+.picture {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: 0.25rem;
+    object-fit: cover;
+    border: 2px solid #fff;
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    @include mixin.sizes;
+}

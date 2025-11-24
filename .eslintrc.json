@@ -2,7 +2,8 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript",
-    "plugin:deprecation/recommended"
+    "plugin:deprecation/recommended",
+    "plugin:storybook/recommended"
   ],
   "plugins": [
     "spellcheck"
