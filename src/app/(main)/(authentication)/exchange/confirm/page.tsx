@@ -154,7 +154,7 @@ export default function ExchangeConfirm() {
                 {/* Daily days */}
                 {ticketData?.isDaily && <span className="horizontal-list gap-2mm">
                   {t("furpanel.booking.items.daily_days",
-                    { days: ticketData.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ") })}
+                    { days: ticketData.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ") ?? "" })}
                 </span>}
                 {/* Extra days */}
                 {exchangeData.fullOrderExchange.extraDays && exchangeData.fullOrderExchange.extraDays !== "NONE" &&

@@ -24,8 +24,8 @@ export default function RoomInvite({ style, className, busy, onAccept, onReject,
                 <UserPicture size={24} userData={inviteData.room.roomOwner} hideEffect={true}></UserPicture>
                 {t.rich("room.invite.title",
                     {
-                        nickname: inviteData.room.roomOwner.fursonaName,
-                        roomName: inviteData.room.roomName,
+                        nickname: inviteData.room.roomOwner.fursonaName ?? "",
+                        roomName: inviteData.room.roomName ?? "",
                         room: (chunks) => <b className="highlight">{chunks}</b>
                     },)
                 }

@@ -1,6 +1,6 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, SearchType } from "@/lib/components/autoInput";
 import { BadgeStatusApiResponse } from "../badge/badge";
-import { SponsorshipType } from "../booking";
+import { Board, SponsorshipType } from "../booking";
 import { ConventionEvent } from "../counts";
 import { ExchangeStatusApiResponse } from "../exchange";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
@@ -48,7 +48,8 @@ export interface FullOrder {
     id: number,
     dailyDaysBitmask: number,
     daily: boolean,
-    membership: boolean
+    membership: boolean,
+    board: Board
 }
 
 export interface GetUserAdminViewResponse extends ApiResponse {

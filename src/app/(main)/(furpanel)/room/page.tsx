@@ -61,7 +61,7 @@ export default function RoomPage() {
   // Room creation
   const createRoom = () => {
     if (userLoading) return;
-    const roomName = t("furpanel.room.default_name", { name: userDisplay?.display?.fursonaName }).substring(0, 63);
+    const roomName = t("furpanel.room.default_name", { name: userDisplay?.display?.fursonaName ?? "" }).substring(0, 63);
     const roomData: RoomCreateData = {
       name: roomName
     };
@@ -658,8 +658,8 @@ export default function RoomPage() {
       {currentInvitation && <>
         <span className="descriptive small">
           {t.rich("furpanel.room.messages.accept_invite.description", {
-            nickname: currentInvitation.room.roomOwner.fursonaName,
-            roomName: currentInvitation.room.roomName,
+            nickname: currentInvitation.room.roomOwner.fursonaName ?? "",
+            roomName: currentInvitation.room.roomName ?? "",
             room: (chunks) => <b className="highlight">{chunks}</b>
           })}
         </span>
@@ -692,8 +692,8 @@ export default function RoomPage() {
       {currentInvitation && <>
         <span className="descriptive small">
           {t.rich("furpanel.room.messages.refuse_invite.description", {
-            nickname: currentInvitation.room.roomOwner.fursonaName,
-            roomName: currentInvitation.room.roomName,
+            nickname: currentInvitation.room.roomOwner.fursonaName ?? "",
+            roomName: currentInvitation.room.roomName ?? "",
             room: (chunks) => <b className="highlight">{chunks}</b>
           })}
         </span>
@@ -749,7 +749,7 @@ export default function RoomPage() {
       onClose={() => { setSelectedGuest(undefined); setInviteCancelModalOpen(false); }} busy={modalLoading}>
       {selectedGuest && data?.currentRoomInfo && <>
         <span className="descriptive small">{t("furpanel.room.messages.confirm_invite_cancel.description", {
-          guestName: selectedGuest.user.fursonaName
+          guestName: selectedGuest.user.fursonaName ?? ""
         })}
         </span>
         <div className="horizontal-list gap-4mm">
@@ -775,7 +775,7 @@ export default function RoomPage() {
       onClose={() => { setSelectedGuest(undefined); setKickModalOpen(false); }} busy={modalLoading}>
       {selectedGuest && data?.currentRoomInfo && <>
         <span className="descriptive small">{t("furpanel.room.messages.confirm_kick.description", {
-          guestName: selectedGuest.user.fursonaName
+          guestName: selectedGuest.user.fursonaName ?? ""
         })}
         </span>
         <div className="horizontal-list gap-4mm">

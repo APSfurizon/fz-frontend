@@ -1,4 +1,4 @@
-import { OrderData } from "./booking";
+import { Board, OrderData } from "./booking";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
 import { RoomData } from "./room";
 import { UserData, ExtraDays } from "./user";
@@ -15,6 +15,7 @@ export interface ExchangeStatusApiResponse extends ApiResponse {
     targetRoomInfoHidden: boolean,
     targetRoomExchange: RoomData,
     targetExtraDays?: ExtraDays,
+    targetBoard?: Board
 }
 
 export class ExchangeStatusApiAction extends ApiAction<ExchangeStatusApiResponse, ApiErrorResponse> {

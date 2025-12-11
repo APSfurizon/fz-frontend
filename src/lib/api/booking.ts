@@ -22,6 +22,12 @@ export function mapOrderStatusToStatusBox(s: OrderStatusType): StatusBoxStyle {
     }
 }
 
+export enum Board {
+    NONE = 0,
+    HALF = 1,
+    FULL = 2
+}
+
 export interface OrderData {
     code: string,
     orderStatus: OrderStatusType,
@@ -32,7 +38,8 @@ export interface OrderData {
     room: RoomData,
     totalFursuits: number,
     orderEvent: ConventionEvent,
-    checkinSecret: string
+    checkinSecret: string,
+    board: Board
 }
 
 export interface BookingOrderResponse extends ApiResponse {
