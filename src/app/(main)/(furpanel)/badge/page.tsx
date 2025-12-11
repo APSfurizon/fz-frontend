@@ -337,7 +337,7 @@ export default function BadgePage() {
 
     {/* Add / Edit fursuit modal */}
     <Modal title={editMode
-      ? t("furpanel.badge.actions.edit_fursuit", { name: currentFursuit?.fursuit.name })
+      ? t("furpanel.badge.actions.edit_fursuit", { name: currentFursuit?.fursuit.name ?? "" })
       : t("furpanel.badge.actions.add_fursuit")}
       open={addFursuitModalOpen}
       onClose={closeAddFursuitModal}
@@ -400,10 +400,10 @@ export default function BadgePage() {
     </Modal>
     <Modal open={deleteFursuitModalOpen} onClose={closeDeleteFursuit}
       title={t("furpanel.badge.messages.confirm_fursuit_deletion.title",
-        { name: currentFursuit?.fursuit.name })
+        { name: currentFursuit?.fursuit.name ?? "" })
       } busy={loading}>
       <span>
-        {t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: currentFursuit?.fursuit.name })}
+        {t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: currentFursuit?.fursuit.name ?? "" })}
       </span>
       <div className="horizontal-list gap-4mm">
         <Button className="danger" iconName={"CANCEL"} busy={loading} onClick={closeDeleteFursuit}>

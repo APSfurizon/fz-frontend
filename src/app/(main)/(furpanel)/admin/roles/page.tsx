@@ -178,8 +178,8 @@ export default function RolesListPage() {
             <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.confirm_deletion",
                 {
                     roleName: selectedRole?.roleDisplayName ?? selectedRole?.roleInternalName ?? "",
-                    members: selectedRole?.permanentUsersNumber,
-                    tempMembers: selectedRole?.temporaryUsersNumber
+                    members: selectedRole?.permanentUsersNumber ?? 0,
+                    tempMembers: selectedRole?.temporaryUsersNumber ?? 0
                 })}
             </span>
             <div className="bottom-toolbar">

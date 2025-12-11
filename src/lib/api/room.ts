@@ -1,5 +1,5 @@
 import { FormApiAction, FormDTOBuilder } from "../components/dataForm";
-import { ExtraDaysType } from "./booking";
+import { Board, ExtraDaysType } from "./booking";
 import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
 import { SponsorType, UserData } from "./user";
@@ -41,7 +41,8 @@ export interface RoomInfo {
     roomData: RoomData,
     canInvite: boolean,
     extraDays: ExtraDaysType,
-    guests: RoomGuestHeader[]
+    guests: RoomGuestHeader[],
+    board?: Board
 }
 
 export interface RoomCreateData {
@@ -260,6 +261,7 @@ export const EMPTY_ROOM_INFO: RoomInfoResponse = {
         canInvite: false,
         showInNosecount: false,
         eventId: 0,
-        extraDays: "NONE"
+        extraDays: "NONE",
+        board: Board.NONE
     }
 };

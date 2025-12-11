@@ -183,7 +183,7 @@ export default function BookingPage() {
                                         supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
                                     })}
                                 description={pageData.isDaily
-                                    ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays })
+                                    ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })
                                     : undefined} />
                             {/* Membership item */}
                             {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}

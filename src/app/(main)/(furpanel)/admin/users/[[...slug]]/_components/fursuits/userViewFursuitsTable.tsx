@@ -108,8 +108,8 @@ export default function UserViewFursuitsTable({
             reloadData={reloadData}
             userId={userData.personalInfo.userId!} />
         <Modal open={delModalOpen} onClose={closeDeleteFursuit}
-            title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuit?.fursuit.name })} busy={deleteLoading}>
-            <span>{t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: fursuit?.fursuit.name })}</span>
+            title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuit?.fursuit.name ?? "" })} busy={deleteLoading}>
+            <span>{t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: fursuit?.fursuit.name ?? "" })}</span>
             <div className="horizontal-list gap-4mm">
                 <Button className="danger" iconName={"CANCEL"} busy={deleteLoading} onClick={closeDeleteFursuit}>
                     {t("common.cancel")}</Button>
