@@ -205,7 +205,7 @@
       "actions": {
         "review_info": "Rivedi informazioni",
         "confirm_info": "Conferma informazioni",
-        "exchange_order": "Scambia ordine",
+        "exchange_order": "Trasferisci ordine",
         "show_qr": "QR per il check-in"
       },
       "reservation_qr": "Codice QR per il check-in",

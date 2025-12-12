@@ -205,7 +205,7 @@
       "actions": {
         "review_info": "Review information",
         "confirm_info": "Confirm information",
-        "exchange_order": "Exchange order",
+        "exchange_order": "Transfer order",
         "show_qr": "Check-in QR code"
       },
       "reservation_qr": "Check-in QR code",
