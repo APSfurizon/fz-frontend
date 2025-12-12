@@ -1,0 +1,79 @@
+:root {
+  --qr-reader-canvas-bg: transparent;
+  --qr-reader-primary: 0, 255, 170;
+  --qr-reader-primary-bg: rgb(var(--qr-reader-primary));
+  --qr-reader-frame-border: rgba(var(--qr-reader-primary), 0.8);
+  --qr-reader-frame-shadow: rgba(var(--qr-reader-primary), 0.35);
+  --qr-reader-primary-text: #05070a;
+  --qr-reader-ghost-border: #f87171;
+  --qr-reader-ghost-text: #f87171;
+  --qr-reader-status-text: #94a3b8;
+}
+
+.qr-reader {
+  display: grid;
+  width: min(90vw, 320px);
+  margin: 0 auto;
+
+  &__viewport {
+    width: 100%;
+    position: relative;
+    aspect-ratio: 1;
+    margin: 0 auto;
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.2rem 0.2rem 0 0;
+    overflow: hidden;
+    background: var(--qr-reader-canvas-bg);
+  }
+
+  &__frame {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--qr-reader-frame-border);
+    border-radius: 1.25rem 1.25rem 0 0;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__button {
+    padding: 0.65rem 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: 100%;
+    border-radius: 0 0 0.5rem 0.5rem;
+
+    &--primary {
+      border: none;
+      background: var(--qr-reader-primary-bg);
+      color: var(--qr-reader-primary-text);
+    }
+
+    &--ghost {
+      border: 1px solid var(--qr-reader-ghost-border);
+      background: transparent;
+      color: var(--qr-reader-ghost-text);
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+    }
+  }
+
+  &__status {
+    margin: 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--qr-reader-status-text);
+  }
+}
