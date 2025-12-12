@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function ViewRoleLayout({ params, children }: Readonly<{ params: Promise<{ id: number }>, children: React.ReactNode }>) {
+export default function ViewRoleLayout({ params, children }: Readonly<{ params: Promise<{ id: string }>, children: React.ReactNode }>) {
     const t = useTranslations("common");
     const { showModal } = useModalUpdate();
     const [roleId, setRoleId] = useState<number>();
@@ -20,7 +20,7 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
     // Parse params
     useEffect(() => {
         params.then((loadedParams) => {
-            let newId = loadedParams.id;
+            let newId = parseInt (loadedParams.id);
             if (newId === undefined || isNaN(newId)) {
                 notFound();
             }

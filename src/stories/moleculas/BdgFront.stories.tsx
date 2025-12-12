@@ -1,5 +1,5 @@
-import Picture from '@components/moleculas/BdgFront/BdgFront';
-import BdgFront from '@components/moleculas/BdgFront/BdgFront';
+import Picture from '@/components/moleculas/BdgFront/BdgFront';
+import BdgFront from '@/components/moleculas/BdgFront/BdgFront';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof BdgFront> = {

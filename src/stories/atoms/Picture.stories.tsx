@@ -1,4 +1,4 @@
-import Picture from '@components/atoms/Picture/Picture';
+import Picture from '@/components/atoms/Picture/Picture';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Picture> = {

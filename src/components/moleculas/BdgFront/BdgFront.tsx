@@ -2,8 +2,8 @@ import './bdg-front.scss';
 
 import React from 'react';
 
-import Badge from '@components/atoms/Badge/Badge';
-import MyPicture from '@components/atoms/Picture/Picture';
+import MyPicture from '@/components/atoms/Picture/Picture';
+import Badge from '@/components/atoms/Badge/Badge';
 
 export interface PictureProps {
     imageUrl: string;
