@@ -124,8 +124,8 @@
     "booking": {
       "title": "Prenotazione",
       "your_booking": "La tua prenotazione",
-      "coundown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
-      "coundown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
+      "countdown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
+      "countdown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
       "book_now": "Prenota",
       "review_info_first": "Rivedi i tuoi dati personali",
       "edit_booking": "Modifica prenotazione",
@@ -155,7 +155,7 @@
           "title": "Gruppo ufficiale",
           "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
         },
-        "exchange_explaination": "Puoi cedere la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio.",
+        "exchange_explanation": "Puoi cedere la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio.",
         "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in."
       },
       "items": {
@@ -193,14 +193,14 @@
         },
         "ORDER_SECRET_NOT_MATCH": {
           "title": "Ordine non valido",
-          "description": "Non è stato possibile autenticizzare la veridicità del tuo ordine. Contattare il supporto per ulteriori informazioni."
+          "description": "Non è stato possibile autenticare la veridicità del tuo ordine. Contattare il supporto per ulteriori informazioni."
         },
         "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
           "title": "Ordine condiviso",
           "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
         },
         "TELEGRAM_USERNAME_EMPTY": "Non è stato inserito alcun nome utente Telegram",
-        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'itentità"
+        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'identità"
       },
       "actions": {
         "review_info": "Rivedi informazioni",
@@ -272,7 +272,7 @@
         },
         "fursuit_badge": {
           "title": "Vuoi portare la tua suit a furizon?",
-          "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, cosicchè Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
+          "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, in modo che Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
         },
         "badge_edit_deadline_end": {
           "title": "Modifiche badge bloccate",

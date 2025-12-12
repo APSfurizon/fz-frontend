@@ -52,8 +52,8 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
             {!isOpen && data?.showCountdown && !data.hasOrder && countdown
                 ? <p className="countdown title bold title large rounded-s center">
                     {countdown[0] > 0
-                        ? t.rich("furpanel.booking.coundown_days", { days: countdown[0] })
-                        : t.rich("furpanel.booking.coundown_clock", {
+                        ? t.rich("furpanel.booking.countdown_days", { days: countdown[0] })
+                        : t.rich("furpanel.booking.countdown_clock", {
                             hours: countdown[1],
                             minutes: countdown[2],
                             seconds: countdown[3],

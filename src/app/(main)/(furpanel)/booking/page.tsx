@@ -280,7 +280,7 @@ export default function BookingPage() {
         </div>
         {/* Order exchange modal */}
         <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
-            <span className="descriptive small">{t("furpanel.booking.messages.exchange_explaination")}</span>
+            <span className="descriptive small">{t("furpanel.booking.messages.exchange_explanation")}</span>
             <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
                 <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>

@@ -124,8 +124,8 @@
     "booking": {
       "title": "Reservation",
       "your_booking": "Your reservation",
-      "coundown_days": "{days, plural, =1 {# day} other {# days}}",
-      "coundown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
+      "countdown_days": "{days, plural, =1 {# day} other {# days}}",
+      "countdown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
       "book_now": "Book now",
       "review_info_first": "Review your personal info",
       "edit_booking": "Edit reservation",
@@ -145,7 +145,7 @@
         },
         "review_info": {
           "title": "Review personal info",
-          "description": "Conferm your membership personal info. This data is needed to release the new membership card and insurance."
+          "description": "Confirm your membership personal info. This data is needed to release the new membership card and insurance."
         },
         "exchange_invite_sent": {
           "title": "Invite sent",
@@ -155,7 +155,7 @@
           "title": "Official group",
           "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
         },
-        "exchange_explaination": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such exchange.",
+        "exchange_explanation": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such exchange.",
         "reservation_qr": "Show this QR code to a Furizon staffer when checking in."
       },
       "items": {
@@ -203,8 +203,8 @@
         "ID_ISSUER_EMPTY": "No ID Card issuer provided"
       },
       "actions": {
-        "review_info": "Review informations",
-        "confirm_info": "Confirm informations",
+        "review_info": "Review information",
+        "confirm_info": "Confirm information",
         "exchange_order": "Exchange order",
         "show_qr": "Check-in QR code"
       },
@@ -403,7 +403,7 @@
         "complete_order": "Complete order",
         "messages": {
           "quota_warning": {
-            "title": "Availaility warning",
+            "title": "Availability warning",
             "description": "Room availability may change while ordering a room, refresh in order to get the latest count of rooms left."
           },
           "order_notice": {
@@ -455,7 +455,7 @@
         }
       },
       "errors": {
-        "UNAUTHENTICATED": "Autentication missing"
+        "UNAUTHENTICATED": "Authentication missing"
       }
     },
     "admin": {
@@ -544,7 +544,7 @@
         },
         "input": {
           "user": {
-            "label": "Seleziona utente"
+            "label": "Select user"
           }
         },
         "table": {
@@ -678,7 +678,7 @@
                 "label": "Add role member"
               },
               "select_user": {
-                "label": "Seleziona utente"
+                "label": "Select user"
               },
               "temporary_member": {
                 "label": "Temporary",
