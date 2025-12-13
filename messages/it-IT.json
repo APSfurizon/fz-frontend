@@ -181,7 +181,7 @@
         },
         "MEMBERSHIP_MULTIPLE_DONE": {
           "title": "Tessere multiple",
-          "description": "Risultano attive due tessere associative in contemporanea. Contatta il supporto per risolvere la situazione e ottenere un possibile rimborso."
+          "description": "Risultano attive due tessere associative in contemporanea. Contatta il supporto per risolvere la situazione."
         },
         "MEMBERSHIP_MISSING": {
           "title": "Tessera associativa mancante",

@@ -181,7 +181,7 @@
         },
         "MEMBERSHIP_MULTIPLE_DONE": {
           "title": "Multiple membership cards",
-          "description": "It appears you have multiple membership cards active at the same time. Please contact the support to arrange a possible refund."
+          "description": "It appears you have multiple membership cards active at the same time. Please contact the support."
         },
         "MEMBERSHIP_MISSING": {
           "title": "Membership card missing",
