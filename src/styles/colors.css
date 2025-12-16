@@ -18,17 +18,44 @@
   --header-link-hover-bg: #ffffff10;
 
   /* Button */
-  --button-bg-normal: linear-gradient(0deg, #69bcf3 0%, #7bb4f5 100%);
-  --button-bg-hover: linear-gradient(0deg, #94cdf3 0%, #8bbffa 100%);
-  --button-bg-down: linear-gradient(0deg, #549ccc 0%, #49aee9 100%);
+  --button-bg-normal: light-dark(
+    linear-gradient(0deg, #69bcf3 0%, #7bb4f5 100%),
+    linear-gradient(0deg, #9154cd 0%, #713da4 100%)
+  );
+  --button-bg-hover: light-dark(
+    linear-gradient(0deg, #94cdf3 0%, #8bbffa 100%),
+    linear-gradient(0deg, #A573D6 0%, #915DC4 100%)
+  );
+  --button-bg-down: light-dark(
+    linear-gradient(0deg, #549ccc 0%, #49aee9 100%),
+    linear-gradient(0deg, #7634B8 0%, #53287E 100%)
+  );
 
-  --button-danger-bg-normal: linear-gradient(0deg, #d65050 0%, #e74d4d 100%);
-  --button-danger-bg-hover: linear-gradient(0deg, #e29b9b 0%, #ee7777 100%);
-  --button-danger-bg-down: linear-gradient(0deg, #993f3f 0%, #912e2e 100%);
+  --button-danger-bg-normal: light-dark(
+    linear-gradient(0deg, #d65050 0%, #e74d4d 100%),
+    linear-gradient(0deg, #CD5454 0%, #A43D3D 100%)
+  );
+  --button-danger-bg-hover: light-dark(
+    linear-gradient(0deg, #e29b9b 0%, #ee7777 100%),
+    linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%)
+  );
+  --button-danger-bg-down: light-dark(
+    linear-gradient(0deg, #993f3f 0%, #912e2e 100%),
+    linear-gradient(0deg, #a24343 0%, #833232 100%)
+  );
 
-  --button-success-bg-normal: linear-gradient(0deg, #8cdd6c 0%, #5fbb64 100%);
-  --button-success-bg-hover: linear-gradient(0deg, #8edd92 0%, #8fda89 100%);
-  --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
+  --button-success-bg-normal: light-dark(
+    linear-gradient(0deg, #8cdd6c 0%, #5fbb64 100%),
+    linear-gradient(0deg, #62a743 0%, #3a963e 100%)
+  );
+  --button-success-bg-hover: light-dark(
+    linear-gradient(0deg, #8edd92 0%, #8fda89 100%),
+    linear-gradient(0deg, #6ccf71 0%, #56a64f 100%)
+  );
+  --button-success-bg-down: light-dark(
+    linear-gradient(0deg, #4ea243 0%, #398332 100%),
+    linear-gradient(0deg, #4ea243 0%, #398332 100%)
+  );
 
   --button-border-normal: #FFFFFF4C;
   --button-border-down: #FFFFFFCC;
@@ -161,22 +188,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Button */
-    --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
-    --button-bg-hover: linear-gradient(0deg, #A573D6 0%, #915DC4 100%);
-    --button-bg-down: linear-gradient(0deg, #7634B8 0%, #53287E 100%);
-
-    --button-danger-bg-normal: linear-gradient(0deg, #CD5454 0%, #A43D3D 100%);
-    --button-danger-bg-hover: linear-gradient(0deg, #cf6c6c 0%, #a64f4f 100%);
-    --button-danger-bg-down: linear-gradient(0deg, #a24343 0%, #833232 100%);
-
-    --button-success-bg-normal: linear-gradient(0deg, #62a743 0%, #3a963e 100%);
-    --button-success-bg-hover: linear-gradient(0deg, #6ccf71 0%, #56a64f 100%);
-    --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
-
-    --button-border-normal: #FFFFFF4C;
-    --button-border-down: #FFFFFFCC;
-
     /* Checkbox */
     --checkbox-bg-unchecked: none;
     --checkbox-bg-checked: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
