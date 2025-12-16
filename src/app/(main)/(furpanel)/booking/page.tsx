@@ -180,7 +180,8 @@ export default function BookingPage() {
                                 title={
                                     t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                         sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                                        supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
+                                        supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
+                                        ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>
                                     })}
                                 description={pageData.isDaily
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })

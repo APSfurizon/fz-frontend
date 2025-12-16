@@ -60,7 +60,8 @@
     },
     "sponsorships": {
       "sponsor": "Sponsor",
-      "super_sponsor": "Super Sponsor"
+      "super_sponsor": "Super Sponsor",
+      "ultra_sponsor": "Explorer"
     },
     "changelog": {
       "title": "Furpanel was updated",
@@ -168,6 +169,7 @@
         "none_ticket": "Regular ticket",
         "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
         "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
+        "ultra_sponsor_ticket": "<ultrasponsor>Explorer</ultrasponsor> ticket",
         "extra_days": "Extra days",
         "extra_days_BOTH": "Early & Late",
         "extra_days_EARLY": "Early",

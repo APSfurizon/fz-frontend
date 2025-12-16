@@ -118,9 +118,12 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         {/* Rendering sponsors */}
         {mode == CountViewMode.SPONSOR && <>
             <p className="title x-large bold">{t("misc.nosecount.sections.sponsors")}</p>
-            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">
-                {t("common.sponsorships.super_sponsor")}
-            </p>}
+            {sponsorData?.users.ULTRA_SPONSOR && <p className="title large">{t("common.sponsorships.ultra_sponsor")}</p>}
+            <div className="user-list horizontal-list flex-wrap gap-4mm">
+                {sponsorData?.users.ULTRA_SPONSOR?.map((user, index) =>
+                    <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}
+            </div>
+            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {sponsorData?.users.SUPER_SPONSOR?.map((user, index) =>
                     <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}

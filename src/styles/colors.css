@@ -1,19 +1,19 @@
 :root {
-  --background: #eeeeee;
-  --foreground: #111111;
-  --highlight: #eb9616;
+  --background: light-dark(#eeeeee, #11191f);
+  --foreground: light-dark(#111111, #ededed);
+  --highlight: light-dark(#eb9616, #eca02f);
 
-  --text-subtitle: #494949;
-  --text-link: #2b6ec5;
+  --text-subtitle: light-dark(#494949, #cccccc);
+  --text-link: light-dark(#2b6ec5, #2395D6);
   --text-status-error: #e44f4f;
-  --main-dialog-background: #f1f1f1;
+  --main-dialog-background: light-dark(#f1f1f1, #152029);
 
   --hoverable-bg: #2a2b3f;
 
   /* Footer */
-  --footer-bg: #e7e7e7;
+  --footer-bg: light-dark(#e7e7e7, #1C1A25);
   /* Header */
-  --header-bg: #f1f1f1;
+  --header-bg: light-dark(#f1f1f1, #141e26;);
   --header-shadow: #00000015;
   --header-link-hover-bg: #ffffff10;
 
@@ -56,6 +56,7 @@
   --profile-picture-border-normal: #ffffff;
   --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
   --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
+  --profile-picture-border-ultra-sponsor: radial-gradient(#44D4D4 20%, #206aca 50%, #4FC1F2 80%);
   --profile-picture-shadow: #242C38;
 
   /* User dropdown */
@@ -153,7 +154,6 @@
   --badge-fursuit-border: #afafaf;
 
   /* Sponsor colors */
-  --sponsor-color: #8E24AA;
   --sponsor-text-color: #b235d4;
   --super-sponsor-color: #DB9703;
   --super-sponsor-text-color: #FAAA00;
@@ -161,24 +161,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #11191F;
-    --foreground: #ededed;
-    --highlight: #ECA02F;
-
-    --text-subtitle: #cccccc;
-    --text-link: #2395D6;
-    --text-status-error: #e44f4f;
-    --main-dialog-background: #152029;
-
-    --hoverable-bg: #2a2b3f;
-
-    /* Footer */
-    --footer-bg: #1C1A25;
-    /* Header */
-    --header-bg: #141E26;
-    --header-shadow: #00000015;
-    --header-link-hover-bg: #ffffff10;
-
     /* Button */
     --button-bg-normal: linear-gradient(0deg, #9154cd 0%, #713da4 100%);
     --button-bg-hover: linear-gradient(0deg, #A573D6 0%, #915DC4 100%);
@@ -313,10 +295,9 @@
     --badge-fursuit-border: #afafaf;
 
     /* Sponsor colors */
-    --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;
-    --super-sponsor-color: #DB9703;
     --super-sponsor-text-color: #FAAA00;
+    --ultra-sponsor-text-color: #4FC1F2;
   }
 }
 

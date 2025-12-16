@@ -5,7 +5,7 @@ import { RoomData } from "./room";
 import { QRCodeOptions } from "next-qrcode/dist/useQRCode";
 
 export type OrderStatusType = "CANCELED" | "PENDING" | "PAID" | "EXPIRED";
-export type SponsorshipType = "NONE" | "SPONSOR" | "SUPER_SPONSOR";
+export type SponsorshipType = "NONE" | "SPONSOR" | "SUPER_SPONSOR" | "ULTRA_SPONSOR";
 export type ExtraDaysType = "NONE" | "EARLY" | "LATE" | "BOTH";
 
 export function mapOrderStatusToStatusBox(s: OrderStatusType): StatusBoxStyle {

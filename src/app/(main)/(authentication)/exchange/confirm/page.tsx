@@ -148,7 +148,8 @@ export default function ExchangeConfirm() {
                   <Icon icon={"LOCAL_ACTIVITY"}></Icon>
                   {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
                     sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
+                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
+                    ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>
                   })}
                 </span>
                 {/* Daily days */}
