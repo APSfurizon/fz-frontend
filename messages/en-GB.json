@@ -173,7 +173,9 @@
         "extra_days": "Extra days",
         "extra_days_BOTH": "Early & Late",
         "extra_days_EARLY": "Early",
-        "extra_days_LATE": "Late"
+        "extra_days_LATE": "Late",
+        "board_HALF": "Half board",
+        "board_FULL": "Full board"
       },
       "errors": {
         "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened, yet.",

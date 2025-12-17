@@ -8,6 +8,7 @@ import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import {
+    Board,
     BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
     ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction,
     OrderRetryLinkApiAction,
@@ -194,11 +195,14 @@ export default function BookingPage() {
                                 title={t("furpanel.booking.items.extra_days")}
                                 description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)} />}
                             {/* Room */}
-                            {bookingData!.order.room && <OrderItem icon={"BED"}
+                            {bookingData!.order.room && <OrderItem icon="BED"
                                 title={[t("furpanel.booking.items.room"),
                                 translate(bookingData!.order.room.roomTypeNames, locale) ?? ""].join(" ")}
                                 description={t("furpanel.booking.items.room_capacity",
                                     { capacity: bookingData!.order.room.roomCapacity })} />}
+                            {/* Board */}
+                            {!!bookingData!.order.board && bookingData!.order.board != Board.NONE && <OrderItem icon="DINING"
+                                title={t(`furpanel.booking.items.board_${bookingData!.order.board}`)}/>}
                         </div>
 
                         {/* Order actions */}

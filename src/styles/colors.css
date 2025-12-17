@@ -18,10 +18,14 @@
   --header-link-hover-bg: #ffffff10;
 
   /* Button */
-  --button-bg-normal: light-dark(
+  /*--button-bg-normal: light-dark(
     linear-gradient(0deg, #69bcf3 0%, #7bb4f5 100%),
     linear-gradient(0deg, #9154cd 0%, #713da4 100%)
-  );
+  );*/
+  --button-bg-s1: light-dark(#69bcf3, #9154cd);
+  --button-bg-s2: light-dark(#7bb4f5, #713da4);
+  --button-bg-normal: linear-gradient(0deg, var(--button-bg-s1) 0%, var(--button-bg-s2) 100%);
+    /*linear-gradient(0deg,  0%,  100%)*/
   --button-bg-hover: light-dark(
     linear-gradient(0deg, #94cdf3 0%, #8bbffa 100%),
     linear-gradient(0deg, #A573D6 0%, #915DC4 100%)

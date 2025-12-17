@@ -169,10 +169,13 @@
         "none_ticket": "Biglietto",
         "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
         "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
+        "ultra_sponsor_ticket": "Biglietto <ultrasponsor>Explorer</ultrasponsor>",
         "extra_days": "Giorni extra",
         "extra_days_BOTH": "Early & Late",
         "extra_days_EARLY": "Early",
-        "extra_days_LATE": "Late"
+        "extra_days_LATE": "Late",
+        "board_HALF": "Mezza pensione",
+        "board_FULL": "Pensione completa"
       },
       "errors": {
         "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",

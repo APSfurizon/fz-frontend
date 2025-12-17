@@ -23,9 +23,9 @@ export function mapOrderStatusToStatusBox(s: OrderStatusType): StatusBoxStyle {
 }
 
 export enum Board {
-    NONE = 0,
-    HALF = 1,
-    FULL = 2
+    NONE="NONE",
+    HALF="HALF",
+    FULL="FULL"
 }
 
 export interface OrderData {
