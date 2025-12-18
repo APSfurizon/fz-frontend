@@ -71,7 +71,7 @@ export default function Register() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"></Icon>
+        <Icon icon="DESIGN_SERVICES"/>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('register.title').toLowerCase()}</span>

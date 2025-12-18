@@ -29,6 +29,7 @@ export const ICONS = {
     CONTEXTUAL_TOKEN: "contextual_token",
     DELETE: "delete",
     DESIGN_SERVICES: "design_services",
+    DINING: "dining",
     DIRECTIONS_CAR: "directions_car",
     DISABLED_BY_DEFAULT: "disabled_by_default",
     DO_NOT_DISTURB_ON: "do_not_disturb_on",

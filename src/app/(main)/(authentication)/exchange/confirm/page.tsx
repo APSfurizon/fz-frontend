@@ -17,7 +17,7 @@ import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
 import { RoomData } from "@/lib/api/room";
 import { UserData } from "@/lib/api/user";
-import { calcTicketData } from "@/lib/api/booking";
+import { Board, calcTicketData } from "@/lib/api/booking";
 import "@/styles/authentication/login.css";
 import "@/styles/authentication/exchangeConfirm.css";
 import LoadingPanel from "@/components/loadingPanel";
@@ -33,13 +33,13 @@ export default function ExchangeConfirm() {
   const renderRoom = (userData: UserData, data: RoomData) => {
     return <>
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-        <Icon className="large" icon={"PACKAGE_2"}></Icon>
+        <Icon className="large" icon="PACKAGE_2"/>
         {t.rich("authentication.exchange_confirm.room.room_title", {
           user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
         })}
       </span>
       <div className="horizontal-list item-content flex-vertical-center gap-2mm rounded-m">
-        <Icon className="xx-large" icon={"BEDROOM_PARENT"}></Icon>
+        <Icon className="xx-large" icon="BEDROOM_PARENT"/>
         <div className="vertical-list">
           <span className="title horizontal-list flex-vertical-center">
             {translate(data.roomTypeNames, locale)}
@@ -100,7 +100,7 @@ export default function ExchangeConfirm() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"></Icon>
+        <Icon icon="DESIGN_SERVICES"/>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('authentication.exchange_confirm.title').toLowerCase()}</span>
@@ -134,7 +134,7 @@ export default function ExchangeConfirm() {
           {exchangeData.fullOrderExchange && ticketData && <>
             <div className="item-info vertical-list rounded-m">
               <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-                <Icon className="large" icon={"LOCAL_ACTIVITY"}></Icon>
+                <Icon className="large" icon="LOCAL_ACTIVITY"/>
                 {t.rich("authentication.exchange_confirm.order.order_title", {
                   user: () => <>
                     <UserPicture userData={exchangeData.sourceUser} />
@@ -145,10 +145,11 @@ export default function ExchangeConfirm() {
               <div className="descriptive vertical-list item-content gap-2mm rounded-m">
                 {/* Ticket name */}
                 <span className="horizontal-list gap-2mm">
-                  <Icon icon={"LOCAL_ACTIVITY"}></Icon>
+                  <Icon icon="LOCAL_ACTIVITY"/>
                   {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
                     sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
+                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
+                    ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>
                   })}
                 </span>
                 {/* Daily days */}
@@ -159,17 +160,22 @@ export default function ExchangeConfirm() {
                 {/* Extra days */}
                 {exchangeData.fullOrderExchange.extraDays && exchangeData.fullOrderExchange.extraDays !== "NONE" &&
                   <span className="horizontal-list gap-2mm">
-                    <Icon icon={"CALENDAR_ADD_ON"}></Icon>
+                    <Icon icon="CALENDAR_ADD_ON"/>
                     {t(`furpanel.booking.items.extra_days_${exchangeData.fullOrderExchange.extraDays}`)}
                   </span>}
                 {/* Room */}
                 {exchangeData.fullOrderExchange.room && <span className="horizontal-list gap-2mm">
-                  <Icon icon={"BED"}></Icon>
+                  <Icon icon="BED"/>
                   {translate(exchangeData.fullOrderExchange.room.roomTypeNames, locale)}
                   &nbsp;
                   ({t("furpanel.booking.items.room_capacity",
                     { capacity: exchangeData.fullOrderExchange.room.roomCapacity })})
                 </span>}
+                {/* Board */}
+                {exchangeData.fullOrderExchange.board != Board.NONE && <span className="horizontal-list gap-2mm">
+                  <Icon icon="DINING"/>
+                  {t(`furpanel.booking.items.board_${exchangeData.fullOrderExchange.board}`)}
+                  </span>}
               </div>
             </div>
           </>}

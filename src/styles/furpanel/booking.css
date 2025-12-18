@@ -85,6 +85,10 @@ b.super-sponsor-highlight {
     color: var(--super-sponsor-text-color);
 }
 
+b.ultra-sponsor-highlight {
+    color: var(--ultra-sponsor-text-color);
+}
+
 @keyframes popup {
     10% {
         transform: scale(0);

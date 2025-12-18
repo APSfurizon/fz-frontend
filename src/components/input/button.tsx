@@ -46,9 +46,9 @@ export default function Button({
             disabled={busy || disabledState}
             className={"button rounded-m" + " " + (className ?? "")}
             style={{ ...style, paddingRight: iconPresent ? '0.5em' : undefined }}>
-            {busy && <Icon className={`medium loading-animation`} icon={"PROGRESS_ACTIVITY"}></Icon>}
-            {!busy && isCooldown && <Icon className={`medium`} icon={"SNOOZE"}></Icon>}
-            {!busy && !isCooldown && iconPresent && <Icon className={`medium`} icon={iconName}></Icon>}
+            {busy && <Icon className={`medium loading-animation`} icon="PROGRESS_ACTIVITY"/>}
+            {!busy && isCooldown && <Icon className={`medium`} icon="SNOOZE"/>}
+            {!busy && !isCooldown && iconPresent && <Icon className={`medium`} icon={iconName}/>}
             {children && iconName && <div className="spacer"></div>}
             {children && <span className="title normal spacer" style={{ fontSize: '15px', textAlign: "left" }}>
                 {children}

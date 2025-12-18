@@ -118,9 +118,12 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         {/* Rendering sponsors */}
         {mode == CountViewMode.SPONSOR && <>
             <p className="title x-large bold">{t("misc.nosecount.sections.sponsors")}</p>
-            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">
-                {t("common.sponsorships.super_sponsor")}
-            </p>}
+            {sponsorData?.users.ULTRA_SPONSOR && <p className="title large">{t("common.sponsorships.ultra_sponsor")}</p>}
+            <div className="user-list horizontal-list flex-wrap gap-4mm">
+                {sponsorData?.users.ULTRA_SPONSOR?.map((user, index) =>
+                    <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}
+            </div>
+            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {sponsorData?.users.SUPER_SPONSOR?.map((user, index) =>
                     <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}
@@ -151,13 +154,13 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             <div className="vertical-list gap-4mm">
                 {roomsData.hotels.map((hotel, hi) => <div key={hi} className="hotel-container">
                     <p className="title medium horizontal-list gap-2mm flex-vertical-center">
-                        <Icon icon={"LOCATION_CITY"}></Icon>
+                        <Icon icon="LOCATION_CITY"/>
                         {translate(hotel.displayName, locale)}
                     </p>
                     {/* Room type */}
                     {hotel.roomTypes.map((roomType, rti) => <div key={`rt${hi}-${rti}`} className="room-type-container">
                         <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                            <Icon icon={"BEDROOM_PARENT"}></Icon>
+                            <Icon icon="BEDROOM_PARENT"/>
                             {translate(roomType.roomData.roomTypeNames, locale)}
                         </p>
                         {/* Room */}
@@ -165,7 +168,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                             className="room-container vertical-list gap-2mm flex-wrap">
                             <p key={`rh${hi}-${rti}-${ri}`}
                                 className="title large bold horizontal-list gap-2mm flex-vertical-center">
-                                <Icon icon={"BED"}></Icon>
+                                <Icon icon="BED"/>
                                 {room.roomName}
                                 {room.roomExtraDays != ExtraDays.NONE && <div className="horizontal-list gap-2mm">
                                     {[ExtraDays.EARLY, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
@@ -203,7 +206,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             {/* Rendering daily furs */}
             {Object.keys(roomsData.dailyFurs).length > 0 && <>
                 <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                    <Icon icon={"BEDROOM_PARENT"}></Icon>
+                    <Icon icon="BEDROOM_PARENT"/>
                     {t("misc.nosecount.daily_furs")}
                 </p>
                 {Object.keys(roomsData.dailyFurs).map((day, di) => <div className="daily-day" key={di}>

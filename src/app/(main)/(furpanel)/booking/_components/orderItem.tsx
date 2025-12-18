@@ -12,7 +12,7 @@ export default function OrderItem({
     className?: string
 }>) {
     return <div className={`item vertical-list flex-vertical-center ${className ?? ""}`}>
-        <Icon className="x-large" icon={icon}></Icon>
+        <Icon className="x-large" icon={icon}/>
         <span className="descriptive small item-name">{title}</span>
         {description && <span className="descriptive tiny item-subtitle">{description}</span>}
     </div>

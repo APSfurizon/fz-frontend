@@ -47,8 +47,10 @@ export async function proxy(req: NextRequest) {
     return stripToken(intlMiddlewareResult);
   }
 
+  const clientIp = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip");
+
   const tokenResult: TokenResult = tokenPresent
-    ? await verifyToken(loginToken?.value ?? loginTokenParam!)
+    ? await verifyToken(clientIp, loginToken?.value ?? loginTokenParam!)
     : { status: TokenVerification.NOT_VALID };
 
   if (tokenResult.status == TokenVerification.SUCCESS) {
@@ -72,12 +74,13 @@ export async function proxy(req: NextRequest) {
   }
 }
 
-async function verifyToken(token: string): Promise<TokenResult> {
+async function verifyToken(clientIp: string | null, token: string): Promise<TokenResult> {
   // Try validating the request
   const headers = new Headers({
-    'Content-type': 'application/json',
-    'Authorization': `Bearer ${token}`
+    "Content-type": "application/json",
+    "Authorization": `Bearer ${token}`,
   });
+  clientIp && headers.append("X-Forwarded-For", clientIp);
   let fetchResult: Response | undefined = undefined;
   try {
     fetchResult = await fetch(`${API_BASE_URL}users/me`, { method: 'GET', headers: headers });

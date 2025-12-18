@@ -21,10 +21,10 @@ export default function Modal({ children, className, icon, onClose, busy, open, 
             {
                 showHeader && (
                     <div className="modal-header horizontal-list gap-2mm">
-                        {icon && <Icon style={{ marginRight: ".25em" }} icon={icon}></Icon>}
+                        {icon && <Icon style={{ marginRight: ".25em" }} icon={icon}/>}
                         <p className="header-title title bold medium">{title}</p>
                         <div className="spacer"></div>
-                        <a className="header-close" onClick={(e) => !busy && onClose(e)} title={t("modal.close")}><Icon icon={"CANCEL"}></Icon></a>
+                        <a className="header-close" onClick={(e) => !busy && onClose(e)} title={t("modal.close")}><Icon icon="CANCEL"/></a>
                     </div>
                 )
             }

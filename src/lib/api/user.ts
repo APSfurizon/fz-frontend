@@ -21,7 +21,8 @@ export interface UserSearchResult extends Partial<AutoInputSearchResult> {
 export enum SponsorType {
     NONE = "NONE",
     SPONSOR = "SPONSOR",
-    SUPER = "SUPER_SPONSOR"
+    SUPER = "SUPER_SPONSOR",
+    ULTRA = "ULTRA_SPONSOR"
 }
 
 export enum ExtraDays {
