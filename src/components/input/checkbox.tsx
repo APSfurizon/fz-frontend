@@ -56,8 +56,8 @@ export default function Checkbox({
             disabled={isDisabled} className={"checkbox rounded-m horizontal-list" + " " + (className ?? "")}>
             <div className={`box rounded-s ${checked ? " checked" : ""}`}>
                 {isBusy
-                    ? <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
-                    : <Icon className="medium" icon={checked ? "CHECK" : "CLOSE"}></Icon>
+                    ? <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY"/>
+                    : <Icon className="medium" icon={checked ? "CHECK" : "CLOSE"}/>
                 }
 
             </div>

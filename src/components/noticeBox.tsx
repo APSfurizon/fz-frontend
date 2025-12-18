@@ -33,7 +33,7 @@ export default function NoticeBox({ title, theme, customIcon, children, headerSt
     return (
         <div className={`notice-box ${className}`} style={{ ...style }}>
             <div className="header vertical-align-middle" style={{ ...headerStyle }}>
-                <Icon className="medium" icon={customIcon ?? icon}></Icon>
+                <Icon className="medium" icon={customIcon ?? icon}/>
                 <span className="title">{title}</span>
             </div>
             <div className="answer descriptive">

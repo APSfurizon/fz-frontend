@@ -56,7 +56,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">
-                        <Icon icon="DESIGN_SERVICES"></Icon>
+                        <Icon icon="DESIGN_SERVICES"/>
                         <span className="titular bold highlight">furpanel</span>
                     </span>
                 </span>
@@ -100,7 +100,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 </div>
                 <span>
                     <a href="#" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
-                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}></Icon>
+                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}/>
                     </a>
                 </span>
             </div>

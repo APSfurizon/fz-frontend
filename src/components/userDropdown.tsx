@@ -49,7 +49,7 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                     <UserPicture userData={userData}></UserPicture>
                     <span className="title average semibold nickname">{userData.fursonaName}</span>
                 </>}
-                <Icon style={{ fontSize: "24px" }} icon={(isOpen) ? "ARROW_DROP_UP" : "ARROW_DROP_DOWN"}></Icon>
+                <Icon style={{ fontSize: "24px" }} icon={(isOpen) ? "ARROW_DROP_UP" : "ARROW_DROP_DOWN"}/>
             </div>
             <div className={`vertical-list dropdown-container rounded-m ${(isOpen) && 'open'}`} onClick={optionClick}
                 onPointerOver={() => setHover(true)} onPointerLeave={() => setHover(false)}>
@@ -63,7 +63,7 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                     key={index} onClick={() => changeLanguage(lng, userData)}>
                     {mapLanguageToFlag(lng)}&nbsp;
                     {t(`header.dropdown.language.${lng}`)}
-                    {lng === locale && <Icon className='medium' icon={"CHECK"}></Icon>}
+                    {lng === locale && <Icon className='medium' icon="CHECK"/>}
                 </Link>)}
             </div>
         </div>
