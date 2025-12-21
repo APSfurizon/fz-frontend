@@ -36,6 +36,7 @@ import ToolLink from "@/components/toolLink";
 import LoadingPanel from "@/components/loadingPanel";
 import { cssClass } from "@/lib/utils";
 import QuotaViewer from "./_components/quotaViewer";
+import { Board } from "@/lib/api/booking";
 
 export default function RoomPage() {
   const t = useTranslations();
@@ -494,6 +495,9 @@ export default function RoomPage() {
               {data.currentRoomInfo.extraDays !== "NONE" && <StatusBox status={"normal"}>
                 {t("furpanel.booking.items.extra_days")}:&nbsp;
                 {t(`furpanel.booking.items.extra_days_${data.currentRoomInfo.extraDays}`)}
+              </StatusBox>}
+              {data.currentRoomInfo.board !== Board.NONE && <StatusBox status={"normal"}>
+                {t(`furpanel.booking.items.board_${data.currentRoomInfo.board}`)}
               </StatusBox>}
               <div className="spacer" style={{ flexGrow: "300" }}></div>
               <div className="horizontal-list flex-space-between gap-4mm" style={{ flexGrow: "1" }}>

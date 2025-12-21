@@ -1,5 +1,5 @@
-i.loading-animation {
-    animation: loading-animation 500ms linear infinite;
+i.icon.loading-animation {
+animation: loading-animation 500ms linear infinite;
 }
 
 @keyframes loading-animation {

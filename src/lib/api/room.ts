@@ -42,7 +42,7 @@ export interface RoomInfo {
     canInvite: boolean,
     extraDays: ExtraDaysType,
     guests: RoomGuestHeader[],
-    board?: Board
+    board: Board
 }
 
 export interface RoomCreateData {
