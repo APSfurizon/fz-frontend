@@ -68,6 +68,10 @@ export default function UserViewOrdersTable({
                 id: 'roomType',
                 header: t("furpanel.admin.users.accounts.view.orders_table.room_type"),
             }),
+        orderColHelper.accessor("board", {
+            id: "board",
+            header: t("furpanel.admin.users.accounts.view.rooms_table.board"),
+        }),
         orderColHelper.display({
             id: 'actionViewOrder',
             header: '',

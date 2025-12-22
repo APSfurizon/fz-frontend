@@ -648,7 +648,8 @@
                     "label": "Select the guest to remove from the room"
                   }
                 }
-              }
+              },
+              "board": "Board"
             },
             "rooms": "Rooms"
           }

@@ -648,7 +648,8 @@
                     "label": "Seleziona l'ospite da rimuovere dalla stanza"
                   }
                 }
-              }
+              },
+              "board": "Pensione"
             },
             "rooms": "Stanze"
           }

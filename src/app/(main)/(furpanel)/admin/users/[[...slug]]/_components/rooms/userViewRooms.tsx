@@ -70,6 +70,10 @@ export default function UserViewRooms({
             id: "roomType",
             header: t("furpanel.admin.users.accounts.view.orders_table.room_type"),
         }),
+        roomColHelper.accessor("currentRoomInfo.board", {
+            id: "board",
+            header: t("furpanel.admin.users.accounts.view.rooms_table.board"),
+        }),
         roomColHelper.display({
             id: "actions",
             header: "",
