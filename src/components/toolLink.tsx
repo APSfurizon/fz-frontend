@@ -31,7 +31,7 @@ export default function ToolLink({
         onClick={onClick}
         className={`tool-link rounded-m ${activeClass} ${className ?? ""}`}
         style={{ ...style }}>
-        {iconName !== undefined && <Icon icon={iconName} style={{ ...iconStyle }}></Icon>}
+        {iconName !== undefined && <Icon icon={iconName} style={{ ...iconStyle }}/>}
         <span className="title small semibold">{children}</span>
     </Link>
 }
