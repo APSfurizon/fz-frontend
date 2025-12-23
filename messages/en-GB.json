@@ -147,16 +147,16 @@
           "title": "Review personal information",
           "description": "Confirm your personal information. This data is legally required to release your new membership card and insurance."
         },
-        "exchange_invite_sent": {
-          "title": "Invite sent",
-          "description": "You will both be contacted via email to confirm the transfer."
-        },
         "invite_group": {
           "title": "Official group",
           "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
         },
-        "exchange_explanation": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such transfer.",
-        "reservation_qr": "Show this QR code to a Furizon staffer when checking in."
+        "reservation_qr": "Show this QR code to a Furizon staffer when checking in.",
+        "transfer_invite_sent": {
+          "title": "Invite sent",
+          "description": "You will both be contacted via email to confirm the transfer."
+        },
+        "transfer_explanation": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such transfer."
       },
       "items": {
         "code": "code",
@@ -205,8 +205,8 @@
       "actions": {
         "review_info": "Review information",
         "confirm_info": "Confirm information",
-        "exchange_order": "Transfer order",
-        "show_qr": "Check-in QR code"
+        "show_qr": "Check-in QR code",
+        "transfer_order": "Transfer order"
       },
       "reservation_qr": "Check-in QR code",
       "event_logo": "Event's logo"
@@ -323,22 +323,22 @@
           "title": "Leave room",
           "description": "Do you want to leave room <room>{roomName}</room>? The room owner will be notified via email."
         },
-        "exchange_invite_sent": {
-          "title": "Invite sent",
-          "description": "You will both be contacted via email to confirm the exchange."
-        },
         "confirm_confirmation": {
           "description": "Do you want to confirm <room>{roomName}</room>?"
         },
         "confirm_unconfirmation": {
           "description": "Do you want to unconfirm <room>{roomName}</room>?"
+        },
+        "transfer_invite_sent": {
+          "description": "You will both be contacted via email to confirm the transfer.",
+          "title": "Invite sent"
         }
       },
       "errors": {
         "ORDER_NOT_FOUND": "Order not found.",
         "ORDER_NOT_PAID": "Order not paid.",
         "ROOM_FULL": "The room is full.",
-        "EXCHANGE_STILL_PENDING": "An exchange request is still pending."
+        "EXCHANGE_STILL_PENDING": "A transfer request is still pending."
       },
       "input": {
         "rename_new_name": {
@@ -356,7 +356,7 @@
         "force_exit": {
           "label": "Forcefully kick the user from any other room"
         },
-        "exchange_user": {
+        "transfer_user": {
           "label": "Recipient",
           "placeholder": "Search for a user"
         }
@@ -379,11 +379,11 @@
         "revoke_invite": "Revoke invite",
         "confirm_room": "Confirm room",
         "unconfirm_room": "Unconfirm room",
-        "exchange": "Exchange",
-        "exchange_room": "Exchange room",
         "leave": "Leave",
         "show_in_nosecount": "Show in nosecount",
-        "hide_in_nosecount": "Hide from nosecount"
+        "hide_in_nosecount": "Hide from nosecount",
+        "transfer_room": "Exchange room",
+        "transfer": "Transfer"
       },
       "your_room": "Your room",
       "or": "or",
@@ -767,19 +767,6 @@
         "unknown_error": "Unknown error"
       }
     },
-    "exchange_confirm": {
-      "title": "Confirm exchange",
-      "room": {
-        "received": "<source></source> wants to exchange his room with you.",
-        "sent": "You asked <target></target> to exchange room.",
-        "room_title": "<user></user>'s room:"
-      },
-      "order": {
-        "received": "<source></source> wants to transfer his order to you.",
-        "sent": "You requested to transfer your order to <target></target>.",
-        "order_title": "<user></user>'s order:"
-      }
-    },
     "logout": {
       "title": "Logout"
     },
@@ -967,6 +954,19 @@
     },
     "logging_in": {
       "title": "Logging in"
+    },
+    "transfer_confirm": {
+      "title": "Confirm exchange",
+      "room": {
+        "received": "<source></source> wants to exchange his room with you.",
+        "sent": "You asked <target></target> to exchange room.",
+        "room_title": "<user></user>'s room:"
+      },
+      "order": {
+        "received": "<source></source> wants to transfer his order to you.",
+        "sent": "You requested to transfer your order to <target></target>.",
+        "order_title": "<user></user>'s order:"
+      }
     }
   },
   "misc": {

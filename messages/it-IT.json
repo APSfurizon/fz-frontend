@@ -147,16 +147,16 @@
           "title": "Rivedi i tuoi dati personali",
           "description": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono legalmente per rilasciarti la tessera associativa e per motivi assicurativi."
         },
-        "exchange_invite_sent": {
-          "title": "Invito inviato",
-          "description": "Verrete contattati via email per confermare il trasferimento."
-        },
         "invite_group": {
           "title": "Gruppo ufficiale",
           "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
         },
-        "exchange_explanation": "Puoi cedere la tua prenotazione a un altro account. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare il trasferimento.",
-        "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in."
+        "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in.",
+        "transfer_invite_sent": {
+          "title": "Invito inviato",
+          "description": "Verrete contattati via email per confermare il trasferimento."
+        },
+        "transfer_explanation": "Puoi cedere la tua prenotazione a un altro account. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare il trasferimento."
       },
       "items": {
         "code": "codice",
@@ -205,8 +205,8 @@
       "actions": {
         "review_info": "Rivedi informazioni",
         "confirm_info": "Conferma informazioni",
-        "exchange_order": "Trasferisci ordine",
-        "show_qr": "QR per il check-in"
+        "show_qr": "QR per il check-in",
+        "transfer_order": "Trasferisci ordine"
       },
       "reservation_qr": "Codice QR per il check-in",
       "event_logo": "Logo evento"
@@ -323,15 +323,15 @@
           "title": "Lascia stanza",
           "description": "Vuoi uscire dalla stanza <room>{roomName}</room>? Il proprietario della stanza verrà notificato via email"
         },
-        "exchange_invite_sent": {
-          "title": "Invito inviato",
-          "description": "Verrete contattati via email per confermare lo scambio."
-        },
         "confirm_confirmation": {
           "description": "Vuoi confermare <room>{roomName}</room>?"
         },
         "confirm_unconfirmation": {
           "description": "Vuoi revocare la conferma di <room>{roomName}</room>?"
+        },
+        "transfer_invite_sent": {
+          "description": "Verrete contattati via email per confermare lo scambio.",
+          "title": "Invito inviato"
         }
       },
       "errors": {
@@ -356,7 +356,7 @@
         "force_exit": {
           "label": "Forza l'uscita dell'utente da qualsiasi altra stanza"
         },
-        "exchange_user": {
+        "transfer_user": {
           "label": "Destinatario",
           "placeholder": "Cerca un destinatario"
         }
@@ -379,11 +379,11 @@
         "revoke_invite": "Revoca invito",
         "confirm_room": "Conferma stanza",
         "unconfirm_room": "Revoca conferma stanza",
-        "exchange": "Scambia",
-        "exchange_room": "Scambia stanza",
         "leave": "Lascia",
         "show_in_nosecount": "Mostra nel nosecount",
-        "hide_in_nosecount": "Nascondi dal nosecount"
+        "hide_in_nosecount": "Nascondi dal nosecount",
+        "transfer_room": "Scambia stanza",
+        "transfer": "Scambia"
       },
       "your_room": "La tua stanza",
       "or": "oppure",
@@ -766,19 +766,6 @@
         "unknown_error": "Errore sconosciuto"
       }
     },
-    "exchange_confirm": {
-      "title": "Conferma scambio",
-      "room": {
-        "received": "<source></source> vuole scambiare stanza con te.",
-        "sent": "Hai chiesto <target></target> di scambiare stanze.",
-        "room_title": "Stanza di <user></user>:"
-      },
-      "order": {
-        "received": "<source></source> vuole cederti il suo ordine.",
-        "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
-        "order_title": "Ordine di <user></user>:"
-      }
-    },
     "logout": {
       "title": "Esci"
     },
@@ -966,6 +953,19 @@
     },
     "logging_in": {
       "title": "Accesso in corso"
+    },
+    "transfer_confirm": {
+      "title": "Conferma scambio",
+      "room": {
+        "received": "<source></source> vuole scambiare stanza con te.",
+        "sent": "Hai chiesto <target></target> di scambiare stanze.",
+        "room_title": "Stanza di <user></user>:"
+      },
+      "order": {
+        "received": "<source></source> vuole cederti il suo ordine.",
+        "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
+        "order_title": "Ordine di <user></user>:"
+      }
     }
   },
   "misc": {
