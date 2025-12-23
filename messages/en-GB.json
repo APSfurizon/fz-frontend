@@ -177,6 +177,12 @@
         "board_HALF": "Half board",
         "board_FULL": "Full board"
       },
+      "input": {
+        "transfer_user": {
+          "label": "Recipient",
+          "placeholder": "Search for a user"
+        }
+      },
       "errors": {
         "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened yet!",
         "SERVER_ERROR": {
@@ -333,8 +339,8 @@
         "confirm_unconfirmation": {
           "description": "Do you want to unconfirm <room>{roomName}</room>?"
         },
-        "transfer_invite_sent": {
-          "description": "You will both be contacted via email to confirm the transfer.",
+        "exchange_invite_sent": {
+          "description": "You will both be contacted via email to confirm the exchange.",
           "title": "Invite sent"
         }
       },
@@ -342,7 +348,7 @@
         "ORDER_NOT_FOUND": "Order not found.",
         "ORDER_NOT_PAID": "Order not paid.",
         "ROOM_FULL": "The room is full.",
-        "EXCHANGE_STILL_PENDING": "A transfer request is still pending."
+        "EXCHANGE_STILL_PENDING": "An exchange or transfer request is still pending."
       },
       "input": {
         "rename_new_name": {
@@ -360,7 +366,7 @@
         "force_exit": {
           "label": "Forcefully kick the user from any other room"
         },
-        "transfer_user": {
+        "exchange_user": {
           "label": "Recipient",
           "placeholder": "Search for a user"
         }
@@ -386,8 +392,8 @@
         "leave": "Leave",
         "show_in_nosecount": "Show in nosecount",
         "hide_in_nosecount": "Hide from nosecount",
-        "transfer_room": "Exchange room",
-        "transfer": "Transfer"
+        "exchange_room": "Exchange room",
+        "exchange": "Exchange"
       },
       "your_room": "Your room",
       "or": "or",
@@ -961,7 +967,7 @@
       "title": "Logging in"
     },
     "transfer_confirm": {
-      "title": "Confirm exchange",
+      "title": "Confirm exchange or transfer",
       "room": {
         "received": "<source></source> wants to exchange his room with you.",
         "sent": "You asked <target></target> to exchange room.",

@@ -213,9 +213,9 @@ export default function RoomPage() {
 
   const roomExchangeSuccess = () => {
     const successBody = <span>
-      {t("furpanel.room.messages.transfer_invite_sent.description")}
+      {t("furpanel.room.messages.exchange_invite_sent.description")}
     </span>;
-    showModal(t("furpanel.room.messages.transfer_invite_sent.title"), successBody, "CHECK_CIRCLE");
+    showModal(t("furpanel.room.messages.exchange_invite_sent.title"), successBody, "CHECK_CIRCLE");
     commonSuccess();
   }
 
@@ -399,7 +399,7 @@ export default function RoomPage() {
                   {data.exchangeSupported && <>
                     <span className="title small">{t("furpanel.room.or")}</span>
                     <Button className="danger" iconName={"SEND"} onClick={() => promptRoomExchange()}
-                      disabled={!!data && !data.canExchange}>{t("furpanel.room.actions.transfer")}</Button>
+                      disabled={!!data && !data.canExchange}>{t("furpanel.room.actions.exchange")}</Button>
                   </>}
                 </>
                 : data.hasOrder
@@ -523,7 +523,7 @@ export default function RoomPage() {
                     iconName={"SEND"}
                     onClick={() => promptRoomExchange()}
                     disabled={!!data && !data.canExchange}>
-                    {t("furpanel.room.actions.transfer")}
+                    {t("furpanel.room.actions.exchange")}
                   </Button>}
                 </> : <>
                   {/* Guest actions */}
@@ -842,7 +842,7 @@ export default function RoomPage() {
     {/* Room exchange modal */}
     <Modal icon={"SEND"}
       open={exchangeModalOpen}
-      title={t("furpanel.room.actions.transfer_room")}
+      title={t("furpanel.room.actions.exchange_room")}
       onClose={() => setExchangeModalOpen(false)}
       busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction}
@@ -861,8 +861,8 @@ export default function RoomPage() {
           manager={new AutoInputRoomInviteManager()}
           multiple={false}
           disabled={modalLoading}
-          label={t("furpanel.room.input.transfer_user.label")}
-          placeholder={t("furpanel.room.input.transfer_user.placeholder")}
+          label={t("furpanel.room.input.exchange_user.label")}
+          placeholder={t("furpanel.room.input.exchange_user.placeholder")}
           style={{ maxWidth: "500px" }}
           required />
         <div className="horizontal-list gap-4mm">

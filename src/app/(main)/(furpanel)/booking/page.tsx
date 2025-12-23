@@ -290,7 +290,7 @@ export default function BookingPage() {
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
                 <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
-                    label={t("furpanel.room.input.transfer_user.label")} placeholder={t("furpanel.room.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
+                    label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
                     <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>

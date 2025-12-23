@@ -177,6 +177,12 @@
         "board_HALF": "Mezza pensione",
         "board_FULL": "Pensione completa"
       },
+      "input": {
+        "transfer_user": {
+          "label": "Destinatario",
+          "placeholder": "Cerca un destinatario"
+        }
+      },
       "errors": {
         "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",
         "SERVER_ERROR": {
@@ -333,7 +339,7 @@
         "confirm_unconfirmation": {
           "description": "Vuoi revocare la conferma di <room>{roomName}</room>?"
         },
-        "transfer_invite_sent": {
+        "exchange_invite_sent": {
           "description": "Verrete contattati via email per confermare lo scambio.",
           "title": "Invito inviato"
         }
@@ -342,7 +348,7 @@
         "ORDER_NOT_FOUND": "Ordine non trovato.",
         "ORDER_NOT_PAID": "Ordine non pagato.",
         "ROOM_FULL": "La stanza è già piena.",
-        "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
+        "EXCHANGE_STILL_PENDING": "Una richiesta di scambio o trasferimento è già stata effettuata"
       },
       "input": {
         "rename_new_name": {
@@ -360,7 +366,7 @@
         "force_exit": {
           "label": "Forza l'uscita dell'utente da qualsiasi altra stanza"
         },
-        "transfer_user": {
+        "exchange_user": {
           "label": "Destinatario",
           "placeholder": "Cerca un destinatario"
         }
@@ -386,8 +392,8 @@
         "leave": "Lascia",
         "show_in_nosecount": "Mostra nel nosecount",
         "hide_in_nosecount": "Nascondi dal nosecount",
-        "transfer_room": "Scambia stanza",
-        "transfer": "Scambia"
+        "exchange_room": "Scambia stanza",
+        "exchange": "Scambia"
       },
       "your_room": "La tua stanza",
       "or": "oppure",
