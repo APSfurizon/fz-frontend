@@ -125,10 +125,10 @@
     "booking": {
       "title": "Reservation",
       "your_booking": "Your reservation",
-      "coundown_days": "{days, plural, =1 {# day} other {# days}}",
-      "coundown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
+      "countdown_days": "{days, plural, =1 {# day} other {# days}}",
+      "countdown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
       "book_now": "Book now",
-      "review_info_first": "Review your personal info",
+      "review_info_first": "Review your personal information",
       "edit_booking": "Edit reservation",
       "retry_payment": "Retry payment",
       "messages": {
@@ -145,19 +145,19 @@
           "description": "Since {lockDate} every form of booking editing is locked."
         },
         "review_info": {
-          "title": "Review personal info",
-          "description": "Conferm your membership personal info. This data is needed to release the new membership card and insurance."
-        },
-        "exchange_invite_sent": {
-          "title": "Invite sent",
-          "description": "You will both be contacted via email to confirm the exchange."
+          "title": "Review personal information",
+          "description": "Confirm your personal information. This data is legally required to release your new membership card and insurance."
         },
         "invite_group": {
           "title": "Official group",
           "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
         },
-        "exchange_explaination": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such exchange.",
-        "reservation_qr": "Show this QR code to a Furizon staffer when checking in."
+        "reservation_qr": "Show this QR code to a Furizon staffer when checking in.",
+        "transfer_invite_sent": {
+          "title": "Invite sent",
+          "description": "You will both be contacted via email to confirm the transfer."
+        },
+        "transfer_explanation": "You can give away your reservation to another account via this dialogue. Once you've selected a recipient, you will both receive an email to confirm such transfer."
       },
       "items": {
         "code": "code",
@@ -177,23 +177,29 @@
         "board_HALF": "Half board",
         "board_FULL": "Full board"
       },
+      "input": {
+        "transfer_user": {
+          "label": "Recipient",
+          "placeholder": "Search for a user"
+        }
+      },
       "errors": {
-        "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened, yet.",
+        "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened yet!",
         "SERVER_ERROR": {
           "title": "Server error",
-          "description": "Could not retrieve the current event info. Try again, later."
+          "description": "An unknown error occurred! Try again and, if this persists, contact us"
         },
         "MEMBERSHIP_MULTIPLE_DONE": {
           "title": "Multiple membership cards",
-          "description": "It appears you have multiple membership cards active at the same time. Please contact the support for further details."
+          "description": "It appears you have multiple membership cards active at the same time. Please contact the support."
         },
         "MEMBERSHIP_MISSING": {
           "title": "Membership card missing",
-          "description": "To participate in a Furizon event, you need a membership card. Membership cards expire on the 30th of September."
+          "description": "To participate in a Furizon event, you need a membership card. We remind you that membership cards last only one fiscal year."
         },
         "ORDER_MULTIPLE_DONE": {
           "title": "Multiple orders",
-          "description": "You've placed multiple orders for one account. Please contact support in order to undo the situation."
+          "description": "You've placed multiple orders for your account. Please contact support in order to arrange the situation."
         },
         "ORDER_SECRET_NOT_MATCH": {
           "title": "Order not valid",
@@ -201,16 +207,16 @@
         },
         "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
           "title": "Shared order",
-          "description": "Your order appears to be shared with more users. Please, contact support to rectify the situation."
+          "description": "The order you're trying to access is already owned by another user. Please, contact support to arrange the situation."
         },
         "TELEGRAM_USERNAME_EMPTY": "No telegram username provided",
         "ID_ISSUER_EMPTY": "No ID Card issuer provided"
       },
       "actions": {
-        "review_info": "Review informations",
-        "confirm_info": "Confirm informations",
-        "exchange_order": "Exchange order",
-        "show_qr": "Check-in QR code"
+        "review_info": "Review information",
+        "confirm_info": "Confirm information",
+        "show_qr": "Check-in QR code",
+        "transfer_order": "Transfer order"
       },
       "reservation_qr": "Check-in QR code",
       "event_logo": "Event's logo"
@@ -264,7 +270,7 @@
       "messages": {
         "what_to_upload": {
           "title": "What to upload here?",
-          "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon’s staff. Any form of explicit content is forbidden, including cub material and pup play."
+          "description": "Any picture uploaded here will be printed on your personal badge and be used as a profile picture site-wise. Every upload is reviewed and can be reported and deleted by Furizon's staff. Any form of explicit content is forbidden, including cub material and pup play."
         },
         "confirm_deletion": {
           "title": "Confirm deletion",
@@ -313,36 +319,36 @@
         },
         "confirm_delete": {
           "title": "Delete your room",
-          "description": "Do you want to delete <room>{roomName}</room>? Confirmed guests will be notified."
+          "description": "Do you want to delete <room>{roomName}</room>? Your guests will be notified."
         },
         "confirm_invite_cancel": {
           "title": "Revoke invite",
-          "description": "Do you want to revoke your invite to {guestName}? The user will be notified via email"
+          "description": "Do you want to revoke your invite to {guestName}?"
         },
         "confirm_kick": {
           "title": "Kick guest",
-          "description": "Do you want to kick {guestName} from your room?"
+          "description": "Do you want to kick {guestName} from your room? The user will be notified via email"
         },
         "confirm_leave": {
           "title": "Leave room",
-          "description": "Do you want to leave room <room>{roomName}</room>?"
-        },
-        "exchange_invite_sent": {
-          "title": "Invite sent",
-          "description": "You will both be contacted via email to confirm the exchange."
+          "description": "Do you want to leave room <room>{roomName}</room>? The room owner will be notified via email."
         },
         "confirm_confirmation": {
           "description": "Do you want to confirm <room>{roomName}</room>?"
         },
         "confirm_unconfirmation": {
           "description": "Do you want to unconfirm <room>{roomName}</room>?"
+        },
+        "exchange_invite_sent": {
+          "description": "You will both be contacted via email to confirm the exchange.",
+          "title": "Invite sent"
         }
       },
       "errors": {
         "ORDER_NOT_FOUND": "Order not found.",
         "ORDER_NOT_PAID": "Order not paid.",
         "ROOM_FULL": "The room is full.",
-        "EXCHANGE_STILL_PENDING": "An exchange request is still pending."
+        "EXCHANGE_STILL_PENDING": "An exchange or transfer request is still pending."
       },
       "input": {
         "rename_new_name": {
@@ -352,13 +358,13 @@
         "invite": {
           "label": "Invite someone in your room",
           "placeholder": "Search for a user",
-          "help": "You can only invite users with a paid order, except daily tickets"
+          "help": "You can only invite users with a paid order and without a daily ticket"
         },
         "force_join": {
-          "label": "Force join the room"
+          "label": "Make the user forcefully join the room"
         },
         "force_exit": {
-          "label": "Kick from any other room"
+          "label": "Forcefully kick the user from any other room"
         },
         "exchange_user": {
           "label": "Recipient",
@@ -382,19 +388,19 @@
         "kick": "Kick user",
         "revoke_invite": "Revoke invite",
         "confirm_room": "Confirm room",
-        "unconfirm_room": "Unconfirm",
-        "exchange": "Exchange",
-        "exchange_room": "Exchange room",
+        "unconfirm_room": "Unconfirm room",
         "leave": "Leave",
         "show_in_nosecount": "Show in nosecount",
-        "hide_in_nosecount": "Hide from nosecount"
+        "hide_in_nosecount": "Hide from nosecount",
+        "exchange_room": "Exchange room",
+        "exchange": "Exchange"
       },
       "your_room": "Your room",
       "or": "or",
       "or_get_invited": "or get invited",
       "no_order": "Please buy a ticket, before.",
       "no_room": "You don't have a room, yet.",
-      "can_create": "You bought a room, create it in order to personalize it.",
+      "can_create": "You bought a room, create it in order to personalize it and invite other guests!",
       "status_owner": "Owner",
       "status_invited": "Invited",
       "room_number_left": "{size, plural, =0 {Room full} =1 {One spot left} other {# spots left}}",
@@ -407,12 +413,12 @@
         "complete_order": "Complete order",
         "messages": {
           "quota_warning": {
-            "title": "Availaility warning",
+            "title": "Availability warning",
             "description": "Room availability may change while ordering a room, refresh in order to get the latest count of rooms left."
           },
           "order_notice": {
             "title": "Order warning",
-            "description": "By checking this, you acknowledge that the requested change to your order cannot be reversed automatically. Please contact support, in case you want to go back."
+            "description": "By checking this, you acknowledge that the requested change to your order cannot be reversed automatically. Please contact support, in case you want to go back. We remind you that, once paid, we will not perform any refund."
           }
         }
       },
@@ -437,10 +443,10 @@
         "title": "Order linking",
         "description": "Please wait while we link your order to your account...",
         "errors": {
-          "SERVER_ERROR": "Server error",
-          "ORDER_SECRET_NOT_MATCH": "Order secret doesn't match",
-          "ORDER_MULTIPLE_DONE": "You might have issued multiple orders",
-          "ORDER_NOT_FOUND": "Order not found"
+          "SERVER_ERROR": "Server error. Please try again later, or contact support if the problem persists.",
+          "ORDER_SECRET_NOT_MATCH": "Order's secret doesn't match! Are you sure this is your order?",
+          "ORDER_MULTIPLE_DONE": "You might have issued multiple orders. Please contact support to arrange the situation.",
+          "ORDER_NOT_FOUND": "Order not found. Please contact support to arrange the situation."
         }
       },
       "sessions": {
@@ -459,7 +465,7 @@
         }
       },
       "errors": {
-        "UNAUTHENTICATED": "Autentication missing"
+        "UNAUTHENTICATED": "Authentication missing"
       }
     },
     "admin": {
@@ -548,7 +554,7 @@
         },
         "input": {
           "user": {
-            "label": "Seleziona utente"
+            "label": "Select user"
           }
         },
         "table": {
@@ -683,11 +689,11 @@
                 "label": "Add role member"
               },
               "select_user": {
-                "label": "Seleziona utente"
+                "label": "Select user"
               },
               "temporary_member": {
                 "label": "Temporary",
-                "help": "Will own this role for the duration of the current event."
+                "help": "You have the chance to automatically remove all temporary members of this role with just one click, whenever needed."
               }
             },
             "sections": {
@@ -701,7 +707,7 @@
               "add_role": "First, enter the role internal name",
               "duplicate_user": {
                 "title": "Duplicate member",
-                "description": "You cannot insert a member in a role more times"
+                "description": "You cannot insert a member in a role twice"
               }
             },
             "actions": {
@@ -772,19 +778,6 @@
         "unknown_error": "Unknown error"
       }
     },
-    "exchange_confirm": {
-      "title": "Confirm exchange",
-      "room": {
-        "received": "<source></source> wants to exchange his room with you.",
-        "sent": "You asked <target></target> to exchange room.",
-        "room_title": "<user></user>'s room:"
-      },
-      "order": {
-        "received": "<source></source> wants to transfer his order to you.",
-        "sent": "You requested to transfer your order to <target></target>.",
-        "order_title": "<user></user>'s order:"
-      }
-    },
     "logout": {
       "title": "Logout"
     },
@@ -838,7 +831,7 @@
         },
         "birth_city": {
           "label": "Birth city",
-          "placeholder": "Ex: Barcelona"
+          "placeholder": "Ex: Rome"
         },
         "birth_country": {
           "label": "Birth country",
@@ -972,6 +965,19 @@
     },
     "logging_in": {
       "title": "Logging in"
+    },
+    "transfer_confirm": {
+      "title": "Confirm exchange or transfer",
+      "room": {
+        "received": "<source></source> wants to exchange his room with you.",
+        "sent": "You asked <target></target> to exchange room.",
+        "room_title": "<user></user>'s room:"
+      },
+      "order": {
+        "received": "<source></source> wants to transfer his order to you.",
+        "sent": "You requested to transfer your order to <target></target>.",
+        "order_title": "<user></user>'s order:"
+      }
     }
   },
   "misc": {

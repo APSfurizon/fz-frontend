@@ -59,9 +59,9 @@ export default function BookingPage() {
 
     const exchangeSuccess = () => {
         setExchangeModalOpen(false);
-        showModal(t("furpanel.booking.messages.exchange_invite_sent.title"),
+        showModal(t("furpanel.booking.messages.transfer_invite_sent.title"),
             <span className="descriptive average">
-                {t("furpanel.booking.messages.exchange_invite_sent.description")}
+                {t("furpanel.booking.messages.transfer_invite_sent.description")}
             </span>, "CHECK_CIRCLE");
     }
 
@@ -237,7 +237,7 @@ export default function BookingPage() {
                                     iconName={"SEND"}
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
-                                    {t("furpanel.booking.actions.exchange_order")}
+                                    {t("furpanel.booking.actions.transfer_order")}
                                 </Button>}
                             </div>
                         </div>
@@ -284,13 +284,13 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Order exchange modal */}
-        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
-            <span className="descriptive small">{t("furpanel.booking.messages.exchange_explaination")}</span>
+        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+            <span className="descriptive small">{t("furpanel.booking.messages.transfer_explanation")}</span>
             <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
                 <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
-                    label={t("furpanel.room.input.exchange_user.label")} placeholder={t("furpanel.room.input.exchange_user.placeholder")} style={{ maxWidth: "500px" }} />
+                    label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
                     <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>

@@ -33,8 +33,8 @@ export default function ExchangeConfirm() {
   const renderRoom = (userData: UserData, data: RoomData) => {
     return <>
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-        <Icon className="large" icon="PACKAGE_2"/>
-        {t.rich("authentication.exchange_confirm.room.room_title", {
+        <Icon className="large" icon={"PACKAGE_2"}></Icon>
+        {t.rich("authentication.transfer_confirm.room.room_title", {
           user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
         })}
       </span>
@@ -81,19 +81,17 @@ export default function ExchangeConfirm() {
       .finally(() => setLoading(false));
   }
 
-  const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    setError(err);
-  }
-
   const manageSuccess = () => {
     router.replace(exchangeData?.action == "order" ? "/booking" : "/room");
   }
 
-  useTitle(t("authentication.exchange_confirm.title"));
+  useTitle(t("authentication.transfer_confirm.title"));
 
   const isOwner = exchangeData && userDisplay && exchangeData.sourceUser.userId === userDisplay.display.userId;
 
-  const ticketData = exchangeData && exchangeData.fullOrderExchange ? calcTicketData(exchangeData.fullOrderExchange) : null;
+  const ticketData = exchangeData && exchangeData.fullOrderExchange
+    ? calcTicketData(exchangeData.fullOrderExchange)
+    : null;
   if (exchangeData && exchangeData.fullOrderExchange) {
     exchangeData.fullOrderExchange.extraDays = "BOTH";
   }
@@ -103,7 +101,7 @@ export default function ExchangeConfirm() {
         <Icon icon="DESIGN_SERVICES"/>
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
-        <span className="titular bold">{t('authentication.exchange_confirm.title').toLowerCase()}</span>
+        <span className="titular bold">{t('authentication.transfer_confirm.title').toLowerCase()}</span>
       </span>
     </div>
     {error && <ModalError error={error} />}
@@ -111,7 +109,7 @@ export default function ExchangeConfirm() {
     {exchangeData && userDisplay && <>
       <div className="exchange-info rounded-l vertical-list gap-2mm">
         <span className="title bold exchange-title rounded-m horizontal-list gap-2mm flex-vertical-center flex-wrap">
-          {t.rich(`authentication.exchange_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
+          {t.rich(`authentication.transfer_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
             source: () => <><UserPicture userData={exchangeData.sourceUser} />{exchangeData.sourceUser.fursonaName}</>,
             target: () => <><UserPicture userData={exchangeData.targetUser} />{exchangeData.targetUser.fursonaName}</>,
           })}
@@ -135,7 +133,7 @@ export default function ExchangeConfirm() {
             <div className="item-info vertical-list rounded-m">
               <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
                 <Icon className="large" icon="LOCAL_ACTIVITY"/>
-                {t.rich("authentication.exchange_confirm.order.order_title", {
+                {t.rich("authentication.transfer_confirm.order.order_title", {
                   user: () => <>
                     <UserPicture userData={exchangeData.sourceUser} />
                     {exchangeData.sourceUser.fursonaName}
