@@ -4,10 +4,6 @@ div.upload-container {
     background-color: var(--upload-bg);
     border: 1px solid var(--upload-border);
 
-    * {
-        width: 100%;
-    }
-
     div.image-container {
         outline: 1px solid var(--upload-border);
         overflow: hidden;

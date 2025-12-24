@@ -116,7 +116,5 @@ const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchP
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next|_vercel|images|.*\\..*).*)',
-  ]
-};
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png|.*\\.webp$).*)'],
+}
