@@ -8,24 +8,22 @@ const withNextIntl = createNextIntlPlugin();
 
 const API_IMAGE_URL = new URL(process.env.NEXT_PUBLIC_IMAGE_BASE_URL!);
 
-
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
+    qualities: [100, 75],
     remotePatterns: [
       {
         protocol: "https",
         hostname: API_IMAGE_URL.hostname,
         port: API_IMAGE_URL.port,
-        pathname: "**",
-        search: ""
+        pathname: "**"
       },
       {
         protocol: "https",
-        hostname: "furizon.net",
+        hostname: "**.furizon.net",
         port: "",
-        pathname: "**",
-        search: ""
+        pathname: "**"
       }
     ]
   },

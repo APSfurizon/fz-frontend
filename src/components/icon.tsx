@@ -107,8 +107,16 @@ export const ICONS = {
 
 export type MaterialIcon = keyof typeof ICONS;
 
-export default function Icon({ icon, style, className }: Readonly<{
-    icon: MaterialIcon, style?: CSSProperties, className?: string;
-}>) {
-    return <span data-nosnippet aria-hidden><i className={`icon mdi ${className ?? ""}`} style={{ ...style }}>{icon}</i></span>
+type IconProps = {
+    icon: MaterialIcon,
+    style?: CSSProperties,
+    className?: string
+}
+
+export default function Icon(props: Readonly<IconProps>) {
+    return <span className="icon-container" data-nosnippet aria-hidden>
+        <i className={`icon mdi ${props.className ?? ""}`} style={{ ...props.style }}>
+            {props.icon}
+        </i>
+    </span>
 }
