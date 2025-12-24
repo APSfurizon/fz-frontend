@@ -291,6 +291,10 @@
         "badge_edit_deadline": {
           "title": "Deadline modifica badge",
           "description": "Le modifiche al badge verranno bloccate il giorno {lockDate}."
+        },
+        "fursuit_banner": {
+          "title": "Non hai selezionato alcuna fursuit",
+          "description": "In modo che Furizon possa organizzare la fursuit lounge, ricordati di spuntare <b>Porta a {eventName}</b> nella schermata di modifica della fursuit."
         }
       },
       "errors": {}
