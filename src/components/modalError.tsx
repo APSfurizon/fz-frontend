@@ -3,20 +3,29 @@ import { ApiDetailedErrorResponse, ApiErrorResponse } from "@/lib/api/global";
 import { copyContent, isEmpty } from "@/lib/utils";
 import { useMemo } from "react";
 
+type ErrorData = {
+    code?: string,
+    message: string
+}
+
 export default function ModalError({ error }: Readonly<{ error?: ApiErrorResponse }>) {
     const t = useTranslations();
     const errors = useMemo(() => {
-        const toReturn = [];
-        if (!error) {
-            toReturn.push("unknown_error");
+        const toReturn: ErrorData[] = [];
+        if (error &&"errors" in error) {
+            const detail: ApiDetailedErrorResponse = error as ApiDetailedErrorResponse;
+            toReturn.push(...detail.errors.map(err => ({ code: err.code, message: err.message})));
         } else {
-            if ("errors" in error) {
-                const detail: ApiDetailedErrorResponse = error as ApiDetailedErrorResponse;
-                toReturn.push(detail.errors.map(err => err.code));
+            if (!error || isEmpty(error?.errorMessage)) {
+                toReturn.push({message: t("common.unknown_error")});
             } else {
-                toReturn.push(isEmpty(error.errorMessage) ? undefined : error.errorMessage);
+                toReturn.push({
+                    code: undefined,
+                    message: error.errorMessage!
+                });
             }
         }
+       
         return toReturn;
     }, [error]);
 
@@ -25,7 +34,7 @@ export default function ModalError({ error }: Readonly<{ error?: ApiErrorRespons
     return <div className="error vertical-list gap-2mm" aria-live="assertive">
         <span className="title medium">{t("common.error_header", { count: errors.length })}</span>
         <ul style={{ marginLeft: "1em" }} aria-relevant="additions text">
-            {errors.map((err, index) => <li key={index} className="descriptive small">{err ? err : t("common.unknown_error")}</li>)}
+            {errors.map((err, index) => <li key={index} className="descriptive small">{err.message} <kbd>{err.code ? `(${err.code})` : ""}</kbd></li>)}
         </ul>
         {!isEmpty(requestId) && <>
             <hr></hr>
