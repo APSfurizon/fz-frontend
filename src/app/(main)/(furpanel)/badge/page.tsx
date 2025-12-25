@@ -35,7 +35,11 @@ export default function BadgePage() {
   const [badgeStatus, setBadgeStatus] = useState<BadgeStatusApiResponse | null | undefined>();
   const isEditExpired = useMemo(() =>
     badgeStatus && new Date(badgeStatus.badgeEditingDeadline).getTime() - Date.now() < 0, [badgeStatus]);
-
+  const shouldShowBanner = useMemo(() => badgeStatus &&
+    !isEditExpired &&
+    badgeStatus.canBringFursuitsToEvent &&
+    badgeStatus.fursuits.filter(f => f.bringingToEvent).length == 0,
+    [badgeStatus, isEditExpired]);
   // Main logic
 
   // Badge upload
@@ -239,6 +243,14 @@ export default function BadgePage() {
       </div>
       {/* Fursuits */}
       <div className="fursuit-section rounded-m vertical-list gap-2mm">
+        {/* Banner */}
+        {shouldShowBanner && <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.badge.messages.fursuit_banner.title")}>
+          {t.rich("furpanel.badge.messages.fursuit_banner.description",
+            {
+              eventName: EVENT_NAME,
+              b: (chunks) => <b className="highlight">{chunks}</b>
+            })}
+        </NoticeBox>}
         <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
           <Icon icon="PETS"/>
           <span className="title average">

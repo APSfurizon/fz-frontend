@@ -329,6 +329,7 @@
 
 .highlight {
   color: var(--highlight);
+  white-space: nowrap;
 }
 
 .main-dialog {

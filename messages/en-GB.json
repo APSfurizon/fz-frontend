@@ -291,6 +291,10 @@
         "badge_edit_deadline": {
           "title": "Badge editing deadline",
           "description": "Badge editing will be locked in the following date: {lockDate}."
+        },
+        "fursuit_banner": {
+          "title": "You haven't selected any fursuit, yet",
+          "description": "In order for Furizon to organize the fursuit lounge, be sure to edit your fursuit and check <b>Bring to {eventName}</b>."
         }
       },
       "errors": {}
