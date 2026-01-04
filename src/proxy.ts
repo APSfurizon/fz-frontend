@@ -2,7 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
+  API_BASE_URL, REGEX_UNAUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
   TOKEN_STORAGE_NAME
 } from './lib/constants';
 
@@ -29,7 +29,7 @@ export async function proxy(req: NextRequest) {
   const tokenPresent = (!!loginToken && !!loginToken.value) || !!getTokenPresent;
 
   // Check url regex
-  const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
+  const needsAuthentication = !REGEX_UNAUTHENTICATED_URLS.test(path);
   const shouldSkipIfAuthenticated = REGEX_SKIP_AUTHENTICATED.test(path);
   const isLogout = REGEX_LOGOUT.test(path);
 
@@ -116,5 +116,5 @@ const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchP
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png|.*\\.webp$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|images/footer|.*\\.woff2|.*\\.png|.*\\.webp|.*\\.$).*)'],
 }
