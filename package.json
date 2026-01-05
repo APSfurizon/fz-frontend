@@ -36,6 +36,7 @@
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/browser-playwright": "^4.0.8",
     "@vitest/coverage-v8": "^4.0.8",
+    "baseline-browser-mapping": "^2.9.11",
     "eslint": "^8",
     "eslint-config-next": "15.0.0",
     "eslint-plugin-deprecation": "^3.0.0",
