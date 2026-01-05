@@ -12,7 +12,6 @@ export default function Login() {
     useEffect(() => {
         setUserDisplay(undefined);
         router.replace("/login");
-        router.refresh();
     }, [])
 
     return <>

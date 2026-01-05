@@ -14,7 +14,6 @@ export default function Logging() {
     useEffect(() => {
         setUpdateUser(true);
         router.replace(params.get("continue") ?? "/home");
-        router.refresh();
     }, [])
 
     return <>
