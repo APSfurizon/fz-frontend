@@ -155,7 +155,7 @@ export default function FpInput({
                 />
                 <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
                     {(isBusy) && (
-                        <Icon className="medium loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
+                        <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY"/>
                     )}
                     {!(isBusy) && (isPassword) && (
                         <a style={{ cursor: 'pointer', visibility: showViewPassword ? 'visible' : 'hidden' }}

@@ -8,6 +8,7 @@ import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import {
+    Board,
     BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
     ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction,
     OrderRetryLinkApiAction,
@@ -58,9 +59,9 @@ export default function BookingPage() {
 
     const exchangeSuccess = () => {
         setExchangeModalOpen(false);
-        showModal(t("furpanel.booking.messages.exchange_invite_sent.title"),
+        showModal(t("furpanel.booking.messages.transfer_invite_sent.title"),
             <span className="descriptive average">
-                {t("furpanel.booking.messages.exchange_invite_sent.description")}
+                {t("furpanel.booking.messages.transfer_invite_sent.description")}
             </span>, "CHECK_CIRCLE");
     }
 
@@ -180,7 +181,8 @@ export default function BookingPage() {
                                 title={
                                     t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                         sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                                        supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>
+                                        supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
+                                        ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>
                                     })}
                                 description={pageData.isDaily
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })
@@ -193,11 +195,14 @@ export default function BookingPage() {
                                 title={t("furpanel.booking.items.extra_days")}
                                 description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)} />}
                             {/* Room */}
-                            {bookingData!.order.room && <OrderItem icon={"BED"}
+                            {bookingData!.order.room && <OrderItem icon="BED"
                                 title={[t("furpanel.booking.items.room"),
                                 translate(bookingData!.order.room.roomTypeNames, locale) ?? ""].join(" ")}
                                 description={t("furpanel.booking.items.room_capacity",
                                     { capacity: bookingData!.order.room.roomCapacity })} />}
+                            {/* Board */}
+                            {!!bookingData!.order.board && bookingData!.order.board != Board.NONE && <OrderItem icon="DINING"
+                                title={t(`furpanel.booking.items.board_${bookingData!.order.board}`)}/>}
                         </div>
 
                         {/* Order actions */}
@@ -232,7 +237,7 @@ export default function BookingPage() {
                                     iconName={"SEND"}
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
-                                    {t("furpanel.booking.actions.exchange_order")}
+                                    {t("furpanel.booking.actions.transfer_order")}
                                 </Button>}
                             </div>
                         </div>
@@ -279,13 +284,13 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Order exchange modal */}
-        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.exchange_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
-            <span className="descriptive small">{t("furpanel.booking.messages.exchange_explaination")}</span>
+        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+            <span className="descriptive small">{t("furpanel.booking.messages.transfer_explanation")}</span>
             <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
                 <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
-                    label={t("furpanel.room.input.exchange_user.label")} placeholder={t("furpanel.room.input.exchange_user.placeholder")} style={{ maxWidth: "500px" }} />
+                    label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
                     <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>

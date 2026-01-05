@@ -60,7 +60,8 @@
     },
     "sponsorships": {
       "sponsor": "Sponsor",
-      "super_sponsor": "Super Sponsor"
+      "super_sponsor": "Super Sponsor",
+      "ultra_sponsor": "Explorer"
     },
     "changelog": {
       "title": "Il Furpanel si è aggiornato",
@@ -124,8 +125,8 @@
     "booking": {
       "title": "Prenotazione",
       "your_booking": "La tua prenotazione",
-      "coundown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
-      "coundown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
+      "countdown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
+      "countdown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
       "book_now": "Prenota",
       "review_info_first": "Rivedi i tuoi dati personali",
       "edit_booking": "Modifica prenotazione",
@@ -144,19 +145,19 @@
           "description": "Dal {lockDate} non è più possibile modificare l'ordine."
         },
         "review_info": {
-          "title": "Revisione dati personali",
-          "description": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono per rilasciarti la tessera associativa e per motivi assicurativi."
-        },
-        "exchange_invite_sent": {
-          "title": "Invito inviato",
-          "description": "Verrete contattati via email per confermare lo scambio."
+          "title": "Rivedi i tuoi dati personali",
+          "description": "Conferma di aver inserito i tuoi dati personali correttamente. Questi dati ci servono legalmente per rilasciarti la tessera associativa e per motivi assicurativi."
         },
         "invite_group": {
           "title": "Gruppo ufficiale",
           "description": "Entra nel gruppo ufficiale della con! <link></link> (solo ospiti di Furizon)"
         },
-        "exchange_explaination": "Puoi cedere la tua prenotazione a un altro account con questo dialogo. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare lo scambio.",
-        "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in."
+        "reservation_qr": "Mostra questo codice QR ad un addetto di Furizon per il check-in.",
+        "transfer_invite_sent": {
+          "title": "Invito inviato",
+          "description": "Verrete contattati via email per confermare il trasferimento."
+        },
+        "transfer_explanation": "Puoi cedere la tua prenotazione a un altro account. Una volta selezionato un utente destinatario, entrambi riceverete un'email per confermare il trasferimento."
       },
       "items": {
         "code": "codice",
@@ -168,45 +169,54 @@
         "none_ticket": "Biglietto",
         "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
         "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
+        "ultra_sponsor_ticket": "Biglietto <ultrasponsor>Explorer</ultrasponsor>",
         "extra_days": "Giorni extra",
         "extra_days_BOTH": "Early & Late",
         "extra_days_EARLY": "Early",
-        "extra_days_LATE": "Late"
+        "extra_days_LATE": "Late",
+        "board_HALF": "Mezza pensione",
+        "board_FULL": "Pensione completa"
+      },
+      "input": {
+        "transfer_user": {
+          "label": "Destinatario",
+          "placeholder": "Cerca un destinatario"
+        }
       },
       "errors": {
         "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",
         "SERVER_ERROR": {
           "title": "Errore server",
-          "description": "Non è stato possibile recuperare alcuna informazione sull'evento. Provare più tardi"
+          "description": "Si è verificato un errore! Riprova più tardi, o contatta il supporto se il problema persiste."
         },
         "MEMBERSHIP_MULTIPLE_DONE": {
           "title": "Tessere multiple",
-          "description": "Risultano attive due tessere in contemporanea. Contattare il supporto per ulteriori informazioni."
+          "description": "Risultano attive due tessere associative in contemporanea. Contatta il supporto per risolvere la situazione."
         },
         "MEMBERSHIP_MISSING": {
           "title": "Tessera associativa mancante",
-          "description": "Per partecipare ad un evento Furizon, devi avere una tessera valida. Ogni tessera ha validità fino al 30 settembre."
+          "description": "Per partecipare ad un evento Furizon, devi avere una tessera valida. Ogni tessera ha validità di un solo anno fiscale."
         },
         "ORDER_MULTIPLE_DONE": {
           "title": "Ordini multipli",
-          "description": "Sono stati acquistati più ordini per lo stesso account. Contattare il supporto per rettificare la situazione."
+          "description": "Sono stati acquistati più ordini per il tuo account. Contatta il supporto per risolvere la situazione."
         },
         "ORDER_SECRET_NOT_MATCH": {
           "title": "Ordine non valido",
-          "description": "Non è stato possibile autenticizzare la veridicità del tuo ordine. Contattare il supporto per ulteriori informazioni."
+          "description": "Non è stato possibile autenticare la veridicità del tuo ordine. Contatta il supporto per ulteriori informazioni."
         },
         "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
           "title": "Ordine condiviso",
-          "description": "L'ordine è al momento assegnato a più persone. Contattare il supporto tecnico per rettificare l'anomalia."
+          "description": "L'ordine a cui stai provando ad accedere appartiene già ad un altro utente. Contatta il supporto per risolvere la situazione."
         },
         "TELEGRAM_USERNAME_EMPTY": "Non è stato inserito alcun nome utente Telegram",
-        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'itentità"
+        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'identità"
       },
       "actions": {
         "review_info": "Rivedi informazioni",
         "confirm_info": "Conferma informazioni",
-        "exchange_order": "Scambia ordine",
-        "show_qr": "QR per il check-in"
+        "show_qr": "QR per il check-in",
+        "transfer_order": "Trasferisci ordine"
       },
       "reservation_qr": "Codice QR per il check-in",
       "event_logo": "Logo evento"
@@ -272,7 +282,7 @@
         },
         "fursuit_badge": {
           "title": "Vuoi portare la tua suit a furizon?",
-          "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, cosicchè Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
+          "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, in modo che Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
         },
         "badge_edit_deadline_end": {
           "title": "Modifiche badge bloccate",
@@ -281,6 +291,10 @@
         "badge_edit_deadline": {
           "title": "Deadline modifica badge",
           "description": "Le modifiche al badge verranno bloccate il giorno {lockDate}."
+        },
+        "fursuit_banner": {
+          "title": "Non hai selezionato alcuna fursuit",
+          "description": "In modo che Furizon possa organizzare la fursuit lounge, ricordati di spuntare <b>Porta a {eventName}</b> nella schermata di modifica della fursuit."
         }
       },
       "errors": {}
@@ -313,32 +327,32 @@
         },
         "confirm_invite_cancel": {
           "title": "Revoca invito",
-          "description": "Vuoi revocare l'invito in stanza per {guestName}? L'utente verrà notificato via email"
+          "description": "Vuoi revocare l'invito in stanza per {guestName}?"
         },
         "confirm_kick": {
           "title": "Rimuovi ospite",
-          "description": "Vuoi rimuovere {guestName} dalla tua stanza?"
+          "description": "Vuoi rimuovere {guestName} dalla tua stanza? L'utente verrà notificato via email"
         },
         "confirm_leave": {
           "title": "Lascia stanza",
-          "description": "Vuoi uscire dalla stanza <room>{roomName}</room>?"
-        },
-        "exchange_invite_sent": {
-          "title": "Invito inviato",
-          "description": "Verrete contattati via email per confermare lo scambio."
+          "description": "Vuoi uscire dalla stanza <room>{roomName}</room>? Il proprietario della stanza verrà notificato via email"
         },
         "confirm_confirmation": {
           "description": "Vuoi confermare <room>{roomName}</room>?"
         },
         "confirm_unconfirmation": {
           "description": "Vuoi revocare la conferma di <room>{roomName}</room>?"
+        },
+        "exchange_invite_sent": {
+          "description": "Verrete contattati via email per confermare lo scambio.",
+          "title": "Invito inviato"
         }
       },
       "errors": {
         "ORDER_NOT_FOUND": "Ordine non trovato.",
         "ORDER_NOT_PAID": "Ordine non pagato.",
         "ROOM_FULL": "La stanza è già piena.",
-        "EXCHANGE_STILL_PENDING": "Una richiesta di scambio è già stata effettuata"
+        "EXCHANGE_STILL_PENDING": "Una richiesta di scambio o trasferimento è già stata effettuata"
       },
       "input": {
         "rename_new_name": {
@@ -348,13 +362,13 @@
         "invite": {
           "label": "Invita qualcuno in stanza",
           "placeholder": "Cerca un utente",
-          "help": "Puoi invitare solo utenti con un ordine pagato, eccetto biglietti giornalieri"
+          "help": "Puoi invitare solo utenti con un ordine pagato, e senza un biglietto giornaliero"
         },
         "force_join": {
-          "label": "Forza invito"
+          "label": "Forza l'inserimento dell'utente nella stanza"
         },
         "force_exit": {
-          "label": "Forza uscita da altre stanze"
+          "label": "Forza l'uscita dell'utente da qualsiasi altra stanza"
         },
         "exchange_user": {
           "label": "Destinatario",
@@ -378,19 +392,19 @@
         "kick": "Rimuovi ospite",
         "revoke_invite": "Revoca invito",
         "confirm_room": "Conferma stanza",
-        "unconfirm_room": "Revoca conferma",
-        "exchange": "Scambia",
-        "exchange_room": "Scambia stanza",
+        "unconfirm_room": "Revoca conferma stanza",
         "leave": "Lascia",
         "show_in_nosecount": "Mostra nel nosecount",
-        "hide_in_nosecount": "Nascondi dal nosecount"
+        "hide_in_nosecount": "Nascondi dal nosecount",
+        "exchange_room": "Scambia stanza",
+        "exchange": "Scambia"
       },
       "your_room": "La tua stanza",
       "or": "oppure",
       "or_get_invited": "oppure fatti invitare",
       "no_order": "Prima acquista un biglietto.",
       "no_room": "Non sei in una stanza, per ora.",
-      "can_create": "Hai comprato una stanza, creala per poterla personalizzare.",
+      "can_create": "Hai comprato una stanza, creala per poterla personalizzare e invitare altri utenti!",
       "status_owner": "Gestore",
       "status_invited": "Invitato",
       "room_number_left": "{size, plural, =0 {Stanza piena} =1 {Un posto rimasto} other {# posti liberi}}",
@@ -408,7 +422,7 @@
           },
           "order_notice": {
             "title": "Avviso sull'ordine",
-            "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere automaticamente annullato. Contatta il supporto in caso di ripensamenti."
+            "description": "Segnando questa spunta, prendi visione che il cambio richiesto al tuo ordine non può essere annullato automaticamente. Contatta il supporto in caso di ripensamenti. Ti ricordiamo che, una volta che l'ordine verrà pagato, non effettueremo alcun rimborso."
           }
         }
       },
@@ -433,10 +447,10 @@
         "title": "Recupero ordine",
         "description": "Attendi mentre colleghiamo l'ordine al tuo account...",
         "errors": {
-          "SERVER_ERROR": "Errore server",
-          "ORDER_SECRET_NOT_MATCH": "Il codice Ordine non è corretto",
-          "ORDER_MULTIPLE_DONE": "Errore ordine multiplo",
-          "ORDER_NOT_FOUND": "Ordine non trovato"
+          "SERVER_ERROR": "Errore con il server. Per favore, riprovare o contatta il supporto se il problema persiste.",
+          "ORDER_SECRET_NOT_MATCH": "Il codice di verifica dell'ordine non è corretto. Sei sicuro che questo sia il tuo ordine?",
+          "ORDER_MULTIPLE_DONE": "Potresti aver effettuato più ordini. Contatta il supporto per sistemare la situazione.",
+          "ORDER_NOT_FOUND": "Ordine non trovato. Contatta il supporto per sistemare la situazione."
         }
       },
       "sessions": {
@@ -644,7 +658,8 @@
                     "label": "Seleziona l'ospite da rimuovere dalla stanza"
                   }
                 }
-              }
+              },
+              "board": "Pensione"
             },
             "rooms": "Stanze"
           }
@@ -682,7 +697,7 @@
               },
               "temporary_member": {
                 "label": "Temporaneo",
-                "help": "Terrà il ruolo solamente per l'evento attuale."
+                "help": "Hai la possibilità di rimuovere tutti gli utenti temporanei dal ruolo quando vorrai con un solo click"
               }
             },
             "sections": {
@@ -764,19 +779,6 @@
         "pw_reset_not_found": "Codice non valido",
         "pw_chage_same_password": "La password è uguale alla precedente",
         "unknown_error": "Errore sconosciuto"
-      }
-    },
-    "exchange_confirm": {
-      "title": "Conferma scambio",
-      "room": {
-        "received": "<source></source> vuole scambiare stanza con te.",
-        "sent": "Hai chiesto <target></target> di scambiare stanze.",
-        "room_title": "Stanza di <user></user>:"
-      },
-      "order": {
-        "received": "<source></source> vuole cederti il suo ordine.",
-        "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
-        "order_title": "Ordine di <user></user>:"
       }
     },
     "logout": {
@@ -890,7 +892,7 @@
         },
         "residence_address": {
           "label": "Indirizzo",
-          "placeholder": "Esempio: Via San Pelo, 125"
+          "placeholder": "Esempio: Via San Pelo, 621"
         },
         "residence_city": {
           "label": "Città",
@@ -966,6 +968,19 @@
     },
     "logging_in": {
       "title": "Accesso in corso"
+    },
+    "transfer_confirm": {
+      "title": "Conferma scambio",
+      "room": {
+        "received": "<source></source> vuole scambiare stanza con te.",
+        "sent": "Hai chiesto <target></target> di scambiare stanze.",
+        "room_title": "Stanza di <user></user>:"
+      },
+      "order": {
+        "received": "<source></source> vuole cederti il suo ordine.",
+        "sent": "Hai chiesto di cedere il tuo ordine a <target></target>.",
+        "order_title": "Ordine di <user></user>:"
+      }
     }
   },
   "misc": {

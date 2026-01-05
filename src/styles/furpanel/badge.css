@@ -29,7 +29,7 @@ div.fursuit-actions {
     flex-direction: row;
 }
 
-div.fursuit-actions button span,
+div.fursuit-actions button span:not(.icon-container),
 div.fursuit-actions button div.spacer {
     display: none;
 }
@@ -41,21 +41,25 @@ div.fursuit {
     gap: 0.2em;
     background-color: var(--badge-fursuit-bg);
     border: 1px solid var(--badge-fursuit-border);
-    max-width: 10.25em;
-    
-    img.fursuit-image {
-        object-fit: cover;
-        width: 9em;
-        height: auto;
-        outline: 1px solid var(--badge-fursuit-border);
-    }
+    max-width: fit-content;
 
     div.main-data {
-        display: flex;
+        max-width: 100%;
+        min-width: 0px;
+        display: inline-flex;
         flex-direction: column;
+        align-items: stretch;
+
+        img.fursuit-image {
+            object-fit: cover;
+            width: 9em;
+            height: auto;
+            outline: 1px solid var(--badge-fursuit-border);
+        }
 
         div.details {
             justify-content: space-between;
+            max-width: 9em;
         }
     }
 

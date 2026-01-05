@@ -36,6 +36,7 @@ import ToolLink from "@/components/toolLink";
 import LoadingPanel from "@/components/loadingPanel";
 import { cssClass } from "@/lib/utils";
 import QuotaViewer from "./_components/quotaViewer";
+import { Board } from "@/lib/api/booking";
 
 export default function RoomPage() {
   const t = useTranslations();
@@ -343,7 +344,7 @@ export default function RoomPage() {
       {/* Your room */}
       <div className="actions-panel rounded-m vertical-list gap-2mm">
         <span className="title small horizontal-list gap-2mm flex-vertical-center flex-wrap">
-          <Icon icon={"BEDROOM_PARENT"}></Icon>
+          <Icon icon="BEDROOM_PARENT"/>
           {t("furpanel.room.your_room")}
           <div className="spacer"></div>
           {data?.currentRoomInfo?.userIsOwner &&
@@ -376,7 +377,7 @@ export default function RoomPage() {
         {data && !data.currentRoomInfo && <>
           <div className="room-invite actions-panel rounded-m">
             <span className="title small horizontal-list gap-2mm flex-vertical-center">
-              <Icon icon={"BEDROOM_PARENT"}></Icon>
+              <Icon icon="BEDROOM_PARENT"/>
               {data.canCreateRoom ? t("furpanel.room.can_create") : t("furpanel.room.no_room")}
             </span>
             <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap"
@@ -430,7 +431,7 @@ export default function RoomPage() {
         {data?.currentRoomInfo && <>
           <div className="room-invite vertical-list gap-4mm rounded-s">
             <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
-              <Icon icon={"BED"}></Icon>
+              <Icon icon="BED"/>
               <span className="limit-view">{data?.currentRoomInfo.roomName}</span>
               <div className="spacer" style={{ flexGrow: "300" }}></div>
               {
@@ -477,7 +478,7 @@ export default function RoomPage() {
                       else
                         promptCancelInvite(guest)
                     }}>
-                      <Icon className="medium" icon={"CLOSE"}></Icon>
+                      <Icon className="medium" icon="CLOSE"/>
                     </a>
                   </>}
               </div>)}
@@ -494,6 +495,9 @@ export default function RoomPage() {
               {data.currentRoomInfo.extraDays !== "NONE" && <StatusBox status={"normal"}>
                 {t("furpanel.booking.items.extra_days")}:&nbsp;
                 {t(`furpanel.booking.items.extra_days_${data.currentRoomInfo.extraDays}`)}
+              </StatusBox>}
+              {data.currentRoomInfo.board !== Board.NONE && <StatusBox status={"normal"}>
+                {t(`furpanel.booking.items.board_${data.currentRoomInfo.board}`)}
               </StatusBox>}
               <div className="spacer" style={{ flexGrow: "300" }}></div>
               <div className="horizontal-list flex-space-between gap-4mm" style={{ flexGrow: "1" }}>
@@ -539,7 +543,7 @@ export default function RoomPage() {
       {data?.invitations && data.invitations.length > 0 && <>
         <div className="actions-panel rounded-m vertical-list gap-2mm">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
-            <Icon icon={"MAIL"}></Icon>
+            <Icon icon="MAIL"/>
             {t("furpanel.room.invite.header", { amount: 1 })}
           </span>
           {

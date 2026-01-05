@@ -9,7 +9,7 @@ export default function LoadingPanel({ showText = true, className, children }: R
     const tcommon = useTranslations("common");
 
     return <div aria-busy="true" className={`horizontal-list gap-2mm flex-vertical-center ${className ?? ""}`}>
-        <Icon className="loading-animation" icon={"PROGRESS_ACTIVITY"}></Icon>
+        <Icon className="loading-animation" icon="PROGRESS_ACTIVITY"/>
         {children ?? <span className="">{showText && tcommon("loading")}</span>}
     </div>
 }

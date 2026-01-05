@@ -56,6 +56,7 @@
   --profile-picture-border-normal: #ffffff;
   --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
   --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
+  --profile-picture-border-ultra-sponsor: radial-gradient(#44D4D4 20%, #206aca 50%, #4FC1F2 80%);
   --profile-picture-shadow: #242C38;
 
   /* User dropdown */
@@ -153,7 +154,6 @@
   --badge-fursuit-border: #afafaf;
 
   /* Sponsor colors */
-  --sponsor-color: #8E24AA;
   --sponsor-text-color: #b235d4;
   --super-sponsor-color: #DB9703;
   --super-sponsor-text-color: #FAAA00;
@@ -313,10 +313,9 @@
     --badge-fursuit-border: #afafaf;
 
     /* Sponsor colors */
-    --sponsor-color: #8E24AA;
     --sponsor-text-color: #b235d4;
-    --super-sponsor-color: #DB9703;
     --super-sponsor-text-color: #FAAA00;
+    --ultra-sponsor-text-color: #4FC1F2;
   }
 }
 
@@ -330,6 +329,7 @@
 
 .highlight {
   color: var(--highlight);
+  white-space: nowrap;
 }
 
 .main-dialog {

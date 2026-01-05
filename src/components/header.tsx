@@ -51,25 +51,25 @@ export default function Header() {
             </div>
             <span>
                 <a href="#" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
-                    <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"}></Icon>
+                    <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"}/>
                 </a>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <Link href="/home" className="header-link medium">
-                    <Icon style={{ fontSize: "24px" }} icon={"HOME"}></Icon>
+                    <Icon style={{ fontSize: "24px" }} icon="HOME"/>
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
                 <Link href={`/nosecount`} className="header-link medium">
-                    <Icon style={{ fontSize: "24px" }} icon={"GROUPS"}></Icon>
+                    <Icon style={{ fontSize: "24px" }} icon="GROUPS"/>
                     <span className="title semibold">{t('header.nose_count')}</span>
                 </Link>
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName={"INFO"}></Icon>
+                    <Icon style={{fontSize: "24px"}} iconName="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>
                 </a> */}
                 <div className="spacer"></div>
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName={"BOOKMARK_STAR"}></Icon>
+                    <Icon style={{fontSize: "24px"}} iconName="BOOKMARK_STAR"/>
                     <span className="title semibold">{t('header.archive')}</span>
                 </a> */}
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>
