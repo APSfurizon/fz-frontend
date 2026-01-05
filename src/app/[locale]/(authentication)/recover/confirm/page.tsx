@@ -5,7 +5,7 @@ import FpInput from "@/components/input/fpInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";

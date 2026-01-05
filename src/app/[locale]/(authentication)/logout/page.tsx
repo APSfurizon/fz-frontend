@@ -2,28 +2,25 @@
 import Icon from "@/components/icon";
 import { useUser } from "@/components/context/userProvider";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Logging() {
+export default function Login() {
     const t = useTranslations("authentication");
     const router = useRouter();
-    const { setUpdateUser } = useUser();
-    const params = useSearchParams();
-
+    const { setUserDisplay } = useUser();
     useEffect(() => {
-        setUpdateUser(true);
-        router.replace(params.get("continue") ?? "/home");
-        router.refresh();
+        setUserDisplay(undefined);
+        router.replace("/login");
     }, [])
 
     return <>
         <div className="horizontal-list gap-4mm flex-center">
             <span className="title-pair">
-                <Icon icon="DESIGN_SERVICES" />
+                <Icon icon="DESIGN_SERVICES"/>
                 <span className="titular bold highlight">furpanel</span>
                 <span> - </span>
-                <span className="titular bold">{t('logging_in.title').toLowerCase()}</span>
+                <span className="titular bold">{t('logout.title').toLowerCase()}</span>
             </span>
         </div>
     </>;
