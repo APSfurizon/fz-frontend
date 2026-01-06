@@ -23,7 +23,8 @@
           "en-GB": "English"
         }
       },
-      "app-badge": "Scarica ora l'app ufficiale!"
+      "app_badge": "Scarica ora l'app ufficiale!",
+      "alt_app_badge": "Bottone per scaricare l'applicazione mobile"
     },
     "reload": "Ricarica",
     "loading": "Caricamento...",

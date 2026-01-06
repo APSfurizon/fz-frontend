@@ -6,9 +6,9 @@ import ModalError from "@/components/modalError";
 import FpTable from "@/components/table/fpTable";
 import { runRequest } from "@/lib/api/global";
 import {
-  DestroyAllSessionsAction, DestroySessionAction, DestroySessionData, GetAllSessionsAction, getUaFriendly,
-  UserSession
+  DestroyAllSessionsAction, DestroySessionAction, DestroySessionData, GetAllSessionsAction, UserSession
 } from "@/lib/api/user";
+import { uaFriendly } from "@/lib/userAgent";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { useFormatter, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -90,7 +90,7 @@ export default function UserSessions() {
       id: "created",
       header: t("furpanel.user.sessions.headers.created")
     }),
-    sessionColHelper.accessor(itm => getUaFriendly(itm.userAgent), {
+    sessionColHelper.accessor(itm => uaFriendly(itm.userAgent), {
       id: "userAgent",
       header: t("furpanel.user.sessions.headers.user_agent")
     }),

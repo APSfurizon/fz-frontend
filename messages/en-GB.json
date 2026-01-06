@@ -23,7 +23,8 @@
           "en-GB": "English"
         }
       },
-      "app-badge": "Download now the official app!"
+      "app_badge": "Download now the official app!",
+      "alt_app_badge": "Mobile application download button"
     },
     "reload": "Reload",
     "loading": "Loading...",

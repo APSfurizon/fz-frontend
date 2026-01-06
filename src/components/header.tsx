@@ -7,20 +7,33 @@ import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
 import { useEffect, useState } from 'react';
 import "@/styles/components/header.css";
-import { DEVICE_TYPE, getDeviceType } from '@/lib/utils';
 import { APP_LINKS, SHOW_APP_BANNER } from '@/lib/constants';
 import Link from 'next/link';
+import { isMobile, UA } from '@/lib/userAgent';
+import { OSName } from 'ua-parser-js/enums';
+
+enum DEVICE_TYPE {
+    APPLE = "apple",
+    ANDROID = "android",
+    GENERIC = "generic"
+}
+
+const type = isMobile()
+    ? UA.os.is(OSName.ANDROID)
+        ? DEVICE_TYPE.ANDROID
+        : UA.os.is(OSName.IOS)
+            ? DEVICE_TYPE.APPLE
+            : DEVICE_TYPE.GENERIC
+    : DEVICE_TYPE.GENERIC;
 
 export default function Header() {
     const t = useTranslations('common');
     const locale = useLocale();
     const { userDisplay, userLoading } = useUser();
-    const router = useRouter();
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [latestScroll, setLatestScroll] = useState<number>();
     const [newScroll, setNewScroll] = useState<number>();
-    const type = getDeviceType();
     const language = locale.split('-')[0];
     const deviceTypeLower = type.toString().toLowerCase();
     const appBadgeSrc = `/images/app-badge/${deviceTypeLower}/${deviceTypeLower}_${language}.png`;
@@ -79,10 +92,10 @@ export default function Header() {
                 {/* Phone app */}
                 {[DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
                     <p className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
-                        <span className="descriptive small color-subtitle">{t("header.app-badge")}</span>
+                        <span className="descriptive small color-subtitle">{t("header.app_badge")}</span>
                         <div className="spacer"></div>
                         <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""}>
-                            <Image className="app-badge" src={appBadgeSrc} width={120} height={40} alt=""></Image>
+                            <Image className="app-badge" src={appBadgeSrc} width={120} height={40} alt={t("header.alt_app_badge")}></Image>
                         </a>
                     </p>
                 </>}
