@@ -92,22 +92,6 @@ export function cssClass(data: Record<string, boolean>) {
     return Object.keys(data).map(key => data[key] == true ? key : "").join(" ");
 }
 
-export enum DEVICE_TYPE {
-    APPLE = "apple",
-    ANDROID = "android",
-    GENERIC = "generic"
-}
-
-export function getDeviceType(): DEVICE_TYPE {
-    const UA = navigator.userAgent;
-    if (/\b(Android)\b/i.test(UA))
-        return DEVICE_TYPE.ANDROID;
-    else if (/\b(iPad|iPod)\b/i.test(UA) || /\b(iPhone)\b/i.test(UA))
-        return DEVICE_TYPE.APPLE;
-    else
-        return DEVICE_TYPE.GENERIC;
-}
-
 export function areEquals(a: any, b: any): boolean {
     return JSON.stringify(a) === JSON.stringify(b);
 }
