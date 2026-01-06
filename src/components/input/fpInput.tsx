@@ -4,7 +4,7 @@ import {
 } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import "@/styles/components/fpInput.css";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { areEquals } from "@/lib/utils";
 import { useFormContext } from "./dataForm";
 import { UAParser } from "ua-parser-js";
@@ -116,14 +116,23 @@ export default function FpInput({
     const isPassword = inputType === "password";
     if (isPassword && visiblePassword) finalType = "text";
 
+    const requiresLocale = ["date", "datetime-local"].includes(inputType)
+    const locale = useLocale();
+
     const isDisabled = disabled || formDisabled;
     const isRequired = required && !isDisabled && !readOnly;
     const isBusy = busy || formLoading;
     const showViewPassword = useMemo(() => !!inputValue && String(inputValue).length > 0, [inputValue]);
 
+    const inputFieldName = `fpInput-${fieldName}`
+
     return <>
         <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
-            {label && <label className="title semibold small margin-bottom-1mm" style={{ ...labelStyle }}>{label}</label>}
+            {label && <label className="title semibold small margin-bottom-1mm"
+                style={{ ...labelStyle }}
+                htmlFor={inputFieldName}>
+                {label}
+            </label>}
             <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
                 onClick={() => inputRef.current?.focus()}>
                 {prefix && <span className="title small color-subtitle">
@@ -136,6 +145,7 @@ export default function FpInput({
                     readOnly={readOnly}
                     required={isRequired}
                     name={fieldName}
+                    id={inputFieldName}
                     className={`input-field title ${hasError ? "danger" : ""}`}
                     style={{ ...inputStyle }}
                     placeholder={placeholder ?? ""}
@@ -152,6 +162,7 @@ export default function FpInput({
                     autoComplete={autocomplete}
                     ref={inputRef}
                     onFocus={scrollToFocus}
+                    lang={requiresLocale ? locale : undefined}
                 />
                 <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
                     {(isBusy) && (

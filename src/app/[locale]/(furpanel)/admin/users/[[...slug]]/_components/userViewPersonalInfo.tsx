@@ -14,7 +14,7 @@ import {
 import { firstOrUndefined, stripProperties, today } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
-import { inputEntityCodeExtractor, MIN_BIRTHDAY_DATE } from "@/lib/components/input";
+import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
 
 export default function UserViewPersonalInfo({
     personalInformation,
@@ -96,7 +96,7 @@ export default function UserViewPersonalInfo({
                 <FpInput fieldName="birthday"
                     required
                     inputType="date"
-                    min={MIN_BIRTHDAY_DATE}
+                    min={MIN_DATE}
                     max={today()}
                     label={t("authentication.register.form.birthday.label")}
                     initialValue={personalInformation?.birthday} />
@@ -150,7 +150,8 @@ export default function UserViewPersonalInfo({
                 <FpInput fieldName="idExpiry"
                     required
                     inputType="date"
-                    min={MIN_BIRTHDAY_DATE}
+                    min={MIN_DATE}
+                    max={MAX_DATE}
                     label={t("authentication.register.form.id_expiry.label")}
                     placeholder={t("authentication.register.form.id_expiry.placeholder")}
                     initialValue={personalInformation?.idExpiry} />
