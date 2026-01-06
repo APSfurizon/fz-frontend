@@ -15,6 +15,8 @@ import { firstOrUndefined, stripProperties, today } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
 import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ModalError from "@/components/modalError";
 
 export default function UserViewPersonalInfo({
     personalInformation,
@@ -32,6 +34,7 @@ export default function UserViewPersonalInfo({
     const [residenceCountry, setResidenceCountry] = useState<string>();
     const [phonePrefix, setPhonePrefix] = useState<string>();
     const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
+    const { showModal } = useModalUpdate();
 
     // Handle admin changing personal user info
     const restPathParams = useMemo(() => {
@@ -49,6 +52,7 @@ export default function UserViewPersonalInfo({
             loading={personalInfoLoading}
             setLoading={setPersonalInfoLoading}
             onSuccess={() => { if (reloadData) reloadData() }}
+            onFail={(apiError) => showModal(t("common.error"), <ModalError error={apiError}/>, "ERROR")}
             formRef={formRef}
             initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
             restPathParams={restPathParams}>
