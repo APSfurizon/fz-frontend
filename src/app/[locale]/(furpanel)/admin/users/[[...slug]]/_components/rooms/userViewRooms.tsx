@@ -38,8 +38,8 @@ export default function UserViewRooms({
     const getDetails = (row: Row<RoomInfoResponse>) => <UserViewRoomDetails data={row.original} />
 
     const eventSort = (rowA: Row<RoomInfoResponse>, rowB: Row<RoomInfoResponse>): number => {
-        const eventA = new Date(events[rowA.original.currentRoomInfo.eventId].dateFrom);
-        const eventB = new Date(events[rowB.original.currentRoomInfo.eventId].dateFrom);
+        const eventA = new Date(events[rowA.original.currentRoomInfo.eventId].correctDateFrom);
+        const eventB = new Date(events[rowB.original.currentRoomInfo.eventId].correctDateFrom);
         if (eventA.getTime() == eventB.getTime()) return 0
         else return eventA.getTime() - eventB.getTime();
     }

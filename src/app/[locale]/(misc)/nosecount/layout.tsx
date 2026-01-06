@@ -18,7 +18,7 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
     const [selectedEvent, setSelectedEvent] = useState<ConventionEvent>();
     const router = useRouter();
     const items = useMemo(() => (events || [])
-        .toSorted((a, b) => new Date(a.dateFrom).getTime() - new Date(b.dateFrom).getTime()).toReversed()
+        .toSorted((a, b) => new Date(a.correctDateFrom).getTime() - new Date(b.correctDateFrom).getTime()).toReversed()
         .map((evt) => new SelectItem(undefined, evt.slug, undefined, undefined, undefined, undefined, evt.eventNames)),
         [events]);
 
@@ -59,7 +59,7 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
         if (!events) return;
         if (!selectedSlug) {
             const current = events.find(evt => !!evt.current)
-                ?? events.toSorted((evt1, evt2) => new Date(evt2.dateFrom).getTime() - new Date(evt1.dateFrom).getTime())[0];
+                ?? events.toSorted((evt1, evt2) => new Date(evt2.correctDateFrom).getTime() - new Date(evt1.correctDateFrom).getTime())[0];
             if (current) { selectEvent(current.slug); }
         } else {
             setSelectedEvent((events || []).find(evt => evt.slug == selectedSlug));

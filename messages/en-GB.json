@@ -57,7 +57,8 @@
       "save": "Save",
       "discard_changes": {
         "description": "Any unsaved change will be discarded"
-      }
+      },
+      "reset": "Reset"
     },
     "sponsorships": {
       "sponsor": "Sponsor",
