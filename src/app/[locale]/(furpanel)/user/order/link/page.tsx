@@ -6,7 +6,7 @@ import { runRequest } from "@/lib/api/global";
 import { UserOrderLinkingAction, UserOrderLinkingData } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 

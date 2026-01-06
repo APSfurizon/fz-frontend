@@ -1,6 +1,6 @@
 "use client"
 import { useLocale, useTranslations } from 'next-intl';
-import { Link, routing, useRouter, usePathname } from '@/i18n/routing';
+import { Link, routing, useRouter } from '@/i18n/routing';
 import { MouseEvent, useState } from 'react';
 import Icon from '@/components/icon';
 import UserPicture from '@/components/userPicture';
@@ -18,7 +18,6 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
     const t = useTranslations('common');
     const router = useRouter();
     const locale = useLocale();
-    const path = usePathname();
 
     const logout = () => {
         runRequest(new LogoutApiAction())

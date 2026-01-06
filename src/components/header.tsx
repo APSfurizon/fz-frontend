@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import Image from "next/image";
 import Icon from './icon';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
 import { useEffect, useState } from 'react';

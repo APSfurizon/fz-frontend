@@ -2,7 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  API_BASE_URL, REGEX_AUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
+  API_BASE_URL, REGEX_UNAUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
   TOKEN_STORAGE_NAME
 } from './lib/constants';
 
@@ -24,12 +24,10 @@ export async function proxy(req: NextRequest) {
 
   // Check Token
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
-  const loginTokenParam = params.get(TOKEN_STORAGE_NAME);
-  const getTokenPresent = loginTokenParam && loginTokenParam.length > 0;
-  const tokenPresent = (!!loginToken && !!loginToken.value) || !!getTokenPresent;
+  const tokenPresent = (!!loginToken && !!loginToken.value);
 
   // Check url regex
-  const needsAuthentication = REGEX_AUTHENTICATED_URLS.test(path);
+  const needsAuthentication = !REGEX_UNAUTHENTICATED_URLS.test(path);
   const shouldSkipIfAuthenticated = REGEX_SKIP_AUTHENTICATED.test(path);
   const isLogout = REGEX_LOGOUT.test(path);
 
@@ -40,17 +38,19 @@ export async function proxy(req: NextRequest) {
   const continueParams = new URLSearchParams({ "continue": `${path}?${strippedParams.toString()}` });
 
   const intlMiddlewareResult = await intlMiddleware(req);
-  // Goddamn next-intl putting the url rewrite even when strictly said not to
-  intlMiddlewareResult.headers.set('x-middleware-rewrite', req.nextUrl.toString());
-
+  
   if (isLogout) {
     return stripToken(intlMiddlewareResult);
   }
 
   const clientIp = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip");
 
+  if (!needsAuthentication) {
+    return intlMiddlewareResult;
+  }
+
   const tokenResult: TokenResult = tokenPresent
-    ? await verifyToken(clientIp, loginToken?.value ?? loginTokenParam!)
+    ? await verifyToken(clientIp, loginToken.value)
     : { status: TokenVerification.NOT_VALID };
 
   if (tokenResult.status == TokenVerification.SUCCESS) {
@@ -62,6 +62,8 @@ export async function proxy(req: NextRequest) {
     } else {
       return intlMiddlewareResult;
     }
+  } else if (tokenResult.status === TokenVerification.NETWORK_ERROR) {
+    return redirectToUrl("/home", req);
   } else {
     if (needsAuthentication) {
       return redirectToLogin(req, continueParams, tokenResult.status == TokenVerification.NOT_VALID);
@@ -116,5 +118,5 @@ const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchP
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png|.*\\.webp$).*)'],
+  matcher: ['/((?!api|_next|favicon.ico|robots.txt|images|.*\\.(?:woff2|png|webp|jpg|svg)$).*)'],
 }
