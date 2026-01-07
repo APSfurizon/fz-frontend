@@ -68,5 +68,6 @@ export const APP_LINKS: Record<string, string> = {
 export const BOOKING_ENABLED = (process.env.NEXT_PUBLIC_BOOKING_ENABLED ?? false) === "true";
 export const BADGE_ENABLED = (process.env.NEXT_PUBLIC_BADGE_ENABLED ?? false) === "true";
 export const ROOM_ENABLED = (process.env.NEXT_PUBLIC_ROOM_ENABLED ?? false) === "true";
+export const NOSECOUNT_ENABLED = (process.env.NEXT_PUBLIC_NOSECOUNT_ENABLED ?? false) === "true";
 export const UPLOAD_ENABLED = (process.env.NEXT_PUBLIC_UPLOAD_ENABLED ?? false) === "true";
 export const DEBUG_ENABLED = (process.env.NEXT_PUBLIC_DEBUG_ENABLED ?? false) === "true";
