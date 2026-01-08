@@ -927,7 +927,7 @@
           "label": "By checking this box, you declare you've read and accepted the privacy policy."
         },
         "sex": {
-          "label": "Sex on your ID",
+          "label": "ID sex",
           "placeholder": "Enter your sex",
           "helptext": "Enter your sex as shown on your ID"
         },

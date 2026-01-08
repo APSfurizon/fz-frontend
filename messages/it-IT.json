@@ -926,7 +926,7 @@
           "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
         },
         "sex": {
-          "label": "Sesso come da documento",
+          "label": "Sesso (Documento di identità)",
           "placeholder": "Inserisci il tuo sesso",
           "helptext": "Inserisci il tuo sesso come indicato sul tuo documento di identità"
         },
