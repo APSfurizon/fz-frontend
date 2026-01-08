@@ -10,7 +10,7 @@ import "@/styles/components/header.css";
 import { APP_LINKS, SHOW_APP_BANNER } from '@/lib/constants';
 import Link from 'next/link';
 import { isMobile, UA } from '@/lib/userAgent';
-import { OSName } from 'ua-parser-js/enums';
+import { OS } from 'ua-parser-js/enums';
 
 enum DEVICE_TYPE {
     APPLE = "apple",
@@ -19,9 +19,9 @@ enum DEVICE_TYPE {
 }
 
 const type = isMobile()
-    ? UA.os.is(OSName.ANDROID)
+    ? UA.os.is(OS.ANDROID)
         ? DEVICE_TYPE.ANDROID
-        : UA.os.is(OSName.IOS)
+        : UA.os.is(OS.IOS)
             ? DEVICE_TYPE.APPLE
             : DEVICE_TYPE.GENERIC
     : DEVICE_TYPE.GENERIC;

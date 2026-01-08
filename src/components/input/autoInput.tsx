@@ -355,8 +355,8 @@ export default function AutoInput({
                     }
                     {(isBusy || valueToSet.length < maxSelections) && <span className="icon-container">
                         {isBusy
-                            ? <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY"/>
-                            : <Icon className="medium" icon="SEARCH"/>
+                            ? <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY" />
+                            : <Icon className="medium" icon="SEARCH" />
                         }
                     </span>}
                 </div>
@@ -389,9 +389,9 @@ export default function AutoInput({
                     )
                 }
             </div>
+            {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
+                {helpText}
+            </span>}
         </div>
-        {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
-            {helpText}
-        </span>}
     </>
 }
