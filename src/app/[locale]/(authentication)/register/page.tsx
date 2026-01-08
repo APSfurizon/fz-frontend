@@ -138,7 +138,9 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="sex" required minDecodeSize={0}
           manager={new AutoInputSexManager}
-          label={t("register.form.sex.label")} placeholder={t("register.form.sex.placeholder")} />
+          label={t("register.form.sex.label")}
+          helpText={t("register.form.sex.helptext")}
+          placeholder={t("register.form.sex.placeholder")} />
         <AutoInput fieldName="gender" minDecodeSize={0}
           manager={new AutoInputGenderManager}
           label={t("register.form.gender.label")} placeholder={t("register.form.gender.placeholder")} />
