@@ -944,7 +944,7 @@
           "placeholder": "Seleziona un tipo documento"
         },
         "id_number": {
-          "label": "Codice documento",
+          "label": "Numero documento",
           "placeholder": "Inserisci il codice/numero documento"
         },
         "id_issuer": {
