@@ -9,7 +9,7 @@ export function translate(data: Record<string, string>, locale: string, fallback
     const key = locale.toLowerCase();
     const partial = key.replace("-", "_").split("_")[0];
     if (fallback) {
-        return data ? data[key] ?? data[partial] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0] : "";
+        return data?.[key] ?? data?.[partial] ?? data?.[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0] ?? "";
     } else {
         return data?.[key] ?? data?.[partial] ?? "";
     }
