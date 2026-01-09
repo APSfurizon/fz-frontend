@@ -3,6 +3,7 @@
     padding-right: 0.625em;
     background: var(--tool-link-bg-normal);
     border: 1px solid var(--tool-link-border-normal);
+    text-decoration: none;
 }
 
 .tool-link:hover {

@@ -1,7 +1,7 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { GROUP_CHAT_URL } from "@/lib/constants";
@@ -11,8 +11,7 @@ import {
     Board,
     BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
     ConfirmMembershipDataApiAction, mapOrderStatusToStatusBox, OrderEditLinkApiAction,
-    OrderRetryLinkApiAction,
-    qrCodeOptions
+    OrderRetryLinkApiAction
 } from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
 import { useQRCode } from 'next-qrcode';
@@ -28,6 +27,9 @@ import LoadingPanel from "@/components/loadingPanel";
 import "@/styles/furpanel/booking.css";
 import Countdown from "./countdown";
 import OrderItem from "./_components/orderItem";
+import Icon from "@/components/icon";
+import Link from "next/link";
+import QrCodeModal from "./_components/qrCodeModal";
 
 export default function BookingPage() {
     const t = useTranslations();
@@ -64,10 +66,6 @@ export default function BookingPage() {
                 {t("furpanel.booking.messages.transfer_invite_sent.description")}
             </span>, "CHECK_CIRCLE");
     }
-
-    // order QR logic
-    const [secretModalOpen, setSecretModalOpen] = useState(false);
-    const { Canvas } = useQRCode();
 
     useTitle(t("furpanel.booking.title"));
 
@@ -140,9 +138,15 @@ export default function BookingPage() {
 
     const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
 
+    const allDaysRange = bookingData?.order.noRoomTicketFromDate && bookingData?.order.noRoomTicketToDate
+            ? formatter.dateTimeRange(new Date (bookingData?.order.noRoomTicketFromDate), new Date (bookingData?.order.noRoomTicketToDate), {dateStyle: "medium"})
+            : undefined;
+
+    const geoLink = bookingData ? `geo:${bookingData.geoLatitude},${bookingData.geoLongitude}?q=Devero%20Hotel` : ""
+
     return <>
         <div className="page">
-            {isLoading || !!!pageData ? <LoadingPanel /> : <>
+            {isLoading || !pageData ? <LoadingPanel /> : <>
                 <Countdown data={pageData}></Countdown>
                 {pageData?.shouldUpdateInfo && <>
                     <NoticeBox title={t("furpanel.booking.messages.review_info.title")}
@@ -153,10 +157,15 @@ export default function BookingPage() {
                             <Button className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
-                                iconName={"CHECK"}>{t("furpanel.booking.actions.confirm_info")}</Button>
-                            <Button className="warning" busy={actionLoading} onClick={() => {
-                                router.push("/user");
-                            }} iconName={"OPEN_IN_NEW"}>{t("furpanel.booking.actions.review_info")}</Button>
+                                iconName="CHECK">
+                                {t("furpanel.booking.actions.confirm_info")}
+                            </Button>
+                            <Button className="warning"
+                                busy={actionLoading}
+                                onClick={() => router.push("/user")}
+                                iconName="OPEN_IN_NEW">
+                                {t("furpanel.booking.actions.review_info")}
+                            </Button>
                         </span>
 
                     </NoticeBox>
@@ -174,6 +183,42 @@ export default function BookingPage() {
                             </StatusBox>
                         </div>
                     </div>
+
+                    {/* Reservation info */}
+                    <div className="booking-information gap-4mm">
+                        {bookingData?.order.checkinDate && <p>
+                            <Icon className="x-large" icon="CONCIERGE" />
+                            <span>
+                                {t.rich("furpanel.booking.information.check_in_date", {
+                                    b: (chunks) => <b>{chunks}</b>,
+                                    checkinDate: formatter.dateTime (new Date (bookingData!.order.checkinDate), {dateStyle: "medium"})
+                                })}
+                            </span>
+                        </p>}
+                        {bookingData?.order.checkoutDate && <p>
+                            <Icon className="x-large" icon="TRIP" />
+                            <span>
+                                {t.rich("furpanel.booking.information.check_out_date", {
+                                    b: (chunks) => <b>{chunks}</b>,
+                                    checkoutDate: formatter.dateTime (new Date (bookingData!.order.checkoutDate), {dateStyle: "medium"})
+                                })}
+                            </span>
+                        </p>}
+                        <p>
+                            <Icon className="x-large" icon="LOCATION_ON" />
+                            <span>
+                                {t.rich("furpanel.booking.information.location", {
+                                    b: (chunks) => <b>{chunks}</b>,
+                                    a: (chunks) => <Link className="highlight hoverable" href={geoLink}>
+                                            {chunks}<Icon className="medium" icon="OPEN_IN_NEW" />
+                                        </Link>,
+                                    link: "Devero hotel"
+                                })}
+                            </span>
+                        </p>
+                    </div>
+                    
+                    {/* Order Items */}
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                             {/* Ticket item */}
@@ -186,7 +231,7 @@ export default function BookingPage() {
                                     })}
                                 description={pageData.isDaily
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })
-                                    : undefined} />
+                                    : allDaysRange} />
                             {/* Membership item */}
                             {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}
                                 title={t("furpanel.booking.items.membership_card")} />}
@@ -207,34 +252,26 @@ export default function BookingPage() {
 
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
-                            {pageData?.shouldRetry && <>
-                                <Button className="action-button"
-                                    iconName={"REPLAY"}
-                                    busy={actionLoading}
-                                    onClick={requestRetryPaymentLink}>
-                                    {t("furpanel.booking.retry_payment")}
-                                </Button>
-                            </>}
-                            {bookingData?.order?.checkinSecret &&
-                                <Button iconName={"QR_CODE"}
-                                    onClick={() => setSecretModalOpen(true)}
-                                    title={t("furpanel.booking.actions.show_qr")}>
-                                    {t("furpanel.booking.actions.show_qr")}
-                                </Button>
-                            }
+                            {pageData?.shouldRetry && <Button className="action-button"
+                                iconName="REPLAY"
+                                busy={actionLoading}
+                                onClick={requestRetryPaymentLink}>
+                                {t("furpanel.booking.retry_payment")}
+                            </Button>}
+                            {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret}/>}
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
                             <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
                                 style={{ flexGrow: "1" }}>
                                 <Button className="action-button"
                                     disabled={isEditLocked}
-                                    iconName={"OPEN_IN_NEW"}
+                                    iconName="OPEN_IN_NEW"
                                     busy={actionLoading}
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
                                 </Button>
                                 {bookingData?.exchangeSupported && <Button className="action-button danger"
                                     disabled={isEditLocked}
-                                    iconName={"SEND"}
+                                    iconName="SEND"
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.transfer_order")}
@@ -259,9 +296,9 @@ export default function BookingPage() {
                                     title={t("furpanel.booking.messages.invite_group.title")}>
                                     {t.rich("furpanel.booking.messages.invite_group.description",
                                         {
-                                            link: () => <a className="highlight" target="_blank" href={GROUP_CHAT_URL}>
+                                            link: () => <Link className="highlight" target="_blank" href={new URL(GROUP_CHAT_URL!)}>
                                                 {GROUP_CHAT_URL}
-                                            </a>
+                                            </Link>
                                         })}
                                 </NoticeBox>}
                         </div>
@@ -292,31 +329,11 @@ export default function BookingPage() {
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" iconName="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={"CHECK"} busy={modalLoading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" iconName="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
-        </Modal>
-        {/* QR Secret modal */}
-        <Modal open={secretModalOpen}
-            icon={"QR_CODE"}
-            title={t("furpanel.booking.reservation_qr")}
-            onClose={() => setSecretModalOpen(false)}>
-            <div className="horizontal-list" style={{ justifyContent: "center" }}>
-                <div className="rounded-l" style={{ overflow: "hidden" }}>
-                    <Canvas text={bookingData?.order?.checkinSecret ?? "a"}
-                        options={qrCodeOptions}
-                        logo={{
-                            src: '/images/favicon.png',
-                            options: {
-                                width: 30
-                            }
-                        }}
-                    />
-                </div>
-            </div>
-            <span className="descriptive small">{t("furpanel.booking.messages.reservation_qr")}</span>
         </Modal>
     </>;
 }

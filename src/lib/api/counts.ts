@@ -77,6 +77,8 @@ export interface ConventionEvent {
     id: number,
     correctDateTo: string,
     correctDateFrom: string,
+    geoLatitude: number,
+    geoLongitude: number,
     eventNames: TranslatableString,
     current: boolean,
     organizerAndEventPair: {

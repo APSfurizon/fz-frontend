@@ -221,7 +221,13 @@
         "transfer_order": "Trasferisci ordine"
       },
       "reservation_qr": "Codice QR per il check-in",
-      "event_logo": "Logo evento"
+      "event_logo": "Logo evento",
+      "information": {
+        "check_in_date": "<b>Data di checkin</b>: {checkinDate}",
+        "check_out_date": "<b>Data di checkout</b>: {checkoutDate}",
+        "title": "Informazioni",
+        "location": "<b>Luogo</b>: <a>{link}</a>"
+      }
     },
     "badge": {
       "title": "Badge",
@@ -396,8 +402,10 @@
         "confirm_room": "Conferma stanza",
         "unconfirm_room": "Revoca conferma stanza",
         "leave": "Lascia",
-        "show_in_nosecount": "Mostra nel nosecount",
-        "hide_in_nosecount": "Nascondi dal nosecount",
+        "show_in_nosecount": {
+          "shown": "Pubblicata nel nosecount",
+          "hidden": "Nascosta dal nosecount"
+        },
         "exchange_room": "Scambia stanza",
         "exchange": "Scambia"
       },
