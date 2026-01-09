@@ -57,7 +57,8 @@
       "save": "Salva",
       "discard_changes": {
         "description": "Le modifiche verranno scartate"
-      }
+      },
+      "reset": "Ripristina"
     },
     "sponsorships": {
       "sponsor": "Sponsor",

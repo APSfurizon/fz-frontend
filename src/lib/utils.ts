@@ -10,7 +10,6 @@ export const DAY_TS = 1000 * 60 * 60 * 24,
     MINUTE_TS = 1000 * 60,
     SECOND_TS = 1000;
 
-
 export function nullifyEmptyStrings(values?: (string | undefined)[]) {
     return values?.map(s => nullifyEmptyString(s));
 }
@@ -176,7 +175,10 @@ export function toEnum<T>(data: any, t: T) {
 }
 
 export function today() {
-    const date = new Date();
+    return dateToParam(new Date());
+}
+
+export function dateToParam(date: Date) {
     return `${date.getFullYear()}-` +
         `${String(date.getMonth() + 1).padStart(2, '0')}-` +
         `${String(date.getDate()).padStart(2, '0')}`;

@@ -19,7 +19,7 @@ import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult 
 import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAnswers } from "@/lib/api/user";
 import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
-import { inputEntityCodeExtractor, MIN_BIRTHDAY_DATE } from "@/lib/components/input";
+import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
 
 export default function Register() {
 
@@ -158,7 +158,7 @@ export default function Register() {
         <FpInput fieldName="birthday"
           required
           inputType="date"
-          min={MIN_BIRTHDAY_DATE}
+          min={MIN_DATE}
           max={today()}
           label={t("register.form.birthday.label")} />
         <AutoInput fieldName="birthCountry"
@@ -218,7 +218,8 @@ export default function Register() {
         <FpInput fieldName="idExpiry"
           required
           inputType="date"
-          min={MIN_BIRTHDAY_DATE}
+          min={MIN_DATE}
+          max={MAX_DATE}
           label={t("register.form.id_expiry.label")}
           placeholder={t("register.form.id_expiry.placeholder")} />
       </div>

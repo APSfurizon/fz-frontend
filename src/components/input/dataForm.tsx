@@ -3,7 +3,8 @@ import {
     useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
     createContext, useContext,
     MutableRefObject,
-    useImperativeHandle
+    useImperativeHandle,
+    RefObject
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
@@ -21,7 +22,7 @@ interface FormUpdate {
     formReset: boolean,
     setFormReset: (b: boolean) => void,
     formDisabled: boolean,
-    onFormChange: (fieldName?: string) => void,
+    onFormChange: (fieldName?: string, value?: any) => void,
     formLoading: boolean
 }
 
@@ -84,7 +85,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     className?: string,
     disabled?: boolean,
     endpoint?: string,
-    formRef?: MutableRefObject<HTMLFormElement | null>,
+    formRef?: RefObject<HTMLFormElement | null>,
     hideSave?: boolean,
     hideReset?: boolean,
     disableSave?: boolean,
@@ -150,16 +151,19 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         } catch (e) {
             console.error(e);
             if (setLoading) setLoading(false);
-            if (onFail) onFail(e ?? "unknown");
+            if (onFail) onFail(e ?? {errorMessage: "unknown"});
         }
 
         e.preventDefault();
         e.stopPropagation();
     }
 
-    const onFormChange = (fieldName?: string) => {
+    const onFormChange = (fieldName?: string, value?: any) => {
         if (!fieldName || !formRef?.current) return;
         const entity: InferRequest<T> = action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
+        if (value) {
+            entity[fieldName] = value;
+        }
         setCurrentEntity(entity);
     };
 
@@ -199,7 +203,8 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                         {saveButton.text}{isEntityChanged && !!initialEntity ? "*" : ""}
                     </Button>}
                     {!hideReset && <Button type="reset"
-                        iconName={saveButton.iconName}
+                        iconName="REPLAY"
+                        disabled={!isEntityChanged}
                         busy={loading}>
                         {t("common.CRUD.reset")}
                     </Button>}
