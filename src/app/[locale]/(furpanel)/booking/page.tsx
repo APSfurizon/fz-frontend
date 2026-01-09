@@ -1,7 +1,7 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { GROUP_CHAT_URL } from "@/lib/constants";
@@ -28,6 +28,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import "@/styles/furpanel/booking.css";
 import Countdown from "./countdown";
 import OrderItem from "./_components/orderItem";
+import Icon from "@/components/icon";
 
 export default function BookingPage() {
     const t = useTranslations();
@@ -140,6 +141,8 @@ export default function BookingPage() {
 
     const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
 
+    const geoLink = bookingData ? `geo:${bookingData.geoLatitude},${bookingData.geoLongitude}?q=Devero%20Hotel` : ""
+
     return <>
         <div className="page">
             {isLoading || !!!pageData ? <LoadingPanel /> : <>
@@ -174,6 +177,42 @@ export default function BookingPage() {
                             </StatusBox>
                         </div>
                     </div>
+
+                    {/* Reservation info */}
+                    <div className="horizontal-list booking-information gap-4mm">
+                        <p>
+                            <Icon className="x-large" icon="CONCIERGE" />
+                            <span>
+                                {t.rich("furpanel.booking.information.check_in_date", {
+                                    b: (chunks) => <b>{chunks}</b>,
+                                    checkinDate: formatter.dateTime (new Date (bookingData!.order.checkinDate), {dateStyle: "medium"})
+                                })}
+                            </span>
+                        </p>
+                        <p>
+                            <Icon className="x-large" icon="TRIP" />
+                            <span>
+                                {t.rich("furpanel.booking.information.check_out_date", {
+                                    b: (chunks) => <b>{chunks}</b>,
+                                    checkoutDate: formatter.dateTime (new Date (bookingData!.order.checkoutDate), {dateStyle: "medium"})
+                                })}
+                            </span>
+                        </p>
+                        <p>
+                            <Icon className="x-large" icon="LOCATION_ON" />
+                            <span>
+                                {t.rich("furpanel.booking.information.location", {
+                                    b: (chunks) => <b>{chunks}</b>,
+                                    a: (chunks) => <a className="highlight hoverable" href={geoLink}>
+                                            <Icon icon="OPEN_IN_NEW" />{chunks}
+                                        </a>,
+                                    link: "Devero hotel"
+                                })}
+                            </span>
+                        </p>
+                    </div>
+                    
+                    {/* Order Items */}
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                             {/* Ticket item */}

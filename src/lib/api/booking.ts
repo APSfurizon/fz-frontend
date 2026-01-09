@@ -30,16 +30,21 @@ export enum Board {
 
 export interface OrderData {
     code: string,
+    checkinSecret: string,
     orderStatus: OrderStatusType,
     sponsorship: SponsorshipType,
+    sponsorNames: Record<string, string>,
     extraDays: ExtraDaysType,
-    dailyTicket: boolean,
+    board: Board,
     dailyDays: string[],
-    room: RoomData,
     totalFursuits: number,
+    room: RoomData,
+    checkinDate: string,
+    checkoutDate: string,
+    noRoomTicketFromDate: string,
+    noRoomTicketToDate: string,
+    dailyTicket: boolean,
     orderEvent: ConventionEvent,
-    checkinSecret: string,
-    board: Board
 }
 
 export interface BookingOrderResponse extends ApiResponse {
@@ -47,6 +52,8 @@ export interface BookingOrderResponse extends ApiResponse {
     bookingStartTime: string,
     editBookEndTime: string,
     eventNames: Record<string, string>,
+    geoLatitude: number,
+    geoLongitude: number,
     hasActiveMembershipForEvent: boolean,
     shouldUpdateInfo: boolean,
     canExchange: boolean,

@@ -114,3 +114,12 @@ b.ultra-sponsor-highlight {
         box-shadow: 0px 0px 2em 0em var(--booking-book-effect-bg);
     }
 }
+
+div.booking-information {
+    span {
+        vertical-align: middle;
+    }
+    p i {
+        margin-right: 1mm;
+    }
+}

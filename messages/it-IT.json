@@ -220,7 +220,13 @@
         "transfer_order": "Trasferisci ordine"
       },
       "reservation_qr": "Codice QR per il check-in",
-      "event_logo": "Logo evento"
+      "event_logo": "Logo evento",
+      "information": {
+        "check_in_date": "<b>Data checkin</b>: {checkinDate}",
+        "check_out_date": "<b>Data checkout</b>: {checkoutDate}",
+        "title": "Informazioni",
+        "location": "<b>Luogo</b>: <a>{link}</a>"
+      }
     },
     "badge": {
       "title": "Badge",
