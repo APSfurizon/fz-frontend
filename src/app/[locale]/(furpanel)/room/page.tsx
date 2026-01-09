@@ -319,6 +319,10 @@ export default function RoomPage() {
       }).finally(() => setLoading(false));
   }, [data]);
 
+  const hideNosecountText = showInNosecount
+    ? t("furpanel.room.actions.show_in_nosecount.shown")
+    : t("furpanel.room.actions.show_in_nosecount.hidden");
+
   /********************/
   /** Page Rendering **/
   /********************/
@@ -348,12 +352,11 @@ export default function RoomPage() {
           {t("furpanel.room.your_room")}
           <div className="spacer"></div>
           {data?.currentRoomInfo?.userIsOwner &&
-            <Button iconName={!showInNosecount ? "VISIBILITY" : "VISIBILITY_OFF"}
-              title={!showInNosecount
-                ? t("furpanel.room.actions.show_in_nosecount")
-                : t("furpanel.room.actions.hide_in_nosecount")}
+            <Button iconName={showInNosecount ? "VISIBILITY" : "VISIBILITY_OFF"}
+              title={hideNosecountText}
               debounce={500} onClick={() => setVisibility(!showInNosecount)}
               disabled={!data?.allowedModifications}>
+                {hideNosecountText}
             </Button>}
           {data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
             <Button iconName={"SHOPPING_CART"} busy={actionLoading} onClick={() => setBuyModalOpen(true)}>

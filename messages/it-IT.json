@@ -401,8 +401,10 @@
         "confirm_room": "Conferma stanza",
         "unconfirm_room": "Revoca conferma stanza",
         "leave": "Lascia",
-        "show_in_nosecount": "Mostra nel nosecount",
-        "hide_in_nosecount": "Nascondi dal nosecount",
+        "show_in_nosecount": {
+          "shown": "Pubblicata nel nosecount",
+          "hidden": "Nascosta dal nosecount"
+        },
         "exchange_room": "Scambia stanza",
         "exchange": "Scambia"
       },

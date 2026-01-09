@@ -401,8 +401,10 @@
         "confirm_room": "Confirm room",
         "unconfirm_room": "Unconfirm room",
         "leave": "Leave",
-        "show_in_nosecount": "Show in nosecount",
-        "hide_in_nosecount": "Hide from nosecount",
+        "show_in_nosecount": {
+          "shown": "Shown in nosecount",
+          "hidden": "Hidden from nosecount"
+        },
         "exchange_room": "Exchange room",
         "exchange": "Exchange"
       },
