@@ -127,9 +127,9 @@ export default function FpInput({
     const inputFieldName = `fpInput-${fieldName}`
 
     return <>
-        <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
+        <div className={`fp-input ${className ?? ""}`} style={style}>
             {label && <label className="title semibold small margin-bottom-1mm"
-                style={{ ...labelStyle }}
+                style={labelStyle}
                 htmlFor={inputFieldName}>
                 {label}
             </label>}
