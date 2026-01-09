@@ -11,7 +11,7 @@ export function translate(data: Record<string, string>, locale: string, fallback
     if (fallback) {
         return data ? data[key] ?? data[partial] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0] : "";
     } else {
-        return data ? data[key] ?? data[partial] ?? "" : "";
+        return data?.[key] ?? data?.[partial] ?? "";
     }
     
 }
@@ -25,7 +25,7 @@ export function translateNullable(data?: Record<string, string>, locale?: string
                 ? data[key] ?? data[partial] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0]
                 : undefined;
         } else {
-            return data && key && partial ? data[key] ?? data[partial] ?? undefined : undefined;
+            return key && partial ? data?.[key] ?? data?.[partial] ?? undefined : undefined;
         }
 }
 

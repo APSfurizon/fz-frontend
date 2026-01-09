@@ -252,14 +252,12 @@ export default function BookingPage() {
 
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
-                            {pageData?.shouldRetry && <>
-                                <Button className="action-button"
-                                    iconName={"REPLAY"}
-                                    busy={actionLoading}
-                                    onClick={requestRetryPaymentLink}>
-                                    {t("furpanel.booking.retry_payment")}
-                                </Button>
-                            </>}
+                            {pageData?.shouldRetry && <Button className="action-button"
+                                iconName={"REPLAY"}
+                                busy={actionLoading}
+                                onClick={requestRetryPaymentLink}>
+                                {t("furpanel.booking.retry_payment")}
+                            </Button>}
                             {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret}/>}
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
                             <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
