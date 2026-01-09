@@ -93,13 +93,13 @@ export default function Header() {
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>
                 {/* Phone app */}
                 {[DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
-                    <p className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
+                    <div className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
                         <span className="descriptive small color-subtitle">{t("header.app_badge")}</span>
                         <div className="spacer"></div>
                         <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""}>
                             <Image className="app-badge" src={appBadgeSrc} width={120} height={40} alt={t("header.alt_app_badge")}></Image>
                         </a>
-                    </p>
+                    </div>
                 </>}
             </div>
         </header>

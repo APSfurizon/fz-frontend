@@ -166,7 +166,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                         {/* Room */}
                         {roomType.rooms.map((room, ri) => <div key={`ri-${hi}-${rti}-${ri}`}
                             className="room-container vertical-list gap-2mm flex-wrap">
-                            <p key={`rh${hi}-${rti}-${ri}`}
+                            <div key={`rh${hi}-${rti}-${ri}`}
                                 className="title large bold horizontal-list gap-2mm flex-vertical-center">
                                 <Icon icon="BED"/>
                                 {room.roomName}
@@ -178,7 +178,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                                         {t(`furpanel.booking.items.extra_days_${ExtraDays.LATE}`)}
                                     </StatusBox>}
                                 </div>}
-                            </p>
+                            </div>
                             <div key={`rgl-${hi}-${rti}-${ri}`}
                                 className="horizontal-list flex-wrap gap-4mm room-guests">
                                 {room.guests.map((guest, ui) => <>
