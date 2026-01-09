@@ -116,10 +116,27 @@ b.ultra-sponsor-highlight {
 }
 
 div.booking-information {
+    display: flex;
+    flex-direction: row;
+
     span {
         vertical-align: middle;
     }
     p i {
         margin-right: 1mm;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    div.booking-information {
+        flex-direction: column;
+        margin-left: 0.5em;
+
+        span {
+            vertical-align: middle;
+        }
+        p i {
+            margin-right: 1mm;
+        }
     }
 }

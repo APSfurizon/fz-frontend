@@ -9,6 +9,7 @@ header.header {
     top: 0px;
     z-index: 300;
     box-shadow: 0px 0px .5em .2em var(--header-shadow);
+    transition-property: top;
     transition-duration: 120ms;
 }
 
@@ -36,6 +37,14 @@ header {
     div.header-link-container {
         padding: 1em 1.3125em;
         gap: 2em;
+
+        a.header-link {
+            text-decoration: none;
+
+            i {
+                margin-bottom: 0.1em;
+            }
+        }
     }
     
     a.header-link span {

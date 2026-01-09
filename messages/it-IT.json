@@ -222,8 +222,8 @@
       "reservation_qr": "Codice QR per il check-in",
       "event_logo": "Logo evento",
       "information": {
-        "check_in_date": "<b>Data checkin</b>: {checkinDate}",
-        "check_out_date": "<b>Data checkout</b>: {checkoutDate}",
+        "check_in_date": "<b>Data di checkin</b>: {checkinDate}",
+        "check_out_date": "<b>Data di checkout</b>: {checkoutDate}",
         "title": "Informazioni",
         "location": "<b>Luogo</b>: <a>{link}</a>"
       }
