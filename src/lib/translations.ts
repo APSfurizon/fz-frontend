@@ -25,7 +25,7 @@ export function translateNullable(data?: Record<string, string>, locale?: string
                 ? data[key] ?? data[partial] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0]
                 : undefined;
         } else {
-            return key && partial ? data?.[key] ?? data?.[partial] ?? undefined : undefined;
+            return key && partial ? data?.[key] ?? data?.[partial] : undefined;
         }
 }
 

@@ -253,7 +253,7 @@ export default function BookingPage() {
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                             {pageData?.shouldRetry && <Button className="action-button"
-                                iconName={"REPLAY"}
+                                iconName="REPLAY"
                                 busy={actionLoading}
                                 onClick={requestRetryPaymentLink}>
                                 {t("furpanel.booking.retry_payment")}
@@ -264,14 +264,14 @@ export default function BookingPage() {
                                 style={{ flexGrow: "1" }}>
                                 <Button className="action-button"
                                     disabled={isEditLocked}
-                                    iconName={"OPEN_IN_NEW"}
+                                    iconName="OPEN_IN_NEW"
                                     busy={actionLoading}
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
                                 </Button>
                                 {bookingData?.exchangeSupported && <Button className="action-button danger"
                                     disabled={isEditLocked}
-                                    iconName={"SEND"}
+                                    iconName="SEND"
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.transfer_order")}
@@ -329,9 +329,9 @@ export default function BookingPage() {
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={"CANCEL"} busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" iconName="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={"CHECK"} busy={modalLoading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" iconName="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>
