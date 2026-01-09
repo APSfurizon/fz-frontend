@@ -875,7 +875,7 @@
           "placeholder": "Inserisci il tuo cognome"
         },
         "nickname": {
-          "help": "Il nome del tuo fursona principle. Non sarà usato per l'accesso",
+          "help": "Il nome del tuo fursona principale. Non sarà usato per l'accesso",
           "label": "Nickname",
           "placeholder": "Es: il nome del tuo fursona"
         },
@@ -927,8 +927,9 @@
           "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
         },
         "sex": {
-          "label": "Sesso",
-          "placeholder": "Inserisci il tuo sesso"
+          "label": "Sesso (Documento di identità)",
+          "placeholder": "Inserisci il tuo sesso",
+          "helptext": "Inserisci il tuo sesso come indicato sul tuo documento di identità"
         },
         "gender": {
           "label": "Genere",
@@ -944,7 +945,7 @@
           "placeholder": "Seleziona un tipo documento"
         },
         "id_number": {
-          "label": "Codice documento",
+          "label": "Numero documento",
           "placeholder": "Inserisci il codice/numero documento"
         },
         "id_issuer": {

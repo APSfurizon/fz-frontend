@@ -7,10 +7,10 @@ import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
 import { useEffect, useState } from 'react';
 import "@/styles/components/header.css";
-import { APP_LINKS, SHOW_APP_BANNER } from '@/lib/constants';
+import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import { isMobile, UA } from '@/lib/userAgent';
-import { OSName } from 'ua-parser-js/enums';
+import { OS } from 'ua-parser-js/enums';
 
 enum DEVICE_TYPE {
     APPLE = "apple",
@@ -19,9 +19,9 @@ enum DEVICE_TYPE {
 }
 
 const type = isMobile()
-    ? UA.os.is(OSName.ANDROID)
+    ? UA.os.is(OS.ANDROID)
         ? DEVICE_TYPE.ANDROID
-        : UA.os.is(OSName.IOS)
+        : UA.os.is(OS.IOS)
             ? DEVICE_TYPE.APPLE
             : DEVICE_TYPE.GENERIC
     : DEVICE_TYPE.GENERIC;
@@ -75,10 +75,12 @@ export default function Header() {
                     <Icon style={{ fontSize: "24px" }} icon="HOME" />
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                <Link href={`/nosecount`} className="header-link medium">
-                    <Icon style={{ fontSize: "24px" }} icon="GROUPS" />
-                    <span className="title semibold">{t('header.nose_count')}</span>
-                </Link>
+                { NOSECOUNT_ENABLED && <>
+                    <Link href={`/nosecount`} className="header-link medium">
+                        <Icon style={{ fontSize: "24px" }} icon="GROUPS" />
+                        <span className="title semibold">{t('header.nose_count')}</span>
+                    </Link>
+                </>}
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} iconName="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>

@@ -73,6 +73,7 @@ export default function UserViewPersonalInfo({
                     manager={new AutoInputSexManager}
                     label={t("authentication.register.form.sex.label")}
                     placeholder={t("authentication.register.form.sex.placeholder")}
+                    helpText={t("authentication.register.form.sex.helptext")}
                     initialData={personalInformation?.sex ? [personalInformation?.sex] : undefined} />
                 <AutoInput fieldName="gender" minDecodeSize={0}
                     manager={new AutoInputGenderManager}

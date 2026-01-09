@@ -928,8 +928,9 @@
           "label": "By checking this box, you declare you've read and accepted the privacy policy."
         },
         "sex": {
-          "label": "Sex",
-          "placeholder": "Enter your biological sex"
+          "label": "ID sex",
+          "placeholder": "Enter your sex",
+          "helptext": "Enter your sex as shown on your ID"
         },
         "gender": {
           "label": "Gender",
@@ -945,7 +946,7 @@
           "placeholder": "Select a document type"
         },
         "id_number": {
-          "label": "Document code",
+          "label": "Document number",
           "placeholder": "Enter the document number/code"
         },
         "id_issuer": {
