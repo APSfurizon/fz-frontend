@@ -7,10 +7,11 @@ export type TranslatableString = Record<string, string>;
 
 export function translate(data: Record<string, string>, locale: string, fallback: boolean = true): string {
     const key = locale.toLowerCase();
+    const partial = key.replace("-", "_").split("_")[0];
     if (fallback) {
-        return data ? data[key] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0] : "";
+        return data?.[key] ?? data?.[partial] ?? data?.[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0] ?? "";
     } else {
-        return data ? data[key] ?? "" : "";
+        return data?.[key] ?? data?.[partial] ?? "";
     }
     
 }
@@ -18,12 +19,13 @@ export function translate(data: Record<string, string>, locale: string, fallback
 export function translateNullable(data?: Record<string, string>, locale?: string,
     fallback: boolean = true): string | undefined {
         const key = locale?.toLowerCase();
+        const partial = key?.replace("-", "_").split("_")[0];
         if (fallback) {
-            return data && key
-                ? data[key] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0]
+            return data && key && partial
+                ? data[key] ?? data[partial] ?? data[DEFAULT_TRANSLATION_KEY] ?? Object.values(data)[0]
                 : undefined;
         } else {
-            return data && key ? data[key] ?? undefined : undefined;
+            return key && partial ? data?.[key] ?? data?.[partial] : undefined;
         }
 }
 

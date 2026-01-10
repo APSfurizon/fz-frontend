@@ -36,12 +36,11 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
 // eslint-disable-next-line max-len
-export const REGEX_AUTHENTICATED_URLS = /^(?:\/(?!(login|logging|logout|recover|register|nosecount|recover\/confirm|api\/og)).+)?$/mi;
-/**Urls that need to be skipped if user is authenticated */
-// eslint-disable-next-line max-len
-export const REGEX_SKIP_AUTHENTICATED = /^(?:\/(login|recover|register|recover\/confirm)(.+)?)?$/mi;
+export const REGEX_UNAUTHENTICATED_URLS = /^(?:\/?(login|logging|logout|recover|register|nosecount|fonts|images\/footer|api\/og)([\/?].*)?)$/mi;
+/**Urls that need to be skipped if user is authenticated */// eslint-disable-next-line max-len
+export const REGEX_SKIP_AUTHENTICATED = /^(?:\/?(login|recover|register)([\/?].*)?)$/mi;
 /**Logout url */
-export const REGEX_LOGOUT = /^(\/logout(.+)?)$/mi;
+export const REGEX_LOGOUT = /^(?:\/?logout([\/?].*)?)$/mi;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
@@ -69,5 +68,6 @@ export const APP_LINKS: Record<string, string> = {
 export const BOOKING_ENABLED = (process.env.NEXT_PUBLIC_BOOKING_ENABLED ?? false) === "true";
 export const BADGE_ENABLED = (process.env.NEXT_PUBLIC_BADGE_ENABLED ?? false) === "true";
 export const ROOM_ENABLED = (process.env.NEXT_PUBLIC_ROOM_ENABLED ?? false) === "true";
+export const NOSECOUNT_ENABLED = (process.env.NEXT_PUBLIC_NOSECOUNT_ENABLED ?? false) === "true";
 export const UPLOAD_ENABLED = (process.env.NEXT_PUBLIC_UPLOAD_ENABLED ?? false) === "true";
 export const DEBUG_ENABLED = (process.env.NEXT_PUBLIC_DEBUG_ENABLED ?? false) === "true";

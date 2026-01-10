@@ -403,11 +403,6 @@ export class AutoInputGenderManager implements AutoInputManager {
     isPresent(): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }
 
-export function getUaFriendly(userAgent: string) {
-    const ua = UAParser(userAgent);
-    return `${ua.browser} - ${ua.os}`
-}
-
 export interface UserSession {
     sessionId: string,
     userAgent: string,

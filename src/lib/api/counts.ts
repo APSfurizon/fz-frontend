@@ -75,8 +75,10 @@ export interface ConventionEvent {
     slug: string,
     publicUrl: string,
     id: number,
-    dateTo: string,
-    dateFrom: string,
+    correctDateTo: string,
+    correctDateFrom: string,
+    geoLatitude: number,
+    geoLongitude: number,
     eventNames: TranslatableString,
     current: boolean,
     organizerAndEventPair: {

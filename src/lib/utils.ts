@@ -10,7 +10,6 @@ export const DAY_TS = 1000 * 60 * 60 * 24,
     MINUTE_TS = 1000 * 60,
     SECOND_TS = 1000;
 
-
 export function nullifyEmptyStrings(values?: (string | undefined)[]) {
     return values?.map(s => nullifyEmptyString(s));
 }
@@ -90,22 +89,6 @@ export function getCookie(cookieName: string) {
 
 export function cssClass(data: Record<string, boolean>) {
     return Object.keys(data).map(key => data[key] == true ? key : "").join(" ");
-}
-
-export enum DEVICE_TYPE {
-    APPLE = "apple",
-    ANDROID = "android",
-    GENERIC = "generic"
-}
-
-export function getDeviceType(): DEVICE_TYPE {
-    const UA = navigator.userAgent;
-    if (/\b(Android)\b/i.test(UA))
-        return DEVICE_TYPE.ANDROID;
-    else if (/\b(iPad|iPod)\b/i.test(UA) || /\b(iPhone)\b/i.test(UA))
-        return DEVICE_TYPE.APPLE;
-    else
-        return DEVICE_TYPE.GENERIC;
 }
 
 export function areEquals(a: any, b: any): boolean {
@@ -192,7 +175,10 @@ export function toEnum<T>(data: any, t: T) {
 }
 
 export function today() {
-    const date = new Date();
+    return dateToParam(new Date());
+}
+
+export function dateToParam(date: Date) {
     return `${date.getFullYear()}-` +
         `${String(date.getMonth() + 1).padStart(2, '0')}-` +
         `${String(date.getDate()).padStart(2, '0')}`;

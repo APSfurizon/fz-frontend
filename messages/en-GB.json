@@ -23,7 +23,8 @@
           "en-GB": "English"
         }
       },
-      "app-badge": "Download now the official app!"
+      "app_badge": "Download now the official app!",
+      "alt_app_badge": "Mobile application download button"
     },
     "reload": "Reload",
     "loading": "Loading...",
@@ -56,7 +57,8 @@
       "save": "Save",
       "discard_changes": {
         "description": "Any unsaved change will be discarded"
-      }
+      },
+      "reset": "Reset"
     },
     "sponsorships": {
       "sponsor": "Sponsor",
@@ -219,7 +221,13 @@
         "transfer_order": "Transfer order"
       },
       "reservation_qr": "Check-in QR code",
-      "event_logo": "Event's logo"
+      "event_logo": "Event's logo",
+      "information": {
+        "title": "Information",
+        "check_in_date": "<b>Check in date</b>: {checkinDate}",
+        "check_out_date": "<b>Check out date</b>: {checkoutDate}",
+        "location": "<b>Location</b>: <a>{link}</a>"
+      }
     },
     "badge": {
       "title": "Badge",
@@ -394,8 +402,10 @@
         "confirm_room": "Confirm room",
         "unconfirm_room": "Unconfirm room",
         "leave": "Leave",
-        "show_in_nosecount": "Show in nosecount",
-        "hide_in_nosecount": "Hide from nosecount",
+        "show_in_nosecount": {
+          "shown": "Shown in nosecount",
+          "hidden": "Hidden from nosecount"
+        },
         "exchange_room": "Exchange room",
         "exchange": "Exchange"
       },
@@ -926,8 +936,9 @@
           "label": "By checking this box, you declare you've read and accepted the privacy policy."
         },
         "sex": {
-          "label": "Sex",
-          "placeholder": "Enter your biological sex"
+          "label": "ID sex",
+          "placeholder": "Enter your sex",
+          "helptext": "Enter your sex as shown on your ID"
         },
         "gender": {
           "label": "Gender",
@@ -943,7 +954,7 @@
           "placeholder": "Select a document type"
         },
         "id_number": {
-          "label": "Document code",
+          "label": "Document number",
           "placeholder": "Enter the document number/code"
         },
         "id_issuer": {

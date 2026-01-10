@@ -38,11 +38,11 @@ html>body>div.page-wrapper {
 
 a {
   color: inherit;
-  text-decoration: none;
 }
 
 a.hoverable {
   cursor: pointer;
+  vertical-align: middle;
 }
 
 a.hoverable:hover {
