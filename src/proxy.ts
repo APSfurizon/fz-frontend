@@ -89,12 +89,16 @@ async function verifyToken(clientIp: string | null, token: string): Promise<Toke
   } catch {
     return { status: TokenVerification.NETWORK_ERROR }
   }
-  const body = await fetchResult.json();
-  return fetchResult && fetchResult.ok
+  try {
+    const body = await fetchResult.json();
+    return fetchResult && fetchResult.ok
     ? {
       status: TokenVerification.SUCCESS,
       language: String(body["language"])?.replace("_", "-")
     } : { status: TokenVerification.NOT_VALID };
+  } catch {
+    return { status: TokenVerification.NETWORK_ERROR }
+  }
 }
 
 const stripToken = (res: NextResponse): NextResponse => {
@@ -118,5 +122,5 @@ const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchP
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|favicon.ico|robots.txt|images|.*\\.(?:woff2|png|webp|jpg|svg)$).*)'],
+  matcher: ['/((?!api|\.well-known|_next|favicon.ico|robots.txt|images|.*\\.(?:woff2|png|webp|jpg|svg)$).*)'],
 }

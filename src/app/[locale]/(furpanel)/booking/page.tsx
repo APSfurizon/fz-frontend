@@ -138,8 +138,8 @@ export default function BookingPage() {
 
     const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
 
-    const allDaysRange = bookingData?.order.noRoomTicketFromDate && bookingData?.order.noRoomTicketToDate
-            ? formatter.dateTimeRange(new Date (bookingData?.order.noRoomTicketFromDate), new Date (bookingData?.order.noRoomTicketToDate), {dateStyle: "medium"})
+    const allDaysRange = pageData?.hasOrder && bookingData?.order?.noRoomTicketFromDate && bookingData?.order?.noRoomTicketToDate
+            ? formatter.dateTimeRange(new Date (bookingData.order.noRoomTicketFromDate), new Date (bookingData.order.noRoomTicketToDate), {dateStyle: "medium"})
             : undefined;
 
     const geoLink = bookingData ? `geo:${bookingData.geoLatitude},${bookingData.geoLongitude}?q=Devero%20Hotel` : ""
