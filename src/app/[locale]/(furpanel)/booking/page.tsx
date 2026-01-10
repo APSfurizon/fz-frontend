@@ -14,7 +14,6 @@ import {
     OrderRetryLinkApiAction
 } from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
-import { useQRCode } from 'next-qrcode';
 import ModalError from "@/components/modalError";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
@@ -138,8 +137,8 @@ export default function BookingPage() {
 
     const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
 
-    const allDaysRange = bookingData?.order.noRoomTicketFromDate && bookingData?.order.noRoomTicketToDate
-            ? formatter.dateTimeRange(new Date (bookingData?.order.noRoomTicketFromDate), new Date (bookingData?.order.noRoomTicketToDate), {dateStyle: "medium"})
+    const allDaysRange = pageData?.hasOrder && bookingData?.order?.noRoomTicketFromDate && bookingData?.order?.noRoomTicketToDate
+            ? formatter.dateTimeRange(new Date (bookingData.order.noRoomTicketFromDate), new Date (bookingData.order.noRoomTicketToDate), {dateStyle: "medium"})
             : undefined;
 
     const geoLink = bookingData ? `geo:${bookingData.geoLatitude},${bookingData.geoLongitude}?q=Devero%20Hotel` : ""
