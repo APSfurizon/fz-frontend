@@ -14,7 +14,6 @@ import {
     OrderRetryLinkApiAction
 } from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
-import { useQRCode } from 'next-qrcode';
 import ModalError from "@/components/modalError";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
