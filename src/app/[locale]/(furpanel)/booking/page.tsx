@@ -7,6 +7,7 @@ import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { isMobile } from '@/lib/userAgent';
 import {
     Board,
     BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
@@ -138,10 +139,12 @@ export default function BookingPage() {
     const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
 
     const allDaysRange = pageData?.hasOrder && bookingData?.order?.noRoomTicketFromDate && bookingData?.order?.noRoomTicketToDate
-            ? formatter.dateTimeRange(new Date (bookingData.order.noRoomTicketFromDate), new Date (bookingData.order.noRoomTicketToDate), {dateStyle: "medium"})
-            : undefined;
+        ? formatter.dateTimeRange(new Date(bookingData.order.noRoomTicketFromDate), new Date(bookingData.order.noRoomTicketToDate), { dateStyle: "medium" })
+        : undefined;
 
-    const geoLink = bookingData ? `geo:${bookingData.geoLatitude},${bookingData.geoLongitude}?q=Devero%20Hotel` : ""
+    const desktopGeoLink = `https://www.google.com/maps/search/?api=1&query=${bookingData?.geoLatitude},${bookingData?.geoLongitude}`;
+    const mobileGeoLink = `geo:${bookingData?.geoLatitude},${bookingData?.geoLongitude}?q=Devero%20Hotel`;
+    const geoLink = bookingData ? (isMobile() ? mobileGeoLink : desktopGeoLink) : "";
 
     return <>
         <div className="page">
@@ -190,7 +193,7 @@ export default function BookingPage() {
                             <span>
                                 {t.rich("furpanel.booking.information.check_in_date", {
                                     b: (chunks) => <b>{chunks}</b>,
-                                    checkinDate: formatter.dateTime (new Date (bookingData!.order.checkinDate), {dateStyle: "medium"})
+                                    checkinDate: formatter.dateTime(new Date(bookingData!.order.checkinDate), { dateStyle: "medium" })
                                 })}
                             </span>
                         </p>}
@@ -199,7 +202,7 @@ export default function BookingPage() {
                             <span>
                                 {t.rich("furpanel.booking.information.check_out_date", {
                                     b: (chunks) => <b>{chunks}</b>,
-                                    checkoutDate: formatter.dateTime (new Date (bookingData!.order.checkoutDate), {dateStyle: "medium"})
+                                    checkoutDate: formatter.dateTime(new Date(bookingData!.order.checkoutDate), { dateStyle: "medium" })
                                 })}
                             </span>
                         </p>}
@@ -208,15 +211,15 @@ export default function BookingPage() {
                             <span>
                                 {t.rich("furpanel.booking.information.location", {
                                     b: (chunks) => <b>{chunks}</b>,
-                                    a: (chunks) => <Link className="highlight hoverable" href={geoLink}>
-                                            {chunks}<Icon className="medium" icon="OPEN_IN_NEW" />
-                                        </Link>,
+                                    a: (chunks) => <Link className="highlight hoverable" target={isMobile() ? "_self" : "_blank"} href={geoLink}>
+                                        {chunks}<Icon className="medium" icon="OPEN_IN_NEW" />
+                                    </Link>,
                                     link: "Devero hotel"
                                 })}
                             </span>
                         </p>
                     </div>
-                    
+
                     {/* Order Items */}
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
@@ -246,7 +249,7 @@ export default function BookingPage() {
                                     { capacity: bookingData!.order.room.roomCapacity })} />}
                             {/* Board */}
                             {!!bookingData!.order.board && bookingData!.order.board != Board.NONE && <OrderItem icon="DINING"
-                                title={t(`furpanel.booking.items.board_${bookingData!.order.board}`)}/>}
+                                title={t(`furpanel.booking.items.board_${bookingData!.order.board}`)} />}
                         </div>
 
                         {/* Order actions */}
@@ -257,7 +260,7 @@ export default function BookingPage() {
                                 onClick={requestRetryPaymentLink}>
                                 {t("furpanel.booking.retry_payment")}
                             </Button>}
-                            {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret}/>}
+                            {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret} />}
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
                             <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
                                 style={{ flexGrow: "1" }}>
