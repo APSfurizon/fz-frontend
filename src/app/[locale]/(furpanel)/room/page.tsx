@@ -458,7 +458,7 @@ export default function RoomPage() {
 
             </span>
             {/* Room guests */}
-            <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
+            <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly flex-wrap">
               {data?.currentRoomInfo.guests.map((guest, key) => <div key={key}
                 className={"guest-container vertical-list gap-2mm"
                   + cssClass({ "invited": !!!guest.roomGuest.confirmed })}>

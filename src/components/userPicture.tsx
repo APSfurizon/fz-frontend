@@ -81,14 +81,9 @@ export default function UserPicture ({
                     {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ''}
                 </span>
             )}
-            { extraDays != ExtraDays.NONE && <div className="vertical-list gap-2mm">
-                {[ExtraDays.EARLY, ExtraDays.BOTH].includes(extraDays) && <StatusBox>
-                    {t(`furpanel.booking.items.extra_days_${ExtraDays.EARLY}`)}
-                    </StatusBox>}
-                {[ExtraDays.LATE, ExtraDays.BOTH].includes(extraDays) && <StatusBox>
-                    {t(`furpanel.booking.items.extra_days_${ExtraDays.LATE}`)}
-                    </StatusBox>}
-            </div>}
+            { extraDays != ExtraDays.NONE && <StatusBox>
+                    {t(`furpanel.booking.items.extra_days_${extraDays}`)}
+            </StatusBox>}
         </div>
     )
 }
