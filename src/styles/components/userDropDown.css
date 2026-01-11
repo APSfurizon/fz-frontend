@@ -58,6 +58,12 @@ div.user-dropdown:has(.dropdown-container.open) .dropdown-button {
     border-bottom: 1px solid transparent;
 }
 
+span.nickname {
+    max-width: 11rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (max-width:800px) {
     div.user-dropdown {
         flex-direction: row-reverse;

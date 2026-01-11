@@ -170,14 +170,9 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                                 className="title large bold horizontal-list gap-2mm flex-vertical-center">
                                 <Icon icon="BED"/>
                                 {room.roomName}
-                                {room.roomExtraDays != ExtraDays.NONE && <div className="horizontal-list gap-2mm">
-                                    {[ExtraDays.EARLY, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
-                                        {t(`furpanel.booking.items.extra_days_${ExtraDays.EARLY}`)}
-                                    </StatusBox>}
-                                    {[ExtraDays.LATE, ExtraDays.BOTH].includes(room.roomExtraDays) && <StatusBox>
-                                        {t(`furpanel.booking.items.extra_days_${ExtraDays.LATE}`)}
-                                    </StatusBox>}
-                                </div>}
+                                {room.roomExtraDays && room.roomExtraDays != ExtraDays.NONE && <StatusBox>
+                                        {t(`furpanel.booking.items.extra_days_${room.roomExtraDays}`)}
+                                </StatusBox>}
                             </div>
                             <div key={`rgl-${hi}-${rti}-${ri}`}
                                 className="horizontal-list flex-wrap gap-4mm room-guests">

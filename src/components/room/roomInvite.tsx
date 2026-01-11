@@ -30,7 +30,7 @@ export default function RoomInvite({ style, className, busy, onAccept, onReject,
                     },)
                 }
             </span>
-            <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly">
+            <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly flex-wrap">
                 {inviteData.room.guests.filter(usr => usr.roomGuest.confirmed)
                     .map((usr, key) => <div key={key} className="guest-container vertical-list gap-2mm">
                         <UserPicture key={key} size={64} userData={usr.user} showNickname showFlag></UserPicture>
@@ -39,6 +39,10 @@ export default function RoomInvite({ style, className, busy, onAccept, onReject,
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
                 <StatusBox>{translate(inviteData.room.roomData.roomTypeNames, locale)}</StatusBox>
+                {inviteData.room.extraDays && inviteData.room.extraDays !== "NONE" && 
+                    <StatusBox>{t(`booking.items.extra_days_${inviteData.room.extraDays}`)}</StatusBox>}
+                    {inviteData.room.board && inviteData.room.board !== "NONE" && 
+                    <StatusBox>{t(`booking.items.board_${inviteData.room.board}`)}</StatusBox>}
                 <div className="spacer"></div>
                 <div className="horizontal-list gap-4mm">
                     <Button busy={busy} className="danger" iconName={"DO_NOT_DISTURB_ON"} onClick={() => onReject(inviteData)}>{t("room.actions.refuse")}</Button>

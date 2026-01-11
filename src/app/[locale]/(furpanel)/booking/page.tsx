@@ -145,6 +145,7 @@ export default function BookingPage() {
     const desktopGeoLink = `https://www.google.com/maps/search/?api=1&query=${bookingData?.geoLatitude},${bookingData?.geoLongitude}`;
     const mobileGeoLink = `geo:${bookingData?.geoLatitude},${bookingData?.geoLongitude}?q=Devero%20Hotel`;
     const geoLink = bookingData ? (isMobile() ? mobileGeoLink : desktopGeoLink) : "";
+    const showGeoData = bookingData?.geoLatitude && bookingData?.geoLongitude;
 
     return <>
         <div className="page">
@@ -187,7 +188,7 @@ export default function BookingPage() {
                     </div>
 
                     {/* Reservation info */}
-                    <div className="booking-information gap-4mm">
+                    <div className="booking-information flex-wrap gap-4mm">
                         {bookingData?.order.checkinDate && <p>
                             <Icon className="x-large" icon="CONCIERGE" />
                             <span>
@@ -206,7 +207,7 @@ export default function BookingPage() {
                                 })}
                             </span>
                         </p>}
-                        <p>
+                        {showGeoData && <p>
                             <Icon className="x-large" icon="LOCATION_ON" />
                             <span>
                                 {t.rich("furpanel.booking.information.location", {
@@ -217,7 +218,7 @@ export default function BookingPage() {
                                     link: "Devero hotel"
                                 })}
                             </span>
-                        </p>
+                        </p>}
                     </div>
 
                     {/* Order Items */}

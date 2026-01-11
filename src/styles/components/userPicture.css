@@ -68,8 +68,12 @@
 }
 
 .user-picture-container .nickname {
-    padding: 0.4em 0em;
-    text-wrap-mode: auto;
-    word-break: break-all;
-    word-wrap: break-word;
+    padding-top: 0.4em;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
 }
