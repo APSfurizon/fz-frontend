@@ -1,7 +1,6 @@
 @import url('../colors.css');
 
 div.user-dropdown {
-    position: relative;
     display: block;
     user-select: none;
 }
@@ -11,15 +10,14 @@ div.user-dropdown .dropdown-button {
     padding: 0.1875em;
     border-radius: 2mm;
     background-color: transparent;
+    anchor-name: --dropdown-anchor;
 }
 
 div.user-dropdown .dropdown-container {
-    width: 100%;
-    position: absolute;
+    position: fixed;
+    position-anchor: --dropdown-anchor;
     display: none;
     gap: .2em;
-    top: auto;
-    right: 0mm;
     border: 1px solid var(--tool-link-border-normal);
     border-top: none;
     border-radius: 0mm 0mm 2mm 2mm;
