@@ -12,7 +12,7 @@ export default function NotFound() {
                         width={256}
                         height={60} />
                     <div className="horizontal-list flex-vertical-center gap-2mm">
-                        <Icon className="xx-large" icon={"FIND_IN_PAGE"} />
+                        <Icon className="xx-large" icon="FIND_IN_PAGE" />
                         <p>
                             <span className="title bold medium">
                                 Not found

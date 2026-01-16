@@ -559,7 +559,7 @@ export default function RoomPage() {
 
     {/* Rename modal */}
     <Modal title={t("furpanel.room.actions.rename")}
-      icon={"EDIT_SQUARE"} open={renameModalOpen}
+      icon="EDIT_SQUARE" open={renameModalOpen}
       onClose={() => setRenameModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomRenameFormAction}
@@ -600,7 +600,7 @@ export default function RoomPage() {
 
     {/* Invite modal */}
     <Modal title={t("furpanel.room.actions.invite")}
-      icon={"PERSON_ADD"}
+      icon="PERSON_ADD"
       open={inviteModalOpen}
       onClose={() => setInviteModalOpen(false)}
       busy={modalLoading}>
@@ -723,7 +723,7 @@ export default function RoomPage() {
 
     {/* Delete modal */}
     <Modal title={t("furpanel.room.messages.confirm_delete.title")}
-      icon={"DELETE"}
+      icon="DELETE"
       open={deleteModalOpen}
       onClose={() => setDeleteModalOpen(false)}
       busy={modalLoading}>
@@ -832,7 +832,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room buy modal */}
-    <Modal icon={"BEDROOM_PARENT"}
+    <Modal icon="BEDROOM_PARENT"
       open={buyModalOpen}
       title={data?.currentRoomInfo ? t("furpanel.room.actions.upgrade_room") : t("furpanel.room.actions.buy_a_room")}
       onClose={() => setBuyModalOpen(false)} busy={modalLoading}>
@@ -843,7 +843,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room exchange modal */}
-    <Modal icon={"SEND"}
+    <Modal icon="SEND"
       open={exchangeModalOpen}
       title={t("furpanel.room.actions.exchange_room")}
       onClose={() => setExchangeModalOpen(false)}
@@ -888,7 +888,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room confirm modal */}
-    <Modal icon={"CHECK_CIRCLE"}
+    <Modal icon="CHECK_CIRCLE"
       open={confirmModalOpen}
       title={t("furpanel.room.actions.confirm_room")}
       onClose={() => setConfirmModalOpen(false)}
@@ -918,7 +918,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room unconfirm modal */}
-    <Modal icon={"CHECK_CIRCLE"}
+    <Modal icon="CHECK_CIRCLE"
       open={unconfirmModalOpen}
       title={t("furpanel.room.actions.confirm_room")}
       onClose={() => setUnconfirmModalOpen(false)}
@@ -948,7 +948,7 @@ export default function RoomPage() {
     </Modal>
 
     {/* Room quota modal */}
-    <Modal icon={"CONFIRMATION_NUMBER"}
+    <Modal icon="CONFIRMATION_NUMBER"
       open={quotaModalOpen}
       title={t("furpanel.room.quota_viewer.available_types")}
       onClose={() => setQuotaModalOpen(false)} busy={modalLoading}>

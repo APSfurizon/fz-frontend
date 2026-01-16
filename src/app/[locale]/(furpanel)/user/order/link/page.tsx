@@ -34,7 +34,7 @@ export default function OrderLinkPage() {
             .finally(() => setLoading(false));
     }, [])
 
-    return <Modal open={true} busy={loading} onClose={() => { router.replace("/home") }} title={t("furpanel.user.linking.title")} icon={"LOCAL_ACTIVITY"}>
+    return <Modal open={true} busy={loading} onClose={() => { router.replace("/home") }} title={t("furpanel.user.linking.title")} icon="LOCAL_ACTIVITY">
         {loading && <LoadingPanel>{t("furpanel.user.linking.description")}</LoadingPanel>}
     </Modal>
 }

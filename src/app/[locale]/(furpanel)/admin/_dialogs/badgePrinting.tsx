@@ -61,7 +61,7 @@ export default function BadgePrintingDialog({
             )).finally(() => setLoading(false))
     }
 
-    return <Modal icon={"BADGE"} title={t("furpanel.admin.events.badges.print_badges")} open={open} onClose={closeModal}>
+    return <Modal icon="BADGE" title={t("furpanel.admin.events.badges.print_badges")} open={open} onClose={closeModal}>
         {step == StepType.CHOOSE_PRINT_MODE && <>
             <span className="title">{t("furpanel.admin.events.badges.print.select_mode")}</span>
             <div className="horizontal-list gap-4mm">

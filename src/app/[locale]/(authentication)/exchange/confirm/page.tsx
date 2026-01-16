@@ -33,7 +33,7 @@ export default function ExchangeConfirm() {
   const renderRoom = (userData: UserData, data: RoomData) => {
     return <>
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-        <Icon className="large" icon={"PACKAGE_2"}></Icon>
+        <Icon className="large" icon="PACKAGE_2"></Icon>
         {t.rich("authentication.transfer_confirm.room.room_title", {
           user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
         })}

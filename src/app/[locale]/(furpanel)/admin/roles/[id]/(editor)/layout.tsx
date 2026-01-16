@@ -18,7 +18,7 @@ export default function RoleEditorLayout({ children }: Readonly<{ children: Reac
 
     return <>
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon={"ARROW_BACK"} /></Link>
+            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">
                     {entity?.displayName ?? entity?.internalName ?? ""}

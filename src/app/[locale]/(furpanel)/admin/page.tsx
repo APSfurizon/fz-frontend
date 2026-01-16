@@ -150,7 +150,7 @@ export default function AdminPage() {
     <div className="page">
       {loading && <LoadingPanel />}
       {/* System area */}
-      <FpMacroSection title={t("furpanel.admin.system.title")} icon={"CONFIRMATION_NUMBER"}>
+      <FpMacroSection title={t("furpanel.admin.system.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.system.server.title")}>
           <Button iconName={"VITAL_SIGNS"} onClick={ping} debounce={5000}
             busy={pingLoading} disabled={!capabilities.canRefreshPretixCache}>
@@ -159,7 +159,7 @@ export default function AdminPage() {
         </FpSection>
       </FpMacroSection>
       {/* Pretix area */}
-      <FpMacroSection title={t("furpanel.admin.pretix.title")} icon={"CONFIRMATION_NUMBER"}>
+      <FpMacroSection title={t("furpanel.admin.pretix.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.pretix.data.title")}>
           <Button iconName={"EVENT_REPEAT"} onClick={reloadEvent} debounce={5000}
             busy={reloadEventLoading} disabled={!capabilities.canRefreshPretixCache}>
@@ -172,7 +172,7 @@ export default function AdminPage() {
         </FpSection>
       </FpMacroSection>
       {/* Event area */}
-      <FpMacroSection title={t("furpanel.admin.events.title")} icon={"LOCAL_ACTIVITY"}>
+      <FpMacroSection title={t("furpanel.admin.events.title")} icon="LOCAL_ACTIVITY">
         <FpSection title={t("furpanel.admin.events.badges.title")}>
           <Button iconName={"PRINT"} onClick={() => setRenderBadgesModalOpen(true)}
             busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
@@ -205,7 +205,7 @@ export default function AdminPage() {
         </FpSection>
       </FpMacroSection>
       {/** Users area */}
-      <FpMacroSection title={t("furpanel.admin.users.title")} icon={"PERSON"}>
+      <FpMacroSection title={t("furpanel.admin.users.title")} icon="PERSON">
         <FpSection title={t("furpanel.admin.users.accounts.title")}>
           <Button iconName={"PERSON_SEARCH"} onClick={() => router.push("/admin/users/")}
             disabled={!capabilities.canManageMembershipCards}>

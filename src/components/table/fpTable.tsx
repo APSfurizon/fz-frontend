@@ -216,7 +216,7 @@ export default function FpTable<T>({
             {enableSearch && <FpInput className="table-search"
                 placeholder={t("table.filter.placeholder")}
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
-                icon={"FILTER_LIST"} />}
+                icon="FILTER_LIST" />}
             {showAddButton && <Button iconName={"ADD"} onClick={onAdd} title={t("table.add.title")} />}
             {showDeleteButton && <Button iconName={"DELETE"} onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
@@ -241,7 +241,7 @@ export default function FpTable<T>({
                                         desc: "ARROW_DROP_DOWN",
                                     }[header.column.getIsSorted() as string]! as MaterialIcon} />}
                                     {header.column.getIsPinned() && <a onClick={() => header.column.pin(false)}>
-                                        <Icon className="small" icon={"KEEP"} /></a>}
+                                        <Icon className="small" icon="KEEP" /></a>}
                                 </div>
                                 <div className="spacer"></div>
                                 {(header.column.columnDef.enableResizing ?? true) &&
@@ -249,7 +249,7 @@ export default function FpTable<T>({
                                         onDoubleClick={() => header.column.resetSize()}
                                         onMouseDown={header.getResizeHandler()}
                                         onTouchStart={header.getResizeHandler()}>
-                                        <Icon icon={"DRAG_HANDLE"} />
+                                        <Icon icon="DRAG_HANDLE" />
                                     </div>
                                 }
                             </div>

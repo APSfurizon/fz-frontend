@@ -143,13 +143,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
             cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
                 {props.row.original.duplicate && <>
-                    <Icon icon={"FILE_COPY"} />
+                    <Icon icon="FILE_COPY" />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}
                     </span>
                 </>}
                 {!props.row.original.membershipCard && <>
-                    <Icon icon={"QUESTION_MARK"} />
+                    <Icon icon="QUESTION_MARK" />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_MISSING")}
                     </span>
@@ -211,7 +211,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     return <>
         <div className="page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon={"ARROW_BACK"} /></a>
+                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}</span>
                     <select className="title average" value={selectedYear ?? ""} onChange={(e) => router.push(e.target.value)}>
@@ -241,7 +241,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                     enablePagination pageSize={20} pinnedColumns={{ left: [], right: ['registered'] }} tableElementRef={tableRef} />}
         </div>
         {/* Add card */}
-        <Modal icon={"ADD"} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)}
+        <Modal icon="ADD" title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)}
             onClose={() => setAddModalOpen(false)} busy={loading}>
             <DataForm action={new AddCardFormAction} loading={loading} setLoading={setLoading} hideSave className="vertical-list gap-2mm" onSuccess={addCardSuccess} onFail={addCardFail}>
                 <AutoInput fieldName="userId" manager={new AutoInputUserAddCardManager} label={t("furpanel.admin.membership_manager.input.user.label")}

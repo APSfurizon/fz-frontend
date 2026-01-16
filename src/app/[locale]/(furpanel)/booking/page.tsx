@@ -225,7 +225,7 @@ export default function BookingPage() {
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                             {/* Ticket item */}
-                            <OrderItem icon={"LOCAL_ACTIVITY"}
+                            <OrderItem icon="LOCAL_ACTIVITY"
                                 title={
                                     t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                         sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
@@ -236,10 +236,10 @@ export default function BookingPage() {
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })
                                     : allDaysRange} />
                             {/* Membership item */}
-                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}
+                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon="ID_CARD"
                                 title={t("furpanel.booking.items.membership_card")} />}
                             {/* Extra days */}
-                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon={"CALENDAR_ADD_ON"}
+                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon="CALENDAR_ADD_ON"
                                 title={t("furpanel.booking.items.extra_days")}
                                 description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)} />}
                             {/* Room */}
@@ -295,7 +295,7 @@ export default function BookingPage() {
 
                             {GROUP_CHAT_URL &&
                                 <NoticeBox theme={NoticeTheme.FAQ}
-                                    customIcon={"GROUPS"}
+                                    customicon="GROUPS"
                                     title={t("furpanel.booking.messages.invite_group.title")}>
                                     {t.rich("furpanel.booking.messages.invite_group.description",
                                         {
@@ -324,7 +324,7 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Order exchange modal */}
-        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+        <Modal icon="SEND" open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
             <span className="descriptive small">{t("furpanel.booking.messages.transfer_explanation")}</span>
             <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>

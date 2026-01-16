@@ -42,7 +42,7 @@ export default function RemoveGuestModal({
     return <Modal open={open}
         onClose={onClose}
         title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
-        icon={"PERSON_REMOVE"}
+        icon="PERSON_REMOVE"
         busy={loading}>
         <DataForm action={new RoomKickFormAction}
             resetOnSuccess

@@ -29,7 +29,7 @@ export default function AddGuestModal({
     return <Modal open={open}
         onClose={onClose}
         title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
-        icon={"PERSON_ADD"}
+        icon="PERSON_ADD"
         busy={loading}>
         <DataForm action={new RoomInviteFormAction}
             resetOnSuccess

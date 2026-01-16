@@ -279,7 +279,7 @@ export default function AutoInput({
                     {element?.getDescription(locale)}
                 </span>
             </div>
-            <Icon className="medium" icon={"ADD_CIRCLE"} />
+            <Icon className="medium" icon="ADD_CIRCLE" />
         </div>;
     }
 
@@ -304,7 +304,7 @@ export default function AutoInput({
                 {element?.getDescription(locale)}
             </span>
             {!readOnly && <span onClick={() => removeItem(element)}>
-                <Icon className="medium delete-selection" icon={"CANCEL"} />
+                <Icon className="medium delete-selection" icon="CANCEL" />
             </span>}
         </a>;
     }
