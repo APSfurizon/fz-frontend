@@ -21,7 +21,7 @@ export default function RoomInvite({ style, className, busy, onAccept, onReject,
     return <>
         <div className="room-invite vertical-list gap-4mm rounded-s">
             <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
-                <UserPicture size={24} userData={inviteData.room.roomOwner} hideEffect={true}></UserPicture>
+                <UserPicture size={24} userData={inviteData.room.roomOwner} hideEffect></UserPicture>
                 {t.rich("room.invite.title",
                     {
                         nickname: inviteData.room.roomOwner.fursonaName ?? "",

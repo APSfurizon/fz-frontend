@@ -135,7 +135,7 @@ export default function UserViewBadge({
                     initialValue={changeDataModalOpen ? userData.badgeData.mainBadge?.fursonaName : ""}
                     label={t("furpanel.badge.input.new_name.label")}
                     placeholder={t("furpanel.badge.input.new_name.placeholder")} />
-                <AutoInput fieldName="locale" required={true} minDecodeSize={2}
+                <AutoInput fieldName="locale" required minDecodeSize={2}
                     manager={new AutoInputCountriesManager}
                     label={t("furpanel.badge.input.new_locale.label")}
                     placeholder={t("furpanel.badge.input.new_locale.placeholder")}

@@ -619,7 +619,7 @@ export default function RoomPage() {
             value={data?.currentRoomInfo?.roomId ?? ""} />
           <AutoInput fieldName="invitedUsers"
             manager={new AutoInputRoomInviteManager()}
-            multiple={true}
+            multiple
             disabled={modalLoading}
             max={(data.currentRoomInfo.roomData.roomCapacity - data.currentRoomInfo.guests.length)}
             label={t("furpanel.room.input.invite.label")}

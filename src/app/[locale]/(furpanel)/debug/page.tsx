@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <div className="page">
       <div className="container">
-        <Upload busy={false} label="Profile picture" requireCrop={true} cropAspectRatio="square"></Upload>
+        <Upload busy={false} label="Profile picture" requireCrop cropAspectRatio="square"></Upload>
       </div>
       <Button className="danger" onClick={() => setBusy(false)} iconName={"ADD_CIRCLE"}>Busy off</Button>
       <Button busy={isBusy} onClick={() => { setBusy(true); }} iconName={"EDIT"}>Busy on</Button>
@@ -55,7 +55,7 @@ export default function Home() {
         </div>
       </div>
       <div className="horizontal-list gap-2mm">
-        {/* <AutoInput manager={new AutoInputDebugUserManager()} multiple={true} max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/> */}
+        {/* <AutoInput manager={new AutoInputDebugUserManager()} multiple max={5} label={"Invite in room"} placeholder="Search user by name" style={{maxWidth: "500px"}}/> */}
         <FpInput label={"Error"} hasError />
       </div>
       <StatusBox>Triple room</StatusBox>
