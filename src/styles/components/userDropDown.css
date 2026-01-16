@@ -16,6 +16,9 @@ div.user-dropdown .dropdown-button {
 div.user-dropdown .dropdown-container {
     position: fixed;
     position-anchor: --dropdown-anchor;
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
     display: none;
     gap: .2em;
     border: 1px solid var(--tool-link-border-normal);

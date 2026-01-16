@@ -1,13 +1,12 @@
 "use client"
 import { useLocale, useTranslations } from 'next-intl';
 import { Link, routing, useRouter } from '@/i18n/routing';
-import { MouseEvent, ToggleEvent, useId, useState } from 'react';
+import { ToggleEvent, useId, useState } from 'react';
 import Icon from '@/components/icon';
 import UserPicture from '@/components/userPicture';
 import { runRequest } from '@/lib/api/global';
 import { LogoutApiAction } from '@/lib/api/authentication/login';
 import { changeLanguage, UserData } from '@/lib/api/user';
-import Button from '@/components/input/button';
 import LoadingPanel from './loadingPanel';
 import "@/styles/components/userDropDown.css";
 import { mapLanguageToFlag } from '@/lib/utils';
@@ -25,11 +24,6 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
             .finally(() => router.replace("/logout"));
     }
 
-    const loginClick = (e: MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        router.push('/login');
-    }
-
     const onToggle = (e: ToggleEvent<HTMLDivElement>) => {
         setOpen (e.newState === "open");
     }
@@ -40,9 +34,10 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                 className="dropdown-button horizontal-list flex-vertical-center gap-2mm rounded-m"
                 popoverTarget={id}>
                 {loading && <LoadingPanel />}
-                {!userData && !loading && <Button onClick={loginClick} iconName={"KEY"}>
-                    {t('header.login')}
-                </Button>}
+                {!userData && !loading && <div className="horizontal-list flex-vertical-center gap-2mm">
+                    <Icon icon="KEY"/>
+                    <Link className="title small" href="/login">{t('header.login')}</Link>
+                </div>}
                 {userData && <>
                     <UserPicture userData={userData}></UserPicture>
                     <span className="title average semibold nickname">{userData.fursonaName}</span>

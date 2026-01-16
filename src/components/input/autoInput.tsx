@@ -1,4 +1,4 @@
-import { ChangeEvent, CSSProperties, useEffect, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useId, useRef, useState } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import Image from "next/image";
 import {
@@ -110,6 +110,8 @@ export default function AutoInput({
     const inputRef = useRef<HTMLInputElement>(null);
 
     const locale = useLocale();
+
+    const id = useId();
 
     /* Props check */
     const maxSelections = multiple == false ? 1 : max;
@@ -364,6 +366,8 @@ export default function AutoInput({
                     isFocused && valueToSet.length < maxSelections && (
                         <div tabIndex={0}
                             className="search-result-container rounded-m"
+                            id={id}
+                            popover="auto"
                             style={{
                                 position: "absolute",
                                 marginTop: "5px",
