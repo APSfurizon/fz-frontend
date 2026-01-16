@@ -77,18 +77,21 @@ div.autocomplete-input {
     }
 
     .search-result-container {
-        background: var(--text-input-bg);
+        z-index: 100;
+        padding: 0.375em 0.4375em;
+        position: fixed;
+        top: anchor(bottom);
+        left: anchor(left);
+        width: anchor-size(width);
+
+        max-height: 20rem;
+        overflow-y: auto;
+        
+        cursor: pointer;
         border: 0px solid var(--text-input-border-normal);
         color: var(--text-input-color);
-        padding: 0.375em 0.4375em;
-        display: flex;
-        gap: 0.5em;
-        cursor: pointer;
+        background: var(--text-input-bg);
         box-shadow: 0px 3px 20px 1px #0000003F;
-    }
-
-    :has(input.input-field:not(:focus)) .search-result-container {
-        visibility: collapse;
     }
 
     .search-result {
@@ -98,6 +101,9 @@ div.autocomplete-input {
         padding: 0.375em;
         display: flex;
         gap: 0.5em;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-drag: none;
     }
 
     .search-result:hover {
@@ -119,6 +125,9 @@ div.autocomplete-input {
         gap: 0.3125em;
         transition-duration: 120ms;
         min-height: 2.20em;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-drag: none;
     }
 
     .selected-value.single {

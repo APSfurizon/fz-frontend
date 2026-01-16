@@ -1,4 +1,4 @@
-import { ChangeEvent, CSSProperties, useEffect, useId, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, FocusEvent, useEffect, useId, useRef, useState } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import Image from "next/image";
 import {
@@ -11,35 +11,7 @@ import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { useFormContext } from "./dataForm";
 
-export default function AutoInput({
-    busy = false,
-    className,
-    disabled = false,
-    fieldName,
-    filterIn,
-    filterOut,
-    helpText,
-    idExtractor,
-    initialData,
-    inputStyle,
-    label,
-    labelStyle,
-    manager,
-    max = 5,
-    minDecodeSize = 3,
-    multiple = false,
-    noDelay = false,
-    onChange,
-    onSelect,
-    param,
-    paramRequired = false,
-    placeholder,
-    readOnly = false,
-    required = false,
-    requiredIfPresent = false,
-    style,
-    emptyIfUnselected = false
-}: Readonly<{
+export type AutoInputProps = {
     busy?: boolean,
     className?: string,
     disabled?: boolean;
@@ -75,7 +47,37 @@ export default function AutoInput({
     requiredIfPresent?: boolean,
     style?: CSSProperties,
     emptyIfUnselected?: boolean
-}>) {
+}
+
+export default function AutoInput({
+    busy = false,
+    className,
+    disabled = false,
+    fieldName,
+    filterIn,
+    filterOut,
+    helpText,
+    idExtractor,
+    initialData,
+    inputStyle,
+    label,
+    labelStyle,
+    manager,
+    max = 5,
+    minDecodeSize = 3,
+    multiple = false,
+    noDelay = false,
+    onChange,
+    onSelect,
+    param,
+    paramRequired = false,
+    placeholder,
+    readOnly = false,
+    required = false,
+    requiredIfPresent = false,
+    style,
+    emptyIfUnselected = false
+}: AutoInputProps) {
     const t = useTranslations('components');
 
     /* States */
@@ -113,6 +115,9 @@ export default function AutoInput({
 
     const id = useId();
 
+    const searchResultRef = useRef<HTMLDivElement>(null);
+    const firstSearchResultRef = useRef<HTMLAnchorElement>(null);
+
     /* Props check */
     const maxSelections = multiple == false ? 1 : max;
     if ((selectedIds).length > maxSelections) throw 'Input values exceed maximum allowed';
@@ -131,7 +136,9 @@ export default function AutoInput({
         setSelectedValues([...selectedValues ?? [], toAdd]);
         setSearchInput("");
         setSearchResults([]);
-        if (onChange) onChange({ values: selectedValues ?? [], newValues: [toAdd], removedValue: undefined });
+        if (onChange) {
+            onChange({ values: selectedValues ?? [], newValues: [toAdd], removedValue: undefined });
+        }
         onFormChange(fieldName);
         setTimeout(() => inputRef.current?.focus(), 100);
     }
@@ -148,8 +155,11 @@ export default function AutoInput({
             setSelectedIds(newSelectedIds);
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
-            if (onChange) onChange({ values: selectedValues ?? [], newValues: undefined, removedValue: toRemove });
+            if (onChange) {
+                onChange({ values: selectedValues ?? [], newValues: undefined, removedValue: toRemove });
+            }
             onFormChange(fieldName);
+            inputRef.current?.focus();
         }
     }
 
@@ -162,7 +172,12 @@ export default function AutoInput({
         setSearchResults([]);
         let excludeFilter = AutoInputFilter.getForSelected(manager, selectedIds);
         if (filterOut) excludeFilter = excludeFilter.merge(filterOut);
-        manager.searchByValues(searchString.trim(), locale, filterIn, excludeFilter, param).then(results => {
+        manager.searchByValues(searchString.trim(),
+            locale,
+            filterIn,
+            excludeFilter,
+            param
+        ).then(results => {
             setSearchResults(results);
             setSearchError(results.length == 0);
         }).catch(() => {
@@ -213,16 +228,28 @@ export default function AutoInput({
         clearTimeout(searchTimeoutHandle);
     };
 
-    const onBlur = () => {
-        setIsFocused(false);
-        setSearchError(false);
-        setSearchResults([]);
-        setIsLoading(false);
-        clearTimeout(searchTimeoutHandle);
-        if (emptyIfUnselected) {
-            setTimeout(() => setSearchInput(""), 100);
-        }
+    const onFocus = () => {
+        setIsFocused(true);
     }
+
+    const onBlur = (e: FocusEvent<HTMLInputElement|HTMLAnchorElement>) => {
+        if (inputRef.current == e.relatedTarget || searchResultRef.current?.contains(e.relatedTarget)) {
+            return;
+        }
+        setIsFocused(false);        
+    }
+
+    useEffect(() => {
+        if (!isFocused) {
+            setSearchError(false);
+            setSearchResults([]);
+            setIsLoading(false);
+            clearTimeout(searchTimeoutHandle);
+            if (emptyIfUnselected) {
+                setTimeout(() => setSearchInput(""), 100);
+            }
+        }
+    }, [isFocused])
 
     useEffect(() => {
         if ((initialData !== undefined && (!areEquals(initialData, latestInitialData) || formReset)) ||
@@ -263,9 +290,11 @@ export default function AutoInput({
      * @returns the rendered node
      */
     const renderResult = (element: AutoInputSearchResult, index: number) => {
-        return <div key={index}
+        return <a href="#" key={index}
             className="search-result horizontal-list flex-vertical-center rounded-s"
-            onMouseDown={() => { addItem(element) }}>
+            onClick={() => { addItem(element) }}
+            onBlur={onBlur}
+            ref={index == 0 ? firstSearchResultRef : undefined}>
             {element.imageUrl !== undefined &&
                 <Image unoptimized
                     src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
@@ -280,7 +309,7 @@ export default function AutoInput({
                 </span>
             </div>
             <Icon className="medium" icon="ADD_CIRCLE" />
-        </div>;
+        </a>;
     }
 
     const valueToSet: (string | number | undefined)[] = selectedValues.map(
@@ -290,7 +319,7 @@ export default function AutoInput({
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
         const selectedClass = "selected-value horizontal-list flex-vertical-center" +
             ((selectedIds.length == 1 && !multiple) ? " single" : "");
-        return <a key={index}
+        return <div key={index}
             className={selectedClass}>
             {element.imageUrl !== undefined &&
                 <Image unoptimized
@@ -303,10 +332,10 @@ export default function AutoInput({
             <span className="title small" style={{ flex: 1 }}>
                 {element?.getDescription(locale)}
             </span>
-            {!readOnly && <span onClick={() => removeItem(element)}>
+            {!readOnly && <a href="#" onClick={() => removeItem(element)}>
                 <Icon className="medium delete-selection" icon="CANCEL" />
-            </span>}
-        </a>;
+            </a>}
+        </div>;
     }
 
     const renderedValue = idExtractor ? selectedValues.map(val => idExtractor(val)) : valueToSet ?? [];
@@ -320,10 +349,10 @@ export default function AutoInput({
 
     return <>
         <div className={`autocomplete-input ${className ?? ""} ${isDisabled ? "disabled" : ""}`}
-            style={{ ...style, zIndex: isFocused ? 100 : 0 }}>
+            style={style}>
             <label htmlFor={fieldName}
                 className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}
-                style={{ ...labelStyle }}>
+                style={labelStyle}>
                 {label}
             </label>
             <input tabIndex={-1}
@@ -333,14 +362,14 @@ export default function AutoInput({
                 value={renderedValue.join(",") ?? ""}
                 required={forceRequired} onChange={checkChange} />
             <div style={{ position: 'relative' }}>
-                <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
+                <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
+                    style={{anchorName: `--${id}`}}>
                     {selectedValues?.map((element, index) => renderSelected(element, index))}
                     {
                         selectedIds.length < maxSelections && (
-                            <input
-                                ref={inputRef}
+                            <input ref={inputRef}
                                 className={`input-field title ${!isValid && forceRequired ? "danger" : ""}`}
-                                style={{ ...inputStyle }}
+                                style={inputStyle}
                                 placeholder={placeholder ?? ""}
                                 type="text"
                                 disabled={
@@ -349,10 +378,10 @@ export default function AutoInput({
                                     (!isRequired && requiredIfPresent)
                                     || readOnly}
                                 onChange={onSearchTextChange}
-                                onFocus={() => setIsFocused(true)}
+                                onFocus={onFocus}
                                 onBlur={onBlur}
                                 value={searchInput ?? ""}
-                                readOnly={readOnly} />
+                                readOnly={readOnly}/>
                         ) || <div className="spacer"></div>
                     }
                     {(isBusy || valueToSet.length < maxSelections) && <span className="icon-container">
@@ -361,23 +390,14 @@ export default function AutoInput({
                             : <Icon className="medium" icon="SEARCH" />
                         }
                     </span>}
-                </div>
-                {
-                    isFocused && valueToSet.length < maxSelections && (
-                        <div tabIndex={0}
-                            className="search-result-container rounded-m"
-                            id={id}
-                            popover="auto"
-                            style={{
-                                position: "absolute",
-                                marginTop: "5px",
-                                flexDirection: "column",
-                                width: "100%",
-                                maxHeight: "200px",
-                                overflowY: "auto"
-                            }}>
-                            {
-                                searchInput.length < minDecodeSize
+                    {/* Search result */}
+                    {isFocused && valueToSet.length < maxSelections && <div
+                        className="search-result-container rounded-m"
+                        id={id}
+                        style={{positionAnchor: `--${id}`}}
+                        ref={searchResultRef}>
+                            <div className="vertical-list gap-2mm">
+                                {searchInput.length < minDecodeSize
                                     ? <span className="title tiny color-subtitle">
                                         {t('autoinput.guide', { minSize: minDecodeSize })}
                                     </span>
@@ -388,10 +408,10 @@ export default function AutoInput({
                                                 {t('autoinput.loading_data')}
                                             </span>
                                         : <span className="title tiny color-subtitle">{t('autoinput.no_results')}</span>
-                            }
-                        </div>
-                    )
-                }
+                                }       
+                            </div>
+                    </div>}
+                </div>
             </div>
             {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
                 {helpText}
