@@ -66,9 +66,9 @@ export default function Header() {
                 </picture>
             </div>
             <span>
-                <a href="#" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
+                <div role="button" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
                     <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"} />
-                </a>
+                </div>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <Link href="/home" className="header-link medium">

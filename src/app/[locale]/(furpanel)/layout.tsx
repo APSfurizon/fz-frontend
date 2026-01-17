@@ -99,9 +99,9 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     </ToolLink>}
                 </div>
                 <span>
-                    <a href="#" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
+                    <div role="button" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
                         <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}/>
-                    </a>
+                    </div>
                 </span>
             </div>
 

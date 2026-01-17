@@ -92,26 +92,24 @@ div.autocomplete-input {
         color: var(--text-input-color);
         background: var(--text-input-bg);
         box-shadow: 0px 3px 20px 1px #0000003F;
-    }
 
-    .search-result {
-        background: var(--autocomplete-selected-value-bg);
-        border: 0px solid var(--text-input-border-normal);
-        color: var(--text-input-color);
-        padding: 0.375em;
-        display: flex;
-        gap: 0.5em;
-        text-decoration: none;
-        user-select: none;
-        -webkit-user-drag: none;
-    }
+        .search-result {
+            background: var(--autocomplete-selected-value-bg);
+            border: 0px solid var(--text-input-border-normal);
+            color: var(--text-input-color);
+            padding: 0.375em;
+            display: flex;
+            gap: 0.5em;
+            text-align: left;
+        }
 
-    .search-result:hover {
-        background-color: var(--autocomplete-selected-value-bg-hover);
-    }
+        .search-result:hover {
+            background-color: var(--autocomplete-selected-value-bg-hover);
+        }
 
-    .search-result>span {
-        color: var(--text-input-color);
+        .search-result>span {
+            color: var(--text-input-color);
+        }
     }
 
     .selected-value {
@@ -128,6 +126,28 @@ div.autocomplete-input {
         text-decoration: none;
         user-select: none;
         -webkit-user-drag: none;
+
+        img {
+            border-radius: 1000px;
+            max-width: 17pt;
+            height: auto;
+            outline: 1px solid var(--autocomplete-color);
+            overflow: none;
+            font-size: 4pt;
+        }
+
+        .action-delete {
+            background-color: transparent;
+            border: none;
+            .delete-selection {
+                margin-right: 0.1em;
+                cursor: pointer;
+            }
+
+            .delete-selection:hover {
+                color: var(--autocomplete-danger-normal);
+            }
+        }
     }
 
     .selected-value.single {
@@ -137,24 +157,6 @@ div.autocomplete-input {
 
     :has(.single) .spacer {
         display: none;
-    }
-
-    .selected-value img {
-        border-radius: 1000px;
-        max-width: 17pt;
-        height: auto;
-        outline: 1px solid var(--autocomplete-color);
-        overflow: none;
-        font-size: 4pt;
-    }
-
-    .selected-value .delete-selection {
-        margin-right: 0.1em;
-        cursor: pointer;
-    }
-
-    .selected-value .delete-selection:hover {
-        color: var(--autocomplete-danger-normal);
     }
 
     .suppressed-input {

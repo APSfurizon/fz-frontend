@@ -63,7 +63,7 @@ header {
         text-decoration: underline;
     }
     
-    span a.hamburger {
+    span div.hamburger {
         display: none;
     }
 
@@ -76,11 +76,12 @@ header {
 
 
 @media (max-width:800px) {
-    header span a.hamburger {
+    header span div.hamburger {
         display: block;
         max-width: fit-content;
         padding: 1em 0.3125em;
         margin: 0.3125em;
+        cursor: pointer;
     }
 
     .header-link-container {

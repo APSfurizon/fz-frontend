@@ -1,7 +1,7 @@
 "use client"
 import { useLocale, useTranslations } from 'next-intl';
 import { Link, routing, useRouter } from '@/i18n/routing';
-import { ToggleEvent, useId, useState } from 'react';
+import { MouseEvent, ToggleEvent, useId, useState } from 'react';
 import Icon from '@/components/icon';
 import UserPicture from '@/components/userPicture';
 import { runRequest } from '@/lib/api/global';
@@ -10,18 +10,21 @@ import { changeLanguage, UserData } from '@/lib/api/user';
 import LoadingPanel from './loadingPanel';
 import "@/styles/components/userDropDown.css";
 import { mapLanguageToFlag } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 export default function UserDropDown({ userData, loading }: Readonly<{ userData?: UserData, loading: boolean }>) {
     const t = useTranslations('common');
     const router = useRouter();
     const locale = useLocale();
+    const path = usePathname();
     const [isOpen, setOpen] = useState(false);
     const id = useId();
 
-    const logout = () => {
+    const logout = (e: MouseEvent<HTMLAnchorElement>) => {
         runRequest(new LogoutApiAction())
             .catch((err) => console.warn("Could not log out: " + err))
             .finally(() => router.replace("/logout"));
+        e.preventDefault();
     }
 
     const onToggle = (e: ToggleEvent<HTMLDivElement>) => {
@@ -49,17 +52,17 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                 popover="auto"
                 onToggle={onToggle}>
                 {/* Logout */}
-                {userData && <a href="#"
-                    onClick={() => logout()}
+                {userData && <a href="/logout"
+                    onClick={logout}
                     className="title small rounded-s vertical-align-middle">
                     {t('header.dropdown.logout')}
                 </a>}
                 {/* Language selector */}
                 <hr />
-                {routing.locales.filter (lng => lng !== locale).map((lng, index) => <Link href="#"
+                {routing.locales.filter (lng => lng !== locale).map((lng, index) => <Link href={path}
                     className="title small rounded-s vertical-align-middle horizontal-list"
                     key={index}
-                    onClick={() => changeLanguage(lng, userData)}>
+                    onClick={(e) => changeLanguage(e, lng, userData)}>
                     {mapLanguageToFlag(lng)}&nbsp;
                     {t(`header.dropdown.language.${lng}`)}
                     {lng === locale && <Icon className='medium' icon="CHECK"/>}

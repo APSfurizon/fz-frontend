@@ -475,14 +475,14 @@ export default function RoomPage() {
 
                 {data.currentRoomInfo.userIsOwner && guest.user.userId !== data.currentRoomInfo.roomOwner.userId &&
                   data.allowedModifications && <>
-                    <a className="action-kick" href="#" onClick={() => {
+                    <div role="button" className="action-kick" onClick={() => {
                       if (guest.roomGuest.confirmed)
                         promptKickGuest(guest);
                       else
                         promptCancelInvite(guest)
                     }}>
                       <Icon className="medium" icon="CLOSE"/>
-                    </a>
+                    </div>
                   </>}
               </div>)}
             </div>

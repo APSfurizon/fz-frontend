@@ -116,7 +116,7 @@ export default function AutoInput({
     const id = useId();
 
     const searchResultRef = useRef<HTMLDivElement>(null);
-    const firstSearchResultRef = useRef<HTMLAnchorElement>(null);
+    const firstSearchResultRef = useRef<HTMLButtonElement>(null);
 
     /* Props check */
     const maxSelections = multiple == false ? 1 : max;
@@ -159,7 +159,6 @@ export default function AutoInput({
                 onChange({ values: selectedValues ?? [], newValues: undefined, removedValue: toRemove });
             }
             onFormChange(fieldName);
-            inputRef.current?.focus();
         }
     }
 
@@ -232,7 +231,7 @@ export default function AutoInput({
         setIsFocused(true);
     }
 
-    const onBlur = (e: FocusEvent<HTMLInputElement|HTMLAnchorElement>) => {
+    const onBlur = (e: FocusEvent<HTMLInputElement|HTMLButtonElement>) => {
         if (inputRef.current == e.relatedTarget || searchResultRef.current?.contains(e.relatedTarget)) {
             return;
         }
@@ -290,7 +289,8 @@ export default function AutoInput({
      * @returns the rendered node
      */
     const renderResult = (element: AutoInputSearchResult, index: number) => {
-        return <a href="#" key={index}
+        return <button key={index}
+            tabIndex={0}
             className="search-result horizontal-list flex-vertical-center rounded-s"
             onClick={() => { addItem(element) }}
             onBlur={onBlur}
@@ -309,7 +309,7 @@ export default function AutoInput({
                 </span>
             </div>
             <Icon className="medium" icon="ADD_CIRCLE" />
-        </a>;
+        </button>;
     }
 
     const valueToSet: (string | number | undefined)[] = selectedValues.map(
@@ -332,9 +332,9 @@ export default function AutoInput({
             <span className="title small" style={{ flex: 1 }}>
                 {element?.getDescription(locale)}
             </span>
-            {!readOnly && <a href="#" onClick={() => removeItem(element)}>
+            {!readOnly && <button className="action-delete" onClick={() => removeItem(element)}>
                 <Icon className="medium delete-selection" icon="CANCEL" />
-            </a>}
+            </button>}
         </div>;
     }
 
