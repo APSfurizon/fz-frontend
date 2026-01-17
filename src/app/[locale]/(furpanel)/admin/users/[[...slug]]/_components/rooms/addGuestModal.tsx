@@ -48,9 +48,9 @@ export default function AddGuestModal({
             <input type="hidden" name="force" value="true" />
             <input type="hidden" name="forceExit" value="true" />
             <div className="horizontal-list gap-4mm">
-                <Button iconName={"CANCEL"} busy={loading} onClick={onClose}>{t("common.cancel")}</Button>
+                <Button icon="CANCEL" busy={loading} onClick={onClose}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button className="danger" type="submit" iconName={"CHECK"} busy={loading}>
+                <Button className="danger" type="submit" icon="CHECK" busy={loading}>
                     {t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
                 </Button>
             </div>

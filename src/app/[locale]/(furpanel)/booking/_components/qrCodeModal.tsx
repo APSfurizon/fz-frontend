@@ -12,7 +12,7 @@ export default function QrCodeModal({secret} : Readonly<{secret: string}>) {
     const t = useTranslations();
 
     return <>
-        <Button iconName={"QR_CODE"}
+        <Button icon="QR_CODE"
             onClick={() => setQrModalOpen(true)}
             title={t("furpanel.booking.actions.show_qr")}>
             {t("furpanel.booking.actions.show_qr")}

@@ -43,7 +43,7 @@ export default function RolePermissionsEditor() {
     return <>
         <div className="horizontal-list gap-2mm">
             <div className="spacer"></div>
-            <Button iconName={"ADD"} onClick={() => { setAddPermissionOpen(true) }}>{t("common.CRUD.add")}</Button>
+            <Button icon="ADD" onClick={() => { setAddPermissionOpen(true) }}>{t("common.CRUD.add")}</Button>
         </div>
         {/* Permissions table */}
         <div className="table-container rounded-m">
@@ -54,7 +54,7 @@ export default function RolePermissionsEditor() {
                     </div>
                     <div className="spacer"></div>
                     <div className="data">
-                        <Button iconName={"DELETE"} onClick={() => removePermission(permission)}></Button>
+                        <Button icon="DELETE" onClick={() => removePermission(permission)}></Button>
                     </div>
                 </div>)}
             </div>
@@ -68,10 +68,10 @@ export default function RolePermissionsEditor() {
                 </AutoInput>
             </DataForm>
             <div className="horizontal-list gap-4mm">
-                <Button type="button" className="danger" iconName={"CANCEL"}
+                <Button type="button" className="danger" icon="CANCEL"
                     onClick={() => setAddPermissionOpen(false)}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" iconName={"CHECK"}
+                <Button type="submit" className="success" icon="CHECK"
                     onClick={() => addPermission()} disabled={!!!selectedPermissionTemp}>
                     {t("common.confirm")}
                 </Button>

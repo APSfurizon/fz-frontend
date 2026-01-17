@@ -41,7 +41,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, clo
             </NoticeBox>
             <div className="spacer"></div>
             <div>
-                <Button iconName={"REFRESH"}
+                <Button icon="REFRESH"
                     onClick={() => setRoomsData(null)}
                     debounce={3000}
                     busy={modalLoading}>

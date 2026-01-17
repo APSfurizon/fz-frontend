@@ -87,9 +87,9 @@ export default function UserViewFursuitsTable({
             enableResizing: false,
             maxSize: 90,
             cell: props => <div className="horizontal-list gap-2mm">
-                <Button iconName={"EDIT_SQUARE"}
+                <Button icon="EDIT_SQUARE"
                     onClick={() => promptEditFursuit(props.row.original)} />
-                <Button iconName={"DELETE"}
+                <Button icon="DELETE"
                     onClick={() => promptDeleteFursuit(props.row.original)} />
             </div>
         })
@@ -111,10 +111,10 @@ export default function UserViewFursuitsTable({
             title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuit?.fursuit.name ?? "" })} busy={deleteLoading}>
             <span>{t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: fursuit?.fursuit.name ?? "" })}</span>
             <div className="horizontal-list gap-4mm">
-                <Button className="danger" iconName={"CANCEL"} busy={deleteLoading} onClick={closeDeleteFursuit}>
+                <Button className="danger" icon="CANCEL" busy={deleteLoading} onClick={closeDeleteFursuit}>
                     {t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button className="success" iconName={"CHECK"} busy={deleteLoading} onClick={deleteFursuit}>
+                <Button className="success" icon="CHECK" busy={deleteLoading} onClick={deleteFursuit}>
                     {t("common.confirm")}</Button>
             </div>
         </Modal>

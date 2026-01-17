@@ -94,7 +94,7 @@ export default function Login() {
           placeholder={t("login.placeholder_password")}/>
         <div className="toolbar-bottom">
           <Button type="submit"
-            iconName={"KEY"}
+            icon="KEY"
             busy={loading}>
               {t("login.login")}
           </Button>

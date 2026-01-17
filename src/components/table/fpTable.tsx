@@ -217,8 +217,8 @@ export default function FpTable<T>({
                 placeholder={t("table.filter.placeholder")}
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
                 icon="FILTER_LIST" />}
-            {showAddButton && <Button iconName={"ADD"} onClick={onAdd} title={t("table.add.title")} />}
-            {showDeleteButton && <Button iconName={"DELETE"} onClick={onDelete} title={t("table.delete.title")}
+            {showAddButton && <Button icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
+            {showDeleteButton && <Button icon="DELETE" onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
         </div>}
         <div className="table rounded-s gap-2mm" ref={tableRef}
@@ -289,14 +289,14 @@ export default function FpTable<T>({
         {enablePagination && <div className="table-pages horizontal-list gap-4mm">
             <div className="spacer"></div>
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
-                iconName={"ARROW_BACK"} onClick={tableWrapper.previousPage}></Button>
+                icon="ARROW_BACK" onClick={tableWrapper.previousPage}></Button>
             {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i) => <Button key={i}
                 className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`}
                 onClick={() => tableWrapper.setPageIndex(i)}
                 disabled={pagination.pageIndex == i}>{i + 1}
             </Button>)}
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
-                iconName={"ARROW_FORWARD"} onClick={tableWrapper.nextPage}></Button>
+                icon="ARROW_FORWARD" onClick={tableWrapper.nextPage}></Button>
             <div className="spacer"></div>
         </div>}
     </div>

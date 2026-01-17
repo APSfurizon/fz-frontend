@@ -61,10 +61,10 @@ export default function UserSessions() {
         <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_session")}</span>
         <div className="bottom-toolbar">
           <Button title={t("common.cancel")} className="danger" onClick={() => hideModal()}
-            iconName={"CANCEL"} busy={loading}>{t("common.cancel")}</Button>
+            icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
           <Button title={t("furpanel.user.sessions.actions.terminate_session")} onClick={() => destroySession(sessionId)}
-            iconName={"CLOSE"} busy={loading}>{t("furpanel.user.sessions.actions.terminate_session")}</Button>
+            icon="CLOSE" busy={loading}>{t("furpanel.user.sessions.actions.terminate_session")}</Button>
         </div>
       </>
     )
@@ -102,7 +102,7 @@ export default function UserSessions() {
       id: "terminate",
       header: "",
       cell: (props) => <Button onClick={() => promptDestroySession(props.row.original.sessionId)}
-        iconName={"CLOSE"} title={t("furpanel.user.sessions.actions.terminate_session")}
+        icon="CLOSE" title={t("furpanel.user.sessions.actions.terminate_session")}
         busy={loading}
         style={{ display: 'inline' }} />,
       enableResizing: false,
@@ -120,7 +120,7 @@ export default function UserSessions() {
     }
     <div className="horizontal-list">
       <div className="spacer"></div>
-      <Button className="danger" iconName={"CLOSE"} onClick={() => setDestroyConfirmModalOpen(true)}>
+      <Button className="danger" icon="CLOSE" onClick={() => setDestroyConfirmModalOpen(true)}>
         {t("furpanel.user.sessions.actions.terminate_all_sessions")}
       </Button>
     </div>
@@ -131,14 +131,14 @@ export default function UserSessions() {
         <Button title={t("common.cancel")}
           className="danger"
           onClick={() => setDestroyConfirmModalOpen(false)}
-          iconName={"CANCEL"}
+          icon="CANCEL"
           busy={loading}>
           {t("common.cancel")}
         </Button>
         <div className="spacer" />
         <Button title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
           onClick={() => destroyAllSessions()}
-          iconName={"CLOSE"}
+          icon="CLOSE"
           busy={loading}>
           {t("furpanel.user.sessions.actions.terminate_all_sessions")}
         </Button>

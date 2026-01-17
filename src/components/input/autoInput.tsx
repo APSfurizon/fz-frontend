@@ -347,6 +347,9 @@ export default function AutoInput({
         setIsValid((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
     }
 
+    const anchorNameStyle = {anchorName: `--${id}`} as CSSProperties;
+    const anchorPositionStyle = {positionAnchor: `--${id}`} as CSSProperties;
+
     return <>
         <div className={`autocomplete-input ${className ?? ""} ${isDisabled ? "disabled" : ""}`}
             style={style}>
@@ -363,7 +366,7 @@ export default function AutoInput({
                 required={forceRequired} onChange={checkChange} />
             <div style={{ position: 'relative' }}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
-                    style={{anchorName: `--${id}`}}>
+                    style={anchorNameStyle}>
                     {selectedValues?.map((element, index) => renderSelected(element, index))}
                     {
                         selectedIds.length < maxSelections && (
@@ -394,7 +397,7 @@ export default function AutoInput({
                     {isFocused && valueToSet.length < maxSelections && <div
                         className="search-result-container rounded-m"
                         id={id}
-                        style={{positionAnchor: `--${id}`}}
+                        style={anchorPositionStyle}
                         ref={searchResultRef}>
                             <div className="vertical-list gap-2mm">
                                 {searchInput.length < minDecodeSize

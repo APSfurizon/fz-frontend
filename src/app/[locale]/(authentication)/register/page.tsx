@@ -315,7 +315,7 @@ export default function Register() {
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={"KEY"} >{t("register.register")}</Button>
+        <Button type="submit" icon="KEY" >{t("register.register")}</Button>
       </div>
     </DataForm>
     <div>

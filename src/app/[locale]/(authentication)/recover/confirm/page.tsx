@@ -86,7 +86,7 @@ export default function RecoverConfirm() {
           onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
         <div className="horizontal-list flex-center">
           <Button type="submit"
-            iconName="SAVE"
+            icon="SAVE"
             disabled={!passwordMatch}>
               {t("common.CRUD.save")}
           </Button>

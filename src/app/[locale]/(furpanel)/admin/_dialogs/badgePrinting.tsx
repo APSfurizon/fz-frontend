@@ -65,15 +65,15 @@ export default function BadgePrintingDialog({
         {step == StepType.CHOOSE_PRINT_MODE && <>
             <span className="title">{t("furpanel.admin.events.badges.print.select_mode")}</span>
             <div className="horizontal-list gap-4mm">
-                <Button busy={loading} onClick={() => setStep(StepType.SIMPLE)} iconName={"CHECK_CIRCLE"}>{t("furpanel.admin.events.badges.print.simple_mode.title")}</Button>
-                <Button busy={loading} onClick={() => router.push('admin/badge/print')} iconName={"TUNE"}>{t("furpanel.admin.events.badges.print.advanced_mode.title")}</Button>
+                <Button busy={loading} onClick={() => setStep(StepType.SIMPLE)} icon="CHECK_CIRCLE">{t("furpanel.admin.events.badges.print.simple_mode.title")}</Button>
+                <Button busy={loading} onClick={() => router.push('admin/badge/print')} icon="TUNE">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</Button>
             </div>
         </>}
         {step == StepType.SIMPLE && <>
             <span className="title">{t("furpanel.admin.events.badges.print.simple_mode.choose_badge")}</span>
             <div className="horizontal-list gap-4mm">
-                <Button busy={loading} onClick={() => renderCommon()} iconName={"PERSON"}>{t("furpanel.admin.events.badges.print.simple_mode.common")}</Button>
-                <Button busy={loading} onClick={() => renderFursuit()} iconName={"PETS"}>{t("furpanel.admin.events.badges.print.simple_mode.fursuit")}</Button>
+                <Button busy={loading} onClick={() => renderCommon()} icon="PERSON">{t("furpanel.admin.events.badges.print.simple_mode.common")}</Button>
+                <Button busy={loading} onClick={() => renderFursuit()} icon="PETS">{t("furpanel.admin.events.badges.print.simple_mode.fursuit")}</Button>
             </div>
         </>}
     </Modal>

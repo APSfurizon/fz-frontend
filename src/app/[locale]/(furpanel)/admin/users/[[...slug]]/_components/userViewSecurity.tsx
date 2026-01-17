@@ -76,12 +76,12 @@ export default function UserViewSecurity({
                     initialValue={userData.email} />
             </div>
             <div className="horizontal-list gap-2mm">
-                {!userData.banned && <Button iconName={"ACCOUNT_CIRCLE_OFF"}
+                {!userData.banned && <Button icon="ACCOUNT_CIRCLE_OFF"
                     onClick={promptBan}
                     disabled={isSelf}>
                     {t("furpanel.admin.users.accounts.view.actions.ban")}
                 </Button>}
-                {userData.banned && <Button iconName={"ACCOUNT_CIRCLE"}
+                {userData.banned && <Button icon="ACCOUNT_CIRCLE"
                     onClick={promptUnban}
                     disabled={isSelf}>
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
@@ -97,14 +97,14 @@ export default function UserViewSecurity({
                 <Button title={t("common.cancel")}
                     className="danger"
                     onClick={() => setBanModalOpen(false)}
-                    iconName={"CANCEL"}
+                    icon="CANCEL"
                     busy={loading}>
                     {t("common.cancel")}
                 </Button>
                 <div className="spacer"></div>
                 <Button title={t("furpanel.admin.users.accounts.view.actions.ban")}
                     onClick={() => ban()}
-                    iconName={"ACCOUNT_CIRCLE_OFF"}
+                    icon="ACCOUNT_CIRCLE_OFF"
                     busy={loading}>
                     {t("furpanel.admin.users.accounts.view.actions.ban")}
                 </Button>
@@ -119,14 +119,14 @@ export default function UserViewSecurity({
                 <Button title={t("common.cancel")}
                     className="danger"
                     onClick={() => setUnbanModalOpen(false)}
-                    iconName={"CANCEL"}
+                    icon="CANCEL"
                     busy={loading}>
                     {t("common.cancel")}
                 </Button>
                 <div className="spacer"></div>
                 <Button title={t("furpanel.admin.users.accounts.view.actions.unban")}
                     onClick={() => unban()}
-                    iconName={"ACCOUNT_CIRCLE"}
+                    icon="ACCOUNT_CIRCLE"
                     busy={loading}>
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
                 </Button>

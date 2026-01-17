@@ -108,12 +108,12 @@ export default function AddFursuitModal({
                 {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
             </Checkbox>
             <div className="horizontal-list gap-4mm margin-top-2mm">
-                <Button type="button" className="danger" iconName={"CANCEL"} busy={loading}
+                <Button type="button" className="danger" icon="CANCEL" busy={loading}
                     onClick={beforeClose}>
                     {t("common.cancel")}
                 </Button>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" iconName={"CHECK"} busy={loading}>
+                <Button type="submit" className="success" icon="CHECK" busy={loading}>
                     {t("common.confirm")}
                 </Button>
             </div>

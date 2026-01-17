@@ -138,7 +138,7 @@ export default function AdvancedBadgePrint() {
                 icon="PETS" />
             <div className="horizontal-list">
                 <div className="spacer"></div>
-                <Button iconName={"PRINT"} disabled={!canPrint} busy={printLoading} onClick={runPrint}>
+                <Button icon="PRINT" disabled={!canPrint} busy={printLoading} onClick={runPrint}>
                     {t("furpanel.admin.events.badges.print.advanced_mode.print")}
                 </Button>
             </div>

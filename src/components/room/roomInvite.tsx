@@ -45,8 +45,8 @@ export default function RoomInvite({ style, className, busy, onAccept, onReject,
                     <StatusBox>{t(`booking.items.board_${inviteData.room.board}`)}</StatusBox>}
                 <div className="spacer"></div>
                 <div className="horizontal-list gap-4mm">
-                    <Button busy={busy} className="danger" iconName={"DO_NOT_DISTURB_ON"} onClick={() => onReject(inviteData)}>{t("room.actions.refuse")}</Button>
-                    <Button busy={busy} className="success" iconName={"PERSON_ADD"} onClick={() => onAccept(inviteData)}>{t("room.actions.accept")}</Button>
+                    <Button busy={busy} className="danger" icon="DO_NOT_DISTURB_ON" onClick={() => onReject(inviteData)}>{t("room.actions.refuse")}</Button>
+                    <Button busy={busy} className="success" icon="PERSON_ADD" onClick={() => onAccept(inviteData)}>{t("room.actions.accept")}</Button>
                 </div>
             </div>
         </div>

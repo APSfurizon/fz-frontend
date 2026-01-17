@@ -160,13 +160,13 @@ export default function BookingPage() {
                             <Button className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
-                                iconName="CHECK">
+                                icon="CHECK">
                                 {t("furpanel.booking.actions.confirm_info")}
                             </Button>
                             <Button className="warning"
                                 busy={actionLoading}
                                 onClick={() => router.push("/user")}
-                                iconName="OPEN_IN_NEW">
+                                icon="OPEN_IN_NEW">
                                 {t("furpanel.booking.actions.review_info")}
                             </Button>
                         </span>
@@ -256,7 +256,7 @@ export default function BookingPage() {
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                             {pageData?.shouldRetry && <Button className="action-button"
-                                iconName="REPLAY"
+                                icon="REPLAY"
                                 busy={actionLoading}
                                 onClick={requestRetryPaymentLink}>
                                 {t("furpanel.booking.retry_payment")}
@@ -267,14 +267,14 @@ export default function BookingPage() {
                                 style={{ flexGrow: "1" }}>
                                 <Button className="action-button"
                                     disabled={isEditLocked}
-                                    iconName="OPEN_IN_NEW"
+                                    icon="OPEN_IN_NEW"
                                     busy={actionLoading}
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
                                 </Button>
                                 {bookingData?.exchangeSupported && <Button className="action-button danger"
                                     disabled={isEditLocked}
-                                    iconName="SEND"
+                                    icon="SEND"
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.transfer_order")}
@@ -295,7 +295,7 @@ export default function BookingPage() {
 
                             {GROUP_CHAT_URL &&
                                 <NoticeBox theme={NoticeTheme.FAQ}
-                                    customicon="GROUPS"
+                                    icon="GROUPS"
                                     title={t("furpanel.booking.messages.invite_group.title")}>
                                     {t.rich("furpanel.booking.messages.invite_group.description",
                                         {
@@ -332,9 +332,9 @@ export default function BookingPage() {
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" icon="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" icon="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

@@ -88,7 +88,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
                 disabled={badgeLoading} />
             <Button busy={badgeLoading}
                 className="margin-bottom-1mm"
-                iconName={"SEARCH"}
+                icon="SEARCH"
                 onClick={searchBadges}>
                 {t("furpanel.admin.events.badges.print.advanced_mode.Search")}
             </Button>

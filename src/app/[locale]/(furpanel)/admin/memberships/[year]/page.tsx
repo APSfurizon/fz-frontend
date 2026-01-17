@@ -220,8 +220,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                 </div>
 
                 <div className="spacer"></div>
-                <Button iconName={"REFRESH"} onClick={() => setCardsData(undefined)} debounce={3000}>{t("common.reload")}</Button>
-                <Button onClick={() => setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} iconName={"ADD"}>{t("furpanel.admin.membership_manager.actions.add")}</Button>
+                <Button icon="REFRESH" onClick={() => setCardsData(undefined)} debounce={3000}>{t("common.reload")}</Button>
+                <Button onClick={() => setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} icon="ADD">{t("furpanel.admin.membership_manager.actions.add")}</Button>
             </div>
             <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
                 <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>
@@ -247,11 +247,11 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                 <AutoInput fieldName="userId" manager={new AutoInputUserAddCardManager} label={t("furpanel.admin.membership_manager.input.user.label")}
                     param={[selectedYear]}></AutoInput>
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={"CANCEL"} busy={loading} onClick={() => setAddModalOpen(false)}>
+                    <Button type="button" className="danger" icon="CANCEL" busy={loading} onClick={() => setAddModalOpen(false)}>
                         {t("common.cancel")}
                     </Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={"CHECK"} busy={loading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" icon="CHECK" busy={loading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

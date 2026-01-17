@@ -84,19 +84,19 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
             <div className="horizontal-list gap-4mm flex-wrap">
                 <Button className={(viewMode != CountViewMode.NORMAL ? "off" : "")
                     + " margin-bottom-1mm"}
-                    iconName="GROUPS"
+                    icon="GROUPS"
                     onClick={() => onSelectMode(CountViewMode.NORMAL)}>
                     {t("misc.nosecount.title")}
                 </Button>
                 <Button className={(viewMode != CountViewMode.FURSUIT ? "off" : "")
                     + " margin-bottom-1mm"}
-                    iconName="PETS"
+                    icon="PETS"
                     onClick={() => onSelectMode(CountViewMode.FURSUIT)}>
                     {t("misc.nosecount.links.fursuits")}
                 </Button>
                 <Button className={(viewMode != CountViewMode.SPONSOR ? "off" : "")
                     + " margin-bottom-1mm"}
-                    iconName="CONSTRUCTION"
+                    icon="CONSTRUCTION"
                     onClick={() => onSelectMode(CountViewMode.SPONSOR)}>
                     {t("misc.nosecount.links.sponsors")}
                 </Button>
@@ -108,7 +108,7 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
                     disabled={(events || []).length == 0}
                     initialValue={selectedEvent?.slug}
                     onChange={onSelectEvent} />
-                <Button iconName={"REFRESH"}
+                <Button icon="REFRESH"
                     className="margin-bottom-1mm"
                     title={t("common.reload")}
                     onClick={() => setEvents(undefined)}

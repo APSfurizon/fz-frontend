@@ -180,11 +180,11 @@ export default function ExchangeConfirm() {
         </div>
       </div>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={"CHECK"} busy={loading} onClick={() => updateExchangeStatus(true)}>
+        <Button className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
           {t("common.accept")}
         </Button>
         <div className="spacer"></div>
-        <Button className="danger" iconName={"CANCEL"} busy={loading} onClick={() => updateExchangeStatus(false)}>
+        <Button className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
           {t("common.refuse")}
         </Button>
       </div>
