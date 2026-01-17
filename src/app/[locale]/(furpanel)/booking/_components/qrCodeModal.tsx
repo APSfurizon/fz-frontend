@@ -12,13 +12,13 @@ export default function QrCodeModal({secret} : Readonly<{secret: string}>) {
     const t = useTranslations();
 
     return <>
-        <Button iconName={"QR_CODE"}
+        <Button icon="QR_CODE"
             onClick={() => setQrModalOpen(true)}
             title={t("furpanel.booking.actions.show_qr")}>
             {t("furpanel.booking.actions.show_qr")}
         </Button>
         <Modal open={qrModalOpen}
-            icon={"QR_CODE"}
+            icon="QR_CODE"
             title={t("furpanel.booking.reservation_qr")}
             onClose={() => setQrModalOpen(false)}>
             <div className="horizontal-list" style={{ justifyContent: "center" }}>

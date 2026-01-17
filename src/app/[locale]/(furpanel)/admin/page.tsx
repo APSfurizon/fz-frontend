@@ -150,76 +150,76 @@ export default function AdminPage() {
     <div className="page">
       {loading && <LoadingPanel />}
       {/* System area */}
-      <FpMacroSection title={t("furpanel.admin.system.title")} icon={"CONFIRMATION_NUMBER"}>
+      <FpMacroSection title={t("furpanel.admin.system.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.system.server.title")}>
-          <Button iconName={"VITAL_SIGNS"} onClick={ping} debounce={5000}
+          <Button icon="VITAL_SIGNS" onClick={ping} debounce={5000}
             busy={pingLoading} disabled={!capabilities.canRefreshPretixCache}>
             {t("furpanel.admin.system.server.ping")}
           </Button>
         </FpSection>
       </FpMacroSection>
       {/* Pretix area */}
-      <FpMacroSection title={t("furpanel.admin.pretix.title")} icon={"CONFIRMATION_NUMBER"}>
+      <FpMacroSection title={t("furpanel.admin.pretix.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.pretix.data.title")}>
-          <Button iconName={"EVENT_REPEAT"} onClick={reloadEvent} debounce={5000}
+          <Button icon="EVENT_REPEAT" onClick={reloadEvent} debounce={5000}
             busy={reloadEventLoading} disabled={!capabilities.canRefreshPretixCache}>
             {t("furpanel.admin.pretix.data.reload_event")}
           </Button>
-          <Button iconName={"SYNC"} onClick={reloadOrders} debounce={5000}
+          <Button icon="SYNC" onClick={reloadOrders} debounce={5000}
             busy={reloadOrdersLoading} disabled={!capabilities.canRefreshPretixCache}>
             {t("furpanel.admin.pretix.data.reload_orders")}
           </Button>
         </FpSection>
       </FpMacroSection>
       {/* Event area */}
-      <FpMacroSection title={t("furpanel.admin.events.title")} icon={"LOCAL_ACTIVITY"}>
+      <FpMacroSection title={t("furpanel.admin.events.title")} icon="LOCAL_ACTIVITY">
         <FpSection title={t("furpanel.admin.events.badges.title")}>
-          <Button iconName={"PRINT"} onClick={() => setRenderBadgesModalOpen(true)}
+          <Button icon="PRINT" onClick={() => setRenderBadgesModalOpen(true)}
             busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
             {t("furpanel.admin.events.badges.print_badges")}
           </Button>
-          <Button iconName={"MAIL"} onClick={remindBadges} debounce={5000}
+          <Button icon="MAIL" onClick={remindBadges} debounce={5000}
             busy={remindBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
             {t("furpanel.admin.events.badges.remind_badges")}
           </Button>
-          <Button iconName={"MAIL"} onClick={remindFursuitBadges} debounce={5000}
+          <Button icon="MAIL" onClick={remindFursuitBadges} debounce={5000}
             busy={remindFursuitBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
             {t("furpanel.admin.events.badges.remind_fursuits")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.events.rooms.title")}>
-          <Button iconName={"MAIL"} onClick={remindRoomsNotFull} debounce={5000}
+          <Button icon="MAIL" onClick={remindRoomsNotFull} debounce={5000}
             busy={remindRoomsNotFullLoading} disabled={!capabilities.canRemindRoomsNotFull}>
             {t("furpanel.admin.events.rooms.remind_rooms_not_full")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.events.orders.title")}>
-          <Button iconName={"DOWNLOAD"} onClick={exportRooms} debounce={5000}
+          <Button icon="DOWNLOAD" onClick={exportRooms} debounce={5000}
             busy={exportRoomsLoading} disabled={!capabilities.canExportHotelList}>
             {t("furpanel.admin.events.orders.export_rooms")}
           </Button>
-          <Button iconName={"MAIL"} onClick={remindOrderLink} debounce={5000}
+          <Button icon="MAIL" onClick={remindOrderLink} debounce={5000}
             busy={remindOrderLinkLoading} disabled={!capabilities.canRemindOrderLinking}>
             {t("furpanel.admin.events.orders.remind_order_linking")}
           </Button>
         </FpSection>
       </FpMacroSection>
       {/** Users area */}
-      <FpMacroSection title={t("furpanel.admin.users.title")} icon={"PERSON"}>
+      <FpMacroSection title={t("furpanel.admin.users.title")} icon="PERSON">
         <FpSection title={t("furpanel.admin.users.accounts.title")}>
-          <Button iconName={"PERSON_SEARCH"} onClick={() => router.push("/admin/users/")}
+          <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/users/")}
             disabled={!capabilities.canManageMembershipCards}>
             {t("furpanel.admin.users.accounts.view.title")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.users.security.title")}>
-          <Button iconName={"GROUPS"} onClick={() => router.push("/admin/roles/")}
+          <Button icon="GROUPS" onClick={() => router.push("/admin/roles/")}
             disabled={!capabilities.canUpgradeUser}>
             {t("furpanel.admin.users.security.roles.title")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.membership.title")}>
-          <Button iconName={"ID_CARD"} onClick={() => router.push("/admin/memberships/a")}
+          <Button icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
             disabled={!capabilities.canManageMembershipCards}>
             {t("furpanel.admin.membership_manager.title")}
           </Button>

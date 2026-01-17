@@ -96,14 +96,14 @@ export default function Register() {
         inputType="text"
         helpText={t("register.form.nickname.help")}
         label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")} />
-      <FpInput fieldName="email" required={true} inputType="email" label={t("register.form.email.label")}
+      <FpInput fieldName="email" required inputType="email" label={t("register.form.email.label")}
         placeholder={t("register.form.email.placeholder")} onChange={(e) => setEmail(e.target.value)} />
-      <FpInput required={true} inputType="email" label={t("register.form.confirm_email.label")}
+      <FpInput required inputType="email" label={t("register.form.confirm_email.label")}
         placeholder={t("register.form.confirm_email.placeholder")} onChange={(e) => setConfirmEmail(e.target.value)}
         className={`${emailMatch ? 'success' : 'danger'}`} />
       <FpInput fieldName="password"
         minLength={6}
-        required={true}
+        required
         inputType="password"
         helpText={t("register.form.password.help")}
         label={t("register.form.password.label")}
@@ -111,7 +111,7 @@ export default function Register() {
         onChange={(e) => setPassword(e.currentTarget.value)} />
       <FpInput fieldName="confirmPassword"
         minLength={6}
-        required={true}
+        required
         inputType="password"
         helpText={t("register.form.confirm_password.help")}
         label={t("register.form.confirm_password.label")}
@@ -130,7 +130,7 @@ export default function Register() {
           label={t("register.form.first_name.label")}
           placeholder={t("register.form.first_name.placeholder")} />
         <FpInput fieldName="lastName"
-          required={true}
+          required
           inputType="text"
           label={t("register.form.last_name.label")}
           placeholder={t("register.form.last_name.placeholder")} />
@@ -227,7 +227,7 @@ export default function Register() {
       <span className="title medium bold highlight">{t("register.form.section.residence_data")}</span>
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="residenceCountry"
-          required={true}
+          required
           minDecodeSize={2}
           manager={new AutoInputCountriesManager}
           onChange={
@@ -279,7 +279,7 @@ export default function Register() {
           }
           emptyIfUnselected />
         <FpInput fieldName="phoneNumber"
-          required={true}
+          required
           inputType="text"
           label={t("register.form.phone_number.label")}
           placeholder={t("register.form.phone_number.placeholder")}
@@ -315,7 +315,7 @@ export default function Register() {
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={"KEY"} >{t("register.register")}</Button>
+        <Button type="submit" icon="KEY" >{t("register.register")}</Button>
       </div>
     </DataForm>
     <div>

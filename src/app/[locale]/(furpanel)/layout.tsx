@@ -65,43 +65,43 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     style={{ justifyContent: 'flex-end' }}>
                     {BOOKING_ENABLED && <ToolLink onClick={toolClick}
                         href="/booking"
-                        iconName={"LOCAL_ACTIVITY"}>
+                        icon="LOCAL_ACTIVITY">
                         {t('furpanel.booking.title')}
                     </ToolLink>}
                     {BADGE_ENABLED && <ToolLink onClick={toolClick}
                         href="/badge"
-                        iconName={"PERSON_BOOK"}>
+                        icon="PERSON_BOOK">
                         {t('furpanel.badge.title')}
                     </ToolLink>}
                     {ROOM_ENABLED && <ToolLink onClick={toolClick}
                         href="/room"
-                        iconName={"BED"}>
+                        icon="BED">
                         {t('furpanel.room.title')}
                     </ToolLink>}
                     {UPLOAD_ENABLED && <ToolLink onClick={toolClick}
                         href="/upload-area"
-                        iconName={"PHOTO_CAMERA"}>
+                        icon="PHOTO_CAMERA">
                         {t('furpanel.upload_area.title')}
                     </ToolLink>}
                     <ToolLink onClick={toolClick}
                         href="/user"
-                        iconName={"PERSON"}>
+                        icon="PERSON">
                         {t('furpanel.user.title')}
                     </ToolLink>
                     {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
                         href="/admin"
-                        iconName={"SECURITY"}>
+                        icon="SECURITY">
                         {t('furpanel.admin.title')}
                     </ToolLink>}
                     {DEBUG_ENABLED && <ToolLink href="/debug"
-                        iconName={"BUG_REPORT"}>
+                        icon="BUG_REPORT">
                         {t('furpanel.debug.title')}
                     </ToolLink>}
                 </div>
                 <span>
-                    <a href="#" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
+                    <div role="button" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
                         <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}/>
-                    </a>
+                    </div>
                 </span>
             </div>
 

@@ -4,7 +4,7 @@ import Icon, { MaterialIcon } from "../icon";
 
 export default function Button({
     children,
-    iconName,
+    icon,
     style,
     className,
     busy,
@@ -15,7 +15,7 @@ export default function Button({
     debounce
 }: Readonly<{
     children?: React.ReactNode,
-    iconName?: MaterialIcon,
+    icon?: MaterialIcon,
     style?: CSSProperties,
     className?: string,
     busy?: boolean,
@@ -26,7 +26,7 @@ export default function Button({
     debounce?: number
 }>) {
     const [disabledState, setDisabledState] = useState(disabled);
-    const iconPresent = iconName != undefined;
+    const iconPresent = icon != undefined;
     const onClickEvent = (e: MouseEvent<HTMLButtonElement>) => {
         if (busy || disabledState || !onClick) return;
         if (debounce && !disabledState) {
@@ -48,8 +48,8 @@ export default function Button({
             style={{ ...style, paddingRight: iconPresent ? '0.5em' : undefined }}>
             {busy && <Icon className={`medium loading-animation`} icon="PROGRESS_ACTIVITY"/>}
             {!busy && isCooldown && <Icon className={`medium`} icon="SNOOZE"/>}
-            {!busy && !isCooldown && iconPresent && <Icon className={`medium`} icon={iconName}/>}
-            {children && iconName && <div className="spacer"></div>}
+            {!busy && !isCooldown && iconPresent && <Icon className={`medium`} icon={icon}/>}
+            {children && icon && <div className="spacer"></div>}
             {children && <span className="title normal spacer" style={{ fontSize: '15px', textAlign: "left" }}>
                 {children}
             </span>}

@@ -66,9 +66,9 @@ export default function Header() {
                 </picture>
             </div>
             <span>
-                <a href="#" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
+                <div role="button" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
                     <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"} />
-                </a>
+                </div>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <Link href="/home" className="header-link medium">
@@ -82,12 +82,12 @@ export default function Header() {
                     </Link>
                 </>}
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName="INFO"/>
+                    <Icon style={{fontSize: "24px"}} icon="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>
                 </a> */}
                 <div className="spacer"></div>
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName="BOOKMARK_STAR"/>
+                    <Icon style={{fontSize: "24px"}} icon="BOOKMARK_STAR"/>
                     <span className="title semibold">{t('header.archive')}</span>
                 </a> */}
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>

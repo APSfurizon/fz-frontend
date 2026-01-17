@@ -33,7 +33,7 @@ export default function ExchangeConfirm() {
   const renderRoom = (userData: UserData, data: RoomData) => {
     return <>
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
-        <Icon className="large" icon={"PACKAGE_2"}></Icon>
+        <Icon className="large" icon="PACKAGE_2"></Icon>
         {t.rich("authentication.transfer_confirm.room.room_title", {
           user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
         })}
@@ -180,11 +180,11 @@ export default function ExchangeConfirm() {
         </div>
       </div>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" iconName={"CHECK"} busy={loading} onClick={() => updateExchangeStatus(true)}>
+        <Button className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
           {t("common.accept")}
         </Button>
         <div className="spacer"></div>
-        <Button className="danger" iconName={"CANCEL"} busy={loading} onClick={() => updateExchangeStatus(false)}>
+        <Button className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
           {t("common.refuse")}
         </Button>
       </div>

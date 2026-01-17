@@ -216,9 +216,9 @@ export default function FpTable<T>({
             {enableSearch && <FpInput className="table-search"
                 placeholder={t("table.filter.placeholder")}
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
-                icon={"FILTER_LIST"} />}
-            {showAddButton && <Button iconName={"ADD"} onClick={onAdd} title={t("table.add.title")} />}
-            {showDeleteButton && <Button iconName={"DELETE"} onClick={onDelete} title={t("table.delete.title")}
+                icon="FILTER_LIST" />}
+            {showAddButton && <Button icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
+            {showDeleteButton && <Button icon="DELETE" onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
         </div>}
         <div className="table rounded-s gap-2mm" ref={tableRef}
@@ -241,7 +241,7 @@ export default function FpTable<T>({
                                         desc: "ARROW_DROP_DOWN",
                                     }[header.column.getIsSorted() as string]! as MaterialIcon} />}
                                     {header.column.getIsPinned() && <a onClick={() => header.column.pin(false)}>
-                                        <Icon className="small" icon={"KEEP"} /></a>}
+                                        <Icon className="small" icon="KEEP" /></a>}
                                 </div>
                                 <div className="spacer"></div>
                                 {(header.column.columnDef.enableResizing ?? true) &&
@@ -249,7 +249,7 @@ export default function FpTable<T>({
                                         onDoubleClick={() => header.column.resetSize()}
                                         onMouseDown={header.getResizeHandler()}
                                         onTouchStart={header.getResizeHandler()}>
-                                        <Icon icon={"DRAG_HANDLE"} />
+                                        <Icon icon="DRAG_HANDLE" />
                                     </div>
                                 }
                             </div>
@@ -289,14 +289,14 @@ export default function FpTable<T>({
         {enablePagination && <div className="table-pages horizontal-list gap-4mm">
             <div className="spacer"></div>
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
-                iconName={"ARROW_BACK"} onClick={tableWrapper.previousPage}></Button>
+                icon="ARROW_BACK" onClick={tableWrapper.previousPage}></Button>
             {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i) => <Button key={i}
                 className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`}
                 onClick={() => tableWrapper.setPageIndex(i)}
                 disabled={pagination.pageIndex == i}>{i + 1}
             </Button>)}
             <Button className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
-                iconName={"ARROW_FORWARD"} onClick={tableWrapper.nextPage}></Button>
+                icon="ARROW_FORWARD" onClick={tableWrapper.nextPage}></Button>
             <div className="spacer"></div>
         </div>}
     </div>

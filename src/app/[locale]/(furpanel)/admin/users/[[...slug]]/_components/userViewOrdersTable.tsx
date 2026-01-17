@@ -75,7 +75,7 @@ export default function UserViewOrdersTable({
         orderColHelper.display({
             id: 'actionViewOrder',
             header: '',
-            cell: props => <Button iconName={"OPEN_IN_NEW"}
+            cell: props => <Button icon="OPEN_IN_NEW"
                 key={`${props.row.original.eventId}-${props.row.original.code}`}
                 onClick={() => viewOrder(props.row.original.eventId, props.row.original.code)}
                 busy={viewOrderLoading} />,

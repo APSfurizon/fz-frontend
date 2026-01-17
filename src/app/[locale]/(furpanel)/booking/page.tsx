@@ -160,13 +160,13 @@ export default function BookingPage() {
                             <Button className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
-                                iconName="CHECK">
+                                icon="CHECK">
                                 {t("furpanel.booking.actions.confirm_info")}
                             </Button>
                             <Button className="warning"
                                 busy={actionLoading}
                                 onClick={() => router.push("/user")}
-                                iconName="OPEN_IN_NEW">
+                                icon="OPEN_IN_NEW">
                                 {t("furpanel.booking.actions.review_info")}
                             </Button>
                         </span>
@@ -225,7 +225,7 @@ export default function BookingPage() {
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                             {/* Ticket item */}
-                            <OrderItem icon={"LOCAL_ACTIVITY"}
+                            <OrderItem icon="LOCAL_ACTIVITY"
                                 title={
                                     t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                         sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
@@ -236,10 +236,10 @@ export default function BookingPage() {
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })
                                     : allDaysRange} />
                             {/* Membership item */}
-                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}
+                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon="ID_CARD"
                                 title={t("furpanel.booking.items.membership_card")} />}
                             {/* Extra days */}
-                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon={"CALENDAR_ADD_ON"}
+                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon="CALENDAR_ADD_ON"
                                 title={t("furpanel.booking.items.extra_days")}
                                 description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)} />}
                             {/* Room */}
@@ -256,7 +256,7 @@ export default function BookingPage() {
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                             {pageData?.shouldRetry && <Button className="action-button"
-                                iconName="REPLAY"
+                                icon="REPLAY"
                                 busy={actionLoading}
                                 onClick={requestRetryPaymentLink}>
                                 {t("furpanel.booking.retry_payment")}
@@ -267,14 +267,14 @@ export default function BookingPage() {
                                 style={{ flexGrow: "1" }}>
                                 <Button className="action-button"
                                     disabled={isEditLocked}
-                                    iconName="OPEN_IN_NEW"
+                                    icon="OPEN_IN_NEW"
                                     busy={actionLoading}
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
                                 </Button>
                                 {bookingData?.exchangeSupported && <Button className="action-button danger"
                                     disabled={isEditLocked}
-                                    iconName="SEND"
+                                    icon="SEND"
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.transfer_order")}
@@ -295,7 +295,7 @@ export default function BookingPage() {
 
                             {GROUP_CHAT_URL &&
                                 <NoticeBox theme={NoticeTheme.FAQ}
-                                    customIcon={"GROUPS"}
+                                    icon="GROUPS"
                                     title={t("furpanel.booking.messages.invite_group.title")}>
                                     {t.rich("furpanel.booking.messages.invite_group.description",
                                         {
@@ -324,7 +324,7 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Order exchange modal */}
-        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+        <Modal icon="SEND" open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
             <span className="descriptive small">{t("furpanel.booking.messages.transfer_explanation")}</span>
             <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
@@ -332,9 +332,9 @@ export default function BookingPage() {
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" icon="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" icon="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

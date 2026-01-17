@@ -69,7 +69,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                         <div className="vertical-list flex-vertical-center">
                             <span className="title large">
                                 {data?.shouldUpdateInfo &&
-                                    <Icon style={{ marginRight: ".2em" }} icon={"LOCK"} />}
+                                    <Icon style={{ marginRight: ".2em" }} icon="LOCK" />}
                                 {t("furpanel.booking.book_now")}
                             </span>
                             {data?.shouldUpdateInfo && <>

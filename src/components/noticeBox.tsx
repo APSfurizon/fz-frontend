@@ -9,31 +9,32 @@ export enum NoticeTheme {
     Error
 }
 
-export default function NoticeBox({ title, theme, customIcon, children, headerStyle, style, className }:
-    Readonly<{ title?: string, theme: NoticeTheme, customIcon?: MaterialIcon, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string }>) {
-    let icon: MaterialIcon = "HELP";
+export default function NoticeBox({ title, theme, icon, children, headerStyle, style, className }:
+    Readonly<{ title?: string, theme: NoticeTheme, icon?: MaterialIcon, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string }>) {
+    let finalIcon: MaterialIcon = "HELP";
     switch (theme) {
         case NoticeTheme.FAQ:
-            icon = "HELP";
+            finalIcon = "HELP";
             className = "faq";
             break;
         case NoticeTheme.Success:
-            icon = "CHECK_CIRCLE";
+            finalIcon = "CHECK_CIRCLE";
             className = "success";
             break;
         case NoticeTheme.Warning:
-            icon = "ERROR";
+            finalIcon = "ERROR";
             className = "warning";
             break;
         case NoticeTheme.Error:
-            icon = "CANCEL";
+            finalIcon = "CANCEL";
             className = "error";
             break;
     }
+    finalIcon = icon ?? finalIcon;
     return (
         <div className={`notice-box ${className}`} style={{ ...style }}>
             <div className="header vertical-align-middle" style={{ ...headerStyle }}>
-                <Icon className="medium" icon={customIcon ?? icon}/>
+                <Icon className="medium" icon={finalIcon}/>
                 <span className="title">{title}</span>
             </div>
             <div className="answer descriptive">

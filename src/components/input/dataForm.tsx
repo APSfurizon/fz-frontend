@@ -14,7 +14,7 @@ import "@/styles/components/dataForm.css";
 
 export interface SaveButtonData {
     text: string,
-    iconName: MaterialIcon
+    icon: MaterialIcon
 }
 
 // Context management
@@ -110,7 +110,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
 
     if (saveButton === undefined) saveButton = {
         text: t('dataForm.save'),
-        iconName: "SAVE"
+        icon: "SAVE"
     };
 
     useEffect(() => {
@@ -198,12 +198,12 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                     <div className="spacer"></div>
                     {!hideSave && <Button type="submit"
                         disabled={disableSave}
-                        iconName={saveButton.iconName}
+                        icon={saveButton.icon}
                         busy={loading}>
                         {saveButton.text}{isEntityChanged && !!initialEntity ? "*" : ""}
                     </Button>}
                     {!hideReset && <Button type="reset"
-                        iconName="REPLAY"
+                        icon="REPLAY"
                         disabled={!isEntityChanged}
                         busy={loading}>
                         {t("common.CRUD.reset")}

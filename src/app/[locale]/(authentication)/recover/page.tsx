@@ -77,7 +77,7 @@ export default function Login() {
           placeholder={t("authentication.login.placeholder_email")}/>
         <div className="horizontal-list flex-center">
           <Button type="submit"
-            iconName="MAIL">
+            icon="MAIL">
               {t("authentication.recover.actions.send_verification")}
           </Button>
         </div>

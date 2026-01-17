@@ -100,7 +100,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                 <div className="horizontal-list flex-vertical-center">
                     <span className="title">{t("furpanel.room.order_flow.select_type")}</span>
                     <div className="spacer"></div>
-                    <Button iconName={"REFRESH"}
+                    <Button icon="REFRESH"
                         onClick={() => setRoomsData(null)}
                         debounce={3000}>
                         {t("common.reload")}
@@ -136,13 +136,13 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                 </div>
                 <div className="horizontal-list gap-4mm">
                     <Button className="danger"
-                        iconName={"CANCEL"}
+                        icon="CANCEL"
                         busy={modalLoading}
                         onClick={() => close()}>
                         {t("common.cancel")}
                     </Button>
                     <div className="spacer" />
-                    <Button iconName={"ARROW_FORWARD"}
+                    <Button icon="ARROW_FORWARD"
                         disabled={!selectedType}
                         busy={modalLoading}
                         onClick={() => setStep(step + 1)}>
@@ -173,7 +173,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                     </NoticeBox>
                     <div className="horizontal-list gap-4mm">
                         <Button className="danger"
-                            iconName={"ARROW_BACK"}
+                            icon="ARROW_BACK"
                             busy={modalLoading} onClick={() => {
                                 setStep(step => step - 1);
                                 setLatestError(undefined);
@@ -181,7 +181,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                             {t("common.back")}
                         </Button>
                         <div className="spacer"></div>
-                        <Button iconName={"SHOPPING_CART_CHECKOUT"}
+                        <Button icon="SHOPPING_CART_CHECKOUT"
                             disabled={!selectedType || !warningAccepted}
                             busy={modalLoading} onClick={changeOrder}>
                             {t("furpanel.room.order_flow.complete_order")}

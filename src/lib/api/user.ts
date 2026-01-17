@@ -11,6 +11,7 @@ import {
 import { MediaData } from "./media";
 import { UAParser } from "ua-parser-js";
 import { SelectItem } from "../components/fpSelect";
+import { MouseEvent } from "react";
 
 export const REG_ITALIAN_FISCAL_CODE = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi;
 
@@ -442,7 +443,8 @@ export class ChangeLanguageAction extends ApiAction<boolean, ApiErrorResponse> {
     urlAction = "users/changeLanguage";
 }
 
-export function changeLanguage(language: string, userDisplay?: UserData) {
+export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: string, userDisplay?: UserData) {
+    e.preventDefault ();
     return new Promise((resolve) => resolve(!!userDisplay
         ? runRequest(new ChangeLanguageAction(), undefined, { languageCode: language })
         : Promise.resolve(null)))

@@ -83,11 +83,11 @@ export default function UserViewRooms({
                 !events[props.row.original.currentRoomInfo.eventId].current
                     ? undefined
                     : <div className="horizontal-list gap-2mm">
-                        <Button iconName={"PERSON_ADD"}
+                        <Button icon="PERSON_ADD"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
                             onClick={() => promptAddGuest(props.row.original)}
                             disabled={roomInfo(props).guests.length >= roomInfo(props).roomData.roomCapacity} />
-                        <Button iconName={"PERSON_REMOVE"}
+                        <Button icon="PERSON_REMOVE"
                             className="danger"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
                             onClick={() => promptRemGuest(props.row.original)}
