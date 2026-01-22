@@ -1,5 +1,5 @@
 .user-picture-container .image-container {
-    padding: 0.2em;
+    padding: 0.25em;
     margin: 0px 0px 0px 0px;
     background-color: var(--profile-picture-border-normal);
     position: relative;
@@ -64,7 +64,8 @@
     position: absolute;
     top: 100%;
     left: 100%;
-    margin: -1.05em -1.1em;
+    margin: -0.8em -0.8em;
+    text-shadow: 0px 0px 4px black;
 }
 
 .user-picture-container .nickname {

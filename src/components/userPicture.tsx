@@ -61,13 +61,13 @@ export default function UserPicture ({
     }, []);
     
     const borderClassName = useMemo(()=>
-        `image-container rounded-m sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
+        `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
         [pictureData, fursuitData, isLoading]);
 
     return (
         <div className="user-picture-container vertical-list flex-vertical-center">
             <div className={borderClassName}>
-                <Image unoptimized className="rounded-s profile-picture"
+                <Image unoptimized className="rounded-m profile-picture"
                     src={getImageUrl(pictureData?.propic?.mediaUrl) ?? getImageUrl(fursuitPictureData?.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
                     alt={t('common.header.alt_profile_picture')} quality={100} width={size ?? 32} height={size ?? 32}>
                 </Image>

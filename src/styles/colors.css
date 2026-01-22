@@ -55,8 +55,8 @@
   /* User profile picture */
   --profile-picture-border-normal: #ffffff;
   --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
-  --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
-  --profile-picture-border-ultra-sponsor: radial-gradient(#44D4D4 20%, #206aca 50%, #4FC1F2 80%);
+  --profile-picture-border-super-sponsor: radial-gradient(#d7104c 20%, #ff4d00 50%, #ea7815 80%);
+  --profile-picture-border-ultra-sponsor: radial-gradient(#FAAA00 20%, #facc00 50%, #fbc500 80%);
   --profile-picture-shadow: #242C38;
 
   /* User dropdown */
@@ -155,8 +155,8 @@
 
   /* Sponsor colors */
   --sponsor-text-color: #b235d4;
-  --super-sponsor-color: #DB9703;
-  --super-sponsor-text-color: #FAAA00;
+  --super-sponsor-text-color: #F55027;
+  --ultra-sponsor-text-color: #FAAA00;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -216,8 +216,6 @@
 
     /* User profile picture */
     --profile-picture-border-normal: #E9E9E9;
-    --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
-    --profile-picture-border-super-sponsor: radial-gradient(#FAAA00 20%, #FA5E00 50%, #FB8C00 80%);
     --profile-picture-shadow: #242C38;
 
     /* User dropdown */
@@ -311,11 +309,6 @@
     /* Badge page */
     --badge-fursuit-bg: #ffffff17;
     --badge-fursuit-border: #afafaf;
-
-    /* Sponsor colors */
-    --sponsor-text-color: #b235d4;
-    --super-sponsor-text-color: #FAAA00;
-    --ultra-sponsor-text-color: #4FC1F2;
   }
 }
 
