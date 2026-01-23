@@ -16,7 +16,7 @@ import ModalError from "@/components/modalError";
 import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
 import { RoomData } from "@/lib/api/room";
-import { UserData } from "@/lib/api/user";
+import { ExtraDays, UserData } from "@/lib/api/user";
 import { Board, calcTicketData } from "@/lib/api/booking";
 import "@/styles/authentication/login.css";
 import "@/styles/authentication/exchangeConfirm.css";
@@ -30,7 +30,7 @@ export default function ExchangeConfirm() {
   const params = useSearchParams();
   const { userDisplay } = useUser();
 
-  const renderRoom = (userData: UserData, data: RoomData) => {
+  const renderRoom = (userData: UserData, data: RoomData, extraDays?: ExtraDays, board?: Board) => {
     return <>
       <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
         <Icon className="large" icon="PACKAGE_2"></Icon>
@@ -47,6 +47,12 @@ export default function ExchangeConfirm() {
           <span className="small descriptive color-subtitle">
             {t("furpanel.booking.items.room_capacity", { capacity: data.roomCapacity })}
           </span>
+          {extraDays && extraDays !== ExtraDays.NONE && <span className="small descriptive color-subtitle">
+            {t(`furpanel.booking.items.extra_days_${extraDays}`)}
+          </span>}
+          {board && board !== Board.NONE && <span className="small descriptive color-subtitle">
+            {t(`furpanel.booking.items.board_${board}`)}
+          </span>}
         </div>
       </div>
     </>;
@@ -95,6 +101,8 @@ export default function ExchangeConfirm() {
   if (exchangeData && exchangeData.fullOrderExchange) {
     exchangeData.fullOrderExchange.extraDays = "BOTH";
   }
+
+  const board = exchangeData?.fullOrderExchange?.board ?? exchangeData?.sourceRoomExchange
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
@@ -118,14 +126,17 @@ export default function ExchangeConfirm() {
           {/* Source room data */}
           {exchangeData.sourceRoomExchange && <>
             <div className="item-info vertical-list rounded-m">
-              {renderRoom(exchangeData.sourceUser, exchangeData.sourceRoomExchange)}
+              {renderRoom(exchangeData.sourceUser, exchangeData.sourceRoomExchange,
+                exchangeData.sourceExtraDays, exchangeData.sourceBoard)}
             </div>
           </>}
           {/* Target room data */}
           {!exchangeData.targetRoomInfoHidden && exchangeData.targetRoomExchange && <>
             <hr />
             <div className="item-info vertical-list rounded-m">
-              {renderRoom(exchangeData.targetUser, exchangeData.targetRoomExchange)}
+              {renderRoom(exchangeData.targetUser, exchangeData.targetRoomExchange,
+                exchangeData.targetExtraDays, exchangeData.targetBoard
+              )}
             </div>
           </>}
           {/* Order data */}
