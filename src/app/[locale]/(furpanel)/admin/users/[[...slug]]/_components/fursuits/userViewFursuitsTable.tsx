@@ -71,7 +71,8 @@ export default function UserViewFursuitsTable({
         fursuitColHelper.display({
             id: "propic",
             header: t("furpanel.admin.users.accounts.view.fursuit_table.picture"),
-            cell: props => <UserPicture size={120} fursuitData={props.row.original.fursuit} />
+            cell: props => <UserPicture key={props.row.original.fursuit.id}
+                size={120} fursuitData={props.row.original.fursuit} />
         }),
         fursuitColHelper.accessor('fursuit.name', {
             id: "fursuitName",
