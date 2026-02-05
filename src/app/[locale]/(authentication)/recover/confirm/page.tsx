@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
-import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
+import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import Button from "@/components/input/button";
 
 export default function RecoverConfirm() {
@@ -62,7 +62,7 @@ export default function RecoverConfirm() {
     <DataForm className="vertical-list login-form"
       loading={loading}
       setLoading={setLoading}
-      action={new ResetPasswordFormAction}
+      action={new ChangePasswordFormAction}
       onFail={(err) => manageError(err)}
       onBeforeSubmit={onLoading}
       onSuccess={manageSuccess}

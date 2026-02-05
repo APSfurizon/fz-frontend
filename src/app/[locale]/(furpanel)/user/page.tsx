@@ -9,7 +9,7 @@ import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ModalError from "@/components/modalError";
 import FpInput from "@/components/input/fpInput";
-import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
+import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import LoadingPanel from "@/components/loadingPanel";
 import "@/styles/furpanel/user.css";
 import UserViewPersonalInfo from "../admin/users/[[...slug]]/_components/userViewPersonalInfo";
@@ -85,7 +85,7 @@ export default function UserPage() {
           <DataForm className="login-form gap-4mm"
             loading={passwordChangeLoading}
             setLoading={setPasswordChangeLoading}
-            action={new ResetPasswordFormAction}
+            action={new ChangePasswordFormAction}
             onFail={(err) => passwordChangeError(err)}
             disableSave={!passwordMatch}>
             <FpInput fieldName="password"

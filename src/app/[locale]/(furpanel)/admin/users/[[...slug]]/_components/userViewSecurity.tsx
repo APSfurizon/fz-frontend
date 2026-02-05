@@ -1,10 +1,12 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useUser } from "@/components/context/userProvider";
 import Button from "@/components/input/button";
+import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import Modal from "@/components/modal";
 import ModalError from "@/components/modalError";
 import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
+import { ChangeEmailAction } from "@/lib/api/authentication/recover";
 import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
@@ -66,9 +68,13 @@ export default function UserViewSecurity({
             });
     }
 
+    // Change email logic
+    const [changeEmailModalOpen, setChangeEmailModalOpen] = useState(false);
+    const [changeEmailLoading, setChangeEmailLoading] = useState(false);
+
     return <>
         <div className="vertical-list gap-2mm" style={{ padding: "0.625em" }}>
-            <div className="horizontal-list gap-2mm">
+            <div className="horizontal-list flex-wrap gap-2mm">
                 <FpInput fieldName="email"
                     readOnly
                     inputType="email"
@@ -86,6 +92,13 @@ export default function UserViewSecurity({
                     disabled={isSelf}>
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
                 </Button>}
+                <Button icon="MAIL"
+                    onClick={() => setChangeEmailModalOpen (true)}>
+                    {t("furpanel.admin.users.accounts.view.actions.change_email")}
+                </Button>
+                <Button icon="KEY">
+                    {t("furpanel.admin.users.accounts.view.actions.change_password")}
+                </Button>
             </div>
         </div>
         <Modal open={banModalOpen} onClose={() => setBanModalOpen(false)} busy={loading}
@@ -131,6 +144,33 @@ export default function UserViewSecurity({
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
                 </Button>
             </div>
+        </Modal>
+        <Modal open={changeEmailModalOpen}
+            onClose={() => setChangeEmailModalOpen(false)}
+            title={t("furpanel.admin.users.accounts.view.actions.change_email")}>
+                <DataForm action={new ChangeEmailAction}
+                    hideSave
+                    className="gap-2mm"
+                    onSuccess={reloadData}
+                    loading={changeEmailLoading}
+                    setLoading={setChangeEmailLoading}>
+                    <input type="hidden" name="userId" value={userData.personalInfo.userId} />
+                    <FpInput inputType="email"
+                        fieldName="email"
+                        initialValue={userData.email}
+                        label={t("authentication.register.form.email.label")}
+                        placeholder={t("authentication.register.form.email.placeholder")} />
+                    <div className="horizontal-list gap-4mm">
+                        <Button type="button" className="danger" icon="CANCEL" busy={changeEmailLoading}
+                            onClick={() => setChangeEmailModalOpen(false)}>
+                                {t("common.cancel")}
+                        </Button>
+                        <div className="spacer"></div>
+                        <Button type="submit" className="success" icon="CHECK" busy={changeEmailLoading}>
+                            {t("common.confirm")}
+                        </Button>
+                    </div>
+                </DataForm>
         </Modal>
     </>
 }

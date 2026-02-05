@@ -618,7 +618,9 @@
             "actions": {
               "ban": "Ban",
               "unban": "Riammetti",
-              "view_order": "Vedi ordine"
+              "view_order": "Vedi ordine",
+              "change_email": "Cambia email",
+              "change_password": "Cambia password"
             },
             "messages": {
               "confirm_ban": {

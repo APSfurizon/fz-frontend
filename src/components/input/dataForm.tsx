@@ -4,7 +4,8 @@ import {
     createContext, useContext,
     MutableRefObject,
     useImperativeHandle,
-    RefObject
+    RefObject,
+    useMemo
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
@@ -12,6 +13,8 @@ import { FormApiAction, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
 import { useModalContext } from "../modal";
+import { useModalUpdate } from "../context/modalProvider";
+import ModalError from "../modalError";
 
 export interface SaveButtonData {
     text: string,
@@ -101,7 +104,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     initialEntity?: InferRequest<T>
 }>) {
     const [reset, setReset] = useState(false);
-    const t = useTranslations('components');
+    const t = useTranslations("");
     const inputRef = useRef<HTMLFormElement>(null);
     useImperativeHandle(formRef, () => inputRef.current!);
 
@@ -109,9 +112,10 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
     const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
     const context = useModalContext();
+    const {showModal} = useModalUpdate();
 
     if (saveButton === undefined) saveButton = {
-        text: t('dataForm.save'),
+        text: t('common.CRUD.save'),
         icon: "SAVE"
     };
 
@@ -134,6 +138,14 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         }
     })
 
+    const fail = useMemo(() => (data: ApiErrorResponse | ApiDetailedErrorResponse) => {
+        if (onFail) {
+            onFail(data);
+        } else {
+            showModal(t("common.error"), <ModalError error={data} />);
+        }
+    }, [])
+
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         try {
             if (!action) throw new Error("dataform must have an action to be submitted")
@@ -150,7 +162,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
             runFormRequest(action, restPathParams, formData)
                 .then((responseData) => onSuccess && onSuccess(responseData))
                 .catch((errorData) => {
-                    if (onFail) onFail(errorData);
+                    fail(errorData);
                     if (resetOnFail) setReset(true);
                 }).finally(() => {
                     if (setLoading) setLoading(false);
@@ -159,7 +171,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         } catch (e) {
             console.error(e);
             if (setLoading) setLoading(false);
-            if (onFail) onFail(e ?? {errorMessage: "unknown"});
+            fail(e ?? {errorMessage: "unknown"});
         }
 
         e.preventDefault();

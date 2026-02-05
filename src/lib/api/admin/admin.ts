@@ -1,8 +1,10 @@
+import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
     canUpgradeUser: boolean,
     canBanUsers: boolean,
+    canChangeLoginData: boolean,
     canManageMembershipCards: boolean,
     canRefreshPretixCache: boolean,
     canRemindOrderLinking: boolean,
@@ -14,6 +16,7 @@ export interface AdminCapabilitesResponse extends ApiResponse {
 export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
     canUpgradeUser: false,
     canBanUsers: false,
+    canChangeLoginData: false,
     canManageMembershipCards: false,
     canRefreshPretixCache: false,
     canRemindOrderLinking: false,
