@@ -20,6 +20,10 @@ div.fp-input.success>div.input-container:has(input.input-field:user-valid) {
 
 div.fp-input {
 
+    div.input-container:has(input.input-field:read-only) {
+        outline-width: 0px;
+    }
+
     label {
         margin-left: 0.125em;
         display: inline-block;
@@ -40,6 +44,10 @@ div.fp-input {
         overflow: hidden;
         border: none;
         outline: none;
+
+        &:read-only {
+            caret-color: transparent;
+        }
     }
 
     /* Focus style */

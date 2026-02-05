@@ -11,6 +11,7 @@ import Button from "./button";
 import { FormApiAction, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
+import { useModalContext } from "../modal";
 
 export interface SaveButtonData {
     text: string,
@@ -107,6 +108,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     // Entity change logic
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
     const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
+    const context = useModalContext();
 
     if (saveButton === undefined) saveButton = {
         text: t('dataForm.save'),
@@ -125,6 +127,12 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         }
         setCurrentEntity(initialEntity ? { ...initialEntity } : undefined);
     }, [reset]);
+
+    useEffect(()=>{
+        if (loading)  {
+            context.setLoading(loading);
+        }
+    })
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         try {
