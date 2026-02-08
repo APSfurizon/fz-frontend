@@ -655,7 +655,8 @@
               "locale": "Locale",
               "delete_badge_picture": "Delete picture",
               "hide_from_nosecount": "Hide from nosecount",
-              "show_from_nosecount": "Show in nosecount"
+              "show_from_nosecount": "Show in nosecount",
+              "fursuit_badges_available": "Available fursuit badges"
             },
             "fursuit_table": {
               "picture": "Photo",

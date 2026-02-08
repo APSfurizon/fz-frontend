@@ -162,9 +162,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             cell: props => <>
                 {props.row.original.membershipCard
                     ? <Checkbox initialValue={props.row.original.membershipCard.registered}
-                        onClick={(event: MouseEvent<HTMLButtonElement>,
-                            checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
-                            setBusy: Dispatch<SetStateAction<boolean>>) => markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
+                        onClick={(event, checked, setChecked, setBusy) =>
+                            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
                         {t("furpanel.admin.membership_manager.table.headers.registered")}
                     </Checkbox>
                     : undefined

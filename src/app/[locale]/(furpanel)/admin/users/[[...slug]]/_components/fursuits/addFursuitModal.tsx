@@ -82,6 +82,7 @@ export default function AddFursuitModal({
                 onDelete={deleteCurrentImage}
                 label={t("furpanel.badge.input.fursuit_image.label")} />
             <FpInput inputType="text"
+                required
                 fieldName="name"
                 initialValue={editMode ? fursuit?.fursuit.name : ""}
                 label={t("furpanel.badge.input.fursuit_name.label")}

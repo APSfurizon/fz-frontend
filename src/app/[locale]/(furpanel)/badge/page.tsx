@@ -376,6 +376,7 @@ export default function BadgePage() {
           helpText={t("furpanel.badge.input.fursuit_image.help")} />
         <FpInput inputType="text"
           fieldName="name"
+          required
           initialValue={editMode ? currentFursuit?.fursuit.name : ""}
           label={t("furpanel.badge.input.fursuit_name.label")}
           placeholder={t("furpanel.badge.input.fursuit_name.placeholder")} />

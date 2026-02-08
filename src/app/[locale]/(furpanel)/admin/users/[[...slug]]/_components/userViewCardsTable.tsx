@@ -1,10 +1,13 @@
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import Checkbox from "@/components/input/checkbox";
 import FpTable from "@/components/table/fpTable";
-import { MembershipCard } from "@/lib/api/admin/membershipManager";
+import { ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, MembershipCard } from "@/lib/api/admin/membershipManager";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
+import { runRequest } from "@/lib/api/global";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 
 export default function UserViewCardsTable({
     userData
@@ -12,6 +15,27 @@ export default function UserViewCardsTable({
     userData: GetUserAdminViewResponse
 }>) {
     const t = useTranslations();
+    const {showModal} = useModalUpdate();
+
+    // Registration logic
+    const [registrationLoading, setRegistrationLoading] = useState(false);
+    // Mark as registered
+    const markAsRegistered = (event: MouseEvent<HTMLButtonElement>,
+        checked: boolean, setChecked: (value: boolean) => void,
+        setBusy: (value: boolean) => void, cardId: number) => {
+        setBusy(true);
+        const data: ChangeCardRegisterStatusApiData = {
+            membershipCardId: cardId,
+            registered: checked
+        }
+        runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
+            .catch((err) => {
+                showModal(t("common.error"), <ErrorMessage error={err} />);
+                setChecked(!checked);
+            })
+            .finally(() => setBusy(false));
+    };
+
     const cardColHelper = createColumnHelper<MembershipCard>();
     const [cardColumns] = useState<ColumnDef<MembershipCard, any>[]>([
         cardColHelper.accessor(itm => `${(itm.cardNo ?? '').padStart(7, '0')}`, {
@@ -25,7 +49,10 @@ export default function UserViewCardsTable({
         cardColHelper.accessor(itm => itm.registered, {
             id: 'registered',
             header: t("furpanel.admin.membership_manager.columns.registered"),
-            cell: props => <Checkbox disabled initialValue={props.getValue()}/>
+            cell: props => <Checkbox busy={registrationLoading}
+                initialValue={props.getValue()}
+                onClick={(event, checked, setChecked, setBusy) =>
+                            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)}/>
         })
     ]);
 

@@ -655,7 +655,8 @@
               "locale": "Localizzazione",
               "delete_badge_picture": "Elimina immagine",
               "hide_from_nosecount": "Nascondi dal nosecount",
-              "show_from_nosecount": "Mostra nel nosecount"
+              "show_from_nosecount": "Mostra nel nosecount",
+              "fursuit_badges_available": "Badge fursuit disponibili"
             },
             "fursuit_table": {
               "picture": "Fotografia",
