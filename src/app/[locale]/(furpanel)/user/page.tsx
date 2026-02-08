@@ -83,8 +83,8 @@ export default function UserPage() {
             </span>
           </div>
           <DataForm className="login-form gap-4mm"
-            loading={passwordChangeLoading}
-            setLoading={setPasswordChangeLoading}
+            busy={passwordChangeLoading}
+            setBusy={setPasswordChangeLoading}
             action={new ChangePasswordFormAction}
             onFail={(err) => passwordChangeError(err)}
             disableSave={!passwordMatch}>

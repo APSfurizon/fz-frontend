@@ -327,8 +327,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             onClose={() => setAddModalOpen(false)}
             busy={loading}>
             <DataForm action={new AddCardFormAction}
-                loading={loading}
-                setLoading={setLoading}
+                busy={loading}
+                setBusy={setLoading}
                 hideSave
                 className="vertical-list gap-2mm"
                 onSuccess={addCardSuccess}

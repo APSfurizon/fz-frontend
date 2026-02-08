@@ -66,8 +66,8 @@ export default function AddFursuitModal({
         busy={loading}>
         <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
             restPathParams={editMode ? ["" + fursuit?.fursuit.id, "update-with-image"] : undefined}
-            loading={loading}
-            setLoading={setLoading}
+            busy={loading}
+            setBusy={setLoading}
             editFormData={editFursuitFormData}
             hideSave
             className="gap-2mm"

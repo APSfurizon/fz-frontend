@@ -18,7 +18,6 @@ import Button from "@/components/input/button";
 export default function Login() {
   const t = useTranslations("authentication");
   const [error, setError] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -73,8 +72,6 @@ export default function Login() {
           {t(`login.messages.${params.get("status")}.description`)}
       </NoticeBox>}
     <DataForm className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
       action={new LoginFormAction}
       onBeforeSubmit={() => onLoad()}
       onSuccess={(data) => manageSuccess(data as LoginResponse)}
@@ -93,9 +90,7 @@ export default function Login() {
           label={t("login.label_password")}
           placeholder={t("login.placeholder_password")}/>
         <div className="toolbar-bottom">
-          <Button type="submit"
-            icon="KEY"
-            busy={loading}>
+          <Button type="submit" icon="KEY">
               {t("login.login")}
           </Button>
         </div>

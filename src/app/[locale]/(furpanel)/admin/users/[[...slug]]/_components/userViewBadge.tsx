@@ -127,7 +127,7 @@ export default function UserViewBadge({
             open={changeDataModalOpen}
             onClose={() => setChangeDataModalOpen(false)}
             busy={badgeLoading}>
-            <DataForm action={new BadgeDataChangeFormAction} loading={badgeLoading} setLoading={setBadgeLoading} hideSave
+            <DataForm action={new BadgeDataChangeFormAction} busy={badgeLoading} setBusy={setBadgeLoading} hideSave
                 className="gap-2mm" onFail={onChangeFail} onSuccess={reloadData}>
                 <input type="hidden" name="userId" value={userData.badgeData.mainBadge?.userId} />
                 <FpInput inputType="text"

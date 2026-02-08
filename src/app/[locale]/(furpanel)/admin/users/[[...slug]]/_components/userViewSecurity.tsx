@@ -70,7 +70,9 @@ export default function UserViewSecurity({
 
     // Change email logic
     const [changeEmailModalOpen, setChangeEmailModalOpen] = useState(false);
-    const [changeEmailLoading, setChangeEmailLoading] = useState(false);
+
+    // Change password logic
+    const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
 
     return <>
         <div className="vertical-list gap-2mm" style={{ padding: "0.625em" }}>
@@ -151,9 +153,7 @@ export default function UserViewSecurity({
                 <DataForm action={new ChangeEmailAction}
                     hideSave
                     className="gap-2mm"
-                    onSuccess={reloadData}
-                    loading={changeEmailLoading}
-                    setLoading={setChangeEmailLoading}>
+                    onSuccess={reloadData}>
                     <input type="hidden" name="userId" value={userData.personalInfo.userId} />
                     <FpInput inputType="email"
                         fieldName="email"
@@ -161,12 +161,35 @@ export default function UserViewSecurity({
                         label={t("authentication.register.form.email.label")}
                         placeholder={t("authentication.register.form.email.placeholder")} />
                     <div className="horizontal-list gap-4mm">
-                        <Button type="button" className="danger" icon="CANCEL" busy={changeEmailLoading}
-                            onClick={() => setChangeEmailModalOpen(false)}>
+                        <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
                                 {t("common.cancel")}
                         </Button>
                         <div className="spacer"></div>
-                        <Button type="submit" className="success" icon="CHECK" busy={changeEmailLoading}>
+                        <Button type="submit" className="success" icon="CHECK">
+                            {t("common.confirm")}
+                        </Button>
+                    </div>
+                </DataForm>
+        </Modal>
+        <Modal open={changePasswordModalOpen}
+            onClose={() => setChangePasswordModalOpen(false)}
+            title={t("furpanel.admin.users.accounts.view.actions.change_email")}>
+                <DataForm action={new ChangeEmailAction}
+                    hideSave
+                    className="gap-2mm"
+                    onSuccess={reloadData}>
+                    <input type="hidden" name="userId" value={userData.personalInfo.userId} />
+                    <FpInput inputType="email"
+                        fieldName="email"
+                        initialValue={userData.email}
+                        label={t("authentication.register.form.email.label")}
+                        placeholder={t("authentication.register.form.email.placeholder")} />
+                    <div className="horizontal-list gap-4mm">
+                        <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
+                            {t("common.cancel")}
+                        </Button>
+                        <div className="spacer"></div>
+                        <Button type="submit" className="success" icon="CHECK">
                             {t("common.confirm")}
                         </Button>
                     </div>

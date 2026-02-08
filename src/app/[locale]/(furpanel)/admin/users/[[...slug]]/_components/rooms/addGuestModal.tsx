@@ -34,8 +34,8 @@ export default function AddGuestModal({
         <DataForm action={new RoomInviteFormAction}
             resetOnSuccess
             resetOnFail
-            setLoading={setLoading}
-            loading={loading}
+            setBusy={setLoading}
+            busy={loading}
             onSuccess={onSuccess}
             hideSave>
             <input type="hidden" name="roomId" value={String(roomInfo.currentRoomInfo.roomId)} />

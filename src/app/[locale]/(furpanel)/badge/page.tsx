@@ -213,7 +213,7 @@ export default function BadgePage() {
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
         <div className="vertical-list flex-vertical-center">
-          <DataForm hideSave loading={loading} setLoading={setLoading}>
+          <DataForm hideSave busy={loading} setBusy={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop busy={loading}
               setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}
               readonly={!badgeStatus?.allowedModifications}>
@@ -324,7 +324,7 @@ export default function BadgePage() {
       open={changeDataModalOpen}
       onClose={() => setChangeDataModalOpen(false)}
       busy={loading}>
-      <DataForm action={new BadgeDataChangeFormAction} loading={loading} setLoading={setLoading} hideSave
+      <DataForm action={new BadgeDataChangeFormAction} busy={loading} setBusy={setLoading} hideSave
         className="gap-2mm" onFail={onChangeFail} onSuccess={onChangeSuccess} >
         <FpInput inputType="text"
           fieldName="fursonaName"
@@ -356,8 +356,8 @@ export default function BadgePage() {
       busy={loading}>
       <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
         restPathParams={editMode ? ["" + currentFursuit?.fursuit.id, "update-with-image"] : undefined}
-        loading={loading}
-        setLoading={setLoading}
+        busy={loading}
+        setBusy={setLoading}
         editFormData={editFursuitFormData}
         hideSave
         className="gap-2mm"

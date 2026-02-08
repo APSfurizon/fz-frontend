@@ -66,9 +66,9 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     formRef,
     hideSave = false,
     hideReset = true,
-    loading,
+    busy,
     editFormData,
-    setLoading,
+    setBusy,
     style,
     saveButton,
     resetOnFail = true,
@@ -93,8 +93,8 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     hideSave?: boolean,
     hideReset?: boolean,
     disableSave?: boolean,
-    loading?: boolean,
-    setLoading?: Dispatch<SetStateAction<boolean>>,
+    busy?: boolean,
+    setBusy?: Dispatch<SetStateAction<boolean>>,
     style?: CSSProperties,
     saveButton?: SaveButtonData,
     resetOnFail?: boolean,
@@ -108,16 +108,29 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     const inputRef = useRef<HTMLFormElement>(null);
     useImperativeHandle(formRef, () => inputRef.current!);
 
+    // Busy state logic
+    // - Internal loading
+    const [loading, setLoading] = useState(false);
+    /**The final busy state, in or between the externally imposed busy state and internal loading */
+    const isBusy = useMemo(()=>(busy ?? false) || loading, [busy, loading]);
+
+    // - Context loading change logic
+    const context = useModalContext();
+
+    // -- Updates the context's busy state
+    useEffect(()=>{
+        context.setLoading(isBusy);
+    }, [isBusy])
+
+    // -- Aligns the external busy state
+    useEffect(() => {
+        setBusy && setBusy(loading);
+    }, [loading])
+
     // Entity change logic
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
     const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
-    const context = useModalContext();
     const {showModal} = useModalUpdate();
-
-    if (saveButton === undefined) saveButton = {
-        text: t('common.CRUD.save'),
-        icon: "SAVE"
-    };
 
     useEffect(() => {
         if (shouldReset) {
@@ -132,12 +145,6 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         setCurrentEntity(initialEntity ? { ...initialEntity } : undefined);
     }, [reset]);
 
-    useEffect(()=>{
-        if (loading)  {
-            context.setLoading(loading);
-        }
-    })
-
     const fail = useMemo(() => (data: ApiErrorResponse | ApiDetailedErrorResponse) => {
         if (onFail) {
             onFail(data);
@@ -147,6 +154,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     }, [])
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+        if (isBusy) {return;}
         try {
             if (!action) throw new Error("dataform must have an action to be submitted")
             const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
@@ -158,19 +166,19 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                 }
             }
             if (onBeforeSubmit) onBeforeSubmit();
-            if (setLoading) setLoading(true);
+            setLoading(true);
             runFormRequest(action, restPathParams, formData)
                 .then((responseData) => onSuccess && onSuccess(responseData))
                 .catch((errorData) => {
                     fail(errorData);
                     if (resetOnFail) setReset(true);
                 }).finally(() => {
-                    if (setLoading) setLoading(false);
+                    setLoading(false);
                     if (resetOnSuccess) { setReset(true); }
                 });
         } catch (e) {
             console.error(e);
-            if (setLoading) setLoading(false);
+            setLoading(false);
             fail(e ?? {errorMessage: "unknown"});
         }
 
@@ -209,7 +217,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                 setFormReset: setReset,
                 formDisabled: disabled,
                 onFormChange,
-                formLoading: loading ?? false
+                formLoading: loading
             }}>
                 {children}
             </FormContext.Provider>
@@ -218,9 +226,9 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
                     <div className="spacer"></div>
                     {!hideSave && <Button type="submit"
                         disabled={disableSave}
-                        icon={saveButton.icon}
+                        icon={saveButton?.icon ?? "SAVE"}
                         busy={loading}>
-                        {saveButton.text}{isEntityChanged && !!initialEntity ? "*" : ""}
+                        {saveButton?.text ?? t("common.CRUD.save")}{isEntityChanged && !!initialEntity ? "*" : ""}
                     </Button>}
                     {!hideReset && <Button type="reset"
                         icon="REPLAY"

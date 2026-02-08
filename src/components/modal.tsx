@@ -31,7 +31,7 @@ export default function Modal({ children, className, icon, onClose, busy, open, 
     const [container, setContainer] = useState<HTMLElement>();
     const [loading, setLoading] = useState (false);
 
-    const definitiveLoading = useMemo(() => busy && loading, [busy, loading]);
+    const definitiveLoading = useMemo(() => busy || loading, [busy, loading]);
 
     useEffect(() => {
         setContainer(globalThis?.document.getElementById("portal-root") ?? undefined);

@@ -158,7 +158,7 @@ export default function RolesListPage() {
         {/* Role creation modal */}
         <Modal open={addRoleModalOpen} onClose={() => setAddRoleModalOpen(false)}
             title={t("furpanel.admin.users.security.roles.actions.add_role")}>
-            <DataForm shouldReset={!addRoleModalOpen} setLoading={setLoading} loading={loading}
+            <DataForm shouldReset={!addRoleModalOpen} setBusy={setLoading} busy={loading}
                 action={new AddRoleFormAction} onSuccess={(data) => onAddSuccess(data as AddRoleApiResponse)}
                 onFail={onAddFail} resetOnSuccess hideSave className="vertical-list gap-2mm">
                 <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>

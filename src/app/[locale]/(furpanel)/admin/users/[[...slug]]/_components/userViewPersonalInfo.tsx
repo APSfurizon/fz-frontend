@@ -49,8 +49,8 @@ export default function UserViewPersonalInfo({
     return <>
         <DataForm className="vertical-list gap-2mm"
             action={new UpdatePersonalInfoFormAction}
-            loading={personalInfoLoading}
-            setLoading={setPersonalInfoLoading}
+            busy={personalInfoLoading}
+            setBusy={setPersonalInfoLoading}
             onSuccess={() => { if (reloadData) reloadData() }}
             onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError}/>, "ERROR")}
             formRef={formRef}

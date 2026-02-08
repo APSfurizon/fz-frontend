@@ -47,8 +47,8 @@ export default function RemoveGuestModal({
         <DataForm action={new RoomKickFormAction}
             resetOnSuccess
             resetOnFail
-            setLoading={setLoading}
-            loading={loading}
+            setBusy={setLoading}
+            busy={loading}
             editFormData={editFormData}
             onSuccess={onSuccess}
             hideSave>

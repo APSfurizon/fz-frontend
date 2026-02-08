@@ -563,8 +563,8 @@ export default function RoomPage() {
       onClose={() => setRenameModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomRenameFormAction}
-          loading={modalLoading}
-          setLoading={setModalLoading}
+          busy={modalLoading}
+          setBusy={setModalLoading}
           onSuccess={commonSuccess}
           onFail={commonFail}
           hideSave
@@ -606,8 +606,8 @@ export default function RoomPage() {
       busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomInviteFormAction}
-          loading={modalLoading}
-          setLoading={setModalLoading}
+          busy={modalLoading}
+          setBusy={setModalLoading}
           onSuccess={commonSuccess}
           onFail={commonFail}
           hideSave
@@ -849,8 +849,8 @@ export default function RoomPage() {
       onClose={() => setExchangeModalOpen(false)}
       busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction}
-        loading={modalLoading}
-        setLoading={setModalLoading}
+        busy={modalLoading}
+        setBusy={setModalLoading}
         onSuccess={roomExchangeSuccess}
         onFail={commonFail}
         hideSave

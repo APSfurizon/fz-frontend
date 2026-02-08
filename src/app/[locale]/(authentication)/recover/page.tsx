@@ -63,8 +63,8 @@ export default function Login() {
       {t("authentication.recover.messages.email_success.description")}
     </NoticeBox>}
     <DataForm className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
+      busy={loading}
+      setBusy={setLoading}
       onSuccess={manageSuccess}
       action={new RecoverFormAction}
       onFail={(err) => manageError(err)}

@@ -60,8 +60,8 @@ export default function RecoverConfirm() {
     </span>}
 
     <DataForm className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
+      busy={loading}
+      setBusy={setLoading}
       action={new ChangePasswordFormAction}
       onFail={(err) => manageError(err)}
       onBeforeSubmit={onLoading}
