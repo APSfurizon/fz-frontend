@@ -613,7 +613,16 @@
               "is_daily": "Is daily",
               "sponsorship_type": "Sponsorship",
               "extra_days": "Extra days",
-              "room_type": "Room type"
+              "room_type": "Room type",
+              "actions": {
+                "link_order": {
+                  "title": "Link order",
+                  "description": "Link an order to <b>{user}</b>",
+                  "order_code": {
+                    "label": "Order code"
+                  }
+                }
+              }
             },
             "actions": {
               "ban": "Ban",

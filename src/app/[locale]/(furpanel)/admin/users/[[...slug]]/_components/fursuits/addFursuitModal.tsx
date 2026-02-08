@@ -28,7 +28,6 @@ export default function AddFursuitModal({
     const t = useTranslations();
     const { showModal } = useModalUpdate();
     const editMode = !!fursuit;
-    const [loading, setLoading] = useState(false);
     const [deleteImage, setDeleteImage] = useState(false);
     const [image, setImage] = useState<Blob>();
 
@@ -62,12 +61,9 @@ export default function AddFursuitModal({
         title={editMode
             ? t("furpanel.badge.actions.edit_fursuit", { name: fursuit.fursuit.name })
             : t("furpanel.badge.actions.add_fursuit")}
-        icon={editMode ? "EDIT" : "ADD_CIRCLE"}
-        busy={loading}>
+        icon={editMode ? "EDIT" : "ADD_CIRCLE"}>
         <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
             restPathParams={editMode ? ["" + fursuit?.fursuit.id, "update-with-image"] : undefined}
-            busy={loading}
-            setBusy={setLoading}
             editFormData={editFursuitFormData}
             hideSave
             className="gap-2mm"
@@ -108,12 +104,16 @@ export default function AddFursuitModal({
                 {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
             </Checkbox>
             <div className="horizontal-list gap-4mm margin-top-2mm">
-                <Button type="button" className="danger" icon="CANCEL" busy={loading}
+                <Button type="button"
+                    className="danger"
+                    icon="CANCEL"
                     onClick={beforeClose}>
                     {t("common.cancel")}
                 </Button>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" icon="CHECK" busy={loading}>
+                <Button type="submit"
+                    className="success"
+                    icon="CHECK">
                     {t("common.confirm")}
                 </Button>
             </div>

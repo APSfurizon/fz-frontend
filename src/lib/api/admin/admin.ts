@@ -37,3 +37,25 @@ export class ExportHotelRoomsApiAction extends ApiAction<Response, ApiErrorRespo
     urlAction = "admin/export/hotel-user-list";
     rawResponse?: boolean = true;
 }
+
+export interface ManualLinkOrderData {
+    orderCode: string,
+    userId: number
+}
+
+class ManuallyLinkOrderDTOBuilder implements FormDTOBuilder<ManualLinkOrderData> {
+    mapToDTO = (data: FormData) => {
+        const toReturn: ManualLinkOrderData = {
+            orderCode: data.get("orderCode")!.toString (),
+            userId: parseInt(data.get("userId")!.toString ())
+        };
+        return toReturn;
+    };
+}
+
+export class ManuallyLinkOrderFormAction extends FormApiAction<ManualLinkOrderData, Response, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    dtoBuilder = new ManuallyLinkOrderDTOBuilder();
+    urlAction = "orders-workflow/manual-order-link";
+}

@@ -613,7 +613,16 @@
               "is_daily": "Giornaliero",
               "sponsorship_type": "Sponsor",
               "extra_days": "Giorni extra",
-              "room_type": "Tipo stanza"
+              "room_type": "Tipo stanza",
+              "actions": {
+                "link_order": {
+                  "title": "Collega un ordine",
+                  "description": "Collega un ordine a <b>{user}</b>",
+                  "order_code": {
+                    "label": "Codice ordine"
+                  }
+                }
+              }
             },
             "actions": {
               "ban": "Ban",

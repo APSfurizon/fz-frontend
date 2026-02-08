@@ -10,7 +10,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
@@ -20,6 +20,18 @@ import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRooms from "./_components/rooms/userViewRooms";
+
+// Context management
+interface UserView {
+    userData?: GetUserAdminViewResponse,
+    reloadAll: () => void
+}
+
+const UserViewContext = createContext<UserView>(undefined as any);
+
+export const useUserViewContext: () => UserView = () => {
+    return useContext(UserViewContext);
+};
 
 export default function AdminUsersPage({ params }: { params: Promise<{ slug: string[] }> }) {
     const [userId, setUserId] = useState<number>();
@@ -69,7 +81,10 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         router.push(`${userId ? getParentDirectory(path) : path}/./${item.id}`);
     }
 
-    return <>
+    return <UserViewContext.Provider value={{
+        userData: userData,
+        reloadAll: reloadData
+    }}>
         <div className="page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <Link href={getParentDirectory(path, userId ? 2 : 1)}><Icon icon="ARROW_BACK" /></Link>
@@ -112,5 +127,5 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 <UserViewSecurity userData={userData} reloadData={reloadData} />
             </>}
         </div>
-    </>;
+    </UserViewContext.Provider>;
 }

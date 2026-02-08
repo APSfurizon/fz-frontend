@@ -19,6 +19,7 @@ const MIN_COLUMN_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 30;
 
 export default function FpTable<T>({
+    children,
     rows,
     columns,
     initialWrapper,
@@ -41,6 +42,7 @@ export default function FpTable<T>({
     pinnedColumns,
     sort
 }: Readonly<{
+    children?: React.ReactNode,
     rows: T[],
     columns: ColumnDef<T, any>[],
     initialWrapper?: Table<T>,
@@ -150,8 +152,8 @@ export default function FpTable<T>({
         }
     }
 
-    const enableToolbar = useMemo(() => enableSearch || showAddButton || showDeleteButton,
-        [enableSearch, showAddButton, showDeleteButton]);
+    const enableToolbar = useMemo(() => enableSearch || showAddButton || showDeleteButton || children,
+        [enableSearch, showAddButton, showDeleteButton, children]);
 
     const t = useTranslations('components');
 
@@ -220,6 +222,7 @@ export default function FpTable<T>({
             {showAddButton && <Button icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
             {showDeleteButton && <Button icon="DELETE" onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
+            {children}
         </div>}
         <div className="table rounded-s gap-2mm" ref={tableRef}
             style={{ ...columnSizeVars, width: '100%', ...tableStyle }}>

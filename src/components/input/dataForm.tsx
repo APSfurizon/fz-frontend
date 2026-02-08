@@ -205,40 +205,38 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
 
     const showBottomToolbar = !hideSave || !hideReset || !!additionalButtons;
 
-    return <>
-        <form ref={inputRef}
-            className={`data-form vertical-list ${className ?? ""}`}
-            action={endpoint}
-            onSubmit={onFormSubmit}
-            onReset={() => setReset(true)}
-            style={{ ...style }}>
-            <FormContext.Provider value={{
-                formReset: reset,
-                setFormReset: setReset,
-                formDisabled: disabled,
-                onFormChange,
-                formLoading: loading
-            }}>
-                {children}
-            </FormContext.Provider>
-            {showBottomToolbar && (
-                <div className="toolbar-bottom gap-2mm">
-                    <div className="spacer"></div>
-                    {!hideSave && <Button type="submit"
-                        disabled={disableSave}
-                        icon={saveButton?.icon ?? "SAVE"}
-                        busy={loading}>
-                        {saveButton?.text ?? t("common.CRUD.save")}{isEntityChanged && !!initialEntity ? "*" : ""}
-                    </Button>}
-                    {!hideReset && <Button type="reset"
-                        icon="REPLAY"
-                        disabled={!isEntityChanged}
-                        busy={loading}>
-                        {t("common.CRUD.reset")}
-                    </Button>}
-                    {additionalButtons}
-                </div>
-            )}
-        </form>
-    </>
+    return <form ref={inputRef}
+        className={`data-form vertical-list ${className ?? ""}`}
+        action={endpoint}
+        onSubmit={onFormSubmit}
+        onReset={() => setReset(true)}
+        style={{ ...style }}>
+        <FormContext.Provider value={{
+            formReset: reset,
+            setFormReset: setReset,
+            formDisabled: disabled,
+            onFormChange,
+            formLoading: loading
+        }}>
+            {children}
+        </FormContext.Provider>
+        {showBottomToolbar && (
+            <div className="toolbar-bottom gap-2mm">
+                <div className="spacer"></div>
+                {!hideSave && <Button type="submit"
+                    disabled={disableSave}
+                    icon={saveButton?.icon ?? "SAVE"}
+                    busy={loading}>
+                    {saveButton?.text ?? t("common.CRUD.save")}{isEntityChanged && !!initialEntity ? "*" : ""}
+                </Button>}
+                {!hideReset && <Button type="reset"
+                    icon="REPLAY"
+                    disabled={!isEntityChanged}
+                    busy={loading}>
+                    {t("common.CRUD.reset")}
+                </Button>}
+                {additionalButtons}
+            </div>
+        )}
+    </form>;
 }

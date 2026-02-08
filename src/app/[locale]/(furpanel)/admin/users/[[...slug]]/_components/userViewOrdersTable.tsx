@@ -12,6 +12,7 @@ import { buildSearchParams } from "@/lib/utils";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import LinkOrderModal from "./orders/linkOrderModal";
 
 export default function UserViewOrdersTable({
     userData
@@ -88,5 +89,7 @@ export default function UserViewOrdersTable({
         columns={orderColumns}
         key={String(viewOrderLoading)}
         pinnedColumns={{ right: ["actionViewOrder"] }}
-        enableSearch />
+        enableSearch>
+            <LinkOrderModal />
+        </FpTable>
 }
