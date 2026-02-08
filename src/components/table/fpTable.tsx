@@ -7,7 +7,7 @@ import {
 import "@/styles/components/fpTable.css";
 import Icon, { MaterialIcon } from "../icon";
 import {
-    CSSProperties, Fragment, MutableRefObject, useEffect, useImperativeHandle, useMemo, useRef,
+    CSSProperties, Fragment, RefObject, useEffect, useImperativeHandle, useMemo, useRef,
     useState
 } from "react";
 import FpInput from "../input/fpInput";
@@ -57,8 +57,8 @@ export default function FpTable<T>({
     hasDetails?: (row: Row<T>) => boolean,
     getDetails?: (row: Row<T>) => React.ReactNode,
     onSelectionChange?: (e: RowSelectionState) => void,
-    tableConfigRef?: MutableRefObject<Table<T> | null>,
-    tableElementRef?: MutableRefObject<HTMLDivElement | null>,
+    tableConfigRef?: RefObject<Table<T> | null>,
+    tableElementRef?: RefObject<HTMLDivElement | null>,
     tableOptions?: Partial<TableOptions<T>>,
     pinnedColumns?: ColumnPinningState,
     sort?: SortingState
@@ -273,8 +273,12 @@ export default function FpTable<T>({
                         + (row.getCanSelect() ? "selectable" : "")}
                         onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
                         {row.getVisibleCells().map(cell =>
-                            <div className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`} key={cell.id}
-                                style={{ width: `var(--col-${cell.column.id}-size)`, ...getCommonPinningStyles(cell.column) }}>
+                            <div key={cell.id}
+                                className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`}
+                                style={{
+                                    width: `var(--col-${cell.column.id}-size)`,
+                                    ...getCommonPinningStyles(cell.column)
+                                }}>
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </div>
                         )}
