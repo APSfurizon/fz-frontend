@@ -157,11 +157,11 @@ export default function UserViewSecurity({
                 <DataForm action={new ChangeEmailFormAction}
                     hideSave
                     className="gap-2mm"
-                    onSuccess={reloadData}>
+                    onSuccess={reloadData}
+                    shouldReset={!changeEmailModalOpen}>
                     <input type="hidden" name="userId" value={userData.personalInfo.userId} />
                     <FpInput inputType="email"
                         fieldName="email"
-                        initialValue={userData.email}
                         label={t("authentication.register.form.email.label")}
                         placeholder={t("authentication.register.form.email.placeholder")} />
                     <div className="horizontal-list gap-4mm">
@@ -182,7 +182,8 @@ export default function UserViewSecurity({
                     hideSave
                     className="gap-2mm"
                     onSuccess={reloadData}
-                    checkFn={() => passwordMatch}>
+                    checkFn={() => passwordMatch}
+                    shouldReset={!changePasswordModalOpen}>
                     <input type="hidden" name="userId" value={userData.personalInfo.userId} />
                     <FpInput fieldName="password"
                         required

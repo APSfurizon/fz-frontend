@@ -622,7 +622,8 @@
                     "label": "Order code"
                   }
                 }
-              }
+              },
+              "event_order_serial": "Serial"
             },
             "actions": {
               "ban": "Ban",
@@ -679,6 +680,13 @@
                   "select_guest": {
                     "label": "Select the guest to remove from the room"
                   }
+                },
+                "rename": {
+                  "title": "Rename room"
+                },
+                "delete": {
+                  "title": "Delete room",
+                  "description": "Are you sure to delete room {roomName}? This will kick out every roommate"
                 }
               },
               "board": "Board"

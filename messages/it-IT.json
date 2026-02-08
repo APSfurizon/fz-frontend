@@ -622,7 +622,8 @@
                     "label": "Codice ordine"
                   }
                 }
-              }
+              },
+              "event_order_serial": "Seriale"
             },
             "actions": {
               "ban": "Ban",
@@ -679,6 +680,13 @@
                   "select_guest": {
                     "label": "Seleziona l'ospite da rimuovere dalla stanza"
                   }
+                },
+                "rename": {
+                  "title": "Rinomina stanza"
+                },
+                "delete": {
+                  "title": "Elimina stanza",
+                  "description": "Eliminare la stanza {roomName}? I compagni di stanza verranno rimossi"
                 }
               },
               "board": "Pensione"

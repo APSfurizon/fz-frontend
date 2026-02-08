@@ -10,6 +10,8 @@ import FpTable from "@/components/table/fpTable";
 import Button from "@/components/input/button";
 import RemoveGuestModal from "./removeGuestModal";
 import AddGuestModal from "./addGuestModal";
+import RenameRoomModal from "./renameRoomModal";
+import DeleteRoomModal from "./deleteRoomModal";
 
 const roomInfo = (obj: CellContext<RoomInfoResponse, unknown>) => obj.row.original.currentRoomInfo;
 
@@ -82,7 +84,7 @@ export default function UserViewRooms({
             cell: props =>
                 !events[props.row.original.currentRoomInfo.eventId].current
                     ? undefined
-                    : <div className="horizontal-list gap-2mm">
+                    : <div className="horizontal-list flex-wrap gap-2mm">
                         <Button icon="PERSON_ADD"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
                             onClick={() => promptAddGuest(props.row.original)}
@@ -90,32 +92,37 @@ export default function UserViewRooms({
                         <Button icon="PERSON_REMOVE"
                             className="danger"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
-                            onClick={() => promptRemGuest(props.row.original)}
+                            onClick={() => promptRemoveGuest(props.row.original)}
                             disabled={roomInfo(props).guests.length == 0} />
+                        <Button icon="EDIT"
+                            title={t("furpanel.admin.users.accounts.view.rooms_table.actions.rename.title")}
+                            onClick={() => promptRename(props.row.original)} />
+                        <Button icon="DELETE"
+                            className="danger"
+                            title={t("furpanel.admin.users.accounts.view.rooms_table.actions.delete.title")}
+                            onClick={() => promptDelete(props.row.original)} />
                     </div>
         })
     ]);
 
     // Guest removal logic
-    const [remGuestModalOpen, setRemGuestModalOpen] = useState(false);
+    const [remGuestModalOpen, setRemoveGuestModalOpen] = useState(false);
     const [currentRow, setCurrentRow] = useState<RoomInfoResponse>();
 
-    const promptRemGuest = (row: RoomInfoResponse) => {
-        setAddGuestModalOpen(false);
+    const promptRemoveGuest = (row: RoomInfoResponse) => {
         setCurrentRow(row);
-        setRemGuestModalOpen(true);
+        setRemoveGuestModalOpen(true);
     }
 
-    const closeRemGuestModal = () => {
+    const closeRemoveGuestModal = () => {
         setCurrentRow(undefined);
-        setRemGuestModalOpen(false);
+        setRemoveGuestModalOpen(false);
     }
 
     // Guest add logic
     const [addGuestModalOpen, setAddGuestModalOpen] = useState(false);
 
     const promptAddGuest = (row: RoomInfoResponse) => {
-        setRemGuestModalOpen(false);
         setCurrentRow(row);
         setAddGuestModalOpen(true);
     }
@@ -125,12 +132,51 @@ export default function UserViewRooms({
         setAddGuestModalOpen(false);
     }
 
+    // Rename room logic
+    const [renameModalOpen, setRenameModalOpen] = useState(false);
+
+    const promptRename = (row: RoomInfoResponse) => {
+        setCurrentRow(row);
+        setRenameModalOpen(true);
+    }
+
+    const closeRenameModal = () => {
+        setCurrentRow(undefined);
+        setRenameModalOpen(false);
+    }
+
+    // Delete room logic
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+    const promptDelete = (row: RoomInfoResponse) => {
+        setCurrentRow(row);
+        setDeleteModalOpen(true);
+    }
+
+    const closeDeleteModal = () => {
+        setCurrentRow(undefined);
+        setDeleteModalOpen(false);
+    }
+
     return <>
-        <FpTable<RoomInfoResponse> rows={roomRows} columns={roomColumns}
-            hasDetails={() => true} getDetails={getDetails} pinnedColumns={{ right: ["actions"] }} />
-        <RemoveGuestModal roomInfo={currentRow} open={remGuestModalOpen} onClose={closeRemGuestModal}
+        <FpTable<RoomInfoResponse> rows={roomRows}
+            columns={roomColumns}
+            hasDetails={() => true}
+            getDetails={getDetails}
+            pinnedColumns={{ right: ["actions"] }} />
+        <RemoveGuestModal roomInfo={currentRow}
+            open={remGuestModalOpen}
+            onClose={closeRemoveGuestModal}
             reloadData={reloadData} />
-        <AddGuestModal roomInfo={currentRow} open={addGuestModalOpen} onClose={closeAddGuestModal}
+        <AddGuestModal roomInfo={currentRow}
+            open={addGuestModalOpen}
+            onClose={closeAddGuestModal}
             reloadData={reloadData} />
+        <RenameRoomModal roomInfo={currentRow}
+            open={renameModalOpen}
+            onClose={closeRenameModal} />
+        <DeleteRoomModal roomInfo={currentRow}
+            open={deleteModalOpen}
+            onClose={closeDeleteModal} />
     </>
 } 

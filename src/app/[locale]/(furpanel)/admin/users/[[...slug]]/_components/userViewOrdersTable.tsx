@@ -9,8 +9,8 @@ import { mapOrderStatusToStatusBox } from "@/lib/api/booking";
 import { runRequest } from "@/lib/api/global";
 import { translate } from "@/lib/translations";
 import { buildSearchParams } from "@/lib/utils";
-import { createColumnHelper } from "@tanstack/react-table";
-import { useLocale, useTranslations } from "next-intl";
+import { createColumnHelper, Row } from "@tanstack/react-table";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import LinkOrderModal from "./orders/linkOrderModal";
 
@@ -20,6 +20,7 @@ export default function UserViewOrdersTable({
     userData: GetUserAdminViewResponse
 }>) {
     const t = useTranslations();
+    const formatter = useFormatter();
     const locale = useLocale();
     const { showModal } = useModalUpdate();
     const [viewOrderLoading, setViewOrderLoading] = useState(false);
@@ -33,6 +34,13 @@ export default function UserViewOrdersTable({
             .finally(() => setViewOrderLoading(false));
     }
 
+    const renderDailyDays = (row: Row<FullOrder>) => {
+        const dailyDays = row.original.dailyDays.map (day => formatter.dateTime(new Date(day), {dateStyle: "medium"}))
+        return <>
+            {dailyDays.map(d => <p>{d}</p>)}
+        </>
+    }
+
     const orderColHelper = createColumnHelper<FullOrder>();
     const orderColumns = useMemo(() => [
         orderColHelper.accessor(itm => translate(itm.orderEvent.eventNames, locale), {
@@ -42,6 +50,10 @@ export default function UserViewOrdersTable({
         orderColHelper.accessor('code', {
             id: 'orderCode',
             header: t("furpanel.admin.users.accounts.view.orders_table.order_code"),
+        }),
+        orderColHelper.accessor('orderSerialInEvent', {
+            id: 'orderSerialInEvent',
+            header: t("furpanel.admin.users.accounts.view.orders_table.event_order_serial")
         }),
         orderColHelper.accessor(itm => t(`common.order_status.${itm.orderStatus}`), {
             id: 'orderStatus',
@@ -89,7 +101,9 @@ export default function UserViewOrdersTable({
         columns={orderColumns}
         key={String(viewOrderLoading)}
         pinnedColumns={{ right: ["actionViewOrder"] }}
-        enableSearch>
+        enableSearch
+        hasDetails={(row) => (row.original.dailyDays ?? []).length > 0}
+        getDetails={renderDailyDays}>
             <LinkOrderModal />
         </FpTable>
 }

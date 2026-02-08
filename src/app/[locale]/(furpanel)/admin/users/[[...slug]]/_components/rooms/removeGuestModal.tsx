@@ -54,11 +54,11 @@ export default function RemoveGuestModal({
                 label={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.select_guest.label")}
                 minDecodeSize={0} />
             <div className="horizontal-list gap-4mm">
-                <Button className="danger" icon="CANCEL" onClick={onClose}>
+                <Button icon="CANCEL" onClick={onClose}>
                     {t("common.cancel")}
                 </Button>
                 <div className="spacer"></div>
-                <Button type="submit" icon="PERSON_REMOVE">
+                <Button className="danger" type="submit" icon="PERSON_REMOVE">
                     {t("furpanel.room.actions.kick")}
                 </Button>
             </div>
