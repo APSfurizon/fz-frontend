@@ -5,7 +5,7 @@ import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import Modal from "@/components/modal"
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { AddFursuitFormAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits"
 import { ApiDetailedErrorResponse, ApiErrorResponse } from "@/lib/api/global";
 import { EVENT_NAME } from "@/lib/constants";
@@ -56,7 +56,7 @@ export default function AddFursuitModal({
         reloadData();
     }
 
-    const onFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />);
+    const onFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
     return <Modal open={open} onClose={beforeClose}
         title={editMode

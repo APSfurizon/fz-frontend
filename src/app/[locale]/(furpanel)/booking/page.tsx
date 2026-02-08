@@ -15,7 +15,7 @@ import {
     OrderRetryLinkApiAction
 } from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
 import StatusBox from "@/components/statusBox";
@@ -56,7 +56,7 @@ export default function BookingPage() {
 
     const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
         setExchangeModalOpen(false);
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
     }
 
     const exchangeSuccess = () => {
@@ -78,7 +78,7 @@ export default function BookingPage() {
             setLoading(true);
             runRequest(new BookingOrderApiAction())
                 .then((result) => setBookingData(result))
-                .catch((err) => showModal(t("common.error"), <ModalError error={err} />, "ERROR"))
+                .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
                 .finally(() => setLoading(false));
             return;
         }
@@ -109,7 +109,7 @@ export default function BookingPage() {
         setActionLoading(true);
         runRequest(new OrderEditLinkApiAction())
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 
@@ -118,7 +118,7 @@ export default function BookingPage() {
         setActionLoading(true);
         runRequest(new OrderRetryLinkApiAction())
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 
@@ -127,7 +127,7 @@ export default function BookingPage() {
         setActionLoading(true);
         runRequest(new ConfirmMembershipDataApiAction())
             .then(() => setBookingData(undefined))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 

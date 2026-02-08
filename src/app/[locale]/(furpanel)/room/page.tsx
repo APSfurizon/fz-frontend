@@ -26,7 +26,7 @@ import AutoInput from "@/components/input/autoInput";
 import "@/styles/furpanel/room.css";
 import { useUser } from "@/components/context/userProvider";
 import { OrderStatus } from "@/lib/api/order";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { translate } from "@/lib/translations";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
 import Checkbox from "@/components/input/checkbox";
@@ -302,7 +302,7 @@ export default function RoomPage() {
     setExchangeModalOpen(false);
     setConfirmModalOpen(false);
     setUnconfirmModalOpen(false);
-    showModal(t("common.error"), <ModalError error={err} />);
+    showModal(t("common.error"), <ErrorMessage error={err} />);
   }
 
   // Data loading
@@ -314,7 +314,7 @@ export default function RoomPage() {
         setShowInNosecount(result.currentRoomInfo?.showInNosecount);
         setData(result);
       }).catch((err) => {
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setData(EMPTY_ROOM_INFO);
       }).finally(() => setLoading(false));
   }, [data]);

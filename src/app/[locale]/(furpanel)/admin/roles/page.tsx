@@ -2,7 +2,7 @@
 import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import {
     AddRoleApiResponse, AddRoleFormAction, AllRolesResponse,
     DeleteRolesApiAction, GetRolesApiAction, RoleInfo
@@ -41,7 +41,7 @@ export default function RolesListPage() {
             .then((response) => setRoles(response.roles))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setLoading(false));
     }
 
@@ -61,7 +61,7 @@ export default function RolesListPage() {
     }
 
     const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setAddRoleModalOpen(false);
     }
 
@@ -86,7 +86,7 @@ export default function RolesListPage() {
         setLoading(true);
         runRequest(new DeleteRolesApiAction(), ["" + roleId])
             .then(() => loadRoles())
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 closeDeleteRoleModal();

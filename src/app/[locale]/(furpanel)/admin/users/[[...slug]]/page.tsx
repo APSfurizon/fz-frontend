@@ -1,7 +1,7 @@
 "use client"
 import AutoInput from "@/components/input/autoInput";
 import Icon from "@/components/icon";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { AutoInputUsersManager } from "@/lib/api/user";
@@ -61,7 +61,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         setLoading(true);
         runRequest(new GetUserAdminViewAction(), [String(userId)])
             .then(data => setUserData(data as GetUserAdminViewResponse))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [userId, userData]);
 
@@ -84,7 +84,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 param={[true]}
                 onSelect={onUserSelect}>
             </AutoInput>
-            {error && <ModalError error={error} />}
+            {error && <ErrorMessage error={error} />}
             {loading && <LoadingPanel />}
             {/** User data render */}
             {userData && <>

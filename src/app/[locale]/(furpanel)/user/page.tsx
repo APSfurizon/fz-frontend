@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import DataForm from "@/components/input/dataForm";
 import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import FpInput from "@/components/input/fpInput";
 import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import LoadingPanel from "@/components/loadingPanel";
@@ -28,7 +28,7 @@ export default function UserPage() {
     if (personalInformation) return;
     runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
       .then((result) => setPersonalInformation(result))
-      .catch((err) => showModal(t("common.error"), <ModalError error={err} />));
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />));
   }, [personalInformation])
 
   // Password change logic
@@ -36,7 +36,7 @@ export default function UserPage() {
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
-  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />, "ERROR");
+  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
 
   useTitle(t("furpanel.user.title"));
 

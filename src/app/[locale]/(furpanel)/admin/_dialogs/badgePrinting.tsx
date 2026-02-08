@@ -1,7 +1,7 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
 import { ApiAction, runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
@@ -57,7 +57,7 @@ export default function BadgePrintingDialog({
                 closeModal();
             }).catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setLoading(false))
     }
 

@@ -4,7 +4,6 @@ import Icon, { MaterialIcon } from "./icon";
 import "@/styles/components/modal.css";
 import { useTranslations } from "next-intl";
 import ReactDOM from "react-dom";
-import LoadingPanel from "./loadingPanel";
 
 // Context management
 interface ModalUpdate {

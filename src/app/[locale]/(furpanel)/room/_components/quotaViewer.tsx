@@ -1,6 +1,6 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { getRemainingRoomType, RoomStoreItemsApiAction, RoomStoreItemsApiResponse } from "@/lib/api/flows/roomOrderFlow";
 import { runRequest } from "@/lib/api/global";
@@ -29,7 +29,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, clo
         runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
             .then(data => setRoomsData(data))
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />, "ERROR");
+                showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
                 setRoomsData(undefined);
             }).finally(() => setModalLoading(false));
     }, [roomsData, isOpen]);

@@ -2,7 +2,7 @@
 import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import {
     AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction,
     ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse,
@@ -53,7 +53,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         }
         runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />);
+                showModal(t("common.error"), <ErrorMessage error={err} />);
                 setChecked(!checked);
             })
             .finally(() => setBusy(false));
@@ -69,7 +69,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
     const addCardFail = (err: any) => {
         setAddModalOpen(false);
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
     }
 
     // Select year
@@ -96,7 +96,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         runRequest(new GetCardsApiAction(), undefined, undefined, new URLSearchParams({ "year": "" + selectedYear }))
             .then((value) => setCardsData(value))
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />);
+                showModal(t("common.error"), <ErrorMessage error={err} />);
                 setCardsData(null);
             }).finally(() => setLoading(false));
     }, [cardsData])

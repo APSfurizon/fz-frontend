@@ -4,7 +4,7 @@ import Button from "@/components/input/button";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
 import { ChangeEmailAction } from "@/lib/api/authentication/recover";
 import { runRequest } from "@/lib/api/global";
@@ -39,7 +39,7 @@ export default function UserViewSecurity({
             userId: userData.personalInfo.userId
         }
         runRequest(new BanUserAction(), undefined, body)
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 reloadData();
@@ -61,7 +61,7 @@ export default function UserViewSecurity({
             userId: userData.personalInfo.userId
         }
         runRequest(new UnbanUserAction(), undefined, body)
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 reloadData();

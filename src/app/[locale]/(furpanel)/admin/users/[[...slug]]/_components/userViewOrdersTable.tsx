@@ -1,7 +1,7 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import Checkbox from "@/components/input/checkbox";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import StatusBox from "@/components/statusBox";
 import FpTable from "@/components/table/fpTable";
 import { FullOrder, GetUserAdminViewResponse, ViewOrderLinkApiAction, ViewOrderLinkResponse } from "@/lib/api/admin/userView";
@@ -28,7 +28,7 @@ export default function UserViewOrdersTable({
         runRequest(new ViewOrderLinkApiAction(), undefined, undefined,
             buildSearchParams({ "event-id": String(eventId), "order-code": orderCode }))
             .then((result) => window.open((result as ViewOrderLinkResponse).link, '_blank'))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />, "ERROR"))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
             .finally(() => setViewOrderLoading(false));
     }
 

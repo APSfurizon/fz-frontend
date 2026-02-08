@@ -14,7 +14,7 @@ import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest
 import "@/styles/components/dataForm.css";
 import { useModalContext } from "../modal";
 import { useModalUpdate } from "../context/modalProvider";
-import ModalError from "../modalError";
+import ErrorMessage from "../errorMessage";
 
 export interface SaveButtonData {
     text: string,
@@ -142,7 +142,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         if (onFail) {
             onFail(data);
         } else {
-            showModal(t("common.error"), <ModalError error={data} />);
+            showModal(t("common.error"), <ErrorMessage error={data} />);
         }
     }, [])
 

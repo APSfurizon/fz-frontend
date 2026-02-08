@@ -9,7 +9,7 @@ import { useMemo, useState } from "react";
 import AddFursuitModal from "./addFursuitModal";
 import { runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import Modal from "@/components/modal";
 
 export default function UserViewFursuitsTable({
@@ -58,7 +58,7 @@ export default function UserViewFursuitsTable({
         setDeleteLoading(true);
         runRequest(new DeleteFursuitApiAction(),
             [String(fursuit?.fursuit.id)])
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 closeDeleteFursuit();
                 setDeleteLoading(false);

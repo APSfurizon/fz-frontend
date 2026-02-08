@@ -1,7 +1,7 @@
 "use client"
 import { EntityEditorProvider } from "@/components/context/entityEditorProvider";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetRoleByIdApiAction, RoleData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
 import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
@@ -34,7 +34,7 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
         setLoading(true);
         getEntity()
             .then((response) => setEntity(response as RoleData))
-            .catch((err) => showModal(t("error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [roleId]);
 
@@ -57,7 +57,7 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
                         .catch((err) => reject(err));
                 })
                 .catch((err) => {
-                    showModal(t("error"), <ModalError error={err} />);
+                    showModal(t("error"), <ErrorMessage error={err} />);
                     reject(err);
                 })
                 .finally(() => setLoading(false));

@@ -2,7 +2,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import LoadingPanel from "@/components/loadingPanel";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import FpTable from "@/components/table/fpTable";
 import { runRequest } from "@/lib/api/global";
 import {
@@ -33,7 +33,7 @@ export default function UserSessions() {
       .catch((err) => {
         showModal(
           t("common.error"),
-          <ModalError error={err} />
+          <ErrorMessage error={err} />
         );
         setSessions([]);
       }).finally(() => setLoading(false));
@@ -46,7 +46,7 @@ export default function UserSessions() {
     if (!sessions) return;
     setLoading(true);
     runRequest(new DestroyAllSessionsAction())
-      .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => {
         setLoading(false);
         setDestroyConfirmModalOpen(false);
@@ -79,7 +79,7 @@ export default function UserSessions() {
         hideModal();
         setSessions(undefined);
       })
-      .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
   }
 

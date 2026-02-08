@@ -14,7 +14,7 @@ import UserPicture from "@/components/userPicture";
 import Icon from "@/components/icon";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import LoadingPanel from "@/components/loadingPanel";
 import { ExtraDays } from "@/lib/api/user";
 import StatusBox from "@/components/statusBox";
@@ -113,7 +113,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
 
     return <div className="page">
         {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel /></div>}
-        {error && <ModalError error={error} />}
+        {error && <ErrorMessage error={error} />}
 
         {/* Rendering sponsors */}
         {mode == CountViewMode.SPONSOR && <>

@@ -12,7 +12,7 @@ import {
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
 import Button from "@/components/input/button";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
 import { RoomData } from "@/lib/api/room";
@@ -104,7 +104,7 @@ export default function ExchangeConfirm() {
         <span className="titular bold">{t('authentication.transfer_confirm.title').toLowerCase()}</span>
       </span>
     </div>
-    {error && <ModalError error={error} />}
+    {error && <ErrorMessage error={error} />}
     {loading && <LoadingPanel />}
     {exchangeData && userDisplay && <>
       <div className="exchange-info rounded-l vertical-list gap-2mm">
