@@ -6,7 +6,7 @@ import FpInput from "@/components/input/fpInput";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
-import { ChangeEmailAction } from "@/lib/api/authentication/recover";
+import { ChangeEmailFormAction, ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
@@ -73,6 +73,9 @@ export default function UserViewSecurity({
 
     // Change password logic
     const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
+    const [password, setPassword] = useState<string>("s");
+    const [confirmPassword, setConfirmPassword] = useState<string>();
+    const passwordMatch = confirmPassword === password;
 
     return <>
         <div className="vertical-list gap-2mm" style={{ padding: "0.625em" }}>
@@ -98,7 +101,8 @@ export default function UserViewSecurity({
                     onClick={() => setChangeEmailModalOpen (true)}>
                     {t("furpanel.admin.users.accounts.view.actions.change_email")}
                 </Button>
-                <Button icon="KEY">
+                <Button icon="KEY"
+                    onClick={() => setChangePasswordModalOpen(true)}>
                     {t("furpanel.admin.users.accounts.view.actions.change_password")}
                 </Button>
             </div>
@@ -150,7 +154,7 @@ export default function UserViewSecurity({
         <Modal open={changeEmailModalOpen}
             onClose={() => setChangeEmailModalOpen(false)}
             title={t("furpanel.admin.users.accounts.view.actions.change_email")}>
-                <DataForm action={new ChangeEmailAction}
+                <DataForm action={new ChangeEmailFormAction}
                     hideSave
                     className="gap-2mm"
                     onSuccess={reloadData}>
@@ -173,23 +177,33 @@ export default function UserViewSecurity({
         </Modal>
         <Modal open={changePasswordModalOpen}
             onClose={() => setChangePasswordModalOpen(false)}
-            title={t("furpanel.admin.users.accounts.view.actions.change_email")}>
-                <DataForm action={new ChangeEmailAction}
+            title={t("furpanel.admin.users.accounts.view.actions.change_password")}>
+                <DataForm action={new ChangePasswordFormAction}
                     hideSave
                     className="gap-2mm"
-                    onSuccess={reloadData}>
+                    onSuccess={reloadData}
+                    checkFn={() => passwordMatch}>
                     <input type="hidden" name="userId" value={userData.personalInfo.userId} />
-                    <FpInput inputType="email"
-                        fieldName="email"
-                        initialValue={userData.email}
-                        label={t("authentication.register.form.email.label")}
-                        placeholder={t("authentication.register.form.email.placeholder")} />
+                    <FpInput fieldName="password"
+                        required
+                        inputType="password"
+                        label={t("authentication.recover_confirm.input.new_password.label")}
+                        placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
+                        helpText={t("authentication.recover_confirm.input.new_password.help")}
+                        onChange={(e) => setPassword(e.currentTarget.value)}
+                        autocomplete="new-password" />
+                    <FpInput inputType="password"
+                        required
+                        label={t("authentication.recover_confirm.input.confirm_password.label")}
+                        placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
+                        onChange={(e) => setConfirmPassword(e.currentTarget.value)}
+                        autocomplete="new-password" />
                     <div className="horizontal-list gap-4mm">
                         <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
                             {t("common.cancel")}
                         </Button>
                         <div className="spacer"></div>
-                        <Button type="submit" className="success" icon="CHECK">
+                        <Button type="submit" className="success" icon="CHECK" disabled={!passwordMatch}>
                             {t("common.confirm")}
                         </Button>
                     </div>

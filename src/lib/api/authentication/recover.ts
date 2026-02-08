@@ -64,7 +64,7 @@ export class ChangeEmailDTOBuilder implements FormDTOBuilder<ChangeEmailApiData>
     }
 }
 
-export class ChangeEmailAction extends FormApiAction<ChangeEmailApiData, boolean, ApiErrorResponse> {
+export class ChangeEmailFormAction extends FormApiAction<ChangeEmailApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new ChangeEmailDTOBuilder();
