@@ -1,5 +1,8 @@
 .main-dialog {
-    width: 210mm;
+    &:not(:has(.stretch-page)) {
+        width: 210mm;
+    }
+    width: 100vw;
     max-width: 100vw;
     transition: width 120ms;
 }

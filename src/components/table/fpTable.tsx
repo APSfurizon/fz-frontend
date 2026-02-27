@@ -184,7 +184,7 @@ export default function FpTable<T>({
             columnCount--;
             extra += h.column.getSize()
         })
-        const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 5);
+        const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 9);
         const sizingStartToSet: Record<string, number> = {};
         for (let i = 0; i < headers.length; i++) {
             const header = headers[i];

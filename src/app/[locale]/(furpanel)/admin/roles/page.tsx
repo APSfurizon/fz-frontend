@@ -3,10 +3,8 @@ import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
-import {
-    AddRoleApiResponse, AddRoleFormAction, AllRolesResponse,
-    DeleteRolesApiAction, GetRolesApiAction, RoleInfo
-} from "@/lib/api/admin/role";
+import { AddRoleApiResponse, AddRoleFormAction, DeleteRolesApiAction, GetRolesApiAction,
+    RoleInfo } from "@/lib/api/admin/role";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
@@ -137,7 +135,7 @@ export default function RolesListPage() {
     });
 
     return <>
-        <div className="page">
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(path)}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">

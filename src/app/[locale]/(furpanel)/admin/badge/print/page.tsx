@@ -107,7 +107,7 @@ export default function AdvancedBadgePrint() {
             )).finally(() => setPrintLoading(false));
     }
 
-    return <div className="page">
+    return <div className="stretch-page">
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
             <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
             <div className="horizontal-list gap-2mm">

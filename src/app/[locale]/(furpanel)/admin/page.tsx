@@ -147,7 +147,7 @@ export default function AdminPage() {
   }
 
   return <>
-    <div className="page">
+    <div className="stretch-page">
       {loading && <LoadingPanel />}
       {/* System area */}
       <FpMacroSection title={t("furpanel.admin.system.title")} icon="CONFIRMATION_NUMBER">

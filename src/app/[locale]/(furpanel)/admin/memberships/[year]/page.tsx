@@ -268,7 +268,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     </>
 
     return <>
-        <div className="page">
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">

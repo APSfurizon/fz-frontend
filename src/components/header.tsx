@@ -2,7 +2,6 @@
 import { useLocale, useTranslations } from 'next-intl';
 import Image from "next/image";
 import Icon from './icon';
-import { useRouter } from "next/navigation";
 import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
 import { useEffect, useState } from 'react';
@@ -10,7 +9,7 @@ import "@/styles/components/header.css";
 import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import { isMobile, UA } from '@/lib/userAgent';
-import { OS } from 'ua-parser-js/enums';
+import { OSName } from 'ua-parser-js/enums';
 
 enum DEVICE_TYPE {
     APPLE = "apple",
@@ -19,9 +18,9 @@ enum DEVICE_TYPE {
 }
 
 const type = isMobile()
-    ? UA.os.is(OS.ANDROID)
+    ? UA.os.is(OSName.ANDROID)
         ? DEVICE_TYPE.ANDROID
-        : UA.os.is(OS.IOS)
+        : UA.os.is(OSName.IOS)
             ? DEVICE_TYPE.APPLE
             : DEVICE_TYPE.GENERIC
     : DEVICE_TYPE.GENERIC;
@@ -38,8 +37,7 @@ export default function Header() {
     const deviceTypeLower = type.toString().toLowerCase();
     const appBadgeSrc = `/images/app-badge/${deviceTypeLower}/${deviceTypeLower}_${language}.png`;
 
-    useEffect(() => document.body.addEventListener('scroll',
-        (e: Event) => setNewScroll(document.body.scrollTop)), []);
+    useEffect(() => document.body.addEventListener('scroll', () => setNewScroll(document.body.scrollTop)), []);
 
     useEffect(() => {
         if (newScroll === undefined) return;
@@ -62,7 +60,10 @@ export default function Header() {
             <div className="logo-container center">
                 <picture className="header-logo">
                     <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
-                    <Image className="header-logo" src="/images/logo-light.png" alt={t('header.alt_logo')} width={175} height={40}></Image>
+                    <Image className="header-logo" src="/images/logo-light.png"
+                        alt={t('header.alt_logo')}
+                        width={175}
+                        height={40} />
                 </picture>
             </div>
             <span>
