@@ -623,7 +623,8 @@
                   }
                 }
               },
-              "event_order_serial": "Serial"
+              "event_order_serial": "Serial",
+              "daily_days": "Daily days"
             },
             "actions": {
               "ban": "Ban",

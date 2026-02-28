@@ -623,7 +623,8 @@
                   }
                 }
               },
-              "event_order_serial": "Seriale"
+              "event_order_serial": "Seriale",
+              "daily_days": "Giorni daily"
             },
             "actions": {
               "ban": "Ban",

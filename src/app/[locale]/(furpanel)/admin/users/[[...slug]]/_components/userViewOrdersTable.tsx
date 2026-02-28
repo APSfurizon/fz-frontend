@@ -29,16 +29,9 @@ export default function UserViewOrdersTable({
         setViewOrderLoading(true);
         runRequest(new ViewOrderLinkApiAction(), undefined, undefined,
             buildSearchParams({ "event-id": String(eventId), "order-code": orderCode }))
-            .then((result) => window.open((result as ViewOrderLinkResponse).link, '_blank'))
+            .then((result) => window.open(result.link, '_blank'))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
             .finally(() => setViewOrderLoading(false));
-    }
-
-    const renderDailyDays = (row: Row<FullOrder>) => {
-        const dailyDays = row.original.dailyDays.map (day => formatter.dateTime(new Date(day), {dateStyle: "medium"}))
-        return <>
-            {dailyDays.map(d => <p>{d}</p>)}
-        </>
     }
 
     const orderColHelper = createColumnHelper<FullOrder>();
@@ -101,9 +94,7 @@ export default function UserViewOrdersTable({
         columns={orderColumns}
         key={String(viewOrderLoading)}
         pinnedColumns={{ right: ["actionViewOrder"] }}
-        enableSearch
-        hasDetails={(row) => (row.original.dailyDays ?? []).length > 0}
-        getDetails={renderDailyDays}>
+        enableSearch>
             <LinkOrderModal />
         </FpTable>
 }
