@@ -48,8 +48,9 @@ export interface FullOrder {
     id: number,
     dailyDaysBitmask: number,
     daily: boolean,
+    dailyDaysDates: string[],
     membership: boolean,
-    board: Board
+    board: Board,
 }
 
 export interface GetUserAdminViewResponse extends ApiResponse {

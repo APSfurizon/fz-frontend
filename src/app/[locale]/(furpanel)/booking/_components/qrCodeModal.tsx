@@ -1,6 +1,6 @@
 import Button from "@/components/input/button";
 import Modal from "@/components/modal";
-import { qrCodeOptions } from "@/lib/api/booking";
+import { qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
 import { useTranslations } from "next-intl";
 import { useQRCode } from "next-qrcode";
 import { useState } from "react";
@@ -25,16 +25,13 @@ export default function QrCodeModal({secret} : Readonly<{secret: string}>) {
                 <div className="rounded-l" style={{ overflow: "hidden" }}>
                     <Canvas text={secret}
                         options={qrCodeOptions}
-                        logo={{
-                            src: '/images/favicon.png',
-                            options: {
-                                width: 30
-                            }
-                        }}
+                        logo={qrCodeLogo}
                     />
                 </div>
             </div>
-            <span className="descriptive small">{t("furpanel.booking.messages.reservation_qr")}</span>
+            <span className="descriptive small">
+                {t("furpanel.booking.messages.reservation_qr")}
+            </span>
         </Modal>
     </>
 }

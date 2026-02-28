@@ -5,7 +5,7 @@ import ErrorMessage from "@/components/errorMessage";
 import StatusBox from "@/components/statusBox";
 import FpTable from "@/components/table/fpTable";
 import { FullOrder, GetUserAdminViewResponse, ViewOrderLinkApiAction, ViewOrderLinkResponse } from "@/lib/api/admin/userView";
-import { mapOrderStatusToStatusBox } from "@/lib/api/booking";
+import { mapOrderStatusToStatusBox, qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
 import { runRequest } from "@/lib/api/global";
 import { translate } from "@/lib/translations";
 import { buildSearchParams } from "@/lib/utils";
@@ -13,6 +13,7 @@ import { createColumnHelper, Row } from "@tanstack/react-table";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import LinkOrderModal from "./orders/linkOrderModal";
+import { useQRCode } from "next-qrcode";
 
 export default function UserViewOrdersTable({
     userData
@@ -24,6 +25,7 @@ export default function UserViewOrdersTable({
     const locale = useLocale();
     const { showModal } = useModalUpdate();
     const [viewOrderLoading, setViewOrderLoading] = useState(false);
+    const { Canvas } = useQRCode();
 
     const viewOrder = (eventId: number, orderCode: string) => {
         setViewOrderLoading(true);
@@ -32,6 +34,14 @@ export default function UserViewOrdersTable({
             .then((result) => window.open(result.link, '_blank'))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
             .finally(() => setViewOrderLoading(false));
+    }
+
+    const renderDailyDaysDates = (row: Row<FullOrder>) => {
+        const dailyDays = row.original.dailyDaysDates.toSorted().map (day => formatter.dateTime(new Date(day), {dateStyle: "medium"}))
+        return <div className="vertical-list">
+            <span className="title medium">{t("furpanel.admin.users.accounts.view.orders_table.daily_days")}</span>
+            {dailyDays.map((d, i) => <span className="monospace" key={i}>{d}</span>)}
+        </div>
     }
 
     const orderColHelper = createColumnHelper<FullOrder>();
@@ -81,11 +91,24 @@ export default function UserViewOrdersTable({
         orderColHelper.display({
             id: 'actionViewOrder',
             header: '',
-            cell: props => <Button icon="OPEN_IN_NEW"
-                key={`${props.row.original.eventId}-${props.row.original.code}`}
-                onClick={() => viewOrder(props.row.original.eventId, props.row.original.code)}
-                busy={viewOrderLoading} />,
-            maxSize: 50,
+            cell: props => <div className="horizontal-list gap-2mm">
+                <Button icon="OPEN_IN_NEW"
+                    key={`op-${props.row.original.eventId}-${props.row.original.code}`}
+                    onClick={() => viewOrder(props.row.original.eventId, props.row.original.code)}
+                    busy={viewOrderLoading} />
+                <Button icon="QR_CODE"
+                    key={`qr-${props.row.original.eventId}-${props.row.original.code}`}
+                    onClick={() => showModal(t("furpanel.admin.users.accounts.view.orders_table.actions.view_qr.title"),
+                        <div className="vertical-list">
+                            <Canvas text={props.row.original.checkinSecret}
+                                options={qrCodeOptions}
+                                logo={qrCodeLogo}
+                            />
+                            <span className="monospace">{props.row.original.code}</span>
+                        </div>
+                    )} />
+                </div>,
+            maxSize: 86,
             enableResizing: false
         })
     ], [viewOrderLoading]);
@@ -94,7 +117,9 @@ export default function UserViewOrdersTable({
         columns={orderColumns}
         key={String(viewOrderLoading)}
         pinnedColumns={{ right: ["actionViewOrder"] }}
-        enableSearch>
+        enableSearch
+        hasDetails={(row) => (row.original.dailyDaysDates ?? []).length > 0}
+        getDetails={renderDailyDaysDates}>
             <LinkOrderModal />
         </FpTable>
 }

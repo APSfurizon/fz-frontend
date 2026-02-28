@@ -621,6 +621,9 @@
                   "order_code": {
                     "label": "Order code"
                   }
+                },
+                "view_qr": {
+                  "title": "Show QR Code"
                 }
               },
               "event_order_serial": "Serial",
