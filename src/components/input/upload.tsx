@@ -235,7 +235,10 @@ export default function Upload({
                 viewMode={1}
                 aspectRatio={cropAspectRatio == 'square' ? 1 : undefined}
                 ref={cropperRef}
-                zoomable={false} minCropBoxWidth={100} minCropBoxHeight={100} style={{ maxHeight: '75vh', width: '100%', aspectRatio: imageToCrop.width / imageToCrop.height }}>
+                zoomable={false}
+                minCropBoxWidth={100}
+                minCropBoxHeight={100}
+                style={{ maxHeight: '75vh', width: '100%', aspectRatio: imageToCrop.width / imageToCrop.height }}>
             </Cropper>}
             <div className="horizontal-list gap-2mm">
                 <Button icon="ROTATE_LEFT" onClick={() => cropperRef.current?.cropper.rotate(-45)}></Button>
