@@ -56,10 +56,10 @@ next-env.d.ts
 .storybook/generated
 .storybook/tmp
 
-package-lock.json
-
 # vscode
 .vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # editor & os cruft
 .idea/
