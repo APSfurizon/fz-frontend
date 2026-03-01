@@ -29,6 +29,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_IMAGE_BASE_URL: https://images.example.com
     steps:
       - name: Checkout
         uses: actions/checkout@v4
