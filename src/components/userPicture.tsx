@@ -64,6 +64,8 @@ export default function UserPicture ({
         `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
         [pictureData, fursuitData, isLoading]);
 
+    const isFursuit = !userData && fursuitData;
+
     return (
         <div className="user-picture-container vertical-list flex-vertical-center">
             <div className={borderClassName}>
@@ -81,9 +83,10 @@ export default function UserPicture ({
                     {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ''}
                 </span>
             )}
-            { extraDays != ExtraDays.NONE && <StatusBox>
+            {!isFursuit && extraDays != ExtraDays.NONE && <StatusBox>
                     {t(`furpanel.booking.items.extra_days_${extraDays}`)}
             </StatusBox>}
+            {isFursuit && fursuitPictureData?.species && <StatusBox>{fursuitPictureData.species}</StatusBox>}
         </div>
     )
 }

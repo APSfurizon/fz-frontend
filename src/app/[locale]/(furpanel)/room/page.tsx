@@ -26,7 +26,7 @@ import AutoInput from "@/components/input/autoInput";
 import "@/styles/furpanel/room.css";
 import { useUser } from "@/components/context/userProvider";
 import { OrderStatus } from "@/lib/api/order";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { translate } from "@/lib/translations";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
 import Checkbox from "@/components/input/checkbox";
@@ -302,7 +302,7 @@ export default function RoomPage() {
     setExchangeModalOpen(false);
     setConfirmModalOpen(false);
     setUnconfirmModalOpen(false);
-    showModal(t("common.error"), <ModalError error={err} />);
+    showModal(t("common.error"), <ErrorMessage error={err} />);
   }
 
   // Data loading
@@ -314,7 +314,7 @@ export default function RoomPage() {
         setShowInNosecount(result.currentRoomInfo?.showInNosecount);
         setData(result);
       }).catch((err) => {
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setData(EMPTY_ROOM_INFO);
       }).finally(() => setLoading(false));
   }, [data]);
@@ -563,8 +563,8 @@ export default function RoomPage() {
       onClose={() => setRenameModalOpen(false)} busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomRenameFormAction}
-          loading={modalLoading}
-          setLoading={setModalLoading}
+          busy={modalLoading}
+          setBusy={setModalLoading}
           onSuccess={commonSuccess}
           onFail={commonFail}
           hideSave
@@ -606,8 +606,8 @@ export default function RoomPage() {
       busy={modalLoading}>
       {data?.currentRoomInfo && <>
         <DataForm action={new RoomInviteFormAction}
-          loading={modalLoading}
-          setLoading={setModalLoading}
+          busy={modalLoading}
+          setBusy={setModalLoading}
           onSuccess={commonSuccess}
           onFail={commonFail}
           hideSave
@@ -849,8 +849,8 @@ export default function RoomPage() {
       onClose={() => setExchangeModalOpen(false)}
       busy={modalLoading}>
       <DataForm action={new RoomExchangeFormAction}
-        loading={modalLoading}
-        setLoading={setModalLoading}
+        busy={modalLoading}
+        setBusy={setModalLoading}
         onSuccess={roomExchangeSuccess}
         onFail={commonFail}
         hideSave

@@ -22,23 +22,51 @@ export class RecoverFormAction extends FormApiAction<RecoverApiData, boolean, Ap
 }
 
 export interface ChangePasswordApiData {
+    targetUserId?: number,
     password?: string,
     resetPwId?: string
 }
 
-export class ResetPasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
+export class ChangePasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
     mapToDTO = (data: FormData) => {
         const toReturn: ChangePasswordApiData = {
-            password: data.get('password')?.toString (),
-            resetPwId: data.get('resetPwId')?.toString (),
+            targetUserId: data.has("userId")
+                ? parseInt(data.get('userId')!.toString ())
+                : undefined,
+            password: data.get("password")?.toString (),
+            resetPwId: data.get("resetPwId")?.toString (),
         };
         return toReturn;
     }
 }
 
-export class ResetPasswordFormAction extends FormApiAction<ChangePasswordApiData, boolean, ApiErrorResponse> {
+export class ChangePasswordFormAction extends FormApiAction<ChangePasswordApiData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new ResetPasswordDTOBuilder ();
+    dtoBuilder = new ChangePasswordDTOBuilder ();
     urlAction = "authentication/pw/change";
+}
+
+export interface ChangeEmailApiData {
+    targetUserId?: number,
+    email: string
+}
+
+export class ChangeEmailDTOBuilder implements FormDTOBuilder<ChangeEmailApiData> {
+    mapToDTO = (data: FormData) => {
+        const toReturn: ChangeEmailApiData = {
+            targetUserId: data.has("userId")
+                ? parseInt(data.get("userId")!.toString())
+                : undefined,
+            email: data.get("email")!.toString()
+        };
+        return toReturn;
+    }
+}
+
+export class ChangeEmailFormAction extends FormApiAction<ChangeEmailApiData, boolean, ApiErrorResponse> {
+    method = RequestType.POST;
+    authenticated = true;
+    dtoBuilder = new ChangeEmailDTOBuilder();
+    urlAction = "authentication/mail/change";
 }

@@ -5,7 +5,7 @@ import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewResponse, ShowInNosecountApiAction, ShowInNosecountApiInput } from "@/lib/api/admin/userView";
 import { BadgeDataChangeFormAction, DeleteBadgeAction, UploadBadgeAction } from "@/lib/api/badge/badge";
 import { AutoInputCountriesManager } from "@/lib/api/geo";
@@ -36,7 +36,7 @@ export default function UserViewBadge({
             .then(() => { reloadData() })
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setNosecountSetLoading(false));
     }
 
@@ -66,7 +66,7 @@ export default function UserViewBadge({
         setBadgeLoading(true);
         runRequest(new DeleteBadgeAction(), [String(userId)])
             .then(() => reloadData())
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setBadgeLoading(false);
                 hideModal();
@@ -81,14 +81,14 @@ export default function UserViewBadge({
         setBadgeLoading(true);
         runRequest(new UploadBadgeAction(), [String(userData.badgeData.mainBadge!.userId)], dataToUpload)
             .then(() => reloadData())
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setBadgeLoading(false));
     }
 
     // Change data
     const [changeDataModalOpen, setChangeDataModalOpen] = useState(false);
 
-    const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />)
+    const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />)
 
     return <>
         <div className="horizontal-list gap-4mm flex-wrap">
@@ -106,6 +106,11 @@ export default function UserViewBadge({
                     <span className="bold">{t("furpanel.admin.users.accounts.view.badges.locale")}:</span>
                     &nbsp;
                     {getFlagEmoji(userData.badgeData.mainBadge?.locale ?? 'un')}
+                </p>
+                <p className="average">
+                    <span className="bold">{t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")}:</span>
+                    &nbsp;
+                    {userData.badgeData.maxFursuits}
                 </p>
                 <div className="spacer" />
                 <div className="horizontal-list gap-2mm flex-wrap">
@@ -127,7 +132,7 @@ export default function UserViewBadge({
             open={changeDataModalOpen}
             onClose={() => setChangeDataModalOpen(false)}
             busy={badgeLoading}>
-            <DataForm action={new BadgeDataChangeFormAction} loading={badgeLoading} setLoading={setBadgeLoading} hideSave
+            <DataForm action={new BadgeDataChangeFormAction} busy={badgeLoading} setBusy={setBadgeLoading} hideSave
                 className="gap-2mm" onFail={onChangeFail} onSuccess={reloadData}>
                 <input type="hidden" name="userId" value={userData.badgeData.mainBadge?.userId} />
                 <FpInput inputType="text"

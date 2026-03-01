@@ -3,7 +3,7 @@ import Button from "@/components/input/button";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/booking";
 import { runRequest } from "@/lib/api/global";
@@ -32,7 +32,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
         setActionLoading(true);
         runRequest(new ShopLinkApiAction())
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 

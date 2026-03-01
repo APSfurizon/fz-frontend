@@ -1,8 +1,10 @@
+import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
     canUpgradeUser: boolean,
     canBanUsers: boolean,
+    canChangeLoginData: boolean,
     canManageMembershipCards: boolean,
     canRefreshPretixCache: boolean,
     canRemindOrderLinking: boolean,
@@ -14,6 +16,7 @@ export interface AdminCapabilitesResponse extends ApiResponse {
 export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
     canUpgradeUser: false,
     canBanUsers: false,
+    canChangeLoginData: false,
     canManageMembershipCards: false,
     canRefreshPretixCache: false,
     canRemindOrderLinking: false,
@@ -33,4 +36,26 @@ export class ExportHotelRoomsApiAction extends ApiAction<Response, ApiErrorRespo
     method = RequestType.GET;
     urlAction = "admin/export/hotel-user-list";
     rawResponse?: boolean = true;
+}
+
+export interface ManualLinkOrderData {
+    orderCode: string,
+    userId: number
+}
+
+class ManuallyLinkOrderDTOBuilder implements FormDTOBuilder<ManualLinkOrderData> {
+    mapToDTO = (data: FormData) => {
+        const toReturn: ManualLinkOrderData = {
+            orderCode: data.get("orderCode")!.toString (),
+            userId: parseInt(data.get("userId")!.toString ())
+        };
+        return toReturn;
+    };
+}
+
+export class ManuallyLinkOrderFormAction extends FormApiAction<ManualLinkOrderData, Response, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    dtoBuilder = new ManuallyLinkOrderDTOBuilder();
+    urlAction = "orders-workflow/manual-order-link";
 }

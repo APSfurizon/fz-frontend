@@ -82,8 +82,8 @@ export default function Register() {
     </span>}
     <DataForm checkFn={checkForm}
       className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
+      busy={loading}
+      setBusy={setLoading}
       action={new RegisterFormAction}
       onSuccess={manageSuccess}
       onFail={(err) => manageError(err)}

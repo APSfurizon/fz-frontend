@@ -16,7 +16,7 @@ import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
 import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 
 export default function UserViewPersonalInfo({
     personalInformation,
@@ -49,10 +49,10 @@ export default function UserViewPersonalInfo({
     return <>
         <DataForm className="vertical-list gap-2mm"
             action={new UpdatePersonalInfoFormAction}
-            loading={personalInfoLoading}
-            setLoading={setPersonalInfoLoading}
+            busy={personalInfoLoading}
+            setBusy={setPersonalInfoLoading}
             onSuccess={() => { if (reloadData) reloadData() }}
-            onFail={(apiError) => showModal(t("common.error"), <ModalError error={apiError}/>, "ERROR")}
+            onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError}/>, "ERROR")}
             formRef={formRef}
             initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
             restPathParams={restPathParams}>

@@ -62,8 +62,6 @@ export async function proxy(req: NextRequest) {
     } else {
       return intlMiddlewareResult;
     }
-  } else if (tokenResult.status === TokenVerification.NETWORK_ERROR) {
-    return redirectToUrl("/home", req);
   } else {
     if (needsAuthentication) {
       return redirectToLogin(req, continueParams, tokenResult.status == TokenVerification.NOT_VALID);

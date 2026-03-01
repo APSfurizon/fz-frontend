@@ -2,7 +2,7 @@ import { StatusBoxStyle } from "@/components/statusBox";
 import { ConventionEvent } from "./counts";
 import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
 import { RoomData } from "./room";
-import { QRCodeOptions } from "next-qrcode/dist/useQRCode";
+import { Logo, QRCodeOptions } from "next-qrcode/dist/useQRCode";
 
 export type OrderStatusType = "CANCELED" | "PENDING" | "PAID" | "EXPIRED";
 export type SponsorshipType = "NONE" | "SPONSOR" | "SUPER_SPONSOR" | "ULTRA_SPONSOR";
@@ -108,6 +108,13 @@ export const qrCodeOptions: QRCodeOptions = {
         light: '#FFFFFF',
     }
 } as const;
+
+export const qrCodeLogo: Logo = {
+    src: '/images/favicon.png',
+    options: {
+        width: 30
+    }
+}
 
 export class BookingOrderApiAction extends ApiAction<BookingOrderResponse, ApiErrorResponse> {
     authenticated = true;

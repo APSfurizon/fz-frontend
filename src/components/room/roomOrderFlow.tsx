@@ -8,7 +8,7 @@ import {
     RoomStoreItemsApiResponse, RoomTypeInfo
 } from "@/lib/api/flows/roomOrderFlow";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { EVENT_CURRENCY } from "@/lib/constants";
@@ -58,7 +58,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
         runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
             .then(data => setRoomsData(data))
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />, "ERROR");
+                showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
                 setRoomsData(undefined);
             }).finally(() => setModalLoading(false));
     }, [roomsData, isOpen]);
@@ -152,7 +152,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
             </>;
         case STEPS.REVIEW:
             return <>
-                {latestError && <ModalError error={latestError} />}
+                {latestError && <ErrorMessage error={latestError} />}
                 <span>{t("furpanel.room.order_flow.your_selection")}</span>
                 <div className="room-container">
                     {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>

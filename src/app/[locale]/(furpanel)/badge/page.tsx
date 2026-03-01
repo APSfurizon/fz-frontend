@@ -13,7 +13,7 @@ import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { UploadBadgeAction } from "@/lib/api/badge/badge";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { useUser } from "@/components/context/userProvider";
 import { getFlagEmoji } from "@/lib/components/userPicture";
 import AutoInput from "@/components/input/autoInput";
@@ -52,7 +52,7 @@ export default function BadgePage() {
       .then(() => {
         setUpdateUser(true);
         setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
     setLoading(true);
   }
@@ -81,7 +81,7 @@ export default function BadgePage() {
       .then(() => {
         setUpdateUser(true);
         setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
   }
 
@@ -94,7 +94,7 @@ export default function BadgePage() {
     setChangeDataModalOpen(false);
   }
 
-  const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />);
+  const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
   // Fursuits
   // Add fursuit
@@ -162,7 +162,7 @@ export default function BadgePage() {
     runRequest(new DeleteFursuitApiAction(), [String(currentFursuit.fursuit.id)])
       .then(() => {
         setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => {
         closeDeleteFursuit();
         setLoading(false);
@@ -183,7 +183,7 @@ export default function BadgePage() {
     runRequest(new GetBadgeStatusAction())
       .then((data) => setBadgeStatus(data))
       .catch((err) => {
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setBadgeStatus(null);
       }).finally(() => setLoading(false));
   }, [badgeStatus]);
@@ -213,7 +213,7 @@ export default function BadgePage() {
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
         <div className="vertical-list flex-vertical-center">
-          <DataForm hideSave loading={loading} setLoading={setLoading}>
+          <DataForm hideSave busy={loading} setBusy={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop busy={loading}
               setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}
               readonly={!badgeStatus?.allowedModifications}>
@@ -324,7 +324,7 @@ export default function BadgePage() {
       open={changeDataModalOpen}
       onClose={() => setChangeDataModalOpen(false)}
       busy={loading}>
-      <DataForm action={new BadgeDataChangeFormAction} loading={loading} setLoading={setLoading} hideSave
+      <DataForm action={new BadgeDataChangeFormAction} busy={loading} setBusy={setLoading} hideSave
         className="gap-2mm" onFail={onChangeFail} onSuccess={onChangeSuccess} >
         <FpInput inputType="text"
           fieldName="fursonaName"
@@ -356,8 +356,8 @@ export default function BadgePage() {
       busy={loading}>
       <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
         restPathParams={editMode ? ["" + currentFursuit?.fursuit.id, "update-with-image"] : undefined}
-        loading={loading}
-        setLoading={setLoading}
+        busy={loading}
+        setBusy={setLoading}
         editFormData={editFursuitFormData}
         hideSave
         className="gap-2mm"
@@ -376,6 +376,7 @@ export default function BadgePage() {
           helpText={t("furpanel.badge.input.fursuit_image.help")} />
         <FpInput inputType="text"
           fieldName="name"
+          required
           initialValue={editMode ? currentFursuit?.fursuit.name : ""}
           label={t("furpanel.badge.input.fursuit_name.label")}
           placeholder={t("furpanel.badge.input.fursuit_name.placeholder")} />

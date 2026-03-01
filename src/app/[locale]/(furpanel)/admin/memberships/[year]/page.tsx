@@ -2,7 +2,7 @@
 import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import {
     AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction,
     ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse,
@@ -53,7 +53,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         }
         runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />);
+                showModal(t("common.error"), <ErrorMessage error={err} />);
                 setChecked(!checked);
             })
             .finally(() => setBusy(false));
@@ -69,7 +69,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
     const addCardFail = (err: any) => {
         setAddModalOpen(false);
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
     }
 
     // Select year
@@ -96,7 +96,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         runRequest(new GetCardsApiAction(), undefined, undefined, new URLSearchParams({ "year": "" + selectedYear }))
             .then((value) => setCardsData(value))
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />);
+                showModal(t("common.error"), <ErrorMessage error={err} />);
                 setCardsData(null);
             }).finally(() => setLoading(false));
     }, [cardsData])
@@ -162,9 +162,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             cell: props => <>
                 {props.row.original.membershipCard
                     ? <Checkbox initialValue={props.row.original.membershipCard.registered}
-                        onClick={(event: MouseEvent<HTMLButtonElement>,
-                            checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
-                            setBusy: Dispatch<SetStateAction<boolean>>) => markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
+                        onClick={(event, checked, setChecked, setBusy) =>
+                            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
                         {t("furpanel.admin.membership_manager.table.headers.registered")}
                     </Checkbox>
                     : undefined
@@ -269,7 +268,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     </>
 
     return <>
-        <div className="page">
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
@@ -327,8 +326,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             onClose={() => setAddModalOpen(false)}
             busy={loading}>
             <DataForm action={new AddCardFormAction}
-                loading={loading}
-                setLoading={setLoading}
+                busy={loading}
+                setBusy={setLoading}
                 hideSave
                 className="vertical-list gap-2mm"
                 onSuccess={addCardSuccess}

@@ -2,11 +2,9 @@
 import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
-import ModalError from "@/components/modalError";
-import {
-    AddRoleApiResponse, AddRoleFormAction, AllRolesResponse,
-    DeleteRolesApiAction, GetRolesApiAction, RoleInfo
-} from "@/lib/api/admin/role";
+import ErrorMessage from "@/components/errorMessage";
+import { AddRoleApiResponse, AddRoleFormAction, DeleteRolesApiAction, GetRolesApiAction,
+    RoleInfo } from "@/lib/api/admin/role";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
@@ -41,7 +39,7 @@ export default function RolesListPage() {
             .then((response) => setRoles(response.roles))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setLoading(false));
     }
 
@@ -61,7 +59,7 @@ export default function RolesListPage() {
     }
 
     const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setAddRoleModalOpen(false);
     }
 
@@ -86,7 +84,7 @@ export default function RolesListPage() {
         setLoading(true);
         runRequest(new DeleteRolesApiAction(), ["" + roleId])
             .then(() => loadRoles())
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 closeDeleteRoleModal();
@@ -137,7 +135,7 @@ export default function RolesListPage() {
     });
 
     return <>
-        <div className="page">
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(path)}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
@@ -158,7 +156,7 @@ export default function RolesListPage() {
         {/* Role creation modal */}
         <Modal open={addRoleModalOpen} onClose={() => setAddRoleModalOpen(false)}
             title={t("furpanel.admin.users.security.roles.actions.add_role")}>
-            <DataForm shouldReset={!addRoleModalOpen} setLoading={setLoading} loading={loading}
+            <DataForm shouldReset={!addRoleModalOpen} setBusy={setLoading} busy={loading}
                 action={new AddRoleFormAction} onSuccess={(data) => onAddSuccess(data as AddRoleApiResponse)}
                 onFail={onAddFail} resetOnSuccess hideSave className="vertical-list gap-2mm">
                 <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>

@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import BadgeTable from "./badgeTable";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
 
 export default function AdvancedBadgePrint() {
@@ -103,11 +103,11 @@ export default function AdvancedBadgePrint() {
             }))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setPrintLoading(false));
     }
 
-    return <div className="page">
+    return <div className="stretch-page">
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
             <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
             <div className="horizontal-list gap-2mm">

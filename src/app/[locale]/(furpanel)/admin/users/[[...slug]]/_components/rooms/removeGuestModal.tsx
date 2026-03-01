@@ -42,13 +42,10 @@ export default function RemoveGuestModal({
     return <Modal open={open}
         onClose={onClose}
         title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
-        icon="PERSON_REMOVE"
-        busy={loading}>
+        icon="PERSON_REMOVE">
         <DataForm action={new RoomKickFormAction}
             resetOnSuccess
             resetOnFail
-            setLoading={setLoading}
-            loading={loading}
             editFormData={editFormData}
             onSuccess={onSuccess}
             hideSave>
@@ -57,9 +54,11 @@ export default function RemoveGuestModal({
                 label={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.select_guest.label")}
                 minDecodeSize={0} />
             <div className="horizontal-list gap-4mm">
-                <Button icon="CANCEL" busy={loading} onClick={onClose}>{t("common.cancel")}</Button>
+                <Button icon="CANCEL" onClick={onClose}>
+                    {t("common.cancel")}
+                </Button>
                 <div className="spacer"></div>
-                <Button className="danger" type="submit" icon="CHECK" busy={loading}>
+                <Button className="danger" type="submit" icon="PERSON_REMOVE">
                     {t("furpanel.room.actions.kick")}
                 </Button>
             </div>

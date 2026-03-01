@@ -613,12 +613,28 @@
               "is_daily": "Giornaliero",
               "sponsorship_type": "Sponsor",
               "extra_days": "Giorni extra",
-              "room_type": "Tipo stanza"
+              "room_type": "Tipo stanza",
+              "actions": {
+                "link_order": {
+                  "title": "Collega un ordine",
+                  "description": "Collega un ordine a <b>{user}</b>",
+                  "order_code": {
+                    "label": "Codice ordine"
+                  }
+                },
+                "view_qr": {
+                  "title": "Mostra codice QR"
+                }
+              },
+              "event_order_serial": "Seriale",
+              "daily_days": "Giorni daily"
             },
             "actions": {
               "ban": "Ban",
               "unban": "Riammetti",
-              "view_order": "Vedi ordine"
+              "view_order": "Vedi ordine",
+              "change_email": "Cambia email",
+              "change_password": "Cambia password"
             },
             "messages": {
               "confirm_ban": {
@@ -644,7 +660,8 @@
               "locale": "Localizzazione",
               "delete_badge_picture": "Elimina immagine",
               "hide_from_nosecount": "Nascondi dal nosecount",
-              "show_from_nosecount": "Mostra nel nosecount"
+              "show_from_nosecount": "Mostra nel nosecount",
+              "fursuit_badges_available": "Badge fursuit disponibili"
             },
             "fursuit_table": {
               "picture": "Fotografia",
@@ -667,6 +684,13 @@
                   "select_guest": {
                     "label": "Seleziona l'ospite da rimuovere dalla stanza"
                   }
+                },
+                "rename": {
+                  "title": "Rinomina stanza"
+                },
+                "delete": {
+                  "title": "Elimina stanza",
+                  "description": "Eliminare la stanza {roomName}? I compagni di stanza verranno rimossi"
                 }
               },
               "board": "Pensione"

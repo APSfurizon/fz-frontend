@@ -1,7 +1,7 @@
 "use client"
 import AutoInput from "@/components/input/autoInput";
 import Icon from "@/components/icon";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { AutoInputUsersManager } from "@/lib/api/user";
@@ -10,7 +10,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
@@ -20,6 +20,18 @@ import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRooms from "./_components/rooms/userViewRooms";
+
+// Context management
+interface UserView {
+    userData?: GetUserAdminViewResponse,
+    reloadAll: () => void
+}
+
+const UserViewContext = createContext<UserView>(undefined as any);
+
+export const useUserViewContext: () => UserView = () => {
+    return useContext(UserViewContext);
+};
 
 export default function AdminUsersPage({ params }: { params: Promise<{ slug: string[] }> }) {
     const [userId, setUserId] = useState<number>();
@@ -61,7 +73,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         setLoading(true);
         runRequest(new GetUserAdminViewAction(), [String(userId)])
             .then(data => setUserData(data as GetUserAdminViewResponse))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [userId, userData]);
 
@@ -69,8 +81,11 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         router.push(`${userId ? getParentDirectory(path) : path}/./${item.id}`);
     }
 
-    return <>
-        <div className="page">
+    return <UserViewContext.Provider value={{
+        userData: userData,
+        reloadAll: reloadData
+    }}>
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
                 <Link href={getParentDirectory(path, userId ? 2 : 1)}><Icon icon="ARROW_BACK" /></Link>
                 <div className="horizontal-list gap-2mm">
@@ -84,7 +99,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 param={[true]}
                 onSelect={onUserSelect}>
             </AutoInput>
-            {error && <ModalError error={error} />}
+            {error && <ErrorMessage error={error} />}
             {loading && <LoadingPanel />}
             {/** User data render */}
             {userData && <>
@@ -112,5 +127,5 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 <UserViewSecurity userData={userData} reloadData={reloadData} />
             </>}
         </div>
-    </>;
+    </UserViewContext.Provider>;
 }

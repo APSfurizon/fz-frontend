@@ -613,12 +613,28 @@
               "is_daily": "Is daily",
               "sponsorship_type": "Sponsorship",
               "extra_days": "Extra days",
-              "room_type": "Room type"
+              "room_type": "Room type",
+              "actions": {
+                "link_order": {
+                  "title": "Link order",
+                  "description": "Link an order to <b>{user}</b>",
+                  "order_code": {
+                    "label": "Order code"
+                  }
+                },
+                "view_qr": {
+                  "title": "Show QR Code"
+                }
+              },
+              "event_order_serial": "Serial",
+              "daily_days": "Daily days"
             },
             "actions": {
               "ban": "Ban",
               "unban": "Unban",
-              "view_order": "View order"
+              "view_order": "View order",
+              "change_email": "Change email",
+              "change_password": "Change password"
             },
             "messages": {
               "confirm_ban": {
@@ -644,7 +660,8 @@
               "locale": "Locale",
               "delete_badge_picture": "Delete picture",
               "hide_from_nosecount": "Hide from nosecount",
-              "show_from_nosecount": "Show in nosecount"
+              "show_from_nosecount": "Show in nosecount",
+              "fursuit_badges_available": "Available fursuit badges"
             },
             "fursuit_table": {
               "picture": "Photo",
@@ -667,6 +684,13 @@
                   "select_guest": {
                     "label": "Select the guest to remove from the room"
                   }
+                },
+                "rename": {
+                  "title": "Rename room"
+                },
+                "delete": {
+                  "title": "Delete room",
+                  "description": "Are you sure to delete room {roomName}? This will kick out every roommate"
                 }
               },
               "board": "Board"

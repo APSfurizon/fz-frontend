@@ -1,6 +1,7 @@
-import { CSSProperties, MouseEvent, useEffect, useState } from "react";
+import { CSSProperties, MouseEvent, useEffect, useMemo, useState } from "react";
 import "@/styles/components/button.css";
 import Icon, { MaterialIcon } from "../icon";
+import { useFormContext } from "./dataForm";
 
 export default function Button({
     children,
@@ -25,10 +26,12 @@ export default function Button({
     type?: "submit" | "reset" | "button",
     debounce?: number
 }>) {
+    const formContext = useFormContext();
+    const finalBusy = useMemo(() => formContext.formLoading || busy, [formContext.formLoading, busy])
     const [disabledState, setDisabledState] = useState(disabled);
     const iconPresent = icon != undefined;
     const onClickEvent = (e: MouseEvent<HTMLButtonElement>) => {
-        if (busy || disabledState || !onClick) return;
+        if (finalBusy || disabledState || !onClick) return;
         if (debounce && !disabledState) {
             setDisabledState(true);
             setTimeout(() => setDisabledState(false), debounce);
@@ -38,17 +41,17 @@ export default function Button({
 
     useEffect(() => setDisabledState(disabled), [disabled]);
 
-    const isCooldown = !busy && debounce !== undefined && disabledState && !disabled;
+    const isCooldown = !finalBusy && debounce !== undefined && disabledState && !disabled;
 
     return (
         <button type={type} onClick={onClickEvent}
             title={title}
-            disabled={busy || disabledState}
+            disabled={finalBusy || disabledState}
             className={"button rounded-m" + " " + (className ?? "")}
             style={{ ...style, paddingRight: iconPresent ? '0.5em' : undefined }}>
-            {busy && <Icon className={`medium loading-animation`} icon="PROGRESS_ACTIVITY"/>}
-            {!busy && isCooldown && <Icon className={`medium`} icon="SNOOZE"/>}
-            {!busy && !isCooldown && iconPresent && <Icon className={`medium`} icon={icon}/>}
+            {finalBusy && <Icon className={`medium loading-animation`} icon="PROGRESS_ACTIVITY"/>}
+            {!finalBusy && isCooldown && <Icon className={`medium`} icon="SNOOZE"/>}
+            {!finalBusy && !isCooldown && iconPresent && <Icon className={`medium`} icon={icon}/>}
             {children && icon && <div className="spacer"></div>}
             {children && <span className="title normal spacer" style={{ fontSize: '15px', textAlign: "left" }}>
                 {children}
