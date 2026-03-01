@@ -56,8 +56,6 @@ next-env.d.ts
 .storybook/generated
 .storybook/tmp
 
-package-lock.json
-
 # vscode
 .vscode/*
 !.vscode/settings.json
