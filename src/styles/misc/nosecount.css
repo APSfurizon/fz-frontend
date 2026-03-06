@@ -20,16 +20,21 @@ a.change-mode {
 }
 
 div.room-type-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 36.2em);
+    justify-content: center;
     justify-items: center;
-    justify-content: space-around;
+    display: grid;
 }
 
 div.room-guests {
     width: fit-content;
     display: grid;
     grid-template-columns: repeat(2, 2fr);
+
+    /* TODO_DREW: vediiiiiiiiiiiiiiiiiiiiiiiiii */
+    @media screen and (max-width: 600px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 div.room-container {
