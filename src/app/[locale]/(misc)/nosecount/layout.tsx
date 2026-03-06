@@ -96,7 +96,7 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
                 </Button>
                 <Button className={(viewMode != CountViewMode.SPONSOR ? "off" : "")
                     + " margin-bottom-1mm"}
-                    icon="CONSTRUCTION"
+                    icon="WORKSPACE_PREMIUM"
                     onClick={() => onSelectMode(CountViewMode.SPONSOR)}>
                     {t("misc.nosecount.links.sponsors")}
                 </Button>
