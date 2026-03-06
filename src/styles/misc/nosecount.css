@@ -27,12 +27,26 @@ div.room-type-container {
 }
 
 div.room-guests {
-    width: fit-content;
     display: grid;
+    justify-items: center;
     grid-template-columns: repeat(2, 2fr);
 
     /* TODO_DREW: vediiiiiiiiiiiiiiiiiiiiiiiiii */
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 679px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.user-list {
+    display: grid;
+    grid-template-columns: repeat(3, 20em);
+    justify-content: center;
+
+    @media screen and (max-width: 949px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (max-width: 659px) {
         grid-template-columns: repeat(1, 1fr);
     }
 }

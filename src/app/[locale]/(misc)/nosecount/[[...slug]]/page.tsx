@@ -180,7 +180,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                                 <div key={`rh${hi}-${rti}-${ri}`}
                                     className="title large bold horizontal-list gap-2mm flex-vertical-center">
                                     <Icon icon="BED" />
-                                    {room.roomName}
+                                    <span>{room.roomName}</span>
                                     {room.roomExtraDays && room.roomExtraDays != ExtraDays.NONE && <StatusBox>
                                         {t(`furpanel.booking.items.extra_days_${room.roomExtraDays}`)}
                                     </StatusBox>}
@@ -196,7 +196,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                     </div>)}
                 </div>)}
             </div>
-            <div className="user-list horizontal-list flex-wrap gap-4mm">
+            <div className="user-list gap-4mm">
                 {roomsData.roomlessFurs.map((data, index) =>
                     <NosecountAttendee key={`rf-${index}`}
                         data={data.user}
@@ -211,7 +211,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                 </p>
                 {Object.keys(roomsData.dailyFurs).map((day, di) => <div className="daily-day" key={di}>
                     <p className="title">{formatter.dateTime(new Date(day), { dateStyle: "medium" })}</p>
-                    <div className="user-list horizontal-list flex-wrap gap-4mm">
+                    <div className="user-list gap-4mm">
                         {roomsData.dailyFurs[day]?.map((user, ui) =>
                             <NosecountAttendee key={ui} data={user} />)}
                     </div>
