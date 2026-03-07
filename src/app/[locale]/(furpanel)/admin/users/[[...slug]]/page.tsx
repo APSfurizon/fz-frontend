@@ -5,7 +5,7 @@ import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { AutoInputUsersManager, UserSearchByMembershipNumberAction, UserSearchByOrderCodeAction, UserSearchByOrderSerialAction } from "@/lib/api/user";
-import { AutoInputSearchResult } from "@/lib/components/autoInput";
+import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -47,6 +47,11 @@ enum SearchCriteria {
     MEMBERSHIP_CARD = "searchTypeMembershipCard"
 }
 
+type UserSearchConfig = {
+    manager: AutoInputManager,
+    minDecodeSize: number
+}
+
 export default function AdminUsersPage({ params }: { params: Promise<{ slug: string[] }> }) {
     const [userId, setUserId] = useState<number>();
     const [userData, setUserData] = useState<GetUserAdminViewResponse>();
@@ -84,34 +89,33 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         },
     ], []);
 
-    const userSearchEndpoint = useMemo(() => {
+    const searchConfig: UserSearchConfig = useMemo(() => {
         switch (currentCriteria) {
             case SearchCriteria.COMMON:
-                return new AutoInputUsersManager();
+                return {
+                    manager: new AutoInputUsersManager(),
+                    minDecodeSize: 3
+                }
             case SearchCriteria.ORDER_SERIAL:
-                return new AutoInputUsersManager(new UserSearchByOrderSerialAction(),
-                    UserSearchByOrderSerialAction.getParams);
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByOrderSerialAction(),
+                        UserSearchByOrderSerialAction.getParams),
+                    minDecodeSize: 1
+                };
             case SearchCriteria.ORDER_CODE:
-                return new AutoInputUsersManager(new UserSearchByOrderCodeAction(),
-                    UserSearchByOrderCodeAction.getParams);
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByOrderCodeAction(),
+                        UserSearchByOrderCodeAction.getParams),
+                    minDecodeSize: 5
+                }
             case SearchCriteria.MEMBERSHIP_CARD:
-                return new AutoInputUsersManager(new UserSearchByMembershipNumberAction(),
-                    UserSearchByMembershipNumberAction.getParams);
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByMembershipNumberAction(),
+                        UserSearchByMembershipNumberAction.getParams),
+                    minDecodeSize: 4
+                };
         }
     }, [currentCriteria]);
-
-    const minCharsPerSearch: number = useMemo(() => {
-        switch (currentCriteria) {
-            case SearchCriteria.COMMON:
-                return 3;
-            case SearchCriteria.ORDER_SERIAL:
-                return 1;
-            case SearchCriteria.ORDER_CODE:
-                return 5;
-            case SearchCriteria.MEMBERSHIP_CARD:
-                return 4;
-        }
-    }, [currentCriteria])
 
     const onSearchCriteriaChange = useMemo(() => function (e: ChangeEvent<HTMLInputElement>) {
         setCurrentCriteria(e.target.value as SearchCriteria);
@@ -184,13 +188,13 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                             </label>)}
                     </div>
                 </div>
-                <AutoInput manager={userSearchEndpoint}
+                <AutoInput manager={searchConfig.manager}
                     label={t("furpanel.admin.users.accounts.view.input.selected_user.label")}
                     placeholder={t("furpanel.admin.users.accounts.view.input.selected_user.placeholder")}
                     initialData={userId ? [userId] : undefined}
                     param={[true]}
                     onSelect={onUserSelect}
-                    minDecodeSize={minCharsPerSearch}>
+                    minDecodeSize={searchConfig.minDecodeSize}>
                 </AutoInput>
             </div>
             {error && <ErrorMessage error={error} />}
