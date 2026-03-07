@@ -601,6 +601,13 @@
               "selected_user": {
                 "label": "Selected user",
                 "placeholder": "Search for a user"
+              },
+              "search_type": {
+                "title": "Search criteria",
+                "common": "Common data",
+                "order_serial": "Order serial code",
+                "order_code": "Order code",
+                "membership_card": "Membership card"
               }
             },
             "personal_info": "Personal info",

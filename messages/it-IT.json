@@ -601,6 +601,13 @@
               "selected_user": {
                 "label": "Utente selezionato",
                 "placeholder": "Cerca un utente"
+              },
+              "search_type": {
+                "common": "Dati comuni",
+                "title": "Criteri di ricerca",
+                "order_serial": "Codice seriale ordine",
+                "order_code": "Codice ordine",
+                "membership_card": "Tessera socio"
               }
             },
             "personal_info": "Dati personali",

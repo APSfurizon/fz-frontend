@@ -1,6 +1,6 @@
 import { TranslatableInputEntity } from "@/lib/translations";
 
-export class AutoInputSearchResult extends TranslatableInputEntity {}
+export class AutoInputSearchResult extends TranslatableInputEntity { }
 
 export interface AutoInputChangedParams {
     values: AutoInputSearchResult[],
@@ -8,7 +8,7 @@ export interface AutoInputChangedParams {
     removedValue?: AutoInputSearchResult
 }
 
-export function createSearchResult (entity: Partial<AutoInputSearchResult>) {
+export function createSearchResult(entity: Partial<AutoInputSearchResult>) {
     const toReturn = new AutoInputSearchResult();
     toReturn.id = entity.id;
     toReturn.code = entity.code;
@@ -26,7 +26,7 @@ export class AutoInputFilter {
         this.filteredCodes = codes;
     }
 
-    static getForSelected (type: AutoInputManager, data: (string | number)[]): AutoInputFilter {
+    static getForSelected(type: AutoInputManager, data: (string | number)[]): AutoInputFilter {
         let ids: number[] = [];
         let codes: string[] = [];
         if (type.codeOnly) {
@@ -40,13 +40,13 @@ export class AutoInputFilter {
     merge(toMerge: AutoInputFilter) {
         this.filteredCodes = Array.from(new Set([...this.filteredCodes, ...toMerge.filteredCodes]));
         this.filteredIds = Array.from(new Set([...this.filteredIds, ...toMerge.filteredIds]))
-        return new AutoInputFilter (this.filteredIds, this.filteredCodes);
+        return new AutoInputFilter(this.filteredIds, this.filteredCodes);
     }
 
     applyFilter(data: AutoInputSearchResult): boolean {
         return (data.code !== undefined && this.filteredCodes.includes(data.code.trim())) ||
             (data.id !== undefined && this.filteredIds.includes(data.id));
-    } 
+    }
 
     filteredCodes: string[];
     filteredIds: number[];
@@ -64,11 +64,11 @@ export type SearchRank = {
 
 export function filterSearchResult(query: string, searchType: SearchType, results: AutoInputSearchResult[],
     locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter) {
-        const value = query.trim().toLowerCase();
-        const filteredResults = results.filter ((result) => {
-            return (!filter || filter.applyFilter (result)) && (!filterOut || !filterOut.applyFilter (result))
-        });
-        return applySearch(value, searchType, filteredResults, locale);
+    const value = query.trim().toLowerCase();
+    const filteredResults = results.filter((result) => {
+        return (!filter || filter.applyFilter(result)) && (!filterOut || !filterOut.applyFilter(result))
+    });
+    return applySearch(value, searchType, filteredResults, locale);
 }
 
 /**
@@ -78,38 +78,39 @@ export function filterSearchResult(query: string, searchType: SearchType, result
  * @param result the search result to test
  * @param locale the current locale to get the translated description
  */
-export function applySearch (query: string, searchType: SearchType, results: AutoInputSearchResult[],
+export function applySearch(query: string, searchType: SearchType, results: AutoInputSearchResult[],
     locale?: string): AutoInputSearchResult[] {
-        switch(searchType) {
-            case SearchType.RANKED:
-                const ranked = results.map(result => {
-                    const translatedDescription = result.getDescription (locale)?.toLowerCase();
-                    const ranks: number[] = [translatedDescription ?? result.description ?? result.code]
-                        .map(dsc => dsc ? dsc.toLowerCase().trim().indexOf(query.toLowerCase().trim()) : -1)
-                        .filter(r=>r>-1);
-                    if (ranks.length == 0) ranks.push(-1);
-                    return {
-                        data: result,
-                        rank: Math.min(...ranks)
-                    }
-                });
-                return ranked.filter(r=>r.rank>-1)
-                    .sort((a, b)=>a.rank - b.rank)
-                    .map(sortedResult=>sortedResult.data);
-            default:
-                return results.filter(result => {
-                    const translatedDescription = result.getDescription (locale)?.toLowerCase();
-                    return result.description?.toLowerCase().includes(query) ||
-                        result.code?.toLowerCase().includes(query) ||
-                        translatedDescription?.includes(query)
-                });
-        }
+    switch (searchType) {
+        case SearchType.RANKED:
+            const ranked = results.map(result => {
+                const translatedDescription = result.getDescription(locale)?.toLowerCase();
+                const ranks: number[] = [translatedDescription ?? result.description ?? result.code]
+                    .map(dsc => dsc ? dsc.toLowerCase().trim().indexOf(query.toLowerCase().trim()) : -1)
+                    .filter(r => r > -1);
+                if (ranks.length == 0) ranks.push(-1);
+                return {
+                    data: result,
+                    rank: Math.min(...ranks)
+                }
+            });
+            return ranked.filter(r => r.rank > -1)
+                .sort((a, b) => a.rank - b.rank)
+                .map(sortedResult => sortedResult.data);
+        default:
+            return results.filter(result => {
+                const translatedDescription = result.getDescription(locale)?.toLowerCase();
+                return result.description?.toLowerCase().includes(query) ||
+                    result.code?.toLowerCase().includes(query) ||
+                    translatedDescription?.includes(query)
+            });
+    }
 }
 
 export function filterLoaded(results: AutoInputSearchResult[], filterIn?: AutoInputFilter,
     filterOut?: AutoInputFilter) {
-        return results.filter(result => (filterIn?.applyFilter (result) ?? true) &&
-            (!(filterOut?.applyFilter (result) ?? false)));
+    if (!results) return [];
+    return results.filter(result => (filterIn?.applyFilter(result) ?? true) &&
+        (!(filterOut?.applyFilter(result) ?? false)));
 }
 
 /**
