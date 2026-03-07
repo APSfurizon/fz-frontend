@@ -4,13 +4,13 @@ import Icon from "@/components/icon";
 import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
-import { AutoInputUsersManager } from "@/lib/api/user";
-import { AutoInputSearchResult } from "@/lib/components/autoInput";
+import { AutoInputUsersManager, UserSearchByMembershipNumberAction, UserSearchByOrderCodeAction, UserSearchByOrderSerialAction } from "@/lib/api/user";
+import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { ChangeEvent, createContext, useContext, useEffect, useMemo, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
@@ -20,6 +20,7 @@ import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRooms from "./_components/rooms/userViewRooms";
+import "@/styles/furpanel/admin/userView.css";
 
 // Context management
 interface UserView {
@@ -33,6 +34,24 @@ export const useUserViewContext: () => UserView = () => {
     return useContext(UserViewContext);
 };
 
+type RadioButtonType = {
+    label: string,
+    name: string,
+    value: string
+}
+
+enum SearchCriteria {
+    COMMON = "searchTypeCommon",
+    ORDER_SERIAL = "searchTypeOrderSerial",
+    ORDER_CODE = "searchTypeOrderCode",
+    MEMBERSHIP_CARD = "searchTypeMembershipCard"
+}
+
+type UserSearchConfig = {
+    manager: AutoInputManager,
+    minDecodeSize: number
+}
+
 export default function AdminUsersPage({ params }: { params: Promise<{ slug: string[] }> }) {
     const [userId, setUserId] = useState<number>();
     const [userData, setUserData] = useState<GetUserAdminViewResponse>();
@@ -43,6 +62,64 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
     const { showModal } = useModalUpdate();
     const path = usePathname();
     const router = useRouter();
+
+    // Search criteria logic
+    const [currentCriteria, setCurrentCriteria] = useState(SearchCriteria.COMMON);
+
+    const searchCriteria: RadioButtonType[] = useMemo(() => [
+        {
+            name: "searchType",
+            label: t("furpanel.admin.users.accounts.view.input.search_type.common"),
+            value: SearchCriteria.COMMON
+        },
+        {
+            name: "searchType",
+            label: t("furpanel.admin.users.accounts.view.input.search_type.order_serial"),
+            value: SearchCriteria.ORDER_SERIAL
+        },
+        {
+            name: "searchType",
+            label: t("furpanel.admin.users.accounts.view.input.search_type.order_code"),
+            value: SearchCriteria.ORDER_CODE
+        },
+        {
+            name: "searchType",
+            label: t("furpanel.admin.users.accounts.view.input.search_type.membership_card"),
+            value: SearchCriteria.MEMBERSHIP_CARD
+        },
+    ], []);
+
+    const searchConfig: UserSearchConfig = useMemo(() => {
+        switch (currentCriteria) {
+            case SearchCriteria.COMMON:
+                return {
+                    manager: new AutoInputUsersManager(),
+                    minDecodeSize: 3
+                }
+            case SearchCriteria.ORDER_SERIAL:
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByOrderSerialAction(),
+                        UserSearchByOrderSerialAction.getParams),
+                    minDecodeSize: 1
+                };
+            case SearchCriteria.ORDER_CODE:
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByOrderCodeAction(),
+                        UserSearchByOrderCodeAction.getParams),
+                    minDecodeSize: 5
+                }
+            case SearchCriteria.MEMBERSHIP_CARD:
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByMembershipNumberAction(),
+                        UserSearchByMembershipNumberAction.getParams),
+                    minDecodeSize: 4
+                };
+        }
+    }, [currentCriteria]);
+
+    const onSearchCriteriaChange = useMemo(() => function (e: ChangeEvent<HTMLInputElement>) {
+        setCurrentCriteria(e.target.value as SearchCriteria);
+    }, []);
 
     // Main Logic
 
@@ -92,13 +169,34 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                     <span className="title medium">{t("furpanel.admin.users.accounts.view.title")}</span>
                 </div>
             </div>
-            <AutoInput manager={new AutoInputUsersManager}
-                label={t("furpanel.admin.users.accounts.view.input.selected_user.label")}
-                placeholder={t("furpanel.admin.users.accounts.view.input.selected_user.placeholder")}
-                initialData={userId ? [userId] : undefined}
-                param={[true]}
-                onSelect={onUserSelect}>
-            </AutoInput>
+            <div className="input-container">
+                <div className="search-criteria">
+                    <p className="title semibold small">
+                        {t("furpanel.admin.users.accounts.view.input.search_type.title")}
+                    </p>
+                    <div className="values gap-4mm">
+                        {searchCriteria.map((criteria, index) =>
+                            <label key={index} className="small" htmlFor={criteria.value}>
+                                <input id={criteria.value}
+                                    type="radio"
+                                    name={criteria.name}
+                                    value={criteria.value}
+                                    checked={currentCriteria == criteria.value}
+                                    onChange={onSearchCriteriaChange} />
+                                &nbsp;
+                                {criteria.label}
+                            </label>)}
+                    </div>
+                </div>
+                <AutoInput manager={searchConfig.manager}
+                    label={t("furpanel.admin.users.accounts.view.input.selected_user.label")}
+                    placeholder={t("furpanel.admin.users.accounts.view.input.selected_user.placeholder")}
+                    initialData={userId ? [userId] : undefined}
+                    param={[true]}
+                    onSelect={onUserSelect}
+                    minDecodeSize={searchConfig.minDecodeSize}>
+                </AutoInput>
+            </div>
             {error && <ErrorMessage error={error} />}
             {loading && <LoadingPanel />}
             {/** User data render */}
