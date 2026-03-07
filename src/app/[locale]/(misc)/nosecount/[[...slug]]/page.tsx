@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "@/styles/misc/nosecount.css";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import {
@@ -10,7 +10,6 @@ import {
 } from "@/lib/api/counts";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
-import UserPicture from "@/components/userPicture";
 import Icon from "@/components/icon";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
@@ -18,6 +17,8 @@ import ErrorMessage from "@/components/errorMessage";
 import LoadingPanel from "@/components/loadingPanel";
 import { ExtraDays } from "@/lib/api/user";
 import StatusBox from "@/components/statusBox";
+import NosecountAttendee from "../_components/attendee";
+import NosecountFursuit from "../_components/fursuit";
 
 export default function NosecountPage({ params }: { params: Promise<{ slug: string[] }> }) {
 
@@ -109,7 +110,17 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         setTotalCount(hotelGuestCount + roomsData.roomlessFurs.length + dailyFursCount);
     }, [roomsData])
 
-    useTitle(t("misc.nosecount.title"));
+    const title = useMemo(() => {
+        switch (mode) {
+            case CountViewMode.NORMAL:
+                return t("misc.nosecount.title");
+            case CountViewMode.FURSUIT:
+                return t("misc.nosecount.links.fursuits");
+            case CountViewMode.SPONSOR:
+                return t("misc.nosecount.links.sponsors");
+        }
+    }, [mode]);
+    useTitle(title);
 
     return <div className="page">
         {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel /></div>}
@@ -117,98 +128,92 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
 
         {/* Rendering sponsors */}
         {mode == CountViewMode.SPONSOR && <>
-            <p className="title x-large bold">{t("misc.nosecount.sections.sponsors")}</p>
-            {sponsorData?.users.ULTRA_SPONSOR && <p className="title large">{t("common.sponsorships.ultra_sponsor")}</p>}
+            {sponsorData?.users.ULTRA_SPONSOR &&
+                <p className="title large">{t("common.sponsorships.ultra_sponsor")}</p>}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {sponsorData?.users.ULTRA_SPONSOR?.map((user, index) =>
-                    <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}
+                    <NosecountAttendee key={`ss-${index}`} data={user} />
+                )}
             </div>
-            {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
+            {sponsorData?.users.SUPER_SPONSOR &&
+                <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {sponsorData?.users.SUPER_SPONSOR?.map((user, index) =>
-                    <UserPicture size={96} key={`ss-${index}`} userData={user} showFlag showNickname />)}
+                    <NosecountAttendee key={`ss-${index}`} data={user} />)}
             </div>
             {sponsorData?.users.SPONSOR && <p className="title large">{t("common.sponsorships.sponsor")}</p>}
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {sponsorData?.users.SPONSOR?.map((user, index) =>
-                    <UserPicture size={96} key={`s-${index}`} userData={user} showFlag showNickname />)}
+                    <NosecountAttendee key={`ss-${index}`} data={user} />)}
             </div>
         </>}
 
         {/* Rendering fursuits */}
         {mode == CountViewMode.FURSUIT && <>
-            <p className="title x-large bold">{t("misc.nosecount.sections.fursuits")}</p>
             <div className="user-list horizontal-list flex-wrap gap-4mm">
                 {fursuitData?.fursuits.map((fursuit, index) =>
-                    <UserPicture size={96} key={index} fursuitData={fursuit} showFlag showNickname />
+                    <NosecountFursuit key={index} data={fursuit} />
                 )}
             </div>
         </>}
 
         {/* Rendering nosecount */}
         {mode == CountViewMode.NORMAL && roomsData && <>
-            <p className="title x-large bold section-title">{t.rich("misc.nosecount.sections.nosecount",
-                { b: (chunks) => <b className="highlight">{chunks}</b> })}</p>
             <p className="title large">{t("misc.nosecount.total_count", { count: totalCount ?? 0 })}</p>
             {/* Hotel */}
             <div className="vertical-list gap-4mm">
                 {roomsData.hotels.map((hotel, hi) => <div key={hi} className="hotel-container">
                     <p className="title medium horizontal-list gap-2mm flex-vertical-center">
-                        <Icon icon="LOCATION_CITY"/>
+                        <Icon icon="LOCATION_CITY" />
                         {translate(hotel.displayName, locale)}
                     </p>
                     {/* Room type */}
-                    {hotel.roomTypes.map((roomType, rti) => <div key={`rt${hi}-${rti}`} className="room-type-container">
+                    {hotel.roomTypes.map((roomType, rti) => <div key={`rt${hi}-${rti}`} className="room-type">
                         <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                            <Icon icon="BEDROOM_PARENT"/>
+                            <Icon icon="BEDROOM_PARENT" />
                             {translate(roomType.roomData.roomTypeNames, locale)}
                         </p>
-                        {/* Room */}
-                        {roomType.rooms.map((room, ri) => <div key={`ri-${hi}-${rti}-${ri}`}
-                            className="room-container vertical-list gap-2mm flex-wrap">
-                            <div key={`rh${hi}-${rti}-${ri}`}
-                                className="title large bold horizontal-list gap-2mm flex-vertical-center">
-                                <Icon icon="BED"/>
-                                {room.roomName}
-                                {room.roomExtraDays && room.roomExtraDays != ExtraDays.NONE && <StatusBox>
+                        <div className="room-type-container">
+                            {/* Room */}
+                            {roomType.rooms.map((room, ri) => <div key={`ri-${hi}-${rti}-${ri}`}
+                                className="room-container">
+                                <div key={`rh${hi}-${rti}-${ri}`}
+                                    className="title large bold horizontal-list gap-2mm flex-vertical-center">
+                                    <Icon icon="BED" />
+                                    <span>{room.roomName}</span>
+                                    {room.roomExtraDays && room.roomExtraDays != ExtraDays.NONE && <StatusBox>
                                         {t(`furpanel.booking.items.extra_days_${room.roomExtraDays}`)}
-                                </StatusBox>}
-                            </div>
-                            <div key={`rgl-${hi}-${rti}-${ri}`}
-                                className="horizontal-list flex-wrap gap-4mm room-guests">
-                                {room.guests.map((guest, ui) => <>
-                                    <UserPicture size={96}
-                                        key={`rgl-${hi}-${rti}-${ri}-${ui}`}
-                                        userData={guest.user}
-                                        showFlag
-                                        showNickname />
-                                </>)}
-                            </div>
-                            <hr></hr>
-                        </div>)}
+                                    </StatusBox>}
+                                </div>
+                                <div key={`rgl-${hi}-${rti}-${ri}`}
+                                    className="room-guests gap-2mm">
+                                    {room.guests.map((guest, ui) =>
+                                        <NosecountAttendee key={`rgl-${hi}-${rti}-${ri}-${ui}`}
+                                            data={guest.user} />)}
+                                </div>
+                            </div>)}
+                        </div>
                     </div>)}
                 </div>)}
             </div>
-            <div className="user-list horizontal-list flex-wrap gap-4mm">
+            <div className="user-list gap-4mm">
                 {roomsData.roomlessFurs.map((data, index) =>
-                    <UserPicture size={96}
-                        key={index}
-                        userData={data.user}
-                        extraDays={data.extraDays}
-                        showFlag
-                        showNickname />)}
+                    <NosecountAttendee key={`rf-${index}`}
+                        data={data.user}
+                        extraDays={data.extraDays} />
+                )}
             </div>
             {/* Rendering daily furs */}
             {Object.keys(roomsData.dailyFurs).length > 0 && <>
                 <p className="title average horizontal-list gap-2mm flex-vertical-center">
-                    <Icon icon="BEDROOM_PARENT"/>
+                    <Icon icon="DATE_RANGE" />
                     {t("misc.nosecount.daily_furs")}
                 </p>
                 {Object.keys(roomsData.dailyFurs).map((day, di) => <div className="daily-day" key={di}>
                     <p className="title">{formatter.dateTime(new Date(day), { dateStyle: "medium" })}</p>
-                    <div className="user-list horizontal-list flex-wrap gap-4mm">
+                    <div className="user-list gap-4mm">
                         {roomsData.dailyFurs[day]?.map((user, ui) =>
-                            <UserPicture size={96} key={ui} userData={user} showFlag showNickname></UserPicture>)}
+                            <NosecountAttendee key={ui} data={user} />)}
                     </div>
                 </div>
                 )}

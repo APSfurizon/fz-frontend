@@ -74,14 +74,14 @@ a.hoverable:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(155, 155, 155, 0.1);
+  background-color: rgba(155, 155, 155, 0.3);
   border-radius: 0px;
   border: transparent;
   transition: background-color 525ms;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(155, 155, 155, 0.5);
+  background-color: rgba(155, 155, 155, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {

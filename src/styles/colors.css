@@ -53,7 +53,7 @@
   --tool-link-hambuger-hover-bg: #ffffff40;
 
   /* User profile picture */
-  --profile-picture-border-normal: #ffffff;
+  --profile-picture-border-normal: #cccccc;
   --profile-picture-border-sponsor: radial-gradient(#AB248F 20%, #6124AB 50%, #8E24AA 80%);
   --profile-picture-border-super-sponsor: radial-gradient(#d7104c 20%, #ff4d00 50%, #ea7815 80%);
   --profile-picture-border-ultra-sponsor: radial-gradient(#FAAA00 20%, #facc00 50%, #fbc500 80%);

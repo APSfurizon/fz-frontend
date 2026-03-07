@@ -29,6 +29,7 @@ export const ICONS = {
     CONTENT_COPY: "content_copy",
     CONTEXTUAL_TOKEN: "contextual_token",
     CROWN: "crown",
+    DATE_RANGE: "date_range",
     DELETE: "delete",
     DESIGN_SERVICES: "design_services",
     DINING: "dining",
@@ -108,7 +109,8 @@ export const ICONS = {
     TUNE: "tune",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
-    VITAL_SIGNS: "vital_signs"
+    VITAL_SIGNS: "vital_signs",
+    WORKSPACE_PREMIUM: "workspace_premium"
 } as const;
 
 export type MaterialIcon = keyof typeof ICONS;
@@ -116,12 +118,16 @@ export type MaterialIcon = keyof typeof ICONS;
 type IconProps = {
     icon: MaterialIcon,
     style?: CSSProperties,
-    className?: string
+    className?: string,
+    title?: string
 }
 
 export default function Icon(props: Readonly<IconProps>) {
     return <span className="icon-container" data-nosnippet aria-hidden>
-        <i translate="no" className={`icon mdi ${props.className ?? ""}`} style={{ ...props.style }}>
+        <i translate="no"
+            className={`icon mdi ${props.className ?? ""}`}
+            style={{ ...props.style }}
+            title={props.title}>
             {props.icon}
         </i>
     </span>

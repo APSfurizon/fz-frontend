@@ -1021,12 +1021,7 @@
   },
   "misc": {
     "nosecount": {
-      "title": "All",
-      "sections": {
-        "fursuits": "Meet the fursuiters",
-        "sponsors": "A big thanks to our sponsors ❤️",
-        "nosecount": "Who's coming to furizon? Let's find out in the <b>nosecount!</b>"
-      },
+      "title": "All attendees",
       "links": {
         "fursuits": "Fursuits",
         "sponsors": "Sponsors"

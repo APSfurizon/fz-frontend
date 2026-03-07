@@ -19,25 +19,140 @@ a.change-mode {
     text-decoration: underline;
 }
 
-div.page,
-div.room-container,
-div.user-list {
-    padding: 0.625em;
-    margin: 0 auto;
-}
-
-div.hotel-container {
-    padding: 0.625em;
-}
-
-div.room-type-container,
-div.room-guests {
-    padding: 0.625em 3em;
-    margin: 0 auto;
+div.room-type-container {
+    grid-template-columns: repeat(2, 36.2em);
     justify-content: center;
+    justify-items: center;
+    display: grid;
+}
+
+div.room-guests {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: repeat(2, 2fr);
+
+    /* TODO_DREW: vediiiiiiiiiiiiiiiiiiiiiiiiii */
+    @media screen and (max-width: 679px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.user-list {
+    display: grid;
+    grid-template-columns: repeat(3, 20em);
+    justify-content: center;
+
+    @media screen and (max-width: 949px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (max-width: 659px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+div.room-container {
+    display: block;
+    max-width: fit-content;
+}
+
+.page,
+.room-container,
+.user-list {
+    padding: 0.625em;
+}
+
+.hotel-container {
+    padding: 0.625em;
+}
+
+.room-type-container,
+.room-guests {
+    padding: 0.625em 0em;
+}
+
+.attendee {
+    overflow: hidden;
+    background-color: var(--background);
+    width: fit-content;
+}
+
+.attendee {
+
+    .attendee-content {
+        margin: 0.2em;
+        overflow: hidden;
+        width: 70mm;
+        display: flex;
+        flex-direction: row;
+        background-color: var(--background);
+
+        .attendee-badges,
+        .attendee-data {
+            padding: 0.1rem 0.4rem;
+        }
+
+        .attendee-data {
+            flex-grow: 1;
+            overflow: hidden;
+
+            p {
+                text-overflow: ellipsis;
+            }
+
+            .attendee-extra {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 4mm;
+            }
+        }
+
+        .attendee-badges {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            span.flag {
+                text-shadow: 0px 0px 0.05em var(--foreground);
+            }
+        }
+    }
+
+    &.sponsor-NONE {
+        background: transparent;
+        box-shadow: 0px 0px 2px var(--foreground);
+    }
+
+    &.sponsor-SPONSOR {
+        background: var(--profile-picture-border-sponsor);
+    }
+
+    &.sponsor-SUPER_SPONSOR {
+        background: var(--profile-picture-border-super-sponsor);
+    }
+
+    &.sponsor-ULTRA_SPONSOR {
+        background: var(--profile-picture-border-ultra-sponsor);
+    }
+
+    &.sponsor-SPONSOR,
+    &.sponsor-SUPER_SPONSOR,
+    &.sponsor-ULTRA_SPONSOR {
+        animation: sponsor-animation 3s linear 0ms infinite;
+        background-size: 200% 200%;
+        background-repeat: repeat;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    div.room-type-container {
+        grid-template-columns: auto;
+    }
 }
 
 @media screen and (max-width: 600px) {
+
     div.room-type-container,
     div.room-guests {
         padding: 0.625em .625em;

@@ -1020,12 +1020,7 @@
   },
   "misc": {
     "nosecount": {
-      "title": "Tutti",
-      "sections": {
-        "fursuits": "Incontra i fursuiter",
-        "sponsors": "Un grazie di ❤️ ai nostri sponsor",
-        "nosecount": "Scopri gli ospiti nel <b>nosecount!</b>"
-      },
+      "title": "Tutti gli ospiti",
       "links": {
         "fursuits": "Fursuit",
         "sponsors": "Sponsor"
