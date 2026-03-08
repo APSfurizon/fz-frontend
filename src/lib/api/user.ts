@@ -101,6 +101,12 @@ export interface UserSearchResponse extends ApiResponse {
     users: UserSearchResult[]
 }
 
+export class GetUserByIdAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/by-user-id";
+}
+
 export class UserSearchAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
@@ -128,9 +134,9 @@ export class UserSearchByOrderCodeAction extends ApiAction<UserSearchResponse, A
 export class UserSearchByMembershipNumberAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
-    urlAction = "users/search/current-event/by-membership-no";
+    urlAction = "users/search/by-membership-number";
     static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
-        return buildSearchParams({ "no": value });
+        return buildSearchParams({ "number": value });
     }
 }
 
@@ -163,7 +169,7 @@ export class AutoInputUsersManager implements AutoInputManager {
     loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
             const params = buildSearchParams({ "id": filter.filteredIds.map(num => "" + num) })
-            runRequest(new UserSearchAction(), ["by-user-id"], undefined, params).then(results => {
+            runRequest(new GetUserByIdAction(), undefined, undefined, params).then(results => {
                 const users = results.users?.map(usr => toSearchResult(usr));
                 resolve(filterLoaded(users, filter));
             });
