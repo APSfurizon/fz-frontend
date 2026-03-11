@@ -10,7 +10,7 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, createContext, useContext, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, createContext, HTMLInputTypeAttribute, useContext, useEffect, useMemo, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
@@ -49,7 +49,8 @@ enum SearchCriteria {
 
 type UserSearchConfig = {
     manager: AutoInputManager,
-    minDecodeSize: number
+    minDecodeSize: number,
+    type?: HTMLInputTypeAttribute
 }
 
 export default function AdminUsersPage({ params }: { params: Promise<{ slug: string[] }> }) {
@@ -100,7 +101,8 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 return {
                     manager: new AutoInputUsersManager(new UserSearchByOrderSerialAction(),
                         UserSearchByOrderSerialAction.getParams),
-                    minDecodeSize: 1
+                    minDecodeSize: 1,
+                    type: "number"
                 };
             case SearchCriteria.ORDER_CODE:
                 return {
@@ -112,7 +114,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 return {
                     manager: new AutoInputUsersManager(new UserSearchByMembershipNumberAction(),
                         UserSearchByMembershipNumberAction.getParams),
-                    minDecodeSize: 4
+                    minDecodeSize: 7
                 };
         }
     }, [currentCriteria]);
@@ -194,7 +196,8 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                     initialData={userId ? [userId] : undefined}
                     param={[true]}
                     onSelect={onUserSelect}
-                    minDecodeSize={searchConfig.minDecodeSize}>
+                    minDecodeSize={searchConfig.minDecodeSize}
+                    type={searchConfig.type}>
                 </AutoInput>
             </div>
             {error && <ErrorMessage error={error} />}
