@@ -218,6 +218,7 @@ export default function FpTable<T>({
             {enableSearch && <FpInput className="table-search"
                 placeholder={t("table.filter.placeholder")}
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
+                autocorrect={false}
                 icon="FILTER_LIST" />}
             {showAddButton && <Button icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
             {showDeleteButton && <Button icon="DELETE" onClick={onDelete} title={t("table.delete.title")}

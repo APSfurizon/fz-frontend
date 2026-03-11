@@ -42,6 +42,7 @@ div.table-container {
                         flex-wrap: wrap;
                         align-items: center;
                         cursor: ew-resize;
+                        user-select: none;
 
                         i.mdi {
                             color: var(--text-subtitle);

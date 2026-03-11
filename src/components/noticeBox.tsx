@@ -9,8 +9,19 @@ export enum NoticeTheme {
     Error
 }
 
+type NoticeBoxProps = {
+    title?: string,
+    theme: NoticeTheme,
+    icon?: MaterialIcon,
+    children: React.ReactNode,
+    headerStyle?:
+    CSSProperties,
+    style?: CSSProperties,
+    className?: string
+}
+
 export default function NoticeBox({ title, theme, icon, children, headerStyle, style, className }:
-    Readonly<{ title?: string, theme: NoticeTheme, icon?: MaterialIcon, children: React.ReactNode, headerStyle?: CSSProperties, style?: CSSProperties, className?: string }>) {
+    Readonly<NoticeBoxProps>) {
     let finalIcon: MaterialIcon = "HELP";
     switch (theme) {
         case NoticeTheme.FAQ:
@@ -34,7 +45,7 @@ export default function NoticeBox({ title, theme, icon, children, headerStyle, s
     return (
         <div className={`notice-box ${className}`} style={{ ...style }}>
             <div className="header vertical-align-middle" style={{ ...headerStyle }}>
-                <Icon className="medium" icon={finalIcon}/>
+                <Icon className="medium" icon={finalIcon} />
                 <span className="title">{title}</span>
             </div>
             <div className="answer descriptive">
