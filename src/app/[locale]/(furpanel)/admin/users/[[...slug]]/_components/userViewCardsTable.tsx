@@ -15,10 +15,8 @@ export default function UserViewCardsTable({
     userData: GetUserAdminViewResponse
 }>) {
     const t = useTranslations();
-    const {showModal} = useModalUpdate();
+    const { showModal } = useModalUpdate();
 
-    // Registration logic
-    const [registrationLoading, setRegistrationLoading] = useState(false);
     // Mark as registered
     const markAsRegistered = (event: MouseEvent<HTMLButtonElement>,
         checked: boolean, setChecked: (value: boolean) => void,
@@ -46,17 +44,20 @@ export default function UserViewCardsTable({
             id: 'issuedYear',
             header: t("furpanel.admin.users.accounts.view.cards_table.issue_year")
         }),
+        cardColHelper.accessor('createdForOrderId', {
+            id: 'createdForOrderId',
+            header: t("furpanel.admin.users.accounts.view.cards_table.created_for_order_id")
+        }),
         cardColHelper.accessor(itm => itm.registered, {
             id: 'registered',
             header: t("furpanel.admin.membership_manager.columns.registered"),
-            cell: props => <Checkbox busy={registrationLoading}
-                initialValue={props.getValue()}
+            cell: props => <Checkbox initialValue={props.getValue()}
                 onClick={(event, checked, setChecked, setBusy) =>
-                            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)}/>
+                    markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)} />
         })
     ]);
 
     return <FpTable<MembershipCard> rows={userData?.membershipCards}
-                columns={cardColumns}
-                enableSearch/>;
+        columns={cardColumns}
+        enableSearch />;
 }

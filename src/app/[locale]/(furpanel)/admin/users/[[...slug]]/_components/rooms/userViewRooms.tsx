@@ -76,6 +76,14 @@ export default function UserViewRooms({
             id: "board",
             header: t("furpanel.admin.users.accounts.view.rooms_table.board"),
         }),
+        roomColHelper.accessor("currentRoomInfo.checkinDate", {
+            id: "checkinDate",
+            header: t("furpanel.admin.users.accounts.view.rooms_table.check_in_date"),
+        }),
+        roomColHelper.accessor("currentRoomInfo.checkoutDate", {
+            id: "checkoutDate",
+            header: t("furpanel.admin.users.accounts.view.rooms_table.check_out_date"),
+        }),
         roomColHelper.display({
             id: "actions",
             header: "",

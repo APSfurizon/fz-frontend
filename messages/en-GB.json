@@ -700,7 +700,9 @@
                   "description": "Are you sure to delete room {roomName}? This will kick out every roommate"
                 }
               },
-              "board": "Board"
+              "board": "Board",
+              "check_in_date": "Check in date",
+              "check_out_date": "Check out date"
             },
             "rooms": "Rooms"
           }

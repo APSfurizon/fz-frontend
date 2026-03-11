@@ -42,7 +42,9 @@ export interface RoomInfo {
     canInvite: boolean,
     extraDays: ExtraDaysType,
     guests: RoomGuestHeader[],
-    board: Board
+    board: Board,
+    checkinDate: Date,
+    checkoutDate: Date
 }
 
 export interface RoomCreateData {
@@ -173,7 +175,7 @@ export class RoomKickFormDTOBuilder implements FormDTOBuilder<GuestIdApiData> {
 export class RoomKickFormAction extends FormApiAction<GuestIdApiData, boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
-    dtoBuilder = new RoomKickFormDTOBuilder ();
+    dtoBuilder = new RoomKickFormDTOBuilder();
     urlAction = "room/kick";
 }
 
@@ -262,6 +264,8 @@ export const EMPTY_ROOM_INFO: RoomInfoResponse = {
         showInNosecount: false,
         eventId: 0,
         extraDays: "NONE",
-        board: Board.NONE
+        board: Board.NONE,
+        checkinDate: new Date(),
+        checkoutDate: new Date()
     }
 };

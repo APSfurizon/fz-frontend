@@ -658,7 +658,8 @@
               "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
             },
             "cards_table": {
-              "issue_year": "Anno emissione"
+              "issue_year": "Anno emissione",
+              "created_for_order_id": "Creato per l'ordine"
             },
             "membership_cards": "Tessere socio",
             "badge": "Badge",
@@ -700,7 +701,9 @@
                   "description": "Eliminare la stanza {roomName}? I compagni di stanza verranno rimossi"
                 }
               },
-              "board": "Pensione"
+              "board": "Pensione",
+              "check_in_date": "Data check in",
+              "check_out_date": "Data check out"
             },
             "rooms": "Stanze"
           }
