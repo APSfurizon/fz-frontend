@@ -4,7 +4,12 @@ import Icon from "@/components/icon";
 import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
-import { AutoInputUsersManager, UserSearchByMembershipNumberAction, UserSearchByOrderCodeAction, UserSearchByOrderSerialAction } from "@/lib/api/user";
+import {
+    AutoInputUsersManager,
+    UserSearchByMembershipNumberAction,
+    UserSearchByOrderCodeAction,
+    UserSearchByOrderSerialAction
+} from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
@@ -204,28 +209,42 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
             {loading && <LoadingPanel />}
             {/** User data render */}
             {userData && <>
-                {/* Badge */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.badge")}</span>
-                <UserViewBadge userData={userData} reloadData={reloadData} />
-                {/* Fursuits */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.fursuits")}</span>
-                <UserViewFursuitsTable userData={userData} reloadData={reloadData} />
+                <div className="badge-grid">
+                    <div className="badge-view">
+                        {/* Badge */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.badge")}</p>
+                        <UserViewBadge userData={userData} reloadData={reloadData} />
+                    </div>
+                    <div className="fursuit-view">
+                        {/* Fursuits */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.fursuits")}</p>
+                        <UserViewFursuitsTable userData={userData} reloadData={reloadData} />
+                    </div>
+                </div>
                 {/* Orders */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</span>
+                <p className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</p>
                 <UserViewOrdersTable userData={userData} />
                 {/* Rooms */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.rooms")}</span>
+                <p className="title medium">{t("furpanel.admin.users.accounts.view.rooms")}</p>
                 <UserViewRooms userData={userData} reloadData={reloadData} />
-                {/* Membership cards */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.membership_cards")}</span>
-                <UserViewCardsTable userData={userData} />
-                {/* Personal info */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.personal_info")}</span>
-                <UserViewPersonalInfo personalInformation={userData.personalInfo}
-                    reloadData={reloadData} />
-                {/* Security */}
-                <span className="title medium">{t("furpanel.admin.users.security.title")}</span>
-                <UserViewSecurity userData={userData} reloadData={reloadData} />
+                <div className="user-data-grid">
+                    <div className="user-personal-data">
+                        {/* Personal info */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.personal_info")}</p>
+                        <UserViewPersonalInfo personalInformation={userData.personalInfo}
+                            reloadData={reloadData} />
+                    </div>
+                    <div className="user-membership-cards">
+                        {/* Membership cards */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.membership_cards")}</p>
+                        <UserViewCardsTable userData={userData} />
+                    </div>
+                    <div className="user-security">
+                        {/* Security */}
+                        <p className="title medium">{t("furpanel.admin.users.security.title")}</p>
+                        <UserViewSecurity userData={userData} reloadData={reloadData} />
+                    </div>
+                </div>
             </>}
         </div>
     </UserViewContext.Provider>;

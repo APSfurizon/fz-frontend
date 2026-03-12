@@ -15,3 +15,66 @@
         }
     }
 }
+
+.badge-grid {
+    display: grid;
+    gap: 0.625em;
+    grid-template-columns: 40% 60%;
+    grid-auto-rows: 1fr;
+
+    &>div {
+        max-height: 100vh;
+        overflow: hidden;
+
+
+        &>p {
+            margin-bottom: 2mm;
+        }
+    }
+
+    .user-view-badge {
+        background-color: var(--table-bg);
+        padding: 0.625em;
+    }
+
+    @media screen and (max-width: 1500px) {
+        grid-template-columns: 100%;
+        grid-auto-rows: auto;
+    }
+}
+
+.user-data-grid {
+    display: grid;
+    gap: 0.625em;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "user-personal-data user-membership-cards"
+        "user-personal-data user-security";
+
+    &>div {
+        overflow: hidden;
+
+        &>p {
+            margin-bottom: 2mm;
+        }
+    }
+
+    .user-personal-data {
+        grid-area: user-personal-data;
+
+        .user-view-personal-info {
+            padding: 0.625em;
+            background-color: var(--table-bg);
+        }
+    }
+
+    .user-membership-cards {
+        grid-area: user-membership-cards;
+    }
+
+    .user-security {
+        grid-area: user-security;
+    }
+
+}

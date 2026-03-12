@@ -91,7 +91,7 @@ export default function UserViewBadge({
     const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />)
 
     return <>
-        <div className="horizontal-list gap-4mm flex-wrap">
+        <div className="user-view-badge rounded-m horizontal-list gap-4mm flex-wrap">
             <div>
                 <Upload initialMedia={userData.badgeData.mainBadge?.propic} requireCrop busy={badgeLoading}
                     setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130} />
@@ -108,12 +108,15 @@ export default function UserViewBadge({
                     {getFlagEmoji(userData.badgeData.mainBadge?.locale ?? 'un')}
                 </p>
                 <p className="average">
-                    <span className="bold">{t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")}:</span>
+                    <span className="bold">
+                        {t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")}:
+                    </span>
                     &nbsp;
                     {userData.badgeData.maxFursuits}
                 </p>
                 <div className="spacer" />
                 <div className="horizontal-list gap-2mm flex-wrap">
+                    <div className="spacer"></div>
                     <Button icon={userData.showInNousecount ? "VISIBILITY_OFF" : "VISIBILITY"}
                         busy={nosecountSetLoading}
                         onClick={() => toggleShowInNosecount(!userData.showInNousecount)}>

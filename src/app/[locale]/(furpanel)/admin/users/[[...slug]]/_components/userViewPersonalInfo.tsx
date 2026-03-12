@@ -1,6 +1,5 @@
 import { useUser } from "@/components/context/userProvider";
 import AutoInput from "@/components/input/autoInput";
-import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
@@ -8,7 +7,12 @@ import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { Permissions } from "@/lib/api/permission";
 import {
-    AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, REG_ITALIAN_FISCAL_CODE, shirtSizeAnswers, UpdatePersonalInfoFormAction,
+    AutoInputGenderManager,
+    AutoInputSexManager,
+    idTypeAnswers,
+    REG_ITALIAN_FISCAL_CODE,
+    shirtSizeAnswers,
+    UpdatePersonalInfoFormAction,
     UserPersonalInfo
 } from "@/lib/api/user";
 import { firstOrUndefined, stripProperties, today } from "@/lib/utils";
@@ -47,12 +51,12 @@ export default function UserViewPersonalInfo({
 
     // Edit logic
     return <>
-        <DataForm className="vertical-list gap-2mm"
+        <DataForm className="user-view-personal-info rounded-m vertical-list gap-2mm"
             action={new UpdatePersonalInfoFormAction}
             busy={personalInfoLoading}
             setBusy={setPersonalInfoLoading}
             onSuccess={() => { if (reloadData) reloadData() }}
-            onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError}/>, "ERROR")}
+            onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError} />, "ERROR")}
             formRef={formRef}
             initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
             restPathParams={restPathParams}>
@@ -97,7 +101,7 @@ export default function UserViewPersonalInfo({
                     onChange={(p) => setBirthCountry((firstOrUndefined(p.newValues) as CountrySearchResult)?.code)}
                     label={t("authentication.register.form.birth_country.label")}
                     placeholder={t("authentication.register.form.birth_country.placeholder")}
-                    initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}/>
+                    initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined} />
                 <FpInput fieldName="birthday"
                     required
                     inputType="date"
