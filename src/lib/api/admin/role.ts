@@ -1,8 +1,8 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global"
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global"
 import { UserData } from "../user";
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
-import { CACHED_PERMISSIONS, CachedPermissions } from "@/lib/cache/cache";
+import { CACHED_PERMISSIONS } from "@/lib/cache/cache";
 
 export interface RoleInfo {
     roleId: number,
@@ -39,7 +39,9 @@ export interface RoleData {
     roleAdmincountPriority: number
 }
 
-export interface RoleDataResponse extends ApiResponse { }
+export interface RoleDataResponse extends ApiResponse {
+    roles: RoleInfo[]
+}
 
 export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
@@ -71,7 +73,7 @@ export interface AddRoleApiResponse extends ApiResponse {
 
 export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: AddRoleApiData = {
+        const toReturn: AddRoleApiData = {
             internalName: data.get("internalName")!.toString()
         };
         return toReturn;
@@ -145,15 +147,15 @@ export class AutoInputPermissionsManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             getAutoInputPermissions().then(results => {
                 resolve(filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
             getAutoInputPermissions().then(results => {
                 resolve(
                     filterLoaded(results, filter, filterOut)
@@ -162,5 +164,5 @@ export class AutoInputPermissionsManager implements AutoInputManager {
         });
     }
 
-    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }

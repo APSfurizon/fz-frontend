@@ -50,10 +50,16 @@
     grid-template-rows: auto 1fr;
     grid-template-areas:
         "user-personal-data user-membership-cards"
-        "user-personal-data user-security";
+        "user-personal-data user-security"
+        "user-personal-data user-permissions"
+        "user-personal-data user-roles";
 
     &>div {
         overflow: hidden;
+
+        &>div {
+            background-color: var(--table-bg);
+        }
 
         &>p {
             margin-bottom: 2mm;
@@ -77,4 +83,11 @@
         grid-area: user-security;
     }
 
+    .user-permissions {
+        grid-area: user-permissions;
+    }
+
+    .user-roles {
+        grid-area: user-roles;
+    }
 }

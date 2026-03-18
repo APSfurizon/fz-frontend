@@ -704,7 +704,15 @@
               "check_in_date": "Check in date",
               "check_out_date": "Check out date"
             },
-            "rooms": "Rooms"
+            "rooms": "Rooms",
+            "permissions_table": {
+              "permission": "Permission"
+            },
+            "roles_table": {
+              "display_name": "Name",
+              "internal_name": "Internal name",
+              "show_in_nosecount": "Show in nosecount"
+            }
           }
         },
         "security": {
@@ -771,6 +779,12 @@
               "temporary_members_count": "Temporary members"
             }
           }
+        },
+        "permissions": {
+          "title": "Permissions"
+        },
+        "roles": {
+          "title": "Roles"
         }
       },
       "system": {

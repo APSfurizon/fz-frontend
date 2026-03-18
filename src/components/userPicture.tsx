@@ -11,7 +11,7 @@ import { FursuitDetails } from '@/lib/api/badge/fursuits';
 import LoadingPanel from './loadingPanel';
 import StatusBox from './statusBox';
 
-export default function UserPicture ({
+export default function UserPicture({
     size,
     userData,
     fursuitData,
@@ -27,14 +27,14 @@ export default function UserPicture ({
     showNickname?: boolean,
     showFlag?: boolean,
     hideEffect?: boolean
-}>) { 
+}>) {
     const t = useTranslations();
     const [isLoading, setLoading] = useState(true);
     const [pictureData, setPictureData] = useState<UserData>();
     const [fursuitPictureData, setFursuitPictureData] = useState<FursuitDetails>();
     if (!userData && !fursuitData) throw new Error("User picture without both fursuit and user data");
 
-    useEffect(()=>{
+    useEffect(() => {
         if (userData) {
             if (userData instanceof Promise) {
                 setLoading(true);
@@ -59,8 +59,8 @@ export default function UserPicture ({
             }
         }
     }, []);
-    
-    const borderClassName = useMemo(()=>
+
+    const borderClassName = useMemo(() =>
         `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
         [pictureData, fursuitData, isLoading]);
 
@@ -70,23 +70,24 @@ export default function UserPicture ({
         <div className="user-picture-container vertical-list flex-vertical-center">
             <div className={borderClassName}>
                 <Image unoptimized className="rounded-m profile-picture"
-                    src={getImageUrl(pictureData?.propic?.mediaUrl) ?? getImageUrl(fursuitPictureData?.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                    src={getImageUrl(pictureData?.propic?.mediaUrl)
+                        ?? getImageUrl(fursuitPictureData?.propic?.mediaUrl)
+                        ?? EMPTY_PROFILE_PICTURE_SRC}
                     alt={t('common.header.alt_profile_picture')} quality={100} width={size ?? 32} height={size ?? 32}>
                 </Image>
                 {pictureData?.locale && showFlag && <span className="flag medium">
                     {getFlagEmoji(pictureData?.locale.toLowerCase())}
                 </span>}
             </div>
-            { showNickname && (
-                <span className="title semibold nickname small" style={{maxWidth: size}}>
-                    {isLoading && <LoadingPanel/>}
+            {showNickname && (
+                <span className="title semibold nickname small" style={{ maxWidth: size }}>
+                    {isLoading && <LoadingPanel />}
                     {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ''}
                 </span>
             )}
             {!isFursuit && extraDays != ExtraDays.NONE && <StatusBox>
-                    {t(`furpanel.booking.items.extra_days_${extraDays}`)}
+                {t(`furpanel.booking.items.extra_days_${extraDays}`)}
             </StatusBox>}
-            {isFursuit && fursuitPictureData?.species && <StatusBox>{fursuitPictureData.species}</StatusBox>}
         </div>
     )
 }

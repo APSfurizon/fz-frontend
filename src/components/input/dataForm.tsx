@@ -2,14 +2,13 @@ import { MaterialIcon } from "../icon";
 import {
     useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
     createContext, useContext,
-    MutableRefObject,
     useImperativeHandle,
     RefObject,
     useMemo
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
-import { FormApiAction, InferRequest } from "@/lib/components/dataForm";
+import { FormApiAction, FormValidationError, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
 import { useModalContext } from "../modal";
@@ -84,7 +83,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: () => void,
     editFormData?: (data: FormData) => FormData,
-    checkFn?: (e: FormData, form: HTMLFormElement) => boolean,
+    checkFn?: (e: FormData, form: HTMLFormElement) => FormValidationError[],
     children?: React.ReactNode,
     className?: string,
     disabled?: boolean,
@@ -112,25 +111,25 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     // - Internal loading
     const [loading, setLoading] = useState(false);
     /**The final busy state, in or between the externally imposed busy state and internal loading */
-    const isBusy = useMemo(()=>(busy ?? false) || loading, [busy, loading]);
+    const isBusy = useMemo(() => (busy ?? false) || loading, [busy, loading]);
 
     // - Context loading change logic
     const context = useModalContext();
 
     // -- Updates the context's busy state
-    useEffect(()=>{
+    useEffect(() => {
         context.setLoading(isBusy);
     }, [isBusy])
 
     // -- Aligns the external busy state
     useEffect(() => {
-        setBusy && setBusy(loading);
+        if (setBusy) { setBusy(loading); }
     }, [loading])
 
     // Entity change logic
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
     const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
-    const {showModal} = useModalUpdate();
+    const { showModal } = useModalUpdate();
 
     useEffect(() => {
         if (shouldReset) {
@@ -154,12 +153,18 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     }, [])
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-        if (isBusy) {return;}
+        if (isBusy) { return; }
         try {
             if (!action) throw new Error("dataform must have an action to be submitted")
             const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
             if (checkFn) {
-                if (!checkFn(formData, e.currentTarget)) {
+                const result = checkFn(formData, e.currentTarget);
+                if (result?.length) {
+                    for (const validation of result) {
+                        const field: HTMLInputElement | null = e
+                            .currentTarget.querySelector(`*[name='${validation.field}']`);
+                        field?.setCustomValidity(validation.error)
+                    }
                     e.preventDefault();
                     e.stopPropagation();
                     return;
@@ -179,7 +184,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
         } catch (e) {
             console.error(e);
             setLoading(false);
-            fail(e ?? {errorMessage: "unknown"});
+            fail(e ?? { errorMessage: "unknown" });
         }
 
         e.preventDefault();

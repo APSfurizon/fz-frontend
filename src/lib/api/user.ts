@@ -12,8 +12,6 @@ import { MediaData } from "./media";
 import { SelectItem } from "../components/fpSelect";
 import { MouseEvent } from "react";
 
-export const REG_ITALIAN_FISCAL_CODE = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi;
-
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
     propic?: MediaData
 }

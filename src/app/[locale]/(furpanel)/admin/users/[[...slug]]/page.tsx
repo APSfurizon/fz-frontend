@@ -25,7 +25,9 @@ import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRooms from "./_components/rooms/userViewRooms";
+import UserViewPermissionsTable from "./_components/userViewPermissionsTable";
 import "@/styles/furpanel/admin/userView.css";
+import UserViewRolesTable from "./_components/userViewRolesTable";
 
 // Context management
 interface UserView {
@@ -243,6 +245,16 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                         {/* Security */}
                         <p className="title medium">{t("furpanel.admin.users.security.title")}</p>
                         <UserViewSecurity userData={userData} reloadData={reloadData} />
+                    </div>
+                    <div className="user-permissions">
+                        {/* Permissions */}
+                        <p className="title medium">{t("furpanel.admin.users.permissions.title")}</p>
+                        <UserViewPermissionsTable userData={userData} />
+                    </div>
+                    <div className="user-roles">
+                        {/* Roles */}
+                        <p className="title medium">{t("furpanel.admin.users.roles.title")}</p>
+                        <UserViewRolesTable userData={userData} />
                     </div>
                 </div>
             </>}

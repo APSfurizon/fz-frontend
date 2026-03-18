@@ -108,6 +108,7 @@ export default function FpInput({
     /* Change handling */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
+        e.target.setCustomValidity("");
         if (onChange) onChange(e);
         if (pattern) patternValidity(e);
         onFormChange(fieldName);

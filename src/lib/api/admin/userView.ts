@@ -1,4 +1,11 @@
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded, filterSearchResult, SearchType } from "@/lib/components/autoInput";
+import {
+    AutoInputFilter,
+    AutoInputManager,
+    AutoInputSearchResult,
+    filterLoaded,
+    filterSearchResult,
+    SearchType
+} from "@/lib/components/autoInput";
 import { BadgeStatusApiResponse } from "../badge/badge";
 import { Board, SponsorshipType } from "../booking";
 import { ConventionEvent } from "../counts";
@@ -9,7 +16,6 @@ import { Permissions } from "../permission";
 import { RoomInfoResponse } from "../room";
 import { ExtraDays, UserData, UserPersonalInfo } from "../user";
 import { MembershipCard } from "./membershipManager";
-import { RoleData } from "./role";
 
 export interface FullOrder {
     code: string,
@@ -53,6 +59,14 @@ export interface FullOrder {
     board: Board,
 }
 
+export type UserViewRoles = {
+    roleId: number,
+    displayName: string,
+    internalName: string,
+    roleAdmincountPriority: number,
+    showInNosecount: boolean
+};
+
 export interface GetUserAdminViewResponse extends ApiResponse {
     personalInfo: UserPersonalInfo,
     membershipCards: MembershipCard[],
@@ -64,7 +78,7 @@ export interface GetUserAdminViewResponse extends ApiResponse {
     otherRooms: RoomInfoResponse[],
     showInNousecount: boolean,
     badgeData: BadgeStatusApiResponse,
-    roles: RoleData[],
+    roles: UserViewRoles[],
     permissions: Permissions[]
 }
 
@@ -115,15 +129,22 @@ export class ShowInNosecountApiAction extends ApiAction<boolean, ApiErrorRespons
     urlAction = "users/show-in-nosecount";
 }
 
+export class AddUserToRoleApiAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    hasPathParams = true;
+    urlAction = "roles/{id}/add-user";
+}
+
 export class AutoInputCustomUserManager implements AutoInputManager {
     private users: AutoInputSearchResult[] = [];
 
     constructor(users: UserData[]) {
-       this.users = users.map(u => {
-        return new AutoInputSearchResult (u.userId, undefined, u.fursonaName, undefined, u.propic?.mediaUrl);
-       });
+        this.users = users.map(u => {
+            return new AutoInputSearchResult(u.userId, undefined, u.fursonaName, undefined, u.propic?.mediaUrl);
+        });
     }
-    
+
     codeOnly = false;
 
     loadByIds(filter: AutoInputFilter) {

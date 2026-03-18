@@ -705,7 +705,15 @@
               "check_in_date": "Data check in",
               "check_out_date": "Data check out"
             },
-            "rooms": "Stanze"
+            "rooms": "Stanze",
+            "permissions_table": {
+              "permission": "Permesso"
+            },
+            "roles_table": {
+              "display_name": "Nome",
+              "internal_name": "Nome interno",
+              "show_in_nosecount": "Mostra nel nosecount"
+            }
           }
         },
         "security": {
@@ -771,6 +779,12 @@
               "temporary_members_count": "Membri temporanei"
             }
           }
+        },
+        "permissions": {
+          "title": "Permessi"
+        },
+        "roles": {
+          "title": "Ruoli"
         }
       },
       "system": {
@@ -812,7 +826,8 @@
         "new_password": {
           "label": "Nuova password",
           "placeholder": "Crea una nuova password",
-          "help": "Deve essere lunga almeno 6 caratteri"
+          "help": "Deve essere lunga almeno 6 caratteri",
+          "mismatch": "Nuova password e conferma non corrispondono"
         },
         "confirm_password": {
           "label": "Conferma password",

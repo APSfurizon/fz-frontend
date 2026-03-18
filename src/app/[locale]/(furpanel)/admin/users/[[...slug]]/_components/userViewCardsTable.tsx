@@ -2,7 +2,11 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import Checkbox from "@/components/input/checkbox";
 import FpTable from "@/components/table/fpTable";
-import { ChangeCardRegisterStatusApiAction, ChangeCardRegisterStatusApiData, MembershipCard } from "@/lib/api/admin/membershipManager";
+import {
+    ChangeCardRegisterStatusApiAction,
+    ChangeCardRegisterStatusApiData,
+    MembershipCard
+} from "@/lib/api/admin/membershipManager";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { runRequest } from "@/lib/api/global";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";

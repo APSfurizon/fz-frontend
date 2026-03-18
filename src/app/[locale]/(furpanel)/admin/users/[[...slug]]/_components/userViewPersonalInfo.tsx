@@ -10,7 +10,6 @@ import {
     AutoInputGenderManager,
     AutoInputSexManager,
     idTypeAnswers,
-    REG_ITALIAN_FISCAL_CODE,
     shirtSizeAnswers,
     UpdatePersonalInfoFormAction,
     UserPersonalInfo
@@ -37,7 +36,8 @@ export default function UserViewPersonalInfo({
     const [birthCountry, setBirthCountry] = useState<string | undefined>();
     const [residenceCountry, setResidenceCountry] = useState<string>();
     const [phonePrefix, setPhonePrefix] = useState<string>();
-    const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
+    const fiscalCodeRequired = useMemo(() => [birthCountry, residenceCountry].includes("IT"),
+        [birthCountry, residenceCountry]);
     const { showModal } = useModalUpdate();
 
     // Handle admin changing personal user info
@@ -117,7 +117,7 @@ export default function UserViewPersonalInfo({
                     minLength={16}
                     maxLength={16}
                     inputType="text"
-                    pattern={REG_ITALIAN_FISCAL_CODE} disabled={!fiscalCodeRequired}
+                    disabled={!fiscalCodeRequired}
                     label={t("authentication.register.form.fiscal_code.label")}
                     placeholder={t("authentication.register.form.fiscal_code.placeholder")}
                     initialValue={fiscalCodeRequired ? personalInformation?.fiscalCode : ""} />
