@@ -33,8 +33,10 @@ export default function DeleteRoomModal({
             roomId: roomId
         };
         setLoading(true);
-        runRequest(new RoomDeleteAction(), undefined, roomData)
-            .then(() => onSuccess())
+        runRequest({
+            action: new RoomDeleteAction(),
+            body: roomData
+        }).then(() => onSuccess())
             .catch(e => showModal(t("common.error"), <ErrorMessage error={e} />))
             .finally(() => {
                 setLoading(false);

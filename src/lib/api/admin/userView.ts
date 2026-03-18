@@ -88,7 +88,8 @@ export interface GetUserAdminViewResponse extends ApiResponse {
 export class GetUserAdminViewAction extends ApiAction<GetUserAdminViewResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
-    urlAction = "users/view";
+    hasPathParams = true;
+    urlAction = "users/view/{id}";
 }
 
 export interface UserIdRequestData {

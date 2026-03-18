@@ -20,7 +20,7 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
     // Parse params
     useEffect(() => {
         params.then((loadedParams) => {
-            let newId = parseInt (loadedParams.id);
+            const newId = parseInt(loadedParams.id);
             if (newId === undefined || isNaN(newId)) {
                 notFound();
             }
@@ -41,7 +41,7 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
     // Get the entity
     const getEntity = () => {
         if (roleId === undefined) return Promise.reject(null);
-        return runRequest(new GetRoleByIdApiAction(), [roleId.toString()])
+        return runRequest({ action: new GetRoleByIdApiAction(), pathParams: { "id": roleId } })
     }
 
     // Save entity
@@ -50,12 +50,17 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
             if (!toSave) return;
             setLoading(true);
             const toSend = roleToOutput(toSave);
-            runRequest(new UpdateRoleByIdApiAction(), ["" + toSave.roleId], toSend)
-                .then((response) => {
-                    getEntity()
-                        .then((data) => resolve(data as RoleData))
-                        .catch((err) => reject(err));
-                })
+            runRequest({
+                action: new UpdateRoleByIdApiAction(),
+                pathParams: {
+                    "id": toSave.roleId,
+                    body: toSend
+                }
+            }).then(() => {
+                getEntity()
+                    .then((data) => resolve(data))
+                    .catch((err) => reject(err));
+            })
                 .catch((err) => {
                     showModal(t("error"), <ErrorMessage error={err} />);
                     reject(err);

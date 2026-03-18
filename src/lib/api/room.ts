@@ -154,10 +154,22 @@ export interface GuestIdApiData {
     guestId: number
 }
 
-export class RoomInviteAnswerAction extends ApiAction<boolean, ApiErrorResponse> {
+export class RoomInviteAcceptAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
-    urlAction = "room/invite";
+    urlAction = "room/invite/accept";
+}
+
+export class RoomInviteRefuseAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "room/invite/refuse";
+}
+
+export class RoomInviteCancelAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "room/invite/cancel";
 }
 
 export class RoomKickAction extends ApiAction<boolean, ApiErrorResponse> {

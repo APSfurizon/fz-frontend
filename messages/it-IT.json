@@ -909,7 +909,8 @@
         "confirm_password": {
           "help": "Deve combaciare con la password",
           "label": "Conferma password",
-          "placeholder": "Conferma la tua password"
+          "placeholder": "Conferma la tua password",
+          "mismatch": "Le password non corrispondono"
         },
         "email": {
           "label": "Email",
@@ -917,7 +918,8 @@
         },
         "confirm_email": {
           "label": "Conferma email",
-          "placeholder": "esempio@furroso.com"
+          "placeholder": "esempio@furroso.com",
+          "mismatch": "Le email non corrispondono"
         },
         "first_name": {
           "label": "Nome",
@@ -978,10 +980,12 @@
         },
         "disclaimer_tos": {
           "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
-          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf",
+          "missing": "Devi accettare i termini e condizioni"
         },
         "disclaimer_data_protection": {
-          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
+          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza.",
+          "missing": "Devi accettare la privacy policy"
         },
         "sex": {
           "label": "Sesso (Documento di identità)",

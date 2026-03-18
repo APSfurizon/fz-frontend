@@ -46,7 +46,7 @@ export default function BadgePrintingDialog({
 
     const renderBadges = (action: ApiAction<any, any>) => {
         setLoading(true);
-        runRequest(action)
+        runRequest({ action })
             .then((response) => {
                 const res = response as Response;
                 res.blob().then((badgesBlob) => {

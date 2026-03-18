@@ -39,14 +39,15 @@ export interface RoleData {
     roleAdmincountPriority: number
 }
 
-export interface RoleDataResponse extends ApiResponse {
-    roles: RoleInfo[]
+export interface RoleDataResponse extends ApiResponse, RoleData {
+
 }
 
 export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
-    urlAction = "roles";
+    hasPathParams = true;
+    urlAction = "roles/{id}";
 }
 
 export interface RoleOutputMember {
@@ -90,13 +91,15 @@ export class AddRoleFormAction extends FormApiAction<AddRoleApiData, AddRoleApiR
 export class DeleteRolesApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
-    urlAction = "roles";
+    hasPathParams = true;
+    urlAction = "roles/{id}";
 }
 
 export class UpdateRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
-    urlAction = "roles";
+    hasPathParams = true;
+    urlAction = "roles/{id}";
 }
 
 export function roleToOutput(view: RoleData): RoleOutputData {

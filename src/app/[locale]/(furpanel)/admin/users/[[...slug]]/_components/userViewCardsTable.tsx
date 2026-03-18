@@ -30,12 +30,13 @@ export default function UserViewCardsTable({
             membershipCardId: cardId,
             registered: checked
         }
-        runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
-            .catch((err) => {
-                showModal(t("common.error"), <ErrorMessage error={err} />);
-                setChecked(!checked);
-            })
-            .finally(() => setBusy(false));
+        runRequest({
+            action: new ChangeCardRegisterStatusApiAction(),
+            body: data
+        }).catch((err) => {
+            showModal(t("common.error"), <ErrorMessage error={err} />);
+            setChecked(!checked);
+        }).finally(() => setBusy(false));
     };
 
     const cardColHelper = createColumnHelper<MembershipCard>();

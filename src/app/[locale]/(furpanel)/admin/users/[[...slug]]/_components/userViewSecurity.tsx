@@ -39,8 +39,10 @@ export default function UserViewSecurity({
         const body: UserIdRequestData = {
             userId: userData.personalInfo.userId
         }
-        runRequest(new BanUserAction(), undefined, body)
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+        runRequest({
+            action: new BanUserAction(),
+            body
+        }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 reloadData();
@@ -61,8 +63,10 @@ export default function UserViewSecurity({
         const body: UserIdRequestData = {
             userId: userData.personalInfo.userId
         }
-        runRequest(new UnbanUserAction(), undefined, body)
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+        runRequest({
+            action: new UnbanUserAction(),
+            body
+        }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 reloadData();

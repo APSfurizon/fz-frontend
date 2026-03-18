@@ -31,9 +31,11 @@ export default function UserViewBadge({
         const data: ShowInNosecountApiInput = {
             userId: userData.badgeData.mainBadge!.userId,
             showInNosecount: show
-        }
-        runRequest(new ShowInNosecountApiAction(), undefined, data)
-            .then(() => { reloadData() })
+        };
+        runRequest({
+            action: new ShowInNosecountApiAction(),
+            body: data
+        }).then(() => { reloadData() })
             .catch((err) => showModal(
                 t("common.error"),
                 <ErrorMessage error={err} />
@@ -64,8 +66,10 @@ export default function UserViewBadge({
     const deleteBadge = (userId: number) => {
         hideModal();
         setBadgeLoading(true);
-        runRequest(new DeleteBadgeAction(), [String(userId)])
-            .then(() => reloadData())
+        runRequest({
+            action: new DeleteBadgeAction(),
+            pathParams: { "id": userId }
+        }).then(() => reloadData())
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setBadgeLoading(false);
@@ -79,8 +83,11 @@ export default function UserViewBadge({
         const dataToUpload: FormData = new FormData();
         dataToUpload.append("image", blob);
         setBadgeLoading(true);
-        runRequest(new UploadBadgeAction(), [String(userData.badgeData.mainBadge!.userId)], dataToUpload)
-            .then(() => reloadData())
+        runRequest({
+            action: new UploadBadgeAction(),
+            pathParams: { "id": userData.badgeData.mainBadge!.userId },
+            body: dataToUpload
+        }).then(() => reloadData())
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setBadgeLoading(false));
     }

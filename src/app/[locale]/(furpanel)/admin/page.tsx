@@ -35,7 +35,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     setLoading(true);
-    runRequest(new GetAdminCapabilitiesApiAction())
+    runRequest({ action: new GetAdminCapabilitiesApiAction() })
       .then((result) => setCapabilities(result))
       .catch((err) => showModal(
         t("common.error"),
@@ -49,7 +49,7 @@ export default function AdminPage() {
   const [pingLoading, setPingLoading] = useState(false);
   const ping = () => {
     setPingLoading(true);
-    runRequest(new PingApiAction())
+    runRequest({ action: new PingApiAction() })
       .then((e) => showModal(
         t("common.success"),
         <span>{e.message}</span>
@@ -65,7 +65,7 @@ export default function AdminPage() {
   const [reloadEventLoading, setReloadEventLoading] = useState(false);
   const reloadEvent = () => {
     setReloadEventLoading(true);
-    runRequest(new ReloadEventApiAction())
+    runRequest({ action: new ReloadEventApiAction() })
       .then(() => { })
       .catch((err) => showModal(
         t("common.error"),
@@ -76,7 +76,7 @@ export default function AdminPage() {
   const [reloadOrdersLoading, setReloadOrdersLoading] = useState(false);
   const reloadOrders = () => {
     setReloadOrdersLoading(true);
-    runRequest(new ReloadOrdersApiAction())
+    runRequest({ action: new ReloadOrdersApiAction() })
       .then(() => { })
       .catch((err) => showModal(
         t("common.error"),
@@ -89,7 +89,7 @@ export default function AdminPage() {
   const [remindOrderLinkLoading, setRemindOrderLinkLoading] = useState(false);
   const remindOrderLink = () => {
     setRemindOrderLinkLoading(true);
-    runRequest(new RemindOrderLinkApiAction())
+    runRequest({ action: new RemindOrderLinkApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -99,7 +99,7 @@ export default function AdminPage() {
   const [exportRoomsLoading, setExportRoomsLoading] = useState(false);
   const exportRooms = () => {
     setExportRoomsLoading(true);
-    runRequest(new ExportHotelRoomsApiAction())
+    runRequest({ action: new ExportHotelRoomsApiAction() })
       .then((response) => {
         response.blob().then((exportBlob) => {
           const result = URL.createObjectURL(exportBlob);
@@ -116,7 +116,7 @@ export default function AdminPage() {
   const [remindRoomsNotFullLoading, setRemindRoomsNotFullLoading] = useState(false);
   const remindRoomsNotFull = () => {
     setRemindRoomsNotFullLoading(true);
-    runRequest(new RemindRoomsNotFullApiAction())
+    runRequest({ action: new RemindRoomsNotFullApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -129,7 +129,7 @@ export default function AdminPage() {
   const [remindBadgesLoading, setRemindBadgesLoading] = useState(false);
   const remindBadges = () => {
     setRemindBadgesLoading(true);
-    runRequest(new RemindBadgesApiAction())
+    runRequest({ action: new RemindBadgesApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -139,7 +139,7 @@ export default function AdminPage() {
   const [remindFursuitBadgesLoading, setRemindFursuitBadgesLoading] = useState(false);
   const remindFursuitBadges = () => {
     setRemindFursuitBadgesLoading(true);
-    runRequest(new RemindFursuitBadgesApiAction())
+    runRequest({ action: new RemindFursuitBadgesApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />

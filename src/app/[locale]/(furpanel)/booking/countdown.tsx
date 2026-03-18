@@ -30,7 +30,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
     const requestShopLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new ShopLinkApiAction())
+        runRequest({ action: new ShopLinkApiAction() })
             .then((result) => router.push(result.link))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));

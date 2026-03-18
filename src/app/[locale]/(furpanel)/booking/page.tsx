@@ -76,7 +76,7 @@ export default function BookingPage() {
     useEffect(() => {
         if (!!!bookingData) {
             setLoading(true);
-            runRequest(new BookingOrderApiAction())
+            runRequest({ action: new BookingOrderApiAction() })
                 .then((result) => setBookingData(result))
                 .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
                 .finally(() => setLoading(false));
@@ -107,7 +107,7 @@ export default function BookingPage() {
     const requestOrderEditLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new OrderEditLinkApiAction())
+        runRequest({ action: new OrderEditLinkApiAction() })
             .then((result) => router.push(result.link))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
@@ -116,7 +116,7 @@ export default function BookingPage() {
     const requestRetryPaymentLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new OrderRetryLinkApiAction())
+        runRequest({ action: new OrderRetryLinkApiAction() })
             .then((result) => router.push(result.link))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
@@ -125,7 +125,7 @@ export default function BookingPage() {
     const confirmMembershipData = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new ConfirmMembershipDataApiAction())
+        runRequest({ action: new ConfirmMembershipDataApiAction() })
             .then(() => setBookingData(undefined))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));

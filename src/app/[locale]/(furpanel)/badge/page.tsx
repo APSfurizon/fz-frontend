@@ -48,11 +48,13 @@ export default function BadgePage() {
     const dataToUpload: FormData = new FormData();
     dataToUpload.append("image", blob);
     setLoading(true);
-    runRequest(new UploadBadgeAction(), undefined, dataToUpload)
-      .then(() => {
-        setUpdateUser(true);
-        setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+    runRequest({
+      action: new UploadBadgeAction(),
+      body: dataToUpload
+    }).then(() => {
+      setUpdateUser(true);
+      setBadgeStatus(undefined);
+    }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
     setLoading(true);
   }
@@ -77,7 +79,7 @@ export default function BadgePage() {
   const deleteBadge = () => {
     hideModal();
     setLoading(true);
-    runRequest(new DeleteBadgeAction())
+    runRequest({ action: new DeleteBadgeAction() })
       .then(() => {
         setUpdateUser(true);
         setBadgeStatus(undefined);
@@ -159,10 +161,12 @@ export default function BadgePage() {
       return;
     }
     setLoading(true);
-    runRequest(new DeleteFursuitApiAction(), [String(currentFursuit.fursuit.id)])
-      .then(() => {
-        setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+    runRequest({
+      action: new DeleteFursuitApiAction(),
+      pathParams: { "id": currentFursuit.fursuit.id }
+    }).then(() => {
+      setBadgeStatus(undefined);
+    }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => {
         closeDeleteFursuit();
         setLoading(false);
@@ -180,7 +184,7 @@ export default function BadgePage() {
     setLoading(true);
     closeAddFursuitModal();
     closeDeleteFursuit();
-    runRequest(new GetBadgeStatusAction())
+    runRequest({ action: new GetBadgeStatusAction() })
       .then((data) => setBadgeStatus(data))
       .catch((err) => {
         showModal(t("common.error"), <ErrorMessage error={err} />);

@@ -908,7 +908,8 @@
         "confirm_password": {
           "help": "Must be the same as the password",
           "label": "Confirm password",
-          "placeholder": "Confirm your password"
+          "placeholder": "Confirm your password",
+          "mismatch": "Passwords don't match"
         },
         "email": {
           "label": "Email",
@@ -916,7 +917,8 @@
         },
         "confirm_email": {
           "label": "Confirm email",
-          "placeholder": "example@fur.com"
+          "placeholder": "example@fur.com",
+          "mismatch": "Emails don't match"
         },
         "first_name": {
           "label": "First name",
@@ -977,10 +979,12 @@
         },
         "disclaimer_tos": {
           "label": "By checking this box, you declare to be an adult and accept the convention's <terms>terms and conditions</terms>.",
-          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_EN.pdf"
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_EN.pdf",
+          "missing": "You must accept the terms of service"
         },
         "disclaimer_data_protection": {
-          "label": "By checking this box, you declare you've read and accepted the privacy policy."
+          "label": "By checking this box, you declare you've read and accepted the privacy policy.",
+          "missing": "You must accept the privacy policy"
         },
         "sex": {
           "label": "ID sex",

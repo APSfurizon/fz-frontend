@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { UserData, UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
+import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
 import { runRequest } from "@/lib/api/global";
 
 interface UserUpdateType {
@@ -20,7 +20,7 @@ export function HeaderProvider({ children }: Readonly<{ children: React.ReactNod
     const handleUserUpdate = (doUpdate: boolean) => {
         setUserLoading(true);
         if (doUpdate) {
-            runRequest(new UserDisplayAction())
+            runRequest({ action: new UserDisplayAction() })
                 .then((data) => setUserDisplay(data))
                 .catch(() => { })
                 .finally(() => setUserLoading(false));

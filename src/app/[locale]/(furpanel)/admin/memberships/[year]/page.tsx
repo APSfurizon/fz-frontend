@@ -51,11 +51,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             membershipCardId: cardId,
             registered: checked
         }
-        runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
-            .catch((err) => {
-                showModal(t("common.error"), <ErrorMessage error={err} />);
-                setChecked(!checked);
-            })
+        runRequest({
+            action: new ChangeCardRegisterStatusApiAction(),
+            body: data
+        }).catch((err) => {
+            showModal(t("common.error"), <ErrorMessage error={err} />);
+            setChecked(!checked);
+        })
             .finally(() => setBusy(false));
     };
 
@@ -93,8 +95,10 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     useEffect(() => {
         if (!selectedYear || isNaN(selectedYear) || cardsData) return;
         setLoading(true);
-        runRequest(new GetCardsApiAction(), undefined, undefined, new URLSearchParams({ "year": "" + selectedYear }))
-            .then((value) => setCardsData(value))
+        runRequest({
+            action: new GetCardsApiAction(),
+            searchParams: new URLSearchParams({ "year": "" + selectedYear })
+        }).then((value) => setCardsData(value))
             .catch((err) => {
                 showModal(t("common.error"), <ErrorMessage error={err} />);
                 setCardsData(null);
@@ -200,9 +204,9 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                     onClick={(e) => copyContent(e.currentTarget)} />
                 {row.original.userInfo.fiscalCode &&
                     <FpInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.fiscalCode}
-                    onClick={(e) => copyContent(e.currentTarget)} />}
+                        readOnly
+                        initialValue={row.original.userInfo.fiscalCode}
+                        onClick={(e) => copyContent(e.currentTarget)} />}
             </div>
             <hr></hr>
             <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
@@ -286,14 +290,14 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                 <Button icon="REFRESH"
                     onClick={() => setCardsData(undefined)}
                     debounce={3000}>
-                        {t("common.reload")}
-                    </Button>
+                    {t("common.reload")}
+                </Button>
                 <Button onClick={() => setAddModalOpen(true)}
                     busy={loading}
                     disabled={!cardsData?.canAddCards}
                     icon="ADD">
-                        {t("furpanel.admin.membership_manager.actions.add")}
-                    </Button>
+                    {t("furpanel.admin.membership_manager.actions.add")}
+                </Button>
             </div>
             <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
                 <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>

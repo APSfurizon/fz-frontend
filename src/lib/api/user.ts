@@ -167,7 +167,7 @@ export class AutoInputUsersManager implements AutoInputManager {
     loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
             const params = buildSearchParams({ "id": filter.filteredIds.map(num => "" + num) })
-            runRequest(new GetUserByIdAction(), undefined, undefined, params).then(results => {
+            runRequest({ action: new GetUserByIdAction(), searchParams: params }).then(results => {
                 const users = results.users?.map(usr => toSearchResult(usr));
                 resolve(filterLoaded(users, filter));
             });
@@ -177,11 +177,10 @@ export class AutoInputUsersManager implements AutoInputManager {
     searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter,
         additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            runRequest(this.searchAction,
-                undefined,
-                undefined,
-                this.getParams(value, additionalValues)
-            ).then(results => {
+            runRequest({
+                action: this.searchAction,
+                searchParams: this.getParams(value, additionalValues)
+            }).then(results => {
                 const users = results.users?.map(usr => toSearchResult(usr));
                 resolve(
                     filterLoaded(users, filter, filterOut)
@@ -211,14 +210,15 @@ export class AutoInputRoomInviteManager extends AutoInputUsersManager {
     searchByValues(value: string, locale?: string, filter?: AutoInputFilter,
         filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            runRequest(new UserSearchAction(), undefined, undefined,
-                buildSearchParams({ "name": value, "filter-not-in-room": "true" }))
-                .then(results => {
-                    const users = results.users.map(usr => toSearchResult(usr));
-                    resolve(
-                        filterLoaded(users, filter, filterOut)
-                    );
-                });
+            runRequest({
+                action: new UserSearchAction(),
+                searchParams: buildSearchParams({ "name": value, "filter-not-in-room": "true" })
+            }).then(results => {
+                const users = results.users.map(usr => toSearchResult(usr));
+                resolve(
+                    filterLoaded(users, filter, filterOut)
+                );
+            });
         });
     }
 }
@@ -499,7 +499,10 @@ export class ChangeLanguageAction extends ApiAction<boolean, ApiErrorResponse> {
 export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: string, userDisplay?: UserData) {
     e.preventDefault();
     return new Promise((resolve) => resolve(!!userDisplay
-        ? runRequest(new ChangeLanguageAction(), undefined, { languageCode: language })
+        ? runRequest({
+            action: new ChangeLanguageAction(),
+            body: { languageCode: language }
+        })
         : Promise.resolve(null)))
         .then(() => {
             setCookie("NEXT_LOCALE", language, new Date(Date.now() + (1000 * 3600 * 24 * 365)));

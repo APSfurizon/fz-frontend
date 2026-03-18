@@ -157,8 +157,10 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
             return;
         }
         setLoading(true);
-        runRequest(new GetUserAdminViewAction(), [String(userId)])
-            .then(data => setUserData(data as GetUserAdminViewResponse))
+        runRequest({
+            action: new GetUserAdminViewAction(),
+            pathParams: { "id": userId }
+        }).then(data => setUserData(data as GetUserAdminViewResponse))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [userId, userData]);

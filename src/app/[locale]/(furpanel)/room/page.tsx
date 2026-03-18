@@ -13,8 +13,10 @@ import {
   EMPTY_ROOM_INFO,
   GuestIdApiData, RoomConfirmAction, RoomCreateApiAction, RoomCreateData,
   RoomDeleteAction, RoomEditData, RoomExchangeFormAction, RoomGuestHeader,
-  RoomInfoApiAction, RoomInfoResponse, RoomInvitation, RoomInviteAnswerAction,
-  RoomInviteFormAction, RoomKickAction, RoomLeaveAction, RoomRenameFormAction,
+  RoomInfoApiAction, RoomInfoResponse, RoomInvitation,
+  RoomInviteAcceptAction,
+  RoomInviteCancelAction,
+  RoomInviteFormAction, RoomInviteRefuseAction, RoomKickAction, RoomLeaveAction, RoomRenameFormAction,
   RoomSetShowInNosecountApiAction, RoomSetShowInNosecountData,
   RoomUnconfirmAction
 } from "@/lib/api/room";
@@ -62,15 +64,19 @@ export default function RoomPage() {
   // Room creation
   const createRoom = () => {
     if (userLoading) return;
-    const roomName = t("furpanel.room.default_name", { name: userDisplay?.display?.fursonaName ?? "" }).substring(0, 63);
+    const roomName = t("furpanel.room.default_name", {
+      name: userDisplay?.display?.fursonaName ?? ""
+    }).substring(0, 63);
     const roomData: RoomCreateData = {
       name: roomName
     };
 
     setActionLoading(true);
 
-    runRequest(new RoomCreateApiAction(), undefined, roomData)
-      .then((data) => { if (data.roomId) setData(undefined); })
+    runRequest({
+      action: new RoomCreateApiAction(),
+      body: roomData
+    }).then((data) => { if (data.roomId) setData(undefined); })
       .catch((err) => commonFail(err))
       .finally(() => setActionLoading(false));
   }
@@ -96,8 +102,10 @@ export default function RoomPage() {
       roomId: roomId
     };
     setModalLoading(true);
-    runRequest(new RoomDeleteAction(), undefined, roomData)
-      .then(() => commonSuccess())
+    runRequest({
+      action: new RoomDeleteAction(),
+      body: roomData
+    }).then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
   }
@@ -125,8 +133,10 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomInviteAnswerAction(), ["accept"], guestData)
-      .then(() => commonSuccess())
+    runRequest({
+      action: new RoomInviteAcceptAction(),
+      body: guestData
+    }).then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
   }
@@ -141,8 +151,10 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomInviteAnswerAction(), ["refuse"], guestData)
-      .then(() => commonSuccess())
+    runRequest({
+      action: new RoomInviteRefuseAction(),
+      body: guestData
+    }).then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
   }
@@ -167,8 +179,10 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomInviteAnswerAction(), ["cancel"], guestData)
-      .then(() => commonSuccess())
+    runRequest({
+      action: new RoomInviteCancelAction(),
+      body: guestData
+    }).then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
   }
@@ -178,8 +192,10 @@ export default function RoomPage() {
       guestId: guestId
     };
     setModalLoading(true);
-    runRequest(new RoomKickAction(), undefined, guestData)
-      .then(() => commonSuccess())
+    runRequest({
+      action: new RoomKickAction(),
+      body: guestData
+    }).then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
   }
@@ -194,7 +210,7 @@ export default function RoomPage() {
 
   const leaveRoom = () => {
     setModalLoading(true);
-    runRequest(new RoomLeaveAction())
+    runRequest({ action: new RoomLeaveAction() })
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -229,7 +245,7 @@ export default function RoomPage() {
 
   const confirmRoom = () => {
     setModalLoading(true);
-    runRequest(new RoomConfirmAction())
+    runRequest({ action: new RoomConfirmAction() })
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -245,7 +261,7 @@ export default function RoomPage() {
 
   const unconfirmRoom = () => {
     setModalLoading(true);
-    runRequest(new RoomUnconfirmAction())
+    runRequest({ action: new RoomUnconfirmAction() })
       .then(() => commonSuccess())
       .catch((err) => commonFail(err))
       .finally(() => setModalLoading(false));
@@ -263,8 +279,10 @@ export default function RoomPage() {
     const reqData: RoomSetShowInNosecountData = {
       showInNosecount: newValue
     };
-    runRequest(new RoomSetShowInNosecountApiAction(), undefined, reqData)
-      .then(() => setShowInNosecount(newValue))
+    runRequest({
+      action: new RoomSetShowInNosecountApiAction(),
+      body: reqData
+    }).then(() => setShowInNosecount(newValue))
       .catch((err) => commonFail(err))
       .finally(() => setLoading(false));
   }
@@ -309,7 +327,7 @@ export default function RoomPage() {
   useEffect(() => {
     if (data) return;
     setLoading(true);
-    runRequest(new RoomInfoApiAction())
+    runRequest({ action: new RoomInfoApiAction() })
       .then(result => {
         setShowInNosecount(result.currentRoomInfo?.showInNosecount);
         setData(result);
@@ -348,7 +366,7 @@ export default function RoomPage() {
       {/* Your room */}
       <div className="actions-panel rounded-m vertical-list gap-2mm">
         <span className="title small horizontal-list gap-2mm flex-vertical-center flex-wrap">
-          <Icon icon="BEDROOM_PARENT"/>
+          <Icon icon="BEDROOM_PARENT" />
           {t("furpanel.room.your_room")}
           <div className="spacer"></div>
           {data?.currentRoomInfo?.userIsOwner &&
@@ -356,7 +374,7 @@ export default function RoomPage() {
               title={hideNosecountText}
               debounce={500} onClick={() => setVisibility(!showInNosecount)}
               disabled={!data?.allowedModifications}>
-                {hideNosecountText}
+              {hideNosecountText}
             </Button>}
           {data && data.currentRoomInfo && !!data.buyOrUpgradeRoomSupported && !!data.canBuyOrUpgradeRoom &&
             <Button icon="SHOPPING_CART" busy={actionLoading} onClick={() => setBuyModalOpen(true)}>
@@ -380,7 +398,7 @@ export default function RoomPage() {
         {data && !data.currentRoomInfo && <>
           <div className="room-invite actions-panel rounded-m">
             <span className="title small horizontal-list gap-2mm flex-vertical-center">
-              <Icon icon="BEDROOM_PARENT"/>
+              <Icon icon="BEDROOM_PARENT" />
               {data.canCreateRoom ? t("furpanel.room.can_create") : t("furpanel.room.no_room")}
             </span>
             <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap"
@@ -434,7 +452,7 @@ export default function RoomPage() {
         {data?.currentRoomInfo && <>
           <div className="room-invite vertical-list gap-4mm rounded-s">
             <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
-              <Icon icon="BED"/>
+              <Icon icon="BED" />
               <span className="limit-view">{data?.currentRoomInfo.roomName}</span>
               <div className="spacer" style={{ flexGrow: "300" }}></div>
               {
@@ -481,7 +499,7 @@ export default function RoomPage() {
                       else
                         promptCancelInvite(guest)
                     }}>
-                      <Icon className="medium" icon="CLOSE"/>
+                      <Icon className="medium" icon="CLOSE" />
                     </div>
                   </>}
               </div>)}
@@ -546,7 +564,7 @@ export default function RoomPage() {
       {data?.invitations && data.invitations.length > 0 && <>
         <div className="actions-panel rounded-m vertical-list gap-2mm">
           <span className="title small horizontal-list gap-2mm flex-vertical-center">
-            <Icon icon="MAIL"/>
+            <Icon icon="MAIL" />
             {t("furpanel.room.invite.header", { amount: 1 })}
           </span>
           {

@@ -67,24 +67,30 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         setError(undefined);
         const searchParams = buildSearchParams({ "event-id": "" + event?.id });
         if (mode == CountViewMode.FURSUIT) {
-            runRequest(new FursuitCountApiAction(), undefined, undefined, searchParams)
-                .then((result) => setFursuitData(result))
+            runRequest({
+                action: new FursuitCountApiAction(),
+                searchParams
+            }).then((result) => setFursuitData(result))
                 .catch((err) => setError(err))
                 .finally(() => {
                     setLoading(false);
                     setNeedsLoading(false);
                 });
         } else if (mode == CountViewMode.SPONSOR) {
-            runRequest(new SponsorCountApiAction(), undefined, undefined, searchParams)
-                .then((result) => setSponsorData(result))
+            runRequest({
+                action: new SponsorCountApiAction(),
+                searchParams
+            }).then((result) => setSponsorData(result))
                 .catch((err) => setError(err))
                 .finally(() => {
                     setLoading(false);
                     setNeedsLoading(false);
                 });
         } else {
-            runRequest(new NoseCountApiAction(), undefined, undefined, searchParams)
-                .then((result) => setRoomsData(result))
+            runRequest({
+                action: new NoseCountApiAction(),
+                searchParams
+            }).then((result) => setRoomsData(result))
                 .catch((err) => setError(err))
                 .finally(() => {
                     setLoading(false);
