@@ -258,6 +258,14 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
     }
 }
 
+export class UpdatePersonalInfoAdminFormAction extends FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    authenticated = true;
+    dtoBuilder = new UpdatePersonalInfoDTOBuilder();
+    hasPathParams = true;
+    urlAction = "membership/update-personal-user-information/{id}";
+}
+
 export class UpdatePersonalInfoFormAction extends FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;

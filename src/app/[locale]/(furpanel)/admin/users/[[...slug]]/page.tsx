@@ -256,7 +256,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                     <div className="user-roles">
                         {/* Roles */}
                         <p className="title medium">{t("furpanel.admin.users.roles.title")}</p>
-                        <UserViewRolesTable userData={userData} />
+                        <UserViewRolesTable userData={userData} reloadData={reloadData} />
                     </div>
                 </div>
             </>}

@@ -4,21 +4,17 @@ import { UserData } from "../user";
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { CACHED_PERMISSIONS } from "@/lib/cache/cache";
 
-export interface RoleInfo {
-    roleId: number,
-    roleInternalName: string,
-    roleDisplayName: string,
-    showInNosecount: boolean,
+export interface RoleInfo extends Omit<RoleBaseData, "roleAdmincountPriority"> {
     permanentUsersNumber: number,
     temporaryUsersNumber: number,
     permissionsNumber: number
 }
 
-export interface AllRolesResponse extends ApiResponse {
-    roles: RoleInfo[]
+export interface MultipleRolesResponse<T extends RoleInfo | RoleBaseData> extends ApiResponse {
+    roles: T[]
 }
 
-export class GetRolesApiAction extends ApiAction<AllRolesResponse, ApiErrorResponse> {
+export class GetAllRolesApiAction extends ApiAction<MultipleRolesResponse<RoleInfo>, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "roles/";
@@ -29,19 +25,20 @@ export interface RoleMember {
     displayData: UserData
 }
 
-export interface RoleData {
+export interface RoleBaseData {
     roleId: number,
     internalName?: string,
     displayName?: string,
     showInAdminCount: boolean,
-    enabledPermissions: string[],
-    users: RoleMember[],
     roleAdmincountPriority: number
 }
 
-export interface RoleDataResponse extends ApiResponse, RoleData {
-
+export interface RoleData extends RoleBaseData {
+    enabledPermissions: string[],
+    users: RoleMember[]
 }
+
+export interface RoleDataResponse extends ApiResponse, RoleData { }
 
 export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
@@ -50,18 +47,20 @@ export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorRe
     urlAction = "roles/{id}";
 }
 
+export class SearchRoleApiAction extends ApiAction<MultipleRolesResponse<RoleBaseData>, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "roles/search";
+}
+
 export interface RoleOutputMember {
     userId: number,
     tempRole: boolean
 }
 
-export interface RoleOutputData {
-    roleInternalName?: string,
-    roleDisplayName?: string,
-    showInAdminCount: boolean,
+export interface RoleOutputData extends Omit<RoleBaseData, "roleId"> {
     enabledPermissions: string[],
-    users: RoleOutputMember[],
-    roleAdmincountPriority: number
+    users: RoleOutputMember[]
 }
 
 export interface AddRoleApiData {
@@ -104,8 +103,8 @@ export class UpdateRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErro
 
 export function roleToOutput(view: RoleData): RoleOutputData {
     return {
-        roleDisplayName: view.displayName,
-        roleInternalName: view.internalName,
+        displayName: view.displayName,
+        internalName: view.internalName,
         showInAdminCount: view.showInAdminCount,
         enabledPermissions: view.enabledPermissions,
         users: view.users.map(vu => {

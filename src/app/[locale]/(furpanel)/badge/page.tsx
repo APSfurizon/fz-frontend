@@ -361,7 +361,7 @@ export default function BadgePage() {
       onClose={closeAddFursuitModal}
       busy={loading}>
       <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
-        restPathParams={editMode ? ["" + currentFursuit?.fursuit.id, "update-with-image"] : undefined}
+        pathParams={editMode ? { "id": currentFursuit?.fursuit.id } : undefined}
         busy={loading}
         setBusy={setLoading}
         editFormData={editFursuitFormData}

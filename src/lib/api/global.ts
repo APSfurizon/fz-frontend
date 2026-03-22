@@ -68,7 +68,8 @@ export type RequestData<U extends ApiResponse | boolean | Response, V extends Ap
     pathParams?: Record<string, any>;
 }
 
-export function runRequest<U extends ApiResponse | boolean | Response, V extends ApiErrorResponse>(data: RequestData<U, V>): Promise<U> {
+export function runRequest<U extends ApiResponse | boolean | Response, V extends ApiErrorResponse>
+    (data: RequestData<U, V>): Promise<U> {
     return new Promise((resolve, reject) => {
         // Calc headers
         const headers = new Headers();
@@ -169,13 +170,33 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
     });
 }
 
-export function runFormRequest<T extends ApiRequest, U extends ApiResponse | boolean, V extends ApiErrorResponse>(
-    action: FormApiAction<T, U, V>, pathParams?: string[], data?: FormData, searchParams?: URLSearchParams
-): Promise<U> {
+export type FormRequestData<
+    T extends ApiRequest,
+    U extends ApiResponse | boolean,
+    V extends ApiErrorResponse
+> = {
+    action: FormApiAction<T, U, V>;
+    additionalPath?: string[];
+    body: FormData;
+    searchParams?: URLSearchParams;
+    pathParams?: Record<string, any>;
+}
+
+export function runFormRequest<
+    T extends ApiRequest,
+    U extends ApiResponse | boolean,
+    V extends ApiErrorResponse
+>(data: FormRequestData<T, U, V>): Promise<U> {
     // Build the DTO if present
     let body: any = undefined;
     if (data) {
-        body = action.dtoBuilder.mapToDTO(data);
+        body = data.action.dtoBuilder.mapToDTO(data.body);
     }
-    return runRequest({ action, pathParams, body, searchParams });
+    return runRequest({
+        body,
+        action: data.action,
+        pathParams: data.pathParams,
+        additionalPath: data.additionalPath,
+        searchParams: data.searchParams
+    });
 }

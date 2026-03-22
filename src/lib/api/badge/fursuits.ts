@@ -34,7 +34,8 @@ export class EditFursuitFormAction extends FormApiAction<FormData, boolean, ApiE
     method = RequestType.POST;
     authenticated = true;
     dtoBuilder = new AddFursuitDTOBuilder();
-    urlAction = "fursuits";
+    hasPathParams = true;
+    urlAction = "fursuits/{id}/update-with-image";
 }
 
 export class DeleteFursuitApiAction extends ApiAction<boolean, ApiErrorResponse> {

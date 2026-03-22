@@ -4,7 +4,7 @@ import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import {
-    AddRoleApiResponse, AddRoleFormAction, DeleteRolesApiAction, GetRolesApiAction,
+    AddRoleApiResponse, AddRoleFormAction, DeleteRolesApiAction, GetAllRolesApiAction,
     RoleInfo
 } from "@/lib/api/admin/role";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
@@ -37,7 +37,7 @@ export default function RolesListPage() {
         if (loading) return;
         setRoles([]);
         setLoading(true);
-        runRequest({ action: new GetRolesApiAction() })
+        runRequest({ action: new GetAllRolesApiAction() })
             .then((response) => setRoles(response.roles))
             .catch((err) => showModal(
                 t("common.error"),
@@ -103,10 +103,10 @@ export default function RolesListPage() {
 
     const [columns] = useState(() => {
         return [
-            columnHelper.accessor('roleDisplayName', {
+            columnHelper.accessor('displayName', {
                 header: t("furpanel.admin.users.security.roles.columns.name")
             }),
-            columnHelper.accessor('roleInternalName', {
+            columnHelper.accessor('internalName', {
                 header: t("furpanel.admin.users.security.roles.columns.internal_name")
             }),
             columnHelper.accessor('permissionsNumber', {
@@ -162,7 +162,7 @@ export default function RolesListPage() {
                 action={new AddRoleFormAction} onSuccess={(data) => onAddSuccess(data as AddRoleApiResponse)}
                 onFail={onAddFail} resetOnSuccess hideSave className="vertical-list gap-2mm">
                 <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>
-                <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/gmi}></FpInput>
+                <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/}></FpInput>
                 <div className="bottom-toolbar">
                     <Button title={t("common.cancel")} className="danger" onClick={() => setAddRoleModalOpen(false)}
                         icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
@@ -177,7 +177,7 @@ export default function RolesListPage() {
             title={t("furpanel.admin.users.security.roles.actions.delete_role")}>
             <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.confirm_deletion",
                 {
-                    roleName: selectedRole?.roleDisplayName ?? selectedRole?.roleInternalName ?? "",
+                    roleName: selectedRole?.displayName ?? selectedRole?.internalName ?? "",
                     members: selectedRole?.permanentUsersNumber ?? 0,
                     tempMembers: selectedRole?.temporaryUsersNumber ?? 0
                 })}

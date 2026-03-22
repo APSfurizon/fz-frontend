@@ -10,12 +10,15 @@ import { BadgeStatusApiResponse } from "../badge/badge";
 import { Board, SponsorshipType } from "../booking";
 import { ConventionEvent } from "../counts";
 import { ExchangeStatusApiResponse } from "../exchange";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { ApiAction, ApiErrorResponse, ApiRequest, ApiResponse, RequestType, runRequest } from "../global";
 import { OrderStatus } from "../order";
 import { Permissions } from "../permission";
 import { RoomInfoResponse } from "../room";
 import { ExtraDays, UserData, UserPersonalInfo } from "../user";
 import { MembershipCard } from "./membershipManager";
+import { buildSearchParams } from "@/lib/utils";
+import { GetRoleByIdApiAction, GetAllRolesApiAction, SearchRoleApiAction, RoleBaseData } from "./role";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 
 export interface FullOrder {
     code: string,
@@ -130,11 +133,78 @@ export class ShowInNosecountApiAction extends ApiAction<boolean, ApiErrorRespons
     urlAction = "users/show-in-nosecount";
 }
 
-export class AddUserToRoleApiAction extends ApiAction<boolean, ApiErrorResponse> {
+export interface AddUserToRoleApiData extends ApiRequest {
+    userId: number,
+    tempRole: boolean
+}
+
+export class AddUserToRoleFormApiAction extends FormApiAction<AddUserToRoleApiData, boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
     hasPathParams = true;
     urlAction = "roles/{id}/add-user";
+    dtoBuilder: FormDTOBuilder<AddUserToRoleApiData> = {
+        mapToDTO(data) {
+            const toReturn: AddUserToRoleApiData = {
+                userId: parseInt(getData(data, "userId") ?? "0"),
+                tempRole: getData(data, "tempRole") === "true"
+            };
+            return toReturn;
+        },
+    };
+}
+
+export class RemoveUserFromRoleApiAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    hasPathParams = true;
+    urlAction = "roles/{id}/remove-user";
+}
+
+// 1 char
+export class AutoInputRolesManager implements AutoInputManager {
+    codeOnly: boolean = false;
+
+    loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
+            runRequest({
+                action: new GetRoleByIdApiAction(),
+                pathParams: { "id": filter.filteredIds.at(0) }
+            }).then(result => {
+                const roles = [result].map(role => this.toSearchResult(role));
+                resolve(filterLoaded(roles, filter));
+            });
+        });
+    }
+
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
+            runRequest({
+                action: new SearchRoleApiAction(),
+                searchParams: buildSearchParams({ "query": value })
+            }).then(results => {
+                const roles = results.roles?.map(usr => this.toSearchResult(usr));
+                resolve(
+                    filterLoaded(roles, filter, filterOut)
+                );
+            });
+        });
+    }
+
+    isPresent(): Promise<boolean> {
+        return runRequest({
+            action: new GetAllRolesApiAction()
+        }).then(result => !!result.roles?.length)
+    };
+
+    toSearchResult(data: RoleBaseData) {
+        const toReturn = new AutoInputSearchResult();
+        toReturn.id = data.roleId;
+        toReturn.code = data.internalName;
+        toReturn.icon = "GROUPS";
+        toReturn.description = data.displayName;
+        return toReturn;
+    }
 }
 
 export class AutoInputCustomUserManager implements AutoInputManager {

@@ -53,9 +53,9 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
             runRequest({
                 action: new UpdateRoleByIdApiAction(),
                 pathParams: {
-                    "id": toSave.roleId,
-                    body: toSend
-                }
+                    "id": roleId
+                },
+                body: toSend
             }).then(() => {
                 getEntity()
                     .then((data) => resolve(data))

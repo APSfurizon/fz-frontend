@@ -2,27 +2,16 @@ import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
-    canUpgradeUser: boolean,
-    canBanUsers: boolean,
-    canChangeLoginData: boolean,
-    canManageMembershipCards: boolean,
-    canRefreshPretixCache: boolean,
-    canRemindOrderLinking: boolean,
-    canRemindBadgeUploads: boolean,
-    canRemindRoomsNotFull: boolean,
-    canExportHotelList: boolean
-}
-
-export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
-    canUpgradeUser: false,
-    canBanUsers: false,
-    canChangeLoginData: false,
-    canManageMembershipCards: false,
-    canRefreshPretixCache: false,
-    canRemindOrderLinking: false,
-    canRemindBadgeUploads: false,
-    canRemindRoomsNotFull: false,
-    canExportHotelList: false
+    canUpgradeUser?: boolean,
+    canBanUsers?: boolean,
+    canChangeLoginData?: boolean,
+    canManageMembershipCards?: boolean,
+    canRefreshPretixCache?: boolean,
+    canRemindOrderLinking?: boolean,
+    canRemindBadgeUploads?: boolean,
+    canRemindRoomsNotFull?: boolean,
+    canExportHotelList?: boolean,
+    canViewUsers?: boolean
 }
 
 export class GetAdminCapabilitiesApiAction extends ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {
@@ -46,8 +35,8 @@ export interface ManualLinkOrderData {
 class ManuallyLinkOrderDTOBuilder implements FormDTOBuilder<ManualLinkOrderData> {
     mapToDTO = (data: FormData) => {
         const toReturn: ManualLinkOrderData = {
-            orderCode: data.get("orderCode")!.toString (),
-            userId: parseInt(data.get("userId")!.toString ())
+            orderCode: data.get("orderCode")!.toString(),
+            userId: parseInt(data.get("userId")!.toString())
         };
         return toReturn;
     };

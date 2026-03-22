@@ -135,11 +135,12 @@ export default function AutoInput({
             cloneSelectedIds.push(toAdd.id!);
         }
         setSelectedIds(cloneSelectedIds);
-        setSelectedValues([...selectedValues ?? [], toAdd]);
+        const newSelectedValues = [...selectedValues ?? [], toAdd];
+        setSelectedValues(newSelectedValues);
         setSearchInput("");
         setSearchResults([]);
         if (onChange) {
-            onChange({ values: selectedValues ?? [], newValues: [toAdd], removedValue: undefined });
+            onChange({ values: newSelectedValues, newValues: [toAdd], removedValue: undefined });
         }
         onFormChange(fieldName);
         setTimeout(() => inputRef.current?.focus(), 100);
@@ -158,7 +159,7 @@ export default function AutoInput({
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
             if (onChange) {
-                onChange({ values: selectedValues ?? [], newValues: undefined, removedValue: toRemove });
+                onChange({ values: newSelectedValues, newValues: undefined, removedValue: toRemove });
             }
             onFormChange(fieldName);
         }

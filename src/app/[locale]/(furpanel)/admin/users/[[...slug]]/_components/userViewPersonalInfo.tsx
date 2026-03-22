@@ -11,6 +11,7 @@ import {
     AutoInputSexManager,
     idTypeAnswers,
     shirtSizeAnswers,
+    UpdatePersonalInfoAdminFormAction,
     UpdatePersonalInfoFormAction,
     UserPersonalInfo
 } from "@/lib/api/user";
@@ -40,26 +41,22 @@ export default function UserViewPersonalInfo({
         [birthCountry, residenceCountry]);
     const { showModal } = useModalUpdate();
 
-    // Handle admin changing personal user info
-    const restPathParams = useMemo(() => {
-        if (userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false) {
-            return [String(personalInformation.userId)];
-        } else {
-            return undefined;
-        }
-    }, [userDisplay])
+    const hasAdminPermission = useMemo(() => (userDisplay?.permissions || [])
+        .includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false, [userDisplay]);
 
     // Edit logic
     return <>
         <DataForm className="user-view-personal-info rounded-m vertical-list gap-2mm"
-            action={new UpdatePersonalInfoFormAction}
+            action={hasAdminPermission
+                ? new UpdatePersonalInfoAdminFormAction
+                : new UpdatePersonalInfoFormAction}
             busy={personalInfoLoading}
             setBusy={setPersonalInfoLoading}
             onSuccess={() => { if (reloadData) reloadData() }}
             onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError} />, "ERROR")}
             formRef={formRef}
             initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
-            restPathParams={restPathParams}>
+            pathParams={hasAdminPermission ? { "id": personalInformation.userId } : undefined}>
             <input type="hidden" name="id" value={personalInformation?.id ?? ""}></input>
             <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
             <div className="form-pair horizontal-list gap-4mm">

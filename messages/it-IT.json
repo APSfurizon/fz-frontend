@@ -712,7 +712,20 @@
             "roles_table": {
               "display_name": "Nome",
               "internal_name": "Nome interno",
-              "show_in_nosecount": "Mostra nel nosecount"
+              "show_in_nosecount": "Mostra nel nosecount",
+              "actions": {
+                "add_role": {
+                  "title": "Aggiungi ruolo",
+                  "form": {
+                    "role": {
+                      "label": "Ruolo"
+                    },
+                    "temporary": {
+                      "label": "Temporaneo"
+                    }
+                  }
+                }
+              }
             }
           }
         },
