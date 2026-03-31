@@ -1,4 +1,4 @@
-import { ChangeEvent, CSSProperties, FocusEvent, useEffect, useId, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, FocusEvent, HTMLInputTypeAttribute, useEffect, useId, useRef, useState } from "react";
 import Icon, { MaterialIcon } from "../icon";
 import Image from "next/image";
 import {
@@ -46,7 +46,8 @@ export type AutoInputProps = {
     /**Sets itself to required, whether there's anything in the remote datasource */
     requiredIfPresent?: boolean,
     style?: CSSProperties,
-    emptyIfUnselected?: boolean
+    emptyIfUnselected?: boolean,
+    type?: HTMLInputTypeAttribute
 }
 
 export default function AutoInput({
@@ -76,7 +77,8 @@ export default function AutoInput({
     required = false,
     requiredIfPresent = false,
     style,
-    emptyIfUnselected = false
+    emptyIfUnselected = false,
+    type
 }: AutoInputProps) {
     const t = useTranslations('components');
 
@@ -133,11 +135,12 @@ export default function AutoInput({
             cloneSelectedIds.push(toAdd.id!);
         }
         setSelectedIds(cloneSelectedIds);
-        setSelectedValues([...selectedValues ?? [], toAdd]);
+        const newSelectedValues = [...selectedValues ?? [], toAdd];
+        setSelectedValues(newSelectedValues);
         setSearchInput("");
         setSearchResults([]);
         if (onChange) {
-            onChange({ values: selectedValues ?? [], newValues: [toAdd], removedValue: undefined });
+            onChange({ values: newSelectedValues, newValues: [toAdd], removedValue: undefined });
         }
         onFormChange(fieldName);
         setTimeout(() => inputRef.current?.focus(), 100);
@@ -156,7 +159,7 @@ export default function AutoInput({
             setSelectedValues(newSelectedValues);
             setSearchResults([]);
             if (onChange) {
-                onChange({ values: selectedValues ?? [], newValues: undefined, removedValue: toRemove });
+                onChange({ values: newSelectedValues, newValues: undefined, removedValue: toRemove });
             }
             onFormChange(fieldName);
         }
@@ -231,11 +234,11 @@ export default function AutoInput({
         setIsFocused(true);
     }
 
-    const onBlur = (e: FocusEvent<HTMLInputElement|HTMLButtonElement>) => {
+    const onBlur = (e: FocusEvent<HTMLInputElement | HTMLButtonElement>) => {
         if (inputRef.current == e.relatedTarget || searchResultRef.current?.contains(e.relatedTarget)) {
             return;
         }
-        setIsFocused(false);        
+        setIsFocused(false);
     }
 
     useEffect(() => {
@@ -347,8 +350,8 @@ export default function AutoInput({
         setIsValid((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
     }
 
-    const anchorNameStyle = {anchorName: `--${id}`} as CSSProperties;
-    const anchorPositionStyle = {positionAnchor: `--${id}`} as CSSProperties;
+    const anchorNameStyle = { anchorName: `--${id}` } as CSSProperties;
+    const anchorPositionStyle = { positionAnchor: `--${id}` } as CSSProperties;
 
     return <>
         <div className={`autocomplete-input ${className ?? ""} ${isDisabled ? "disabled" : ""}`}
@@ -374,7 +377,7 @@ export default function AutoInput({
                                 className={`input-field title ${!isValid && forceRequired ? "danger" : ""}`}
                                 style={inputStyle}
                                 placeholder={placeholder ?? ""}
-                                type="text"
+                                type={type}
                                 disabled={
                                     isDisabled ||
                                     (paramRequired && !param) ||
@@ -384,7 +387,7 @@ export default function AutoInput({
                                 onFocus={onFocus}
                                 onBlur={onBlur}
                                 value={searchInput ?? ""}
-                                readOnly={readOnly}/>
+                                readOnly={readOnly} />
                         ) || <div className="spacer"></div>
                     }
                     {(isBusy || valueToSet.length < maxSelections) && <span className="icon-container">
@@ -399,20 +402,20 @@ export default function AutoInput({
                         id={id}
                         style={anchorPositionStyle}
                         ref={searchResultRef}>
-                            <div className="vertical-list gap-2mm">
-                                {searchInput.length < minDecodeSize
-                                    ? <span className="title tiny color-subtitle">
-                                        {t('autoinput.guide', { minSize: minDecodeSize })}
-                                    </span>
-                                    : !searchError
-                                        ? searchResults.length > 0
-                                            ? searchResults.map((element, index) => renderResult(element, index))
-                                            : <span className="title tiny color-subtitle">
-                                                {t('autoinput.loading_data')}
-                                            </span>
-                                        : <span className="title tiny color-subtitle">{t('autoinput.no_results')}</span>
-                                }       
-                            </div>
+                        <div className="vertical-list gap-2mm">
+                            {searchInput.length < minDecodeSize
+                                ? <span className="title tiny color-subtitle">
+                                    {t('autoinput.guide', { minSize: minDecodeSize })}
+                                </span>
+                                : !searchError
+                                    ? searchResults.length > 0
+                                        ? searchResults.map((element, index) => renderResult(element, index))
+                                        : <span className="title tiny color-subtitle">
+                                            {t('autoinput.loading_data')}
+                                        </span>
+                                    : <span className="title tiny color-subtitle">{t('autoinput.no_results')}</span>
+                            }
+                        </div>
                     </div>}
                 </div>
             </div>

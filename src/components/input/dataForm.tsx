@@ -2,14 +2,13 @@ import { MaterialIcon } from "../icon";
 import {
     useState, CSSProperties, FormEvent, Dispatch, SetStateAction, useEffect, useRef,
     createContext, useContext,
-    MutableRefObject,
     useImperativeHandle,
     RefObject,
     useMemo
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
-import { FormApiAction, InferRequest } from "@/lib/components/dataForm";
+import { FormApiAction, FormValidationError, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
 import { useModalContext } from "../modal";
@@ -50,33 +49,7 @@ export function compareFormObjects(a?: object, b?: object): boolean {
     return Object.entries(a ?? {}).sort().toString() === Object.entries(b ?? {}).sort().toString();
 }
 
-export default function DataForm<T extends FormApiAction<any, any, any>>({
-    additionalButtons,
-    action,
-    onChange,
-    onSuccess,
-    onFail,
-    onBeforeSubmit,
-    children,
-    checkFn,
-    className,
-    disabled = false,
-    disableSave = false,
-    endpoint,
-    formRef,
-    hideSave = false,
-    hideReset = true,
-    busy,
-    editFormData,
-    setBusy,
-    style,
-    saveButton,
-    resetOnFail = true,
-    resetOnSuccess = false,
-    restPathParams,
-    shouldReset = false,
-    initialEntity
-}: Readonly<{
+type DataFormProps<T extends FormApiAction<any, any, any>> = {
     additionalButtons?: React.ReactNode,
     action?: T,
     onChange?: (different: boolean, newEntity: InferRequest<T> | undefined) => void,
@@ -84,14 +57,14 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: () => void,
     editFormData?: (data: FormData) => FormData,
-    checkFn?: (e: FormData, form: HTMLFormElement) => boolean,
+    checkFn?: (e: FormData, form: HTMLFormElement) => FormValidationError[],
     children?: React.ReactNode,
     className?: string,
     disabled?: boolean,
     endpoint?: string,
     formRef?: RefObject<HTMLFormElement | null>,
     hideSave?: boolean,
-    hideReset?: boolean,
+    showReset?: boolean,
     disableSave?: boolean,
     busy?: boolean,
     setBusy?: Dispatch<SetStateAction<boolean>>,
@@ -99,87 +72,103 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     saveButton?: SaveButtonData,
     resetOnFail?: boolean,
     resetOnSuccess?: boolean,
-    restPathParams?: string[],
+    pathParams?: Record<string, any>,
+    additionalPath?: string[],
     shouldReset?: boolean,
     initialEntity?: InferRequest<T>
-}>) {
+};
+
+export default function DataForm<T extends FormApiAction<any, any, any>>(props: Readonly<DataFormProps<T>>) {
     const [reset, setReset] = useState(false);
     const t = useTranslations("");
     const inputRef = useRef<HTMLFormElement>(null);
-    useImperativeHandle(formRef, () => inputRef.current!);
+    useImperativeHandle(props.formRef, () => inputRef.current!);
 
     // Busy state logic
     // - Internal loading
     const [loading, setLoading] = useState(false);
     /**The final busy state, in or between the externally imposed busy state and internal loading */
-    const isBusy = useMemo(()=>(busy ?? false) || loading, [busy, loading]);
+    const isBusy = useMemo(() => (props.busy ?? false) || loading, [props.busy, loading]);
 
     // - Context loading change logic
     const context = useModalContext();
 
     // -- Updates the context's busy state
-    useEffect(()=>{
+    useEffect(() => {
         context.setLoading(isBusy);
     }, [isBusy])
 
     // -- Aligns the external busy state
     useEffect(() => {
-        setBusy && setBusy(loading);
+        if (props.setBusy) { props.setBusy(loading); }
     }, [loading])
 
     // Entity change logic
-    const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(initialEntity);
-    const [isEntityChanged, setEntityChanged] = useState(!!initialEntity ? false : true);
-    const {showModal} = useModalUpdate();
+    const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(props.initialEntity);
+    const [isEntityChanged, setEntityChanged] = useState(!!props.initialEntity ? false : true);
+    const { showModal } = useModalUpdate();
 
     useEffect(() => {
-        if (shouldReset) {
+        if (props.shouldReset) {
             setReset(true);
         }
-    }, [shouldReset])
+    }, [props.shouldReset])
 
     useEffect(() => {
         if (reset) {
             setReset(false);
         }
-        setCurrentEntity(initialEntity ? { ...initialEntity } : undefined);
+        setCurrentEntity(props.initialEntity ? { ...props.initialEntity } : undefined);
     }, [reset]);
 
     const fail = useMemo(() => (data: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        if (onFail) {
-            onFail(data);
+        if (props.onFail) {
+            props.onFail(data);
         } else {
             showModal(t("common.error"), <ErrorMessage error={data} />);
         }
     }, [])
 
     const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-        if (isBusy) {return;}
+        if (isBusy) { return; }
         try {
-            if (!action) throw new Error("dataform must have an action to be submitted")
-            const formData = editFormData ? editFormData(new FormData(e.currentTarget)) : new FormData(e.currentTarget);
-            if (checkFn) {
-                if (!checkFn(formData, e.currentTarget)) {
+            if (!props.action) throw new Error("dataform must have an action to be submitted")
+            const formData = props.editFormData
+                ? props.editFormData(new FormData(e.currentTarget))
+                : new FormData(e.currentTarget);
+            if (props.checkFn) {
+                const result = props.checkFn(formData, e.currentTarget);
+                if (result?.length) {
+                    for (const validation of result) {
+                        const field: HTMLInputElement | null = e
+                            .currentTarget.querySelector(`*[name='${validation.field}']`);
+                        field?.setCustomValidity(validation.error)
+                    }
                     e.preventDefault();
                     e.stopPropagation();
                     return;
                 }
             }
-            if (onBeforeSubmit) onBeforeSubmit();
+            if (props.onBeforeSubmit) props.onBeforeSubmit();
             setLoading(true);
-            runFormRequest(action, restPathParams, formData)
-                .then((responseData) => onSuccess && onSuccess(responseData))
+            runFormRequest({
+                action: props.action,
+                pathParams: props.pathParams,
+                additionalPath: props.additionalPath,
+                body: formData
+            })
+                .then((responseData) => props.onSuccess && props.onSuccess(responseData))
                 .catch((errorData) => {
                     fail(errorData);
-                    if (resetOnFail) setReset(true);
+                    if (props.resetOnFail) setReset(true);
                 }).finally(() => {
                     setLoading(false);
-                    if (resetOnSuccess) { setReset(true); }
+                    if (props.resetOnSuccess) { setReset(true); }
                 });
         } catch (e) {
             console.error(e);
             setLoading(false);
-            fail(e ?? {errorMessage: "unknown"});
+            fail(e ?? { errorMessage: "unknown" });
         }
 
         e.preventDefault();
@@ -187,8 +176,8 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     }
 
     const onFormChange = (fieldName?: string, value?: any) => {
-        if (!fieldName || !formRef?.current) return;
-        const entity: InferRequest<T> = action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
+        if (!fieldName || !props.formRef?.current) return;
+        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(props.formRef.current));
         if (value) {
             entity[fieldName] = value;
         }
@@ -196,46 +185,47 @@ export default function DataForm<T extends FormApiAction<any, any, any>>({
     };
 
     useEffect(() => {
-        const isChanged = !initialEntity
+        const isChanged = !props.initialEntity
             ? true
-            : !compareFormObjects(initialEntity, currentEntity);
+            : !compareFormObjects(props.initialEntity, currentEntity);
         setEntityChanged(isChanged);
-        if (onChange) onChange(isChanged, currentEntity);
+        if (props.onChange) props.onChange(isChanged, currentEntity);
     }, [currentEntity])
 
-    const showBottomToolbar = !hideSave || !hideReset || !!additionalButtons;
+    const showBottomToolbar = !props.hideSave || props.showReset || !!props.additionalButtons;
 
     return <form ref={inputRef}
-        className={`data-form vertical-list ${className ?? ""}`}
-        action={endpoint}
+        className={`data-form vertical-list ${props.className ?? ""}`}
+        action={props.endpoint}
         onSubmit={onFormSubmit}
         onReset={() => setReset(true)}
-        style={{ ...style }}>
+        style={props.style}>
         <FormContext.Provider value={{
             formReset: reset,
             setFormReset: setReset,
-            formDisabled: disabled,
+            formDisabled: !!props.disabled,
             onFormChange,
             formLoading: loading
         }}>
-            {children}
+            {props.children}
         </FormContext.Provider>
         {showBottomToolbar && (
             <div className="toolbar-bottom gap-2mm">
                 <div className="spacer"></div>
-                {!hideSave && <Button type="submit"
-                    disabled={disableSave}
-                    icon={saveButton?.icon ?? "SAVE"}
+                {!props.hideSave && <Button type="submit"
+                    disabled={props.disableSave}
+                    icon={props.saveButton?.icon ?? "SAVE"}
                     busy={loading}>
-                    {saveButton?.text ?? t("common.CRUD.save")}{isEntityChanged && !!initialEntity ? "*" : ""}
+                    {props.saveButton?.text ?? t("common.CRUD.save")}
+                    {isEntityChanged && !!props.initialEntity ? "*" : ""}
                 </Button>}
-                {!hideReset && <Button type="reset"
+                {props.showReset && <Button type="reset"
                     icon="REPLAY"
                     disabled={!isEntityChanged}
                     busy={loading}>
                     {t("common.CRUD.reset")}
                 </Button>}
-                {additionalButtons}
+                {props.additionalButtons}
             </div>
         )}
     </form>;

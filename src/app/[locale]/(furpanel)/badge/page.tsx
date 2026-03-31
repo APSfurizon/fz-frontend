@@ -48,11 +48,13 @@ export default function BadgePage() {
     const dataToUpload: FormData = new FormData();
     dataToUpload.append("image", blob);
     setLoading(true);
-    runRequest(new UploadBadgeAction(), undefined, dataToUpload)
-      .then(() => {
-        setUpdateUser(true);
-        setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+    runRequest({
+      action: new UploadBadgeAction(),
+      body: dataToUpload
+    }).then(() => {
+      setUpdateUser(true);
+      setBadgeStatus(undefined);
+    }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
     setLoading(true);
   }
@@ -77,7 +79,7 @@ export default function BadgePage() {
   const deleteBadge = () => {
     hideModal();
     setLoading(true);
-    runRequest(new DeleteBadgeAction())
+    runRequest({ action: new DeleteBadgeAction() })
       .then(() => {
         setUpdateUser(true);
         setBadgeStatus(undefined);
@@ -159,10 +161,12 @@ export default function BadgePage() {
       return;
     }
     setLoading(true);
-    runRequest(new DeleteFursuitApiAction(), [String(currentFursuit.fursuit.id)])
-      .then(() => {
-        setBadgeStatus(undefined);
-      }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+    runRequest({
+      action: new DeleteFursuitApiAction(),
+      pathParams: { "id": currentFursuit.fursuit.id }
+    }).then(() => {
+      setBadgeStatus(undefined);
+    }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => {
         closeDeleteFursuit();
         setLoading(false);
@@ -180,7 +184,7 @@ export default function BadgePage() {
     setLoading(true);
     closeAddFursuitModal();
     closeDeleteFursuit();
-    runRequest(new GetBadgeStatusAction())
+    runRequest({ action: new GetBadgeStatusAction() })
       .then((data) => setBadgeStatus(data))
       .catch((err) => {
         showModal(t("common.error"), <ErrorMessage error={err} />);
@@ -208,7 +212,7 @@ export default function BadgePage() {
       </>}
       <span className="title medium horizontal-list gap-2mm">
         {t("furpanel.badge.your_badges")}
-        {loading && <Icon icon="PROGRESS_ACTIVITY" className="loading-animation"/>}
+        {loading && <Icon icon="PROGRESS_ACTIVITY" className="loading-animation" />}
       </span>
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
@@ -244,7 +248,8 @@ export default function BadgePage() {
       {/* Fursuits */}
       <div className="fursuit-section rounded-m vertical-list gap-2mm">
         {/* Banner */}
-        {shouldShowBanner && <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.badge.messages.fursuit_banner.title")}>
+        {shouldShowBanner && <NoticeBox theme={NoticeTheme.Warning}
+          title={t("furpanel.badge.messages.fursuit_banner.title")}>
           {t.rich("furpanel.badge.messages.fursuit_banner.description",
             {
               eventName: EVENT_NAME,
@@ -252,11 +257,11 @@ export default function BadgePage() {
             })}
         </NoticeBox>}
         <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
-          <Icon icon="PETS"/>
+          <Icon icon="PETS" />
           <span className="title average">
             {t("furpanel.badge.your_fursuits", { amount: badgeStatus?.fursuits.length ?? 0 })}
           </span>
-          {loading && <Icon icon="PROGRESS_ACTIVITY" className="loading-animation"/>}
+          {loading && <Icon icon="PROGRESS_ACTIVITY" className="loading-animation" />}
           <div className="spacer"></div>
           <Button icon="ADD_CIRCLE" title={t("common.CRUD.add")} onClick={promptAddFursuit}>
             {t("common.CRUD.add")}</Button>
@@ -277,15 +282,15 @@ export default function BadgePage() {
                   </div>
                   <div className="vertical-list gap-2mm">
                     {fursuitData.bringingToEvent && <span className="title tiny">
-                      <Icon className="average" icon="CHECK_CIRCLE"/>
+                      <Icon className="average" icon="CHECK_CIRCLE" />
                       {t("furpanel.badge.input.bring_to_event.label", { eventName: EVENT_NAME })}
                     </span>}
                     {fursuitData.showInFursuitCount && <span className="title tiny">
-                      <Icon className="average" icon="CHECK_CIRCLE"/>
+                      <Icon className="average" icon="CHECK_CIRCLE" />
                       {t("furpanel.badge.input.show_in_fursuit_count.label", { eventName: EVENT_NAME })}
                     </span>}
                     {fursuitData.showOwner && <span className="title tiny">
-                      <Icon className="average" icon="CHECK_CIRCLE"/>
+                      <Icon className="average" icon="CHECK_CIRCLE" />
                       {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
                     </span>}
                   </div>
@@ -295,7 +300,8 @@ export default function BadgePage() {
               <div className="fursuit-actions gap-2mm">
                 <Button className="danger" icon="DELETE" busy={loading}
                   onClick={() => promptDeleteFursuit(fursuitData)}
-                  title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuitData.fursuit.name })}
+                  title={t("furpanel.badge.messages.confirm_fursuit_deletion.title",
+                    { name: fursuitData.fursuit.name })}
                   disabled={!badgeStatus.allowedModifications}>
                   {t("common.CRUD.delete")}
                 </Button>
@@ -355,7 +361,7 @@ export default function BadgePage() {
       onClose={closeAddFursuitModal}
       busy={loading}>
       <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
-        restPathParams={editMode ? ["" + currentFursuit?.fursuit.id, "update-with-image"] : undefined}
+        pathParams={editMode ? { "id": currentFursuit?.fursuit.id } : undefined}
         busy={loading}
         setBusy={setLoading}
         editFormData={editFursuitFormData}
@@ -416,7 +422,8 @@ export default function BadgePage() {
         { name: currentFursuit?.fursuit.name ?? "" })
       } busy={loading}>
       <span>
-        {t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: currentFursuit?.fursuit.name ?? "" })}
+        {t("furpanel.badge.messages.confirm_fursuit_deletion.description",
+          { name: currentFursuit?.fursuit.name ?? "" })}
       </span>
       <div className="horizontal-list gap-4mm">
         <Button className="danger" icon="CANCEL" busy={loading} onClick={closeDeleteFursuit}>

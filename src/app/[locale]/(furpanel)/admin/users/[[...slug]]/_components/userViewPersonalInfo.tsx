@@ -1,6 +1,5 @@
 import { useUser } from "@/components/context/userProvider";
 import AutoInput from "@/components/input/autoInput";
-import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
@@ -8,7 +7,12 @@ import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { Permissions } from "@/lib/api/permission";
 import {
-    AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, REG_ITALIAN_FISCAL_CODE, shirtSizeAnswers, UpdatePersonalInfoFormAction,
+    AutoInputGenderManager,
+    AutoInputSexManager,
+    idTypeAnswers,
+    shirtSizeAnswers,
+    UpdatePersonalInfoAdminFormAction,
+    UpdatePersonalInfoFormAction,
     UserPersonalInfo
 } from "@/lib/api/user";
 import { firstOrUndefined, stripProperties, today } from "@/lib/utils";
@@ -33,29 +37,26 @@ export default function UserViewPersonalInfo({
     const [birthCountry, setBirthCountry] = useState<string | undefined>();
     const [residenceCountry, setResidenceCountry] = useState<string>();
     const [phonePrefix, setPhonePrefix] = useState<string>();
-    const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
+    const fiscalCodeRequired = useMemo(() => [birthCountry, residenceCountry].includes("IT"),
+        [birthCountry, residenceCountry]);
     const { showModal } = useModalUpdate();
 
-    // Handle admin changing personal user info
-    const restPathParams = useMemo(() => {
-        if (userDisplay?.permissions?.includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false) {
-            return [String(personalInformation.userId)];
-        } else {
-            return undefined;
-        }
-    }, [userDisplay])
+    const hasAdminPermission = useMemo(() => (userDisplay?.permissions || [])
+        .includes(Permissions.CAN_MANAGE_USER_PUBLIC_INFO) ?? false, [userDisplay]);
 
     // Edit logic
     return <>
-        <DataForm className="vertical-list gap-2mm"
-            action={new UpdatePersonalInfoFormAction}
+        <DataForm className="user-view-personal-info rounded-m vertical-list gap-2mm"
+            action={hasAdminPermission
+                ? new UpdatePersonalInfoAdminFormAction
+                : new UpdatePersonalInfoFormAction}
             busy={personalInfoLoading}
             setBusy={setPersonalInfoLoading}
             onSuccess={() => { if (reloadData) reloadData() }}
-            onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError}/>, "ERROR")}
+            onFail={(apiError) => showModal(t("common.error"), <ErrorMessage error={apiError} />, "ERROR")}
             formRef={formRef}
             initialEntity={stripProperties(personalInformation, ["lastUpdatedEventId"])}
-            restPathParams={restPathParams}>
+            pathParams={hasAdminPermission ? { "id": personalInformation.userId } : undefined}>
             <input type="hidden" name="id" value={personalInformation?.id ?? ""}></input>
             <input type="hidden" name="userId" value={personalInformation?.userId ?? ""}></input>
             <div className="form-pair horizontal-list gap-4mm">
@@ -97,7 +98,7 @@ export default function UserViewPersonalInfo({
                     onChange={(p) => setBirthCountry((firstOrUndefined(p.newValues) as CountrySearchResult)?.code)}
                     label={t("authentication.register.form.birth_country.label")}
                     placeholder={t("authentication.register.form.birth_country.placeholder")}
-                    initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}/>
+                    initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined} />
                 <FpInput fieldName="birthday"
                     required
                     inputType="date"
@@ -113,7 +114,7 @@ export default function UserViewPersonalInfo({
                     minLength={16}
                     maxLength={16}
                     inputType="text"
-                    pattern={REG_ITALIAN_FISCAL_CODE} disabled={!fiscalCodeRequired}
+                    disabled={!fiscalCodeRequired}
                     label={t("authentication.register.form.fiscal_code.label")}
                     placeholder={t("authentication.register.form.fiscal_code.placeholder")}
                     initialValue={fiscalCodeRequired ? personalInformation?.fiscalCode : ""} />

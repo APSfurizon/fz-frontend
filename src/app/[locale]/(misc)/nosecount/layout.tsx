@@ -27,7 +27,7 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
     useEffect(() => {
         if (events) return;
         setLoading(true);
-        runRequest(new GetAllEventsApiAction())
+        runRequest({ action: new GetAllEventsApiAction() })
             .then((result) => setEvents(result.events))
             .catch((e) => console.error(e))
             .finally(() => setLoading(false));

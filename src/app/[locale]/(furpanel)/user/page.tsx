@@ -26,7 +26,7 @@ export default function UserPage() {
 
   useEffect(() => {
     if (personalInformation) return;
-    runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
+    runRequest({ action: new GetPersonalInfoAction() })
       .then((result) => setPersonalInformation(result))
       .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />));
   }, [personalInformation])
@@ -45,7 +45,7 @@ export default function UserPage() {
       {/* User area */}
       <div className="section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-          <Icon className="x-large" icon="PERSON"/>
+          <Icon className="x-large" icon="PERSON" />
           <span className="title medium">{t("furpanel.user.sections.user")}</span>
         </div>
         {/* Personal info manager */}
@@ -64,7 +64,7 @@ export default function UserPage() {
       {/* User area */}
       <div className="section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-          <Icon className="x-large" icon="SECURITY"/>
+          <Icon className="x-large" icon="SECURITY" />
           <span className="title medium">{t("furpanel.user.sections.security")}</span>
         </div>
         <div className="vertical-list gap-2mm">

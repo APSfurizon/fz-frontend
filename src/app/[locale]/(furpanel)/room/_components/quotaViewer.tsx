@@ -2,13 +2,17 @@ import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
 import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { getRemainingRoomType, RoomStoreItemsApiAction, RoomStoreItemsApiResponse } from "@/lib/api/flows/roomOrderFlow";
+import {
+    getRemainingRoomType,
+    RoomStoreItemsApiAction,
+    RoomStoreItemsApiResponse
+} from "@/lib/api/flows/roomOrderFlow";
 import { runRequest } from "@/lib/api/global";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, close }: Readonly<{
+export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: Readonly<{
     isOpen: boolean,
     modalLoading: boolean,
     setModalLoading: Dispatch<SetStateAction<boolean>>,
@@ -26,7 +30,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, clo
     useEffect(() => {
         if (roomsData || !isOpen) return;
         setModalLoading(true);
-        runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
+        runRequest({ action: new RoomStoreItemsApiAction() })
             .then(data => setRoomsData(data))
             .catch((err) => {
                 showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");

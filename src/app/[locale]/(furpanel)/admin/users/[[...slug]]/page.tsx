@@ -4,13 +4,18 @@ import Icon from "@/components/icon";
 import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
-import { AutoInputUsersManager, UserSearchByMembershipNumberAction, UserSearchByOrderCodeAction, UserSearchByOrderSerialAction } from "@/lib/api/user";
+import {
+    AutoInputUsersManager,
+    UserSearchByMembershipNumberAction,
+    UserSearchByOrderCodeAction,
+    UserSearchByOrderSerialAction
+} from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, createContext, useContext, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, createContext, HTMLInputTypeAttribute, useContext, useEffect, useMemo, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewCardsTable from "./_components/userViewCardsTable";
@@ -20,7 +25,9 @@ import Link from "next/link";
 import UserViewSecurity from "./_components/userViewSecurity";
 import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRooms from "./_components/rooms/userViewRooms";
+import UserViewPermissionsTable from "./_components/userViewPermissionsTable";
 import "@/styles/furpanel/admin/userView.css";
+import UserViewRolesTable from "./_components/userViewRolesTable";
 
 // Context management
 interface UserView {
@@ -49,7 +56,8 @@ enum SearchCriteria {
 
 type UserSearchConfig = {
     manager: AutoInputManager,
-    minDecodeSize: number
+    minDecodeSize: number,
+    type?: HTMLInputTypeAttribute
 }
 
 export default function AdminUsersPage({ params }: { params: Promise<{ slug: string[] }> }) {
@@ -100,7 +108,8 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 return {
                     manager: new AutoInputUsersManager(new UserSearchByOrderSerialAction(),
                         UserSearchByOrderSerialAction.getParams),
-                    minDecodeSize: 1
+                    minDecodeSize: 1,
+                    type: "number"
                 };
             case SearchCriteria.ORDER_CODE:
                 return {
@@ -112,7 +121,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                 return {
                     manager: new AutoInputUsersManager(new UserSearchByMembershipNumberAction(),
                         UserSearchByMembershipNumberAction.getParams),
-                    minDecodeSize: 4
+                    minDecodeSize: 7
                 };
         }
     }, [currentCriteria]);
@@ -148,8 +157,10 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
             return;
         }
         setLoading(true);
-        runRequest(new GetUserAdminViewAction(), [String(userId)])
-            .then(data => setUserData(data as GetUserAdminViewResponse))
+        runRequest({
+            action: new GetUserAdminViewAction(),
+            pathParams: { "id": userId }
+        }).then(data => setUserData(data as GetUserAdminViewResponse))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [userId, userData]);
@@ -194,35 +205,60 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                     initialData={userId ? [userId] : undefined}
                     param={[true]}
                     onSelect={onUserSelect}
-                    minDecodeSize={searchConfig.minDecodeSize}>
+                    minDecodeSize={searchConfig.minDecodeSize}
+                    type={searchConfig.type}>
                 </AutoInput>
             </div>
             {error && <ErrorMessage error={error} />}
             {loading && <LoadingPanel />}
             {/** User data render */}
             {userData && <>
-                {/* Badge */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.badge")}</span>
-                <UserViewBadge userData={userData} reloadData={reloadData} />
-                {/* Fursuits */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.fursuits")}</span>
-                <UserViewFursuitsTable userData={userData} reloadData={reloadData} />
+                <div className="badge-grid">
+                    <div className="badge-view">
+                        {/* Badge */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.badge")}</p>
+                        <UserViewBadge userData={userData} reloadData={reloadData} />
+                    </div>
+                    <div className="fursuit-view">
+                        {/* Fursuits */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.fursuits")}</p>
+                        <UserViewFursuitsTable userData={userData} reloadData={reloadData} />
+                    </div>
+                </div>
                 {/* Orders */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</span>
+                <p className="title medium">{t("furpanel.admin.users.accounts.view.orders")}</p>
                 <UserViewOrdersTable userData={userData} />
                 {/* Rooms */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.rooms")}</span>
+                <p className="title medium">{t("furpanel.admin.users.accounts.view.rooms")}</p>
                 <UserViewRooms userData={userData} reloadData={reloadData} />
-                {/* Membership cards */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.membership_cards")}</span>
-                <UserViewCardsTable userData={userData} />
-                {/* Personal info */}
-                <span className="title medium">{t("furpanel.admin.users.accounts.view.personal_info")}</span>
-                <UserViewPersonalInfo personalInformation={userData.personalInfo}
-                    reloadData={reloadData} />
-                {/* Security */}
-                <span className="title medium">{t("furpanel.admin.users.security.title")}</span>
-                <UserViewSecurity userData={userData} reloadData={reloadData} />
+                <div className="user-data-grid">
+                    <div className="user-personal-data">
+                        {/* Personal info */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.personal_info")}</p>
+                        <UserViewPersonalInfo personalInformation={userData.personalInfo}
+                            reloadData={reloadData} />
+                    </div>
+                    <div className="user-membership-cards">
+                        {/* Membership cards */}
+                        <p className="title medium">{t("furpanel.admin.users.accounts.view.membership_cards")}</p>
+                        <UserViewCardsTable userData={userData} />
+                    </div>
+                    <div className="user-security">
+                        {/* Security */}
+                        <p className="title medium">{t("furpanel.admin.users.security.title")}</p>
+                        <UserViewSecurity userData={userData} reloadData={reloadData} />
+                    </div>
+                    <div className="user-permissions">
+                        {/* Permissions */}
+                        <p className="title medium">{t("furpanel.admin.users.permissions.title")}</p>
+                        <UserViewPermissionsTable userData={userData} />
+                    </div>
+                    <div className="user-roles">
+                        {/* Roles */}
+                        <p className="title medium">{t("furpanel.admin.users.roles.title")}</p>
+                        <UserViewRolesTable userData={userData} reloadData={reloadData} />
+                    </div>
+                </div>
             </>}
         </div>
     </UserViewContext.Provider>;

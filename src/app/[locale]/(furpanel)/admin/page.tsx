@@ -9,7 +9,7 @@ import ErrorMessage from "@/components/errorMessage";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
 import { runRequest } from "@/lib/api/global";
 import {
-  AdminCapabilitesResponse, EMPTY_CAPABILITIES, ExportHotelRoomsApiAction,
+  AdminCapabilitesResponse, ExportHotelRoomsApiAction,
   GetAdminCapabilitiesApiAction
 } from "@/lib/api/admin/admin";
 import {
@@ -31,11 +31,11 @@ export default function AdminPage() {
   // Capabilities logic
 
   const [loading, setLoading] = useState(false);
-  const [capabilities, setCapabilities] = useState<AdminCapabilitesResponse>(EMPTY_CAPABILITIES);
+  const [capabilities, setCapabilities] = useState<AdminCapabilitesResponse>();
 
   useEffect(() => {
     setLoading(true);
-    runRequest(new GetAdminCapabilitiesApiAction())
+    runRequest({ action: new GetAdminCapabilitiesApiAction() })
       .then((result) => setCapabilities(result))
       .catch((err) => showModal(
         t("common.error"),
@@ -49,7 +49,7 @@ export default function AdminPage() {
   const [pingLoading, setPingLoading] = useState(false);
   const ping = () => {
     setPingLoading(true);
-    runRequest(new PingApiAction())
+    runRequest({ action: new PingApiAction() })
       .then((e) => showModal(
         t("common.success"),
         <span>{e.message}</span>
@@ -65,7 +65,7 @@ export default function AdminPage() {
   const [reloadEventLoading, setReloadEventLoading] = useState(false);
   const reloadEvent = () => {
     setReloadEventLoading(true);
-    runRequest(new ReloadEventApiAction())
+    runRequest({ action: new ReloadEventApiAction() })
       .then(() => { })
       .catch((err) => showModal(
         t("common.error"),
@@ -76,7 +76,7 @@ export default function AdminPage() {
   const [reloadOrdersLoading, setReloadOrdersLoading] = useState(false);
   const reloadOrders = () => {
     setReloadOrdersLoading(true);
-    runRequest(new ReloadOrdersApiAction())
+    runRequest({ action: new ReloadOrdersApiAction() })
       .then(() => { })
       .catch((err) => showModal(
         t("common.error"),
@@ -89,7 +89,7 @@ export default function AdminPage() {
   const [remindOrderLinkLoading, setRemindOrderLinkLoading] = useState(false);
   const remindOrderLink = () => {
     setRemindOrderLinkLoading(true);
-    runRequest(new RemindOrderLinkApiAction())
+    runRequest({ action: new RemindOrderLinkApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -99,7 +99,7 @@ export default function AdminPage() {
   const [exportRoomsLoading, setExportRoomsLoading] = useState(false);
   const exportRooms = () => {
     setExportRoomsLoading(true);
-    runRequest(new ExportHotelRoomsApiAction())
+    runRequest({ action: new ExportHotelRoomsApiAction() })
       .then((response) => {
         response.blob().then((exportBlob) => {
           const result = URL.createObjectURL(exportBlob);
@@ -116,7 +116,7 @@ export default function AdminPage() {
   const [remindRoomsNotFullLoading, setRemindRoomsNotFullLoading] = useState(false);
   const remindRoomsNotFull = () => {
     setRemindRoomsNotFullLoading(true);
-    runRequest(new RemindRoomsNotFullApiAction())
+    runRequest({ action: new RemindRoomsNotFullApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -129,7 +129,7 @@ export default function AdminPage() {
   const [remindBadgesLoading, setRemindBadgesLoading] = useState(false);
   const remindBadges = () => {
     setRemindBadgesLoading(true);
-    runRequest(new RemindBadgesApiAction())
+    runRequest({ action: new RemindBadgesApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -139,7 +139,7 @@ export default function AdminPage() {
   const [remindFursuitBadgesLoading, setRemindFursuitBadgesLoading] = useState(false);
   const remindFursuitBadges = () => {
     setRemindFursuitBadgesLoading(true);
-    runRequest(new RemindFursuitBadgesApiAction())
+    runRequest({ action: new RemindFursuitBadgesApiAction() })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />
@@ -153,7 +153,7 @@ export default function AdminPage() {
       <FpMacroSection title={t("furpanel.admin.system.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.system.server.title")}>
           <Button icon="VITAL_SIGNS" onClick={ping} debounce={5000}
-            busy={pingLoading} disabled={!capabilities.canRefreshPretixCache}>
+            busy={pingLoading} disabled={!capabilities?.canRefreshPretixCache}>
             {t("furpanel.admin.system.server.ping")}
           </Button>
         </FpSection>
@@ -162,11 +162,11 @@ export default function AdminPage() {
       <FpMacroSection title={t("furpanel.admin.pretix.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.pretix.data.title")}>
           <Button icon="EVENT_REPEAT" onClick={reloadEvent} debounce={5000}
-            busy={reloadEventLoading} disabled={!capabilities.canRefreshPretixCache}>
+            busy={reloadEventLoading} disabled={!capabilities?.canRefreshPretixCache}>
             {t("furpanel.admin.pretix.data.reload_event")}
           </Button>
           <Button icon="SYNC" onClick={reloadOrders} debounce={5000}
-            busy={reloadOrdersLoading} disabled={!capabilities.canRefreshPretixCache}>
+            busy={reloadOrdersLoading} disabled={!capabilities?.canRefreshPretixCache}>
             {t("furpanel.admin.pretix.data.reload_orders")}
           </Button>
         </FpSection>
@@ -175,31 +175,31 @@ export default function AdminPage() {
       <FpMacroSection title={t("furpanel.admin.events.title")} icon="LOCAL_ACTIVITY">
         <FpSection title={t("furpanel.admin.events.badges.title")}>
           <Button icon="PRINT" onClick={() => setRenderBadgesModalOpen(true)}
-            busy={renderBadgesLoading} disabled={!capabilities.canRefreshPretixCache}>
+            busy={renderBadgesLoading} disabled={!capabilities?.canRefreshPretixCache}>
             {t("furpanel.admin.events.badges.print_badges")}
           </Button>
           <Button icon="MAIL" onClick={remindBadges} debounce={5000}
-            busy={remindBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
+            busy={remindBadgesLoading} disabled={!capabilities?.canRemindBadgeUploads}>
             {t("furpanel.admin.events.badges.remind_badges")}
           </Button>
           <Button icon="MAIL" onClick={remindFursuitBadges} debounce={5000}
-            busy={remindFursuitBadgesLoading} disabled={!capabilities.canRemindBadgeUploads}>
+            busy={remindFursuitBadgesLoading} disabled={!capabilities?.canRemindBadgeUploads}>
             {t("furpanel.admin.events.badges.remind_fursuits")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.events.rooms.title")}>
           <Button icon="MAIL" onClick={remindRoomsNotFull} debounce={5000}
-            busy={remindRoomsNotFullLoading} disabled={!capabilities.canRemindRoomsNotFull}>
+            busy={remindRoomsNotFullLoading} disabled={!capabilities?.canRemindRoomsNotFull}>
             {t("furpanel.admin.events.rooms.remind_rooms_not_full")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.events.orders.title")}>
           <Button icon="DOWNLOAD" onClick={exportRooms} debounce={5000}
-            busy={exportRoomsLoading} disabled={!capabilities.canExportHotelList}>
+            busy={exportRoomsLoading} disabled={!capabilities?.canExportHotelList}>
             {t("furpanel.admin.events.orders.export_rooms")}
           </Button>
           <Button icon="MAIL" onClick={remindOrderLink} debounce={5000}
-            busy={remindOrderLinkLoading} disabled={!capabilities.canRemindOrderLinking}>
+            busy={remindOrderLinkLoading} disabled={!capabilities?.canRemindOrderLinking}>
             {t("furpanel.admin.events.orders.remind_order_linking")}
           </Button>
         </FpSection>
@@ -208,19 +208,19 @@ export default function AdminPage() {
       <FpMacroSection title={t("furpanel.admin.users.title")} icon="PERSON">
         <FpSection title={t("furpanel.admin.users.accounts.title")}>
           <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/users/")}
-            disabled={!capabilities.canManageMembershipCards}>
+            disabled={!capabilities?.canViewUsers}>
             {t("furpanel.admin.users.accounts.view.title")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.users.security.title")}>
           <Button icon="GROUPS" onClick={() => router.push("/admin/roles/")}
-            disabled={!capabilities.canUpgradeUser}>
+            disabled={!capabilities?.canUpgradeUser}>
             {t("furpanel.admin.users.security.roles.title")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.membership.title")}>
           <Button icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
-            disabled={!capabilities.canManageMembershipCards}>
+            disabled={!capabilities?.canManageMembershipCards}>
             {t("furpanel.admin.membership_manager.title")}
           </Button>
         </FpSection>

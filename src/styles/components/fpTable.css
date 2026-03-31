@@ -19,9 +19,17 @@ div.table-container {
         div.table-data {
             max-height: calc(2.6em*20);
 
+            &:has(.table-header-group:not(:has(.resizing)))>.table-row>.table-cell {
+                transition: width 120ms;
+            }
+
             div.table-header-group {
                 display: flex;
                 background-color: var(--table-header-row-bg);
+
+                &:not(:has(.resizing))>div.table-header {
+                    transition: width 120ms;
+                }
 
                 div.table-header {
                     display: flex;
@@ -42,6 +50,7 @@ div.table-container {
                         flex-wrap: wrap;
                         align-items: center;
                         cursor: ew-resize;
+                        user-select: none;
 
                         i.mdi {
                             color: var(--text-subtitle);

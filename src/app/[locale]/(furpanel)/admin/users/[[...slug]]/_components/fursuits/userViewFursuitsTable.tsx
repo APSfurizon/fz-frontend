@@ -56,9 +56,10 @@ export default function UserViewFursuitsTable({
 
     const deleteFursuit = () => {
         setDeleteLoading(true);
-        runRequest(new DeleteFursuitApiAction(),
-            [String(fursuit?.fursuit.id)])
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+        runRequest({
+            action: new DeleteFursuitApiAction(),
+            pathParams: { "id": fursuit?.fursuit.id }
+        }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 closeDeleteFursuit();
                 setDeleteLoading(false);
@@ -109,14 +110,26 @@ export default function UserViewFursuitsTable({
             reloadData={reloadData}
             userId={userData.personalInfo.userId!} />
         <Modal open={delModalOpen} onClose={closeDeleteFursuit}
-            title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuit?.fursuit.name ?? "" })} busy={deleteLoading}>
-            <span>{t("furpanel.badge.messages.confirm_fursuit_deletion.description", { name: fursuit?.fursuit.name ?? "" })}</span>
+            title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", { name: fursuit?.fursuit.name ?? "" })}
+            busy={deleteLoading}>
+            <span>
+                {t("furpanel.badge.messages.confirm_fursuit_deletion.description",
+                    { name: fursuit?.fursuit.name ?? "" })}
+            </span>
             <div className="horizontal-list gap-4mm">
-                <Button className="danger" icon="CANCEL" busy={deleteLoading} onClick={closeDeleteFursuit}>
-                    {t("common.cancel")}</Button>
+                <Button className="danger"
+                    icon="CANCEL"
+                    busy={deleteLoading}
+                    onClick={closeDeleteFursuit}>
+                    {t("common.cancel")}
+                </Button>
                 <div className="spacer"></div>
-                <Button className="success" icon="CHECK" busy={deleteLoading} onClick={deleteFursuit}>
-                    {t("common.confirm")}</Button>
+                <Button className="success"
+                    icon="CHECK"
+                    busy={deleteLoading}
+                    onClick={deleteFursuit}>
+                    {t("common.confirm")}
+                </Button>
             </div>
         </Modal>
     </>;

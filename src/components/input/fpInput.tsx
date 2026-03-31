@@ -19,6 +19,7 @@ function scrollToFocus(e: FocusEvent<HTMLInputElement>) {
 }
 
 export default function FpInput({
+    autocorrect = true,
     busy = false,
     className,
     disabled = false,
@@ -46,6 +47,7 @@ export default function FpInput({
     initialValue,
     autocomplete
 }: Readonly<{
+    autocorrect?: boolean,
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -106,6 +108,7 @@ export default function FpInput({
     /* Change handling */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
+        e.target.setCustomValidity("");
         if (onChange) onChange(e);
         if (pattern) patternValidity(e);
         onFormChange(fieldName);
@@ -163,10 +166,11 @@ export default function FpInput({
                     ref={inputRef}
                     onFocus={scrollToFocus}
                     lang={requiresLocale ? locale : undefined}
+                    autoCorrect={autocorrect ? "on" : "off"}
                 />
                 <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
                     {(isBusy) && (
-                        <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY"/>
+                        <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY" />
                     )}
                     {!(isBusy) && (isPassword) && (
                         <a style={{ cursor: 'pointer', visibility: showViewPassword ? 'visible' : 'hidden' }}

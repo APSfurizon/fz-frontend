@@ -9,8 +9,9 @@ import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequest
 import { ChangeEmailFormAction, ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
-
+import { useCallback, useMemo, useState } from "react";
+import * as formUtil from "@/lib/components/dataForm";
+import { ValidationError } from "next/dist/compiled/amphtml-validator";
 export default function UserViewSecurity({
     userData,
     reloadData
@@ -38,8 +39,10 @@ export default function UserViewSecurity({
         const body: UserIdRequestData = {
             userId: userData.personalInfo.userId
         }
-        runRequest(new BanUserAction(), undefined, body)
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+        runRequest({
+            action: new BanUserAction(),
+            body
+        }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 reloadData();
@@ -60,8 +63,10 @@ export default function UserViewSecurity({
         const body: UserIdRequestData = {
             userId: userData.personalInfo.userId
         }
-        runRequest(new UnbanUserAction(), undefined, body)
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+        runRequest({
+            action: new UnbanUserAction(),
+            body
+        }).catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 reloadData();
@@ -73,12 +78,21 @@ export default function UserViewSecurity({
 
     // Change password logic
     const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
-    const [password, setPassword] = useState<string>("s");
-    const [confirmPassword, setConfirmPassword] = useState<string>();
-    const passwordMatch = confirmPassword === password;
+    const passwordMatch = useCallback((e: FormData) => {
+        const toReturn: ValidationError[] = [];
+        const password = formUtil.getData(e, "password");
+        const confirmPassowrd = formUtil.getData(e, "confirmPassword");
+        if (password !== confirmPassowrd) {
+            toReturn.push({
+                field: "password",
+                error: t("authentication.recover_confirm.input.new_password.mismatch")
+            });
+        }
+        return toReturn;
+    }, []);
 
     return <>
-        <div className="vertical-list gap-2mm" style={{ padding: "0.625em" }}>
+        <div className="vertical-list gap-2mm rounded-m" style={{ padding: "0.625em" }}>
             <div className="horizontal-list flex-wrap gap-2mm">
                 <FpInput fieldName="email"
                     readOnly
@@ -98,7 +112,7 @@ export default function UserViewSecurity({
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
                 </Button>}
                 <Button icon="MAIL"
-                    onClick={() => setChangeEmailModalOpen (true)}>
+                    onClick={() => setChangeEmailModalOpen(true)}>
                     {t("furpanel.admin.users.accounts.view.actions.change_email")}
                 </Button>
                 <Button icon="KEY"
@@ -154,61 +168,65 @@ export default function UserViewSecurity({
         <Modal open={changeEmailModalOpen}
             onClose={() => setChangeEmailModalOpen(false)}
             title={t("furpanel.admin.users.accounts.view.actions.change_email")}>
-                <DataForm action={new ChangeEmailFormAction}
-                    hideSave
-                    className="gap-2mm"
-                    onSuccess={reloadData}
-                    shouldReset={!changeEmailModalOpen}>
-                    <input type="hidden" name="userId" value={userData.personalInfo.userId} />
-                    <FpInput inputType="email"
-                        fieldName="email"
-                        label={t("authentication.register.form.email.label")}
-                        placeholder={t("authentication.register.form.email.placeholder")} />
-                    <div className="horizontal-list gap-4mm">
-                        <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
-                                {t("common.cancel")}
-                        </Button>
-                        <div className="spacer"></div>
-                        <Button type="submit" className="success" icon="CHECK">
-                            {t("common.confirm")}
-                        </Button>
-                    </div>
-                </DataForm>
+            <DataForm action={new ChangeEmailFormAction}
+                hideSave
+                className="gap-2mm"
+                onSuccess={reloadData}
+                shouldReset={!changeEmailModalOpen}>
+                <input type="hidden" name="userId" value={userData.personalInfo.userId} />
+                <FpInput inputType="email"
+                    fieldName="email"
+                    label={t("authentication.register.form.email.label")}
+                    placeholder={t("authentication.register.form.email.placeholder")} />
+                <div className="horizontal-list gap-4mm">
+                    <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
+                        {t("common.cancel")}
+                    </Button>
+                    <div className="spacer"></div>
+                    <Button type="submit" className="success" icon="CHECK">
+                        {t("common.confirm")}
+                    </Button>
+                </div>
+            </DataForm>
         </Modal>
         <Modal open={changePasswordModalOpen}
             onClose={() => setChangePasswordModalOpen(false)}
             title={t("furpanel.admin.users.accounts.view.actions.change_password")}>
-                <DataForm action={new ChangePasswordFormAction}
-                    hideSave
-                    className="gap-2mm"
-                    onSuccess={reloadData}
-                    checkFn={() => passwordMatch}
-                    shouldReset={!changePasswordModalOpen}>
-                    <input type="hidden" name="userId" value={userData.personalInfo.userId} />
-                    <FpInput fieldName="password"
-                        required
-                        inputType="password"
-                        label={t("authentication.recover_confirm.input.new_password.label")}
-                        placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
-                        helpText={t("authentication.recover_confirm.input.new_password.help")}
-                        onChange={(e) => setPassword(e.currentTarget.value)}
-                        autocomplete="new-password" />
-                    <FpInput inputType="password"
-                        required
-                        label={t("authentication.recover_confirm.input.confirm_password.label")}
-                        placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
-                        onChange={(e) => setConfirmPassword(e.currentTarget.value)}
-                        autocomplete="new-password" />
-                    <div className="horizontal-list gap-4mm">
-                        <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
-                            {t("common.cancel")}
-                        </Button>
-                        <div className="spacer"></div>
-                        <Button type="submit" className="success" icon="CHECK" disabled={!passwordMatch}>
-                            {t("common.confirm")}
-                        </Button>
-                    </div>
-                </DataForm>
+            <DataForm action={new ChangePasswordFormAction}
+                hideSave
+                className="gap-2mm"
+                onSuccess={reloadData}
+                checkFn={passwordMatch}
+                shouldReset={!changePasswordModalOpen}>
+                <input type="hidden" name="userId" value={userData.personalInfo.userId} />
+                <FpInput fieldName="password"
+                    required
+                    inputType="password"
+                    label={t("authentication.recover_confirm.input.new_password.label")}
+                    placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
+                    helpText={t("authentication.recover_confirm.input.new_password.help")}
+                    autocomplete="new-password" />
+                <FpInput fieldName="confirmPassword"
+                    required
+                    inputType="password"
+                    label={t("authentication.recover_confirm.input.confirm_password.label")}
+                    placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
+                    autocomplete="new-password" />
+                <div className="horizontal-list gap-4mm">
+                    <Button type="button"
+                        className="danger"
+                        icon="CANCEL"
+                        onClick={() => setChangeEmailModalOpen(false)}>
+                        {t("common.cancel")}
+                    </Button>
+                    <div className="spacer"></div>
+                    <Button type="submit"
+                        className="success"
+                        icon="CHECK">
+                        {t("common.confirm")}
+                    </Button>
+                </div>
+            </DataForm>
         </Modal>
     </>
 }

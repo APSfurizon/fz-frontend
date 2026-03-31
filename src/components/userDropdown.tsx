@@ -21,14 +21,14 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
     const id = useId();
 
     const logout = (e: MouseEvent<HTMLAnchorElement>) => {
-        runRequest(new LogoutApiAction())
+        runRequest({ action: new LogoutApiAction() })
             .catch((err) => console.warn("Could not log out: " + err))
             .finally(() => router.replace("/logout"));
         e.preventDefault();
     }
 
     const onToggle = (e: ToggleEvent<HTMLDivElement>) => {
-        setOpen (e.newState === "open");
+        setOpen(e.newState === "open");
     }
 
     return (
@@ -38,14 +38,14 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                 popoverTarget={id}>
                 {loading && <LoadingPanel />}
                 {!userData && !loading && <div className="horizontal-list flex-vertical-center gap-2mm">
-                    <Icon icon="KEY"/>
+                    <Icon icon="KEY" />
                     <Link className="title small" href="/login">{t('header.login')}</Link>
                 </div>}
                 {userData && <>
                     <UserPicture userData={userData}></UserPicture>
                     <span className="title average semibold nickname">{userData.fursonaName}</span>
                 </>}
-                <Icon style={{ fontSize: "24px" }} icon={(isOpen) ? "ARROW_DROP_UP" : "ARROW_DROP_DOWN"}/>
+                <Icon style={{ fontSize: "24px" }} icon={(isOpen) ? "ARROW_DROP_UP" : "ARROW_DROP_DOWN"} />
             </button>
             <div id={id}
                 className={`vertical-list dropdown-container rounded-m ${isOpen ? "open" : ""}`}
@@ -59,13 +59,13 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
                 </a>}
                 {/* Language selector */}
                 <hr />
-                {routing.locales.filter (lng => lng !== locale).map((lng, index) => <Link href={path}
+                {routing.locales.filter(lng => lng !== locale).map((lng, index) => <Link href={path}
                     className="title small rounded-s vertical-align-middle horizontal-list"
                     key={index}
                     onClick={(e) => changeLanguage(e, lng, userData)}>
                     {mapLanguageToFlag(lng)}&nbsp;
                     {t(`header.dropdown.language.${lng}`)}
-                    {lng === locale && <Icon className='medium' icon="CHECK"/>}
+                    {lng === locale && <Icon className='medium' icon="CHECK" />}
                 </Link>)}
             </div>
         </div>

@@ -28,7 +28,7 @@ export default function UserSessions() {
   useEffect(() => {
     if (sessions !== undefined) return;
     setLoading(true);
-    runRequest(new GetAllSessionsAction())
+    runRequest({ action: new GetAllSessionsAction() })
       .then((result) => setSessions(result.sessions))
       .catch((err) => {
         showModal(
@@ -45,7 +45,7 @@ export default function UserSessions() {
   const destroyAllSessions = () => {
     if (!sessions) return;
     setLoading(true);
-    runRequest(new DestroyAllSessionsAction())
+    runRequest({ action: new DestroyAllSessionsAction() })
       .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => {
         setLoading(false);
@@ -63,8 +63,12 @@ export default function UserSessions() {
           <Button title={t("common.cancel")} className="danger" onClick={() => hideModal()}
             icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
           <div className="spacer"></div>
-          <Button title={t("furpanel.user.sessions.actions.terminate_session")} onClick={() => destroySession(sessionId)}
-            icon="CLOSE" busy={loading}>{t("furpanel.user.sessions.actions.terminate_session")}</Button>
+          <Button title={t("furpanel.user.sessions.actions.terminate_session")}
+            onClick={() => destroySession(sessionId)}
+            icon="CLOSE"
+            busy={loading}>
+            {t("furpanel.user.sessions.actions.terminate_session")}
+          </Button>
         </div>
       </>
     )
@@ -74,11 +78,13 @@ export default function UserSessions() {
     if (!sessions) return;
     setLoading(true);
     const sessionData: DestroySessionData = { sessionId: sessionId };
-    runRequest(new DestroySessionAction(), undefined, sessionData)
-      .then(() => {
-        hideModal();
-        setSessions(undefined);
-      })
+    runRequest({
+      action: new DestroySessionAction(),
+      body: sessionData
+    }).then(() => {
+      hideModal();
+      setSessions(undefined);
+    })
       .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
   }

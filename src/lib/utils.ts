@@ -183,3 +183,11 @@ export function dateToParam(date: Date) {
         `${String(date.getMonth() + 1).padStart(2, '0')}-` +
         `${String(date.getDate()).padStart(2, '0')}`;
 }
+
+export function templateReplace(toReplace: string, templateMap: Record<string, any>): string {
+    let toReturn = toReplace;
+    for (const key of Object.keys(templateMap)) {
+        toReturn = toReturn.replaceAll(`{${key}}`, templateMap[key]);
+    }
+    return toReturn;
+}

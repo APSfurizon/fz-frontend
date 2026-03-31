@@ -119,7 +119,7 @@
   --upload-crop-handle-active: radial-gradient(#aa67ee 30%, #fffa 35%, #fffa 50%, #aa67ee 60%, #aa67ee 100%);
 
   /* Table */
-  --table-bg: #d6d6d6;
+  --table-bg: #e3e3e3;
   --table-border: #d3d3d3;
   --table-header-row-bg: #c2c2c28c;
   --table-row-bg: #ffffff8c;
@@ -236,7 +236,7 @@
     --notice-box-header-border-error: #EC2F2F;
 
     /* Input Field */
-    --text-input-bg: #242C38;
+    --text-input-bg: #1b212a;
     --text-input-bg-disabled: #374355;
     --text-input-color: #fff;
     --text-input-color-disabled: #7d8b96;

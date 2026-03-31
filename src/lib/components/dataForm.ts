@@ -7,13 +7,18 @@ import { nullifyEmptyString } from "../utils";
  */
 export abstract class FormApiAction<T extends ApiRequest, U extends ApiResponse | boolean, V extends ApiErrorResponse>
     extends ApiAction<U, V> {
-        dtoBuilder!: FormDTOBuilder<T>
-    }
+    dtoBuilder!: FormDTOBuilder<T>
+}
 
-export type InferRequest<A> = A extends FormApiAction<infer T, any, any> ? T : never; 
+export type InferRequest<A> = A extends FormApiAction<infer T, any, any> ? T : never;
 export type InferResponse<A> = A extends FormApiAction<any, infer T, any> ? T : never;
 
 export type FormApiActionFactory<T extends FormApiAction<any, any, any>> = new () => T;
+
+export type FormValidationError = {
+    field: string,
+    error: string
+}
 
 /**
  * Describes how to create the Data Transfer Object, describing which type will be creating,
@@ -23,17 +28,17 @@ export interface FormDTOBuilder<T> {
     mapToDTO: (data: FormData) => T
 }
 
-export class DummyDTOBuilder implements FormDTOBuilder<any>{
-    mapToDTO = () => {return {}}
+export class DummyDTOBuilder implements FormDTOBuilder<any> {
+    mapToDTO = () => { return {} }
 }
 
 export class DummyFormAction extends FormApiAction<any, boolean, ApiErrorResponse> {
     method = RequestType.GET;
     authenticated = true;
-    dtoBuilder = new DummyDTOBuilder ();
+    dtoBuilder = new DummyDTOBuilder();
     urlAction = "";
 }
 
-export function getData (data: FormData, key: string) {
+export function getData(data: FormData, key: string) {
     return nullifyEmptyString(data.get(key)?.toString());
 }

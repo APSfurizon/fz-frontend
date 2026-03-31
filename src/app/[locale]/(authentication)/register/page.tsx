@@ -2,7 +2,7 @@
 import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { redirect, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import DataForm from "@/components/input/dataForm";
 import Icon from "@/components/icon";
@@ -20,6 +20,7 @@ import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAn
 import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
+import { FormValidationError } from "@/lib/components/dataForm";
 
 export default function Register() {
 
@@ -55,7 +56,42 @@ export default function Register() {
 
   const emailMatch = confirmEmail === email;
 
-  const checkForm = () => tosAccepted && privacyAccepted && passwordMatch && emailMatch;
+  const checkForm: () => FormValidationError[] = useCallback(() => {
+    if (tosAccepted && privacyAccepted && passwordMatch && emailMatch) {
+      return [];
+    } else {
+      const toReturn = [];
+      if (!tosAccepted) {
+        toReturn.push({
+          field: "tosAccepted",
+          error: t("register.form.disclaimer_tos.missing")
+        });
+      }
+      if (!privacyAccepted) {
+        toReturn.push({
+          field: "privacyAccepted",
+          error: t("register.form.disclaimer_data_protection.missing")
+        });
+      }
+      if (!passwordMatch) {
+        toReturn.push(
+          {
+            field: "confirmPassword",
+            error: t("register.form.confirm_password.mismatch")
+          }
+        );
+      }
+      if (!emailMatch) {
+        toReturn.push(
+          {
+            field: "confirmEmail",
+            error: t("register.form.confirm_email.mismatch")
+          }
+        );
+      }
+      return toReturn;
+    }
+  }, []);
 
   const manageSuccess = () => setTimeout(() => {
     const newParams = new URLSearchParams(params);
@@ -71,7 +107,7 @@ export default function Register() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"/>
+        <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('register.title').toLowerCase()}</span>
@@ -98,7 +134,7 @@ export default function Register() {
         label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")} />
       <FpInput fieldName="email" required inputType="email" label={t("register.form.email.label")}
         placeholder={t("register.form.email.placeholder")} onChange={(e) => setEmail(e.target.value)} />
-      <FpInput required inputType="email" label={t("register.form.confirm_email.label")}
+      <FpInput fieldName="confirmEmail" required inputType="email" label={t("register.form.confirm_email.label")}
         placeholder={t("register.form.confirm_email.placeholder")} onChange={(e) => setConfirmEmail(e.target.value)}
         className={`${emailMatch ? 'success' : 'danger'}`} />
       <FpInput fieldName="password"
@@ -304,14 +340,16 @@ export default function Register() {
         className="descriptive">
         {t("register.question.description")}
       </NoticeBox>
-      <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>
+      <Checkbox onClick={(e, checked) => setTosAccepted(checked)}
+        fieldName="tosAccepted">
         {t.rich("register.form.disclaimer_tos.label", {
           terms: (chunks) => <Link target="_blank"
             href={t("register.form.disclaimer_tos.link")}
             className="highlight underlined">{chunks}</Link>
         })}
       </Checkbox>
-      <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}>
+      <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}
+        fieldName="privacyAccepted">
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">

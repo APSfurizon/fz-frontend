@@ -24,6 +24,7 @@ div.room-type-container {
     justify-content: center;
     justify-items: center;
     display: grid;
+    gap: 4mm;
 }
 
 div.room-guests {

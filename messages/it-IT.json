@@ -658,7 +658,8 @@
               "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
             },
             "cards_table": {
-              "issue_year": "Anno emissione"
+              "issue_year": "Anno emissione",
+              "created_for_order_id": "Creato per l'ordine"
             },
             "membership_cards": "Tessere socio",
             "badge": "Badge",
@@ -700,9 +701,32 @@
                   "description": "Eliminare la stanza {roomName}? I compagni di stanza verranno rimossi"
                 }
               },
-              "board": "Pensione"
+              "board": "Pensione",
+              "check_in_date": "Data check in",
+              "check_out_date": "Data check out"
             },
-            "rooms": "Stanze"
+            "rooms": "Stanze",
+            "permissions_table": {
+              "permission": "Permesso"
+            },
+            "roles_table": {
+              "display_name": "Nome",
+              "internal_name": "Nome interno",
+              "show_in_nosecount": "Mostra nel nosecount",
+              "actions": {
+                "add_role": {
+                  "title": "Aggiungi ruolo",
+                  "form": {
+                    "role": {
+                      "label": "Ruolo"
+                    },
+                    "temporary": {
+                      "label": "Temporaneo"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": {
@@ -768,6 +792,12 @@
               "temporary_members_count": "Membri temporanei"
             }
           }
+        },
+        "permissions": {
+          "title": "Permessi"
+        },
+        "roles": {
+          "title": "Ruoli"
         }
       },
       "system": {
@@ -809,7 +839,8 @@
         "new_password": {
           "label": "Nuova password",
           "placeholder": "Crea una nuova password",
-          "help": "Deve essere lunga almeno 6 caratteri"
+          "help": "Deve essere lunga almeno 6 caratteri",
+          "mismatch": "Nuova password e conferma non corrispondono"
         },
         "confirm_password": {
           "label": "Conferma password",
@@ -891,7 +922,8 @@
         "confirm_password": {
           "help": "Deve combaciare con la password",
           "label": "Conferma password",
-          "placeholder": "Conferma la tua password"
+          "placeholder": "Conferma la tua password",
+          "mismatch": "Le password non corrispondono"
         },
         "email": {
           "label": "Email",
@@ -899,7 +931,8 @@
         },
         "confirm_email": {
           "label": "Conferma email",
-          "placeholder": "esempio@furroso.com"
+          "placeholder": "esempio@furroso.com",
+          "mismatch": "Le email non corrispondono"
         },
         "first_name": {
           "label": "Nome",
@@ -960,10 +993,12 @@
         },
         "disclaimer_tos": {
           "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
-          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf",
+          "missing": "Devi accettare i termini e condizioni"
         },
         "disclaimer_data_protection": {
-          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
+          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza.",
+          "missing": "Devi accettare la privacy policy"
         },
         "sex": {
           "label": "Sesso (Documento di identità)",

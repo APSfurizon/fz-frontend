@@ -26,19 +26,21 @@ export class AddFursuitDTOBuilder implements FormDTOBuilder<FormData> {
 export class AddFursuitFormAction extends FormApiAction<FormData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new AddFursuitDTOBuilder ();
+    dtoBuilder = new AddFursuitDTOBuilder();
     urlAction = "fursuits/add-with-image";
 }
 
 export class EditFursuitFormAction extends FormApiAction<FormData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new AddFursuitDTOBuilder ();
-    urlAction = "fursuits";
+    dtoBuilder = new AddFursuitDTOBuilder();
+    hasPathParams = true;
+    urlAction = "fursuits/{id}/update-with-image";
 }
 
 export class DeleteFursuitApiAction extends ApiAction<boolean, ApiErrorResponse> {
     method = RequestType.DELETE;
     authenticated = true;
-    urlAction = "fursuits";
+    hasPathParams = true;
+    urlAction = "fursuits/{id}";
 }

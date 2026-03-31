@@ -55,7 +55,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
         if (roomsData || !isOpen) return;
         setSelectedType(undefined);
         setModalLoading(true);
-        runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
+        runRequest({ action: new RoomStoreItemsApiAction() })
             .then(data => setRoomsData(data))
             .catch((err) => {
                 showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
@@ -86,11 +86,13 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
             roomPretixItemId: selectedType.data.roomPretixItemId
         }
 
-        runRequest(new RoomStoreBuyAction(), undefined, roomBuyData, undefined)
-            .then((result) => {
-                router.push(result.link);
-                close();
-            }).catch((err) => setLatestError(err))
+        runRequest({
+            action: new RoomStoreBuyAction(),
+            body: roomBuyData
+        }).then((result) => {
+            router.push(result.link);
+            close();
+        }).catch((err) => setLatestError(err))
             .finally(() => { setModalLoading(false); });
     }
 
@@ -118,7 +120,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                         <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`}
                             key={index} onClick={() => selectRoomType(roomInfo)}>
                             {selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId &&
-                                <Icon className="large" icon="CHECK_CIRCLE"/>}
+                                <Icon className="large" icon="CHECK_CIRCLE" />}
                             <div className="vertical-list">
                                 <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
                                 <span>

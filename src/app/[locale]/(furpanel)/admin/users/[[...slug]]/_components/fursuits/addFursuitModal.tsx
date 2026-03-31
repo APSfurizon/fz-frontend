@@ -7,7 +7,7 @@ import Upload from "@/components/input/upload";
 import Modal from "@/components/modal"
 import ErrorMessage from "@/components/errorMessage";
 import { AddFursuitFormAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits"
-import { ApiDetailedErrorResponse, ApiErrorResponse } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/global";
 import { EVENT_NAME } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -55,7 +55,7 @@ export default function AddFursuitModal({
         reloadData();
     }
 
-    const onFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
+    const onFail = (err: ApiErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
     return <Modal open={open} onClose={beforeClose}
         title={editMode
@@ -63,7 +63,7 @@ export default function AddFursuitModal({
             : t("furpanel.badge.actions.add_fursuit")}
         icon={editMode ? "EDIT" : "ADD_CIRCLE"}>
         <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
-            restPathParams={editMode ? ["" + fursuit?.fursuit.id, "update-with-image"] : undefined}
+            pathParams={editMode ? { "id": fursuit?.fursuit.id } : undefined}
             editFormData={editFursuitFormData}
             hideSave
             className="gap-2mm"

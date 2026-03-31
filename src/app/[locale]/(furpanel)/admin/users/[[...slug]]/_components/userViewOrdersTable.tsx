@@ -4,7 +4,7 @@ import Checkbox from "@/components/input/checkbox";
 import ErrorMessage from "@/components/errorMessage";
 import StatusBox from "@/components/statusBox";
 import FpTable from "@/components/table/fpTable";
-import { FullOrder, GetUserAdminViewResponse, ViewOrderLinkApiAction, ViewOrderLinkResponse } from "@/lib/api/admin/userView";
+import { FullOrder, GetUserAdminViewResponse, ViewOrderLinkApiAction } from "@/lib/api/admin/userView";
 import { mapOrderStatusToStatusBox, qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
 import { runRequest } from "@/lib/api/global";
 import { translate } from "@/lib/translations";
@@ -29,15 +29,16 @@ export default function UserViewOrdersTable({
 
     const viewOrder = (eventId: number, orderCode: string) => {
         setViewOrderLoading(true);
-        runRequest(new ViewOrderLinkApiAction(), undefined, undefined,
-            buildSearchParams({ "event-id": String(eventId), "order-code": orderCode }))
-            .then((result) => window.open(result.link, '_blank'))
+        runRequest({
+            action: new ViewOrderLinkApiAction(),
+            searchParams: buildSearchParams({ "event-id": String(eventId), "order-code": orderCode })
+        }).then((result) => window.open(result.link, '_blank'))
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
             .finally(() => setViewOrderLoading(false));
     }
 
     const renderDailyDaysDates = (row: Row<FullOrder>) => {
-        const dailyDays = row.original.dailyDaysDates.toSorted().map (day => formatter.dateTime(new Date(day), {dateStyle: "medium"}))
+        const dailyDays = row.original.dailyDaysDates.toSorted().map(day => formatter.dateTime(new Date(day), { dateStyle: "medium" }))
         return <div className="vertical-list">
             <span className="title medium">{t("furpanel.admin.users.accounts.view.orders_table.daily_days")}</span>
             {dailyDays.map((d, i) => <span className="monospace" key={i}>{d}</span>)}
@@ -107,7 +108,7 @@ export default function UserViewOrdersTable({
                             <span className="monospace">{props.row.original.code}</span>
                         </div>
                     )} />
-                </div>,
+            </div>,
             maxSize: 86,
             enableResizing: false
         })
@@ -120,6 +121,6 @@ export default function UserViewOrdersTable({
         enableSearch
         hasDetails={(row) => (row.original.dailyDaysDates ?? []).length > 0}
         getDetails={renderDailyDaysDates}>
-            <LinkOrderModal />
-        </FpTable>
+        <LinkOrderModal />
+    </FpTable>
 }

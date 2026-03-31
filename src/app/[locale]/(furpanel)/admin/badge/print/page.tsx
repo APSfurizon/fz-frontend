@@ -85,12 +85,20 @@ export default function AdvancedBadgePrint() {
         const fursuitBadgeCodes = fursuitBadgeRows.map(row => row.fursuit.id).join(",");
         const promises: Promise<any>[] = [];
         if (!isEmpty(regularBadgeCodes)) {
-            promises.push(runRequest(new GetRenderedCommonBadgesApiAction(), undefined, undefined,
-                buildSearchParams({ "userIds": [regularBadgeCodes] })));
+            promises.push(
+                runRequest({
+                    action: new GetRenderedCommonBadgesApiAction(),
+                    searchParams: buildSearchParams({ "userIds": [regularBadgeCodes] })
+                })
+            );
         }
         if (!isEmpty(fursuitBadgeCodes)) {
-            promises.push(runRequest(new GetRenderedFursuitBadgesApiAction(), undefined, undefined,
-                buildSearchParams({ "fursuitIds": [fursuitBadgeCodes] })));
+            promises.push(
+                runRequest({
+                    action: new GetRenderedFursuitBadgesApiAction(),
+                    searchParams: buildSearchParams({ "fursuitIds": [fursuitBadgeCodes] })
+                })
+            );
         }
         Promise.all(promises)
             .then(responses => responses.forEach(response => {

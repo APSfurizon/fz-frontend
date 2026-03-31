@@ -7,13 +7,14 @@ import {
 import "@/styles/components/fpTable.css";
 import Icon, { MaterialIcon } from "../icon";
 import {
-    CSSProperties, Fragment, RefObject, useEffect, useImperativeHandle, useMemo, useRef,
+    CSSProperties, Fragment, RefObject, useCallback, useEffect, useImperativeHandle, useMemo, useRef,
     useState
 } from "react";
 import FpInput from "../input/fpInput";
 import { useTranslations } from "next-intl";
 import Button from "../input/button";
 import { getCountArray } from "@/lib/utils";
+import { useWindowSize } from "../hooks/useWindowSize";
 
 const MIN_COLUMN_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 30;
@@ -83,6 +84,7 @@ export default function FpTable<T>({
 
     const [tableColumns, setTableColumns] = useState(columns);
     const tableRef = useRef<HTMLDivElement>(null);
+    const tableContainerRef = useRef<HTMLDivElement>(null);
     const [sorting, setSorting] = useState<SortingState>(sort || []);
     const [globalFilter, setGlobalFilter] = useState<any>([]);
     const [pagination, setPagination] = useState({
@@ -95,6 +97,8 @@ export default function FpTable<T>({
         right: [],
     });
     const [data, setData] = useState<T[]>([]);
+    const [updatingWidth, setUpdatingWidth] = useState(false);
+    const windowSize = useWindowSize();
 
     const reactTable = useReactTable({
         ...tableOptions,
@@ -174,10 +178,10 @@ export default function FpTable<T>({
         setData(rows);
     }, [rows]);
 
-    /**First time table render */
-    useEffect(() => {
+    const resizeTable = useCallback(() => {
         if (!tableRef.current) return;
         const headers = tableWrapper.getFlatHeaders();
+        const resizableHeaders = headers.filter(h => h.column.getCanResize());
         let extra = 0;
         let columnCount = headers.length;
         headers.filter(h => !h.column.getCanResize()).forEach(h => {
@@ -186,13 +190,23 @@ export default function FpTable<T>({
         })
         const autofillWidth = (tableRef.current.clientWidth - extra) / Math.min(columnCount, 9);
         const sizingStartToSet: Record<string, number> = {};
-        for (let i = 0; i < headers.length; i++) {
-            const header = headers[i];
+        for (let i = 0; i < resizableHeaders.length; i++) {
+            const header = resizableHeaders[i];
             if (header.column.id === EXPAND_DETAILS_COLUMN.id) continue;
             sizingStartToSet[header.id] = Math.max(autofillWidth, MIN_COLUMN_SIZE);
         }
         tableWrapper.setColumnSizing(sizingStartToSet);
-    }, [tableRef.current, tableColumns])
+    }, []);
+
+    /**Resize on first time render and width change */
+    useEffect(() => {
+        if (updatingWidth) { return; }
+        setUpdatingWidth(true);
+        setTimeout(() => {
+            resizeTable();
+            setUpdatingWidth(false);
+        }, 250);
+    }, [tableRef.current, tableColumns, windowSize])
 
     /* Row selection change */
     useEffect(() => {
@@ -212,12 +226,14 @@ export default function FpTable<T>({
         return colSizes;
     }, [tableWrapper.getState().columnSizingInfo, tableWrapper.getState().columnSizing]);
 
-    return <div className="table-container title rounded-m">
+    return <div className="table-container title rounded-m"
+        ref={tableContainerRef}>
         {enableToolbar && <div className="table-toolbar horizontal-list gap-2mm">
             <div className="spacer"></div>
             {enableSearch && <FpInput className="table-search"
                 placeholder={t("table.filter.placeholder")}
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
+                autocorrect={false}
                 icon="FILTER_LIST" />}
             {showAddButton && <Button icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
             {showDeleteButton && <Button icon="DELETE" onClick={onDelete} title={t("table.delete.title")}
@@ -260,14 +276,17 @@ export default function FpTable<T>({
                     </div>
                 )}
                 {/**No data */}
-                {!tableWrapper.getRowModel().rows || tableWrapper.getRowModel().rows.length == 0 && <div className="table-row">
-                    <div className="table-cell" style={{
-                        width: tableRef.current?.clientWidth, textAlign: 'center',
-                        position: 'sticky', left: '0px'
-                    }}>
-                        <span className="title">{t("table.no_data")}</span>
+                {!tableWrapper.getRowModel().rows ||
+                    tableWrapper.getRowModel().rows.length == 0 &&
+                    <div className="table-row">
+                        <div className="table-cell" style={{
+                            width: tableRef.current?.clientWidth, textAlign: 'center',
+                            position: 'sticky', left: '0px'
+                        }}>
+                            <span className="title">{t("table.no_data")}</span>
+                        </div>
                     </div>
-                </div>}
+                }
                 {/**Rows */}
                 {tableWrapper.getRowModel().rows.map(row => <Fragment key={row.id}>
                     <div className={"table-row "
