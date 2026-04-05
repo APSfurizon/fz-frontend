@@ -660,7 +660,8 @@
             },
             "membership_cards": "Membership cards",
             "cards_table": {
-              "issue_year": "Issued year"
+              "issue_year": "Issued year",
+              "created_for_order_id": "Created for order"
             },
             "badge": "Badge",
             "badges": {
