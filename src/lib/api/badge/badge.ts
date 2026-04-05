@@ -26,11 +26,23 @@ export interface BadgeUploadResponse extends MediaData, ApiResponse { }
 export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
+    urlAction = "badge/user/upload";
+}
+
+export class UploadBadgeAdminAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
     hasPathParams = true;
     urlAction = "badge/user/upload/{id}";
 }
 
 export class DeleteBadgeAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.DELETE;
+    urlAction = "badge/user";
+}
+
+export class DeleteBadgeAdminAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
     hasPathParams = true;

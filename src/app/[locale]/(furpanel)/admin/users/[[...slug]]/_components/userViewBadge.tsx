@@ -7,7 +7,7 @@ import Upload from "@/components/input/upload";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewResponse, ShowInNosecountApiAction, ShowInNosecountApiInput } from "@/lib/api/admin/userView";
-import { BadgeDataChangeFormAction, DeleteBadgeAction, UploadBadgeAction } from "@/lib/api/badge/badge";
+import { BadgeDataChangeFormAction, DeleteBadgeAdminAction, UploadBadgeAdminAction } from "@/lib/api/badge/badge";
 import { AutoInputCountriesManager } from "@/lib/api/geo";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { getFlagEmoji } from "@/lib/components/userPicture";
@@ -67,7 +67,7 @@ export default function UserViewBadge({
         hideModal();
         setBadgeLoading(true);
         runRequest({
-            action: new DeleteBadgeAction(),
+            action: new DeleteBadgeAdminAction(),
             pathParams: { "id": userId }
         }).then(() => reloadData())
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
@@ -84,7 +84,7 @@ export default function UserViewBadge({
         dataToUpload.append("image", blob);
         setBadgeLoading(true);
         runRequest({
-            action: new UploadBadgeAction(),
+            action: new UploadBadgeAdminAction(),
             pathParams: { "id": userData.badgeData.mainBadge!.userId },
             body: dataToUpload
         }).then(() => reloadData())
