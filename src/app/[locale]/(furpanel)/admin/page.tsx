@@ -10,7 +10,7 @@ import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pre
 import { runRequest } from "@/lib/api/global";
 import {
   AdminCapabilitesResponse, ExportHotelRoomsApiAction,
-  GetAdminCapabilitiesApiAction
+  ExportTShirtsApiAction, GetAdminCapabilitiesApiAction
 } from "@/lib/api/admin/admin";
 import {
   RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction,
@@ -112,6 +112,22 @@ export default function AdminPage() {
       )).finally(() => setExportRoomsLoading(false))
   }
 
+  const [exportShirtsLoading, setExportShirtsLoading] = useState(false);
+  const exportShirts = () => {
+    setExportShirtsLoading(true);
+    runRequest({ action: new ExportTShirtsApiAction() })
+      .then((response) => {
+        response.blob().then((exportBlob) => {
+          const result = URL.createObjectURL(exportBlob);
+          window.open(result, "_blank");
+          URL.revokeObjectURL(result);
+        })
+      }).catch((err) => showModal(
+        t("common.error"),
+        <ErrorMessage error={err} />
+      )).finally(() => setExportShirtsLoading(false))
+  }
+
   // - rooms
   const [remindRoomsNotFullLoading, setRemindRoomsNotFullLoading] = useState(false);
   const remindRoomsNotFull = () => {
@@ -197,6 +213,10 @@ export default function AdminPage() {
           <Button icon="DOWNLOAD" onClick={exportRooms} debounce={5000}
             busy={exportRoomsLoading} disabled={!capabilities?.canExportHotelList}>
             {t("furpanel.admin.events.orders.export_rooms")}
+          </Button>
+          <Button icon="DOWNLOAD" onClick={exportShirts} debounce={5000}
+            busy={exportShirtsLoading} disabled={!capabilities?.canExportShirtList}>
+            {t("furpanel.admin.events.orders.export_tshirts")}
           </Button>
           <Button icon="MAIL" onClick={remindOrderLink} debounce={5000}
             busy={remindOrderLinkLoading} disabled={!capabilities?.canRemindOrderLinking}>

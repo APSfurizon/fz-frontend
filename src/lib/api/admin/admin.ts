@@ -11,6 +11,7 @@ export interface AdminCapabilitesResponse extends ApiResponse {
     canRemindBadgeUploads?: boolean,
     canRemindRoomsNotFull?: boolean,
     canExportHotelList?: boolean,
+    canExportShirtList?: boolean,
     canViewUsers?: boolean
 }
 
@@ -24,6 +25,13 @@ export class ExportHotelRoomsApiAction extends ApiAction<Response, ApiErrorRespo
     authenticated = true;
     method = RequestType.GET;
     urlAction = "admin/export/hotel-user-list";
+    rawResponse?: boolean = true;
+}
+
+export class ExportTShirtsApiAction extends ApiAction<Response, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "admin/export/shirt-user-list";
     rawResponse?: boolean = true;
 }
 

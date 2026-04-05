@@ -550,7 +550,8 @@
         "orders": {
           "title": "Orders",
           "remind_order_linking": "Remind unlinked orders",
-          "export_rooms": "Export hotel rooms"
+          "export_rooms": "Export hotel rooms",
+          "export_tshirts": "Export t-shirt sizes"
         },
         "rooms": {
           "title": "Rooms",
