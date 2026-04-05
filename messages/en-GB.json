@@ -550,7 +550,8 @@
         "orders": {
           "title": "Orders",
           "remind_order_linking": "Remind unlinked orders",
-          "export_rooms": "Export hotel rooms"
+          "export_rooms": "Export hotel rooms",
+          "export_tshirts": "Export t-shirt sizes"
         },
         "rooms": {
           "title": "Rooms",
@@ -659,7 +660,8 @@
             },
             "membership_cards": "Membership cards",
             "cards_table": {
-              "issue_year": "Issued year"
+              "issue_year": "Issued year",
+              "created_for_order_id": "Created for order"
             },
             "badge": "Badge",
             "badges": {

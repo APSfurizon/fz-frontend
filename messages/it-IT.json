@@ -550,7 +550,8 @@
         "orders": {
           "title": "Ordini",
           "remind_order_linking": "Notifica ordini disconnessi",
-          "export_rooms": "Esporta stanze hotel"
+          "export_rooms": "Esporta stanze hotel",
+          "export_tshirts": "Esporta taglia magliette"
         },
         "rooms": {
           "title": "Stanze",
