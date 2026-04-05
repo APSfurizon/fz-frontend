@@ -96,7 +96,7 @@ export default function BadgePage() {
     setChangeDataModalOpen(false);
   }
 
-  const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
+  const onChangeFail = (err: ApiErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
   // Fursuits
   // Add fursuit
