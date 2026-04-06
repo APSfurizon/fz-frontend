@@ -103,6 +103,9 @@ export class GetUserByIdAction extends ApiAction<UserSearchResponse, ApiErrorRes
     authenticated = true;
     method = RequestType.GET;
     urlAction = "users/search/by-user-id";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "id": value });
+    }
 }
 
 export class UserSearchAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
@@ -135,6 +138,15 @@ export class UserSearchByMembershipNumberAction extends ApiAction<UserSearchResp
     urlAction = "users/search/by-membership-number";
     static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
         return buildSearchParams({ "number": value });
+    }
+}
+
+export class UserSearchByFursuitIdAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/by-fursuit-id";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "id": value });
     }
 }
 

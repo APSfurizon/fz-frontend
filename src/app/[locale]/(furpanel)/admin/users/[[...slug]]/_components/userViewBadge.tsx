@@ -110,6 +110,11 @@ export default function UserViewBadge({
                     {userData.badgeData.mainBadge?.fursonaName}
                 </p>
                 <p className="average">
+                    <span className="bold">{t("furpanel.admin.users.accounts.view.badges.user_id")}:</span>
+                    &nbsp;
+                    {userData.badgeData.mainBadge?.userId}
+                </p>
+                <p className="average">
                     <span className="bold">{t("furpanel.admin.users.accounts.view.badges.locale")}:</span>
                     &nbsp;
                     {getFlagEmoji(userData.badgeData.mainBadge?.locale ?? 'un')}
