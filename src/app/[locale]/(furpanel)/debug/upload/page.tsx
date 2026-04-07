@@ -1,26 +1,42 @@
 "use client"
 
 import { useUser } from "@/components/context/userProvider"
-import { upload, UploadProgress } from "@/lib/api/gallery/upload";
+import Button from "@/components/input/button";
+import { GalleryUpload } from "@/lib/api/gallery/upload/main";
+import { UploadProgress } from "@/lib/api/gallery/upload/types";
 import { ChangeEvent, useState } from "react";
 
 export default function DebugUpload() {
     const [progress, setProgress] = useState<UploadProgress>();
+    const [upload, setUpload] = useState<GalleryUpload>();
 
     const { userDisplay } = useUser();
     const runUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.length ? e.target.files[0] : null;
         if (file && userDisplay) {
-            upload(file, 1, userDisplay.display.userId, (status) => { setProgress(status); console.log(status); })
-                .then(e => console.log("SUCCESS", e))
-                .catch(e => console.error("FAIL", e))
-                .finally(() => setProgress(undefined));
+            const upload = new GalleryUpload({
+                eventId: 1,
+                userId: userDisplay.display.userId,
+                file
+            }, false);
+            setUpload(upload);
+            upload.addEventHandler("PROGRESS", (e) => {
+                setProgress(e.data.progress);
+            });
+            upload.addEventHandler("DONE", e => console.log(e.upload));
+            upload.upload();
         }
     }
 
     return <div className="page">
         <p>{progress?.uploadedSize}</p>
         <input type="file" onChange={runUpload} disabled={!!progress} />
-        {!!progress && <progress max={progress.totalSize} value={progress.uploadedSize} />}
+        {!!progress && <>
+            <progress max={progress.totalSize} value={progress.uploadedSize} />
+            <p>{progress.status}</p>
+        </>}
+        <Button onClick={() => upload?.confirmUpload()} disabled={progress?.status !== "UPLOAD_COMPLETE"}>
+            Confirm
+        </Button>
     </div>
 }
