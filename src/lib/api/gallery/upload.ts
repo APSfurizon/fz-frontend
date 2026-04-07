@@ -64,6 +64,7 @@ export type ChunkUpload = {
 const ChunkUploadFailTypes = {
     REQUEST_FAILED: "request_failed",
     NETWORK_ERROR: "network_error",
+    ABORTED: "aborted"
 
 } as const;
 export type ChunkUploadFailType = typeof ChunkUploadFailTypes[keyof typeof ChunkUploadFailTypes];
@@ -73,17 +74,25 @@ export type ChunkUploadFail = {
     error: ChunkUploadFailType
 }
 
-export function upload(file: File, userId: number) {
+export type UploadProgress = {
+    totalSize: number,
+    uploadedSize: number,
+    status: "UPLOADING" | "DONE" | "ERROR"
+}
+
+export function upload(file: File, eventId: number, userId: number, onProgress?: (status: UploadProgress) => any) {
     return new Promise(async (resolve, reject) => {
         try {
             // Create upload links
-            const uploadRequestData = await beginUpload(file, userId);
+            const uploadRequestData = await beginUpload(file, eventId, userId);
+            const chunkSize = uploadRequestData.multipartCreationResponse.chunkSize;
+            const preSignedUrls = uploadRequestData.multipartCreationResponse.presignedUrls;
             // Create chunk upload data
             const chunks: ChunkUpload[] = [];
-            uploadRequestData.multipartCreationResponse.presignedUrls.forEach((preSignedUrl, index) => {
+            preSignedUrls.forEach((preSignedUrl, index) => {
                 chunks.push({
                     success: false,
-                    offsetStart: index * uploadRequestData.multipartCreationResponse.chunkSize,
+                    offsetStart: index * chunkSize,
                     link: preSignedUrl,
                     etag: null,
                     md5Checksum: null,
@@ -92,13 +101,15 @@ export function upload(file: File, userId: number) {
             });
             // Upload chunks
             const uploadedChunks = await uploadAllChunks(file,
-                uploadRequestData.multipartCreationResponse.chunkSize, chunks);
+                uploadRequestData.multipartCreationResponse.chunkSize,
+                chunks,
+                onProgress);
             // Confirm upload
             const etags = uploadedChunks.map(c => c.etag ?? "");
             const concatHashes = uploadedChunks.map(c => c.md5Checksum).filter(v => !!v)
                 .reduce((last, newValue) => last!.concat(newValue), CryptoJS.lib.WordArray.create());
             const md5Hash = CryptoJS.MD5(concatHashes).toString(CryptoJS.enc.Hex);
-            resolve(await completeUpload(file, userId, uploadRequestData.uploadReqId, etags, md5Hash));
+            resolve(await completeUpload(file, eventId, userId, uploadRequestData.uploadReqId, etags, md5Hash));
         } catch (e) {
             reject(e);
         }
@@ -106,9 +117,9 @@ export function upload(file: File, userId: number) {
 
 }
 
-function beginUpload(file: File, userId: number) {
+function beginUpload(file: File, eventId: number, userId: number) {
     const uploadApiBody: GalleryUploadApiBody = {
-        eventId: 1,
+        eventId,
         fileName: file.name,
         fileSize: file.size,
         userId
@@ -120,16 +131,48 @@ function beginUpload(file: File, userId: number) {
     });
 }
 
-function uploadAllChunks(file: File, chunkSize: number, chunks: ChunkUpload[]): Promise<ChunkUpload[]> {
+function uploadAllChunks(file: File, chunkSize: number, chunks: ChunkUpload[],
+    onProgress?: (status: UploadProgress) => any): Promise<ChunkUpload[]> {
     const MAX_RUNNING_WORKERS = 3;
+
+    // Divide in upload batches
     const batchedChunks: ChunkUpload[][] = [];
     slidingWindow(chunks, MAX_RUNNING_WORKERS, (data) => batchedChunks.push(data));
-    console.log("Batches", batchedChunks);
+
+    // Progress handling
+    // map chunks
+    const chunkMap: Record<number, { chunk: ChunkUpload, uploaded: number }> = chunks.reduce((record, chunk) => {
+        record[chunk.offsetStart] = { chunk, uploaded: 0 };
+        return record;
+    }, {} as Record<number, { chunk: ChunkUpload, uploaded: number }>);
+    // init progress
+    const uploadProgress: UploadProgress = {
+        status: "UPLOADING",
+        totalSize: file.size,
+        uploadedSize: 0
+    };
+    // define update methods
+    const increaseAndNotify = (chunk: ChunkUpload, uploaded: number) => {
+        if (chunk.offsetStart in chunkMap) {
+            chunkMap[chunk.offsetStart].uploaded = uploaded;
+        }
+        notify(uploadProgress);
+    };
+    const notify = (status: UploadProgress) => {
+        const progressToSend = { ...status } as UploadProgress;
+        progressToSend.uploadedSize = Object.values(chunkMap).map(v => v.uploaded).reduce((prev, val) => prev + val, 0);
+        if (onProgress) {
+            onProgress(progressToSend);
+        }
+    };
+    notify(uploadProgress);
+    // launch chunk uploads
     return new Promise(async (resolve, reject) => {
         const toReturn: ChunkUpload[] = [];
         try {
             for (const toUpload of batchedChunks) {
-                const executed = await Promise.all(toUpload.map(chunk => uploadChunk(file, chunkSize, chunk)));
+                const executed = await Promise.all(
+                    toUpload.map(chunk => uploadChunk(file, chunkSize, chunk, increaseAndNotify)));
                 toReturn.push(...executed);
             }
         } catch (e) { reject(e); }
@@ -137,10 +180,10 @@ function uploadAllChunks(file: File, chunkSize: number, chunks: ChunkUpload[]): 
     });
 }
 
-function uploadChunk(file: File, chunkSize: number, chunkData: ChunkUpload): Promise<ChunkUpload> {
+function uploadChunk(file: File, chunkSize: number, chunkData: ChunkUpload, progress: (chunk: ChunkUpload, uploaded: number) => any): Promise<ChunkUpload> {
     const MAX_TRIES = 3;
     return new Promise(async (resolve, reject) => {
-        const data = { ...chunkData };
+        const data = { ...chunkData } as ChunkUpload;
         const slicedFile = file.slice(data.offsetStart, data.offsetStart + chunkSize);
         // Create md5 checksum of chunk
         const sliceArray = await slicedFile.arrayBuffer();
@@ -150,7 +193,7 @@ function uploadChunk(file: File, chunkSize: number, chunkData: ChunkUpload): Pro
         let lastError: any = null;
         while (!data.success && data.tries <= MAX_TRIES) {
             try {
-                const toReturn = await runChunkUpload(slicedFile, data);
+                const toReturn = await runChunkUpload(slicedFile, data, progress);
                 data.success = true;
                 resolve(toReturn);
                 break;
@@ -166,35 +209,42 @@ function uploadChunk(file: File, chunkSize: number, chunkData: ChunkUpload): Pro
     });
 }
 
-function runChunkUpload(slicedFile: Blob, chunkData: ChunkUpload): Promise<ChunkUpload> {
+function runChunkUpload(slicedFile: Blob, chunkData: ChunkUpload, progress: (chunk: ChunkUpload, uploaded: number) => any): Promise<ChunkUpload> {
     return new Promise((resolve, reject) => {
         const request = new XMLHttpRequest();
         request.open("PUT", chunkData.link);
-        request.onload = () => {
+        request.onloadend = () => {
             if (request.readyState === XMLHttpRequest.DONE) {
                 if ([200, 201, 202, 203, 204, 207, 208].includes(request.status)) {
                     // Retrieve chunk etag
                     chunkData.etag = request.getResponseHeader("etag")?.replaceAll("\"", "") ?? null;
-                    console.log(`Chunk ${chunkData.link} SUCCESS. Etag: ${chunkData.etag}`)
+                    console.debug(`Chunk ${chunkData.link} SUCCESS. Etag: ${chunkData.etag}`)
                     resolve(chunkData);
                 } else {
                     reject(ChunkUploadFailTypes.REQUEST_FAILED);
                 }
             }
         }
-        request.onerror = () => {
+        const errorFn = () => {
             reject(reject(ChunkUploadFailTypes.NETWORK_ERROR));
+        };
+        request.upload.onerror = () => errorFn;
+        request.upload.onabort = () => errorFn;
+        request.upload.ontimeout = () => errorFn;
+        request.upload.onprogress = (e) => {
+            progress(chunkData, e.loaded);
         }
         request.send(slicedFile);
     })
 }
 
-function completeUpload(file: File, userId: number, uploadReqId: number, etags: string[], md5Hash: string) {
+function completeUpload(file: File, eventId: number, userId: number, uploadReqId: number, etags: string[],
+    md5Hash: string) {
     const body: GalleryUploadCompleteApiBody = {
         fileName: file.name,
         uploadReqId,
         fileSize: file.size,
-        eventId: 1,
+        eventId,
         uploadRepostPermissions: "PHOTOGRAPHER_DISCRETION",
         etags,
         md5Hash,
