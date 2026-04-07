@@ -608,7 +608,9 @@
                 "common": "Common data",
                 "order_serial": "Order serial code",
                 "order_code": "Order code",
-                "membership_card": "Membership card"
+                "membership_card": "Membership card",
+                "user_id": "User number",
+                "fursuit_id": "Fursuit number"
               }
             },
             "personal_info": "Personal info",
@@ -666,6 +668,7 @@
             "badge": "Badge",
             "badges": {
               "fursona_name": "Fursona name",
+              "user_id": "User number",
               "locale": "Locale",
               "delete_badge_picture": "Delete picture",
               "hide_from_nosecount": "Hide from nosecount",
@@ -675,7 +678,8 @@
             "fursuit_table": {
               "picture": "Photo",
               "name": "Name",
-              "species": "Species"
+              "species": "Species",
+              "id": "Fursuit number"
             },
             "fursuits": "Fursuits",
             "rooms_table": {
