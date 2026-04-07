@@ -13,7 +13,8 @@ import {
   ExportTShirtsApiAction, GetAdminCapabilitiesApiAction
 } from "@/lib/api/admin/admin";
 import {
-  RemindBadgesApiAction, RemindFursuitBadgesApiAction, RemindOrderLinkApiAction,
+  RemindBadgesApiAction, RemindFursuitBadgesApiAction,
+  RemindFursuitBringToEventApiAction, RemindOrderLinkApiAction,
   RemindRoomsNotFullApiAction
 } from "@/lib/api/admin/badge";
 import BadgePrintingDialog from "./_dialogs/badgePrinting";
@@ -162,6 +163,16 @@ export default function AdminPage() {
       )).finally(() => setRemindFursuitBadgesLoading(false))
   }
 
+  const [remindFursuitBringToEventLoading, setRemindFursuitBringToEventLoading] = useState(false);
+  const remindFursuitBringToEvent = () => {
+    setRemindFursuitBringToEventLoading(true);
+    runRequest({ action: new RemindFursuitBringToEventApiAction() })
+      .catch((err) => showModal(
+        t("common.error"),
+        <ErrorMessage error={err} />
+      )).finally(() => setRemindFursuitBringToEventLoading(false))
+  }
+
   return <>
     <div className="stretch-page">
       {loading && <LoadingPanel />}
@@ -201,6 +212,10 @@ export default function AdminPage() {
           <Button icon="MAIL" onClick={remindFursuitBadges} debounce={5000}
             busy={remindFursuitBadgesLoading} disabled={!capabilities?.canRemindBadgeUploads}>
             {t("furpanel.admin.events.badges.remind_fursuits")}
+          </Button>
+          <Button icon="MAIL" onClick={remindFursuitBringToEvent} debounce={5000}
+            busy={remindFursuitBringToEventLoading} disabled={!capabilities?.canRemindFursuitBringToEvent}>
+            {t("furpanel.admin.events.badges.remind_fursuits_bring_to_event")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.events.rooms.title")}>

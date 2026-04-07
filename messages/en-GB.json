@@ -505,6 +505,7 @@
           "print_badges": "Print badges",
           "remind_badges": "Remind missing badges",
           "remind_fursuits": "Remind missing fursuits",
+          "remind_fursuits_bring_to_event": "Remind fursuits to bring to event",
           "print": {
             "select_mode": "Select print mode",
             "simple_mode": {
