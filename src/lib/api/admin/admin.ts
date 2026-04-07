@@ -10,6 +10,7 @@ export interface AdminCapabilitesResponse extends ApiResponse {
     canRemindOrderLinking?: boolean,
     canRemindBadgeUploads?: boolean,
     canRemindRoomsNotFull?: boolean,
+    canRemindFursuitBringToEvent?: boolean,
     canExportHotelList?: boolean,
     canExportShirtList?: boolean,
     canViewUsers?: boolean

@@ -505,6 +505,7 @@
           "print_badges": "Stampa badge",
           "remind_badges": "Notifica badge mancanti",
           "remind_fursuits": "Notifica fursuit mancanti",
+          "remind_fursuits_bring_to_event": "Notifica fursuit da portare all'evento",
           "print": {
             "select_mode": "Seleziona modalità stampa",
             "simple_mode": {
