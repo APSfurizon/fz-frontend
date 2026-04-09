@@ -55,16 +55,19 @@ export default function Upload({
     const inputRef = useRef<HTMLInputElement>(null);
     const { showModal } = useModalUpdate();
 
-    {/* Crop dialog */ }
+    // Crop dialog
     const cropperRef = useRef<ReactCropperElement>(null);
     const [cropDialogOpen, setCropDialogOpen] = useState(false);
     const [imageToCrop, setImageToCrop] = useState<ImageBitmap>();
     const [previewUrl, setPreviewUrl] = useState<string>();
 
-    // Reset logic
-    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    // Form logic
+    const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
 
-    /**Loads the initial value media */
+    // Handle field registration
+    useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
+
+    // Loads the initial value media
     useEffect(() => {
         if (!areEquals(initialMedia, lastInitialMedia) || formReset) {
             setError(false);

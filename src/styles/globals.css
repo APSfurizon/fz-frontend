@@ -60,7 +60,6 @@ a.hoverable:hover {
   padding: 0px;
   outline: none;
   border: none;
-  position: absolute;
 }
 
 /* Scrollbar styles */
