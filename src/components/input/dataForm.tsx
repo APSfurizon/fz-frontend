@@ -4,7 +4,8 @@ import {
     createContext, useContext,
     useImperativeHandle,
     RefObject,
-    useMemo
+    useMemo,
+    useCallback
 } from "react";
 import { useTranslations } from "next-intl";
 import Button from "./button";
@@ -26,7 +27,8 @@ interface FormUpdate {
     setFormReset: (b: boolean) => void,
     formDisabled: boolean,
     onFormChange: (fieldName?: string, value?: any) => void,
-    formLoading: boolean
+    formLoading: boolean,
+    registerField: (fieldName: string | undefined, reference: RefObject<HTMLInputElement | null>) => void
 }
 
 const FormContext = createContext<FormUpdate | undefined>(undefined);
@@ -39,7 +41,8 @@ export const useFormContext: () => FormUpdate = () => {
             setFormReset: () => { },
             formDisabled: false,
             onFormChange: () => { },
-            formLoading: false
+            formLoading: false,
+            registerField: () => { }
         };
     }
     return context;
@@ -80,9 +83,9 @@ type DataFormProps<T extends FormApiAction<any, any, any>> = {
 
 export default function DataForm<T extends FormApiAction<any, any, any>>(props: Readonly<DataFormProps<T>>) {
     const [reset, setReset] = useState(false);
-    const t = useTranslations("");
-    const inputRef = useRef<HTMLFormElement>(null);
-    useImperativeHandle(props.formRef, () => inputRef.current!);
+    const formRef = useRef<HTMLFormElement>(null);
+    useImperativeHandle(props.formRef, () => formRef.current!);
+    const t = useTranslations();
 
     // Busy state logic
     // - Internal loading
@@ -96,12 +99,27 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
     // -- Updates the context's busy state
     useEffect(() => {
         context.setLoading(isBusy);
-    }, [isBusy])
+    }, [isBusy]);
 
     // -- Aligns the external busy state
     useEffect(() => {
         if (props.setBusy) { props.setBusy(loading); }
-    }, [loading])
+    }, [loading]);
+
+    // Field map logic
+    const [fieldMap, setFieldMap] = useState<Record<string, RefObject<HTMLInputElement>>>({});
+    const registerField = useCallback((fieldName: string | undefined, ref: RefObject<HTMLInputElement | null>) => {
+        if (fieldName && ref.current) {
+            setFieldMap(value => {
+                value[fieldName] = ref as RefObject<HTMLInputElement>;
+                return value;
+            });
+        }
+    }, []);
+
+    const clearValidationErrors = useCallback(() => {
+        Object.values(fieldMap).forEach(input => input.current?.setCustomValidity(""));
+    }, []);
 
     // Entity change logic
     const [currentEntity, setCurrentEntity] = useState<InferRequest<T> | undefined>(props.initialEntity);
@@ -136,17 +154,25 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
             const formData = props.editFormData
                 ? props.editFormData(new FormData(e.currentTarget))
                 : new FormData(e.currentTarget);
+            // Perform check functions
             if (props.checkFn) {
-                const result = props.checkFn(formData, e.currentTarget);
-                if (result?.length) {
-                    for (const validation of result) {
-                        const field: HTMLInputElement | null = e
-                            .currentTarget.querySelector(`*[name='${validation.field}']`);
-                        field?.setCustomValidity(validation.error)
+                const formCheckErrors = props.checkFn(formData, e.currentTarget);
+                formCheckErrors.forEach((validation, index) => {
+                    const element = fieldMap[validation.field]?.current;
+                    element?.setCustomValidity(validation.error);
+                    // Report first
+                    if (index == 0 && element) {
+                        window.scrollBy({ top: element.scrollTop });
+                        element?.reportValidity();
                     }
+                });
+
+                if (formCheckErrors?.length) {
                     e.preventDefault();
                     e.stopPropagation();
                     return;
+                } else {
+                    clearValidationErrors();
                 }
             }
             if (props.onBeforeSubmit) props.onBeforeSubmit();
@@ -176,8 +202,8 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
     }
 
     const onFormChange = (fieldName?: string, value?: any) => {
-        if (!fieldName || !props.formRef?.current) return;
-        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(props.formRef.current));
+        if (!fieldName || !formRef?.current) return;
+        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
         if (value) {
             entity[fieldName] = value;
         }
@@ -189,12 +215,15 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
             ? true
             : !compareFormObjects(props.initialEntity, currentEntity);
         setEntityChanged(isChanged);
-        if (props.onChange) props.onChange(isChanged, currentEntity);
+        clearValidationErrors();
+        if (props.onChange) {
+            props.onChange(isChanged, currentEntity);
+        }
     }, [currentEntity])
 
     const showBottomToolbar = !props.hideSave || props.showReset || !!props.additionalButtons;
 
-    return <form ref={inputRef}
+    return <form ref={formRef}
         className={`data-form vertical-list ${props.className ?? ""}`}
         action={props.endpoint}
         onSubmit={onFormSubmit}
@@ -205,7 +234,8 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
             setFormReset: setReset,
             formDisabled: !!props.disabled,
             onFormChange,
-            formLoading: loading
+            formLoading: loading,
+            registerField
         }}>
             {props.children}
         </FormContext.Provider>

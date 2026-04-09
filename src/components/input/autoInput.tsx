@@ -104,18 +104,17 @@ export default function AutoInput({
 
     /* latest initialData */
     const [latestInitialData, setLatestInitialData] = useState<(number | string)[]>();
-
     /* waitForParam */
     const [waitForParam, setWaitForParam] = useState(false);
-
     /* reset */
-    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
 
     const inputRef = useRef<HTMLInputElement>(null);
-
     const locale = useLocale();
-
     const id = useId();
+
+    // Handle field registration
+    useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
 
     const searchResultRef = useRef<HTMLDivElement>(null);
     const firstSearchResultRef = useRef<HTMLButtonElement>(null);
@@ -361,12 +360,6 @@ export default function AutoInput({
                 style={labelStyle}>
                 {label}
             </label>
-            <input tabIndex={-1}
-                className="suppressed-input"
-                type="text"
-                name={fieldName}
-                value={renderedValue.join(",") ?? ""}
-                required={forceRequired} onChange={checkChange} />
             <div style={{ position: 'relative' }}>
                 <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
                     style={anchorNameStyle}>
@@ -419,6 +412,12 @@ export default function AutoInput({
                     </div>}
                 </div>
             </div>
+            <input tabIndex={-1}
+                className="suppressed-input"
+                type="text"
+                name={fieldName}
+                value={renderedValue.join(",") ?? ""}
+                required={forceRequired} onChange={checkChange} />
             {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
                 {helpText}
             </span>}

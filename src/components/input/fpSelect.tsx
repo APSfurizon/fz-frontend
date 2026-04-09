@@ -53,12 +53,17 @@ export default function FpSelect({
     const [selectedItem, setSelectedItem] = useState<InputEntity>();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [mappedItems, setMappedItems] = useState<Record<string, InputEntity>>();
-    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
     const defaultValue = useMemo(() => required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined, [mappedItems]);
     const selectDefaultValue = useMemo(() => {
-        const item = selectedItem ?? defaultValue;  
+        const item = selectedItem ?? defaultValue;
         return item ? itemExtractor(item) ?? "" : "";
     }, [selectedItem, defaultValue]);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Handle field registration
+    useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
+
     const isDisabled = formDisabled || disabled || formLoading;
 
     function getMappedItems(items: (SelectGroup | SelectItem)[]): Record<string, InputEntity> {
@@ -107,10 +112,18 @@ export default function FpSelect({
     const selectLabel = `fpSelect-${fieldName}`;
 
     return <div className={`fp-input ${className ?? ""}`} style={{ ...style }}>
-        {label && <label htmlFor={selectLabel} className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
-            style={{ ...labelStyle }}>{label}</label>}
-        <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
-            defaultValue={selectDefaultValue} required={required}></input>
+        {label && <label htmlFor={selectLabel}
+            className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
+            style={{ ...labelStyle }}>
+            {label}
+        </label>}
+        <input tabIndex={-1}
+            className="suppressed-input"
+            type="text"
+            name={fieldName}
+            defaultValue={selectDefaultValue}
+            required={required}
+            ref={inputRef} />
         <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
             <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
                 id={selectLabel}

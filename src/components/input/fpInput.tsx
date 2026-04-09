@@ -80,9 +80,12 @@ export default function FpInput({
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
     const inputRef = useRef<HTMLInputElement>(null);
     const t = useTranslations("components");
+
+    // Handle field registration
+    useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
 
     // Detect reset
     useEffect(() => {
