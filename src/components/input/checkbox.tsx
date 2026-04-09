@@ -36,15 +36,14 @@ export default function Checkbox({
     useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
 
     const clickEvent = (event: MouseEvent<HTMLButtonElement>) => {
-        if (!isDisabled && !busyState) {
-            let value = checked;
-            setChecked(prev => {
-                value = !prev;
-                return value;
-            });
-            onFormChange(fieldName, value);
-            if (onClick != undefined) onClick(event, value, setChecked, setBusyState);
-        }
+        if (isDisabled || busyState) return;
+        let value = checked;
+        setChecked(prev => {
+            value = !prev;
+            return value;
+        });
+        onFormChange(fieldName, value);
+        if (onClick != undefined) onClick(event, value, setChecked, setBusyState);
     }
 
     useEffect(() => {

@@ -109,12 +109,11 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
     // Field map logic
     const [fieldMap, setFieldMap] = useState<Record<string, RefObject<HTMLInputElement>>>({});
     const registerField = useCallback((fieldName: string | undefined, ref: RefObject<HTMLInputElement | null>) => {
-        if (fieldName && ref.current) {
-            setFieldMap(value => {
-                value[fieldName] = ref as RefObject<HTMLInputElement>;
-                return value;
-            });
-        }
+        if (!fieldName || !ref.current) return;
+        setFieldMap(value => {
+            value[fieldName] = ref as RefObject<HTMLInputElement>;
+            return value;
+        });
     }, []);
 
     const clearValidationErrors = useCallback(() => {
@@ -171,9 +170,8 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
                     e.preventDefault();
                     e.stopPropagation();
                     return;
-                } else {
-                    clearValidationErrors();
                 }
+                clearValidationErrors();
             }
             if (props.onBeforeSubmit) props.onBeforeSubmit();
             setLoading(true);
