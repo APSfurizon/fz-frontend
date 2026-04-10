@@ -27,7 +27,8 @@ const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> 
     CONFIRMING: 4,
     DONE: 5,
     ERROR: undefined,
-    IDLE: undefined
+    IDLE: undefined,
+    ABORTED: undefined
 }
 
 /**
@@ -35,7 +36,7 @@ const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> 
  * @author Drew
  */
 export class GalleryUpload {
-    private abort: AbortController;
+    private abortController: AbortController;
     public id: string;
     public progress: UploadProgress;
     private eventHandlers: Record<GalleryUploadEvent, GalleryUploadEventCallback[]>;
@@ -63,7 +64,7 @@ export class GalleryUpload {
         this.autoConfirm = data.autoConfirm ?? false;
         this.uploadRepostPermissions = data.uploadRepostPermissions ?? "PHOTOGRAPHER_DISCRETION";
         this.eventHandlers = {} as Record<GalleryUploadEvent, GalleryUploadEventCallback[]>;
-        this.abort = new AbortController();
+        this.abortController = new AbortController();
 
         // Init status
         this.progress = {
@@ -130,8 +131,10 @@ export class GalleryUpload {
     }
 
     private error(reason: any) {
-        this.progress = { ...this.progress, status: "ERROR" };
-        this.dispatchEvent("ERROR", { error: reason });
+        if (!this.abortController.signal.aborted) {
+            this.progress = { ...this.progress, status: "ERROR" };
+            this.dispatchEvent("ERROR", { error: reason });
+        }
         // Run abort request if an upload request was made
         if (this.uploadRequestId) {
             return runRequest({
@@ -144,12 +147,113 @@ export class GalleryUpload {
         }
     }
 
+    private uploadAllChunks(chunks: ChunkUpload[]): Promise<ChunkUpload[]> {
+        const MAX_RUNNING_WORKERS = 3;
+
+        // Divide in upload batches
+        const batchedChunks: ChunkUpload[][] = [];
+        slidingWindow(chunks, MAX_RUNNING_WORKERS, (data) => batchedChunks.push(data));
+
+        // Progress handling
+        // map chunks
+        this.chunkStatusMap = chunks.reduce((record, chunk) => {
+            record[chunk.offsetStart] = 0;
+            return record;
+        }, {} as Record<number, number>);
+
+        // launch chunk uploads
+        return new Promise(async (resolve, reject) => {
+            this.abortController.signal.throwIfAborted();
+            const toReturn: ChunkUpload[] = [];
+            try {
+                for (const toUpload of batchedChunks) {
+                    const executed = await Promise.all(
+                        toUpload.map(chunk => this.uploadChunk(chunk)));
+                    toReturn.push(...executed);
+                }
+            } catch (e) { reject(e); }
+            resolve(toReturn);
+        });
+    }
+
+    private uploadChunk(chunkData: ChunkUpload): Promise<ChunkUpload> {
+        const MAX_TRIES = 3;
+        return new Promise(async (resolve, reject) => {
+            this.abortController.signal.throwIfAborted();
+            const data = { ...chunkData } as ChunkUpload;
+            const slicedFile = this.file.slice(data.offsetStart, data.offsetStart + this.chunkSize);
+            // Create md5 checksum of chunk
+            const wordArray = CryptoJS.lib.WordArray.create(await slicedFile.arrayBuffer());
+            data.md5Checksum = CryptoJS.MD5(wordArray);
+            console.debug(`Uploading chunk ${data.link} - Md5 = ${data.md5Checksum}`);
+            let lastError: any = null;
+            while (!data.success && data.tries <= MAX_TRIES) {
+                this.abortController.signal.throwIfAborted();
+                try {
+                    const toReturn = await this.chunkUploadRequest(slicedFile, data);
+                    data.success = true;
+                    resolve(toReturn);
+                    break;
+                } catch (e) {
+                    lastError = e;
+                    data.tries += 1;
+                    console.warn(`Upload of chunk to ${data.link} failed:`, e);
+                }
+            }
+            if (data.tries > MAX_TRIES) {
+                reject({ chunkData: data, error: lastError });
+            }
+        });
+    }
+
+    private chunkUploadRequest(slicedFile: Blob, chunkData: ChunkUpload): Promise<ChunkUpload> {
+        return new Promise((resolve, reject) => {
+            this.abortController.signal.throwIfAborted();
+            // Create request
+            const request = new XMLHttpRequest();
+            request.open("PUT", chunkData.link);
+
+            // Handle abort operation
+            const requestAbort = function () {
+                request.abort();
+            };
+            this.abortController.signal.addEventListener("abort", requestAbort, { once: true });
+
+            request.onloadend = () => {
+                this.abortController.signal.removeEventListener("abort", requestAbort);
+                if (request.readyState !== XMLHttpRequest.DONE) { return; }
+                if (request.status >= 200 && request.status < 300) {
+                    // Retrieve chunk etag
+                    chunkData.etag = request.getResponseHeader("etag")?.replaceAll("\"", "") ?? null;
+                    console.debug(`Chunk ${chunkData.link} SUCCESS. Etag: ${chunkData.etag}`)
+                    resolve(chunkData);
+                } else {
+                    reject(ChunkUploadFailTypes.REQUEST_FAILED);
+                }
+            }
+            const errorFn = () => {
+                reject(reject(ChunkUploadFailTypes.NETWORK_ERROR));
+            };
+            request.upload.onerror = () => errorFn;
+            request.upload.ontimeout = () => errorFn;
+            request.upload.onabort = () => this.abortController.signal.throwIfAborted();
+            request.upload.onprogress = (e) => {
+                if (this.chunkStatusMap && chunkData.offsetStart in this.chunkStatusMap) {
+                    this.chunkStatusMap[chunkData.offsetStart] = e.loaded;
+                    this.updateProgress({});
+                }
+            }
+            request.send(slicedFile);
+        })
+    }
+
     /**
      * Begins upload
      * @returns 
      */
     public upload() {
         if (this.progress.status !== "IDLE") { return Promise.reject("Upload already began"); }
+        this.abortController.signal.throwIfAborted();
         this.updateProgress({ status: "INITIALIZING" });
         return runRequest({
             action: new GalleryUploadApiAction(),
@@ -172,9 +276,11 @@ export class GalleryUpload {
                 md5Checksum: null,
                 tries: 1
             }));
+            this.abortController.signal.throwIfAborted();
             this.updateProgress({ status: "UPLOADING" });
             return this.uploadAllChunks(chunks);
         }).then(uploadedChunks => {
+            this.abortController.signal.throwIfAborted();
             this.updateProgress({ status: "UPLOAD_COMPLETE" });
             const concatHashes = uploadedChunks.map(c => c.md5Checksum).filter(v => !!v)
                 .reduce((last, newValue) => last!.concat(newValue), CryptoJS.lib.WordArray.create());
@@ -202,94 +308,7 @@ export class GalleryUpload {
         }).catch(e => this.error(e))
     }
 
-    private uploadAllChunks(chunks: ChunkUpload[]): Promise<ChunkUpload[]> {
-        const MAX_RUNNING_WORKERS = 3;
-
-        // Divide in upload batches
-        const batchedChunks: ChunkUpload[][] = [];
-        slidingWindow(chunks, MAX_RUNNING_WORKERS, (data) => batchedChunks.push(data));
-
-        // Progress handling
-        // map chunks
-        this.chunkStatusMap = chunks.reduce((record, chunk) => {
-            record[chunk.offsetStart] = 0;
-            return record;
-        }, {} as Record<number, number>);
-
-        // launch chunk uploads
-        return new Promise(async (resolve, reject) => {
-            const toReturn: ChunkUpload[] = [];
-            try {
-                for (const toUpload of batchedChunks) {
-                    const executed = await Promise.all(
-                        toUpload.map(chunk => this.uploadChunk(chunk)));
-                    toReturn.push(...executed);
-                }
-            } catch (e) { reject(e); }
-            resolve(toReturn);
-        });
-    }
-
-    private uploadChunk(chunkData: ChunkUpload): Promise<ChunkUpload> {
-        const MAX_TRIES = 3;
-        return new Promise(async (resolve, reject) => {
-            const data = { ...chunkData } as ChunkUpload;
-            const slicedFile = this.file.slice(data.offsetStart, data.offsetStart + this.chunkSize);
-            // Create md5 checksum of chunk
-            const wordArray = CryptoJS.lib.WordArray.create(await slicedFile.arrayBuffer());
-            data.md5Checksum = CryptoJS.MD5(wordArray);
-            console.debug(`Uploading chunk ${data.link} - Md5 = ${data.md5Checksum}`);
-            let lastError: any = null;
-            while (!data.success && data.tries <= MAX_TRIES) {
-                try {
-                    const toReturn = await this.chunkUploadRequest(slicedFile, data);
-                    data.success = true;
-                    resolve(toReturn);
-                    break;
-                } catch (e) {
-                    lastError = e;
-                    data.tries += 1;
-                    console.warn(`Upload of chunk to ${data.link} failed:`, e);
-                }
-            }
-            if (data.tries > MAX_TRIES) {
-                reject({ chunkData: data, error: lastError });
-            }
-        });
-    }
-
-    private chunkUploadRequest(slicedFile: Blob, chunkData: ChunkUpload): Promise<ChunkUpload> {
-        return new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.open("PUT", chunkData.link);
-            request.onloadend = () => {
-                if (request.readyState !== XMLHttpRequest.DONE) { return; }
-                if (request.status >= 200 && request.status < 300) {
-                    // Retrieve chunk etag
-                    chunkData.etag = request.getResponseHeader("etag")?.replaceAll("\"", "") ?? null;
-                    console.debug(`Chunk ${chunkData.link} SUCCESS. Etag: ${chunkData.etag}`)
-                    resolve(chunkData);
-                } else {
-                    reject(ChunkUploadFailTypes.REQUEST_FAILED);
-                }
-            }
-            const errorFn = () => {
-                reject(reject(ChunkUploadFailTypes.NETWORK_ERROR));
-            };
-            request.upload.onerror = () => errorFn;
-            request.upload.onabort = () => errorFn;
-            request.upload.ontimeout = () => errorFn;
-            request.upload.onprogress = (e) => {
-                if (this.chunkStatusMap && chunkData.offsetStart in this.chunkStatusMap) {
-                    this.chunkStatusMap[chunkData.offsetStart] = e.loaded;
-                    this.updateProgress({});
-                }
-            }
-            request.send(slicedFile);
-        })
-    }
-
-    confirmUpload(data?: GalleryUploadCompleteApiBody) {
+    public confirmUpload(data?: GalleryUploadCompleteApiBody) {
         this.updateProgress({ status: "CONFIRMING" });
         return runRequest({
             action: new GalleryUploadCompleteApiAction(),
@@ -309,6 +328,16 @@ export class GalleryUpload {
             this.dispatchEvent("DONE", { upload: this.uploadedMedia });
             return Promise.resolve(true);
         });
+    }
+
+    public abort() {
+        if (this.progress.status === "DONE") {
+            throw "Upload already completed";
+        }
+        this.abortController.signal.throwIfAborted();
+        this.abortController.abort("Aborted by user");
+        this.updateProgress({ status: "ABORTED" });
+        this.dispatchEvent("ABORTED", { error: "Aborted", upload: this.uploadedMedia });
     }
 }
 

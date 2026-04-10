@@ -33,7 +33,8 @@ export type UploadProgressStatus = "IDLE" |
     "UPLOAD_COMPLETE" |
     "CONFIRMING" |
     "DONE" |
-    "ERROR";
+    "ERROR" |
+    "ABORTED";
 
 export type UploadProgress = {
     totalSize: number,
@@ -49,6 +50,6 @@ export type GalleryUploadData = {
     uploadRepostPermissions?: UploadRepostPermissions
 }
 
-export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE"
+export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED"
 export type GalleryUploadEventParams = { data: GalleryUpload, error?: any, upload?: ApiResponse }
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;

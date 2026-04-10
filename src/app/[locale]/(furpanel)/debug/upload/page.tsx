@@ -24,16 +24,25 @@ export default function DebugUpload() {
                 setProgress(e.data.progress);
             });
             upload.addEventHandler("DONE", e => console.log(e.upload));
+            upload.addEventHandler("ERROR", e => setProgress(e.data.progress));
             upload.upload();
         }
     }
 
     return <div className="page">
         <p>{progress?.uploadedSize}</p>
-        <input type="file" onChange={runUpload} disabled={!!progress} />
+        <input type="file"
+            onChange={runUpload}
+            disabled={progress && !["ABORTED", "ERROR", "UPLOAD_COMPLETE"].includes(progress.status ?? "")} />
         {!!progress && <>
             <progress max={progress.totalSize} value={progress.uploadedSize} />
             <p>{progress.status}</p>
+            <Button className="danger"
+                icon="CANCEL"
+                onClick={() => upload?.abort()}
+                disabled={["ABORTED", "ERROR", "UPLOAD_COMPLETE"].includes(progress?.status)}>
+                ABORT
+            </Button>
         </>}
         <Button onClick={() => upload?.confirmUpload()} disabled={progress?.status !== "UPLOAD_COMPLETE"}>
             Confirm
