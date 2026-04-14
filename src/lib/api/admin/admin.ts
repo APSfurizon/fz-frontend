@@ -11,9 +11,10 @@ export interface AdminCapabilitesResponse extends ApiResponse {
     canRemindBadgeUploads?: boolean,
     canRemindRoomsNotFull?: boolean,
     canRemindFursuitBringToEvent?: boolean,
+    canViewUsers?: boolean
     canExportHotelList?: boolean,
     canExportShirtList?: boolean,
-    canViewUsers?: boolean
+    canExportBadges?: boolean,
 }
 
 export class GetAdminCapabilitiesApiAction extends ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {

@@ -202,7 +202,7 @@ export default function AdminPage() {
       <FpMacroSection title={t("furpanel.admin.events.title")} icon="LOCAL_ACTIVITY">
         <FpSection title={t("furpanel.admin.events.badges.title")}>
           <Button icon="PRINT" onClick={() => setRenderBadgesModalOpen(true)}
-            busy={renderBadgesLoading} disabled={!capabilities?.canRefreshPretixCache}>
+            busy={renderBadgesLoading} disabled={!capabilities?.canExportBadges}>
             {t("furpanel.admin.events.badges.print_badges")}
           </Button>
           <Button icon="MAIL" onClick={remindBadges} debounce={5000}
