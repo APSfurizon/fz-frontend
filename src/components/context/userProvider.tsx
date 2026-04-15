@@ -14,7 +14,7 @@ const UserContext = createContext<UserUpdateType>(undefined as any);
 
 export function HeaderProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const [updateUser, setUpdateUser] = useState(false);
-    const [userLoading, setUserLoading] = useState(false);
+    const [userLoading, setUserLoading] = useState(true);
     const [userDisplay, setUserDisplay] = useState<UserDisplayResponse>();
 
     const handleUserUpdate = (doUpdate: boolean) => {

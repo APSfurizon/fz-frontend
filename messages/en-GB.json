@@ -24,7 +24,8 @@
         }
       },
       "app_badge": "Download now the official app!",
-      "alt_app_badge": "Mobile application download button"
+      "alt_app_badge": "Mobile application download button",
+      "gallery": "Gallery"
     },
     "reload": "Reload",
     "loading": "Loading...",
@@ -1070,6 +1071,17 @@
       "total_count": "{count, plural, =1 {ONE attendee} other {# attendees}}",
       "input": {
         "select_event": "Select event"
+      }
+    },
+    "gallery": {
+      "explore": {
+        "title": "Explore"
+      },
+      "upload": {
+        "title": "Upload"
+      },
+      "admin": {
+        "title": "Administration"
       }
     }
   }

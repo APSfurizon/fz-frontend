@@ -38,7 +38,7 @@ export async function proxy(req: NextRequest) {
   const continueParams = new URLSearchParams({ "continue": `${path}?${strippedParams.toString()}` });
 
   const intlMiddlewareResult = await intlMiddleware(req);
-  
+
   if (isLogout) {
     return stripToken(intlMiddlewareResult);
   }
@@ -55,7 +55,9 @@ export async function proxy(req: NextRequest) {
 
   if (tokenResult.status == TokenVerification.SUCCESS) {
     if (tokenResult.language) {
-      intlMiddlewareResult.cookies.set("NEXT_LOCALE", tokenResult.language, intlMiddlewareResult.cookies.get("NEXT_LOCALE"));
+      intlMiddlewareResult.cookies.set("NEXT_LOCALE",
+        tokenResult.language,
+        intlMiddlewareResult.cookies.get("NEXT_LOCALE"));
     }
     if (shouldSkipIfAuthenticated) {
       return redirectToUrl(params.get("continue") ?? "/home", req);
@@ -90,10 +92,10 @@ async function verifyToken(clientIp: string | null, token: string): Promise<Toke
   try {
     const body = await fetchResult.json();
     return fetchResult && fetchResult.ok
-    ? {
-      status: TokenVerification.SUCCESS,
-      language: String(body["language"])?.replace("_", "-")
-    } : { status: TokenVerification.NOT_VALID };
+      ? {
+        status: TokenVerification.SUCCESS,
+        language: String(body["language"])?.replace("_", "-")
+      } : { status: TokenVerification.NOT_VALID };
   } catch {
     return { status: TokenVerification.NETWORK_ERROR }
   }

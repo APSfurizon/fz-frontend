@@ -15,8 +15,14 @@
   "rules": {
     "deprecation/deprecation": "warn",
     "import/no-deprecated": "warn",
-    "max-len": ["warn", {"code": 120}],
+    "max-len": [
+      "warn",
+      {
+        "code": 120
+      }
+    ],
     "@typescript-eslint/no-explicit-any": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-unused-expressions": "off"
   }
 }

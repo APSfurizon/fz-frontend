@@ -24,7 +24,8 @@
         }
       },
       "app_badge": "Scarica ora l'app ufficiale!",
-      "alt_app_badge": "Bottone per scaricare l'applicazione mobile"
+      "alt_app_badge": "Bottone per scaricare l'applicazione mobile",
+      "gallery": "Galleria"
     },
     "reload": "Ricarica",
     "loading": "Caricamento...",
@@ -1071,6 +1072,17 @@
       "total_count": "{count, plural, =1 {UN ospite} other {# ospiti}}",
       "input": {
         "select_event": "Seleziona evento"
+      }
+    },
+    "gallery": {
+      "explore": {
+        "title": "Esplora"
+      },
+      "upload": {
+        "title": "Carica"
+      },
+      "admin": {
+        "title": "Amministrazione"
       }
     }
   }

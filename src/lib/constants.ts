@@ -7,7 +7,7 @@ export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "";
 export const APP_VERSION = process.env.version;
 export const APP_GIT = "https://github.com/APSfurizon/";
 export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";
-export const APP_GIT_PROJECT_RELEASE  = new URL("releases/tag/"+APP_VERSION, APP_GIT_PROJECT);
+export const APP_GIT_PROJECT_RELEASE = new URL("releases/tag/" + APP_VERSION, APP_GIT_PROJECT);
 export const DEFAULT_TRANSLATION_KEY = "en-gb";
 
 export const READ_CHANGELOG_STORAGE_NAME = "fz-read-changelog";
@@ -36,7 +36,7 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
 // eslint-disable-next-line max-len
-export const REGEX_UNAUTHENTICATED_URLS = /^(?:\/?(login|logging|logout|recover|register|nosecount|fonts|images\/footer|api\/og)([\/?].*)?)$/mi;
+export const REGEX_UNAUTHENTICATED_URLS = /^(?:\/?(login|logging|logout|recover|register|nosecount|fonts|images\/footer|api\/og|gallery)([\/?].*)?)$/mi;
 /**Urls that need to be skipped if user is authenticated */// eslint-disable-next-line max-len
 export const REGEX_SKIP_AUTHENTICATED = /^(?:\/?(login|recover|register)([\/?].*)?)$/mi;
 /**Logout url */
