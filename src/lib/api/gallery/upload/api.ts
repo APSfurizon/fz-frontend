@@ -1,3 +1,4 @@
+import { AllEventsResponse } from "../../counts";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
 import { UploadRepostPermissions } from "../types";
 
@@ -57,4 +58,10 @@ export class GalleryUploadAbortApiAction extends ApiAction<boolean, ApiErrorResp
     authenticated = true;
     method = RequestType.POST;
     urlAction = "gallery/upload/abort";
+}
+
+export class AttendedEventsApiAction extends ApiAction<AllEventsResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "events/attended"
 }

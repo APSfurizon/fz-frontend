@@ -1078,7 +1078,17 @@
         "title": "Explore"
       },
       "upload": {
-        "title": "Upload"
+        "title": "Upload",
+        "form": {
+          "event": {
+            "label": "Event",
+            "placeholder": "Select an event"
+          },
+          "copyright": {
+            "label": "Distribution license",
+            "placeholder": "Select a license"
+          }
+        }
       },
       "admin": {
         "title": "Administration"

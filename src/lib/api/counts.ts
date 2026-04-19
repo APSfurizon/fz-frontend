@@ -72,11 +72,12 @@ export class NoseCountApiAction extends ApiAction<NoseCountResponse, ApiErrorRes
 }
 
 export interface ConventionEvent {
+    id: number,
     slug: string,
     publicUrl: string,
-    id: number,
     correctDateTo: string,
     correctDateFrom: string,
+    testModeEnabled: boolean,
     geoLatitude: number,
     geoLongitude: number,
     eventNames: TranslatableString,

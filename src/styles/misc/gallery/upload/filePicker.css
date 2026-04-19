@@ -1,0 +1,19 @@
+:root {
+    --file-picker-background: #49aee93b;
+}
+
+.gallery-file-picker {
+    padding: .5em;
+    outline: 1px solid var(--button-border-normal);
+    transition-property: border-color;
+    transition-duration: 200ms;
+    background-color: var(--file-picker-background);
+}
+
+@media screen and (max-width: 800px) {}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --file-picker-background: #53287e3b;
+    }
+}

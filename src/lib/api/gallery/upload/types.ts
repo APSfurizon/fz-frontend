@@ -50,6 +50,11 @@ export type GalleryUploadData = {
     uploadRepostPermissions?: UploadRepostPermissions
 }
 
+export type GalleryUploadThumbnail = {
+    blob: Blob,
+    url: string
+}
+
 export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED"
 export type GalleryUploadEventParams = { data: GalleryUpload, error?: any, upload?: ApiResponse }
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;

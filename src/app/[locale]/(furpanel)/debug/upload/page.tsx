@@ -25,7 +25,7 @@ export default function DebugUpload() {
             });
             upload.addEventHandler("DONE", e => console.log(e.upload));
             upload.addEventHandler("ERROR", e => setProgress(e.data.progress));
-            upload.upload();
+            upload.start();
         }
     }
 

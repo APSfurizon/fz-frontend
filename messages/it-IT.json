@@ -1079,7 +1079,17 @@
         "title": "Esplora"
       },
       "upload": {
-        "title": "Carica"
+        "title": "Carica",
+        "form": {
+          "copyright": {
+            "label": "Licenza di distribuzione",
+            "placeholder": "Seleziona una licenza"
+          },
+          "event": {
+            "label": "Evento",
+            "placeholder": "Seleziona un evento"
+          }
+        }
       },
       "admin": {
         "title": "Amministrazione"

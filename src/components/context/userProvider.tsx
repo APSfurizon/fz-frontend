@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, RefObject, useContext, useEffect, useRef, useState } from "react";
 import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
 import { runRequest } from "@/lib/api/global";
 
@@ -7,7 +7,8 @@ interface UserUpdateType {
     setUpdateUser: (value: boolean) => void;
     userDisplay?: UserDisplayResponse,
     setUserDisplay: (value?: UserDisplayResponse) => void;
-    userLoading: boolean
+    userLoading: boolean,
+    userDisplayRef: RefObject<UserDisplayResponse | undefined>;
 }
 
 const UserContext = createContext<UserUpdateType>(undefined as any);
@@ -16,13 +17,16 @@ export function HeaderProvider({ children }: Readonly<{ children: React.ReactNod
     const [updateUser, setUpdateUser] = useState(false);
     const [userLoading, setUserLoading] = useState(true);
     const [userDisplay, setUserDisplay] = useState<UserDisplayResponse>();
+    const userDisplayRef = useRef<typeof userDisplay>(userDisplay);
 
     const handleUserUpdate = (doUpdate: boolean) => {
         setUserLoading(true);
         if (doUpdate) {
             runRequest({ action: new UserDisplayAction() })
-                .then((data) => setUserDisplay(data))
-                .catch(() => { })
+                .then((data) => {
+                    setUserDisplay(data);
+                    userDisplayRef.current = data;
+                }).catch(() => { /* TODO: Handle user login errors */ })
                 .finally(() => setUserLoading(false));
             setUpdateUser(false);
         }
@@ -36,7 +40,7 @@ export function HeaderProvider({ children }: Readonly<{ children: React.ReactNod
         handleUserUpdate(true);
     }, []);
 
-    return <UserContext.Provider value={{ updateUser, setUpdateUser, userDisplay, setUserDisplay, userLoading }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ updateUser, setUpdateUser, userDisplay, setUserDisplay, userLoading, userDisplayRef }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => {

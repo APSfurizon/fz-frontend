@@ -2,12 +2,13 @@ import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import { ChangeEvent, CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useMemo, useState } from "react";
 import "@/styles/components/fpSelect.css";
 import { useLocale } from "next-intl";
 import { useFormContext } from "./dataForm";
 
-const renderItems = (items: (SelectGroup | SelectItem)[], itemExtractor: (entity: InputEntity) => string | number, locale: string) => {
+function renderItems(items: (SelectGroup | SelectItem)[],
+    itemExtractor: (entity: InputEntity) => string | number | undefined, locale: string) {
     return <>
         {items.map((item, idx) => {
             if (item instanceof SelectGroup) {
@@ -46,7 +47,7 @@ export default function FpSelect({
     disabled?: boolean,
     initialValue?: string,
     inputStyle?: CSSProperties,
-    itemExtractor?: (entity: InputEntity) => string | number,
+    itemExtractor?: (entity: InputEntity) => string | number | undefined,
     hasError?: boolean
 }>) {
     const locale = useLocale();
@@ -56,7 +57,7 @@ export default function FpSelect({
     const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
     const defaultValue = useMemo(() => required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined, [mappedItems]);
     const selectDefaultValue = useMemo(() => {
-        const item = selectedItem ?? defaultValue;  
+        const item = selectedItem ?? defaultValue;
         return item ? itemExtractor(item) ?? "" : "";
     }, [selectedItem, defaultValue]);
     const isDisabled = formDisabled || disabled || formLoading;

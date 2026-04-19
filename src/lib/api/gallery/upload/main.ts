@@ -16,9 +16,12 @@ import {
     GalleryUploadEvent,
     GalleryUploadEventCallback,
     GalleryUploadEventParams,
+    GalleryUploadThumbnail,
     UploadProgress,
     UploadProgressStatus
 } from "./types";
+import { SelectItem } from "@/lib/components/fpSelect";
+import * as uploadComponentLib from "@/lib/components/upload";
 
 const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> = {
     INITIALIZING: 1,
@@ -36,13 +39,14 @@ const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> 
  * @author Drew
  */
 export class GalleryUpload {
-    private abortController: AbortController;
-    public id: string;
-    public progress: UploadProgress;
+    private readonly abortController: AbortController;
+    public readonly id: string;
+    private progress: UploadProgress;
     private eventHandlers: Record<GalleryUploadEvent, GalleryUploadEventCallback[]>;
 
-    private file: File;
-    private eventId: number;
+    private readonly file: File;
+    private thumbnail: GalleryUploadThumbnail | undefined;
+    private readonly eventId: number;
     private userId: number;
     private autoConfirm: boolean;
     public uploadRepostPermissions: UploadRepostPermissions;
@@ -74,9 +78,11 @@ export class GalleryUpload {
         }
 
         if (begin) {
-            this.upload();
+            this.start();
         }
     }
+
+    public getProgress() { return this.progress; }
 
     public addEventHandler(eventType: GalleryUploadEvent, callback: GalleryUploadEventCallback) {
         if (this.eventHandlers[eventType]) {
@@ -251,8 +257,8 @@ export class GalleryUpload {
      * Begins upload
      * @returns 
      */
-    public upload() {
-        if (this.progress.status !== "IDLE") { return Promise.reject("Upload already began"); }
+    public start() {
+        if (this.progress.status !== "IDLE") { return Promise.reject("Upload already started"); }
         this.abortController.signal.throwIfAborted();
         this.updateProgress({ status: "INITIALIZING" });
         return runRequest({
@@ -339,6 +345,61 @@ export class GalleryUpload {
         this.updateProgress({ status: "ABORTED" });
         this.dispatchEvent("ABORTED", { error: "Aborted", upload: this.uploadedMedia });
     }
+
+    public dispose() {
+        // Clear event handlers
+        Object.keys(this.eventHandlers).forEach(k => this.eventHandlers[k as GalleryUploadEvent] = []);
+        // Revoke thumbnail data
+        if (this.thumbnail) URL.revokeObjectURL(this.thumbnail.url);
+    }
+
+    public getThumbnail(): Promise<GalleryUploadThumbnail> {
+        return new Promise((resolve, reject) => {
+            // Do not re-process if already present
+            if (this.thumbnail) {
+                resolve(this.thumbnail);
+                return;
+            }
+            // Get image sizes
+            return createImageBitmap(this.file).then(original => {
+                const data = { width: original.width, height: original.height };
+                // Dispose image bitmap
+                original.close();
+                return Promise.resolve(data);
+            }).then(originalSize => {
+                const newSizes = getThumbnailCappedSize(originalSize.width, originalSize.height);
+                return createImageBitmap(this.file, {
+                    resizeWidth: newSizes.width,
+                    resizeHeight: newSizes.height,
+                    resizeQuality: "medium"
+                });
+            }).then(thumbnailImage => uploadComponentLib.imageToBlob(thumbnailImage, true))
+                .then(thumbnailBlob => {
+                    this.thumbnail = {
+                        blob: thumbnailBlob,
+                        url: URL.createObjectURL(thumbnailBlob)
+                    };
+                    // Finally return new thumbnail
+                    resolve(this.thumbnail);
+                }).catch(e => reject(e));
+        })
+    }
+}
+
+const MAX_THUMBNAIL_SIZE = 320;
+function getThumbnailCappedSize(width: number, height: number) {
+    type Size = { width: number, height: number };
+    const data: Size = { width, height };
+    const toEvaluate: { bigger: keyof Size, resized: keyof Size } = { bigger: "width", resized: "height" };
+    if (height > width) {
+        toEvaluate.bigger = "height";
+        toEvaluate.resized = "width";
+    }
+    // Proportion of sizes
+    return {
+        [toEvaluate.bigger]: MAX_THUMBNAIL_SIZE,
+        [toEvaluate.resized]: Math.floor((data[toEvaluate.resized] * MAX_THUMBNAIL_SIZE) / data[toEvaluate.bigger])
+    } as Size;
 }
 
 function slidingWindow<T, U>(data: T[], windowSize: number, onWindow: (data: T[]) => U) {
@@ -349,3 +410,53 @@ function slidingWindow<T, U>(data: T[], windowSize: number, onWindow: (data: T[]
         onWindow(arr.slice(str, end));
     }
 }
+
+export const copyrightValues: SelectItem[] = [
+    new SelectItem(
+        undefined,
+        "PHOTOGRAPHER_DISCRETION",
+        "Photographer discretion",
+        undefined,
+        undefined,
+        undefined,
+        { "it-it": "Discrezione del fotografo", "en-gb": "Photographer discretion" }
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY_NC_ND",
+        "CC BY-NC-ND"
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY_NC",
+        "CC BY-NC"
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY_ND",
+        "CC BY-ND"
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY",
+        "CC BY"
+    ),
+    new SelectItem(
+        undefined,
+        "PUBLIC_DOMAIN",
+        "Public domain",
+        undefined,
+        undefined,
+        undefined,
+        { "it-it": "Pubblico dominio", "en-gb": "Public domain" }
+    ),
+    new SelectItem(
+        undefined,
+        "ALL_RIGHTS_RESERVED",
+        "All rights reserved",
+        undefined,
+        undefined,
+        undefined,
+        { "it-it": "Tutti i diritti riservati", "en-gb": "All rights reserved" }
+    )
+]
