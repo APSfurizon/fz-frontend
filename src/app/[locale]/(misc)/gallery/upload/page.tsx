@@ -15,10 +15,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import GalleryFilePicker from "./_components/filePicker";
-import "@/styles/misc/gallery/upload/page.css";
 import { UploadRepostPermissions } from "@/lib/api/gallery/types";
 import { GalleryUploadEventParams, UploadProgress, UploadProgressStatus } from "@/lib/api/gallery/upload/types";
 import UploadStatusBox from "./_components/uploadStatusBox";
+import "@/styles/misc/gallery/upload/page.css";
 
 const MAXIMUM_RUNNING_UPLOADS = 1;
 

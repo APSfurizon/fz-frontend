@@ -105,6 +105,7 @@ export const ICONS = {
     SHOPPING_CART_CHECKOUT: "shopping_cart_checkout",
     SNOOZE: "snooze",
     STAR: "star",
+    STOP: "stop",
     SYNC: "sync",
     TRANSGENDER: "transgender",
     TRIP: "trip",
@@ -125,9 +126,9 @@ type IconProps = {
 }
 
 export default function Icon(props: Readonly<IconProps>) {
-    return <span className="icon-container" data-nosnippet aria-hidden>
+    return <span className={`icon-container ${props.className ?? ""}`} data-nosnippet aria-hidden>
         <i translate="no"
-            className={`icon mdi ${props.className ?? ""}`}
+            className="icon mdi"
             style={{ ...props.style }}
             title={props.title}>
             {props.icon}
