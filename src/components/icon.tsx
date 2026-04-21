@@ -129,7 +129,7 @@ export default function Icon(props: Readonly<IconProps>) {
     return <span className={`icon-container ${props.className ?? ""}`} data-nosnippet aria-hidden>
         <i translate="no"
             className="icon mdi"
-            style={{ ...props.style }}
+            style={props.style}
             title={props.title}>
             {props.icon}
         </i>

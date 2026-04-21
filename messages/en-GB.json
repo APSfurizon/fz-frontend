@@ -70,7 +70,8 @@
       "title": "Furpanel was updated",
       "description": "Read the changelog at <a></a>"
     },
-    "success": "Success"
+    "success": "Success",
+    "help": "Help"
   },
   "components": {
     "autoinput": {
@@ -1086,7 +1087,16 @@
           },
           "copyright": {
             "label": "Distribution license",
-            "placeholder": "Select a license"
+            "placeholder": "Select a license",
+            "help": {
+              "text": "<a>What is this?</a>",
+              "modal": {
+                "title": "What is the distribution license?"
+              }
+            }
+          },
+          "picker": {
+            "hint": "Drag photos and videos here, or else <f>select files</f>"
           }
         }
       },

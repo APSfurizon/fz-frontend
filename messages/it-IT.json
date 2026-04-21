@@ -70,7 +70,8 @@
       "title": "Il Furpanel si è aggiornato",
       "description": "Leggi le ultime novità su <a></a>"
     },
-    "success": "Successo"
+    "success": "Successo",
+    "help": "Aiuto"
   },
   "components": {
     "autoinput": {
@@ -1083,11 +1084,20 @@
         "form": {
           "copyright": {
             "label": "Licenza di distribuzione",
-            "placeholder": "Seleziona una licenza"
+            "placeholder": "Seleziona una licenza",
+            "help": {
+              "text": "<a>Cosa è questo?</a>",
+              "modal": {
+                "title": "Cosa è la licenza di distribuzione?"
+              }
+            }
           },
           "event": {
             "label": "Evento",
             "placeholder": "Seleziona un evento"
+          },
+          "picker": {
+            "hint": "Trascina foto e video qui, oppure <f>seleziona file</f>"
           }
         }
       },

@@ -1,6 +1,7 @@
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../api/global"
-import { MediaData } from "../api/media"
-import { UPLOAD_SELECTOR_MAX_SIZE, UPLOAD_SELECTOR_MIN_SIZE } from "../constants"
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../api/global";
+import { MediaData } from "../api/media";
+import { UPLOAD_SELECTOR_MAX_SIZE, UPLOAD_SELECTOR_MIN_SIZE } from "../constants";
+import * as mediaUtil from "@/lib/utils/media";
 
 export const VALID_FILE_TYPES = ["image/gif", "image/jpeg", "image/png", "image/bmp", "image/webp", "image/tiff"];
 const ERROR_NOT_VALID = "file_not_valid";
@@ -18,16 +19,6 @@ export function validateImage(file: File): Promise<ImageBitmap> {
     })
 }
 
-export function imageToBlob(image: ImageBitmap, closeBitmap: boolean = false): Promise<Blob> {
-    const canvas = new OffscreenCanvas(image.width, image.height);
-    const ctx = canvas.getContext("bitmaprenderer");
-    ctx?.transferFromImageBitmap(image);
-    if (closeBitmap) {
-        image.close();
-    }
-    return canvas.convertToBlob();
-};
-
 export function scaleBlob(b: Blob, maxWidth: number, maxHeight: number): Promise<Blob> {
     return new Promise<Blob>(async (resolve, reject) => {
         const generatedImage = await createImageBitmap(b);
@@ -40,7 +31,7 @@ export function scaleBlob(b: Blob, maxWidth: number, maxHeight: number): Promise
         if (!imageToReturn) {
             reject("Image resize failed");
         } else {
-            const toReturn = await imageToBlob(imageToReturn, true);
+            const toReturn = await mediaUtil.imageToBlob(imageToReturn, true);
             resolve(toReturn);
         }
     })

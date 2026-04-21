@@ -8,6 +8,12 @@
     transition-property: border-color;
     transition-duration: 200ms;
     background-color: var(--file-picker-background);
+
+    .prompt {
+        width: fit-content;
+        height: 6em;
+        margin: 0 auto;
+    }
 }
 
 @media screen and (max-width: 800px) {}

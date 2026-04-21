@@ -27,12 +27,7 @@ function renderItems(items: (SelectGroup | SelectItem)[],
 }
 
 
-export default function FpSelect({
-    items, className, style, labelStyle, label, hasError = false,
-    onChange, placeholder, readOnly = false, required = false,
-    disabled = false, initialValue = "", fieldName, inputStyle,
-    itemExtractor = inputEntityIdExtractor
-}: Readonly<{
+type FpSelectProps = {
     fieldName?: string,
     items: (SelectGroup | SelectItem)[],
     className?: string,
@@ -48,8 +43,16 @@ export default function FpSelect({
     initialValue?: string,
     inputStyle?: CSSProperties,
     itemExtractor?: (entity: InputEntity) => string | number | undefined,
-    hasError?: boolean
-}>) {
+    hasError?: boolean,
+    helpText?: string | React.ReactNode
+};
+
+export default function FpSelect({
+    items, className, style, labelStyle, label, hasError = false,
+    onChange, placeholder, readOnly = false, required = false,
+    disabled = false, initialValue = "", fieldName, inputStyle,
+    itemExtractor = inputEntityIdExtractor, helpText
+}: Readonly<FpSelectProps>) {
     const locale = useLocale();
     const [selectedItem, setSelectedItem] = useState<InputEntity>();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
@@ -123,5 +126,9 @@ export default function FpSelect({
                 {renderItems(items, itemExtractor, locale)}
             </select>
         </div>
+        {helpText &&
+            <span className="help-text tiny descriptive color-subtitle">
+                {helpText}
+            </span>}
     </div>
 }

@@ -22,6 +22,7 @@ import {
 } from "./types";
 import { SelectItem } from "@/lib/components/fpSelect";
 import * as uploadComponentLib from "@/lib/components/upload";
+import * as mediaUtil from "@/lib/utils/media";
 
 const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> = {
     INITIALIZING: 1,
@@ -360,20 +361,9 @@ export class GalleryUpload {
                 resolve(this.thumbnail);
                 return;
             }
+
             // Get image sizes
-            return createImageBitmap(this.file).then(original => {
-                const data = { width: original.width, height: original.height };
-                // Dispose image bitmap
-                original.close();
-                return Promise.resolve(data);
-            }).then(originalSize => {
-                const newSizes = getThumbnailCappedSize(originalSize.width, originalSize.height);
-                return createImageBitmap(this.file, {
-                    resizeWidth: newSizes.width,
-                    resizeHeight: newSizes.height,
-                    resizeQuality: "medium"
-                });
-            }).then(thumbnailImage => uploadComponentLib.imageToBlob(thumbnailImage, true))
+            return mediaUtil.getThumbnail(this.file)
                 .then(thumbnailBlob => {
                     this.thumbnail = {
                         blob: thumbnailBlob,
@@ -382,24 +372,8 @@ export class GalleryUpload {
                     // Finally return new thumbnail
                     resolve(this.thumbnail);
                 }).catch(e => reject(e));
-        })
+        });
     }
-}
-
-const MAX_THUMBNAIL_SIZE = 320;
-function getThumbnailCappedSize(width: number, height: number) {
-    type Size = { width: number, height: number };
-    const data: Size = { width, height };
-    const toEvaluate: { bigger: keyof Size, resized: keyof Size } = { bigger: "width", resized: "height" };
-    if (height > width) {
-        toEvaluate.bigger = "height";
-        toEvaluate.resized = "width";
-    }
-    // Proportion of sizes
-    return {
-        [toEvaluate.bigger]: MAX_THUMBNAIL_SIZE,
-        [toEvaluate.resized]: Math.floor((data[toEvaluate.resized] * MAX_THUMBNAIL_SIZE) / data[toEvaluate.bigger])
-    } as Size;
 }
 
 function slidingWindow<T, U>(data: T[], windowSize: number, onWindow: (data: T[]) => U) {

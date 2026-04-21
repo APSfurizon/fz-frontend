@@ -19,6 +19,8 @@ import { UploadRepostPermissions } from "@/lib/api/gallery/types";
 import { GalleryUploadEventParams, UploadProgress, UploadProgressStatus } from "@/lib/api/gallery/upload/types";
 import UploadStatusBox from "./_components/uploadStatusBox";
 import "@/styles/misc/gallery/upload/page.css";
+import Button from "@/components/input/button";
+import Icon from "@/components/icon";
 
 const MAXIMUM_RUNNING_UPLOADS = 1;
 
@@ -42,7 +44,7 @@ export default function GalleryUploadPage() {
     const router = useRouter();
     const { showModal } = useModalUpdate();
     const formRef = useRef<HTMLFormElement>(null!);
-    const t = useTranslations();
+    const t = useTranslations("");
     const locale = useLocale();
 
     // Events logic
@@ -172,6 +174,11 @@ export default function GalleryUploadPage() {
         }
     }, [uploads]);
 
+    // Copyright explaination modal
+    const showCopyrightExplainationModal = () => {
+        showModal(t("misc.gallery.upload.form.copyright.help.modal.title"), <></>, "HELP");
+    }
+
     // User shall not access this page if not logged in
 
     useEffect(() => {
@@ -186,10 +193,12 @@ export default function GalleryUploadPage() {
             <DataForm formRef={formRef}
                 className="vertical-list login-form gap-2mm"
                 busy={eventsLoading}
-                hideSave>
+                hideSave
+                style={{ width: "100vw" }}>
                 <div className="horizontal-list gap-4mm">
                     {/* Event selector */}
                     <FpSelect required
+                        className="spacer"
                         fieldName="eventId"
                         items={eventsItems}
                         label={t("misc.gallery.upload.form.event.label")}
@@ -200,10 +209,13 @@ export default function GalleryUploadPage() {
                         itemExtractor={inputEntityCodeExtractor}
                         items={copyrightValues}
                         label={t("misc.gallery.upload.form.copyright.label")}
-                        placeholder={t("misc.gallery.upload.form.copyright.placeholder")} />
+                        placeholder={t("misc.gallery.upload.form.copyright.placeholder")}
+                        helpText={t.rich("misc.gallery.upload.form.copyright.help.text", {
+                            a: chunks => <a href="#" onClick={() => showCopyrightExplainationModal()}>{chunks}</a>
+                        })} />
                 </div>
                 <GalleryFilePicker onFilesSelected={onFilesSelected} />
-                <div className="horizontal-list flex-wrap">
+                <div className="uploads-container">
                     {[...uploads.entries()].map(([id, u]) => <UploadStatusBox key={id} state={u} />)}
                 </div>
             </DataForm>

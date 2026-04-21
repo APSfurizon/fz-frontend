@@ -13,5 +13,5 @@
         "source.fixAll.eslint": "always"
     },
     "editor.formatOnSave": true,
-    "i18n-ally.sourceLanguage": "it-IT"
+    "i18n-ally.sourceLanguage": "en-GB"
 }

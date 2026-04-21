@@ -2,6 +2,8 @@ import { useFormContext } from "@/components/input/dataForm";
 import { useTranslations } from "next-intl";
 import { DragEvent, useCallback, useEffect } from "react";
 import "@/styles/misc/gallery/upload/filePicker.css";
+import Icon from "@/components/icon";
+import Button from "@/components/input/button";
 
 type GalleryFilePickerProps = {
     onFilesSelected: (files: File[]) => void
@@ -53,6 +55,13 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
         role="region"
         onDragOver={dragOverHandler}
         onDrop={dropHandler}>
-        <p style={{ pointerEvents: "none" }}>aaaaaaaa<br></br> venite venite</p>
+        <div className="prompt vertical-list flex-horizontal-center flex-center">
+            <span className="title horizontal-list flex-vertical-center flex-horizontal-center gap-2mm">
+                <Icon icon="CLOUD_UPLOAD"></Icon>
+                {t.rich("misc.gallery.upload.form.picker.hint", {
+                    f: chunks => <Button>{chunks}</Button>
+                })}
+            </span>
+        </div>
     </div>
 }

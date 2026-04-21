@@ -178,7 +178,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
     const onFormChange = (fieldName?: string, value?: any) => {
         if (!fieldName || !props.formRef?.current) return;
         const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(props.formRef.current));
-        if (value) {
+        if (entity && value) {
             entity[fieldName] = value;
         }
         setCurrentEntity(entity);
