@@ -122,13 +122,14 @@ type IconProps = {
     icon: MaterialIcon,
     style?: CSSProperties,
     className?: string,
+    containerClassName?: string,
     title?: string
 }
 
 export default function Icon(props: Readonly<IconProps>) {
-    return <span className={`icon-container ${props.className ?? ""}`} data-nosnippet aria-hidden>
+    return <span className={`icon-container ${props.containerClassName ?? ""}`} data-nosnippet aria-hidden>
         <i translate="no"
-            className="icon mdi"
+            className={`icon mdi ${props.className ?? ""}`}
             style={props.style}
             title={props.title}>
             {props.icon}

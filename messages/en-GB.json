@@ -1091,7 +1091,9 @@
             "help": {
               "text": "<a>What is this?</a>",
               "modal": {
-                "title": "What is the distribution license?"
+                "title": "What is the distribution license?",
+                "source": "Visit the Creative commons website",
+                "text": "Creative Commons licenses offer a standardized, legally-sound way to grant permission in advance, so that creators can clearly communicate how their work may be used, without negotiating individual permissions every time. This enables access to knowledge by offering a “some rights reserved” option for content that would otherwise be closed off."
               }
             }
           },

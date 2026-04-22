@@ -1088,7 +1088,9 @@
             "help": {
               "text": "<a>Cosa è questo?</a>",
               "modal": {
-                "title": "Cosa è la licenza di distribuzione?"
+                "title": "Cosa è la licenza di distribuzione?",
+                "source": "Visita il sito di Creative commons",
+                "text": "Le licenze Creative Commons offrono un metodo standardizzato, pseudo-legale, per i creatori di lavori che vogliono garantire permessi agli usufruitori, senza dover negoziare permessi individuali. Queste licenze si offrono come punto intermedio tra \"Tutti i diritti riservati\" e \"pubblico dominio\"."
               }
             }
           },

@@ -5,9 +5,16 @@
 .gallery-file-picker {
     padding: .5em;
     outline: 1px solid var(--button-border-normal);
-    transition-property: border-color;
-    transition-duration: 200ms;
-    background-color: var(--file-picker-background);
+    background: var(--file-picker-background);
+    transition-property: background;
+    transition-duration: 100ms;
+
+    &.hover {
+        outline-style: dashed;
+        outline-width: 3px;
+        background: color-mix(var(--file-picker-background), #888);
+        background-blend-mode: multiply;
+    }
 
     .prompt {
         width: fit-content;

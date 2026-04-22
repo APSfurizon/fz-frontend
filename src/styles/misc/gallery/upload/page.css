@@ -1,5 +1,7 @@
 :root {
     --icon-shadow: white;
+    --grid-column-count: 5;
+    --grid-column-width: 140px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,8 +25,20 @@
 
 .uploads-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10vw, 1fr));
-    gap: 2mm;
+    grid-template-columns: repeat(var(--grid-column-count), var(--grid-column-width));
+    justify-content: space-between;
+    align-content: space-between;
+    row-gap: 4mm;
+
+    .uploaded-image {
+        width: var(--grid-column-width);
+        height: var(--grid-column-width);
+        overflow: clip;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    :root {}
 }
 
 .upload-status-box {
