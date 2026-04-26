@@ -1,6 +1,7 @@
 import { AllEventsResponse } from "../../counts";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
 import { UploadRepostPermissions } from "../types";
+import { UploadsApiResponse } from "./types";
 
 export type GalleryUploadApiBody = {
     fileSize: number;
@@ -64,4 +65,10 @@ export class AttendedEventsApiAction extends ApiAction<AllEventsResponse, ApiErr
     authenticated = true;
     method = RequestType.GET;
     urlAction = "events/attended"
+}
+
+export class MyUploadsApiAction extends ApiAction<UploadsApiResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "gallery/my-uploads"
 }

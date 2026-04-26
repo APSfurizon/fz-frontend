@@ -2,6 +2,24 @@
     --file-picker-background: #49aee93b;
 }
 
+@keyframes bouncy {
+    0% {
+        transform: translateY(0) scaleY(1);
+    }
+
+    20% {
+        transform: translateY(2px) scaleY(0.9);
+    }
+
+    50% {
+        transform: translateY(-.25em) scaleY(1.1);
+    }
+
+    100% {
+        transform: translateY(0) scaleY(1);
+    }
+}
+
 .gallery-file-picker {
     padding: .5em;
     outline: 1px solid var(--button-border-normal);
@@ -12,8 +30,14 @@
     &.hover {
         outline-style: dashed;
         outline-width: 3px;
-        background: color-mix(var(--file-picker-background), #888);
+        background: color-mix(var(--file-picker-background), #afafaf);
         background-blend-mode: multiply;
+
+        @media (prefers-reduced-motion: no-preference) {
+            i.icon {
+                animation: bouncy 0.5s infinite ease-in-out 0ms;
+            }
+        }
     }
 
     .prompt {

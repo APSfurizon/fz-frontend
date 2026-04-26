@@ -1100,6 +1100,10 @@
           "picker": {
             "hint": "Drag photos and videos here, or else <f>select files</f>"
           }
+        },
+        "grid": {
+          "end_message": "You've reached the bottom of the gallery",
+          "title": "Your media"
         }
       },
       "admin": {

@@ -17,7 +17,6 @@ import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import GalleryFilePicker from "./filePicker";
 import Modal from "@/components/modal";
-import UploadStatusBox from "./uploadStatusBox";
 
 const MAXIMUM_RUNNING_UPLOADS = 1;
 
@@ -37,7 +36,8 @@ const CLEARING_STATUSES: UploadProgressStatus[] = [
 ];
 
 type UploadPanelProps = {
-    onUploadUpdate: (updates: Map<string, UploadState>) => void
+    onUploadUpdate: (updates: Map<string, UploadState>) => void,
+    onCompletedUpload: () => void
 }
 export default function UploadPanel(props: Readonly<UploadPanelProps>) {
     const { userDisplayRef } = useUser();
@@ -143,10 +143,11 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
         return next;
     }, []);
 
+    const timers = useRef(new Map<string, number>());
+
     useEffect(() => {
-        const timers = new Map<string, number>();
         for (const [id, entry] of uploads) {
-            if (timers.has(id) || !CLEARING_STATUSES.includes(entry.progress.status)) continue;
+            if (timers.current.has(id) || !CLEARING_STATUSES.includes(entry.progress.status)) continue;
 
             const t = window.setTimeout(() => {
                 setUploads(prev => {
@@ -155,13 +156,14 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
                     return next;
                 });
 
+                // Fire on complete
+                props.onCompletedUpload();
                 entry.upload.dispose();
-            }, 5000);
+                timers.current.delete(id);
+            }, 3100);
 
-            timers.set(id, t);
+            timers.current.set(id, t);
         }
-
-        return () => timers.forEach(clearTimeout);
     }, [uploads]);
 
     useEffect(() => {
@@ -180,13 +182,13 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
         setCopyrightExplainationOpen(true);
     }
 
-    return <div className="horizontal-list">
+    return <div className="upload-panel horizontal-list">
         <DataForm formRef={formRef}
             className="vertical-list login-form gap-2mm"
             busy={eventsLoading}
             hideSave
             style={{ width: "100vw" }}>
-            <div className="horizontal-list gap-4mm">
+            <div className="upload-input-data gap-4mm">
                 {/* Event selector */}
                 <FpSelect required
                     className="spacer"

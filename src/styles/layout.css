@@ -47,6 +47,18 @@
     margin-top: 2mm;
 }
 
+.margin-auto {
+    margin: auto;
+}
+
+.margin-left-auto {
+    margin-left: auto;
+}
+
+.margin-right-auto {
+    margin-right: auto;
+}
+
 .flex-center {
     justify-content: center;
 }

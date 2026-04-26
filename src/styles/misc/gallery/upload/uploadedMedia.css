@@ -1,0 +1,27 @@
+.uploaded-media,
+.upload-status-box {
+    width: var(--grid-column-width);
+    height: var(--grid-column-width);
+    border: 2px solid var(--button-border-normal);
+    position: relative;
+    overflow: clip;
+
+    img.thumbnail {
+        position: absolute;
+        width: var(--grid-column-width);
+        height: var(--grid-column-width);
+    }
+}
+
+.uploaded-media {
+    input.selection {
+        position: absolute;
+        width: 1.5em;
+        height: 1.5em;
+        z-index: 2;
+        top: 2mm;
+        right: 2mm;
+        color: white;
+        background-color: transparent;
+    }
+}

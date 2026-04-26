@@ -1,9 +1,9 @@
 import { useFormContext } from "@/components/input/dataForm";
 import { useTranslations } from "next-intl";
 import { ChangeEvent, DragEvent, useCallback, useEffect, useRef, useState } from "react";
-import "@/styles/misc/gallery/upload/filePicker.css";
 import Icon from "@/components/icon";
 import Button from "@/components/input/button";
+import "@/styles/misc/gallery/upload/filePicker.css";
 
 type GalleryFilePickerProps = {
     onFilesSelected: (files: File[]) => void
@@ -73,7 +73,7 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
                 ref={fileRef}
                 accept="image/*, video/*"
                 onChange={filePickerHandler} />
-            <span className="title horizontal-list flex-vertical-center flex-horizontal-center gap-2mm">
+            <span className="title horizontal-list flex-vertical-center flex-horizontal-center gap-2mm flex-wrap">
                 <Icon icon="CLOUD_UPLOAD"></Icon>
                 {t.rich("misc.gallery.upload.form.picker.hint", {
                     f: chunks => <Button onClick={() => fileRef.current?.showPicker()}>{chunks}</Button>

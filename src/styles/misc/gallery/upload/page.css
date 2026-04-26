@@ -4,6 +4,30 @@
     --grid-column-width: 140px;
 }
 
+@media screen and (max-width: 800px) {
+    :root {
+        --grid-column-width: 120px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    :root {
+        --grid-column-count: 4;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    :root {
+        --grid-column-width: 100px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    :root {
+        --grid-column-count: 3;
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
         --icon-shadow: black;
@@ -23,35 +47,41 @@
     }
 }
 
+.upload-panel {
+    .upload-input-data {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .upload-panel {
+        .upload-input-data {
+            flex-direction: column;
+        }
+    }
+}
+
 .uploads-container {
     display: grid;
     grid-template-columns: repeat(var(--grid-column-count), var(--grid-column-width));
     justify-content: space-between;
     align-content: space-between;
     row-gap: 4mm;
+    scrollbar-gutter: stable;
 
-    .uploaded-image {
-        width: var(--grid-column-width);
-        height: var(--grid-column-width);
-        overflow: clip;
+    .bottom-message {
+        grid-column: span var(--grid-column-count);
+        margin: 0 auto;
     }
 }
 
-@media screen and (max-width: 800px) {
-    :root {}
-}
-
 .upload-status-box {
-    border: 2px solid var(--button-border-normal);
-    position: relative;
-    overflow: clip;
-
     &.ended {
         animation: ended 100ms ease-in 3000ms forwards;
     }
 
     img.thumbnail {
-        position: absolute;
         filter: grayscale(.3) brightness(1.3) contrast(.6);
     }
 

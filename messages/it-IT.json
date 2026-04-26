@@ -1101,6 +1101,10 @@
           "picker": {
             "hint": "Trascina foto e video qui, oppure <f>seleziona file</f>"
           }
+        },
+        "grid": {
+          "end_message": "Hai raggiunto il fondo della galleria",
+          "title": "I tuoi contenuti multimediali"
         }
       },
       "admin": {
