@@ -16,6 +16,8 @@
       "information": "About",
       "login": "Login",
       "nose_count": "Nose count",
+      "schedule": "Schedule",
+      "dealer": "Dealer",
       "dropdown": {
         "logout": "Logout",
         "language": {
@@ -814,6 +816,9 @@
           "ping": "Ping"
         }
       }
+    },
+    "security": {
+      "title": "Security"
     }
   },
   "authentication": {

@@ -76,12 +76,20 @@ export default function Header() {
                     <Icon style={{ fontSize: "24px" }} icon="HOME" />
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                { NOSECOUNT_ENABLED && <>
+                {NOSECOUNT_ENABLED && <>
                     <Link href={`/nosecount`} className="header-link medium">
                         <Icon style={{ fontSize: "24px" }} icon="GROUPS" />
                         <span className="title semibold">{t('header.nose_count')}</span>
                     </Link>
                 </>}
+                <Link href={`/schedule`} className="header-link medium">
+                    <Icon style={{ fontSize: "24px" }} icon="EVENT" />
+                    <span className="title semibold">{t('header.schedule')}</span>
+                </Link>
+                <Link href={`/dealer`} className="header-link medium">
+                    <Icon style={{ fontSize: "24px" }} icon="STORE" />
+                    <span className="title semibold">{t('header.dealer')}</span>
+                </Link>
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} icon="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>

@@ -11,6 +11,8 @@
     "header": {
       "home": "Home",
       "nose_count": "Nose count",
+      "schedule": "Programma",
+      "dealer": "Dealer",
       "information": "Informazioni",
       "archive": "Archivio",
       "login": "Accedi",
@@ -813,6 +815,9 @@
           "ping": "Ping"
         }
       }
+    },
+    "security": {
+      "title": "Sicurezza"
     }
   },
   "authentication": {

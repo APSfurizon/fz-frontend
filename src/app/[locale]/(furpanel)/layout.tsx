@@ -56,7 +56,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">
-                        <Icon icon="DESIGN_SERVICES"/>
+                        <Icon icon="DESIGN_SERVICES" />
                         <span className="titular bold highlight">furpanel</span>
                     </span>
                 </span>
@@ -93,6 +93,11 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         icon="SECURITY">
                         {t('furpanel.admin.title')}
                     </ToolLink>}
+                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
+                        href="/security"
+                        icon="GPP_GOOD">
+                        {t('furpanel.security.title')}
+                    </ToolLink>}
                     {DEBUG_ENABLED && <ToolLink href="/debug"
                         icon="BUG_REPORT">
                         {t('furpanel.debug.title')}
@@ -100,7 +105,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 </div>
                 <span>
                     <div role="button" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
-                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}/>
+                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"} />
                     </div>
                 </span>
             </div>
