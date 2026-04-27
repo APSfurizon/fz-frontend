@@ -102,7 +102,7 @@ export default function GalleryUploadPage() {
             action: new MyUploadsApiAction(),
             searchParams: buildSearchParams({
                 "fromUploadId": String(lastImageId ?? ""),
-                "after": String(true)
+                "invertOrder": String(true)
             })
         });
         // Define the loop promise logic
