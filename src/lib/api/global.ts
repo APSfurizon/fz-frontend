@@ -1,5 +1,5 @@
 import { FormApiAction } from "@/lib/components/dataForm"
-import { API_BASE_URL, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import { API_BASE_URL, API_MOBILE_URL, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { getCookie, templateReplace } from "@/lib/utils";
 
 export enum RequestType {
@@ -43,10 +43,16 @@ export function isDetailedError(err: ApiErrorResponse | ApiDetailedErrorResponse
     return (err as ApiDetailedErrorResponse).errors !== undefined;
 }
 
+export enum Endpoint {
+    API,
+    MOBILE
+};
+
 /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
  */
 export abstract class ApiAction<U extends ApiResponse | boolean | Response, V extends ApiErrorResponse> {
+    endpoint: Endpoint = Endpoint.API;
     abstract authenticated: boolean;
     abstract method: RequestType;
     abstract urlAction: string;
@@ -54,6 +60,14 @@ export abstract class ApiAction<U extends ApiResponse | boolean | Response, V ex
     rawResponse?: boolean;
     onSuccess?: (status: number, body?: U) => void;
     onFail?: (status: number, body?: V) => void;
+}
+
+/**
+ * Describes an api endpoint to the mobile app server
+ */
+export abstract class MobileApiAction<U extends ApiResponse | boolean | Response, V extends ApiErrorResponse> extends ApiAction<U, V> {
+    readonly authenticated: boolean = false;
+    readonly endpoint = Endpoint.MOBILE;
 }
 
 export function getToken(): string | null {
@@ -84,7 +98,10 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
 
         // Calc url
         const useSearchParams = !!data.searchParams;
-        let endpointUrl = API_BASE_URL;
+        let endpointUrl = {
+            [Endpoint.API]: API_BASE_URL,
+            [Endpoint.MOBILE]: API_MOBILE_URL!
+        }[data.action.endpoint];
         endpointUrl += [data.action.urlAction, ...data.additionalPath ?? []].join("/");
         if (useSearchParams) endpointUrl += "?" + data.searchParams!.toString();
         if (data.action.hasPathParams && data.pathParams) {

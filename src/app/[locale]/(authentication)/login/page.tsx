@@ -49,7 +49,7 @@ export default function Login() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"/>
+        <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('login.title').toLowerCase()}</span>
@@ -57,19 +57,19 @@ export default function Login() {
     </div>
     <Link href={`/register?${params.toString()}`}
       className="suggestion title small center color-subtitle underlined">
-        {t('login.create_an_account')}
+      {t('login.create_an_account')}
     </Link>
     {error && <span className="error-container title small center">
-      {t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}  
+      {t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}
     </span>}
     {params.get("register") &&
       <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
         {t("login.messages.register_success.description")}
-    </NoticeBox>}
+      </NoticeBox>}
     {Object.keys(AuthenticationCodes).includes(params.get("status") ?? "") &&
       <NoticeBox theme={AuthenticationCodes[params.get("status") ?? "UNKNOWN"]}
         title={t(`login.messages.${params.get("status")}.title`)}>
-          {t(`login.messages.${params.get("status")}.description`)}
+        {t(`login.messages.${params.get("status")}.description`)}
       </NoticeBox>}
     <DataForm className="vertical-list login-form"
       action={new LoginFormAction}
@@ -78,27 +78,27 @@ export default function Login() {
       onFail={(err) => manageError(err)} hideSave
       resetOnFail={false}
       resetOnSuccess={false}>
-        <FpInput fieldName="email"
-          required
-          inputType="email"
-          label={t("login.label_email")}
-          placeholder={t("login.placeholder_email")}/>
-        <FpInput fieldName="password"
-          minLength={6}
-          required
-          inputType="password"
-          label={t("login.label_password")}
-          placeholder={t("login.placeholder_password")}/>
-        <div className="toolbar-bottom">
-          <Button type="submit" icon="KEY">
-              {t("login.login")}
-          </Button>
-        </div>
+      <FpInput fieldName="email"
+        required
+        inputType="email"
+        label={t("login.label_email")}
+        placeholder={t("login.placeholder_email")} />
+      <FpInput fieldName="password"
+        minLength={6}
+        required
+        inputType="password"
+        label={t("login.label_password")}
+        placeholder={t("login.placeholder_password")} />
+      <div className="toolbar-bottom">
+        <Button type="submit" icon="KEY">
+          {t("login.login")}
+        </Button>
+      </div>
     </DataForm>
     <div className="horizontal-list">
-      <Link style={{width: '100%'}} href={`/recover?${params.toString()}`}
+      <Link style={{ width: '100%' }} href={`/recover?${params.toString()}`}
         className="suggestion title small center color-subtitle underlined">
-          {t('login.recover')}
+        {t('login.recover')}
       </Link>
     </div>
   </>;
