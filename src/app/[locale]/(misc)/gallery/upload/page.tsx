@@ -12,7 +12,7 @@ import UploadPanel from "./_components/uploadPanel/uploadPanel";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingPanel from "@/components/loadingPanel";
 import { buildSearchParams } from "@/lib/utils";
-import UploadedImage from "./_components/uploadedMedia";
+import UploadedMedia from "./_components/uploadedMedia";
 import "@/styles/misc/gallery/upload/page.css";
 import Button from "@/components/input/button";
 
@@ -151,6 +151,9 @@ export default function GalleryUploadPage() {
     return <>
         <UploadPanel onUploadUpdate={(u) => setUploads(u)}
             onCompletedUpload={prependUploadedImages} />
+        <div className="upload-queue rounded-l">
+            {[...uploads.entries()].map(([id, u]) => <UploadStatusBox key={id} state={u} size={imageSize} />)}
+        </div>
         <h3 className="title medium">{t("misc.gallery.upload.grid.title")}</h3>
         <div className="toolbar horizontal-list gap-2mm flex-vertical-center">
             <span>{selection.size}/{medias.size}</span>
@@ -165,7 +168,7 @@ export default function GalleryUploadPage() {
             </Button>
         </div>
         <InfiniteScroll
-            dataLength={medias.size + uploads.size}
+            dataLength={medias.size}
             next={onNextData}
             hasMore={!ended}
             loader={<LoadingPanel />}
@@ -177,8 +180,7 @@ export default function GalleryUploadPage() {
                 </div>
             }
             className="uploads-container">
-            {[...uploads.entries()].map(([id, u]) => <UploadStatusBox key={id} state={u} size={imageSize} />)}
-            {[...medias.entries()].sort(sortFn).map(([id, u]) => <UploadedImage key={id} image={u} onSelect={onSelect} selected={selection.has(id)} />)}
+            {[...medias.entries()].sort(sortFn).map(([id, u]) => <UploadedMedia key={id} image={u} onSelect={onSelect} selected={selection.has(id)} />)}
         </InfiniteScroll>
     </>
 }

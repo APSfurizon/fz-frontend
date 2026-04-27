@@ -10,7 +10,7 @@ type UploadedImageProps = {
     onSelect: (id: number, selected: boolean) => void
 }
 
-export default function UploadedImage(props: Readonly<UploadedImageProps>) {
+export default function UploadedMedia(props: Readonly<UploadedImageProps>) {
     const imageSource = props.image.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC;
     const checkEvent = (e: MouseEvent<HTMLDivElement> | ChangeEvent<HTMLInputElement>) => {
         props.onSelect(props.image.id, !props.selected);
