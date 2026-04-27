@@ -15,7 +15,7 @@ import {
 import {
   RemindBadgesApiAction, RemindFursuitBadgesApiAction,
   RemindFursuitBringToEventApiAction, RemindOrderLinkApiAction,
-  RemindRoomsNotFullApiAction
+  RemindRoomsNotFullApiAction, SendMembershipCardByMailApiAction
 } from "@/lib/api/admin/badge";
 import BadgePrintingDialog from "./_dialogs/badgePrinting";
 import FpMacroSection from "./_components/fpMacroSection";
@@ -139,6 +139,16 @@ export default function AdminPage() {
         <ErrorMessage error={err} />
       )).finally(() => setRemindRoomsNotFullLoading(false))
   }
+  // - membership cards
+  const [sendMembershipCardByMailLoading, setSendMembershipCardByMailLoading] = useState(false);
+  const sendMembershipCardByMail = () => {
+    setSendMembershipCardByMailLoading(true);
+    runRequest({ action: new SendMembershipCardByMailApiAction() })
+      .catch((err) => showModal(
+        t("common.error"),
+        <ErrorMessage error={err} />
+      )).finally(() => setSendMembershipCardByMailLoading(false))
+  }
   // - badge
   const [renderBadgesLoading, setRenderBadgesLoading] = useState(false);
   const [renderBadgesModalOpen, setRenderBadgesModalOpen] = useState(false);
@@ -257,6 +267,10 @@ export default function AdminPage() {
           <Button icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
             disabled={!capabilities?.canManageMembershipCards}>
             {t("furpanel.admin.membership_manager.title")}
+          </Button>
+          <Button icon="MAIL" onClick={sendMembershipCardByMail} debounce={5000}
+            busy={sendMembershipCardByMailLoading} disabled={!capabilities?.canManageMembershipCards}>
+            {t("furpanel.admin.membership_manager.send_card_by_mail")}
           </Button>
         </FpSection>
       </FpMacroSection>

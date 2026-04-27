@@ -562,6 +562,7 @@
       "membership_manager": {
         "title": "Card management",
         "header": "Viewing cards for year ",
+        "send_card_by_mail": "Send cards by mail",
         "actions": {
           "add": "Add card",
           "show_missing_cards": "Show missing",

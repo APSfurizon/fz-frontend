@@ -43,3 +43,9 @@ export class RemindRoomsNotFullApiAction extends ApiAction<any, ApiErrorResponse
     method = RequestType.GET;
     urlAction = "admin/mail-reminders/room-not-full";
 }
+
+export class SendMembershipCardByMailApiAction extends ApiAction<any, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "admin/mail-reminders/send-membership-card";
+}
