@@ -1,0 +1,285 @@
+.schedule-wrapper {
+    width: min(100%, 74vw);
+    max-width: 1320px;
+    flex: 1;
+    min-height: 600px;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+    color-scheme: only light;
+    forced-color-adjust: none;
+}
+
+@media screen and (max-width: 980px) {
+    .schedule-wrapper {
+        width: 100%;
+    }
+}
+
+/* Override react-big-calendar styles to match app theme */
+.rbc-calendar {
+    background-color: var(--main-dialog-background);
+    border-radius: 8px;
+    border: 1px solid #cccccc40;
+    font-family: inherit;
+    color: var(--foreground);
+    height: 100%;
+    color-scheme: only light;
+    forced-color-adjust: none;
+}
+
+.rbc-header {
+    background-color: var(--header-bg);
+    color: var(--foreground);
+    border-bottom: 1px solid #cccccc60;
+    padding: 0.5em;
+    font-weight: 600;
+}
+
+.rbc-time-view-resources .rbc-time-header,
+.rbc-time-view-resources .rbc-time-header-content {
+    align-items: stretch;
+}
+
+.rbc-resource-grouping.rbc-time-header-content,
+.rbc-time-view-resources .rbc-time-header,
+.rbc-time-view-resources .rbc-time-header-content,
+.rbc-time-view-resources .rbc-time-header-content>.rbc-row.rbc-row-resource {
+    height: auto;
+    min-height: 0;
+}
+
+.rbc-time-view-resources .rbc-time-header>.rbc-row:first-child {
+    display: none;
+}
+
+.rbc-time-view-resources .rbc-time-header-content>.rbc-row.rbc-row-resource {
+    flex: 0 0 auto;
+}
+
+.rbc-time-view-resources .rbc-time-header-content>.rbc-row.rbc-row-resource .rbc-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    height: auto;
+    padding-block: 0.9em;
+}
+
+.rbc-time-header.rbc-overflowing {
+    margin-right: 0;
+}
+
+.rbc-time-header-content .rbc-header {
+    min-width: 140px;
+    white-space: nowrap;
+}
+
+.rbc-toolbar {
+    display: none;
+}
+
+/* Custom day tabs toolbar */
+.schedule-day-toolbar {
+    display: flex;
+    gap: 0;
+    background-color: var(--header-bg);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid #cccccc40;
+    overflow: hidden;
+}
+
+.schedule-day-tab {
+    flex: 1;
+    padding: 0.65em 1em;
+    background: transparent;
+    border: none;
+    border-right: 1px solid #cccccc40;
+    color: var(--foreground);
+    font-family: inherit;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: capitalize;
+    transition: background 0.15s, color 0.15s;
+}
+
+.schedule-day-tab:last-child {
+    border-right: none;
+}
+
+.schedule-day-tab:hover {
+    background: var(--tool-link-bg-hover);
+    color: #fff;
+}
+
+.schedule-day-tab.active {
+    background: var(--button-bg-normal);
+    color: #fff;
+    font-weight: 700;
+}
+
+.rbc-day-bg+.rbc-day-bg,
+.rbc-month-row+.rbc-month-row {
+    border-color: #cccccc40;
+}
+
+.rbc-time-content,
+.rbc-time-header-content {
+    border-color: #cccccc40;
+}
+
+.rbc-time-header,
+.rbc-time-header>.rbc-row:first-child,
+.rbc-time-header>.rbc-row.rbc-row-resource,
+.rbc-time-header-content+.rbc-time-header-content,
+.rbc-time-header-content>.rbc-row.rbc-row-resource,
+.rbc-time-content>*+*>*,
+.rbc-time-view .rbc-time-gutter,
+.rbc-time-view-resources .rbc-time-gutter,
+.rbc-time-view-resources .rbc-time-header-gutter,
+.rbc-time-view-resources .rbc-time-header-content,
+.rbc-time-view-resources .rbc-header,
+.rbc-time-view-resources .rbc-day-bg {
+    border-color: #cccccc40 !important;
+}
+
+.rbc-time-view .rbc-allday-cell,
+.rbc-time-view-resources .rbc-allday-cell {
+    display: none;
+}
+
+.rbc-time-gutter,
+.rbc-time-header-gutter,
+.rbc-time-view-resources .rbc-time-gutter,
+.rbc-time-view-resources .rbc-time-header-gutter,
+.rbc-time-content>.rbc-time-gutter {
+    background-color: var(--background);
+}
+
+.rbc-time-content {
+    min-width: 980px;
+    border-top-color: #cccccc40 !important;
+}
+
+.rbc-day-slot .rbc-events-container {
+    margin-right: 0;
+}
+
+.rbc-time-slot {
+    border-color: #cccccc40 !important;
+}
+
+.rbc-timeslot-group {
+    border-bottom-color: #cccccc40 !important;
+}
+
+.rbc-current-time-indicator {
+    background-color: var(--highlight);
+}
+
+.rbc-event {
+    background: var(--button-bg-normal);
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    font-size: 0.98em;
+    padding: 0.25em 0.4em;
+}
+
+.rbc-event:focus,
+.rbc-event:hover {
+    background: var(--button-bg-hover);
+}
+
+.rbc-day-slot .rbc-event-label {
+    display: none;
+}
+
+.rbc-event-label {
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.schedule-event-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.12em;
+    line-height: 1.15;
+    font-size: 0.98em;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.schedule-event-title {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.schedule-event-host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.22em;
+    font-size: 0.9em;
+    font-weight: 500;
+    opacity: 0.82;
+    width: 100%;
+    color: #000 !important;
+    forced-color-adjust: none;
+}
+
+.schedule-event-host span {
+    color: #000 !important;
+}
+
+.schedule-event-host-icon {
+    color: #5b95df !important;
+    font-size: 1.05em;
+    forced-color-adjust: none;
+}
+
+.rbc-today {
+    background-color: #eb961610;
+}
+
+.rbc-off-range-bg {
+    background-color: #00000008;
+}
+
+.rbc-show-more {
+    color: var(--text-link);
+}
+
+/* Day columns header date link */
+.rbc-header a,
+.rbc-header a:visited {
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+.rbc-time-view {
+    border-color: #cccccc40 !important;
+    border-radius: 0 0 8px 8px;
+}
+
+.rbc-agenda-view table.rbc-agenda-table {
+    border-color: #cccccc40;
+}
+
+.rbc-agenda-view table.rbc-agenda-table tbody>tr>td+td {
+    border-color: #cccccc40;
+}
+
+.rbc-agenda-view table.rbc-agenda-table .rbc-agenda-time-cell {
+    color: var(--text-subtitle);
+    font-size: 0.85em;
+}
+
+.rbc-agenda-empty {
+    color: var(--text-subtitle);
+    padding: 1em;
+    text-align: center;
+}

@@ -1083,6 +1083,20 @@
       "input": {
         "select_event": "Seleziona evento"
       }
+    },
+    "schedule": {
+      "no_events": "Nessun evento programmato per questo giorno.",
+      "all_day": "Tutto il giorno",
+      "nav": {
+        "today": "Oggi",
+        "back": "Indietro",
+        "next": "Avanti"
+      },
+      "views": {
+        "day": "Giorno",
+        "week": "Settimana",
+        "agenda": "Agenda"
+      }
     }
   }
 }
