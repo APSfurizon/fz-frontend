@@ -1105,6 +1105,9 @@
         "grid": {
           "end_message": "Hai raggiunto il fondo della galleria",
           "title": "I tuoi contenuti multimediali"
+        },
+        "queue": {
+          "title": "Caricamento..."
         }
       },
       "admin": {

@@ -37,7 +37,8 @@ const CLEARING_STATUSES: UploadProgressStatus[] = [
 
 type UploadPanelProps = {
     onUploadUpdate: (updates: Map<string, UploadState>) => void,
-    onCompletedUpload: () => void
+    onCompletedUpload: () => void,
+    onEventItemsLoaded: (values: SelectItem[]) => void,
 }
 export default function UploadPanel(props: Readonly<UploadPanelProps>) {
     const { userDisplayRef } = useUser();
@@ -57,6 +58,8 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
             undefined,
             undefined,
             evt.eventNames)) ?? [], [events]);
+
+    useEffect(() => props.onEventItemsLoaded(eventsItems), [eventsItems]);
 
     useEffect(() => {
         setEventsLoading(true);

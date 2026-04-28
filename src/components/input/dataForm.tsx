@@ -56,6 +56,7 @@ type DataFormProps<T extends FormApiAction<any, any, any>> = {
     onSuccess?: (data: boolean | ApiResponse) => any,
     onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any,
     onBeforeSubmit?: () => void,
+    editBodyData?: (data: InferRequest<T>) => InferRequest<T>,
     editFormData?: (data: FormData) => FormData,
     checkFn?: (e: FormData, form: HTMLFormElement) => FormValidationError[],
     children?: React.ReactNode,
@@ -155,6 +156,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
                 action: props.action,
                 pathParams: props.pathParams,
                 additionalPath: props.additionalPath,
+                bodyModification: props.editBodyData,
                 body: formData
             })
                 .then((responseData) => props.onSuccess && props.onSuccess(responseData))

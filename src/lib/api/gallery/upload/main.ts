@@ -374,6 +374,10 @@ export class GalleryUpload {
                 }).catch(e => reject(e));
         });
     }
+
+    public getFileName(): string {
+        return this.file.name;
+    }
 }
 
 function slidingWindow<T, U>(data: T[], windowSize: number, onWindow: (data: T[]) => U) {

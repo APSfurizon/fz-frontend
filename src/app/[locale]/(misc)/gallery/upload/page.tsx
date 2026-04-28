@@ -15,6 +15,10 @@ import { buildSearchParams } from "@/lib/utils";
 import UploadedMedia from "./_components/uploadedMedia";
 import "@/styles/misc/gallery/upload/page.css";
 import Button from "@/components/input/button";
+import { useWindowSize } from "@/components/hooks/useWindowSize";
+import MediaEditModal from "./_components/modals/mediaEditModal";
+import { SelectItem } from "@/lib/components/fpSelect";
+import { Permissions } from "@/lib/api/permission";
 
 export type UploadState = {
     upload: GalleryUpload,
@@ -51,6 +55,12 @@ export default function GalleryUploadPage() {
     /** The key of the oldest media uploaded */
     const minKey = useMemo(() => medias.keys().reduce((prev, next) => Math.min(prev, next), Number.MAX_SAFE_INTEGER), [medias]);
     const [ended, setEnded] = useState(false);
+    const selectedMedias = useMemo(() => [...(selection ?? [])]
+        .map(k => (medias ?? []).get(k))
+        .filter(v => !!v), [medias, selection]);
+
+    const [eventItems, setEventItems] = useState<SelectItem[]>([]);
+    const [editModalOpen, setEditModalOpen] = useState(false);
 
     // Loading state
     const [loading, setLoading] = useState(false);
@@ -144,34 +154,38 @@ export default function GalleryUploadPage() {
     }, []);
 
     const sortFn = ((a: [number, GalleryUploadedMedia], b: [number, GalleryUploadedMedia]) => b[0] - a[0]);
-    const imageSize = globalThis.document
-        ? Number(globalThis.getComputedStyle(globalThis.document.body).getPropertyValue("--grid-column-width").replace("px", ""))
-        : 80;
-
+    const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
     return <>
         <UploadPanel onUploadUpdate={(u) => setUploads(u)}
-            onCompletedUpload={prependUploadedImages} />
-        <div className="upload-queue rounded-l">
-            {[...uploads.entries()].map(([id, u]) => <UploadStatusBox key={id} state={u} size={imageSize} />)}
+            onCompletedUpload={prependUploadedImages}
+            onEventItemsLoaded={e => setEventItems(e)} />
+        <div className="upload-queue">
+            <h3 className="title medium margin-bottom-1mm">{t("misc.gallery.upload.queue.title")}</h3>
+            <div className="container rounded-l vertical-list">
+                {[...uploads.entries()].map(([id, u]) => <UploadStatusBox key={id} state={u} />)}
+            </div>
         </div>
         <h3 className="title medium">{t("misc.gallery.upload.grid.title")}</h3>
         <div className="toolbar horizontal-list gap-2mm flex-vertical-center">
-            <span>{selection.size}/{medias.size}</span>
+            {canManageMedias && <span>{selection.size}/{medias.size}</span>}
             <Button className="margin-left-auto" icon="REFRESH"
                 onClick={onRefresh}
                 busy={loading}>
                 {t("common.reload")}
             </Button>
-            <Button icon="EDIT"
-                disabled={loading || !selection.size}>
-                {t("common.CRUD.edit")}
-            </Button>
+            {canManageMedias &&
+                <Button icon="EDIT"
+                    disabled={loading || !selection.size}
+                    onClick={() => setEditModalOpen(true)}>
+                    {t("common.CRUD.edit")}
+                </Button>
+            }
         </div>
         <InfiniteScroll
             dataLength={medias.size}
             next={onNextData}
             hasMore={!ended}
-            loader={<LoadingPanel />}
+            loader={<div className="bottom-message"><LoadingPanel /></div>}
             endMessage={
                 <div className="bottom-message">
                     <span className="title medium">
@@ -179,8 +193,13 @@ export default function GalleryUploadPage() {
                     </span>
                 </div>
             }
-            className="uploads-container">
+            className="medias-container">
             {[...medias.entries()].sort(sortFn).map(([id, u]) => <UploadedMedia key={id} image={u} onSelect={onSelect} selected={selection.has(id)} />)}
         </InfiniteScroll>
+        <MediaEditModal events={eventItems}
+            medias={selectedMedias}
+            open={editModalOpen}
+            onClose={() => setEditModalOpen(false)}
+            onRefresh={onRefresh} />
     </>
 }

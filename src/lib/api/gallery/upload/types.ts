@@ -1,4 +1,4 @@
-import { ApiResponse } from "../../global";
+import { ApiRequest, ApiResponse } from "../../global";
 import { MediaData } from "../../media";
 import { UploadRepostPermissions } from "../types";
 import { GalleryUpload } from "./main";
@@ -74,4 +74,11 @@ export type GalleryUploadedMedia = {
 
 export interface UploadsApiResponse extends ApiResponse {
     results: GalleryUploadedMedia[]
+}
+
+export interface GalleryUpdateBody extends ApiRequest {
+    uploadIds: number[],
+    newStatus?: string,
+    newPhotographerUserId?: number,
+    newEventUid?: number
 }

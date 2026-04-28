@@ -1104,6 +1104,9 @@
         "grid": {
           "end_message": "You've reached the bottom of the gallery",
           "title": "Your media"
+        },
+        "queue": {
+          "title": "Uploading..."
         }
       },
       "admin": {

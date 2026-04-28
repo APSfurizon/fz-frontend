@@ -5,13 +5,13 @@ export function getThumbnail(file: File): Promise<Blob> {
 }
 
 export function getVideoThumbnail(file: File): Promise<Blob> {
+    const video = document.createElement("video");
+    video.crossOrigin = "anonymous";
+    video.playsInline = true;
+    video.muted = true;
+    video.preload = "metadata";
+    const canvas = new OffscreenCanvas(320, 320);
     return new Promise((resolve, reject) => {
-        const video = document.createElement("video");
-        video.crossOrigin = "anonymous";
-        video.playsInline = true;
-        video.muted = true;
-        video.preload = "metadata";
-        const canvas = new OffscreenCanvas(320, 320);
         // Set the source
         video.src = URL.createObjectURL(file);
         // Event listener
@@ -26,7 +26,7 @@ export function getVideoThumbnail(file: File): Promise<Blob> {
                 resolve(canvas.convertToBlob());
             })
         });
-    });
+    }).then();
 }
 
 export function getImageThumbnail(file: File): Promise<Blob> {
@@ -46,7 +46,7 @@ export function getImageThumbnail(file: File): Promise<Blob> {
     }).then(thumbnailImage => imageToBlob(thumbnailImage, true));
 }
 
-const MAX_THUMBNAIL_SIZE = 320;
+const MAX_THUMBNAIL_SIZE = 120;
 export function getThumbnailCappedSize(width: number, height: number) {
     type Size = { width: number, height: number };
     const data: Size = { width, height };

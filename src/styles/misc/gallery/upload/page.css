@@ -2,6 +2,8 @@
     --icon-shadow: white;
     --grid-column-count: 5;
     --grid-column-width: 140px;
+    --upload-status-size: max(min(80px, 10vw), 60px);
+    --upload-status-progress-size: calc(var(--upload-status-size) - 30px);
 }
 
 @media screen and (max-width: 800px) {
@@ -36,13 +38,13 @@
 
 @keyframes ended {
     from {
-        transform: scale(1);
+        transform: translate(0px, 0px);
         opacity: 1;
     }
 
     to {
         display: none;
-        transform: scale(0);
+        transform: translate(-200px, 0px);
         opacity: 0;
     }
 }
@@ -63,31 +65,34 @@
 }
 
 .upload-queue {
-    outline: 1px solid var(--button-border-normal);
-    background: var(--file-picker-background);
-    padding: 0.250em;
-    display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    gap: 2mm;
-    transition-property: max-height;
-    transition-duration: 250ms;
-    max-height: 180px;
+    transition: max-height 1000ms, opacity 1000ms;
+    max-height: fit-content;
+    opacity: 1;
+    overflow: hidden;
 
-    &:empty {
+    &:has(.container:empty) {
         max-height: 0px;
-        padding: 0px;
-        outline: none;
+        opacity: 0;
+
+        .container {
+            padding: 0px;
+            border: none;
+        }
     }
 
-    div {
-        min-width: var(--grid-column-width);
+    .container {
+        transition: border 100ms, padding 200ms;
+        border: 1px solid var(--button-border-normal);
+        background: var(--file-picker-background);
+        padding: 1em;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+        gap: 2mm;
+        max-height: calc((5 * (var(--upload-status-size) + 2mm)) + 2em);
     }
 }
 
-.uploads-container {
+.medias-container {
     display: grid;
     grid-template-columns: repeat(var(--grid-column-count), var(--grid-column-width));
     justify-content: space-between;

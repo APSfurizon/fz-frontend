@@ -12,8 +12,6 @@ export default function CircularProgressBar(props: Readonly<CircularProgressBarP
     const offset = circumference * ((100 - progress) / 100);
 
     return <svg className="circular-progress-bar"
-        width={props.size}
-        height={props.size}
         viewBox={`0 0 ${props.size} ${props.size}`}
         version="1.1"
         xmlns="http://www.w3.org/2000/svg">
