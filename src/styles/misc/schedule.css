@@ -183,6 +183,14 @@
     cursor: pointer;
 }
 
+.rbc-day-slot .rbc-event {
+    min-height: 0 !important;
+}
+
+.rbc-day-slot .rbc-event-content {
+    min-height: 0 !important;
+}
+
 .rbc-event:focus,
 .rbc-event:hover {
     background: var(--button-bg-hover);
