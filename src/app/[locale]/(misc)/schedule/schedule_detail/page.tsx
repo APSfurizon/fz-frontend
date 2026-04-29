@@ -129,7 +129,7 @@ export default function ScheduleDetailPage() {
             {loading && <LoadingPanel />}
             {!loading && error && <ErrorMessage error={error} />}
             {!loading && !error && activity && (
-                <div className="schedule-detail-container schedule-dialog rounded-s vertical-list gap-0">
+                <div className="schedule-detail-container schedule-detail-dialog rounded-s vertical-list gap-0">
                     {/* Two-column: info left, image right */}
                     <div className="schedule-detail-body">
                         {/* Left: Info */}

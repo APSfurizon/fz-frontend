@@ -176,6 +176,26 @@ export default function AdminPage() {
   return <>
     <div className="stretch-page">
       {loading && <LoadingPanel />}
+      {/* Security area */}
+      <FpMacroSection title="Gestione Security" icon="SHIELD">
+        <FpSection title="Sezioni">
+          <Button icon="DESCRIPTION" onClick={() => router.push("/admin/security/documents")}>
+            Documents
+          </Button>
+          <Button icon="INVENTORY_2" onClick={() => router.push("/admin/security/assets")}>
+            Asset Manager
+          </Button>
+          <Button icon="WARNING" onClick={() => router.push("/admin/security/hazardous")}>
+            Hazardous Register
+          </Button>
+          <Button icon="SEARCH" onClick={() => router.push("/admin/security/lost-found")}>
+            Lost and Found
+          </Button>
+          <Button icon="ASSIGNMENT" onClick={() => router.push("/admin/security/incidents")}>
+            Registro Incidenti
+          </Button>
+        </FpSection>
+      </FpMacroSection>
       {/* System area */}
       <FpMacroSection title={t("furpanel.admin.system.title")} icon="CONFIRMATION_NUMBER">
         <FpSection title={t("furpanel.admin.system.server.title")}>

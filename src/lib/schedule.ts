@@ -49,7 +49,7 @@ export const SCHEDULE_ROOMS: ScheduleRoom[] = [
     { resourceId: "panel-room-2", resourceTitle: "Panel Room 2" },
     { resourceId: "dealers-den", resourceTitle: "Dealers' Den" },
     { resourceId: "cnc", resourceTitle: "C&C" },
-    { resourceId: "forecourt", resourceTitle: "Forecourt" },
+    { resourceId: "forecourt", resourceTitle: "Forecourt & Other" },
 ];
 
 const ROOM_ID_BY_LOCATION: Record<string, string> = {
@@ -61,6 +61,7 @@ const ROOM_ID_BY_LOCATION: Record<string, string> = {
     "Dealers": "dealers-den",
     "C&C": "cnc",
     "Forecourt": "forecourt",
+    "Other": "forecourt",
     "Forecout": "forecourt",
 };
 

@@ -92,9 +92,19 @@
 }
 
 .schedule-detail-image {
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center;
     border-radius: 8px;
+}
+
+.schedule-detail-dialog {
+    padding: 1.25em;
+    margin: 0 auto 8mm auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+    width: fit-content;
+    box-shadow: 0px 3px 20px 1px #0000003F;
 }
 
 /* Right info panel */
