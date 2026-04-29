@@ -20,6 +20,7 @@ import MediaEditModal from "./_components/modals/mediaEditModal";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { Permissions } from "@/lib/api/permission";
 import Image from "next/image";
+import { useGallery } from "../../_components/galleryProvider";
 
 export type UploadState = {
     upload: GalleryUpload,
@@ -62,6 +63,8 @@ export default function GalleryUploadPage() {
 
     const [eventItems, setEventItems] = useState<SelectItem[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
+
+    const { currentMedia, openMedia, closeMedia, modalOpen } = useGallery();
 
     // Loading state
     const [loading, setLoading] = useState(false);
@@ -196,7 +199,9 @@ export default function GalleryUploadPage() {
                 </div>
             }
             className="medias-container">
-            {[...medias.entries()].sort(sortFn).map(([id, u]) => <UploadedMedia key={id} image={u} onSelect={onSelect} selected={selection.has(id)} />)}
+            {[...medias.entries()].sort(sortFn).map(([id, u]) =>
+                <UploadedMedia key={id} image={u} onSelect={onSelect} onClick={openMedia} selected={selection.has(id)} />
+            )}
         </InfiniteScroll>
         <MediaEditModal events={eventItems}
             medias={selectedMedias}

@@ -10,7 +10,8 @@ type UploadedImageProps = {
     image: GalleryUploadedMedia,
     selected: boolean,
     onSelect: (id: number, selected: boolean) => void,
-    checkbox?: boolean
+    checkbox?: boolean,
+    onClick(image: GalleryUploadedMedia): void
 }
 
 export default function UploadedMedia(props: Readonly<UploadedImageProps>) {
@@ -23,7 +24,8 @@ export default function UploadedMedia(props: Readonly<UploadedImageProps>) {
     }
 
     return <div className="uploaded-media rounded-m"
-        onDoubleClick={checkEvent}>
+        onDoubleClick={checkEvent}
+        onClick={() => props.onClick(props.image)}>
         {props.checkbox &&
             <input type="checkbox" checked={props.selected} className="selection" onChange={checkEvent} />
         }

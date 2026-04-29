@@ -6,6 +6,7 @@ import { hasPermission, Permissions } from "@/lib/api/permission";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import "@/styles/misc/gallery/layout.css";
+import { GalleryProvider } from "./_components/galleryProvider";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const [toolListExpanded, setToolListExpanded] = useState(false);
@@ -49,6 +50,8 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 </div>
             </span>
         </div>
-        {children}
+        <GalleryProvider>
+            {children}
+        </GalleryProvider>
     </div>
 }
