@@ -1103,7 +1103,8 @@
         },
         "grid": {
           "end_message": "You've reached the bottom of the gallery",
-          "title": "Your media"
+          "title": "Your media",
+          "end_label": "End of gallery message"
         },
         "queue": {
           "title": "Uploading..."

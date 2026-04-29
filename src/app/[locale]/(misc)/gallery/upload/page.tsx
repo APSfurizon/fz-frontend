@@ -19,6 +19,7 @@ import { useWindowSize } from "@/components/hooks/useWindowSize";
 import MediaEditModal from "./_components/modals/mediaEditModal";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { Permissions } from "@/lib/api/permission";
+import Image from "next/image";
 
 export type UploadState = {
     upload: GalleryUpload,
@@ -187,10 +188,11 @@ export default function GalleryUploadPage() {
             hasMore={!ended}
             loader={<div className="bottom-message"><LoadingPanel /></div>}
             endMessage={
-                <div className="bottom-message">
-                    <span className="title medium">
+                <div className="bottom-message align-center">
+                    <span aria-label={t("misc.gallery.upload.grid.end_label")} className="descriptive medium">
                         {t("misc.gallery.upload.grid.end_message")}
-                    </span>
+                    </span><br />
+                    <Image alt="" width={100} height={100} src={"/images/chibi/furizonchibi-social.png"} />
                 </div>
             }
             className="medias-container">

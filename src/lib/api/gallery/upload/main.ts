@@ -62,7 +62,7 @@ export class GalleryUpload {
     } | undefined;
 
     public constructor(data: GalleryUploadData, begin: boolean = false) {
-        this.id = self.crypto.randomUUID();
+        this.id = globalThis.crypto.randomUUID();
         this.file = data.file;
         this.eventId = data.eventId;
         this.userId = data.userId;

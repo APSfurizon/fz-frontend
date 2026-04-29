@@ -28,8 +28,5 @@ export default function UploadedMedia(props: Readonly<UploadedImageProps>) {
             <input type="checkbox" checked={props.selected} className="selection" onChange={checkEvent} />
         }
         <Image className="thumbnail" alt="thumbnail" width={140} height={140} src={imageSource} />
-        <a role="button" className="delete-button rounded-m">
-            <Icon className="delete-icon large danger" icon="DELETE" title={t("common.CRUD.delete")} />
-        </a>
     </div>
 }

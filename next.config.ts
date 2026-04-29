@@ -10,6 +10,7 @@ const API_IMAGE_URL = new URL(process.env.NEXT_PUBLIC_IMAGE_BASE_URL!);
 
 const nextConfig: NextConfig = {
   /* config options here */
+  allowedDevOrigins: ['192.168.1.72'],
   images: {
     qualities: [100, 75],
     remotePatterns: [

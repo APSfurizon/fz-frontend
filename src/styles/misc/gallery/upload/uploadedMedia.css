@@ -9,17 +9,42 @@
     }
 }
 
-.uploaded-media {
-    width: var(--grid-column-width);
-    height: var(--grid-column-width);
-
-    img.thumbnail {
-        width: var(--grid-column-width);
-        height: var(--grid-column-width);
+@keyframes show {
+    from {
+        transform: scale(0);
+        opacity: 0;
     }
 
-    .input.selection,
-    .delete-button {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.uploaded-media {
+    aspect-ratio: 1;
+    width: 1fr;
+    height: auto;
+    cursor: pointer;
+    transition: filter 200ms, transform 300ms;
+    animation: show 300ms ease-out 0ms 1 forwards;
+
+    &:hover {
+        filter: brightness(1.1) grayscale(0.3) contrast(.6);
+        border-width: .25em;
+    }
+
+    &:active {
+        filter: brightness(0.7) grayscale(0.3) contrast(.9);
+        transform: translateY(.2em);
+    }
+
+    img.thumbnail {
+        width: 100%;
+        height: 100%;
+    }
+
+    .input.selection {
         position: absolute;
         width: 1.5em;
         height: 1.5em;
@@ -27,22 +52,6 @@
         top: 2mm;
         right: 2mm;
         background-color: transparent;
-    }
-
-    .delete-button {
-        opacity: 1;
-        filter: grayscale(1);
-        transition: filter 120ms;
-        cursor: pointer;
-        user-select: none;
-
-        &:hover {
-            filter: grayscale(0);
-        }
-
-        .delete-icon {
-            color: var(--upload-border-danger);
-        }
     }
 
     input.selection {

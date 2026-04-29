@@ -1104,7 +1104,8 @@
         },
         "grid": {
           "end_message": "Hai raggiunto il fondo della galleria",
-          "title": "I tuoi contenuti multimediali"
+          "title": "I tuoi contenuti multimediali",
+          "end_label": "Messaggio di fondo galleria"
         },
         "queue": {
           "title": "Caricamento..."

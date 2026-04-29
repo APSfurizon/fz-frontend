@@ -2,25 +2,14 @@
     --icon-shadow: white;
     --grid-column-count: 5;
     --grid-column-width: 140px;
+    --col-w: 1fr;
     --upload-status-size: max(min(80px, 10vw), 60px);
     --upload-status-progress-size: calc(var(--upload-status-size) - 30px);
-}
-
-@media screen and (max-width: 800px) {
-    :root {
-        --grid-column-width: 120px;
-    }
 }
 
 @media screen and (max-width: 650px) {
     :root {
         --grid-column-count: 4;
-    }
-}
-
-@media screen and (max-width: 550px) {
-    :root {
-        --grid-column-width: 100px;
     }
 }
 
@@ -94,11 +83,8 @@
 
 .medias-container {
     display: grid;
-    grid-template-columns: repeat(var(--grid-column-count), var(--grid-column-width));
-    justify-content: space-between;
-    align-content: space-between;
-    row-gap: 4mm;
-    scrollbar-gutter: stable;
+    grid-template-columns: repeat(var(--grid-column-count), 1fr);
+    gap: 4mm;
 
     .bottom-message {
         grid-column: span var(--grid-column-count);
