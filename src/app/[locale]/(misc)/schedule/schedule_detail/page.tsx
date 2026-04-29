@@ -38,6 +38,11 @@ export default function ScheduleDetailPage() {
         return Number.isNaN(parsed) ? null : parsed;
     }, [searchParams]);
 
+    const selectedDayKey = useMemo(() => {
+        const day = searchParams.get("day")?.trim();
+        return day ? day : undefined;
+    }, [searchParams]);
+
     const isItalian = locale === "it-IT";
     const title = useMemo(() => {
         if (!activity) {
@@ -124,7 +129,7 @@ export default function ScheduleDetailPage() {
             {loading && <LoadingPanel />}
             {!loading && error && <ErrorMessage error={error} />}
             {!loading && !error && activity && (
-                <div className="schedule-detail-container main-dialog rounded-s vertical-list gap-0">
+                <div className="schedule-detail-container schedule-dialog rounded-s vertical-list gap-0">
                     {/* Two-column: info left, image right */}
                     <div className="schedule-detail-body">
                         {/* Left: Info */}
@@ -133,7 +138,13 @@ export default function ScheduleDetailPage() {
                             <div className="schedule-detail-header-top">
                                 <button
                                     className="schedule-detail-back-button"
-                                    onClick={() => router.push("/schedule")}
+                                    onClick={() =>
+                                        router.push(
+                                            selectedDayKey
+                                                ? `/schedule?day=${encodeURIComponent(selectedDayKey)}`
+                                                : "/schedule",
+                                        )
+                                    }
                                     type="button"
                                     aria-label={t("schedule_detail.back_to_schedule")}
                                 >

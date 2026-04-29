@@ -12,6 +12,8 @@ interface ScheduleCalendarProps {
     events: ScheduleEvent[];
     rooms: ScheduleRoom[];
     onEventClick?: (event: ScheduleEvent) => void;
+    initialDate?: Date;
+    onDateChange?: (date: Date) => void;
 }
 
 const CONV_START = new Date(2026, 5, 2); // June 2, 2026
@@ -116,7 +118,13 @@ function ScheduleEventCard({ event }: { event: ScheduleEvent }) {
     );
 }
 
-export default function ScheduleCalendar({ events, rooms, onEventClick }: ScheduleCalendarProps) {
+export default function ScheduleCalendar({
+    events,
+    rooms,
+    onEventClick,
+    initialDate,
+    onDateChange,
+}: ScheduleCalendarProps) {
     const locale = useLocale();
     const t = useTranslations("misc.schedule");
     const dateFnsLocale = locale === "it-IT" ? it : enGB;
@@ -129,7 +137,11 @@ export default function ScheduleCalendar({ events, rooms, onEventClick }: Schedu
         locales,
     });
 
-    const [currentDate, setCurrentDate] = useState<Date>(CONV_START);
+    const [currentDate, setCurrentDate] = useState<Date>(() => {
+        if (initialDate) return initialDate;
+        const today = new Date();
+        return CONV_DAYS.find((d) => isSameDay(d, today)) ?? CONV_START;
+    });
 
     // Calendar day view does not support max time past midnight;
     // shift everything by -10h so the visible 00:00-16:30 maps to real 10:00-02:30.
@@ -163,6 +175,7 @@ export default function ScheduleCalendar({ events, rooms, onEventClick }: Schedu
 
     const handleNavigate = (date: Date) => {
         setCurrentDate(date);
+        onDateChange?.(date);
     };
 
     return (

@@ -14,21 +14,53 @@ import {
 } from "@/lib/schedule";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+function formatDayKey(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function parseDayKey(value: string | null): Date | undefined {
+    if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return undefined;
+    }
+
+    const [year, month, day] = value.split("-").map((part) => Number.parseInt(part, 10));
+    const parsed = new Date(year, month - 1, day);
+    if (Number.isNaN(parsed.getTime())) {
+        return undefined;
+    }
+
+    return parsed;
+}
 
 export default function SchedulePage() {
     const locale = useLocale();
     const t = useTranslations("common");
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [activities, setActivities] = useState<ScheduleActivityApiItem[]>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<ApiErrorResponse>();
+    const [selectedDayKey, setSelectedDayKey] = useState<string | undefined>(() => {
+        const day = searchParams.get("day");
+        return day ?? undefined;
+    });
 
     useTitle(t("header.schedule"));
 
     const events = useMemo(
         () => mapScheduleActivitiesToEvents(activities ?? [], locale),
         [activities, locale],
+    );
+
+    const initialDate = useMemo(
+        () => parseDayKey(searchParams.get("day") ?? selectedDayKey ?? null),
+        [searchParams, selectedDayKey],
     );
 
     useEffect(() => {
@@ -59,12 +91,33 @@ export default function SchedulePage() {
             return;
         }
 
-        router.push(`/schedule/schedule_detail?id=${activity.id}`);
+        const params = new URLSearchParams();
+        params.set("id", String(activity.id));
+
+        const dayKey = selectedDayKey ?? searchParams.get("day") ?? undefined;
+        if (dayKey) {
+            params.set("day", dayKey);
+        }
+
+        router.push(`/schedule/schedule_detail?${params.toString()}`);
+    };
+
+    const handleDateChange = (date: Date) => {
+        const dayKey = formatDayKey(date);
+        setSelectedDayKey(dayKey);
+
+        if (searchParams.get("day") === dayKey) {
+            return;
+        }
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("day", dayKey);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     return (
-        <div className="page vertical-list gap-4mm">
-            <div className="main-dialog rounded-s">
+        <div className="page vertical-list gap-4mm" key="schedule-page">
+            <div className="schedule-dialog rounded-s" key="schedule-content">
                 {loading && <LoadingPanel />}
                 {!loading && error && <ErrorMessage error={error} />}
                 {!loading && !error && (
@@ -72,6 +125,8 @@ export default function SchedulePage() {
                         events={events}
                         rooms={SCHEDULE_ROOMS}
                         onEventClick={handleEventClick}
+                        initialDate={initialDate}
+                        onDateChange={handleDateChange}
                     />
                 )}
             </div>
