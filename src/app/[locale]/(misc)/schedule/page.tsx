@@ -4,6 +4,7 @@ import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
 import LoadingPanel from "@/components/loadingPanel";
 import ScheduleCalendar from "@/components/schedule/scheduleCalendar";
+import { loadScheduleActivities } from "@/lib/api/schedule_detail";
 import { ApiErrorResponse } from "@/lib/api/global";
 import {
     mapScheduleActivitiesToEvents,
@@ -36,26 +37,9 @@ export default function SchedulePage() {
         }
 
         setLoading(true);
-        fetch("/api/schedule", {
-            cache: "no-store",
-        })
-            .then(async (response) => {
-                if (!response.ok) {
-                    let errorMessage = "Failed to load schedule.";
-                    try {
-                        const errorResult = await response.json();
-                        errorMessage = errorResult?.errorMessage ?? errorMessage;
-                    } catch {
-                        errorMessage = (await response.text()) || errorMessage;
-                    }
-
-                    throw { errorMessage } as ApiErrorResponse;
-                }
-
-                return response.json();
-            })
+        loadScheduleActivities()
             .then((result) => {
-                setActivities(Array.isArray(result) ? (result as ScheduleActivityApiItem[]) : []);
+                setActivities(result);
                 setError(undefined);
             })
             .catch((reason: ApiErrorResponse | Error) => {
@@ -75,20 +59,22 @@ export default function SchedulePage() {
             return;
         }
 
-        router.push(`/schedule_detail?id=${activity.id}`);
+        router.push(`/schedule/schedule_detail?id=${activity.id}`);
     };
 
     return (
         <div className="page vertical-list gap-4mm">
-            {loading && <LoadingPanel />}
-            {!loading && error && <ErrorMessage error={error} />}
-            {!loading && !error && (
-                <ScheduleCalendar
-                    events={events}
-                    rooms={SCHEDULE_ROOMS}
-                    onEventClick={handleEventClick}
-                />
-            )}
+            <div className="main-dialog rounded-s">
+                {loading && <LoadingPanel />}
+                {!loading && error && <ErrorMessage error={error} />}
+                {!loading && !error && (
+                    <ScheduleCalendar
+                        events={events}
+                        rooms={SCHEDULE_ROOMS}
+                        onEventClick={handleEventClick}
+                    />
+                )}
+            </div>
         </div>
     );
 }

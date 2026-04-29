@@ -226,4 +226,3 @@ function InfoField({ icon, label, value }: { icon: MaterialIcon; label: string; 
         </div>
     );
 }
-

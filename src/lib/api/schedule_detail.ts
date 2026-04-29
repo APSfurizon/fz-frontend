@@ -1,7 +1,22 @@
 import { ScheduleActivityApiItem } from "@/lib/schedule";
 import { ApiErrorResponse } from "./global";
 
-export async function loadScheduleActivityDetail(activityId: number): Promise<ScheduleActivityApiItem> {
+let cachedScheduleActivities: ScheduleActivityApiItem[] | null = null;
+
+export type ScheduleActivityDetailResolver = (
+    activityId: number,
+    context: { cachedActivities: ScheduleActivityApiItem[] | null },
+) => Promise<ScheduleActivityApiItem | undefined>;
+
+export function primeScheduleActivitiesCache(activities: ScheduleActivityApiItem[]): void {
+    cachedScheduleActivities = [...activities];
+}
+
+export function clearScheduleActivitiesCache(): void {
+    cachedScheduleActivities = null;
+}
+
+export async function loadScheduleActivities(): Promise<ScheduleActivityApiItem[]> {
     const response = await fetch("/api/schedule", {
         cache: "no-store",
     });
@@ -20,7 +35,36 @@ export async function loadScheduleActivityDetail(activityId: number): Promise<Sc
 
     const result = await response.json();
     const activities = Array.isArray(result) ? (result as ScheduleActivityApiItem[]) : [];
-    const activity = activities.find((item) => item.id === activityId);
+    primeScheduleActivitiesCache(activities);
+    return activities;
+}
+
+const defaultScheduleActivityDetailResolver: ScheduleActivityDetailResolver = async (
+    activityId,
+    context,
+) => {
+    const fromCache = context.cachedActivities?.find((item) => item.id === activityId);
+    if (fromCache) {
+        return fromCache;
+    }
+
+    const activities = await loadScheduleActivities();
+    return activities.find((item) => item.id === activityId);
+};
+
+let scheduleActivityDetailResolver: ScheduleActivityDetailResolver =
+    defaultScheduleActivityDetailResolver;
+
+export function setScheduleActivityDetailResolver(
+    resolver: ScheduleActivityDetailResolver | null,
+): void {
+    scheduleActivityDetailResolver = resolver ?? defaultScheduleActivityDetailResolver;
+}
+
+export async function loadScheduleActivityDetail(activityId: number): Promise<ScheduleActivityApiItem> {
+    const activity = await scheduleActivityDetailResolver(activityId, {
+        cachedActivities: cachedScheduleActivities,
+    });
 
     if (!activity) {
         throw { errorMessage: "Activity not found." } as ApiErrorResponse;
