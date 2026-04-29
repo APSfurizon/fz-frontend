@@ -194,9 +194,17 @@ export default function ScheduleCalendar({ events, rooms, onEventClick }: Schedu
                 onSelectEvent={(event) => onEventClick?.(event)}
                 eventPropGetter={(event) => {
                     const classes: string[] = [];
+                    const durationMinutes = Math.max(
+                        0,
+                        (event.end.getTime() - event.start.getTime()) / 60000,
+                    );
 
                     if (event.tipologia) {
                         classes.push(`tipologia-${event.tipologia.toLowerCase()}`);
+                    }
+
+                    if (durationMinutes < 20) {
+                        classes.push("duration-under-20");
                     }
 
                     if (event.cancellato) {
