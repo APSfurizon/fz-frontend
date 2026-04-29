@@ -71,6 +71,27 @@
       "title": "Il Furpanel si è aggiornato",
       "description": "Leggi le ultime novità su <a></a>"
     },
+    "schedule_detail": {
+      "back_to_schedule": "Torna al programma",
+      "info_title": "Informazioni su Questa Attività",
+      "labels": {
+        "date": "Data",
+        "time": "Orario",
+        "duration": "Durata",
+        "host": "Presentatore",
+        "location": "Luogo",
+        "language": "Lingua"
+      },
+      "tags": {
+        "explorer": "Explorer",
+        "super_sponsor": "Super Sponsor",
+        "sponsor": "Sponsor",
+        "cancelled": "Cancellato"
+      },
+      "errors": {
+        "invalid_activity_id": "ID attivita non valido."
+      }
+    },
     "success": "Successo"
   },
   "components": {

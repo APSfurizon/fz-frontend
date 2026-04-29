@@ -4,6 +4,9 @@ export interface ScheduleEvent {
     end: Date;
     allDay?: boolean;
     resourceId: string;
+    titleEmote?: string | null;
+    tipologia?: string | null;
+    cancellato?: boolean;
     resource?: unknown;
 }
 
@@ -20,7 +23,7 @@ export interface ScheduleActivityApiItem {
     about: string;
     aboutIT: string;
     start: string;
-    end: string;
+    end: string | null;
     durata: string | null;
     language: string | null;
     sponsor: boolean;
@@ -36,6 +39,8 @@ export interface ScheduleActivityApiItem {
     id: number;
     immagineCentrata: boolean;
     languageIcon: string | null;
+    tipologia?: string | null;
+    logo?: string;
 }
 
 export const SCHEDULE_ROOMS: ScheduleRoom[] = [
@@ -56,6 +61,7 @@ const ROOM_ID_BY_LOCATION: Record<string, string> = {
     "Dealers": "dealers-den",
     "C&C": "cnc",
     "Forecourt": "forecourt",
+    "Forecout": "forecourt",
 };
 
 export function mapScheduleLocationToRoomId(location: string): string | null {
@@ -66,7 +72,7 @@ export function mapScheduleActivityToEvent(
     activity: ScheduleActivityApiItem,
     locale: string,
 ): ScheduleEvent | null {
-    if (activity.visibile === false || activity.cancellato === true) {
+    if (activity.visibile === false && activity.cancellato !== true) {
         return null;
     }
 
@@ -76,7 +82,9 @@ export function mapScheduleActivityToEvent(
     }
 
     const start = new Date(activity.start);
-    const end = new Date(activity.end);
+    const end = activity.end
+        ? new Date(activity.end)
+        : calcEndFromDuration(start, activity.durata);
 
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
         return null;
@@ -85,15 +93,39 @@ export function mapScheduleActivityToEvent(
     const localizedTitle = locale === "it-IT"
         ? activity.titleIT?.trim() || activity.title.trim()
         : activity.title.trim() || activity.titleIT?.trim() || "";
-    const prefix = activity.titleEmote?.trim();
+    const prefix = activity.cancellato === true ? "⚠️" : activity.titleEmote?.trim();
 
     return {
-        title: prefix ? `${prefix} ${localizedTitle}` : localizedTitle,
+        title: localizedTitle,
         start,
         end,
         resourceId,
+        titleEmote: prefix || null,
+        tipologia: activity.tipologia ?? null,
+        cancellato: activity.cancellato === true,
         resource: activity,
     };
+}
+
+function calcEndFromDuration(start: Date, duration: string | null): Date {
+    const fallback = new Date(start.getTime());
+    fallback.setMinutes(fallback.getMinutes() + 30);
+
+    if (!duration) {
+        return fallback;
+    }
+
+    const normalized = duration.replaceAll(" ", "").toLowerCase();
+    const hours = normalized.match(/(\d+)h/);
+    const minutes = normalized.match(/(\d+)m/);
+    const totalMinutes = (hours ? parseInt(hours[1], 10) * 60 : 0)
+        + (minutes ? parseInt(minutes[1], 10) : 0);
+
+    if (totalMinutes <= 0) {
+        return fallback;
+    }
+
+    return new Date(start.getTime() + totalMinutes * 60 * 1000);
 }
 
 export function mapScheduleActivitiesToEvents(

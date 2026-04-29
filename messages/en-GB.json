@@ -71,6 +71,27 @@
       "title": "Furpanel was updated",
       "description": "Read the changelog at <a></a>"
     },
+    "schedule_detail": {
+      "back_to_schedule": "Back to schedule",
+      "info_title": "Activity Information",
+      "labels": {
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration",
+        "host": "Host",
+        "location": "Location",
+        "language": "Language"
+      },
+      "tags": {
+        "explorer": "Explorer",
+        "super_sponsor": "Super Sponsor",
+        "sponsor": "Sponsor",
+        "cancelled": "Cancelled"
+      },
+      "errors": {
+        "invalid_activity_id": "Invalid activity ID."
+      }
+    },
     "success": "Success"
   },
   "components": {

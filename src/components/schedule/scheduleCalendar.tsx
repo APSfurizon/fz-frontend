@@ -3,15 +3,15 @@ import { Calendar, dateFnsLocalizer, Formats, Messages, ToolbarProps } from "rea
 import { addHours, format, parse, startOfWeek, getDay, isSameDay } from "date-fns";
 import { enGB, it } from "date-fns/locale";
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
-import Icon, { ICONS } from "@/components/icon";
-import type { ScheduleActivityApiItem, ScheduleEvent, ScheduleRoom } from "@/lib/schedule";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { ScheduleEvent, ScheduleRoom } from "@/lib/schedule";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "@/styles/misc/schedule.css";
 
 interface ScheduleCalendarProps {
     events: ScheduleEvent[];
     rooms: ScheduleRoom[];
+    onEventClick?: (event: ScheduleEvent) => void;
 }
 
 const CONV_START = new Date(2026, 5, 2); // June 2, 2026
@@ -60,22 +60,63 @@ function DayToolbar({ date, onNavigate, dateFnsLocale }: DayToolbarProps) {
 }
 
 function ScheduleEventCard({ event }: { event: ScheduleEvent }) {
-    const activity = event.resource as ScheduleActivityApiItem | undefined;
+    const durationMinutes = Math.max(0, (event.end.getTime() - event.start.getTime()) / 60000);
+    const compact = durationMinutes < 45;
+    const cardRef = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const card = cardRef.current;
+        const title = titleRef.current;
+        if (!card || !title) {
+            return;
+        }
+
+        const fitTitle = () => {
+            title.style.fontSize = "";
+
+            let currentSize = parseFloat(getComputedStyle(title).fontSize);
+            const minSize = compact ? 10.5 : 11.5;
+            let guard = 0;
+
+            while (guard < 18) {
+                const overflowY = title.scrollHeight > card.clientHeight - 4;
+                const overflowX = title.scrollWidth > title.clientWidth + 1;
+
+                if ((!overflowY && !overflowX) || currentSize <= minSize) {
+                    break;
+                }
+
+                currentSize -= 0.5;
+                title.style.fontSize = `${currentSize}px`;
+                guard += 1;
+            }
+        };
+
+        fitTitle();
+
+        const observer = new ResizeObserver(fitTitle);
+        observer.observe(card);
+        observer.observe(title);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [compact, event.title]);
 
     return (
-        <div className="schedule-event-card">
-            <div className="schedule-event-title">{event.title}</div>
-            {activity?.host ? (
-                <div className="schedule-event-host">
-                    <Icon icon={ICONS.PERSON} className="schedule-event-host-icon" />
-                    <span>{activity.host}</span>
-                </div>
-            ) : null}
+        <div ref={cardRef} className={`schedule-event-card${compact ? " compact" : ""}`}>
+            <div ref={titleRef} className="schedule-event-heading">
+                {event.titleEmote && (
+                    <span className="schedule-event-emote" aria-hidden="true">{event.titleEmote}</span>
+                )}
+                <div className="schedule-event-title">{event.title}</div>
+            </div>
         </div>
     );
 }
 
-export default function ScheduleCalendar({ events, rooms }: ScheduleCalendarProps) {
+export default function ScheduleCalendar({ events, rooms, onEventClick }: ScheduleCalendarProps) {
     const locale = useLocale();
     const t = useTranslations("misc.schedule");
     const dateFnsLocale = locale === "it-IT" ? it : enGB;
@@ -132,6 +173,9 @@ export default function ScheduleCalendar({ events, rooms }: ScheduleCalendarProp
                 resources={rooms}
                 startAccessor="start"
                 endAccessor="end"
+                tooltipAccessor={(event) => (
+                    event.cancellato ? `${event.title} - CANCELLATO` : event.title
+                )}
                 resourceAccessor="resourceId"
                 resourceIdAccessor="resourceId"
                 resourceTitleAccessor="resourceTitle"
@@ -140,10 +184,29 @@ export default function ScheduleCalendar({ events, rooms }: ScheduleCalendarProp
                 view="day"
                 onNavigate={handleNavigate}
                 views={["day"]}
+                dayLayoutAlgorithm="no-overlap"
+                step={15}
+                timeslots={4}
                 min={DAY_MIN_TIME}
                 max={DAY_MAX_TIME}
                 messages={messages}
                 formats={formats}
+                onSelectEvent={(event) => onEventClick?.(event)}
+                eventPropGetter={(event) => {
+                    const classes: string[] = [];
+
+                    if (event.tipologia) {
+                        classes.push(`tipologia-${event.tipologia.toLowerCase()}`);
+                    }
+
+                    if (event.cancellato) {
+                        classes.push("canceled");
+                    }
+
+                    return {
+                        className: classes.length > 0 ? classes.join(" ") : undefined,
+                    };
+                }}
                 components={{
                     toolbar: (props) => (
                         <DayToolbar {...props} dateFnsLocale={dateFnsLocale} />

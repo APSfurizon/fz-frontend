@@ -1,5 +1,5 @@
 .schedule-wrapper {
-    width: min(100%, 74vw);
+    width: 74vw;
     max-width: 1320px;
     flex: 1;
     min-height: 600px;
@@ -9,18 +9,12 @@
     forced-color-adjust: none;
 }
 
-@media screen and (max-width: 980px) {
-    .schedule-wrapper {
-        width: 100%;
-    }
-}
-
 /* Override react-big-calendar styles to match app theme */
 .rbc-calendar {
     background-color: var(--main-dialog-background);
     border-radius: 8px;
     border: 1px solid #cccccc40;
-    font-family: inherit;
+    font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
     color: var(--foreground);
     height: 100%;
     color-scheme: only light;
@@ -30,7 +24,7 @@
 .rbc-header {
     background-color: var(--header-bg);
     color: var(--foreground);
-    border-bottom: 1px solid #cccccc60;
+    border-bottom: 0px solid #cccccc60;
     padding: 0.5em;
     font-weight: 600;
 }
@@ -95,7 +89,7 @@
     border: none;
     border-right: 1px solid #cccccc40;
     color: var(--foreground);
-    font-family: inherit;
+    font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
     font-size: 0.95em;
     font-weight: 500;
     cursor: pointer;
@@ -166,7 +160,7 @@
 }
 
 .rbc-time-slot {
-    border-color: #cccccc40 !important;
+    border-color: transparent !important;
 }
 
 .rbc-timeslot-group {
@@ -182,8 +176,11 @@
     border: none;
     border-radius: 4px;
     color: #000;
+    font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
     font-size: 0.98em;
     padding: 0.25em 0.4em;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .rbc-event:focus,
@@ -206,16 +203,58 @@
     align-items: center;
     justify-content: center;
     gap: 0.12em;
-    line-height: 1.15;
-    font-size: 0.98em;
+    line-height: 1.08;
+    font-size: 0.9em;
     text-align: center;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+}
+
+.schedule-event-heading {
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-self: center;
+    gap: 0.18em;
+    width: auto;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.schedule-event-emote {
+    flex: 0 0 auto;
+    line-height: 1;
+    font-size: 1.05em;
 }
 
 .schedule-event-title {
-    font-size: 1em;
+    font-size: 1.08em;
     font-weight: 700;
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.schedule-event-card.compact {
+    justify-content: center;
+}
+
+.schedule-event-card.compact .schedule-event-title {
+    line-height: 1.02;
+    font-size: 0.96em;
+}
+
+.schedule-event-card.compact .schedule-event-emote {
+    font-size: 0.95em;
+}
+
+.schedule-event-card.tight .schedule-event-title {
+    font-size: 0.88em;
+    line-height: 1;
 }
 
 .schedule-event-host {
@@ -282,4 +321,146 @@
     color: var(--text-subtitle);
     padding: 1em;
     text-align: center;
+}
+
+/* Tipologia event colors (same palette in light and dark mode) */
+.rbc-event.tipologia-panel {
+    background: #ffd35f;
+    color: #000;
+}
+
+.rbc-event.tipologia-panel:hover {
+    background: #f3bf3e;
+    color: #000;
+}
+
+.rbc-event.tipologia-panel:focus {
+    background: #e8af1f;
+    color: #000;
+}
+
+.rbc-event.tipologia-event {
+    background: #8eb8e2;
+    color: #000;
+}
+
+.rbc-event.tipologia-event:hover {
+    background: #79a9d9;
+    color: #000;
+}
+
+.rbc-event.tipologia-event:focus {
+    background: #6599cf;
+    color: #000;
+}
+
+.rbc-event.tipologia-game {
+    background: #b999c8;
+    color: #000;
+}
+
+.rbc-event.tipologia-game:hover {
+    background: #ac86be;
+    color: #000;
+}
+
+.rbc-event.tipologia-game:focus {
+    background: #9e72b5;
+    color: #000;
+}
+
+.rbc-event.tipologia-tournament {
+    background: #b7d96b;
+    color: #000;
+}
+
+.rbc-event.tipologia-tournament:hover {
+    background: #a8cf56;
+    color: #000;
+}
+
+.rbc-event.tipologia-tournament:focus {
+    background: #99c243;
+    color: #000;
+}
+
+.rbc-event.tipologia-dealers {
+    background: #f3a06a;
+    color: #000;
+}
+
+.rbc-event.tipologia-dealers:hover {
+    background: #ea8f52;
+    color: #000;
+}
+
+.rbc-event.tipologia-dealers:focus {
+    background: #df8040;
+    color: #000;
+}
+
+.rbc-event.tipologia-explorers {
+    background: #e65052;
+    color: #000;
+}
+
+.rbc-event.tipologia-explorers:hover {
+    background: #dd3f42;
+    color: #000;
+}
+
+.rbc-event.tipologia-explorers:focus {
+    background: #d13235;
+    color: #000;
+}
+
+.rbc-event.tipologia-supersponsors {
+    background: #f98286;
+    color: #000;
+}
+
+.rbc-event.tipologia-supersponsors:hover {
+    background: #f46f74;
+    color: #000;
+}
+
+.rbc-event.tipologia-supersponsors:focus {
+    background: #ee5f66;
+    color: #000;
+}
+
+.rbc-event.tipologia-other {
+    background: #daf0fb;
+    color: #000;
+}
+
+.rbc-event.tipologia-other:hover {
+    background: #c2e4f6;
+    color: #000;
+}
+
+.rbc-event.tipologia-other:focus {
+    background: #abd8f0;
+    color: #000;
+}
+
+/* Canceled events keep visibility but use neutral styling */
+.rbc-event.canceled {
+    background: #b6bcc4;
+    color: #000;
+}
+
+.rbc-event.canceled:hover {
+    background: #a6adb7;
+    color: #000;
+}
+
+.rbc-event.canceled:focus {
+    background: #969faa;
+    color: #000;
+}
+
+.rbc-event.canceled .schedule-event-title {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
 }
