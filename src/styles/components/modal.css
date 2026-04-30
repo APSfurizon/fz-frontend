@@ -1,8 +1,6 @@
 div.modal-overlay,
 div.modal-dialog {
     opacity: 0;
-    transition-property: opacity;
-    transition-duration: 400ms;
     pointer-events: none;
 }
 
@@ -29,7 +27,6 @@ div.modal-dialog {
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition-property: opacity, top;
 }
 
 div.modal-overlay.open,

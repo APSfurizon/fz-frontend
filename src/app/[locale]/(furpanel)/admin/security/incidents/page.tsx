@@ -5,6 +5,7 @@ import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Modal from "@/components/modal";
+import ImagePreviewModal from "@/components/imagePreviewModal";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
 import {
@@ -272,8 +273,8 @@ export default function SecurityIncidentsPage() {
         const isHistory = item.folder === "cronologia";
         return (
             <div key={`${item.data}_${item.fileName ?? "report"}`}
-                className="main-dialog rounded-m"
-                style={{ padding: "0.75em", cursor: "pointer", display: "flex", gap: "0.75em", alignItems: "flex-start", opacity: disabled ? 0.85 : 1 }}
+                className="rounded-m"
+                style={{ padding: "0.75em", margin: 0, cursor: "pointer", display: "flex", gap: "0.75em", alignItems: "flex-start", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a", opacity: disabled ? 0.85 : 1 }}
                 onClick={() => openDetail(item)}>
                 <div style={{ flex: 1 }}>
                     <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", marginBottom: 4 }}>
@@ -293,31 +294,25 @@ export default function SecurityIncidentsPage() {
 
     const renderList = () => (
         <div className="vertical-list gap-2mm">
-            <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>Aggiungi</Button>
-                <Button onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? "Segnalazioni" : "Storico"}</Button>
-                <Button onClick={refreshList} busy={refreshing}>Aggiorna</Button>
-            </div>
-
             {showHistory ? (
-                <div className="vertical-list gap-2mm">
+                <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
                     <span className="title normal color-subtitle">Storico ({historyReports.length})</span>
                     {historyReports.length === 0 && <span className="title normal color-subtitle">Nessuna segnalazione nello storico</span>}
                     {historyReports.map((item) => renderReportCard(item, true))}
                 </div>
             ) : (
                 <>
-                    <div className="vertical-list gap-2mm">
+                    <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
                         <span className="title normal color-subtitle">Segnalazioni importanti ({importantReports.length})</span>
                         {importantReports.length === 0 && <span className="title small color-subtitle">Nessuna segnalazione importante</span>}
                         {importantReports.map((item) => renderReportCard(item))}
                     </div>
-                    <div className="vertical-list gap-2mm">
+                    <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
                         <span className="title normal color-subtitle">Segnalazioni ({regularReports.length})</span>
                         {regularReports.length === 0 && <span className="title small color-subtitle">Nessuna segnalazione attiva</span>}
                         {regularReports.map((item) => renderReportCard(item))}
                     </div>
-                    <div className="vertical-list gap-2mm">
+                    <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
                         <span className="title normal color-subtitle">Segnalazioni sospese ({disabledReports.length})</span>
                         {disabledReports.length === 0 && <span className="title small color-subtitle">Nessuna segnalazione sospesa</span>}
                         {disabledReports.map((item) => renderReportCard(item, true))}
@@ -383,27 +378,23 @@ export default function SecurityIncidentsPage() {
                     </div>
                 )}
 
-                <div className="vertical-list gap-2mm">
+                <div className="vertical-list furpanel-table-container">
                     {(item.messaggi ?? []).map((message, idx) => (
-                        <div key={`${message.id ?? idx}_${message.data ?? idx}`} className="main-dialog rounded-m" style={{ padding: "0.75em" }}>
-                            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap" }}>
-                                <span className="title small" style={{ fontWeight: 700 }}>{message.from || "-"}</span>
-                                <span className="title small color-subtitle">{formatReportDate(message.data)}</span>
+                        <div key={`${message.id ?? idx}_${message.data ?? idx}`} className="main-dialog rounded-m" style={{ padding: "0.75em", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "flex-start" }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap" }}>
+                                    <span className="title small" style={{ fontWeight: 700 }}>{message.from || "-"}</span>
+                                    <span className="title small color-subtitle">{formatReportDate(message.data)}</span>
+                                </div>
+                                {message.messaggio && <span className="title small" style={{ display: "block", marginTop: 6 }}>{message.messaggio}</span>}
                             </div>
-                            {message.messaggio && <span className="title small" style={{ display: "block", marginTop: 6 }}>{message.messaggio}</span>}
                             {message.logoUrl && (
-                                <a
-                                    href={`/api/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{ width: 108, height: 108, display: "inline-block", marginTop: 8 }}
-                                >
-                                    <img
-                                        src={`/api/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
-                                        alt={`${item.titolo || "Segnalazione"} - allegato ${idx + 1}`}
-                                        style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6, display: "block" }}
-                                    />
-                                </a>
+                                <ImagePreviewModal
+                                    imageUrl={`/api/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
+                                    alt={`${item.titolo || "Segnalazione"} - allegato ${idx + 1}`}
+                                    thumbSize={108}
+                                    title={(message.messaggio?.trim() || item.titolo || "Anteprima immagine").slice(0, 48)}
+                                />
                             )}
                         </div>
                     ))}
@@ -426,8 +417,6 @@ export default function SecurityIncidentsPage() {
 
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                     {item.folder !== "cronologia" && <Button icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>Invia messaggio</Button>}
-                    <Button icon="EDIT" onClick={openEditMeta}>Modifica</Button>
-                    <Button onClick={() => setView("list")}>← Indietro</Button>
                 </div>
             </div>
         );
@@ -435,7 +424,7 @@ export default function SecurityIncidentsPage() {
 
     return (
         <div className="stretch-page compact-main">
-            <div style={{ marginBottom: 8 }}>
+            <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
                 <Button icon="ARROW_BACK" onClick={() => {
                     if (view === "list") {
                         router.push("/admin");
@@ -443,6 +432,19 @@ export default function SecurityIncidentsPage() {
                     }
                     setView("list");
                 }}>Indietro</Button>
+
+                {view === "list" && <Button onClick={refreshList} busy={refreshing}>Aggiorna</Button>}
+
+                <div className="spacer" />
+
+                {view === "list" && (
+                    <>
+                        <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>Aggiungi</Button>
+                        <Button onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? "Segnalazioni" : "Storico"}</Button>
+                    </>
+                )}
+
+                {view === "detail" && selected && <Button icon="EDIT" onClick={openEditMeta}>Modifica</Button>}
             </div>
 
             {loading && view === "list" && <LoadingPanel />}

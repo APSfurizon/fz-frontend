@@ -760,6 +760,51 @@
         },
         "security": {
           "title": "Security",
+          "user_search": {
+            "title": "User search",
+            "input": {
+              "search_user": {
+                "label": "Search user"
+              }
+            },
+            "sections": {
+              "user_data": "User data",
+              "user_info": "User info",
+              "user_order_room": "User order / room"
+            },
+            "fields": {
+              "name": "Name",
+              "surname": "Surname",
+              "mail": "Mail",
+              "sex": "Sex",
+              "gender": "Gender",
+              "birthday": "Birthday",
+              "allergies": "Allergies",
+              "telegram": "Telegram",
+              "phone": "Phone",
+              "permissions": "Permissions",
+              "have_order": "Have order",
+              "have_room": "Have room",
+              "room_name": "Room name",
+              "check_in_out": "Check-in/out",
+              "guests": "Guests",
+              "bring_to_event": "Bring to event"
+            },
+            "actions": {
+              "call": "Call"
+            },
+            "values": {
+              "yes": "Yes",
+              "no": "No",
+              "none": "None",
+              "banned": "Banned",
+              "to": "to"
+            },
+            "alt": {
+              "user": "User",
+              "fursuit": "Fursuit"
+            }
+          },
           "roles": {
             "title": "Roles",
             "list": {

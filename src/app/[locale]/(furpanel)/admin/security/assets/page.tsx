@@ -12,6 +12,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
+import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
@@ -136,8 +137,8 @@ export default function SecurityAssetManagerPage() {
 
     const renderList = () => (
         <div className="vertical-list gap-2mm">
-            {/* Filter chips */}
-            <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
+            {/* Filter chips + primary action */}
+            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", alignItems: "center" }}>
                 <button className={"button rounded-m" + (!filterStato ? " active" : "")} onClick={() => setFilterStato(null)}>
                     <span className="title normal">Tutti ({assets.length})</span>
                 </button>
@@ -150,36 +151,39 @@ export default function SecurityAssetManagerPage() {
             </div>
 
             {/* List */}
-            {filtered.length === 0 && <span className="title normal color-subtitle">Nessun asset</span>}
-            {filtered.map((a) => (
-                <div key={a.data} className="main-dialog rounded-m" style={{ padding: "0.75em", cursor: "pointer", display: "flex", gap: "0.75em", alignItems: "center" }}
-                    onClick={() => { setSelected(a); setView("detail"); }}>
-                    <div style={{ flex: 1 }}>
-                        <div className="horizontal-list gap-2mm flex-vertical-center">
-                            <span className="title small" style={{ background: "#1f3a5f", color: "#9ec1fa", padding: "2px 8px", borderRadius: 6, fontWeight: 700 }}>{a.tag}</span>
-                            <span className="title small" style={{ color: STATO_COLOR[a.stato], fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
+            <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
+                {filtered.length === 0 && <span className="title normal color-subtitle">Nessun asset</span>}
+                {filtered.map((a) => (
+                    <div key={a.data} className="rounded-m" style={{ padding: "0.75em", cursor: "pointer", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "center", width: "100%", boxSizing: "border-box", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a" }}
+                        onClick={() => { setSelected(a); setView("detail"); }}>
+                        {/* Left: tag + title + person */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 0 }}>
+                            <span className="title small" style={{ background: "#1f3a5f", color: "#9ec1fa", padding: "2px 8px", borderRadius: 6, fontWeight: 700, alignSelf: "flex-start" }}>{a.tag}</span>
+                            <span className="title normal" style={{ fontWeight: 700 }}>{[a.device_tipo, a.device_modello].filter(Boolean).join(" — ")}</span>
+                            {a.utilizzatore_attuale && <span className="title small color-subtitle">👤 {a.utilizzatore_attuale}</span>}
                         </div>
-                        <span className="title normal" style={{ fontWeight: 700 }}>{[a.device_tipo, a.device_modello].filter(Boolean).join(" — ")}</span>
-                        {a.utilizzatore_attuale && <span className="title small color-subtitle">👤 {a.utilizzatore_attuale}</span>}
+                        {/* Right: status top, photo indicator bottom */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end", justifyContent: "center", flexShrink: 0 }}>
+                            <span className="title small" style={{ color: STATO_COLOR[a.stato], fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
+                            {(a.foto?.length ?? 0) > 0 && (
+                                <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {a.foto!.length}</span>
+                            )}
+                        </div>
                     </div>
-                    {(a.foto?.length ?? 0) > 0 && (
-                        <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {a.foto!.length}</span>
-                    )}
-                </div>
-            ))}
-            <Button icon="ADD" onClick={openAdd}>Aggiungi asset</Button>
+                ))}
+            </div>
         </div>
     );
 
     const renderForm = () => (
         <div className="vertical-list gap-3mm">
-            <span className="title large">{isEdit ? "Modifica asset" : "Nuovo asset"}</span>
+            <span className="title large" style={{ marginBottom: 8 }}>{isEdit ? "Modifica asset" : "Nuovo asset"}</span>
             <FpInput label="Tag / Etichetta" initialValue={fTag} onChange={(e) => setFTag(e.target.value ?? "")} placeholder="Es. RADIO-01" />
             <FpInput label="Tipo dispositivo" initialValue={fTipo} onChange={(e) => setFTipo(e.target.value ?? "")} placeholder="Es. Radio, Tablet..." />
             <FpInput label="Modello" initialValue={fModello} onChange={(e) => setFModello(e.target.value ?? "")} placeholder="Es. Motorola XT1234" />
             <FpInput label="Numero seriale" initialValue={fSerial} onChange={(e) => setFSerial(e.target.value ?? "")} placeholder="S/N" />
             <FpInput label="Note condizioni" initialValue={fNote} onChange={(e) => setFNote(e.target.value ?? "")} placeholder="Condizioni, danni..." />
-            <div>
+            <div style={{ marginTop: 6 }}>
                 <span className="title small" style={{ display: "block", marginBottom: 6 }}>Stato</span>
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                     {STATI.map((s) => (
@@ -190,7 +194,7 @@ export default function SecurityAssetManagerPage() {
                     ))}
                 </div>
             </div>
-            <div className="horizontal-list gap-2mm">
+            <div className="horizontal-list gap-2mm" style={{ marginTop: 10 }}>
                 <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>Annulla</Button>
                 <Button icon="SAVE" busy={loading} onClick={saveItem}>Salva</Button>
             </div>
@@ -199,8 +203,10 @@ export default function SecurityAssetManagerPage() {
 
     const renderDetail = (a: SecurityAsset) => (
         <div className="vertical-list gap-3mm">
-            <span className="title large">{[a.tag, a.device_modello].filter(Boolean).join(" — ") || "Dettaglio asset"}</span>
-            <span style={{ ...SECURITY_BADGE_STYLE, background: STATO_COLOR[a.stato], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
+            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 6 }}>
+                <span className="title large" style={{ flex: 1 }}>{[a.tag, a.device_modello].filter(Boolean).join(" — ") || "Dettaglio asset"}</span>
+                <span style={{ ...SECURITY_BADGE_STYLE, background: STATO_COLOR[a.stato], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>{STATO_LABEL[a.stato]}</span>
+            </div>
             {[
                 ["Tipo", a.device_tipo], ["Modello", a.device_modello], ["Seriale", a.device_serial_number],
                 ["Utilizzatore", a.utilizzatore_attuale], ["Note", a.note_condizioni],
@@ -215,28 +221,19 @@ export default function SecurityAssetManagerPage() {
                     <span className="title small color-subtitle">Foto ({a.foto!.length})</span>
                     <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                         {a.foto!.map((img, idx) => (
-                            <a
+                            <ImagePreviewModal
                                 key={idx}
-                                href={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ cursor: "pointer", width: SECURITY_IMAGE_THUMB_SIZE, height: SECURITY_IMAGE_THUMB_SIZE, flex: `0 0 ${SECURITY_IMAGE_THUMB_SIZE}px` }}
-                            >
-                                <img
-                                    src={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
-                                    alt={`${a.tag} — foto ${idx + 1}`}
-                                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6, display: "block" }}
-                                />
-                            </a>
+                                imageUrl={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                alt={`${a.tag} — foto ${idx + 1}`}
+                                thumbSize={SECURITY_IMAGE_THUMB_SIZE}
+                                title={`${a.tag || "Asset"} — foto ${idx + 1}`}
+                            />
                         ))}
                     </div>
                 </div>
             )}
-            <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                <Button icon="EDIT" onClick={() => openEdit(a)}>Modifica</Button>
+            <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap", marginTop: 10 }}>
                 <Button icon="SYNC" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>Rendi / Trasferisci</Button>
-                <Button icon="FIND_IN_PAGE" onClick={() => loadLogs(a)}>Vedi Log</Button>
-                <Button onClick={() => setView("list")}>← Indietro</Button>
             </div>
         </div>
     );
@@ -256,13 +253,12 @@ export default function SecurityAssetManagerPage() {
                     {l.note && <span className="title small color-subtitle">{l.note}</span>}
                 </div>
             ))}
-            <Button onClick={() => setView("detail")}>← Indietro</Button>
         </div>
     );
 
     return (
         <div className="stretch-page compact-main">
-            <div style={{ marginBottom: 8 }}>
+            <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
                 <Button icon="ARROW_BACK" onClick={() => {
                     if (view === "list") {
                         router.push("/admin");
@@ -272,6 +268,14 @@ export default function SecurityAssetManagerPage() {
                     else if (view === "logs") setView("detail");
                     else setView("list");
                 }}>Indietro</Button>
+                <div className="spacer" />
+                {view === "list" && <Button icon="ADD" onClick={openAdd}>Aggiungi asset</Button>}
+                {view === "detail" && selected && (
+                    <>
+                        <Button icon="EDIT" onClick={() => openEdit(selected)}>Modifica</Button>
+                        <Button icon="FIND_IN_PAGE" onClick={() => loadLogs(selected)}>Vedi Log</Button>
+                    </>
+                )}
             </div>
 
             {loading && view === "list" && <LoadingPanel />}

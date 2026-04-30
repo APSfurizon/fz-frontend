@@ -14,6 +14,12 @@
     }
 }
 
+.furpanel-table-container {
+    overflow: hidden;
+    background-color: var(--table-bg);
+    padding: 0.625em;
+}
+
 span:has(.hamburger),
 .hamburger {
     display: none;
