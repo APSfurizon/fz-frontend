@@ -1,11 +1,17 @@
 .main-dialog {
+    width: 95vw;
+    max-width: 95vw;
+    transition: width 120ms;
+
     &:not(:has(.stretch-page)) {
         width: 210mm;
     }
 
-    width: 95vw;
-    max-width: 95vw;
-    transition: width 120ms;
+    &:has(.stretch-page.compact-main) {
+        width: fit-content;
+        min-width: min(95vw, 210mm);
+        max-width: 95vw;
+    }
 }
 
 span:has(.hamburger),
@@ -33,6 +39,12 @@ span:has(.hamburger),
 
     .main-dialog {
         min-width: 100vw;
+
+        &:has(.stretch-page.compact-main) {
+            width: 95vw;
+            min-width: 95vw;
+            max-width: 95vw;
+        }
 
         .tools-list {
             transition-duration: 120ms;

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -20,6 +20,12 @@ import { useRouter } from "next/navigation";
 const STATI = ["disponibile", "in_uso", "non_disponibile"] as const;
 const STATO_LABEL: Record<string, string> = { disponibile: "Disponibile", in_uso: "In uso", non_disponibile: "Non disponibile" };
 const STATO_COLOR: Record<string, string> = { disponibile: "#27ae60", in_uso: "#f39c12", non_disponibile: "#c0392b" };
+const SECURITY_IMAGE_THUMB_SIZE = 108;
+const SECURITY_BADGE_STYLE = {
+    display: "inline-flex",
+    width: "fit-content",
+    alignSelf: "flex-start",
+};
 
 export default function SecurityAssetManagerPage() {
     useTitle("Security - Asset Manager");
@@ -34,6 +40,7 @@ export default function SecurityAssetManagerPage() {
     const [isEdit, setIsEdit] = useState(false);
     const [logs, setLogs] = useState<SecurityAssetLog[]>([]);
     const [logsLoading, setLogsLoading] = useState(false);
+    const initialLoadDone = useRef(false);
 
     // Transfer modal
     const [transferOpen, setTransferOpen] = useState(false);
@@ -57,28 +64,33 @@ export default function SecurityAssetManagerPage() {
             .finally(() => setLoading(false));
     };
 
-    useEffect(() => { loadAssets(); }, []);
+    useEffect(() => {
+        if (initialLoadDone.current) return;
+        initialLoadDone.current = true;
+        loadAssets();
+    }, []);
 
     const resetForm = () => { setFTag(""); setFTipo(""); setFModello(""); setFSerial(""); setFNote(""); setFStato("disponibile"); };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
     const openEdit = (a: SecurityAsset) => {
-        setFTag(a.tag); setFTipo(a.tipo); setFModello(a.device_modello);
-        setFSerial(a.seriale ?? ""); setFNote(a.note ?? ""); setFStato(a.stato);
+        setFTag(a.tag); setFTipo(a.device_tipo); setFModello(a.device_modello);
+        setFSerial(a.device_serial_number ?? ""); setFNote(a.note_condizioni ?? ""); setFStato(a.stato);
         setSelected(a); setIsEdit(true); setView("form");
     };
 
     const saveItem = () => {
         const body = new FormData();
         body.append("tag", fTag.trim());
-        body.append("tipo", fTipo.trim());
-        body.append("modello", fModello.trim());
-        body.append("seriale", fSerial.trim());
-        body.append("note", fNote.trim());
+        body.append("device_tipo", fTipo.trim());
+        body.append("device_modello", fModello.trim());
+        body.append("device_serial_number", fSerial.trim());
+        body.append("note_condizioni", fNote.trim());
         body.append("stato", fStato);
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
+            if (selected.updateId) body.append("expectedUpdateId", selected.updateId);
         }
         setLoading(true);
         const action = isEdit ? new UpdateSecurityAssetApiAction() : new CreateSecurityAssetApiAction();
@@ -93,8 +105,10 @@ export default function SecurityAssetManagerPage() {
         const body = new FormData();
         body.append("itemId", String(selected.data));
         if (selected.fileName) body.append("fileName", selected.fileName);
-        body.append("utilizzatore", tUtilizzatore.trim());
-        body.append("note", tNote.trim());
+        if (selected.updateId) body.append("expectedUpdateId", selected.updateId);
+        body.append("utilizzatore_attuale", tUtilizzatore.trim() || "Non impostato");
+        body.append("utilizzatore_precedente", selected.utilizzatore_attuale ?? "Non impostato");
+        body.append("note_condizioni", tNote.trim());
         body.append("stato", tStato);
         setLoading(true);
         runRequest({ action: new TransferSecurityAssetApiAction(), body })
@@ -107,7 +121,10 @@ export default function SecurityAssetManagerPage() {
         setSelected(a);
         setLogsLoading(true);
         setLogs([]);
-        runRequest({ action: new GetSecurityAssetLogsApiAction(), additionalPath: [String(a.data)] })
+        const params = new URLSearchParams();
+        params.set("itemId", String(a.data));
+        if (a.fileName) params.set("fileName", a.fileName);
+        runRequest({ action: new GetSecurityAssetLogsApiAction(), searchParams: params })
             .then((res) => setLogs(res.logs ?? []))
             .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
             .finally(() => { setLogsLoading(false); setView("logs"); });
@@ -142,8 +159,8 @@ export default function SecurityAssetManagerPage() {
                             <span className="title small" style={{ background: "#1f3a5f", color: "#9ec1fa", padding: "2px 8px", borderRadius: 6, fontWeight: 700 }}>{a.tag}</span>
                             <span className="title small" style={{ color: STATO_COLOR[a.stato], fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
                         </div>
-                        <span className="title normal" style={{ fontWeight: 700 }}>{[a.tipo, a.device_modello].filter(Boolean).join(" — ")}</span>
-                        {a.utilizzatore && <span className="title small color-subtitle">👤 {a.utilizzatore}</span>}
+                        <span className="title normal" style={{ fontWeight: 700 }}>{[a.device_tipo, a.device_modello].filter(Boolean).join(" — ")}</span>
+                        {a.utilizzatore_attuale && <span className="title small color-subtitle">👤 {a.utilizzatore_attuale}</span>}
                     </div>
                     {(a.foto?.length ?? 0) > 0 && (
                         <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {a.foto!.length}</span>
@@ -157,11 +174,11 @@ export default function SecurityAssetManagerPage() {
     const renderForm = () => (
         <div className="vertical-list gap-3mm">
             <span className="title large">{isEdit ? "Modifica asset" : "Nuovo asset"}</span>
-            <FpInput label="Tag / Etichetta" initialValue={fTag} onChange={(v) => setFTag(v ?? "")} placeholder="Es. RADIO-01" />
-            <FpInput label="Tipo dispositivo" initialValue={fTipo} onChange={(v) => setFTipo(v ?? "")} placeholder="Es. Radio, Tablet..." />
-            <FpInput label="Modello" initialValue={fModello} onChange={(v) => setFModello(v ?? "")} placeholder="Es. Motorola XT1234" />
-            <FpInput label="Numero seriale" initialValue={fSerial} onChange={(v) => setFSerial(v ?? "")} placeholder="S/N" />
-            <FpInput label="Note condizioni" initialValue={fNote} onChange={(v) => setFNote(v ?? "")} placeholder="Condizioni, danni..." />
+            <FpInput label="Tag / Etichetta" initialValue={fTag} onChange={(e) => setFTag(e.target.value ?? "")} placeholder="Es. RADIO-01" />
+            <FpInput label="Tipo dispositivo" initialValue={fTipo} onChange={(e) => setFTipo(e.target.value ?? "")} placeholder="Es. Radio, Tablet..." />
+            <FpInput label="Modello" initialValue={fModello} onChange={(e) => setFModello(e.target.value ?? "")} placeholder="Es. Motorola XT1234" />
+            <FpInput label="Numero seriale" initialValue={fSerial} onChange={(e) => setFSerial(e.target.value ?? "")} placeholder="S/N" />
+            <FpInput label="Note condizioni" initialValue={fNote} onChange={(e) => setFNote(e.target.value ?? "")} placeholder="Condizioni, danni..." />
             <div>
                 <span className="title small" style={{ display: "block", marginBottom: 6 }}>Stato</span>
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
@@ -183,20 +200,42 @@ export default function SecurityAssetManagerPage() {
     const renderDetail = (a: SecurityAsset) => (
         <div className="vertical-list gap-3mm">
             <span className="title large">{[a.tag, a.device_modello].filter(Boolean).join(" — ") || "Dettaglio asset"}</span>
-            <span style={{ display: "inline-block", background: STATO_COLOR[a.stato], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
+            <span style={{ ...SECURITY_BADGE_STYLE, background: STATO_COLOR[a.stato], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
             {[
-                ["Tipo", a.tipo], ["Modello", a.device_modello], ["Seriale", a.seriale],
-                ["Utilizzatore", a.utilizzatore], ["Note", a.note],
+                ["Tipo", a.device_tipo], ["Modello", a.device_modello], ["Seriale", a.device_serial_number],
+                ["Utilizzatore", a.utilizzatore_attuale], ["Note", a.note_condizioni],
             ].filter(([, v]) => !!v).map(([label, value]) => (
                 <div key={label} className="horizontal-list gap-2mm" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
                     <span className="title small color-subtitle" style={{ minWidth: 140 }}>{label}</span>
                     <span className="title small">{value}</span>
                 </div>
             ))}
+            {(a.foto?.length ?? 0) > 0 && (
+                <div className="vertical-list gap-2mm">
+                    <span className="title small color-subtitle">Foto ({a.foto!.length})</span>
+                    <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
+                        {a.foto!.map((img, idx) => (
+                            <a
+                                key={idx}
+                                href={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ cursor: "pointer", width: SECURITY_IMAGE_THUMB_SIZE, height: SECURITY_IMAGE_THUMB_SIZE, flex: `0 0 ${SECURITY_IMAGE_THUMB_SIZE}px` }}
+                            >
+                                <img
+                                    src={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                    alt={`${a.tag} — foto ${idx + 1}`}
+                                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6, display: "block" }}
+                                />
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
             <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                 <Button icon="EDIT" onClick={() => openEdit(a)}>Modifica</Button>
-                <Button icon="SWAP_HORIZ" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>Rendi / Trasferisci</Button>
-                <Button icon="HISTORY" onClick={() => loadLogs(a)}>Vedi Log</Button>
+                <Button icon="SYNC" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>Rendi / Trasferisci</Button>
+                <Button icon="FIND_IN_PAGE" onClick={() => loadLogs(a)}>Vedi Log</Button>
                 <Button onClick={() => setView("list")}>← Indietro</Button>
             </div>
         </div>
@@ -222,17 +261,18 @@ export default function SecurityAssetManagerPage() {
     );
 
     return (
-        <div className="stretch-page">
-            {/* Back button */}
-            {view !== "list" && (
-                <div style={{ marginBottom: 8 }}>
-                    <Button icon="ARROW_BACK" onClick={() => {
-                        if (view === "form") setView(isEdit ? "detail" : "list");
-                        else if (view === "logs") setView("detail");
-                        else setView("list");
-                    }}>Indietro</Button>
-                </div>
-            )}
+        <div className="stretch-page compact-main">
+            <div style={{ marginBottom: 8 }}>
+                <Button icon="ARROW_BACK" onClick={() => {
+                    if (view === "list") {
+                        router.push("/admin");
+                        return;
+                    }
+                    if (view === "form") setView(isEdit ? "detail" : "list");
+                    else if (view === "logs") setView("detail");
+                    else setView("list");
+                }}>Indietro</Button>
+            </div>
 
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}
@@ -246,8 +286,8 @@ export default function SecurityAssetManagerPage() {
                     <div className="main-dialog rounded-m" style={{ width: "100%", maxWidth: 480 }}>
                         <span className="title large" style={{ display: "block", marginBottom: 16, textAlign: "center" }}>Rendi / Trasferisci</span>
                         <div className="vertical-list gap-3mm">
-                            <FpInput label="Nuovo utilizzatore" initialValue={tUtilizzatore} onChange={(v) => setTUtilizzatore(v ?? "")} placeholder="Nome persona" />
-                            <FpInput label="Note condizioni" initialValue={tNote} onChange={(v) => setTNote(v ?? "")} placeholder="Condizioni, danni..." />
+                            <FpInput label="Nuovo utilizzatore" initialValue={tUtilizzatore} onChange={(e) => setTUtilizzatore(e.target.value ?? "")} placeholder="Nome persona" />
+                            <FpInput label="Note condizioni" initialValue={tNote} onChange={(e) => setTNote(e.target.value ?? "")} placeholder="Condizioni, danni..." />
                             <div>
                                 <span className="title small" style={{ display: "block", marginBottom: 6 }}>Stato</span>
                                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
@@ -261,7 +301,7 @@ export default function SecurityAssetManagerPage() {
                             </div>
                             <div className="horizontal-list gap-2mm">
                                 <Button onClick={() => setTransferOpen(false)}>Annulla</Button>
-                                <Button icon="SWAP_HORIZ" busy={loading} onClick={saveTransfer} style={{ background: "#e67e22" }}>Conferma</Button>
+                                <Button icon="SYNC" busy={loading} onClick={saveTransfer} style={{ background: "#e67e22" }}>Conferma</Button>
                             </div>
                         </div>
                     </div>

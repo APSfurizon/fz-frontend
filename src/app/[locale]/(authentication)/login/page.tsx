@@ -2,8 +2,13 @@
 import DataForm from "@/components/input/dataForm";
 import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
-import { AuthenticationCodes, LoginFormAction, LoginResponse } from "@/lib/api/authentication/login";
+import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError, runRequest } from "@/lib/api/global";
+import {
+  AdminSecondaryLoginResponse,
+  AuthenticationCodes,
+  LoginFormAction,
+  LoginResponse
+} from "@/lib/api/authentication/login";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,13 +16,18 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import { ADMIN_TOKEN_STORAGE_NAME, APP_VERSION, SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
 import Button from "@/components/input/button";
+import { UserDisplayAction } from "@/lib/api/user";
+import { useModalUpdate } from "@/components/context/modalProvider";
 
 export default function Login() {
   const t = useTranslations("authentication");
   const [error, setError] = useState<string | undefined>(undefined);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { showModal } = useModalUpdate();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -37,10 +47,59 @@ export default function Login() {
     }
   }
 
-  const manageSuccess = (body?: LoginResponse) => {
+  const isAdminByRole = (internalName?: string) => {
+    if (!internalName) return false;
+    const role = internalName.toLowerCase().trim();
+    return role === "team_security" || role === "root" || role === "main_staff" || role === "super_admin";
+  }
+
+  const doSecondaryAdminLogin = async () => {
+    const secondaryResponse = await fetch("/api/admin-secondary-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: email.trim().toLowerCase(),
+        password,
+        platform: "web",
+        versione: APP_VERSION
+      })
+    });
+
+    if (!secondaryResponse.ok) {
+      throw new Error(`Secondary login failed with status ${secondaryResponse.status}`);
+    }
+
+    const response: AdminSecondaryLoginResponse = await secondaryResponse.json();
+
+    if (!response.accessToken) return;
+    const sessionExpiry = new Date(new Date().getTime() + SESSION_DURATION * 24 * 60 * 60 * 1000);
+    setCookie(ADMIN_TOKEN_STORAGE_NAME, response.accessToken, sessionExpiry);
+  }
+
+  const manageSuccess = async (body?: LoginResponse) => {
     if (!body) return;
     const sessionExpiry = new Date(new Date().getTime() + SESSION_DURATION * 24 * 60 * 60 * 1000);
     setCookie(TOKEN_STORAGE_NAME, body.accessToken, sessionExpiry);
+
+    // Role check must happen after primary token is cached.
+    try {
+      const profile = await runRequest({ action: new UserDisplayAction() });
+      const isAdminUser = (profile.roles ?? []).some((r) => isAdminByRole(r.internalName));
+      if (isAdminUser) {
+        try {
+          await doSecondaryAdminLogin();
+        } catch (secondaryLoginError) {
+          console.warn("Secondary admin login failed", secondaryLoginError);
+          showModal("Attenzione", <span>Secondo login admin non riuscito. Continui con il login standard.</span>);
+          // Keep primary login valid even if secondary auth endpoint is temporarily unavailable.
+        }
+      }
+    } catch {
+      // Fallback: do not block login redirection if role check fails.
+    }
+
     router.replace(`/logging?${params.toString()}`);
   }
 
@@ -81,12 +140,14 @@ export default function Login() {
       <FpInput fieldName="email"
         required
         inputType="email"
+        onChange={(e) => setEmail(e.target.value ?? "")}
         label={t("login.label_email")}
         placeholder={t("login.placeholder_email")} />
       <FpInput fieldName="password"
         minLength={6}
         required
         inputType="password"
+        onChange={(e) => setPassword(e.target.value ?? "")}
         label={t("login.label_password")}
         placeholder={t("login.placeholder_password")} />
       <div className="toolbar-bottom">

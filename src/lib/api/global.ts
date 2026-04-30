@@ -1,5 +1,11 @@
 import { FormApiAction } from "@/lib/components/dataForm"
-import { API_BASE_URL, API_MOBILE_URL, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import {
+    ADMIN_TOKEN_STORAGE_NAME,
+    API_BASE_URL,
+    API_MOBILE_URL,
+    MOBILE_FURIZON_AUTH_HEADER,
+    TOKEN_STORAGE_NAME
+} from "@/lib/constants";
 import { getCookie, templateReplace } from "@/lib/utils";
 
 export enum RequestType {
@@ -91,16 +97,29 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
         if (data.body instanceof FormData == false) headers.append("Content-type", "application/json");
 
         const token = getToken();
+        const adminToken = getCookie(ADMIN_TOKEN_STORAGE_NAME);
 
         headers.append("Accept-Language", getCookie("NEXT_LOCALE"));
 
         if (data.action.authenticated && token && token.length > 0) headers.append("Authorization", token);
 
+        // Mobile backend headers:
+        // - furizonauth: shared secret from env
+        // - furizon_admin: user token from secondary login
+        if (data.action.endpoint === Endpoint.MOBILE) {
+            if (MOBILE_FURIZON_AUTH_HEADER.length > 0) {
+                headers.append("furizonauth", MOBILE_FURIZON_AUTH_HEADER);
+            }
+            if (adminToken && adminToken.length > 0) {
+                headers.append("furizon_admin", adminToken);
+            }
+        }
+
         // Calc url
         const useSearchParams = !!data.searchParams;
         let endpointUrl = {
             [Endpoint.API]: API_BASE_URL,
-            [Endpoint.MOBILE]: API_MOBILE_URL!
+            [Endpoint.MOBILE]: "/api/mobile/"
         }[data.action.endpoint];
         endpointUrl += [data.action.urlAction, ...data.additionalPath ?? []].join("/");
         if (useSearchParams) endpointUrl += "?" + data.searchParams!.toString();

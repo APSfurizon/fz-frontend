@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
@@ -13,10 +13,19 @@ import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
+import { useRouter } from "next/navigation";
+
+const SECURITY_IMAGE_THUMB_SIZE = 108;
+const SECURITY_BADGE_STYLE = {
+    display: "inline-flex",
+    width: "fit-content",
+    alignSelf: "flex-start",
+};
 
 export default function SecurityLostAndFoundPage() {
     useTitle("Security - Lost and Found");
     const { showModal } = useModalUpdate();
+    const router = useRouter();
 
     const [items, setItems] = useState<SecurityLostItem[]>([]);
     const [loading, setLoading] = useState(false);
@@ -24,6 +33,7 @@ export default function SecurityLostAndFoundPage() {
     const [view, setView] = useState<"list" | "form" | "detail">("list");
     const [selected, setSelected] = useState<SecurityLostItem | null>(null);
     const [isEdit, setIsEdit] = useState(false);
+    const initialLoadDone = useRef(false);
 
     // Form state
     const [fLuogo, setFLuogo] = useState("");
@@ -35,12 +45,16 @@ export default function SecurityLostAndFoundPage() {
     const loadItems = () => {
         setLoading(true);
         runRequest({ action: new GetSecurityLostItemsApiAction() })
-            .then((res) => setItems(res.items ?? []))
+            .then((res) => setItems(res.items ?? [...(res.smarriti ?? []), ...(res.consegnati ?? [])]))
             .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
-    useEffect(() => { loadItems(); }, []);
+    useEffect(() => {
+        if (initialLoadDone.current) return;
+        initialLoadDone.current = true;
+        loadItems();
+    }, []);
 
     const smarriti = items.filter((i) => i.status === "smarrito");
     const consegnati = items.filter((i) => i.status === "consegnato");
@@ -71,6 +85,7 @@ export default function SecurityLostAndFoundPage() {
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
+            if (selected.updateId) body.append("expectedUpdateId", String(selected.updateId));
         }
         setLoading(true);
         const action = isEdit ? new UpdateSecurityLostItemApiAction() : new CreateSecurityLostItemApiAction();
@@ -84,7 +99,7 @@ export default function SecurityLostAndFoundPage() {
         const body = new FormData();
         body.append("itemId", String(item.data));
         if (item.fileName) body.append("fileName", item.fileName);
-        if (item.updateId) body.append("updateId", String(item.updateId));
+        if (item.updateId) body.append("expectedUpdateId", String(item.updateId));
         body.append("status", "consegnato");
         setLoading(true);
         runRequest({ action: new UpdateSecurityLostItemApiAction(), body })
@@ -135,10 +150,10 @@ export default function SecurityLostAndFoundPage() {
     const renderForm = () => (
         <div className="vertical-list gap-3mm">
             <span className="title large">{isEdit ? "Modifica oggetto" : "Nuovo oggetto smarrito"}</span>
-            <FpInput label="Luogo di ritrovamento" initialValue={fLuogo} onChange={(v) => setFLuogo(v ?? "")} placeholder="Es. Padiglione A, ingresso..." />
-            <FpInput label="Descrizione *" initialValue={fDescrizione} onChange={(v) => setFDescrizione(v ?? "")} placeholder="Descrizione dell'oggetto..." />
-            <FpInput label="Trovato da" initialValue={fFoundBy} onChange={(v) => setFFoundBy(v ?? "")} placeholder="Nome di chi ha trovato" />
-            <FpInput label="Proprietario" initialValue={fProprietario} onChange={(v) => setFProprietario(v ?? "")} placeholder="Nome del proprietario (se noto)" />
+            <FpInput label="Luogo di ritrovamento" initialValue={fLuogo} onChange={(e) => setFLuogo(e.target.value ?? "")} placeholder="Es. Padiglione A, ingresso..." />
+            <FpInput label="Descrizione *" initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder="Descrizione dell'oggetto..." />
+            <FpInput label="Trovato da" initialValue={fFoundBy} onChange={(e) => setFFoundBy(e.target.value ?? "")} placeholder="Nome di chi ha trovato" />
+            <FpInput label="Proprietario" initialValue={fProprietario} onChange={(e) => setFProprietario(e.target.value ?? "")} placeholder="Nome del proprietario (se noto)" />
             <div className="horizontal-list gap-2mm">
                 <button className="button rounded-m" style={{ flex: 1, ...(fStatus === "smarrito" ? { background: "#c0392b", borderColor: "#c0392b", color: "#fff" } : {}) }}
                     onClick={() => setFStatus("smarrito")}>Smarrito</button>
@@ -166,7 +181,7 @@ export default function SecurityLostAndFoundPage() {
         ];
         return (
             <div className="vertical-list gap-3mm">
-                <span style={{ display: "inline-block", background: isConsegnato ? "#27ae60" : "#c0392b", color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>
+                <span style={{ ...SECURITY_BADGE_STYLE, background: isConsegnato ? "#27ae60" : "#c0392b", color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>
                     {isConsegnato ? "CONSEGNATO" : "SMARRITO"}
                 </span>
                 {rows.filter(([, v]) => !!v).map(([label, value]) => (
@@ -175,6 +190,31 @@ export default function SecurityLostAndFoundPage() {
                         <span className="title small">{value}</span>
                     </div>
                 ))}
+                {((item.immagini?.length ?? 0) > 0 || (item.foto?.length ?? 0) > 0) && (
+                    <div className="vertical-list gap-2mm">
+                        <span className="title small color-subtitle">Foto ({item.immagini?.length ?? item.foto?.length ?? 0})</span>
+                        <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
+                            {(item.immagini ?? item.foto ?? []).map((img, idx) => {
+                                const url = typeof img === "string" ? img : img.url;
+                                return (
+                                    <a
+                                        key={idx}
+                                        href={`/api/image-proxy?url=${encodeURIComponent(url)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ cursor: "pointer", width: SECURITY_IMAGE_THUMB_SIZE, height: SECURITY_IMAGE_THUMB_SIZE, flex: `0 0 ${SECURITY_IMAGE_THUMB_SIZE}px` }}
+                                    >
+                                        <img
+                                            src={`/api/image-proxy?url=${encodeURIComponent(url)}`}
+                                            alt={`${item.descrizione || "Oggetto"} — foto ${idx + 1}`}
+                                            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6, display: "block" }}
+                                        />
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                     {!isConsegnato && (
                         <Button icon="CHECK" style={{ background: "#27ae60" }} onClick={() => {
@@ -189,7 +229,16 @@ export default function SecurityLostAndFoundPage() {
     };
 
     return (
-        <div className="stretch-page">
+        <div className="stretch-page compact-main">
+            <div style={{ marginBottom: 8 }}>
+                <Button icon="ARROW_BACK" onClick={() => {
+                    if (view === "list") {
+                        router.push("/admin");
+                        return;
+                    }
+                    setView(isEdit ? "detail" : "list");
+                }}>Indietro</Button>
+            </div>
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}
             {view === "form" && renderForm()}

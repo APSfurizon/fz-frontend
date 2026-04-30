@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
@@ -13,14 +13,22 @@ import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
+import { useRouter } from "next/navigation";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
 const LIVELLO_LABEL: Record<string, string> = { basso: "Basso", medio: "Medio", alto: "Alto", critico: "Critico" };
 const LIVELLO_COLOR: Record<string, string> = { basso: "#27ae60", medio: "#f39c12", alto: "#e67e22", critico: "#c0392b" };
+const SECURITY_IMAGE_THUMB_SIZE = 108;
+const SECURITY_BADGE_STYLE = {
+    display: "inline-flex",
+    width: "fit-content",
+    alignSelf: "flex-start",
+};
 
 export default function SecurityHazardousRegisterPage() {
     useTitle("Security - Hazardous Register");
     const { showModal } = useModalUpdate();
+    const router = useRouter();
 
     const [hazards, setHazards] = useState<SecurityHazard[]>([]);
     const [loading, setLoading] = useState(false);
@@ -28,6 +36,7 @@ export default function SecurityHazardousRegisterPage() {
     const [view, setView] = useState<"list" | "form" | "detail">("list");
     const [selected, setSelected] = useState<SecurityHazard | null>(null);
     const [isEdit, setIsEdit] = useState(false);
+    const initialLoadDone = useRef(false);
 
     // Form state
     const [fTitolo, setFTitolo] = useState("");
@@ -44,7 +53,11 @@ export default function SecurityHazardousRegisterPage() {
             .finally(() => setLoading(false));
     };
 
-    useEffect(() => { loadHazards(); }, []);
+    useEffect(() => {
+        if (initialLoadDone.current) return;
+        initialLoadDone.current = true;
+        loadHazards();
+    }, []);
 
     const resetForm = () => {
         setFTitolo(""); setFDescrizione(""); setFLivello("basso");
@@ -73,6 +86,7 @@ export default function SecurityHazardousRegisterPage() {
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
+            if (selected.updateId) body.append("expectedUpdateId", String(selected.updateId));
         }
         setLoading(true);
         const action = isEdit ? new UpdateSecurityHazardApiAction() : new CreateSecurityHazardApiAction();
@@ -128,10 +142,10 @@ export default function SecurityHazardousRegisterPage() {
     const renderForm = () => (
         <div className="vertical-list gap-3mm">
             <span className="title large">{isEdit ? "Modifica segnalazione" : "Nuova segnalazione"}</span>
-            <FpInput label="Titolo *" initialValue={fTitolo} onChange={(v) => setFTitolo(v ?? "")} placeholder="Titolo segnalazione" />
-            <FpInput label="Descrizione" initialValue={fDescrizione} onChange={(v) => setFDescrizione(v ?? "")} placeholder="Descrizione del pericolo..." />
-            <FpInput label="Nickname Proprietario" initialValue={fProprietarioNick} onChange={(v) => setFProprietarioNick(v ?? "")} placeholder="Nickname" />
-            <FpInput label="ID Proprietario" initialValue={fProprietarioId} onChange={(v) => setFProprietarioId(v ?? "")} placeholder="ID utente" />
+            <FpInput label="Titolo *" initialValue={fTitolo} onChange={(e) => setFTitolo(e.target.value ?? "")} placeholder="Titolo segnalazione" />
+            <FpInput label="Descrizione" initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder="Descrizione del pericolo..." />
+            <FpInput label="Nickname Proprietario" initialValue={fProprietarioNick} onChange={(e) => setFProprietarioNick(e.target.value ?? "")} placeholder="Nickname" />
+            <FpInput label="ID Proprietario" initialValue={fProprietarioId} onChange={(e) => setFProprietarioId(e.target.value ?? "")} placeholder="ID utente" />
             <div>
                 <span className="title small" style={{ display: "block", marginBottom: 6 }}>Livello</span>
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
@@ -153,7 +167,7 @@ export default function SecurityHazardousRegisterPage() {
     const renderDetail = (h: SecurityHazard) => (
         <div className="vertical-list gap-3mm">
             <span className="title large">{h.titolo}</span>
-            <span style={{ display: "inline-block", background: LIVELLO_COLOR[h.livello], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>{LIVELLO_LABEL[h.livello]}</span>
+            <span style={{ ...SECURITY_BADGE_STYLE, background: LIVELLO_COLOR[h.livello], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700 }}>{LIVELLO_LABEL[h.livello]}</span>
             {[
                 ["Descrizione", h.descrizione], ["Segnalato da", h.trovato_da],
                 ["Proprietario", h.proprietario_nickname], ["ID Proprietario", h.proprietario_id],
@@ -164,6 +178,28 @@ export default function SecurityHazardousRegisterPage() {
                     <span className="title small">{value}</span>
                 </div>
             ))}
+            {(h.foto?.length ?? 0) > 0 && (
+                <div className="vertical-list gap-2mm">
+                    <span className="title small color-subtitle">Foto ({h.foto!.length})</span>
+                    <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
+                        {h.foto!.map((img, idx) => (
+                            <a
+                                key={idx}
+                                href={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ cursor: "pointer", width: SECURITY_IMAGE_THUMB_SIZE, height: SECURITY_IMAGE_THUMB_SIZE, flex: `0 0 ${SECURITY_IMAGE_THUMB_SIZE}px` }}
+                            >
+                                <img
+                                    src={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                    alt={`${h.titolo} — foto ${idx + 1}`}
+                                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6, display: "block" }}
+                                />
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
             <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                 <Button icon="EDIT" onClick={() => openEdit(h)}>Modifica</Button>
                 <Button onClick={() => setView("list")}>← Indietro</Button>
@@ -172,7 +208,16 @@ export default function SecurityHazardousRegisterPage() {
     );
 
     return (
-        <div className="stretch-page">
+        <div className="stretch-page compact-main">
+            <div style={{ marginBottom: 8 }}>
+                <Button icon="ARROW_BACK" onClick={() => {
+                    if (view === "list") {
+                        router.push("/admin");
+                        return;
+                    }
+                    setView(isEdit ? "detail" : "list");
+                }}>Indietro</Button>
+            </div>
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}
             {view === "form" && renderForm()}

@@ -15,6 +15,12 @@ import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { shouldShowChangelog } from '@/lib/utils';
 
+const ADMIN_ROLE_NAMES = new Set(["root", "main_staff", "super_admin", "admin"]);
+
+function normalizeRole(internalName?: string) {
+    return (internalName ?? "").toLowerCase().trim();
+}
+
 export default function Layout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const t = useTranslations();
     const { isOpen, icon, title, modalChildren, hideModal, showModal } = useModalUpdate();
@@ -50,6 +56,12 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     const toolClick = () => {
         setToolListExpanded(false);
     }
+
+    const roles = userDisplay?.roles ?? [];
+    const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
+    const isTeamSecurity = roles.some((role) => normalizeRole(role.internalName) === "team_security");
+    const isAdminRole = roles.some((role) => ADMIN_ROLE_NAMES.has(normalizeRole(role.internalName)));
+    const securityOnlyMode = isTeamSecurity && !isAdminRole;
 
     return <>
         <div className="main-dialog rounded-s">
@@ -88,13 +100,13 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         icon="PERSON">
                         {t('furpanel.user.title')}
                     </ToolLink>
-                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
+                    {canSeeAdminPages && !securityOnlyMode && <ToolLink onClick={toolClick}
                         href="/admin"
                         icon="SECURITY">
                         {t('furpanel.admin.title')}
                     </ToolLink>}
-                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
-                        href="/security"
+                    {canSeeAdminPages && securityOnlyMode && <ToolLink onClick={toolClick}
+                        href="/admin"
                         icon="GPP_GOOD">
                         {t('furpanel.security.title')}
                     </ToolLink>}

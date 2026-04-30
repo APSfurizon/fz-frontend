@@ -1,19 +1,26 @@
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, SimpleApiResponse } from "../global";
+import { ApiErrorResponse, ApiResponse, MobileApiAction, RequestType, SimpleApiResponse } from "../global";
 
 // ─── Assets ──────────────────────────────────────────────────────────────────
 
 export interface SecurityAsset {
+    id?: number;
     data: number;
+    data_creazione?: number;
+    data_modifica?: number;
     fileName?: string;
-    updateId?: number;
+    updateId?: string;
     tag: string;
-    tipo: string;
+    device_tipo: string;
     device_modello: string;
-    seriale?: string;
+    device_serial_number?: string;
     stato: "disponibile" | "in_uso" | "non_disponibile";
-    utilizzatore?: string;
-    note?: string;
-    foto?: { url: string }[];
+    utilizzatore_attuale?: string | null;
+    utilizzatore_precedente?: string | null;
+    note_condizioni?: string;
+    creato_da?: string;
+    modificato_da?: string;
+    data_ritiro?: string | number | null;
+    foto?: { url: string; path?: string }[];
 }
 
 export interface SecurityAssetsResponse extends ApiResponse {
@@ -33,35 +40,29 @@ export interface SecurityAssetLog {
     note?: string;
 }
 
-export class GetSecurityAssetsApiAction extends ApiAction<SecurityAssetsResponse, ApiErrorResponse> {
-    authenticated = true;
+export class GetSecurityAssetsApiAction extends MobileApiAction<SecurityAssetsResponse, ApiErrorResponse> {
     method = RequestType.GET;
-    urlAction = "admin/security/assets";
+    urlAction = "security/loadAssets";
 }
 
-export class GetSecurityAssetLogsApiAction extends ApiAction<SecurityAssetLogsResponse, ApiErrorResponse> {
-    authenticated = true;
+export class GetSecurityAssetLogsApiAction extends MobileApiAction<SecurityAssetLogsResponse, ApiErrorResponse> {
     method = RequestType.GET;
-    urlAction = "admin/security/assets/logs";
-    hasPathParams = true;
+    urlAction = "security/loadAssetLogs";
 }
 
-export class CreateSecurityAssetApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
+export class CreateSecurityAssetApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
-    urlAction = "admin/security/assets";
+    urlAction = "security/saveAsset";
 }
 
-export class UpdateSecurityAssetApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.PATCH;
-    urlAction = "admin/security/assets";
+export class UpdateSecurityAssetApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/updateAsset";
 }
 
-export class TransferSecurityAssetApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.PATCH;
-    urlAction = "admin/security/assets/transfer";
+export class TransferSecurityAssetApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/updateAsset";
 }
 
 // ─── Hazardous register ──────────────────────────────────────────────────────
@@ -83,22 +84,19 @@ export interface SecurityHazardsResponse extends ApiResponse {
     hazards: SecurityHazard[];
 }
 
-export class GetSecurityHazardsApiAction extends ApiAction<SecurityHazardsResponse, ApiErrorResponse> {
-    authenticated = true;
+export class GetSecurityHazardsApiAction extends MobileApiAction<SecurityHazardsResponse, ApiErrorResponse> {
     method = RequestType.GET;
-    urlAction = "admin/security/hazards";
+    urlAction = "security/loadHazards";
 }
 
-export class CreateSecurityHazardApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
+export class CreateSecurityHazardApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
-    urlAction = "admin/security/hazards";
+    urlAction = "security/saveHazard";
 }
 
-export class UpdateSecurityHazardApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.PATCH;
-    urlAction = "admin/security/hazards";
+export class UpdateSecurityHazardApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/updateHazard";
 }
 
 // ─── Lost & Found ────────────────────────────────────────────────────────────
@@ -120,23 +118,89 @@ export interface SecurityLostItem {
 }
 
 export interface SecurityLostItemsResponse extends ApiResponse {
-    items: SecurityLostItem[];
+    items?: SecurityLostItem[];
+    smarriti?: SecurityLostItem[];
+    consegnati?: SecurityLostItem[];
 }
 
-export class GetSecurityLostItemsApiAction extends ApiAction<SecurityLostItemsResponse, ApiErrorResponse> {
-    authenticated = true;
+export class GetSecurityLostItemsApiAction extends MobileApiAction<SecurityLostItemsResponse, ApiErrorResponse> {
     method = RequestType.GET;
-    urlAction = "admin/security/lost";
+    urlAction = "security/loadLostFound";
 }
 
-export class CreateSecurityLostItemApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
+export class CreateSecurityLostItemApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
     method = RequestType.POST;
-    urlAction = "admin/security/lost";
+    urlAction = "security/saveLostFound";
 }
 
-export class UpdateSecurityLostItemApiAction extends ApiAction<SimpleApiResponse, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.PATCH;
-    urlAction = "admin/security/lost";
+export class UpdateSecurityLostItemApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/updateLostFound";
+}
+
+// ─── Incidents / Security Log ───────────────────────────────────────────────
+
+export interface SecurityIncidentMessage {
+    id?: number;
+    data?: number;
+    from?: string | null;
+    messaggio?: string | null;
+    logo?: string | null;
+    logoUrl?: string | null;
+}
+
+export interface SecurityIncident {
+    data: number;
+    fileName?: string;
+    folder?: string;
+    textData?: string;
+    titolo?: string | null;
+    messaggio?: string | null;
+    from?: string | null;
+    persone_coinvolte?: string | null;
+    sospeso?: boolean;
+    importante?: boolean;
+    updateId?: string;
+    logo?: string | null;
+    logoUrl?: string | null;
+    messaggi?: SecurityIncidentMessage[];
+}
+
+export interface SecurityIncidentsResponse extends ApiResponse {
+    countReports?: number;
+    reports: SecurityIncident[];
+    disabledReports?: SecurityIncident[];
+}
+
+export interface SecurityIncidentDetailResponse extends ApiResponse {
+    report: SecurityIncident;
+}
+
+export interface SecurityIncidentUpdateResponse extends SimpleApiResponse {
+    updateId?: string;
+}
+
+export class GetSecurityIncidentsApiAction extends MobileApiAction<SecurityIncidentsResponse, ApiErrorResponse> {
+    method = RequestType.GET;
+    urlAction = "security/loadSecurity";
+}
+
+export class GetSecurityIncidentDetailApiAction extends MobileApiAction<SecurityIncidentDetailResponse, ApiErrorResponse> {
+    method = RequestType.GET;
+    urlAction = "security/loadSecurityDetail";
+}
+
+export class CreateSecurityIncidentApiAction extends MobileApiAction<SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/saveSecurity";
+}
+
+export class AddSecurityIncidentMessageApiAction extends MobileApiAction<SecurityIncidentDetailResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/addSecurityMessage";
+}
+
+export class UpdateSecurityIncidentApiAction extends MobileApiAction<SecurityIncidentUpdateResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    urlAction = "security/changeSecurity";
 }
