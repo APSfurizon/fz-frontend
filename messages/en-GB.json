@@ -1108,6 +1108,9 @@
         },
         "queue": {
           "title": "Uploading..."
+        },
+        "modal": {
+          "title": "View picture"
         }
       },
       "admin": {

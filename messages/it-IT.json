@@ -1109,6 +1109,9 @@
         },
         "queue": {
           "title": "Caricamento..."
+        },
+        "modal": {
+          "title": "Visualizza immagine"
         }
       },
       "admin": {

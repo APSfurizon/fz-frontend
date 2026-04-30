@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import "@/styles/misc/gallery/layout.css";
 import { GalleryProvider } from "./_components/galleryProvider";
+import ViewMediaModal from "./_components/viewMediaModal";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const [toolListExpanded, setToolListExpanded] = useState(false);
@@ -50,8 +51,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 </div>
             </span>
         </div>
-        <GalleryProvider>
-            {children}
-        </GalleryProvider>
+        {children}
     </div>
 }

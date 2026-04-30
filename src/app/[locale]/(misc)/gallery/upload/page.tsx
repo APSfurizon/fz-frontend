@@ -6,21 +6,21 @@ import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { GalleryUploadedMedia, UploadProgress, UploadProgressStatus } from "@/lib/api/gallery/upload/types";
+import { UploadProgress } from "@/lib/api/gallery/upload/types";
 import UploadStatusBox from "./_components/uploadStatusBox";
 import UploadPanel from "./_components/uploadPanel/uploadPanel";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingPanel from "@/components/loadingPanel";
 import { buildSearchParams } from "@/lib/utils";
 import UploadedMedia from "./_components/uploadedMedia";
-import "@/styles/misc/gallery/upload/page.css";
 import Button from "@/components/input/button";
-import { useWindowSize } from "@/components/hooks/useWindowSize";
 import MediaEditModal from "./_components/modals/mediaEditModal";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { Permissions } from "@/lib/api/permission";
 import Image from "next/image";
-import { useGallery } from "../../_components/galleryProvider";
+import { useGallery } from "../_components/galleryProvider";
+import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
+import "@/styles/misc/gallery/upload/page.css";
 
 export type UploadState = {
     upload: GalleryUpload,
@@ -64,7 +64,7 @@ export default function GalleryUploadPage() {
     const [eventItems, setEventItems] = useState<SelectItem[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
 
-    const { currentMedia, openMedia, closeMedia, modalOpen } = useGallery();
+    const { openMedia, setModalMedias } = useGallery();
 
     // Loading state
     const [loading, setLoading] = useState(false);
@@ -157,6 +157,13 @@ export default function GalleryUploadPage() {
         }, 1000);
     }, []);
 
+    // Modal functions
+    useEffect(() => setModalMedias(medias), [medias])
+
+    const onOpenImage = useCallback((media: GalleryUploadedMedia) => {
+        openMedia(media.id)
+    }, [openMedia]);
+
     const sortFn = ((a: [number, GalleryUploadedMedia], b: [number, GalleryUploadedMedia]) => b[0] - a[0]);
     const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
     return <>
@@ -199,8 +206,11 @@ export default function GalleryUploadPage() {
                 </div>
             }
             className="medias-container">
-            {[...medias.entries()].sort(sortFn).map(([id, u]) =>
-                <UploadedMedia key={id} image={u} onSelect={onSelect} onClick={openMedia} selected={selection.has(id)} />
+            {[...medias.entries()].sort(sortFn).map(([id, u]) => <UploadedMedia key={id}
+                image={u}
+                onSelect={onSelect}
+                onClick={onOpenImage}
+                selected={selection.has(id)} />
             )}
         </InfiniteScroll>
         <MediaEditModal events={eventItems}

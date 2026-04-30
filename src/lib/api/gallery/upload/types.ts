@@ -1,6 +1,5 @@
 import { ApiRequest, ApiResponse } from "../../global";
-import { MediaData } from "../../media";
-import { UploadRepostPermissions } from "../types";
+import { GalleryUploadedMedia, UploadRepostPermissions } from "../types";
 import { GalleryUpload } from "./main";
 
 /**
@@ -59,18 +58,6 @@ export type GalleryUploadThumbnail = {
 export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED"
 export type GalleryUploadEventParams = { data: GalleryUpload, error?: any, upload?: ApiResponse }
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;
-
-export type GalleryUploadedMedia = {
-    id: number;
-    photographerUserId: number;
-    uploadDate: string;
-    status: "PENDING" | "APPROVED" | "REJECTED";
-    fileName: string;
-    type: string;
-    thumbnailMedia?: MediaData;
-    eventId: number;
-    selected: boolean;
-}
 
 export interface UploadsApiResponse extends ApiResponse {
     results: GalleryUploadedMedia[]

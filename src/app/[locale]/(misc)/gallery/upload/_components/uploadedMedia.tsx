@@ -1,4 +1,4 @@
-import { GalleryUploadedMedia } from "@/lib/api/gallery/upload/types";
+import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import Image from "next/image";
 import "@/styles/misc/gallery/upload/uploadedMedia.css";
@@ -29,6 +29,6 @@ export default function UploadedMedia(props: Readonly<UploadedImageProps>) {
         {props.checkbox &&
             <input type="checkbox" checked={props.selected} className="selection" onChange={checkEvent} />
         }
-        <Image className="thumbnail" alt="thumbnail" width={140} height={140} src={imageSource} />
+        <Image draggable="false" className="thumbnail" alt="thumbnail" width={140} height={140} src={imageSource} />
     </div>
 }
