@@ -105,6 +105,7 @@
     gap: 1.25em;
     width: fit-content;
     box-shadow: 0px 3px 20px 1px #0000003F;
+    background-color: var(--main-dialog-background);
 }
 
 /* Right info panel */

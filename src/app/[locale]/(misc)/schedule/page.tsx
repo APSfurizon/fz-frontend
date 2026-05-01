@@ -15,6 +15,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import ScheduleLegend from "@/components/schedule/scheduleLegenda";
 
 function formatDayKey(date: Date): string {
     const year = date.getFullYear();
@@ -129,6 +130,7 @@ export default function SchedulePage() {
                         onDateChange={handleDateChange}
                     />
                 )}
+                <ScheduleLegend />
             </div>
         </div>
     );

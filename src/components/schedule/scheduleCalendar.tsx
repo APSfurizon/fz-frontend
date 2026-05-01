@@ -1,4 +1,5 @@
 "use client";
+
 import { Calendar, dateFnsLocalizer, Formats, Messages, ToolbarProps } from "react-big-calendar";
 import { addHours, format, parse, startOfWeek, getDay, isSameDay } from "date-fns";
 import { enGB, it } from "date-fns/locale";
@@ -16,7 +17,7 @@ interface ScheduleCalendarProps {
     onDateChange?: (date: Date) => void;
 }
 
-const CONV_START = new Date(2026, 5, 2); // June 2, 2026
+const CONV_START = new Date(2026, 5, 2);
 const DISPLAY_SHIFT_HOURS = 10;
 const DAY_MIN_TIME = new Date(2026, 5, 2, 0, 0);
 const DAY_MAX_TIME = new Date(2026, 5, 2, 16, 30);
@@ -36,6 +37,20 @@ interface DayToolbarProps extends ToolbarProps {
     dateFnsLocale: Locale;
 }
 
+function useIsMobile(breakpoint = 800) {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < breakpoint);
+        check();
+
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, [breakpoint]);
+
+    return isMobile;
+}
+
 function shiftHours(date: Date, amount: number): Date {
     return addHours(date, amount);
 }
@@ -46,11 +61,42 @@ function DayToolbar({ date, onNavigate, dateFnsLocale }: DayToolbarProps) {
             {CONV_DAYS.map((day) => {
                 const isActive = isSameDay(date, day);
                 const label = format(day, "EEE d MMM", { locale: dateFnsLocale });
+
                 return (
                     <button
                         key={day.toISOString()}
                         className={`schedule-day-tab${isActive ? " active" : ""}`}
                         onClick={() => onNavigate("DATE", day)}
+                        aria-current={isActive ? "date" : undefined}
+                    >
+                        {label}
+                    </button>
+                );
+            })}
+        </div>
+    );
+}
+
+function MobileDayTabs({
+    date,
+    onDateChange,
+    dateFnsLocale,
+}: {
+    date: Date;
+    onDateChange: (date: Date) => void;
+    dateFnsLocale: Locale;
+}) {
+    return (
+        <div className="schedule-day-toolbar">
+            {CONV_DAYS.map((day) => {
+                const isActive = isSameDay(date, day);
+                const label = format(day, "EEE d MMM", { locale: dateFnsLocale });
+
+                return (
+                    <button
+                        key={day.toISOString()}
+                        className={`schedule-day-tab${isActive ? " active" : ""}`}
+                        onClick={() => onDateChange(day)}
                         aria-current={isActive ? "date" : undefined}
                     >
                         {label}
@@ -70,9 +116,7 @@ function ScheduleEventCard({ event }: { event: ScheduleEvent }) {
     useEffect(() => {
         const card = cardRef.current;
         const title = titleRef.current;
-        if (!card || !title) {
-            return;
-        }
+        if (!card || !title) return;
 
         const fitTitle = () => {
             title.style.fontSize = "";
@@ -85,9 +129,7 @@ function ScheduleEventCard({ event }: { event: ScheduleEvent }) {
                 const overflowY = title.scrollHeight > card.clientHeight - 4;
                 const overflowX = title.scrollWidth > title.clientWidth + 1;
 
-                if ((!overflowY && !overflowX) || currentSize <= minSize) {
-                    break;
-                }
+                if ((!overflowY && !overflowX) || currentSize <= minSize) break;
 
                 currentSize -= 0.5;
                 title.style.fontSize = `${currentSize}px`;
@@ -101,16 +143,16 @@ function ScheduleEventCard({ event }: { event: ScheduleEvent }) {
         observer.observe(card);
         observer.observe(title);
 
-        return () => {
-            observer.disconnect();
-        };
+        return () => observer.disconnect();
     }, [compact, event.title]);
 
     return (
         <div ref={cardRef} className={`schedule-event-card${compact ? " compact" : ""}`}>
             <div ref={titleRef} className="schedule-event-heading">
                 {event.titleEmote && (
-                    <span className="schedule-event-emote" aria-hidden="true">{event.titleEmote}</span>
+                    <span className="schedule-event-emote" aria-hidden="true">
+                        {event.titleEmote}
+                    </span>
                 )}
                 <div className="schedule-event-title">{event.title}</div>
             </div>
@@ -128,14 +170,19 @@ export default function ScheduleCalendar({
     const locale = useLocale();
     const t = useTranslations("misc.schedule");
     const dateFnsLocale = locale === "it-IT" ? it : enGB;
+    const isMobile = useIsMobile();
 
-    const localizer = dateFnsLocalizer({
-        format,
-        parse,
-        startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }),
-        getDay,
-        locales,
-    });
+    const localizer = useMemo(
+        () =>
+            dateFnsLocalizer({
+                format,
+                parse,
+                startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }),
+                getDay,
+                locales,
+            }),
+        [],
+    );
 
     const [currentDate, setCurrentDate] = useState<Date>(() => {
         if (initialDate) return initialDate;
@@ -143,8 +190,6 @@ export default function ScheduleCalendar({
         return CONV_DAYS.find((d) => isSameDay(d, today)) ?? CONV_START;
     });
 
-    // Calendar day view does not support max time past midnight;
-    // shift everything by -10h so the visible 00:00-16:30 maps to real 10:00-02:30.
     const displayEvents = useMemo(
         () =>
             events.map((event) => ({
@@ -155,11 +200,22 @@ export default function ScheduleCalendar({
         [events],
     );
 
+    const currentDayEvents = useMemo(() => {
+        return events
+            .filter((event) => isSameDay(event.start, currentDate))
+            .sort((a, b) => a.start.getTime() - b.start.getTime());
+    }, [events, currentDate]);
+
     const formats: Formats = {
-        timeGutterFormat: (date) => format(shiftHours(date, DISPLAY_SHIFT_HOURS), "HH:mm", { locale: dateFnsLocale }),
+        timeGutterFormat: (date) =>
+            format(shiftHours(date, DISPLAY_SHIFT_HOURS), "HH:mm", { locale: dateFnsLocale }),
         eventTimeRangeFormat: ({ start, end }) => {
-            const startLabel = format(shiftHours(start, DISPLAY_SHIFT_HOURS), "HH:mm", { locale: dateFnsLocale });
-            const endLabel = format(shiftHours(end, DISPLAY_SHIFT_HOURS), "HH:mm", { locale: dateFnsLocale });
+            const startLabel = format(shiftHours(start, DISPLAY_SHIFT_HOURS), "HH:mm", {
+                locale: dateFnsLocale,
+            });
+            const endLabel = format(shiftHours(end, DISPLAY_SHIFT_HOURS), "HH:mm", {
+                locale: dateFnsLocale,
+            });
             return `${startLabel} - ${endLabel}`;
         },
     };
@@ -178,6 +234,62 @@ export default function ScheduleCalendar({
         onDateChange?.(date);
     };
 
+    if (isMobile) {
+        return (
+            <div className="schedule-wrapper mobile">
+                <MobileDayTabs
+                    date={currentDate}
+                    onDateChange={handleNavigate}
+                    dateFnsLocale={dateFnsLocale}
+                />
+
+                <div className="schedule-mobile-list">
+                    {currentDayEvents.length === 0 && (
+                        <div className="schedule-mobile-empty">{t("no_events")}</div>
+                    )}
+
+                    {currentDayEvents.map((event) => {
+                        const startLabel = format(event.start, "HH:mm", { locale: dateFnsLocale });
+                        const endLabel = format(event.end, "HH:mm", { locale: dateFnsLocale });
+                        const room = rooms.find((r) => r.resourceId === event.resourceId);
+
+                        return (
+                            <button
+                                key={`${event.title}-${event.start.toISOString()}-${event.resourceId ?? ""}`}
+                                className={`schedule-mobile-event ${event.cancellato ? "canceled" : ""
+                                    } ${event.tipologia
+                                        ? `tipologia-${event.tipologia.toLowerCase()}`
+                                        : ""
+                                    }`}
+                                onClick={() => onEventClick?.(event)}
+                            >
+                                <div className="schedule-mobile-time">
+                                    {startLabel}
+                                    <span>{endLabel}</span>
+                                </div>
+
+                                <div className="schedule-mobile-content">
+                                    <div className="schedule-mobile-title">
+                                        {event.titleEmote && (
+                                            <span aria-hidden="true">{event.titleEmote} </span>
+                                        )}
+                                        {event.title}
+                                    </div>
+
+                                    {room?.resourceTitle && (
+                                        <div className="schedule-mobile-room">
+                                            {room.resourceTitle}
+                                        </div>
+                                    )}
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="schedule-wrapper">
             <Calendar
@@ -186,9 +298,9 @@ export default function ScheduleCalendar({
                 resources={rooms}
                 startAccessor="start"
                 endAccessor="end"
-                tooltipAccessor={(event) => (
+                tooltipAccessor={(event) =>
                     event.cancellato ? `${event.title} - CANCELLATO` : event.title
-                )}
+                }
                 resourceAccessor="resourceId"
                 resourceIdAccessor="resourceId"
                 resourceTitleAccessor="resourceTitle"
@@ -229,9 +341,7 @@ export default function ScheduleCalendar({
                     };
                 }}
                 components={{
-                    toolbar: (props) => (
-                        <DayToolbar {...props} dateFnsLocale={dateFnsLocale} />
-                    ),
+                    toolbar: (props) => <DayToolbar {...props} dateFnsLocale={dateFnsLocale} />,
                     event: ScheduleEventCard,
                 }}
                 style={{ height: "100%", minHeight: 600 }}
