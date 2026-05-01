@@ -179,8 +179,13 @@ export default function ScheduleDetailPage() {
                                 <InfoField
                                     icon="EVENT"
                                     label={t("schedule_detail.labels.time")}
-                                    value={`${startTime}${endTime ? ` - ${endTime}` : ""}${activity.durata ? ` | ${t("schedule_detail.labels.duration")}: ${activity.durata}` : ""}`}
+                                    value={`${startTime}${endTime ? ` - ${endTime}` : ""}`}
                                 />
+                                {activity.durata && <InfoField
+                                    icon="TIMELAPSE"
+                                    label={t("schedule_detail.labels.duration")}
+                                    value={`${activity.durata ? `${activity.durata}` : "?"}`}
+                                />}
                                 {activity.host && <InfoField icon="PERSON" label={t("schedule_detail.labels.host")} value={activity.host} />}
                                 <InfoField icon="LOCATION_ON" label={t("schedule_detail.labels.location")} value={activity.location} />
                                 {activity.language && <InfoField icon="LANGUAGE" label={t("schedule_detail.labels.language")} value={activity.language} />}
@@ -205,7 +210,7 @@ export default function ScheduleDetailPage() {
                                 src={getScheduleActivityImageUrl(activity.logo)}
                                 alt={localizedTitle}
                                 fill
-                                sizes="(max-width: 768px) 100vw, 50vw"
+                                sizes="(max-width: 800px) 34vw, 50vw"
                                 className="schedule-detail-image"
                                 priority
                                 unoptimized

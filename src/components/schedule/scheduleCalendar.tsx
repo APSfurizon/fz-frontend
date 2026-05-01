@@ -243,33 +243,62 @@ export default function ScheduleCalendar({
                     dateFnsLocale={dateFnsLocale}
                 />
 
-                <div className="schedule-mobile-list">
+                <div className="schedule-mobile-timeline">
                     {currentDayEvents.length === 0 && (
                         <div className="schedule-mobile-empty">{t("no_events")}</div>
                     )}
 
                     {currentDayEvents.map((event) => {
+                        const now = new Date();
+
+                        const isNow = now >= event.start && now <= event.end;
+                        const isPast = now > event.end;
+
                         const startLabel = format(event.start, "HH:mm", { locale: dateFnsLocale });
                         const endLabel = format(event.end, "HH:mm", { locale: dateFnsLocale });
+
+                        const durationMinutes = Math.max(
+                            0,
+                            (event.end.getTime() - event.start.getTime()) / 60000,
+                        );
+
+                        const hours = Math.floor(durationMinutes / 60);
+                        const minutes = durationMinutes % 60;
+
+                        const durationLabel =
+                            hours > 0 && minutes > 0
+                                ? `${hours}h${minutes}m`
+                                : hours > 0
+                                    ? `${hours}h`
+                                    : `${minutes}m`;
+
                         const room = rooms.find((r) => r.resourceId === event.resourceId);
 
                         return (
-                            <button
+                            <div
                                 key={`${event.title}-${event.start.toISOString()}-${event.resourceId ?? ""}`}
-                                className={`schedule-mobile-event ${event.cancellato ? "canceled" : ""
-                                    } ${event.tipologia
-                                        ? `tipologia-${event.tipologia.toLowerCase()}`
-                                        : ""
-                                    }`}
-                                onClick={() => onEventClick?.(event)}
+                                className={`schedule-mobile-row ${isNow ? "now" : ""} ${isPast ? "past" : ""}`}
                             >
-                                <div className="schedule-mobile-time">
-                                    {startLabel}
-                                    <span>{endLabel}</span>
+                                <div className="schedule-mobile-hour">
+                                    <span>{startLabel}</span>
+                                    <div className="schedule-mobile-line" />
                                 </div>
 
-                                <div className="schedule-mobile-content">
-                                    <div className="schedule-mobile-title">
+                                <div
+                                    className={`schedule-mobile-dot ${isNow ? "now" : ""} ${isPast ? "past" : ""
+                                        }`}
+                                />
+
+                                <button
+                                    className={`schedule-mobile-card 
+                                        ${event.cancellato ? "canceled" : ""}
+                                        ${event.tipologia ? `tipologia-${event.tipologia.toLowerCase()}` : ""}
+                                        ${isNow ? "now" : ""}
+                                        ${isPast ? "past" : ""}
+                                    `}
+                                    onClick={() => onEventClick?.(event)}
+                                >
+                                    <div className="schedule-mobile-card-title">
                                         {event.titleEmote && (
                                             <span aria-hidden="true">{event.titleEmote} </span>
                                         )}
@@ -277,12 +306,20 @@ export default function ScheduleCalendar({
                                     </div>
 
                                     {room?.resourceTitle && (
-                                        <div className="schedule-mobile-room">
-                                            {room.resourceTitle}
+                                        <div className="schedule-mobile-card-room">
+                                            📍 {room.resourceTitle}
                                         </div>
                                     )}
-                                </div>
-                            </button>
+
+                                    <div className="schedule-mobile-card-duration">
+                                        ⏱ Durata: {durationLabel}
+                                    </div>
+
+                                    <div className="schedule-mobile-card-time">
+                                        {startLabel} - {endLabel}
+                                    </div>
+                                </button>
+                            </div>
                         );
                     })}
                 </div>

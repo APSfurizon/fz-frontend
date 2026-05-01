@@ -107,6 +107,7 @@ export const ICONS = {
     STAR: "star",
     STORE: "store",
     SYNC: "sync",
+    TIMELAPSE: "timelapse",
     TRANSGENDER: "transgender",
     TRIP: "trip",
     TUNE: "tune",

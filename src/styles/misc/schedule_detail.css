@@ -225,14 +225,16 @@
     word-break: break-word;
 }
 
-/* Responsive: stack columns on small screens */
-@media (max-width: 768px) {
+/* Responsive: keep image at top-right on small screens */
+@media (max-width: 800px) {
     .schedule-detail-container {
         padding: 0.8rem;
     }
 
     .schedule-detail-body {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) clamp(120px, 34vw, 180px);
+        gap: 0.9rem;
+        align-items: start;
     }
 
     .schedule-detail-main-title {

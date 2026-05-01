@@ -47,10 +47,10 @@ export default function Login() {
     }
   }
 
-  const isAdminByRole = (internalName?: string) => {
-    if (!internalName) return false;
-    const role = internalName.toLowerCase().trim();
-    return role === "team_security" || role === "root" || role === "main_staff" || role === "super_admin";
+  const isSecurityByPermission = (permission?: string) => {
+    if (!permission) return false;
+    const permesso = permission.toUpperCase().trim();
+    return permesso === "SECURITY_STAFF";
   }
 
   const doSecondaryAdminLogin = async () => {
@@ -86,8 +86,8 @@ export default function Login() {
     // Role check must happen after primary token is cached.
     try {
       const profile = await runRequest({ action: new UserDisplayAction() });
-      const isAdminUser = (profile.roles ?? []).some((r) => isAdminByRole(r.internalName));
-      if (isAdminUser) {
+      const isSecurityUser = (profile.permissions ?? []).some((r) => isSecurityByPermission(r));
+      if (isSecurityUser) {
         try {
           await doSecondaryAdminLogin();
         } catch (secondaryLoginError) {

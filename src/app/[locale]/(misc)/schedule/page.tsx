@@ -117,7 +117,7 @@ export default function SchedulePage() {
     };
 
     return (
-        <div className="page vertical-list gap-4mm" key="schedule-page">
+        <div className="page schedule-page vertical-list gap-4mm" key="schedule-page">
             <div className="schedule-dialog rounded-s" key="schedule-content">
                 {loading && <LoadingPanel />}
                 {!loading && error && <ErrorMessage error={error} />}
