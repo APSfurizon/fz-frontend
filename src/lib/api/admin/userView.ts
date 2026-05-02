@@ -108,7 +108,7 @@ export interface SecurityOrder {
     code: string,
     orderStatus: OrderStatus,
     sponsorship: SponsorshipType,
-    extraDays: ExtraDays,
+    dailyDaysDates: string[],
     board: string,
     dailyDays: string[],
     pretixRoomItemId: number,

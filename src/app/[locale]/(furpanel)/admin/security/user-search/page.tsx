@@ -273,7 +273,7 @@ export default function SecurityUserSearchPage() {
                                     <DataField label={t("furpanel.admin.users.security.user_search.fields.board")} value={userData.currentOrder.board} />
                                     <div className="security-data-field" style={{ gridColumn: "span 2" }}>
                                         <span className="security-data-label">{t("furpanel.admin.users.accounts.view.orders_table.daily_days")}</span>
-                                        <span className="security-data-value">{userData.currentOrder.dailyDaysDates?.length ? [...userData.currentOrder.dailyDaysDates].sort().join(", ") : "-"}</span>
+                                        <span className="security-data-value">{userData.currentOrder?.dailyDaysDates?.length ? [...userData.currentOrder?.dailyDaysDates].sort().join(", ") : "-"}</span>
                                     </div>
                                 </div>
                             </SectionCard>
