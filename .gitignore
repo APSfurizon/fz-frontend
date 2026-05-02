@@ -66,4 +66,3 @@ next-env.d.ts
 .fleet/
 Thumbs.db
 ehthumbs.db
-package-lock.json

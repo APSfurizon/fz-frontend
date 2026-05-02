@@ -206,7 +206,7 @@ export default function SecurityLostAndFoundPage() {
                         <span className="title small">{value}</span>
                     </div>
                 ))}
-                {((item.immagini?.length ?? 0) > 0 || (item.foto?.length ?? 0) > 0) && (
+                {((item.immagini?.length ?? 0) > 0 || (item?.foto?.length ?? 0) > 0) && (
                     <div className="vertical-list gap-2mm" style={{ marginTop: 8 }}>
                         <span className="title small color-subtitle">Foto ({item.immagini?.length ?? item.foto?.length ?? 0})</span>
                         <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
