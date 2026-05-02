@@ -13,7 +13,7 @@ import {
     ScheduleEvent,
 } from "@/lib/schedule";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ScheduleLegend from "@/components/schedule/scheduleLegenda";
 
@@ -51,6 +51,7 @@ export default function SchedulePage() {
         const day = searchParams.get("day");
         return day ?? undefined;
     });
+    const fetchStarted = useRef(false);
 
     useTitle(t("header.schedule"));
 
@@ -65,9 +66,8 @@ export default function SchedulePage() {
     );
 
     useEffect(() => {
-        if (activities) {
-            return;
-        }
+        if (fetchStarted.current) return;
+        fetchStarted.current = true;
 
         setLoading(true);
         loadScheduleActivities()
@@ -84,7 +84,7 @@ export default function SchedulePage() {
                 setError(reason);
             })
             .finally(() => setLoading(false));
-    }, [activities]);
+    }, []);
 
     const handleEventClick = (event: ScheduleEvent) => {
         const activity = event.resource as ScheduleActivityApiItem | undefined;

@@ -13,6 +13,7 @@ import {
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
 import ImagePreviewModal from "@/components/imagePreviewModal";
+import Modal from "@/components/modal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
@@ -22,6 +23,8 @@ const STATI = ["disponibile", "in_uso", "non_disponibile"] as const;
 const STATO_LABEL: Record<string, string> = { disponibile: "Disponibile", in_uso: "In uso", non_disponibile: "Non disponibile" };
 const STATO_COLOR: Record<string, string> = { disponibile: "#27ae60", in_uso: "#f39c12", non_disponibile: "#c0392b" };
 const SECURITY_IMAGE_THUMB_SIZE = 108;
+const SECURITY_LIST_PREVIEW_SIZE = 56;
+const SECURITY_LIST_MEDIA_SLOT_WIDTH = 120;
 const SECURITY_BADGE_STYLE = {
     display: "inline-flex",
     width: "fit-content",
@@ -29,6 +32,7 @@ const SECURITY_BADGE_STYLE = {
 };
 
 export default function SecurityAssetManagerPage() {
+    const t = useTranslations();
     useTitle("Security - Asset Manager");
     const { showModal } = useModalUpdate();
     const router = useRouter();
@@ -36,6 +40,7 @@ export default function SecurityAssetManagerPage() {
     const [assets, setAssets] = useState<SecurityAsset[]>([]);
     const [loading, setLoading] = useState(false);
     const [filterStato, setFilterStato] = useState<string | null>(null);
+    const [searchText, setSearchText] = useState("");
     const [view, setView] = useState<"list" | "form" | "detail" | "logs">("list");
     const [selected, setSelected] = useState<SecurityAsset | null>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -131,7 +136,14 @@ export default function SecurityAssetManagerPage() {
             .finally(() => { setLogsLoading(false); setView("logs"); });
     };
 
-    const filtered = filterStato ? assets.filter((a) => a.stato === filterStato) : assets;
+    const normalizedSearch = searchText.trim().toLowerCase();
+    const filtered = assets.filter((a) => {
+        const matchesStato = !filterStato || a.stato === filterStato;
+        if (!matchesStato) return false;
+        if (!normalizedSearch) return true;
+        return [a.tag, a.device_tipo, a.device_modello, a.device_serial_number]
+            .some((value) => String(value ?? "").toLowerCase().includes(normalizedSearch));
+    });
 
     // ── Views ────────────────────────────────────────────────────────────────
 
@@ -139,6 +151,16 @@ export default function SecurityAssetManagerPage() {
         <div className="vertical-list gap-2mm">
             {/* Filter chips + primary action */}
             <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", alignItems: "center" }}>
+                <div style={{ flex: "1 1 320px", minWidth: 240, maxWidth: 560 }}>
+                    <input
+                        type="text"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        placeholder="Cerca per Tag, Tipo, Modello o Seriale"
+                        style={{ width: "100%", padding: "0.5em 0.7em", borderRadius: 8, border: "1px solid #00000040", background: "var(--table-header-row-bg)", color: "inherit" }}
+                    />
+                </div>
+                <div className="spacer" />
                 <button className={"button rounded-m" + (!filterStato ? " active" : "")} onClick={() => setFilterStato(null)}>
                     <span className="title normal">Tutti ({assets.length})</span>
                 </button>
@@ -163,11 +185,25 @@ export default function SecurityAssetManagerPage() {
                             {a.utilizzatore_attuale && <span className="title small color-subtitle">👤 {a.utilizzatore_attuale}</span>}
                         </div>
                         {/* Right: status top, photo indicator bottom */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end", justifyContent: "center", flexShrink: 0 }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end", justifyContent: "center", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
                             <span className="title small" style={{ color: STATO_COLOR[a.stato], fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
-                            {(a.foto?.length ?? 0) > 0 && (
-                                <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {a.foto!.length}</span>
-                            )}
+                            <div style={{ display: "flex", flexDirection: "row", gap: 6, alignItems: "center", justifyContent: "flex-end" }}>
+                                {(a.foto?.length ?? 0) > 1 && (
+                                    <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {a.foto!.length}</span>
+                                )}
+                                {(a.foto?.length ?? 0) > 0 ? (
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                        <ImagePreviewModal
+                                            imageUrl={`/api/image-proxy?url=${encodeURIComponent(a.foto![0].url)}`}
+                                            alt={`${a.tag || "Asset"} - preview`}
+                                            thumbSize={SECURITY_LIST_PREVIEW_SIZE}
+                                            title={`${a.tag || "Asset"} - preview`}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div style={{ width: SECURITY_LIST_PREVIEW_SIZE, height: SECURITY_LIST_PREVIEW_SIZE, borderRadius: 8, background: "#1f2b3a", border: "1px solid #ffffff22" }} />
+                                )}
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -258,8 +294,8 @@ export default function SecurityAssetManagerPage() {
 
     return (
         <div className="stretch-page compact-main">
-            <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                <Button icon="ARROW_BACK" onClick={() => {
+            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
+                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
                         router.push("/admin");
                         return;
@@ -267,7 +303,12 @@ export default function SecurityAssetManagerPage() {
                     if (view === "form") setView(isEdit ? "detail" : "list");
                     else if (view === "logs") setView("detail");
                     else setView("list");
-                }}>Indietro</Button>
+                }}>
+                    <Icon icon="ARROW_BACK" />
+                </span>
+                <div className="horizontal-list gap-2mm">
+                    <span className="title medium">Asset Manager</span>
+                </div>
                 <div className="spacer" />
                 {view === "list" && <Button icon="ADD" onClick={openAdd}>Aggiungi asset</Button>}
                 {view === "detail" && selected && (
@@ -286,30 +327,38 @@ export default function SecurityAssetManagerPage() {
 
             {/* Transfer modal */}
             {transferOpen && selected && (
-                <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-                    <div className="main-dialog rounded-m" style={{ width: "100%", maxWidth: 480 }}>
-                        <span className="title large" style={{ display: "block", marginBottom: 16, textAlign: "center" }}>Rendi / Trasferisci</span>
-                        <div className="vertical-list gap-3mm">
-                            <FpInput label="Nuovo utilizzatore" initialValue={tUtilizzatore} onChange={(e) => setTUtilizzatore(e.target.value ?? "")} placeholder="Nome persona" />
-                            <FpInput label="Note condizioni" initialValue={tNote} onChange={(e) => setTNote(e.target.value ?? "")} placeholder="Condizioni, danni..." />
-                            <div>
-                                <span className="title small" style={{ display: "block", marginBottom: 6 }}>Stato</span>
-                                <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                                    {STATI.map((s) => (
-                                        <button key={s} className="button rounded-m" onClick={() => setTStato(s)}
-                                            style={tStato === s ? { background: STATO_COLOR[s], borderColor: STATO_COLOR[s], color: "#fff" } : {}}>
-                                            {STATO_LABEL[s]}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="horizontal-list gap-2mm">
-                                <Button onClick={() => setTransferOpen(false)}>Annulla</Button>
-                                <Button icon="SYNC" busy={loading} onClick={saveTransfer} style={{ background: "#e67e22" }}>Conferma</Button>
+                <Modal
+                    open={transferOpen}
+                    onClose={() => setTransferOpen(false)}
+                    busy={loading}
+                    title="Rendi / Trasferisci"
+                    icon="SYNC"
+                    style={{ width: "min(92vw, 480px)" }}>
+                    <div className="vertical-list gap-3mm" style={{ padding: "1em" }}>
+                        <FpInput label="Nuovo utilizzatore" initialValue={tUtilizzatore} onChange={(e) => setTUtilizzatore(e.target.value ?? "")} placeholder="Nome persona" />
+                        <FpInput label="Note condizioni" initialValue={tNote} onChange={(e) => setTNote(e.target.value ?? "")} placeholder="Condizioni, danni..." />
+                        <div>
+                            <span className="title small" style={{ display: "block", marginBottom: 6 }}>Stato</span>
+                            <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
+                                {STATI.map((s) => (
+                                    <button key={s} className="button rounded-m" onClick={() => setTStato(s)}
+                                        style={tStato === s ? { background: STATO_COLOR[s], borderColor: STATO_COLOR[s], color: "#fff" } : {}}>
+                                        {STATO_LABEL[s]}
+                                    </button>
+                                ))}
                             </div>
                         </div>
+                        <div className="bottom-toolbar" style={{ marginTop: 10 }}>
+                            <Button type="button" className="danger" icon="CANCEL" busy={loading} onClick={() => setTransferOpen(false)}>
+                                {t("common.cancel")}
+                            </Button>
+                            <div className="spacer"></div>
+                            <Button type="button" className="success" icon="CHECK" busy={loading} onClick={saveTransfer}>
+                                {t("common.confirm")}
+                            </Button>
+                        </div>
                     </div>
-                </div>
+                </Modal>
             )}
         </div>
     );

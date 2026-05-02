@@ -202,6 +202,7 @@ export default function ScheduleDetailPage() {
                                     </span>
                                 )}
                             </div>
+
                         </div>
 
                         {/* Right: Image */}
@@ -216,14 +217,15 @@ export default function ScheduleDetailPage() {
                                 unoptimized
                             />
                         </div>
+
+                        {/* Description across full width below image/info */}
+                        {localizedAbout && (
+                            <div className="schedule-detail-description">
+                                <p className="schedule-detail-description-text">{localizedAbout}</p>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Description - full width below */}
-                    {localizedAbout && (
-                        <div className="schedule-detail-description">
-                            <p className="schedule-detail-description-text">{localizedAbout}</p>
-                        </div>
-                    )}
                 </div>
             )}
         </div>

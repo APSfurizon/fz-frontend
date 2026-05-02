@@ -1,0 +1,58 @@
+.security-data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.8em 1.4em;
+}
+
+.security-data-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8em 1.4em;
+
+    @media screen and (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.search-criteria {
+    margin-bottom: 2mm;
+
+    p {
+        margin-bottom: 2mm;
+    }
+
+    &>.values {
+        display: flex;
+
+        @media screen and (max-width: 600px) {
+            flex-direction: column;
+            margin-left: .5em;
+            gap: 2mm;
+        }
+    }
+}
+
+.security-data-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    min-width: 0;
+}
+
+.security-data-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.55;
+    line-height: 1.2;
+    color: var(--foreground);
+}
+
+.security-data-value {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--foreground);
+    word-break: break-word;
+    white-space: pre-line;
+}

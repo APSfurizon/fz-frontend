@@ -14,12 +14,15 @@ import FpInput from "@/components/input/fpInput";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
+import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
 const LIVELLO_LABEL: Record<string, string> = { basso: "Basso", medio: "Medio", alto: "Alto", critico: "Critico" };
 const LIVELLO_COLOR: Record<string, string> = { basso: "#27ae60", medio: "#f39c12", alto: "#e67e22", critico: "#c0392b" };
 const SECURITY_IMAGE_THUMB_SIZE = 108;
+const SECURITY_LIST_PREVIEW_SIZE = 56;
+const SECURITY_LIST_MEDIA_SLOT_WIDTH = 120;
 const SECURITY_BADGE_STYLE = {
     display: "inline-flex",
     width: "fit-content",
@@ -34,6 +37,7 @@ export default function SecurityHazardousRegisterPage() {
     const [hazards, setHazards] = useState<SecurityHazard[]>([]);
     const [loading, setLoading] = useState(false);
     const [filterLivello, setFilterLivello] = useState<string | null>(null);
+    const [searchText, setSearchText] = useState("");
     const [view, setView] = useState<"list" | "form" | "detail">("list");
     const [selected, setSelected] = useState<SecurityHazard | null>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -97,11 +101,28 @@ export default function SecurityHazardousRegisterPage() {
             .finally(() => setLoading(false));
     };
 
-    const filtered = filterLivello ? hazards.filter((h) => h.livello === filterLivello) : hazards;
+    const normalizedSearch = searchText.trim().toLowerCase();
+    const filtered = hazards.filter((h) => {
+        const matchesLevel = !filterLivello || h.livello === filterLivello;
+        if (!matchesLevel) return false;
+        if (!normalizedSearch) return true;
+        return [h.titolo, h.descrizione, h.proprietario_nickname]
+            .some((value) => String(value ?? "").toLowerCase().includes(normalizedSearch));
+    });
 
     const renderList = () => (
         <div className="vertical-list gap-2mm">
             <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", alignItems: "center" }}>
+                <div style={{ flex: "1 1 320px", minWidth: 240, maxWidth: 560 }}>
+                    <input
+                        type="text"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        placeholder="Cerca per Titolo, Descrizione o Nickname"
+                        style={{ width: "100%", padding: "0.5em 0.7em", borderRadius: 8, border: "1px solid #00000040", background: "var(--table-header-row-bg)", color: "inherit" }}
+                    />
+                </div>
+                <div className="spacer" />
                 <button className="button rounded-m" onClick={() => setFilterLivello(null)}
                     style={!filterLivello ? { background: "var(--button-background-active)" } : {}}>
                     <span className="title normal">Tutti ({hazards.length})</span>
@@ -120,21 +141,37 @@ export default function SecurityHazardousRegisterPage() {
             <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
                 {filtered.length === 0 && <span className="title normal color-subtitle">Nessuna segnalazione</span>}
                 {filtered.map((h) => (
-                    <div key={h.data} className="main-dialog rounded-m"
-                        style={{ padding: "0.75em", margin: 0, cursor: "pointer", display: "flex", gap: "0.75em", alignItems: "flex-start", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a", borderLeft: `4px solid ${LIVELLO_COLOR[h.livello]}` }}
+                    <div key={h.data} className="rounded-m"
+                        style={{ padding: "0.75em", margin: 0, cursor: "pointer", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "flex-start", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a", borderLeft: `4px solid ${LIVELLO_COLOR[h.livello]}` }}
                         onClick={() => { setSelected(h); setView("detail"); }}>
-                        <div style={{ flex: 1 }}>
-                            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 4 }}>
+                        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 4, flexWrap: "wrap" }}>
                                 <span style={{ background: LIVELLO_COLOR[h.livello], color: "#fff", fontWeight: 700, fontSize: 11, padding: "2px 8px", borderRadius: 6 }}>{LIVELLO_LABEL[h.livello]}</span>
-                                <span className="title small color-subtitle">{h.data ? new Date(h.data).toLocaleDateString() : ""}</span>
+                                <span className="title normal" style={{ fontWeight: 700 }}>{h.titolo}</span>
                             </div>
-                            <span className="title normal" style={{ fontWeight: 700 }}>{h.titolo}</span>
                             {h.descrizione && <span className="title small color-subtitle" style={{ display: "block", marginTop: 2 }}>{h.descrizione}</span>}
-                            {h.trovato_da && <span className="title small color-subtitle">👤 {h.trovato_da}</span>}
+                            {h.trovato_da && <span className="title small color-subtitle" style={{ display: "block", marginTop: 8 }}>👤 {h.trovato_da}</span>}
                         </div>
-                        {(h.foto?.length ?? 0) > 0 && (
-                            <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>📷 {h.foto!.length}</span>
-                        )}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", justifyContent: "flex-start", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
+                            <span className="title small color-subtitle">{h.data ? new Date(h.data).toLocaleDateString() : ""}</span>
+                            <div style={{ display: "flex", flexDirection: "row", gap: 6, alignItems: "center", justifyContent: "flex-end" }}>
+                                {(h.foto?.length ?? 0) > 1 && (
+                                    <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>📷 {h.foto!.length}</span>
+                                )}
+                                {(h.foto?.length ?? 0) > 0 ? (
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                        <ImagePreviewModal
+                                            imageUrl={`/api/image-proxy?url=${encodeURIComponent(h.foto![0].url)}`}
+                                            alt={`${h.titolo || "Segnalazione"} - preview`}
+                                            thumbSize={SECURITY_LIST_PREVIEW_SIZE}
+                                            title={`${h.titolo || "Segnalazione"} - preview`}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div style={{ width: SECURITY_LIST_PREVIEW_SIZE, height: SECURITY_LIST_PREVIEW_SIZE, borderRadius: 8, background: "#1f2b3a", border: "1px solid #ffffff22" }} />
+                                )}
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -203,14 +240,23 @@ export default function SecurityHazardousRegisterPage() {
 
     return (
         <div className="stretch-page compact-main">
-            <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                <Button icon="ARROW_BACK" onClick={() => {
+            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
+                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
                         router.push("/admin");
                         return;
                     }
-                    setView(isEdit ? "detail" : "list");
-                }}>Indietro</Button>
+                    if (view === "form") {
+                        setView(isEdit && selected ? "detail" : "list");
+                        return;
+                    }
+                    setView("list");
+                }}>
+                    <Icon icon="ARROW_BACK" />
+                </span>
+                <div className="horizontal-list gap-2mm">
+                    <span className="title medium">Hazardous Register</span>
+                </div>
                 <div className="spacer" />
                 {view === "list" && <Button icon="ADD" onClick={openAdd}>Aggiungi segnalazione</Button>}
                 {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>Modifica</Button>}

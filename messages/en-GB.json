@@ -78,6 +78,7 @@
         "date": "Date",
         "time": "Time",
         "duration": "Duration",
+        "description": "Description",
         "host": "Host",
         "location": "Location",
         "language": "Language"
@@ -90,6 +91,16 @@
       },
       "errors": {
         "invalid_activity_id": "Invalid activity ID."
+      }
+    },
+    "schedule": {
+      "labels": {
+        "all_day": "All day",
+        "no_events": "No events scheduled for this day.",
+        "date": "Date",
+        "time": "Time",
+        "event": "Event",
+        "others": "others"
       }
     },
     "success": "Success"
@@ -639,7 +650,7 @@
             },
             "personal_info": "Personal info",
             "security": "Security",
-            "orders": "Orders",
+            "orders": "Order",
             "orders_table": {
               "event_name": "Event",
               "order_code": "Order code",
@@ -684,9 +695,15 @@
               "unknown_user": "User not found",
               "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
             },
-            "membership_cards": "Membership cards",
+            "membership_cards": "Membership card",
             "cards_table": {
+              "card_no": "Card no.",
               "issue_year": "Issued year",
+              "id_in_year": "No. in year",
+              "signed_at": "Signed at",
+              "aps_form": "APS form",
+              "aps_form_signed": "Signed",
+              "sent_by_email": "Sent by email",
               "created_for_order_id": "Created for order"
             },
             "badge": "Badge",
@@ -783,15 +800,22 @@
               "telegram": "Telegram",
               "phone": "Phone",
               "permissions": "Permissions",
+              "roles": "Roles",
               "have_order": "Have order",
               "have_room": "Have room",
+              "is_owner": "Owner",
+              "owner_label": "(Owner)",
               "room_name": "Room name",
               "check_in_out": "Check-in/out",
               "guests": "Guests",
-              "bring_to_event": "Bring to event"
+              "bring_to_event": "Bring to event",
+              "room_capacity": "Room capacity",
+              "room_type": "Room type",
+              "board": "Board"
             },
             "actions": {
-              "call": "Call"
+              "call": "Call",
+              "view_user": "View user"
             },
             "values": {
               "yes": "Yes",
@@ -873,6 +897,24 @@
         },
         "roles": {
           "title": "Roles"
+        }
+      },
+      "security_management": {
+        "title": "Security Management",
+        "users_and_docs": {
+          "title": "Users and Documents",
+          "user_search": "User Search",
+          "documents": "Documents"
+        },
+        "reports": {
+          "title": "Reports",
+          "incident_log": "Incident Log"
+        },
+        "logs": {
+          "title": "Logs",
+          "asset_manager": "Asset Manager",
+          "hazardous_register": "Hazardous Register",
+          "lost_and_found": "Lost and Found"
         }
       },
       "system": {

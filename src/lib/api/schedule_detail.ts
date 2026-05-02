@@ -1,7 +1,9 @@
 import { ScheduleActivityApiItem } from "@/lib/schedule";
 import { ApiErrorResponse } from "./global";
 
+const SCHEDULE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 let cachedScheduleActivities: ScheduleActivityApiItem[] | null = null;
+let cachedAt = 0;
 
 export type ScheduleActivityDetailResolver = (
     activityId: number,
@@ -17,9 +19,12 @@ export function clearScheduleActivitiesCache(): void {
 }
 
 export async function loadScheduleActivities(): Promise<ScheduleActivityApiItem[]> {
-    const response = await fetch("/api/schedule", {
-        cache: "no-store",
-    });
+    const now = Date.now();
+    if (cachedScheduleActivities && now - cachedAt < SCHEDULE_CACHE_TTL_MS) {
+        return cachedScheduleActivities;
+    }
+
+    const response = await fetch("/api/schedule");
 
     if (!response.ok) {
         let errorMessage = "Failed to load schedule.";
@@ -35,6 +40,7 @@ export async function loadScheduleActivities(): Promise<ScheduleActivityApiItem[
 
     const result = await response.json();
     const activities = Array.isArray(result) ? (result as ScheduleActivityApiItem[]) : [];
+    cachedAt = Date.now();
     primeScheduleActivitiesCache(activities);
     return activities;
 }

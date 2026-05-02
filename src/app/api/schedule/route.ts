@@ -14,7 +14,7 @@ export async function GET() {
             headers: {
                 Accept: "application/json",
             },
-            cache: "no-store",
+            next: { revalidate: 300 },
         });
 
         const responseText = await response.text();
@@ -27,6 +27,7 @@ export async function GET() {
             status: 200,
             headers: {
                 "Content-Type": response.headers.get("content-type") ?? "application/json",
+                "Cache-Control": "no-cache, no-store",
             },
         });
     } catch {

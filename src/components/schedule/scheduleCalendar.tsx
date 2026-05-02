@@ -1,13 +1,14 @@
 "use client";
 
 import { Calendar, dateFnsLocalizer, Formats, Messages, ToolbarProps } from "react-big-calendar";
-import { addHours, format, parse, startOfWeek, getDay, isSameDay } from "date-fns";
+import { addHours, format, parse, startOfWeek, getDay, isSameDay, type Locale } from "date-fns";
 import { enGB, it } from "date-fns/locale";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ScheduleEvent, ScheduleRoom } from "@/lib/schedule";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "@/styles/misc/schedule.css";
+import Icon, { MaterialIcon } from "../icon";
 
 interface ScheduleCalendarProps {
     events: ScheduleEvent[];
@@ -33,22 +34,22 @@ const locales = {
     "it-IT": it,
 };
 
-interface DayToolbarProps extends ToolbarProps {
+interface DayToolbarProps extends ToolbarProps<ScheduleEvent, ScheduleRoom> {
     dateFnsLocale: Locale;
 }
 
-function useIsMobile(breakpoint = 800) {
-    const [isMobile, setIsMobile] = useState(false);
+function useNarrowScreenMode() {
+    const [isNarrowScreen, setIsNarrowScreen] = useState(false);
 
     useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < breakpoint);
+        const check = () => setIsNarrowScreen(window.innerWidth < 800);
         check();
 
         window.addEventListener("resize", check);
         return () => window.removeEventListener("resize", check);
-    }, [breakpoint]);
+    }, []);
 
-    return isMobile;
+    return isNarrowScreen;
 }
 
 function shiftHours(date: Date, amount: number): Date {
@@ -149,12 +150,13 @@ function ScheduleEventCard({ event }: { event: ScheduleEvent }) {
     return (
         <div ref={cardRef} className={`schedule-event-card${compact ? " compact" : ""}`}>
             <div ref={titleRef} className="schedule-event-heading">
-                {event.titleEmote && (
+
+                <div className="schedule-event-title">
                     <span className="schedule-event-emote" aria-hidden="true">
                         {event.titleEmote}
                     </span>
-                )}
-                <div className="schedule-event-title">{event.title}</div>
+                    {event.title}
+                </div>
             </div>
         </div>
     );
@@ -168,9 +170,9 @@ export default function ScheduleCalendar({
     onDateChange,
 }: ScheduleCalendarProps) {
     const locale = useLocale();
-    const t = useTranslations("misc.schedule");
+    const t = useTranslations("common");
     const dateFnsLocale = locale === "it-IT" ? it : enGB;
-    const isMobile = useIsMobile();
+    const isNarrowScreen = useNarrowScreenMode();
 
     const localizer = useMemo(
         () =>
@@ -221,12 +223,12 @@ export default function ScheduleCalendar({
     };
 
     const messages: Messages = {
-        allDay: t("all_day"),
-        noEventsInRange: t("no_events"),
-        date: "Data",
-        time: "Ora",
-        event: "Evento",
-        showMore: (total) => `+${total} altri`,
+        allDay: t("schedule.labels.all_day"),
+        noEventsInRange: t("schedule.labels.no_events"),
+        date: t("schedule.labels.date"),
+        time: t("schedule.labels.time"),
+        event: t("schedule.labels.event"),
+        showMore: (total) => `+${total} ${t("schedule.labels.others")}`,
     };
 
     const handleNavigate = (date: Date) => {
@@ -234,7 +236,7 @@ export default function ScheduleCalendar({
         onDateChange?.(date);
     };
 
-    if (isMobile) {
+    if (isNarrowScreen) {
         return (
             <div className="schedule-wrapper mobile">
                 <MobileDayTabs
@@ -245,7 +247,7 @@ export default function ScheduleCalendar({
 
                 <div className="schedule-mobile-timeline">
                     {currentDayEvents.length === 0 && (
-                        <div className="schedule-mobile-empty">{t("no_events")}</div>
+                        <div className="schedule-mobile-empty">{t("schedule.labels.no_events")}</div>
                     )}
 
                     {currentDayEvents.map((event) => {
@@ -261,16 +263,6 @@ export default function ScheduleCalendar({
                             0,
                             (event.end.getTime() - event.start.getTime()) / 60000,
                         );
-
-                        const hours = Math.floor(durationMinutes / 60);
-                        const minutes = durationMinutes % 60;
-
-                        const durationLabel =
-                            hours > 0 && minutes > 0
-                                ? `${hours}h${minutes}m`
-                                : hours > 0
-                                    ? `${hours}h`
-                                    : `${minutes}m`;
 
                         const room = rooms.find((r) => r.resourceId === event.resourceId);
 
@@ -304,19 +296,19 @@ export default function ScheduleCalendar({
                                         )}
                                         {event.title}
                                     </div>
-
                                     {room?.resourceTitle && (
-                                        <div className="schedule-mobile-card-room">
-                                            📍 {room.resourceTitle}
+                                        <div className="schedule-mobile-card-room horizontal-list flex-vertical-center gap-2mm">
+                                            <Icon className="medium" icon="LOCATION_ON" />
+                                            <span>{room.resourceTitle}</span>
                                         </div>
                                     )}
-
-                                    <div className="schedule-mobile-card-duration">
-                                        ⏱ Durata: {durationLabel}
-                                    </div>
-
-                                    <div className="schedule-mobile-card-time">
-                                        {startLabel} - {endLabel}
+                                    <div className="schedule-detail-info-field horizontal-list flex-vertical-center gap-2mm">
+                                        <div className="schedule-detail-info-icon">
+                                            <Icon className="medium" icon={"TIMELAPSE"} />
+                                        </div>
+                                        <div className="schedule-detail-info-content vertical-list">
+                                            <span className="schedule-detail-info-value"><strong>{startLabel} - {endLabel}</strong></span>
+                                        </div>
                                     </div>
                                 </button>
                             </div>

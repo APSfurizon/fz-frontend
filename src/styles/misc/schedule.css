@@ -6,6 +6,23 @@
     .schedule-page {
         padding-inline: 2mm;
     }
+
+    .schedule-page .schedule-dialog {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        align-self: stretch;
+        margin-inline: 0;
+    }
+
+    .schedule-page .schedule-wrapper,
+    .schedule-page .schedule-wrapper.mobile {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        margin-inline: 0;
+    }
 }
 
 .schedule-dialog {
@@ -561,6 +578,37 @@
 .schedule-wrapper.mobile {
     height: auto;
     min-height: unset;
+    --schedule-mobile-toolbar-bg: #e9eef3ee;
+    --schedule-mobile-tab-text: var(--foreground);
+    --schedule-mobile-tab-border: #8da0b4;
+    --schedule-mobile-tab-active: var(--highlight);
+    --schedule-mobile-tab-hover-bg: #dfe7ef;
+    --schedule-mobile-hour-text: #203244;
+    --schedule-mobile-line-bg: #8fa3b8;
+    --schedule-mobile-dot-bg: #f7f9fc;
+    --schedule-mobile-dot-ring: #38485a44;
+    --schedule-mobile-card-bg: #d6e0ea;
+    --schedule-mobile-card-text: #172636;
+    --schedule-mobile-card-subtext: #2c4257;
+    --schedule-mobile-empty-text: var(--text-subtitle);
+}
+
+@media (prefers-color-scheme: dark) {
+    .schedule-wrapper.mobile {
+        --schedule-mobile-toolbar-bg: rgba(10, 24, 32, 0.96);
+        --schedule-mobile-tab-text: rgba(255, 255, 255, 0.85);
+        --schedule-mobile-tab-border: rgba(255, 255, 255, 0.35);
+        --schedule-mobile-tab-active: #f19b73;
+        --schedule-mobile-tab-hover-bg: #ffffff10;
+        --schedule-mobile-hour-text: rgba(255, 255, 255, 0.82);
+        --schedule-mobile-line-bg: rgba(255, 255, 255, 0.18);
+        --schedule-mobile-dot-bg: #ffffff;
+        --schedule-mobile-dot-ring: rgba(255, 255, 255, 0.22);
+        --schedule-mobile-card-bg: rgba(48, 61, 70, 0.95);
+        --schedule-mobile-card-text: #ffffff;
+        --schedule-mobile-card-subtext: rgba(255, 255, 255, 0.84);
+        --schedule-mobile-empty-text: rgba(255, 255, 255, 0.75);
+    }
 }
 
 /* Tabs giorni stile app */
@@ -572,16 +620,16 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    background: rgba(10, 24, 32, 0.96);
+    background: var(--schedule-mobile-toolbar-bg);
     backdrop-filter: blur(8px);
 }
 
 .schedule-wrapper.mobile .schedule-day-tab {
     border: 0;
-    border-bottom: 3px solid rgba(255, 255, 255, 0.35);
+    border-bottom: 3px solid var(--schedule-mobile-tab-border);
     border-radius: 0;
     background: transparent;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--schedule-mobile-tab-text);
     padding: 6px 4px 8px;
     font-size: 13px;
     font-weight: 700;
@@ -589,19 +637,26 @@
 }
 
 .schedule-wrapper.mobile .schedule-day-tab.active {
-    color: #f19b73;
-    border-bottom-color: #f19b73;
+    color: var(--schedule-mobile-tab-active);
+    border-bottom-color: var(--schedule-mobile-tab-active);
+}
+
+.schedule-wrapper.mobile .schedule-day-tab:hover {
+    background: var(--schedule-mobile-tab-hover-bg);
 }
 
 /* Timeline */
 .schedule-mobile-timeline {
     padding: 10px 10px 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .schedule-mobile-empty {
     padding: 28px 16px;
     text-align: center;
-    opacity: 0.75;
+    color: var(--schedule-mobile-empty-text);
 }
 
 .schedule-mobile-row {
@@ -610,6 +665,12 @@
     column-gap: 8px;
     position: relative;
     min-height: 104px;
+    width: 100%;
+    min-width: 0;
+}
+
+.schedule-mobile-row>* {
+    min-width: 0;
 }
 
 .schedule-mobile-hour {
@@ -618,7 +679,7 @@
     padding-top: 7px;
     font-size: 15px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--schedule-mobile-hour-text);
 }
 
 .schedule-mobile-line {
@@ -629,7 +690,7 @@
     margin-right: 12px;
     margin-top: 10px;
     border-radius: 99px;
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--schedule-mobile-line-bg);
 }
 
 .schedule-mobile-dot {
@@ -637,21 +698,33 @@
     height: 13px;
     margin-top: 13px;
     border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.22);
+    background: var(--schedule-mobile-dot-bg);
+    box-shadow: 0 0 0 2px var(--schedule-mobile-dot-ring);
 }
 
 /* Card evento */
 .schedule-mobile-card {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     margin-bottom: 14px;
     border: 0;
     border-radius: 14px;
     padding: 13px 14px;
     text-align: left;
-    color: #ffffff;
-    background: rgba(48, 61, 70, 0.95);
+    color: var(--schedule-mobile-card-text);
+    background: var(--schedule-mobile-card-bg);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.schedule-mobile-card:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    opacity: 0.88;
 }
 
 .schedule-mobile-card-title {
@@ -659,13 +732,18 @@
     font-weight: 900;
     line-height: 1.2;
     margin-bottom: 8px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .schedule-mobile-card-room {
-    font-size: 14px;
-    font-weight: 700;
-    opacity: 0.9;
+    font-size: 12.5px;
+    font-weight: 600;
+    opacity: 0.82;
     margin-bottom: 4px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    color: var(--schedule-mobile-card-subtext);
 }
 
 .schedule-mobile-card-duration {
@@ -678,6 +756,27 @@
     margin-top: 5px;
     font-size: 12px;
     opacity: 0.55;
+}
+
+.schedule-mobile-card .schedule-detail-info-field {
+    padding: 0;
+    margin: 0;
+    gap: 0.4rem;
+    opacity: 1;
+}
+
+.schedule-mobile-card .schedule-detail-info-icon {
+    font-size: 0.9rem;
+    opacity: 0.88;
+    color: var(--schedule-mobile-card-subtext);
+}
+
+.schedule-mobile-card .schedule-detail-info-value {
+    font-size: 12px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    color: var(--schedule-mobile-card-subtext);
 }
 
 .schedule-mobile-card.canceled {
@@ -700,7 +799,7 @@
 }
 
 .schedule-mobile-row.past .schedule-mobile-line {
-    background: rgba(255, 255, 255, 0.1);
+    opacity: 0.65;
 }
 
 .schedule-mobile-card.now {

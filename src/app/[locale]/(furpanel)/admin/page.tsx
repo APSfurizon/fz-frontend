@@ -190,29 +190,29 @@ export default function AdminPage() {
     <div className="stretch-page">
       {loading && <LoadingPanel />}
       {/* Security area */}
-      <FpMacroSection title="Gestione Security" icon="SECURITY">
-        <FpSection title="Utenti e Documenti">
+      <FpMacroSection title={t("furpanel.admin.security_management.title")} icon="SECURITY">
+        <FpSection title={t("furpanel.admin.security_management.users_and_docs.title")}>
           <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/security/user-search")}>
-            Ricerca Utente
+            {t("furpanel.admin.security_management.users_and_docs.user_search")}
           </Button>
           <Button icon="FIND_IN_PAGE" onClick={() => router.push("/admin/security/documents")}>
-            Documents
+            {t("furpanel.admin.security_management.users_and_docs.documents")}
           </Button>
         </FpSection>
-        <FpSection title="Segnalazioni">
+        <FpSection title={t("furpanel.admin.security_management.reports.title")}>
           <Button icon="BOOKMARK_STAR" onClick={() => router.push("/admin/security/incidents")}>
-            Registro Incidenti
+            {t("furpanel.admin.security_management.reports.incident_log")}
           </Button>
         </FpSection>
-        <FpSection title="Registri">
+        <FpSection title={t("furpanel.admin.security_management.logs.title")}>
           <Button icon="PACKAGE_2" onClick={() => router.push("/admin/security/assets")}>
-            Asset Manager
+            {t("furpanel.admin.security_management.logs.asset_manager")}
           </Button>
           <Button icon="ERROR" onClick={() => router.push("/admin/security/hazardous")}>
-            Hazardous Register
+            {t("furpanel.admin.security_management.logs.hazardous_register")}
           </Button>
           <Button icon="SEARCH" onClick={() => router.push("/admin/security/lost-found")}>
-            Lost and Found
+            {t("furpanel.admin.security_management.logs.lost_and_found")}
           </Button>
         </FpSection>
       </FpMacroSection>

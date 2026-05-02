@@ -14,9 +14,12 @@ import FpInput from "@/components/input/fpInput";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
+import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 
 const SECURITY_IMAGE_THUMB_SIZE = 108;
+const SECURITY_LIST_PREVIEW_SIZE = 56;
+const SECURITY_LIST_MEDIA_SLOT_WIDTH = 120;
 const SECURITY_ACCENT_COLOR = "#9061ff";
 const SECURITY_ACCENT_TEXT = "#fff8f5";
 const SECURITY_BADGE_STYLE = {
@@ -33,6 +36,7 @@ export default function SecurityLostAndFoundPage() {
     const [items, setItems] = useState<SecurityLostItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [showConsegnati, setShowConsegnati] = useState(false);
+    const [searchText, setSearchText] = useState("");
     const [view, setView] = useState<"list" | "form" | "detail">("list");
     const [selected, setSelected] = useState<SecurityLostItem | null>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -61,7 +65,12 @@ export default function SecurityLostAndFoundPage() {
 
     const smarriti = items.filter((i) => i.status === "smarrito");
     const consegnati = items.filter((i) => i.status === "consegnato");
-    const displayed = showConsegnati ? consegnati : smarriti;
+    const normalizedSearch = searchText.trim().toLowerCase();
+    const displayed = (showConsegnati ? consegnati : smarriti).filter((item) => {
+        if (!normalizedSearch) return true;
+        return [item.luogo_ritrovo, item.descrizione, item.proprietario]
+            .some((value) => String(value ?? "").toLowerCase().includes(normalizedSearch));
+    });
 
     const resetForm = () => {
         setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFProprietario(""); setFStatus("smarrito");
@@ -118,13 +127,22 @@ export default function SecurityLostAndFoundPage() {
 
     const renderList = () => (
         <div className="vertical-list gap-2mm">
-            {/* Tabs */}
-            <div className="horizontal-list gap-2mm">
-                <button className="button rounded-m" style={{ flex: 1, background: (!showConsegnati) ? SECURITY_ACCENT_COLOR : "transparent", color: (!showConsegnati) ? SECURITY_ACCENT_TEXT : "#888", fontWeight: (!showConsegnati) ? 700 : 400, border: (!showConsegnati) ? `2px solid ${SECURITY_ACCENT_COLOR}` : "2px solid #666" }}
+            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", alignItems: "center" }}>
+                <div style={{ flex: "1 1 320px", minWidth: 240, maxWidth: 560 }}>
+                    <input
+                        type="text"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        placeholder="Cerca per Luogo, Descrizione o Proprietario"
+                        style={{ width: "100%", padding: "0.5em 0.7em", borderRadius: 8, border: "1px solid #00000040", background: "var(--table-header-row-bg)", color: "inherit" }}
+                    />
+                </div>
+                <div className="spacer" />
+                <button className="button rounded-m" style={{ background: (!showConsegnati) ? SECURITY_ACCENT_COLOR : "transparent", color: (!showConsegnati) ? SECURITY_ACCENT_TEXT : "#888", fontWeight: (!showConsegnati) ? 700 : 500, border: (!showConsegnati) ? `2px solid ${SECURITY_ACCENT_COLOR}` : "2px solid #666", fontSize: 12, padding: "0.25em 0.6em" }}
                     onClick={() => setShowConsegnati(false)}>
                     Smarriti ({smarriti.length})
                 </button>
-                <button className="button rounded-m" style={{ flex: 1, background: showConsegnati ? SECURITY_ACCENT_COLOR : "transparent", color: showConsegnati ? SECURITY_ACCENT_TEXT : "#888", fontWeight: showConsegnati ? 700 : 400, border: showConsegnati ? `2px solid ${SECURITY_ACCENT_COLOR}` : "2px solid #666" }}
+                <button className="button rounded-m" style={{ background: showConsegnati ? SECURITY_ACCENT_COLOR : "transparent", color: showConsegnati ? SECURITY_ACCENT_TEXT : "#888", fontWeight: showConsegnati ? 700 : 500, border: showConsegnati ? `2px solid ${SECURITY_ACCENT_COLOR}` : "2px solid #666", fontSize: 12, padding: "0.25em 0.6em" }}
                     onClick={() => setShowConsegnati(true)}>
                     Consegnati ({consegnati.length})
                 </button>
@@ -140,11 +158,27 @@ export default function SecurityLostAndFoundPage() {
                             <span className="title normal" style={{ fontWeight: 700, display: "block" }}>{item.descrizione || "—"}</span>
                             {item.luogo_ritrovo && <span className="title small color-subtitle">📍 {item.luogo_ritrovo}</span>}
                             {item.found_by && <span className="title small color-subtitle" style={{ display: "block" }}>👤 {item.found_by}</span>}
-                            <span className="title small color-subtitle" style={{ opacity: 0.7 }}>{item.data ? new Date(item.data).toLocaleDateString() : ""}</span>
                         </div>
-                        {(item.immagini?.length ?? 0) > 0 && (
-                            <span style={{ background: SECURITY_ACCENT_COLOR, color: SECURITY_ACCENT_TEXT, padding: "3px 8px", borderRadius: 8, fontSize: 12, flexShrink: 0 }}>🖼 {item.immagini!.length}</span>
-                        )}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", justifyContent: "flex-start", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
+                            <span className="title small color-subtitle" style={{ opacity: 0.7 }}>{item.data ? new Date(item.data).toLocaleDateString() : ""}</span>
+                            <div style={{ display: "flex", flexDirection: "row", gap: 6, alignItems: "center", justifyContent: "flex-end" }}>
+                                {(item.immagini?.length ?? 0) > 1 && (
+                                    <span style={{ background: SECURITY_ACCENT_COLOR, color: SECURITY_ACCENT_TEXT, padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {item.immagini!.length}</span>
+                                )}
+                                {(item.immagini?.length ?? 0) > 0 ? (
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                        <ImagePreviewModal
+                                            imageUrl={`/api/image-proxy?url=${encodeURIComponent(typeof item.immagini![0] === "string" ? item.immagini![0] : item.immagini![0].url)}`}
+                                            alt={`${item.descrizione || "Oggetto"} - preview`}
+                                            thumbSize={SECURITY_LIST_PREVIEW_SIZE}
+                                            title={`${item.descrizione || "Oggetto"} - preview`}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div style={{ width: SECURITY_LIST_PREVIEW_SIZE, height: SECURITY_LIST_PREVIEW_SIZE, borderRadius: 8, background: "#1f2b3a", border: "1px solid #ffffff22" }} />
+                                )}
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -206,11 +240,11 @@ export default function SecurityLostAndFoundPage() {
                         <span className="title small">{value}</span>
                     </div>
                 ))}
-                {((item.immagini?.length ?? 0) > 0 || (item?.foto?.length ?? 0) > 0) && (
+                {(item.immagini?.length ?? 0) > 0 && (
                     <div className="vertical-list gap-2mm" style={{ marginTop: 8 }}>
-                        <span className="title small color-subtitle">Foto ({item.immagini?.length ?? item.foto?.length ?? 0})</span>
+                        <span className="title small color-subtitle">Foto ({item.immagini?.length ?? 0})</span>
                         <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                            {(item.immagini ?? item.foto ?? []).map((img, idx) => {
+                            {(item.immagini ?? []).map((img: { url: string }, idx: number) => {
                                 const url = typeof img === "string" ? img : img.url;
                                 return (
                                     <ImagePreviewModal
@@ -238,14 +272,23 @@ export default function SecurityLostAndFoundPage() {
 
     return (
         <div className="stretch-page compact-main">
-            <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                <Button icon="ARROW_BACK" onClick={() => {
+            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
+                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
                         router.push("/admin");
                         return;
                     }
-                    setView(isEdit ? "detail" : "list");
-                }}>Indietro</Button>
+                    if (view === "form") {
+                        setView(isEdit && selected ? "detail" : "list");
+                        return;
+                    }
+                    setView("list");
+                }}>
+                    <Icon icon="ARROW_BACK" />
+                </span>
+                <div className="horizontal-list gap-2mm">
+                    <span className="title medium">Lost and Found</span>
+                </div>
                 <div className="spacer" />
                 {view === "list" && <Button icon="ADD" onClick={openAdd}>Nuovo oggetto smarrito</Button>}
                 {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>Modifica</Button>}

@@ -7,6 +7,7 @@ export interface ScheduleEvent {
     titleEmote?: string | null;
     tipologia?: string | null;
     cancellato?: boolean;
+    durata?: string | null;
     resource?: unknown;
 }
 
@@ -49,7 +50,7 @@ export const SCHEDULE_ROOMS: ScheduleRoom[] = [
     { resourceId: "panel-room-2", resourceTitle: "Panel Room 2" },
     { resourceId: "dealers-den", resourceTitle: "Dealers' Den" },
     { resourceId: "cnc", resourceTitle: "C&C" },
-    { resourceId: "forecourt", resourceTitle: "Forecourt & Other" },
+    { resourceId: "forecourt", resourceTitle: "Forecourt" },
 ];
 
 const ROOM_ID_BY_LOCATION: Record<string, string> = {
@@ -58,7 +59,7 @@ const ROOM_ID_BY_LOCATION: Record<string, string> = {
     "Panel Room 2": "panel-room-2",
     "Dealers' Den": "dealers-den",
     "Dealers Den": "dealers-den",
-    "Dealers": "dealers-den",
+    "Dealers'": "dealers-den",
     "C&C": "cnc",
     "Forecourt": "forecourt",
     "Other": "forecourt",
@@ -104,6 +105,7 @@ export function mapScheduleActivityToEvent(
         titleEmote: prefix || null,
         tipologia: activity.tipologia ?? null,
         cancellato: activity.cancellato === true,
+        durata: activity.durata ?? null,
         resource: activity,
     };
 }

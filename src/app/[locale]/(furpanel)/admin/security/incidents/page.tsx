@@ -6,6 +6,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Modal from "@/components/modal";
 import ImagePreviewModal from "@/components/imagePreviewModal";
+import Icon from "@/components/icon";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
 import {
@@ -278,45 +279,64 @@ export default function SecurityIncidentsPage() {
                 onClick={() => openDetail(item)}>
                 <div style={{ flex: 1 }}>
                     <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", marginBottom: 4 }}>
-                        {item.importante && !isHistory && renderBadge("Importante", "#f39c12")}
-                        {item.sospeso && !isHistory && renderBadge("Sospesa", "#7f8c8d")}
-                        {isHistory && renderBadge("Storico", "#8e44ad")}
                         <span className="title small color-subtitle">{item.textData}</span>
                     </div>
                     <span className="title normal" style={{ fontWeight: 700, display: "block" }}>{item.titolo || "Senza titolo"}</span>
                     {item.from && <span className="title small color-subtitle" style={{ display: "block", marginTop: 2 }}>👤 {item.from}</span>}
                     {item.messaggio && <span className="title small color-subtitle" style={{ display: "block", marginTop: 2 }}>{item.messaggio}</span>}
                 </div>
-                <span className="title small color-subtitle" style={{ whiteSpace: "nowrap" }}>Messaggi ({messageCount})</span>
+                <div className="vertical-list gap-2mm" style={{ alignItems: "flex-end", flexShrink: 0 }}>
+                    <span className="title small color-subtitle" style={{ whiteSpace: "nowrap" }}>Messaggi ({messageCount})</span>
+                    <div className="horizontal-list gap-2mm" style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+                        {item.importante && !isHistory && renderBadge("Importante", "#f39c12")}
+                        {item.sospeso && !isHistory && renderBadge("Sospesa", "#7f8c8d")}
+                        {isHistory && renderBadge("Storico", "#8e44ad")}
+                    </div>
+                </div>
             </div>
         );
     };
 
+    const renderReportGroup = (
+        title: string,
+        emptyText: string,
+        list: SecurityIncident[],
+        disabled = false
+    ) => (
+        <div className="main-dialog rounded-m vertical-list gap-2mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
+            <span className="title normal color-subtitle">{title}</span>
+            {list.length === 0 && <span className="title small color-subtitle">{emptyText}</span>}
+            {list.map((item) => renderReportCard(item, disabled))}
+        </div>
+    );
+
     const renderList = () => (
         <div className="vertical-list gap-2mm">
             {showHistory ? (
-                <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
-                    <span className="title normal color-subtitle">Storico ({historyReports.length})</span>
-                    {historyReports.length === 0 && <span className="title normal color-subtitle">Nessuna segnalazione nello storico</span>}
-                    {historyReports.map((item) => renderReportCard(item, true))}
-                </div>
+                renderReportGroup(
+                    `Storico (${historyReports.length})`,
+                    "Nessuna segnalazione nello storico",
+                    historyReports,
+                    true
+                )
             ) : (
                 <>
-                    <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
-                        <span className="title normal color-subtitle">Segnalazioni importanti ({importantReports.length})</span>
-                        {importantReports.length === 0 && <span className="title small color-subtitle">Nessuna segnalazione importante</span>}
-                        {importantReports.map((item) => renderReportCard(item))}
-                    </div>
-                    <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
-                        <span className="title normal color-subtitle">Segnalazioni ({regularReports.length})</span>
-                        {regularReports.length === 0 && <span className="title small color-subtitle">Nessuna segnalazione attiva</span>}
-                        {regularReports.map((item) => renderReportCard(item))}
-                    </div>
-                    <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
-                        <span className="title normal color-subtitle">Segnalazioni sospese ({disabledReports.length})</span>
-                        {disabledReports.length === 0 && <span className="title small color-subtitle">Nessuna segnalazione sospesa</span>}
-                        {disabledReports.map((item) => renderReportCard(item, true))}
-                    </div>
+                    {renderReportGroup(
+                        `Segnalazioni importanti (${importantReports.length})`,
+                        "Nessuna segnalazione importante",
+                        importantReports
+                    )}
+                    {renderReportGroup(
+                        `Segnalazioni (${regularReports.length})`,
+                        "Nessuna segnalazione attiva",
+                        regularReports
+                    )}
+                    {renderReportGroup(
+                        `Segnalazioni sospese (${disabledReports.length})`,
+                        "Nessuna segnalazione sospesa",
+                        disabledReports,
+                        true
+                    )}
                 </>
             )}
         </div>
@@ -355,13 +375,15 @@ export default function SecurityIncidentsPage() {
     const renderDetail = (item: SecurityIncident) => {
         const people = splitCsvNames(item.persone_coinvolte);
         return (
-            <div className="vertical-list gap-3mm">
+            <div className="main-dialog rounded-m vertical-list gap-3mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
                 <div className="vertical-list gap-2mm">
-                    <span className="title large">{item.titolo || "Segnalazione"}</span>
                     <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap" }}>
-                        {item.importante && renderBadge("Importante", "#f39c12")}
-                        {item.sospeso && item.folder !== "cronologia" && renderBadge("Sospesa", "#7f8c8d")}
-                        {item.folder === "cronologia" && renderBadge("Storico", "#8e44ad")}
+                        <span className="title large" style={{ flex: 1, minWidth: 0 }}>{item.titolo || "Segnalazione"}</span>
+                        <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", justifyContent: "flex-end" }}>
+                            {item.importante && renderBadge("Importante", "#f39c12")}
+                            {item.sospeso && item.folder !== "cronologia" && renderBadge("Sospesa", "#7f8c8d")}
+                            {item.folder === "cronologia" && renderBadge("Storico", "#8e44ad")}
+                        </div>
                     </div>
                     <span className="title small color-subtitle">Segnalato da: {item.from || "-"}</span>
                     <span className="title small color-subtitle">{item.textData}</span>
@@ -378,26 +400,44 @@ export default function SecurityIncidentsPage() {
                     </div>
                 )}
 
-                <div className="vertical-list furpanel-table-container">
-                    {(item.messaggi ?? []).map((message, idx) => (
-                        <div key={`${message.id ?? idx}_${message.data ?? idx}`} className="main-dialog rounded-m" style={{ padding: "0.75em", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "flex-start" }}>
+                <div className="vertical-list gap-2mm">
+                    {(item.messaggi ?? []).map((message, idx) => {
+                        const isCurrentUserMessage = (message.from ?? "").trim().toLowerCase() === (currentUserName ?? "").trim().toLowerCase();
+                        return <div
+                            key={`${message.id ?? idx}_${message.data ?? idx}`}
+                            className="rounded-m"
+                            style={{
+                                padding: "0.75em",
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "0.75em",
+                                alignItems: "flex-start",
+                                background: "var(--table-header-row-bg)",
+                                border: "1px solid #00000030",
+                                boxShadow: "0px 1px 6px 0px #0000002a",
+                                boxSizing: "border-box",
+                                marginLeft: isCurrentUserMessage ? "clamp(0.5rem, 4vw, 6rem)" : undefined,
+                                marginRight: !isCurrentUserMessage ? "clamp(0.5rem, 4vw, 6rem)" : undefined
+                            }}>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap" }}>
                                     <span className="title small" style={{ fontWeight: 700 }}>{message.from || "-"}</span>
                                     <span className="title small color-subtitle">{formatReportDate(message.data)}</span>
                                 </div>
-                                {message.messaggio && <span className="title small" style={{ display: "block", marginTop: 6 }}>{message.messaggio}</span>}
+                                {message.messaggio && <span className="title small" style={{ display: "block", marginTop: 6, whiteSpace: "pre-wrap", overflowWrap: "anywhere", wordBreak: "break-word" }}>{message.messaggio}</span>}
                             </div>
                             {message.logoUrl && (
-                                <ImagePreviewModal
-                                    imageUrl={`/api/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
-                                    alt={`${item.titolo || "Segnalazione"} - allegato ${idx + 1}`}
-                                    thumbSize={108}
-                                    title={(message.messaggio?.trim() || item.titolo || "Anteprima immagine").slice(0, 48)}
-                                />
+                                <div style={{ flexShrink: 0, marginLeft: "auto" }}>
+                                    <ImagePreviewModal
+                                        imageUrl={`/api/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
+                                        alt={`${item.titolo || "Segnalazione"} - allegato ${idx + 1}`}
+                                        thumbSize={108}
+                                        title={(message.messaggio?.trim() || item.titolo || "Anteprima immagine").slice(0, 48)}
+                                    />
+                                </div>
                             )}
-                        </div>
-                    ))}
+                        </div>;
+                    })}
                     {(item.messaggi?.length ?? 0) === 0 && <span className="title small color-subtitle">Nessun messaggio disponibile</span>}
                 </div>
 
@@ -424,14 +464,23 @@ export default function SecurityIncidentsPage() {
 
     return (
         <div className="stretch-page compact-main">
-            <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                <Button icon="ARROW_BACK" onClick={() => {
+            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
+                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
+                        if (showHistory) {
+                            setShowHistory(false);
+                            return;
+                        }
                         router.push("/admin");
                         return;
                     }
                     setView("list");
-                }}>Indietro</Button>
+                }}>
+                    <Icon icon="ARROW_BACK" />
+                </span>
+                <div className="horizontal-list gap-2mm">
+                    <span className="title medium">Registro Incidenti</span>
+                </div>
 
                 {view === "list" && <Button onClick={refreshList} busy={refreshing}>Aggiorna</Button>}
 
@@ -439,7 +488,7 @@ export default function SecurityIncidentsPage() {
 
                 {view === "list" && (
                     <>
-                        <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>Aggiungi</Button>
+                        {!showHistory && <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>Aggiungi</Button>}
                         <Button onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? "Segnalazioni" : "Storico"}</Button>
                     </>
                 )}
