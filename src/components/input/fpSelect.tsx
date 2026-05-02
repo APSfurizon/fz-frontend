@@ -115,7 +115,7 @@ export default function FpSelect({
             style={{ ...labelStyle }}>{label}</label>}
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
             defaultValue={selectDefaultValue} required={required}></input>
-        <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
+        <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm">
             <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
                 id={selectLabel}
                 value={selectDefaultValue}

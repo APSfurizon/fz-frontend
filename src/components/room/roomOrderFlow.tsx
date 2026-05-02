@@ -99,7 +99,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
     switch (step) {
         case STEPS.START:
             return <>
-                <div className="horizontal-list flex-vertical-center">
+                <div className="horizontal-list align-items-center">
                     <span className="title">{t("furpanel.room.order_flow.select_type")}</span>
                     <div className="spacer"></div>
                     <Button icon="REFRESH"
@@ -117,7 +117,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                     {modalLoading && <LoadingPanel />}
                     {/* Room type selection */}
                     {roomsData?.rooms?.map((roomInfo, index) =>
-                        <a className={`room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`}
+                        <a className={`room-type-container horizontal-list gap-2mm align-items-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`}
                             key={index} onClick={() => selectRoomType(roomInfo)}>
                             {selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId &&
                                 <Icon className="large" icon="CHECK_CIRCLE" />}
@@ -157,7 +157,7 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                 {latestError && <ErrorMessage error={latestError} />}
                 <span>{t("furpanel.room.order_flow.your_selection")}</span>
                 <div className="room-container">
-                    {selectedType && <a className={"room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m selected"}>
+                    {selectedType && <a className={"room-type-container horizontal-list gap-2mm align-items-center rounded-m selected"}>
                         <div className="vertical-list">
                             <span className="title">{translate(selectedType.data.roomTypeNames, locale)}</span>
                             <span>{formatter.number(parseFloat(selectedType.price) - parseFloat(roomsData?.priceOfCurrentRoom ?? "0"), { style: 'currency', currency: EVENT_CURRENCY })}</span>

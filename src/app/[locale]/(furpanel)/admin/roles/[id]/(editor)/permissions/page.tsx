@@ -48,7 +48,7 @@ export default function RolePermissionsEditor() {
         {/* Permissions table */}
         <div className="table-container rounded-m">
             <div className="table rounded-m">
-                {entity?.enabledPermissions?.map((permission, pi) => <div key={pi} className="row horizontal-list flex-vertical-center gap-2mm flex-wrap">
+                {entity?.enabledPermissions?.map((permission, pi) => <div key={pi} className="row horizontal-list align-items-center gap-2mm flex-wrap">
                     <div className="data">
                         <span className="title average">{permission}</span>
                     </div>

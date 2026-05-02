@@ -177,7 +177,7 @@ export default function GalleryUploadPage() {
             </div>
         </div>
         <h3 className="title medium">{t("misc.gallery.upload.grid.title")}</h3>
-        <div className="toolbar horizontal-list gap-2mm flex-vertical-center">
+        <div className="toolbar horizontal-list gap-2mm align-items-center">
             {canManageMedias && <span>{selection.size}/{medias.size}</span>}
             <Button className="margin-left-auto" icon="REFRESH"
                 onClick={onRefresh}

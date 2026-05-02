@@ -69,7 +69,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
     }
 
     return (<div className="vertical-list gap-2mm">
-        <div className="horizontal-list flex-vertical-center">
+        <div className="horizontal-list align-items-center">
             <Icon icon={icon} />
             <span className="title small">{title}</span>
         </div>

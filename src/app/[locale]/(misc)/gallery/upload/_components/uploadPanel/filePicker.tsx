@@ -66,14 +66,14 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
         onDragOver={dragOverHandler}
         onDrop={dropHandler}
         onDragLeave={() => setHover(false)}>
-        <div className="prompt vertical-list flex-horizontal-center flex-center">
+        <div className="prompt vertical-list flex-horizontal-center justify-content-center">
             <input type="file"
                 className="suppressed-input"
                 multiple
                 ref={fileRef}
                 accept="image/*, video/*"
                 onChange={filePickerHandler} />
-            <span className="title horizontal-list flex-vertical-center flex-horizontal-center gap-2mm flex-wrap">
+            <span className="title horizontal-list align-items-center flex-horizontal-center gap-2mm flex-wrap">
                 <Icon icon="CLOUD_UPLOAD"></Icon>
                 {t.rich("misc.gallery.upload.form.picker.hint", {
                     f: chunks => <Button onClick={() => fileRef.current?.showPicker()}>{chunks}</Button>

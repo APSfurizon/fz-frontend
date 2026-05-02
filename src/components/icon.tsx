@@ -89,6 +89,7 @@ export const ICONS = {
     PROGRESS_ACTIVITY: "progress_activity",
     QR_CODE: "qr_code",
     QUESTION_MARK: "question_mark",
+    READ_MORE: "read_more",
     REFRESH: "refresh",
     REMOVE: "remove",
     REPLAY: "replay",

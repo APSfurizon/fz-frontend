@@ -1,0 +1,48 @@
+.view-media-modal {
+    .view-grid {
+        display: grid;
+        grid-template-columns: 2em auto auto 2em;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "back-button media-container information-panel forward-button"
+            "bottom-toolbar bottom-toolbar bottom-toolbar bottom-toolbar";
+
+        .back-button {
+            grid-area: back-button;
+        }
+
+        .media-container {
+            grid-area: media-container;
+        }
+
+        .forward-button {
+            grid-area: forward-button;
+        }
+
+        .bottom-toolbar {
+            grid-area: bottom-toolbar;
+        }
+
+        .information-panel {
+            grid-area: information-panel;
+        }
+
+        .forward-button,
+        .back-button {
+            align-content: center;
+        }
+    }
+}
+
+@media screen and (max-width: 800) {
+    .view-media-modal {
+        .view-grid {
+            grid-template-columns: 2em auto 2em;
+            grid-template-rows: auto auto auto;
+            grid-template-areas:
+                "back-button media-container forward-button"
+                "bottom-toolbar bottom-toolbar bottom-toolbar"
+                "information-panel information-panel information-panel";
+        }
+    }
+}

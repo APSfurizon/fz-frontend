@@ -71,7 +71,9 @@
       "description": "Read the changelog at <a></a>"
     },
     "success": "Success",
-    "help": "Help"
+    "help": "Help",
+    "open": "Open",
+    "close": "Close"
   },
   "components": {
     "autoinput": {

@@ -71,7 +71,9 @@
       "description": "Leggi le ultime novità su <a></a>"
     },
     "success": "Successo",
-    "help": "Aiuto"
+    "help": "Aiuto",
+    "open": "Apri",
+    "close": "Chiudi"
   },
   "components": {
     "autoinput": {

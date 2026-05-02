@@ -59,15 +59,15 @@
     margin-right: auto;
 }
 
-.flex-center {
+.justify-content-center {
     justify-content: center;
 }
 
-.flex-vertical-center {
+.align-items-center {
     align-items: center;
 }
 
-.flex-vertical-bottom {
+.align-items-bottom {
     align-items: end;
 }
 
