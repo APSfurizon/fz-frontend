@@ -119,7 +119,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
         const useSearchParams = !!data.searchParams;
         let endpointUrl = {
             [Endpoint.API]: API_BASE_URL,
-            [Endpoint.MOBILE]: "/api/mobile/"
+            [Endpoint.MOBILE]: API_MOBILE_URL ?? ""
         }[data.action.endpoint];
         endpointUrl += [data.action.urlAction, ...data.additionalPath ?? []].join("/");
         if (useSearchParams) endpointUrl += "?" + data.searchParams!.toString();
@@ -129,7 +129,8 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
         const fetchOptions: RequestInit = {
             method: data.action.method,
             body: data.body ? data.body instanceof FormData ? data.body : JSON.stringify(data.body) : null,
-            headers: headers
+            headers: headers,
+            cache: "no-store"
         }
 
         // Execute fetch

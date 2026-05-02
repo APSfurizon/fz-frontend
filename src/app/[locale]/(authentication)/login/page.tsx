@@ -16,7 +16,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { ADMIN_TOKEN_STORAGE_NAME, APP_VERSION, SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import {
+  ADMIN_TOKEN_STORAGE_NAME,
+  API_MOBILE_URL,
+  APP_VERSION,
+  MOBILE_FURIZON_AUTH_HEADER,
+  SESSION_DURATION,
+  TOKEN_STORAGE_NAME
+} from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
 import Button from "@/components/input/button";
 import { UserDisplayAction } from "@/lib/api/user";
@@ -54,17 +61,26 @@ export default function Login() {
   }
 
   const doSecondaryAdminLogin = async () => {
-    const secondaryResponse = await fetch("/api/admin-secondary-login", {
+    if (!API_MOBILE_URL) {
+      throw new Error("Mobile API base URL not configured");
+    }
+
+    const requestUrl = new URL("mail/sendMail", API_MOBILE_URL);
+    const secondaryResponse = await fetch(requestUrl, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...(MOBILE_FURIZON_AUTH_HEADER
+          ? { furizonauth: MOBILE_FURIZON_AUTH_HEADER }
+          : {})
       },
       body: JSON.stringify({
         username: email.trim().toLowerCase(),
-        password,
+        password: encodeURIComponent(password),
         platform: "web",
         versione: APP_VERSION
-      })
+      }),
+      cache: "no-store"
     });
 
     if (!secondaryResponse.ok) {
