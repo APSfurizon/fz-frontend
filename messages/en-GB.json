@@ -1112,11 +1112,24 @@
           "title": "Uploading..."
         },
         "modal": {
-          "title": "View picture"
+          "title": "View picture",
+          "video": {
+            "duration": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}, {milliseconds} milliseconds"
+          },
+          "information_panel": {
+            "title": "Information"
+          }
         }
       },
       "admin": {
         "title": "Administration"
+      },
+      "media": {
+        "status": {
+          "approved": "Approved",
+          "pending": "Pending review",
+          "rejected": "Rejected"
+        }
       }
     }
   }

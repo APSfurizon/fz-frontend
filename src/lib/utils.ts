@@ -36,7 +36,8 @@ export function getCountdown(ts: number): number[] {
     const minutes = Math.floor(base / MINUTE_TS);
     base -= minutes * MINUTE_TS;
     const seconds = Math.floor(base / SECOND_TS);
-    return [days, hours, minutes, seconds];
+    base -= seconds * SECOND_TS;
+    return [days, hours, minutes, seconds, base];
 }
 
 export function isEmpty(str?: string) {

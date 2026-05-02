@@ -1113,11 +1113,24 @@
           "title": "Caricamento..."
         },
         "modal": {
-          "title": "Visualizza immagine"
+          "title": "Visualizza immagine",
+          "video": {
+            "duration": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}, {milliseconds} millisecondi"
+          },
+          "information_panel": {
+            "title": "Informazioni"
+          }
         }
       },
       "admin": {
         "title": "Amministrazione"
+      },
+      "media": {
+        "status": {
+          "approved": "Approvata",
+          "pending": "Valutazione in attesa",
+          "rejected": "Rifiutato"
+        }
       }
     }
   }

@@ -95,6 +95,10 @@
     vertical-align: middle;
 }
 
+.vertical-align-bottom * {
+    vertical-align: bottom;
+}
+
 .center {
     text-align: center;
 }

@@ -20,7 +20,7 @@ div.modal-overlay {
 div.modal-dialog {
     max-width: 210mm;
     max-height: 100vh;
-    overflow: visible;
+    overflow: hidden;
     background-color: var(--modal-dialog-bg);
     box-shadow: 0px 3px 20px 1px #0000003F;
     gap: 0.9375em;
@@ -64,6 +64,9 @@ div.modal-dialog div.bottom-toolbar {
 @media (max-width:800px) {
     div.modal-dialog {
         width: 100vw;
-        padding-bottom: 5em;
+
+        &:not(.no-bottom) {
+            padding-bottom: 5em;
+        }
     }
 }

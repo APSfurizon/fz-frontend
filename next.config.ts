@@ -3,19 +3,33 @@ import createNextIntlPlugin from 'next-intl/plugin';
 import './src/envConfig.ts'
 import { version } from './package.json';
 import { Header } from "next/dist/lib/load-custom-routes.js";
+import { RemotePattern } from "next/dist/shared/lib/image-config.js";
 
 const withNextIntl = createNextIntlPlugin();
 
 const API_IMAGE_URL = new URL(process.env.NEXT_PUBLIC_IMAGE_BASE_URL!);
+const isDev = process.env.NODE_ENV === 'development';
+
+const additionalData: RemotePattern[] = isDev
+  ? [
+    {
+      protocol: "http",
+      hostname: "localhost",
+      pathname: "**"
+    }
+  ]
+  : [];
+
 
 const nextConfig: NextConfig = {
   /* config options here */
-  allowedDevOrigins: ['192.168.1.72'],
+  allowedDevOrigins: ['localhost'],
   images: {
+    dangerouslyAllowLocalIP: isDev,
     qualities: [100, 75],
     remotePatterns: [
       {
-        protocol: "https",
+        protocol: API_IMAGE_URL.protocol.replace(":", "") as "http" | "https",
         hostname: API_IMAGE_URL.hostname,
         port: API_IMAGE_URL.port,
         pathname: "**"
@@ -25,7 +39,8 @@ const nextConfig: NextConfig = {
         hostname: "**.furizon.net",
         port: "",
         pathname: "**"
-      }
+      },
+      ...additionalData
     ]
   },
   env: {

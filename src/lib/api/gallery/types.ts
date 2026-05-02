@@ -10,13 +10,15 @@ export type UploadRepostPermissions = "PHOTOGRAPHER_DISCRETION" |
     "PUBLIC_DOMAIN" |
     "ALL_RIGHTS_RESERVED";
 
+export type GalleryUploadedMediaStatus = "PENDING" | "APPROVED" | "REJECTED";
+
 export interface GalleryUploadedMedia {
     id: number;
     photographerUserId: number;
     uploadDate: string;
-    status: "PENDING" | "APPROVED" | "REJECTED";
+    status: GalleryUploadedMediaStatus;
     fileName: string;
-    type: string;
+    type: "PHOTO" | "VIDEO";
     thumbnailMedia?: MediaData;
     eventId: number;
     selected: boolean;
