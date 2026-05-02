@@ -562,6 +562,7 @@
       "membership_manager": {
         "title": "Gestione tessere",
         "header": "Tessere del ",
+        "send_card_by_mail": "Invia tessere via email",
         "actions": {
           "add": "Aggiungi tessera",
           "show_missing_cards": "Mostra mancanti",
