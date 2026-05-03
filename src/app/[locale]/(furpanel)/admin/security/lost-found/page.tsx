@@ -17,6 +17,7 @@ import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import "@/styles/furpanel/admin/security-pages.css";
 
 const SECURITY_IMAGE_THUMB_SIZE = 108;
 const SECURITY_LIST_PREVIEW_SIZE = 56;
@@ -55,7 +56,7 @@ export default function SecurityLostAndFoundPage() {
         setLoading(true);
         runRequest({ action: new GetSecurityLostItemsApiAction() })
             .then((res) => setItems(res.items ?? [...(res.smarriti ?? []), ...(res.consegnati ?? [])]))
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -87,7 +88,7 @@ export default function SecurityLostAndFoundPage() {
 
     const saveItem = () => {
         if (!fDescrizione.trim() && !fLuogo.trim()) {
-            showModal("Dati mancanti", <span>Inserisci almeno la descrizione o il luogo</span>);
+            showModal(t("furpanel.admin.security_management.lost_found.missing_data_title"), <span>{t("furpanel.admin.security_management.lost_found.missing_data_description")}</span>);
             return;
         }
         const body = new FormData();
@@ -105,7 +106,7 @@ export default function SecurityLostAndFoundPage() {
         const action = isEdit ? new UpdateSecurityLostItemApiAction() : new CreateSecurityLostItemApiAction();
         runRequest({ action, body })
             .then(() => { resetForm(); setView("list"); loadItems(); })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -118,7 +119,7 @@ export default function SecurityLostAndFoundPage() {
         setLoading(true);
         runRequest({ action: new UpdateSecurityLostItemApiAction(), body })
             .then(() => { loadItems(); setView("list"); })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -134,24 +135,24 @@ export default function SecurityLostAndFoundPage() {
                     <input
                         type="text"
                         value={searchText}
+                        className="security-search-input"
                         onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Cerca per Luogo, Descrizione o Proprietario"
-                        style={{ width: "100%", padding: "0.5em 0.7em", borderRadius: 8, border: "1px solid #00000040", background: "var(--table-header-row-bg)", color: "inherit" }}
+                        placeholder={t("furpanel.admin.security_management.lost_found.search_placeholder")}
                     />
                 </div>
                 <div className="spacer" />
                 <button className="button rounded-m" style={{ background: (!showConsegnati) ? SECURITY_ACCENT_COLOR : "transparent", color: (!showConsegnati) ? SECURITY_ACCENT_TEXT : "#888", fontWeight: (!showConsegnati) ? 700 : 500, border: (!showConsegnati) ? `2px solid ${SECURITY_ACCENT_COLOR}` : "2px solid #666", fontSize: 12, padding: "0.25em 0.6em" }}
                     onClick={() => setShowConsegnati(false)}>
-                    Smarriti ({smarriti.length})
+                    {t("furpanel.admin.security_management.lost_found.status_lost")} ({smarriti.length})
                 </button>
                 <button className="button rounded-m" style={{ background: showConsegnati ? SECURITY_ACCENT_COLOR : "transparent", color: showConsegnati ? SECURITY_ACCENT_TEXT : "#888", fontWeight: showConsegnati ? 700 : 500, border: showConsegnati ? `2px solid ${SECURITY_ACCENT_COLOR}` : "2px solid #666", fontSize: 12, padding: "0.25em 0.6em" }}
                     onClick={() => setShowConsegnati(true)}>
-                    Consegnati ({consegnati.length})
+                    {t("furpanel.admin.security_management.lost_found.status_delivered")} ({consegnati.length})
                 </button>
             </div>
 
             <div className="vertical-list gap-2mm table-container title rounded-m">
-                {displayed.length === 0 && <span className="title normal color-subtitle">Nessun oggetto</span>}
+                {displayed.length === 0 && <span className="title normal color-subtitle">{t("furpanel.admin.security_management.lost_found.no_items")}</span>}
                 {displayed.map((item, idx) => (
                     <div key={`${item.data}_${idx}`} className="rounded-m"
                         style={{ padding: "0.75em", margin: 0, cursor: "pointer", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "flex-start", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a" }}
@@ -171,9 +172,9 @@ export default function SecurityLostAndFoundPage() {
                                     <div onClick={(e) => e.stopPropagation()}>
                                         <ImagePreviewModal
                                             imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(typeof item.immagini![0] === "string" ? item.immagini![0] : item.immagini![0].url)}`}
-                                            alt={`${item.descrizione || "Oggetto"} - preview`}
+                                            alt={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} - preview`}
                                             thumbSize={SECURITY_LIST_PREVIEW_SIZE}
-                                            title={`${item.descrizione || "Oggetto"} - preview`}
+                                            title={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} - preview`}
                                         />
                                     </div>
                                 ) : (
@@ -189,11 +190,11 @@ export default function SecurityLostAndFoundPage() {
 
     const renderForm = () => (
         <div className="vertical-list gap-3mm">
-            <span className="title large" style={{ marginBottom: 8 }}>{isEdit ? "Modifica oggetto" : "Nuovo oggetto smarrito"}</span>
-            <FpInput label="Luogo di ritrovamento" initialValue={fLuogo} onChange={(e) => setFLuogo(e.target.value ?? "")} placeholder="Es. Padiglione A, ingresso..." />
-            <FpInput label="Descrizione *" initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder="Descrizione dell'oggetto..." />
-            <FpInput label="Trovato da" initialValue={fFoundBy} onChange={(e) => setFFoundBy(e.target.value ?? "")} placeholder="Nome di chi ha trovato" />
-            <FpInput label="Proprietario" initialValue={fProprietario} onChange={(e) => setFProprietario(e.target.value ?? "")} placeholder="Nome del proprietario (se noto)" />
+            <span className="title large" style={{ marginBottom: 8 }}>{isEdit ? t("furpanel.admin.security_management.lost_found.edit_title") : t("furpanel.admin.security_management.lost_found.new_title")}</span>
+            <FpInput label={t("furpanel.admin.security_management.lost_found.place_label")} initialValue={fLuogo} onChange={(e) => setFLuogo(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.place_placeholder")} />
+            <FpInput required label={t("furpanel.admin.security_management.lost_found.description_label")} initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.description_placeholder")} />
+            <FpInput label={t("furpanel.admin.security_management.lost_found.found_by_label")} initialValue={fFoundBy} onChange={(e) => setFFoundBy(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.found_by_placeholder")} />
+            <FpInput label={t("furpanel.admin.security_management.lost_found.owner_label")} initialValue={fProprietario} onChange={(e) => setFProprietario(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.owner_placeholder")} />
             <div className="horizontal-list gap-4mm" style={{ flexWrap: "wrap", marginTop: 10, marginBottom: 10 }}>
                 {(["smarrito", "consegnato"] as const).map((s) => (
                     <label key={s} className="small" htmlFor={`status_${s}`} style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}>
@@ -205,13 +206,13 @@ export default function SecurityLostAndFoundPage() {
                             checked={fStatus === s}
                             onChange={() => setFStatus(s)}
                         />
-                        {s === "smarrito" ? "Smarrito" : "Consegnato"}
+                        {s === "smarrito" ? t("furpanel.admin.security_management.lost_found.status_lost") : t("furpanel.admin.security_management.lost_found.status_delivered")}
                     </label>
                 ))}
             </div>
             <div className="horizontal-list gap-2mm" style={{ marginTop: 10 }}>
-                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>Annulla</Button>
-                <Button icon="SAVE" busy={loading} onClick={saveItem}>Salva</Button>
+                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.lost_found.cancel")}</Button>
+                <Button icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.lost_found.save")}</Button>
             </div>
         </div>
     );
@@ -219,21 +220,21 @@ export default function SecurityLostAndFoundPage() {
     const renderDetail = (item: SecurityLostItem) => {
         const isConsegnato = item.status === "consegnato";
         const rows: [string, string | undefined][] = [
-            ["Luogo ritrovo", item.luogo_ritrovo],
-            ["Descrizione", item.descrizione],
-            ["Trovato da", item.found_by],
-            ["Proprietario", item.proprietario],
-            ["Data ritrovo", formatDateTime(item.data_ritrovo)],
-            ["Data riconsegna", formatDateTime(item.data_riconsegna)],
-            ["Inserito da", item.ricognizione],
-            ["Registrato il", formatDateTime(item.data_registrazione ?? item.data)],
+            [t("furpanel.admin.security_management.lost_found.place_label"), item.luogo_ritrovo],
+            [t("furpanel.admin.security_management.lost_found.description_label"), item.descrizione],
+            [t("furpanel.admin.security_management.lost_found.found_by_label"), item.found_by],
+            [t("furpanel.admin.security_management.lost_found.owner_label"), item.proprietario],
+            [t("furpanel.admin.security_management.lost_found.found_date_label"), formatDateTime(item.data_ritrovo)],
+            [t("furpanel.admin.security_management.lost_found.return_date_label"), formatDateTime(item.data_riconsegna)],
+            [t("furpanel.admin.security_management.lost_found.inserted_by_label"), item.ricognizione],
+            [t("furpanel.admin.security_management.lost_found.created_at_label"), formatDateTime(item.data_registrazione ?? item.data)],
         ];
         return (
             <div className="vertical-list gap-3mm">
                 <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 6 }}>
                     <span className="title large" style={{ flex: 1 }}>{item.descrizione || "—"}</span>
                     <span style={{ ...SECURITY_BADGE_STYLE, background: isConsegnato ? "#27ae60" : "#c0392b", color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>
-                        {isConsegnato ? "CONSEGNATO" : "SMARRITO"}
+                        {isConsegnato ? t("furpanel.admin.security_management.lost_found.status_delivered").toUpperCase() : t("furpanel.admin.security_management.lost_found.status_lost").toUpperCase()}
                     </span>
                 </div>
                 {rows.filter(([, v]) => !!v).map(([label, value]) => (
@@ -244,7 +245,7 @@ export default function SecurityLostAndFoundPage() {
                 ))}
                 {(item.immagini?.length ?? 0) > 0 && (
                     <div className="vertical-list gap-2mm" style={{ marginTop: 8 }}>
-                        <span className="title small color-subtitle">Foto ({item.immagini?.length ?? 0})</span>
+                        <span className="title small color-subtitle">{t("furpanel.admin.security_management.lost_found.photo")} ({item.immagini?.length ?? 0})</span>
                         <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                             {(item.immagini ?? []).map((img: { url: string }, idx: number) => {
                                 const url = typeof img === "string" ? img : img.url;
@@ -252,9 +253,9 @@ export default function SecurityLostAndFoundPage() {
                                     <ImagePreviewModal
                                         key={idx}
                                         imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(url)}`}
-                                        alt={`${item.descrizione || "Oggetto"} — foto ${idx + 1}`}
+                                        alt={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} — ${t("furpanel.admin.security_management.lost_found.photo")} ${idx + 1}`}
                                         thumbSize={SECURITY_IMAGE_THUMB_SIZE}
-                                        title={`${item.descrizione || "Oggetto"} — foto ${idx + 1}`}
+                                        title={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} — ${t("furpanel.admin.security_management.lost_found.photo")} ${idx + 1}`}
                                     />
                                 );
                             })}
@@ -264,8 +265,8 @@ export default function SecurityLostAndFoundPage() {
                 {!isConsegnato && (
                     <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap", marginTop: 10 }}>
                         <Button icon="CHECK" style={{ background: "#27ae60" }} onClick={() => {
-                            if (confirm("Confermi la consegna dell'oggetto?")) markConsegnato(item);
-                        }}>Segna Consegnato</Button>
+                            if (confirm(t("furpanel.admin.security_management.lost_found.confirm_delivery"))) markConsegnato(item);
+                        }}>{t("furpanel.admin.security_management.lost_found.mark_delivered")}</Button>
                     </div>
                 )}
             </div>
@@ -289,11 +290,11 @@ export default function SecurityLostAndFoundPage() {
                     <Icon icon="ARROW_BACK" />
                 </span>
                 <div className="horizontal-list gap-2mm">
-                    <span className="title medium">Lost and Found</span>
+                    <span className="title medium">{t("furpanel.admin.security_management.lost_found.title")}</span>
                 </div>
                 <div className="spacer" />
-                {view === "list" && <Button icon="ADD" onClick={openAdd}>Nuovo oggetto smarrito</Button>}
-                {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>Modifica</Button>}
+                {view === "list" && <Button icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.lost_found.add")}</Button>}
+                {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.lost_found.edit")}</Button>}
             </div>
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}

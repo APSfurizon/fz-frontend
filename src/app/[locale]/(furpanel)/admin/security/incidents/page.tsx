@@ -118,7 +118,7 @@ export default function SecurityIncidentsPage() {
                     setDisabledReports(mappedDisabled);
                 }
             })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -147,19 +147,19 @@ export default function SecurityIncidentsPage() {
                 setReplyMessage("");
                 setReplyImage(null);
             })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
     const saveIncident = () => {
         const message = newDescription.trim();
         if (message.length < 3) {
-            showModal("Dati mancanti", <span>Inserisci una descrizione di almeno 3 caratteri</span>);
+            showModal(t("furpanel.admin.security_management.incidents.missing_data_title"), <span>{t("furpanel.admin.security_management.incidents.missing_data_description")}</span>);
             return;
         }
 
         const body = new FormData();
-        body.append("from", currentUserName || "Security");
+        body.append("from", currentUserName || t("furpanel.admin.security_management.incidents.default_author"));
         body.append("persone_coinvolte", newPeople.trim());
         body.append("titolo", (newTitle.trim() || message.split("\n")[0]).trim());
         body.append("messaggio", message);
@@ -173,7 +173,7 @@ export default function SecurityIncidentsPage() {
                 setView("list");
                 loadReports(false);
             })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -183,7 +183,7 @@ export default function SecurityIncidentsPage() {
         if (message.length < 1) return;
 
         const body = new FormData();
-        body.append("from", currentUserName || "Security");
+        body.append("from", currentUserName || t("furpanel.admin.security_management.incidents.default_author"));
         body.append("messaggio", message);
         body.append("reportId", String(selected.data));
         if (selected.fileName) body.append("fileName", selected.fileName);
@@ -204,7 +204,7 @@ export default function SecurityIncidentsPage() {
                 setReplyImage(null);
                 refreshList();
             })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -249,7 +249,7 @@ export default function SecurityIncidentsPage() {
                 } : prev);
                 refreshList();
             })
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -283,16 +283,16 @@ export default function SecurityIncidentsPage() {
                     <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", marginBottom: 4 }}>
                         <span className="title small color-subtitle">{item.textData}</span>
                     </div>
-                    <span className="title normal" style={{ fontWeight: 700, display: "block" }}>{item.titolo || "Senza titolo"}</span>
+                    <span className="title normal" style={{ fontWeight: 700, display: "block" }}>{item.titolo || t("furpanel.admin.security_management.incidents.untitled")}</span>
                     {item.from && <span className="title small color-subtitle" style={{ display: "block", marginTop: 2 }}>👤 {item.from}</span>}
                     {item.messaggio && <span className="title small color-subtitle" style={{ display: "block", marginTop: 2 }}>{item.messaggio}</span>}
                 </div>
                 <div className="vertical-list gap-2mm" style={{ alignItems: "flex-end", flexShrink: 0 }}>
-                    <span className="title small color-subtitle" style={{ whiteSpace: "nowrap" }}>Messaggi ({messageCount})</span>
+                    <span className="title small color-subtitle" style={{ whiteSpace: "nowrap" }}>{t("furpanel.admin.security_management.incidents.messages")} ({messageCount})</span>
                     <div className="horizontal-list gap-2mm" style={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
-                        {item.importante && !isHistory && renderBadge("Importante", "#f39c12")}
-                        {item.sospeso && !isHistory && renderBadge("Sospesa", "#7f8c8d")}
-                        {isHistory && renderBadge("Storico", "#8e44ad")}
+                        {item.importante && !isHistory && renderBadge(t("furpanel.admin.security_management.incidents.important"), "#f39c12")}
+                        {item.sospeso && !isHistory && renderBadge(t("furpanel.admin.security_management.incidents.suspended"), "#7f8c8d")}
+                        {isHistory && renderBadge(t("furpanel.admin.security_management.incidents.history"), "#8e44ad")}
                     </div>
                 </div>
             </div>
@@ -316,26 +316,26 @@ export default function SecurityIncidentsPage() {
         <div className="vertical-list gap-2mm">
             {showHistory ? (
                 renderReportGroup(
-                    `Storico (${historyReports.length})`,
-                    "Nessuna segnalazione nello storico",
+                    `${t("furpanel.admin.security_management.incidents.history")} (${historyReports.length})`,
+                    t("furpanel.admin.security_management.incidents.no_history"),
                     historyReports,
                     true
                 )
             ) : (
                 <>
                     {renderReportGroup(
-                        `Segnalazioni importanti (${importantReports.length})`,
-                        "Nessuna segnalazione importante",
+                        `${t("furpanel.admin.security_management.incidents.important_reports")} (${importantReports.length})`,
+                        t("furpanel.admin.security_management.incidents.no_important_reports"),
                         importantReports
                     )}
                     {renderReportGroup(
-                        `Segnalazioni (${regularReports.length})`,
-                        "Nessuna segnalazione attiva",
+                        `${t("furpanel.admin.security_management.incidents.reports")} (${regularReports.length})`,
+                        t("furpanel.admin.security_management.incidents.no_active_reports"),
                         regularReports
                     )}
                     {renderReportGroup(
-                        `Segnalazioni sospese (${disabledReports.length})`,
-                        "Nessuna segnalazione sospesa",
+                        `${t("furpanel.admin.security_management.incidents.suspended_reports")} (${disabledReports.length})`,
+                        t("furpanel.admin.security_management.incidents.no_suspended_reports"),
                         disabledReports,
                         true
                     )}
@@ -346,30 +346,30 @@ export default function SecurityIncidentsPage() {
 
     const renderCreate = () => (
         <div className="vertical-list gap-3mm">
-            <span className="title large">Nuova segnalazione</span>
-            <FpInput label="Titolo" initialValue={newTitle} onChange={(e) => setNewTitle(e.target.value ?? "")} placeholder="Titolo segnalazione" />
-            <FpInput label="Persone coinvolte" initialValue={newPeople} onChange={(e) => setNewPeople(e.target.value ?? "")} placeholder="Nome1, Nome2, ..." />
+            <span className="title large">{t("furpanel.admin.security_management.incidents.new_report")}</span>
+            <FpInput label={t("furpanel.admin.security_management.incidents.title")} initialValue={newTitle} onChange={(e) => setNewTitle(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.incidents.title_placeholder")} />
+            <FpInput label={t("furpanel.admin.security_management.incidents.people_involved")} initialValue={newPeople} onChange={(e) => setNewPeople(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.incidents.people_placeholder")} />
             <div className="vertical-list gap-2mm">
-                <span className="title small">Descrizione</span>
+                <span className="title small">{t("furpanel.admin.security_management.incidents.description")}</span>
                 <textarea
                     value={newDescription}
                     onChange={(e) => setNewDescription(e.target.value)}
-                    placeholder="Descrivi l'incidente..."
+                    placeholder={t("furpanel.admin.security_management.incidents.description_placeholder")}
                     style={{ minHeight: 140, padding: 12, borderRadius: 10, border: "1px solid #ffffff15", background: "#0e1621", color: "#fff", resize: "vertical" }}
                 />
             </div>
             <div className="vertical-list gap-2mm">
-                <span className="title small">Screenshot / immagine</span>
+                <span className="title small">{t("furpanel.admin.security_management.incidents.screenshot")}</span>
                 <input type="file" accept="image/*" onChange={(e) => setNewImage(e.target.files?.[0] ?? null)} />
                 {newImage && <span className="title small color-subtitle">{newImage.name}</span>}
             </div>
             <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
                 <input type="checkbox" checked={newImportant} onChange={(e) => setNewImportant(e.target.checked)} />
-                <span className="title small">Segna come importante</span>
+                <span className="title small">{t("furpanel.admin.security_management.incidents.mark_important")}</span>
             </label>
             <div className="horizontal-list gap-2mm">
-                <Button onClick={() => { resetCreateForm(); setView("list"); }}>Annulla</Button>
-                <Button icon="SEND" busy={loading} onClick={saveIncident}>Invia</Button>
+                <Button onClick={() => { resetCreateForm(); setView("list"); }}>{t("furpanel.admin.security_management.incidents.cancel")}</Button>
+                <Button icon="SEND" busy={loading} onClick={saveIncident}>{t("furpanel.admin.security_management.incidents.send")}</Button>
             </div>
         </div>
     );
@@ -380,20 +380,28 @@ export default function SecurityIncidentsPage() {
             <div className="rounded-m vertical-list gap-3mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
                 <div className="vertical-list gap-2mm">
                     <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap" }}>
-                        <span className="title large" style={{ flex: 1, minWidth: 0 }}>{item.titolo || "Segnalazione"}</span>
+                        <span className="title large" style={{ flex: 1, minWidth: 0 }}>{item.titolo || t("furpanel.admin.security_management.incidents.report")}</span>
                         <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap", justifyContent: "flex-end" }}>
-                            {item.importante && renderBadge("Importante", "#f39c12")}
-                            {item.sospeso && item.folder !== "cronologia" && renderBadge("Sospesa", "#7f8c8d")}
-                            {item.folder === "cronologia" && renderBadge("Storico", "#8e44ad")}
+                            {item.importante && renderBadge(t("furpanel.admin.security_management.incidents.important"), "#f39c12")}
+                            {item.sospeso && item.folder !== "cronologia" && renderBadge(t("furpanel.admin.security_management.incidents.suspended"), "#7f8c8d")}
+                            {item.folder === "cronologia" && renderBadge(t("furpanel.admin.security_management.incidents.history"), "#8e44ad")}
                         </div>
                     </div>
-                    <span className="title small color-subtitle">Segnalato da: {item.from || "-"}</span>
-                    <span className="title small color-subtitle">{item.textData}</span>
+                    <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.reported_by")}: {item.from || "-"}</span>
+                    <span className="title small color-subtitle" style={{ marginBottom: "0.5em" }}>{item.textData}</span>
                 </div>
 
                 {people.length > 0 && (
-                    <div className="vertical-list gap-2mm">
-                        <span className="title small color-subtitle">Persone coinvolte</span>
+                    <div
+                        className="vertical-list gap-2mm rounded-m"
+                        style={{
+                            marginTop: "0.25em",
+                            marginBottom: "0.75em",
+                            padding: "0.7em",
+                            background: "var(--table-row-bg)",
+                            border: "1px solid #00000030"
+                        }}>
+                        <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.people_involved")}:</span>
                         <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                             {people.map((name, idx) => (
                                 <span key={`${name}_${idx}`} style={{ ...INCIDENT_BADGE_STYLE, background: "#132033", color: "#fff" }}>{name}</span>
@@ -432,24 +440,24 @@ export default function SecurityIncidentsPage() {
                                 <div style={{ flexShrink: 0, marginLeft: "auto" }}>
                                     <ImagePreviewModal
                                         imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
-                                        alt={`${item.titolo || "Segnalazione"} - allegato ${idx + 1}`}
+                                        alt={`${item.titolo || t("furpanel.admin.security_management.incidents.report")} - ${t("furpanel.admin.security_management.incidents.attachment")} ${idx + 1}`}
                                         thumbSize={108}
-                                        title={(message.messaggio?.trim() || item.titolo || "Anteprima immagine").slice(0, 48)}
+                                        title={(message.messaggio?.trim() || item.titolo || t("furpanel.admin.security_management.incidents.image_preview")).slice(0, 48)}
                                     />
                                 </div>
                             )}
                         </div>;
                     })}
-                    {(item.messaggi?.length ?? 0) === 0 && <span className="title small color-subtitle">Nessun messaggio disponibile</span>}
+                    {(item.messaggi?.length ?? 0) === 0 && <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.no_messages")}</span>}
                 </div>
 
                 {item.folder !== "cronologia" && (
-                    <div className="vertical-list gap-2mm">
-                        <span className="title small color-subtitle">Aggiungi messaggio</span>
+                    <div className="vertical-list gap-2mm" style={{ marginTop: "0.8em" }}>
+                        <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.add_message")}</span>
                         <textarea
                             value={replyMessage}
                             onChange={(e) => setReplyMessage(e.target.value)}
-                            placeholder="Scrivi un messaggio..."
+                            placeholder={t("furpanel.admin.security_management.incidents.write_message")}
                             style={{ minHeight: 100, padding: 12, borderRadius: 10, border: "1px solid #ffffff15", background: "#0e1621", color: "#fff", resize: "vertical" }}
                         />
                         <input type="file" accept="image/*" onChange={(e) => setReplyImage(e.target.files?.[0] ?? null)} />
@@ -458,7 +466,7 @@ export default function SecurityIncidentsPage() {
                 )}
 
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                    {item.folder !== "cronologia" && <Button icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>Invia messaggio</Button>}
+                    {item.folder !== "cronologia" && <Button icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>{t("furpanel.admin.security_management.incidents.send_message")}</Button>}
                 </div>
             </div>
         );
@@ -481,21 +489,21 @@ export default function SecurityIncidentsPage() {
                     <Icon icon="ARROW_BACK" />
                 </span>
                 <div className="horizontal-list gap-2mm">
-                    <span className="title medium">Registro Incidenti</span>
+                    <span className="title medium">{t("furpanel.admin.security_management.incidents.incident_log")}</span>
                 </div>
 
-                {view === "list" && <Button onClick={refreshList} busy={refreshing}>Aggiorna</Button>}
+                {view === "list" && <Button onClick={refreshList} busy={refreshing}>{t("furpanel.admin.security_management.incidents.refresh")}</Button>}
 
                 <div className="spacer" />
 
                 {view === "list" && (
                     <>
-                        {!showHistory && <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>Aggiungi</Button>}
-                        <Button onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? "Segnalazioni" : "Storico"}</Button>
+                        {!showHistory && <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>{t("furpanel.admin.security_management.incidents.add")}</Button>}
+                        <Button onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? t("furpanel.admin.security_management.incidents.reports") : t("furpanel.admin.security_management.incidents.history")}</Button>
                     </>
                 )}
 
-                {view === "detail" && selected && <Button icon="EDIT" onClick={openEditMeta}>Modifica</Button>}
+                {view === "detail" && selected && <Button icon="EDIT" onClick={openEditMeta}>{t("furpanel.admin.security_management.incidents.edit")}</Button>}
             </div>
 
             {loading && view === "list" && <LoadingPanel />}
@@ -503,10 +511,16 @@ export default function SecurityIncidentsPage() {
             {view === "create" && renderCreate()}
             {view === "detail" && selected && renderDetail(selected)}
 
-            <Modal open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} title="Modifica segnalazione" icon="EDIT" style={{ width: "min(92vw, 520px)" }}>
-                <div className="vertical-list gap-3mm">
-                    <FpInput label="Persone coinvolte" initialValue={detailPeople} onChange={(e) => setDetailPeople(e.target.value ?? "")} placeholder="Nome1, Nome2, ..." />
-                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
+            <Modal open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} title={t("furpanel.admin.security_management.incidents.edit_report")} icon="EDIT" style={{ width: "min(92vw, 520px)" }}>
+                <div className="vertical-list gap-3mm" style={{ padding: "0.9em" }}>
+                    <FpInput
+                        style={{ marginBottom: "0.4em" }}
+                        label={t("furpanel.admin.security_management.incidents.people_involved")}
+                        initialValue={detailPeople}
+                        onChange={(e) => setDetailPeople(e.target.value ?? "")}
+                        placeholder={t("furpanel.admin.security_management.incidents.people_placeholder")}
+                    />
+                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content", marginTop: "0.2em" }}>
                         <input type="checkbox" checked={detailImportant} onChange={(e) => {
                             const checked = e.target.checked;
                             setDetailImportant(checked);
@@ -515,9 +529,9 @@ export default function SecurityIncidentsPage() {
                                 setDetailHistory(false);
                             }
                         }} />
-                        <span className="title small">Segna come importante</span>
+                        <span className="title small">{t("furpanel.admin.security_management.incidents.mark_important")}</span>
                     </label>
-                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
+                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content", marginTop: "0.2em" }}>
                         <input type="checkbox" checked={detailSuspend} onChange={(e) => {
                             const checked = e.target.checked;
                             setDetailSuspend(checked);
@@ -526,9 +540,9 @@ export default function SecurityIncidentsPage() {
                                 setDetailHistory(false);
                             }
                         }} />
-                        <span className="title small">Sospendi segnalazione</span>
+                        <span className="title small">{t("furpanel.admin.security_management.incidents.suspend_report")}</span>
                     </label>
-                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
+                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content", marginTop: "0.2em" }}>
                         <input type="checkbox" checked={detailHistory} onChange={(e) => {
                             const checked = e.target.checked;
                             setDetailHistory(checked);
@@ -537,11 +551,11 @@ export default function SecurityIncidentsPage() {
                                 setDetailSuspend(false);
                             }
                         }} />
-                        <span className="title small">Storicizza segnalazione</span>
+                        <span className="title small">{t("furpanel.admin.security_management.incidents.archive_report")}</span>
                     </label>
-                    <div className="horizontal-list gap-2mm">
-                        <Button onClick={() => setDetailsModalOpen(false)}>Annulla</Button>
-                        <Button icon="CHECK" busy={loading} onClick={saveMeta}>Aggiorna</Button>
+                    <div className="horizontal-list gap-2mm" style={{ marginTop: "0.5em" }}>
+                        <Button onClick={() => setDetailsModalOpen(false)}>{t("furpanel.admin.security_management.incidents.cancel")}</Button>
+                        <Button icon="CHECK" busy={loading} onClick={saveMeta}>{t("furpanel.admin.security_management.incidents.update")}</Button>
                     </div>
                 </div>
             </Modal>

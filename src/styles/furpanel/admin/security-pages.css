@@ -56,3 +56,24 @@
     word-break: break-word;
     white-space: pre-line;
 }
+
+.security-search-input {
+    width: 100%;
+    padding: 0.5em 0.7em;
+    border-radius: 8px;
+    border: 1px solid var(--text-input-border-normal);
+    background: var(--text-input-bg);
+    color: var(--text-input-color);
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.security-search-input::placeholder {
+    color: var(--text-subtitle);
+    opacity: 0.9;
+}
+
+.security-search-input:focus {
+    outline: none;
+    border-color: var(--text-link);
+    box-shadow: 0 0 0 1px var(--text-link);
+}

@@ -19,7 +19,7 @@ const getScheduleActivityImageUrl = (imageId?: string): string => {
     if (!imageId) {
         return EMPTY_PROFILE_PICTURE_SRC;
     }
-    return `${API_MOBILE_URL}/server/loadDealerImgById?id=${imageId}`;
+    return `${API_MOBILE_URL}server/loadDealerImgById?id=${imageId}`;
 };
 
 export default function ScheduleDetailPage() {

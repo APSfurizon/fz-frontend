@@ -196,26 +196,26 @@ export default function AdminPage() {
       {/* Security area */}
       <FpMacroSection title={t("furpanel.admin.security_management.title")} icon="SECURITY">
         <FpSection title={t("furpanel.admin.security_management.users_and_docs.title")}>
-          <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/security/user-search")}>
+          <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/security/user-search")} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.users_and_docs.user_search")}
           </Button>
-          <Button icon="FIND_IN_PAGE" onClick={() => router.push("/admin/security/documents")}>
+          <Button icon="FIND_IN_PAGE" onClick={() => router.push("/admin/security/documents")} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.users_and_docs.documents")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.security_management.reports.title")}>
-          <Button icon="BOOKMARK_STAR" onClick={() => router.push("/admin/security/incidents")}>
+          <Button icon="BOOKMARK_STAR" onClick={() => router.push("/admin/security/incidents")} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.reports.incident_log")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.security_management.logs.title")}>
-          <Button icon="PACKAGE_2" onClick={() => router.push("/admin/security/assets")}>
+          <Button icon="PACKAGE_2" onClick={() => router.push("/admin/security/assets")} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.asset_manager")}
           </Button>
-          <Button icon="ERROR" onClick={() => router.push("/admin/security/hazardous")}>
+          <Button icon="ERROR" onClick={() => router.push("/admin/security/hazardous")} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.hazardous_register")}
           </Button>
-          <Button icon="SEARCH" onClick={() => router.push("/admin/security/lost-found")}>
+          <Button icon="SEARCH" onClick={() => router.push("/admin/security/lost-found")} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.lost_and_found")}
           </Button>
         </FpSection>

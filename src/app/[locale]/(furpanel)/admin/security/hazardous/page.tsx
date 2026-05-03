@@ -17,6 +17,7 @@ import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import "@/styles/furpanel/admin/security-pages.css";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
 const LIVELLO_COLOR: Record<string, string> = { basso: "#27ae60", medio: "#f39c12", alto: "#e67e22", critico: "#c0392b" };
@@ -120,9 +121,9 @@ export default function SecurityHazardousRegisterPage() {
                     <input
                         type="text"
                         value={searchText}
+                        className="security-search-input"
                         onChange={(e) => setSearchText(e.target.value)}
                         placeholder={t("furpanel.admin.security_management.hazard.search_placeholder")}
-                        style={{ width: "100%", padding: "0.5em 0.7em", borderRadius: 8, border: "1px solid #00000040", background: "var(--table-header-row-bg)", color: "inherit" }}
                     />
                 </div>
                 <div className="spacer" />
