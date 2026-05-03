@@ -122,6 +122,22 @@
       "CRUD": {
         "reset": "Ripristina"
       }
+    },
+    "gallery": {
+      "grid": {
+        "end_label": "Messaggio di fondo galleria",
+        "end_message": "Hai raggiunto il fondo della galleria",
+        "toolbar": {
+          "deselect_all": "Deseleziona tutto"
+        }
+      },
+      "media": {
+        "status": {
+          "approved": "Approvata",
+          "pending": "Valutazione in attesa",
+          "rejected": "Rifiutato"
+        }
+      }
     }
   },
   "furpanel": {
@@ -1105,9 +1121,7 @@
           }
         },
         "grid": {
-          "end_message": "Hai raggiunto il fondo della galleria",
-          "title": "I tuoi contenuti multimediali",
-          "end_label": "Messaggio di fondo galleria"
+          "title": "I tuoi contenuti multimediali"
         },
         "queue": {
           "title": "Caricamento..."
@@ -1126,11 +1140,7 @@
         "title": "Amministrazione"
       },
       "media": {
-        "status": {
-          "approved": "Approvata",
-          "pending": "Valutazione in attesa",
-          "rejected": "Rifiutato"
-        }
+        "status": {}
       }
     }
   }

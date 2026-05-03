@@ -4,7 +4,7 @@
     .media-container {
         background-color: black;
         overflow: hidden;
-        min-height: 80vh;
+        min-height: 75svh;
 
         img {
             width: 100%;
@@ -104,6 +104,14 @@
     }
 }
 
+@media (pointer: coarse) {
+    .view-media-modal .view-grid {
+        grid-template-areas:
+            "media-container media-container media-container information-panel"
+            "bottom-toolbar bottom-toolbar bottom-toolbar bottom-toolbar";
+    }
+}
+
 @media screen and (max-width: 1200) {
     .view-media-modal {
         .view-grid {
@@ -117,13 +125,27 @@
             .information-panel {
                 .data {
                     transition: max-height 200ms, opacity 300ms;
-                    max-height: 100vh;
+                    max-height: 100svh;
                 }
 
                 &:not(.open) .data {
                     max-height: 0px;
                     opacity: 0;
                 }
+            }
+        }
+    }
+
+    @media (pointer: coarse) {
+        .view-media-modal .view-grid {
+            grid-template-areas:
+                "media-container media-container media-container"
+                "bottom-toolbar bottom-toolbar bottom-toolbar"
+                "information-panel information-panel information-panel";
+
+            .back-button,
+            .forward-button {
+                display: none;
             }
         }
     }

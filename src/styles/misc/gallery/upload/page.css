@@ -1,28 +1,9 @@
 :root {
-    --icon-shadow: white;
     --grid-column-count: 5;
     --grid-column-width: 140px;
     --col-w: 1fr;
     --upload-status-size: max(min(80px, 10vw), 60px);
     --upload-status-progress-size: calc(var(--upload-status-size) - 30px);
-}
-
-@media screen and (max-width: 650px) {
-    :root {
-        --grid-column-count: 4;
-    }
-}
-
-@media screen and (max-width: 450px) {
-    :root {
-        --grid-column-count: 3;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --icon-shadow: black;
-    }
 }
 
 @keyframes ended {
@@ -39,10 +20,16 @@
 }
 
 .upload-panel {
+    margin-bottom: 2mm;
+
     .upload-input-data {
         display: flex;
         flex-direction: row;
     }
+}
+
+.gallery__grid {
+    margin-top: 2mm;
 }
 
 @media screen and (max-width: 650px) {
@@ -78,16 +65,5 @@
         scroll-behavior: smooth;
         gap: 2mm;
         max-height: calc((5 * (var(--upload-status-size) + 2mm)) + 2em);
-    }
-}
-
-.medias-container {
-    display: grid;
-    grid-template-columns: repeat(var(--grid-column-count), 1fr);
-    gap: 4mm;
-
-    .bottom-message {
-        grid-column: span var(--grid-column-count);
-        margin: 0 auto;
     }
 }

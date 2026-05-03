@@ -1,4 +1,3 @@
-.uploaded-media,
 .upload-status-box .picture-container {
     border: 2px solid var(--button-border-normal);
     position: relative;
@@ -6,56 +5,6 @@
 
     img.thumbnail {
         position: absolute;
-    }
-}
-
-@keyframes show {
-    from {
-        transform: scale(0);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.uploaded-media {
-    aspect-ratio: 1;
-    width: 1fr;
-    height: auto;
-    cursor: pointer;
-    transition: filter 200ms, transform 300ms;
-    animation: show 300ms ease-out 0ms 1 forwards;
-
-    &:hover {
-        filter: brightness(1.1) grayscale(0.3) contrast(.6);
-        border-width: .25em;
-    }
-
-    &:active {
-        filter: brightness(0.7) grayscale(0.3) contrast(.9);
-        transform: translateY(.2em);
-    }
-
-    img.thumbnail {
-        width: 100%;
-        height: 100%;
-    }
-
-    .input.selection {
-        position: absolute;
-        width: 1.5em;
-        height: 1.5em;
-        z-index: 2;
-        top: 2mm;
-        right: 2mm;
-        background-color: transparent;
-    }
-
-    input.selection {
-        color: white;
     }
 }
 

@@ -1,10 +1,11 @@
+"use client"
 import Modal from "@/components/modal";
-import { useGallery } from "./galleryProvider";
+import { useGallery } from "../../../../../components/gallery/context/galleryProvider";
 import Image from "next/image";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import Icon from "@/components/icon";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
 import { GetFullMediaApiAction } from "@/lib/api/gallery/api";
@@ -12,6 +13,7 @@ import "@/styles/misc/gallery/viewMediaModal.css";
 import LoadingPanel from "@/components/loadingPanel";
 import { translate } from "@/lib/translations";
 import { getCountdown } from "@/lib/utils";
+import { copyrightValues } from "@/lib/api/gallery/upload/main";
 
 export default function ViewMediaModal() {
     const { currentMedia, closeMedia, modalOpen, goNext, goBack } = useGallery();
@@ -21,6 +23,41 @@ export default function ViewMediaModal() {
     const [loading, setLoading] = useState(false);
     const [fullMedia, setFullMedia] = useState<GalleryUploadedFullMedia>();
     const [dataPanelOpen, setDataPanelOpen] = useState(false);
+
+    // Swipe handler
+    const swipeEnabledRef = useRef(false);
+    const mediaRef = useRef<HTMLImageElement>(null!);
+    const startPoint = useRef<number>(undefined);
+    const [swipeDiff, setSwipeDiff] = useState<number>();
+
+    useEffect(() => {
+        swipeEnabledRef.current = window?.matchMedia("(pointer: coarse)").matches ?? false
+    }, [])
+
+    const touchStartHandler = (e: globalThis.TouchEvent) => {
+        startPoint.current = e.touches[0].clientX;
+    }
+
+    const touchMoveHandler = (e: globalThis.TouchEvent) => {
+        if (startPoint.current === undefined) return;
+        setSwipeDiff(e.touches[0].clientX - startPoint.current);
+    };
+
+    const touchEndHandler = (e: globalThis.TouchEvent) => {
+        const halfWidth = mediaRef.current.offsetWidth / 2;
+        if (startPoint.current !== undefined) {
+            const moveAmount = startPoint.current - e.changedTouches[0].clientX;
+            if (Math.abs(moveAmount) > halfWidth) {
+                if (moveAmount > 0) {
+                    goNext();
+                } else {
+                    goBack();
+                }
+            }
+        }
+        setSwipeDiff(undefined);
+        startPoint.current = undefined;
+    }
 
     // Keyboard listener
     const keyEventHandler = (e: globalThis.KeyboardEvent) => {
@@ -41,9 +78,25 @@ export default function ViewMediaModal() {
     }
 
     useEffect(() => {
-        if (modalOpen) document.addEventListener("keydown", keyEventHandler);
-        return () => document.removeEventListener("keydown", keyEventHandler)
-    }, [modalOpen]);
+        if (modalOpen) {
+            document.addEventListener("keydown", keyEventHandler);
+            if (swipeEnabledRef.current) {
+                mediaRef.current?.addEventListener("touchstart", touchStartHandler);
+                mediaRef.current?.addEventListener("touchmove", touchMoveHandler);
+                mediaRef.current?.addEventListener("touchend", touchEndHandler);
+            }
+        }
+        return () => {
+            document.removeEventListener("keydown", keyEventHandler)
+            if (swipeEnabledRef.current) {
+                mediaRef.current?.removeEventListener("touchstart", touchStartHandler);
+                mediaRef.current?.removeEventListener("touchmove", touchMoveHandler);
+                mediaRef.current?.removeEventListener("touchend", touchEndHandler);
+                setSwipeDiff(undefined);
+                startPoint.current = undefined;
+            }
+        }
+    }, [modalOpen, currentMedia]);
 
     const closeModal = () => {
         setDataPanelOpen(true);
@@ -63,14 +116,29 @@ export default function ViewMediaModal() {
             .finally(() => setLoading(false))
     }, [currentMedia]);
 
+    const downloadFile = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        if (!fullMedia?.downloadMedia?.mediaUrl) { return; }
+        fetch(fullMedia.downloadMedia.mediaUrl)
+            .then(f => f.blob())
+            .then((blobFile) => {
+                const url = URL.createObjectURL(blobFile);
+                const anchor = document.createElement("a");
+                anchor.href = url;
+                anchor.download = fullMedia.fileName;
+                anchor.click();
+                URL.revokeObjectURL(url);
+            });
+    }, [fullMedia]);
+
     const mapStatus = (status: GalleryUploadedMediaStatus) => {
         switch (status) {
             case "APPROVED":
-                return t("misc.gallery.media.status.approved");
+                return t("components.gallery.media.status.approved");
             case "PENDING":
-                return t("misc.gallery.media.status.pending");
+                return t("components.gallery.media.status.pending");
             case "REJECTED":
-                return t("misc.gallery.media.status.rejected");
+                return t("components.gallery.media.status.rejected");
         }
     }
 
@@ -89,9 +157,10 @@ export default function ViewMediaModal() {
             <div className="back-button">
                 <a href="#" onClick={() => goBack()}><Icon icon="ARROW_BACK" /></a>
             </div>
-            <div className="media-container rounded-m">
+            <div className="media-container rounded-m"
+                style={{ transform: `translate(${swipeDiff ?? 0}px, 0px)` }}>
                 {currentMedia
-                    ? <img alt="gallery image" src={currentMedia?.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC} />
+                    ? <img alt="gallery image" ref={mediaRef} src={currentMedia?.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC} />
                     : <LoadingPanel />}
             </div>
             <div className="forward-button align-right">
@@ -99,14 +168,19 @@ export default function ViewMediaModal() {
             </div>
             {fullMedia
                 ? <>
-                    <div className="bottom-toolbar horizontal-list align-items-center">
+                    <div className="bottom-toolbar horizontal-list gap-2mm align-items-center">
                         <div className="horizontal-list author align-items-center">
                             <Image alt="image author" src={fullMedia.photographer.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC}
                                 width={32} height={32} />
                             <span>{fullMedia.photographer.fursonaName}</span>
                         </div>
                         <div className="spacer"></div>
-                        <a className="vertical-align-middle" href="#"><Icon icon="DOWNLOAD" />Download</a>
+                        {fullMedia?.downloadMedia && <a className="vertical-align-middle"
+                            href={fullMedia.downloadMedia.mediaUrl}
+                            onClick={downloadFile}>
+                            <Icon icon="DOWNLOAD" />
+                            Download
+                        </a>}
                     </div>
                     { /* Information panel */}
                     <div className={["information-panel", "rounded-m", dataPanelOpen ? "open" : ""].join(" ")}>
@@ -121,6 +195,9 @@ export default function ViewMediaModal() {
                             </a>
                         </div>
                         <div className="data vertical-list gap-2mm">
+                            <span className="vertical-align-bottom"><Icon icon="COPYRIGHT" />
+                                {translate(copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.translatedDescription ?? {}, locale)}
+                            </span>
                             <span className="vertical-align-bottom"><Icon icon="DRAFT" />{currentMedia?.fileName}</span>
                             <span className="vertical-align-bottom"><Icon icon="LOCAL_ACTIVITY" />{translate(fullMedia.event.eventNames, locale)}</span>
                             <span className="vertical-align-bottom"><Icon icon="FLAG" />{mapStatus(fullMedia.status)}</span>

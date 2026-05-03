@@ -122,6 +122,22 @@
       "CRUD": {
         "reset": "Reset"
       }
+    },
+    "gallery": {
+      "grid": {
+        "end_label": "End of gallery message",
+        "end_message": "You've reached the bottom of the gallery",
+        "toolbar": {
+          "deselect_all": "De-select all"
+        }
+      },
+      "media": {
+        "status": {
+          "approved": "Approved",
+          "pending": "Pending review",
+          "rejected": "Rejected"
+        }
+      }
     }
   },
   "furpanel": {
@@ -1104,9 +1120,7 @@
           }
         },
         "grid": {
-          "end_message": "You've reached the bottom of the gallery",
-          "title": "Your media",
-          "end_label": "End of gallery message"
+          "title": "Your media"
         },
         "queue": {
           "title": "Uploading..."
@@ -1125,11 +1139,7 @@
         "title": "Administration"
       },
       "media": {
-        "status": {
-          "approved": "Approved",
-          "pending": "Pending review",
-          "rejected": "Rejected"
-        }
+        "status": {}
       }
     }
   }

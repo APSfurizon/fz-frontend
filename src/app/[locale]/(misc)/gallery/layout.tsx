@@ -6,7 +6,7 @@ import { hasPermission, Permissions } from "@/lib/api/permission";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import "@/styles/misc/gallery/layout.css";
-import { GalleryProvider } from "./_components/galleryProvider";
+import { GalleryProvider } from "../../../../components/gallery/context/galleryProvider";
 import ViewMediaModal from "./_components/viewMediaModal";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {

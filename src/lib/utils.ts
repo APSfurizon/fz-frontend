@@ -44,6 +44,11 @@ export function isEmpty(str?: string) {
     return !str || !str.length;
 }
 
+export function isNumeric(str: string) {
+    if (typeof str != "string") return false;
+    return !isNaN(parseFloat(str));
+}
+
 export function copyContent(e: HTMLElement | HTMLInputElement) {
     if (e.textContent) {
         navigator.clipboard.writeText(e.textContent);

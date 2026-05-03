@@ -6,7 +6,7 @@ import { ChangeEvent, MouseEvent } from "react";
 import Icon from "@/components/icon";
 import { useTranslations } from "next-intl";
 
-type UploadedImageProps = {
+type GalleryMediaProps = {
     image: GalleryUploadedMedia,
     selected: boolean,
     onSelect: (id: number, selected: boolean) => void,
@@ -14,21 +14,35 @@ type UploadedImageProps = {
     onClick(image: GalleryUploadedMedia): void
 }
 
-export default function UploadedMedia(props: Readonly<UploadedImageProps>) {
+export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
     const t = useTranslations("");
     const imageSource = props.image.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC;
     const checkEvent = (e: MouseEvent<HTMLDivElement> | ChangeEvent<HTMLInputElement>) => {
         if (!props.checkbox) return;
         props.onSelect(props.image.id, !props.selected);
+    }
+    const onSelectClick = (e: MouseEvent<HTMLInputElement>) => {
         e.stopPropagation();
     }
 
-    return <div className="uploaded-media rounded-m"
+    return <div className="gallery__grid__media rounded-m"
+        aria-roledescription="image"
+        tabIndex={0}
         onDoubleClick={checkEvent}
         onClick={() => props.onClick(props.image)}>
         {props.checkbox &&
-            <input type="checkbox" checked={props.selected} className="selection" onChange={checkEvent} />
+            <input type="checkbox"
+                tabIndex={0}
+                checked={props.selected}
+                className="gallery__grid__media__selection"
+                onChange={checkEvent}
+                onClick={onSelectClick} />
         }
-        <Image draggable="false" className="thumbnail" alt="thumbnail" width={140} height={140} src={imageSource} />
+        <Image draggable="false"
+            className="gallery__grid__media__thumbnail"
+            alt="thumbnail"
+            width={140}
+            height={140}
+            src={imageSource} />
     </div>
 }
