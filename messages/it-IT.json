@@ -12,7 +12,7 @@
       "home": "Home",
       "nose_count": "Nose count",
       "schedule": "Programma",
-      "dealer": "Dealer",
+      "dealer": "Dealers' Den",
       "information": "Informazioni",
       "archive": "Archivio",
       "login": "Accedi",
@@ -650,7 +650,7 @@
             },
             "personal_info": "Dati personali",
             "security": "Sicurezza",
-            "orders": "Ordine",
+            "orders": "Ordini",
             "orders_table": {
               "event_name": "Evento",
               "order_code": "Codice ordine",
@@ -705,7 +705,7 @@
               "sent_by_email": "Inviata via email",
               "created_for_order_id": "Creato per l'ordine"
             },
-            "membership_cards": "Tessera socio",
+            "membership_cards": "Tessere socio",
             "badge": "Badge",
             "badges": {
               "fursona_name": "Nome fursona",
@@ -899,6 +899,11 @@
         }
       },
       "security_management": {
+        "title_hazardous_register": "Registro oggetti pericolosi",
+        "title_asset_register": "Registro asset",
+        "title_lost_and_found": "Smarriti e Ritrovati",
+        "title_incident_log": "Registro incidenti",
+        "title_documents": "Documenti",
         "title": "Gestione Sicurezza",
         "users_and_docs": {
           "title": "Utenti e Documenti",
@@ -914,6 +919,36 @@
           "asset_manager": "Gestione Asset",
           "hazardous_register": "Oggetti Pericolosi",
           "lost_and_found": "Smarriti e Ritrovati"
+        },
+        "hazard": {
+          "hazardous_register": "Registro oggetti pericolosi",
+          "edit_title": "Modifica Segnalazione",
+          "new_title": "Nuova Segnalazione",
+          "title": "Titolo",
+          "title_placeholder": "Titolo pericolo",
+          "description": "Descrizione",
+          "description_placeholder": "Descrizione oggetto",
+          "owner_nickname_placeholder": "Nickname del proprietario",
+          "owner_nickname": "Nickname proprietario",
+          "owner_id": "Id proprietario",
+          "owner_id_placeholder": "Id proprietario",
+          "cancel": "Annulla",
+          "save": "Salva",
+          "level": "Livello",
+          "photo": "Foto",
+          "add_report": "Aggiungi segnalazione",
+          "edit": "Modifica",
+          "reported_by": "Segnalato da",
+          "date": "Data",
+          "report": "Segnalazione",
+          "no_reports": "Nessuna segnalazione",
+          "all": "Tutti",
+          "search_placeholder": "Cerca per titolo,descrizione e nickname",
+          "missing_title": "Il titolo è obbligatorio",
+          "low": "Basso",
+          "medium": "Medio",
+          "high": "Alto",
+          "critical": "Critico"
         }
       },
       "system": {
@@ -1205,6 +1240,13 @@
         "week": "Settimana",
         "agenda": "Agenda"
       }
+    }
+  },
+  "login": {
+    "errors": {
+      "secondary_login_failed": "Login Security non riuscito",
+      "secondary_login_failed_description": "Risorse Security non caricate",
+      "secondary_login_failed_fetch": "Errore recupero dei permessi Security"
     }
   }
 }

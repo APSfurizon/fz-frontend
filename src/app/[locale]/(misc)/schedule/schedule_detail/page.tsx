@@ -8,7 +8,7 @@ import type { MaterialIcon } from "@/components/icon";
 import { loadScheduleActivityDetail } from "@/lib/api/schedule_detail";
 import { ApiErrorResponse } from "@/lib/api/global";
 import { ScheduleActivityApiItem } from "@/lib/schedule";
-import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { API_MOBILE_URL, EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -19,7 +19,7 @@ const getScheduleActivityImageUrl = (imageId?: string): string => {
     if (!imageId) {
         return EMPTY_PROFILE_PICTURE_SRC;
     }
-    return `http://152.89.254.125:3000/server/loadDealerImgById?id=${imageId}`;
+    return `${API_MOBILE_URL}/server/loadDealerImgById?id=${imageId}`;
 };
 
 export default function ScheduleDetailPage() {

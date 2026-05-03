@@ -17,7 +17,7 @@ import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import {
-  ADMIN_TOKEN_STORAGE_NAME,
+  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
   API_MOBILE_URL,
   APP_VERSION,
   MOBILE_FURIZON_AUTH_HEADER,
@@ -91,7 +91,7 @@ export default function Login() {
 
     if (!response.accessToken) return;
     const sessionExpiry = new Date(new Date().getTime() + SESSION_DURATION * 24 * 60 * 60 * 1000);
-    setCookie(ADMIN_TOKEN_STORAGE_NAME, response.accessToken, sessionExpiry);
+    setCookie(MOBILE_ADMIN_TOKEN_STORAGE_NAME, response.accessToken, sessionExpiry);
   }
 
   const manageSuccess = async (body?: LoginResponse) => {
@@ -107,13 +107,14 @@ export default function Login() {
         try {
           await doSecondaryAdminLogin();
         } catch (secondaryLoginError) {
-          console.warn("Secondary admin login failed", secondaryLoginError);
-          showModal("Attenzione", <span>Secondo login admin non riuscito. Continui con il login standard.</span>);
+          console.warn(t("login.errors.secondary_login_failed"), secondaryLoginError);
+          showModal(t("login.errors.secondary_login_failed"), <span>{t("login.errors.secondary_login_failed_description")}</span>);
           // Keep primary login valid even if secondary auth endpoint is temporarily unavailable.
         }
       }
     } catch {
       // Fallback: do not block login redirection if role check fails.
+      console.error(t("login.errors.secondary_login_failed_fetch"));
     }
 
     router.replace(`/logging?${params.toString()}`);

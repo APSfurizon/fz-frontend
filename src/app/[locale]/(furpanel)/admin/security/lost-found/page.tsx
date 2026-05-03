@@ -16,6 +16,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const SECURITY_IMAGE_THUMB_SIZE = 108;
 const SECURITY_LIST_PREVIEW_SIZE = 56;
@@ -29,7 +30,8 @@ const SECURITY_BADGE_STYLE = {
 };
 
 export default function SecurityLostAndFoundPage() {
-    useTitle("Security - Lost and Found");
+    const t = useTranslations();
+    useTitle(t("furpanel.admin.security_management.title_lost_and_found"));
     const { showModal } = useModalUpdate();
     const router = useRouter();
 
@@ -148,7 +150,7 @@ export default function SecurityLostAndFoundPage() {
                 </button>
             </div>
 
-            <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
+            <div className="vertical-list gap-2mm table-container title rounded-m">
                 {displayed.length === 0 && <span className="title normal color-subtitle">Nessun oggetto</span>}
                 {displayed.map((item, idx) => (
                     <div key={`${item.data}_${idx}`} className="rounded-m"
@@ -156,8 +158,8 @@ export default function SecurityLostAndFoundPage() {
                         onClick={() => { setSelected(item); setView("detail"); }}>
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <span className="title normal" style={{ fontWeight: 700, display: "block" }}>{item.descrizione || "—"}</span>
-                            {item.luogo_ritrovo && <span className="title small color-subtitle">📍 {item.luogo_ritrovo}</span>}
-                            {item.found_by && <span className="title small color-subtitle" style={{ display: "block" }}>👤 {item.found_by}</span>}
+                            {item.luogo_ritrovo && <span className="title small color-subtitle"><Icon icon="LOCATION_ON" className="medium" /> {item.luogo_ritrovo}</span>}
+                            {item.found_by && <span className="title small color-subtitle" style={{ display: "block" }}><Icon icon="PERSON" className="medium" />  {item.found_by}</span>}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", justifyContent: "flex-start", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
                             <span className="title small color-subtitle" style={{ opacity: 0.7 }}>{item.data ? new Date(item.data).toLocaleDateString() : ""}</span>
@@ -168,7 +170,7 @@ export default function SecurityLostAndFoundPage() {
                                 {(item.immagini?.length ?? 0) > 0 ? (
                                     <div onClick={(e) => e.stopPropagation()}>
                                         <ImagePreviewModal
-                                            imageUrl={`/api/image-proxy?url=${encodeURIComponent(typeof item.immagini![0] === "string" ? item.immagini![0] : item.immagini![0].url)}`}
+                                            imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(typeof item.immagini![0] === "string" ? item.immagini![0] : item.immagini![0].url)}`}
                                             alt={`${item.descrizione || "Oggetto"} - preview`}
                                             thumbSize={SECURITY_LIST_PREVIEW_SIZE}
                                             title={`${item.descrizione || "Oggetto"} - preview`}
@@ -249,7 +251,7 @@ export default function SecurityLostAndFoundPage() {
                                 return (
                                     <ImagePreviewModal
                                         key={idx}
-                                        imageUrl={`/api/image-proxy?url=${encodeURIComponent(url)}`}
+                                        imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(url)}`}
                                         alt={`${item.descrizione || "Oggetto"} — foto ${idx + 1}`}
                                         thumbSize={SECURITY_IMAGE_THUMB_SIZE}
                                         title={`${item.descrizione || "Oggetto"} — foto ${idx + 1}`}

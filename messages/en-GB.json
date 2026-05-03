@@ -17,7 +17,7 @@
       "login": "Login",
       "nose_count": "Nose count",
       "schedule": "Schedule",
-      "dealer": "Dealer",
+      "dealer": "Dealers' Den",
       "dropdown": {
         "logout": "Logout",
         "language": {
@@ -650,7 +650,7 @@
             },
             "personal_info": "Personal info",
             "security": "Security",
-            "orders": "Order",
+            "orders": "Orders",
             "orders_table": {
               "event_name": "Event",
               "order_code": "Order code",
@@ -695,7 +695,7 @@
               "unknown_user": "User not found",
               "PERMISSION_NOT_FOUND": "You don't have the permission to do that."
             },
-            "membership_cards": "Membership card",
+            "membership_cards": "Membership cards",
             "cards_table": {
               "card_no": "Card no.",
               "issue_year": "Issued year",
@@ -900,6 +900,11 @@
         }
       },
       "security_management": {
+        "title_hazardous_register": "Hazardous Register",
+        "title_asset_register": "Asset Register",
+        "title_lost_and_found": "Lost and Found",
+        "title_incident_log": "Incident Log",
+        "title_documents": "Documents",
         "title": "Security Management",
         "users_and_docs": {
           "title": "Users and Documents",
@@ -915,6 +920,36 @@
           "asset_manager": "Asset Manager",
           "hazardous_register": "Hazardous Register",
           "lost_and_found": "Lost and Found"
+        },
+        "hazard": {
+          "hazardous_register": "Hazard register",
+          "edit_title": "Edit Report",
+          "new_title": "New Report",
+          "title": "Title",
+          "title_placeholder": "Title hazard",
+          "description": "Description",
+          "description_placeholder": "Object description",
+          "owner_nickname_placeholder": "Owner Nickname",
+          "owner_nickname": "Owner nickname",
+          "owner_id": "Owner Id",
+          "owner_id_placeholder": "Owner Id",
+          "cancel": "Cancel",
+          "save": "Save",
+          "level": "Level",
+          "photo": "Photo",
+          "add_report": "Add report",
+          "edit": "Edit",
+          "reported_by": "Reported by",
+          "date": "Date",
+          "report": "Report",
+          "no_reports": "No reports",
+          "all": "All",
+          "search_placeholder": "Find by title,description and nickname",
+          "missing_title": "Title is mandatory",
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "critical": "Critical"
         }
       },
       "system": {
@@ -1205,6 +1240,13 @@
         "week": "Week",
         "agenda": "Agenda"
       }
+    }
+  },
+  "login": {
+    "errors": {
+      "secondary_login_failed": "Login Security Failed",
+      "secondary_login_failed_description": "Security resources not lodead",
+      "secondary_login_failed_fetch": "Failed to fetch user Security permission"
     }
   }
 }

@@ -20,6 +20,7 @@ import {
 import { UserDisplayAction } from "@/lib/api/user";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const INCIDENT_BADGE_STYLE = {
     display: "inline-flex",
@@ -45,7 +46,8 @@ function formatReportDate(value?: number) {
 }
 
 export default function SecurityIncidentsPage() {
-    useTitle("Registro Incidenti");
+    const t = useTranslations();
+    useTitle(t("furpanel.admin.security_management.title_incident_log"));
     const router = useRouter();
     const { showModal } = useModalUpdate();
 
@@ -303,7 +305,7 @@ export default function SecurityIncidentsPage() {
         list: SecurityIncident[],
         disabled = false
     ) => (
-        <div className="main-dialog rounded-m vertical-list gap-2mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
+        <div className="rounded-m vertical-list gap-2mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
             <span className="title normal color-subtitle">{title}</span>
             {list.length === 0 && <span className="title small color-subtitle">{emptyText}</span>}
             {list.map((item) => renderReportCard(item, disabled))}
@@ -375,7 +377,7 @@ export default function SecurityIncidentsPage() {
     const renderDetail = (item: SecurityIncident) => {
         const people = splitCsvNames(item.persone_coinvolte);
         return (
-            <div className="main-dialog rounded-m vertical-list gap-3mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
+            <div className="rounded-m vertical-list gap-3mm" style={{ width: "100%", margin: 0, padding: "0.75em" }}>
                 <div className="vertical-list gap-2mm">
                     <div className="horizontal-list gap-2mm flex-vertical-center" style={{ flexWrap: "wrap" }}>
                         <span className="title large" style={{ flex: 1, minWidth: 0 }}>{item.titolo || "Segnalazione"}</span>
@@ -429,7 +431,7 @@ export default function SecurityIncidentsPage() {
                             {message.logoUrl && (
                                 <div style={{ flexShrink: 0, marginLeft: "auto" }}>
                                     <ImagePreviewModal
-                                        imageUrl={`/api/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
+                                        imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
                                         alt={`${item.titolo || "Segnalazione"} - allegato ${idx + 1}`}
                                         thumbSize={108}
                                         title={(message.messaggio?.trim() || item.titolo || "Anteprima immagine").slice(0, 48)}

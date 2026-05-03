@@ -24,7 +24,6 @@ import LoadingPanel from "@/components/loadingPanel";
 import { PingApiAction } from "@/lib/api/admin/system";
 import { useUser } from "@/components/context/userProvider";
 
-const ADMIN_ROLE_NAMES = new Set(["root", "main_staff", "super_admin", "admin"]);
 
 function normalizeRole(internalName?: string) {
   return (internalName ?? "").toLowerCase().trim();
@@ -34,23 +33,28 @@ export default function AdminPage() {
   const t = useTranslations();
   const router = useRouter();
   const { showModal } = useModalUpdate();
-  const { userDisplay } = useUser();
   useTitle(t("furpanel.admin.title"));
 
-  const roles = userDisplay?.roles ?? [];
-  const isTeamSecurity = roles.some((role) => normalizeRole(role.internalName) === "team_security");
-  const isAdminRole = roles.some((role) => ADMIN_ROLE_NAMES.has(normalizeRole(role.internalName)));
-  const securityOnlyMode = isTeamSecurity && !isAdminRole;
-
   // Capabilities logic
-
   const [loading, setLoading] = useState(false);
+  const [securityOnlyMode, setSecurityOnlyMode] = useState(false);
   const [capabilities, setCapabilities] = useState<AdminCapabilitesResponse>();
 
   useEffect(() => {
     setLoading(true);
     runRequest({ action: new GetAdminCapabilitiesApiAction() })
-      .then((result) => setCapabilities(result))
+      .then((result) => {
+        if (!result.canBanUsers && !result.canChangeLoginData && !result.canUpgradeUser && !result.canManageMembershipCards &&
+          !result.canRefreshPretixCache && !result.canRemindOrderLinking && !result.canRemindBadgeUploads && !result.canRemindRoomsNotFull &&
+          !result.canRemindFursuitBringToEvent && !result.canViewUsers && !result.canExportHotelList && !result.canExportShirtList &&
+          !result.canExportBadges && result.security
+        ) {
+          setSecurityOnlyMode(true);
+        } else {
+          setSecurityOnlyMode(false);
+        }
+        setCapabilities(result)
+      })
       .catch((err) => showModal(
         t("common.error"),
         <ErrorMessage error={err} />

@@ -1,4 +1,4 @@
-import { ADMIN_TOKEN_STORAGE_NAME, API_MOBILE_URL, MOBILE_FURIZON_AUTH_HEADER } from "@/lib/constants";
+import { MOBILE_ADMIN_TOKEN_STORAGE_NAME, API_MOBILE_URL, MOBILE_FURIZON_AUTH_HEADER } from "@/lib/constants";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
@@ -15,7 +15,7 @@ async function proxy(req: Request, params: { path: string[] }) {
     const incomingContentType = req.headers.get("content-type");
     const incomingAcceptLanguage = req.headers.get("accept-language");
     const incomingAuthorization = req.headers.get("authorization");
-    const incomingAdminToken = req.headers.get("furizon_admin") ?? (await cookies()).get(ADMIN_TOKEN_STORAGE_NAME)?.value;
+    const incomingAdminToken = req.headers.get("furizon_admin") ?? (await cookies()).get(MOBILE_ADMIN_TOKEN_STORAGE_NAME)?.value;
 
     if (incomingContentType) requestHeaders.set("content-type", incomingContentType);
     if (incomingAcceptLanguage) requestHeaders.set("accept-language", incomingAcceptLanguage);

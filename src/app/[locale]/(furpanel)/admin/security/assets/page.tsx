@@ -33,7 +33,7 @@ const SECURITY_BADGE_STYLE = {
 
 export default function SecurityAssetManagerPage() {
     const t = useTranslations();
-    useTitle("Security - Asset Manager");
+    useTitle(t("furpanel.admin.security_management.title_assets"));
     const { showModal } = useModalUpdate();
     const router = useRouter();
 
@@ -173,7 +173,7 @@ export default function SecurityAssetManagerPage() {
             </div>
 
             {/* List */}
-            <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
+            <div className="vertical-list gap-2mm table-container title rounded-m">
                 {filtered.length === 0 && <span className="title normal color-subtitle">Nessun asset</span>}
                 {filtered.map((a) => (
                     <div key={a.data} className="rounded-m" style={{ padding: "0.75em", cursor: "pointer", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "center", width: "100%", boxSizing: "border-box", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a" }}
@@ -194,7 +194,7 @@ export default function SecurityAssetManagerPage() {
                                 {(a.foto?.length ?? 0) > 0 ? (
                                     <div onClick={(e) => e.stopPropagation()}>
                                         <ImagePreviewModal
-                                            imageUrl={`/api/image-proxy?url=${encodeURIComponent(a.foto![0].url)}`}
+                                            imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(a.foto![0].url)}`}
                                             alt={`${a.tag || "Asset"} - preview`}
                                             thumbSize={SECURITY_LIST_PREVIEW_SIZE}
                                             title={`${a.tag || "Asset"} - preview`}
@@ -259,7 +259,7 @@ export default function SecurityAssetManagerPage() {
                         {a.foto!.map((img, idx) => (
                             <ImagePreviewModal
                                 key={idx}
-                                imageUrl={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(img.url)}`}
                                 alt={`${a.tag} — foto ${idx + 1}`}
                                 thumbSize={SECURITY_IMAGE_THUMB_SIZE}
                                 title={`${a.tag || "Asset"} — foto ${idx + 1}`}

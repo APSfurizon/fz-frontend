@@ -16,9 +16,9 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
-const LIVELLO_LABEL: Record<string, string> = { basso: "Basso", medio: "Medio", alto: "Alto", critico: "Critico" };
 const LIVELLO_COLOR: Record<string, string> = { basso: "#27ae60", medio: "#f39c12", alto: "#e67e22", critico: "#c0392b" };
 const SECURITY_IMAGE_THUMB_SIZE = 108;
 const SECURITY_LIST_PREVIEW_SIZE = 56;
@@ -30,9 +30,12 @@ const SECURITY_BADGE_STYLE = {
 };
 
 export default function SecurityHazardousRegisterPage() {
-    useTitle("Security - Hazardous Register");
+    const t = useTranslations();
+    useTitle(t("furpanel.admin.security_management.title_hazardous_register"));
     const { showModal } = useModalUpdate();
     const router = useRouter();
+
+    const LIVELLO_LABEL: Record<string, string> = { basso: t("furpanel.admin.security_management.hazard.low"), medio: t("furpanel.admin.security_management.hazard.medium"), alto: t("furpanel.admin.security_management.hazard.high"), critico: t("furpanel.admin.security_management.hazard.critical") };
 
     const [hazards, setHazards] = useState<SecurityHazard[]>([]);
     const [loading, setLoading] = useState(false);
@@ -79,7 +82,7 @@ export default function SecurityHazardousRegisterPage() {
 
     const saveItem = () => {
         if (!fTitolo.trim()) {
-            showModal("Dati mancanti", <span>Inserisci almeno il titolo</span>);
+            showModal("Dati mancanti", <span>{t("furpanel.admin.security_management.hazard.missing_title")}</span>);
             return;
         }
         const body = new FormData();
@@ -118,14 +121,14 @@ export default function SecurityHazardousRegisterPage() {
                         type="text"
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Cerca per Titolo, Descrizione o Nickname"
+                        placeholder={t("furpanel.admin.security_management.hazard.search_placeholder")}
                         style={{ width: "100%", padding: "0.5em 0.7em", borderRadius: 8, border: "1px solid #00000040", background: "var(--table-header-row-bg)", color: "inherit" }}
                     />
                 </div>
                 <div className="spacer" />
                 <button className="button rounded-m" onClick={() => setFilterLivello(null)}
                     style={!filterLivello ? { background: "var(--button-background-active)" } : {}}>
-                    <span className="title normal">Tutti ({hazards.length})</span>
+                    <span className="title normal">{t("furpanel.admin.security_management.hazard.all")} ({hazards.length})</span>
                 </button>
                 {LIVELLI.map((l) => {
                     const count = hazards.filter((h) => h.livello === l).length;
@@ -138,8 +141,8 @@ export default function SecurityHazardousRegisterPage() {
                 })}
             </div>
 
-            <div className="vertical-list gap-2mm table-container title rounded-m furpanel-table-container">
-                {filtered.length === 0 && <span className="title normal color-subtitle">Nessuna segnalazione</span>}
+            <div className="vertical-list gap-2mm table-container title rounded-m">
+                {filtered.length === 0 && <span className="title normal color-subtitle">{t("furpanel.admin.security_management.hazard.no_reports")}</span>}
                 {filtered.map((h) => (
                     <div key={h.data} className="rounded-m"
                         style={{ padding: "0.75em", margin: 0, cursor: "pointer", display: "flex", flexDirection: "row", gap: "0.75em", alignItems: "flex-start", background: "var(--table-header-row-bg)", border: "1px solid #00000030", boxShadow: "0px 1px 6px 0px #0000002a", borderLeft: `4px solid ${LIVELLO_COLOR[h.livello]}` }}
@@ -150,7 +153,7 @@ export default function SecurityHazardousRegisterPage() {
                                 <span className="title normal" style={{ fontWeight: 700 }}>{h.titolo}</span>
                             </div>
                             {h.descrizione && <span className="title small color-subtitle" style={{ display: "block", marginTop: 2 }}>{h.descrizione}</span>}
-                            {h.trovato_da && <span className="title small color-subtitle" style={{ display: "block", marginTop: 8 }}>👤 {h.trovato_da}</span>}
+                            {h.trovato_da && <span className="title small color-subtitle" style={{ display: "block", marginTop: 8 }}><Icon icon="PERSON" className="medium" /> {h.trovato_da}</span>}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", justifyContent: "flex-start", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
                             <span className="title small color-subtitle">{h.data ? new Date(h.data).toLocaleDateString() : ""}</span>
@@ -161,10 +164,10 @@ export default function SecurityHazardousRegisterPage() {
                                 {(h.foto?.length ?? 0) > 0 ? (
                                     <div onClick={(e) => e.stopPropagation()}>
                                         <ImagePreviewModal
-                                            imageUrl={`/api/image-proxy?url=${encodeURIComponent(h.foto![0].url)}`}
-                                            alt={`${h.titolo || "Segnalazione"} - preview`}
+                                            imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(h.foto![0].url)}`}
+                                            alt={`${h.titolo || t("furpanel.admin.security_management.hazard.report")} - preview`}
                                             thumbSize={SECURITY_LIST_PREVIEW_SIZE}
-                                            title={`${h.titolo || "Segnalazione"} - preview`}
+                                            title={`${h.titolo || t("furpanel.admin.security_management.hazard.report")} - preview`}
                                         />
                                     </div>
                                 ) : (
@@ -180,13 +183,13 @@ export default function SecurityHazardousRegisterPage() {
 
     const renderForm = () => (
         <div className="vertical-list gap-3mm">
-            <span className="title large" style={{ marginBottom: 8 }}>{isEdit ? "Modifica segnalazione" : "Nuova segnalazione"}</span>
-            <FpInput label="Titolo *" initialValue={fTitolo} onChange={(e) => setFTitolo(e.target.value ?? "")} placeholder="Titolo segnalazione" />
-            <FpInput label="Descrizione" initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder="Descrizione del pericolo..." />
-            <FpInput label="Nickname Proprietario" initialValue={fProprietarioNick} onChange={(e) => setFProprietarioNick(e.target.value ?? "")} placeholder="Nickname" />
-            <FpInput label="ID Proprietario" initialValue={fProprietarioId} onChange={(e) => setFProprietarioId(e.target.value ?? "")} placeholder="ID utente" />
+            <span className="title large" style={{ marginBottom: 8 }}>{isEdit ? t("furpanel.admin.security_management.hazard.edit_title") : t("furpanel.admin.security_management.hazard.new_title")}</span>
+            <FpInput required label={t("furpanel.admin.security_management.hazard.title")} initialValue={fTitolo} onChange={(e) => setFTitolo(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.title_placeholder")} />
+            <FpInput label={t("furpanel.admin.security_management.hazard.description")} initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.description_placeholder")} />
+            <FpInput required label={t("furpanel.admin.security_management.hazard.owner_nickname")} initialValue={fProprietarioNick} onChange={(e) => setFProprietarioNick(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_nickname_placeholder")} />
+            <FpInput required label={t("furpanel.admin.security_management.hazard.owner_id")} initialValue={fProprietarioId} onChange={(e) => setFProprietarioId(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_id_placeholder")} />
             <div style={{ marginTop: 6 }}>
-                <span className="title small" style={{ display: "block", marginBottom: 6 }}>Livello</span>
+                <span className="title small" style={{ display: "block", marginBottom: 6 }}>{t("furpanel.admin.security_management.hazard.level")}</span>
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                     {LIVELLI.map((l) => (
                         <button key={l} className="button rounded-m" onClick={() => setFLivello(l)}
@@ -197,8 +200,8 @@ export default function SecurityHazardousRegisterPage() {
                 </div>
             </div>
             <div className="horizontal-list gap-2mm" style={{ marginTop: 10 }}>
-                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>Annulla</Button>
-                <Button icon="SAVE" busy={loading} onClick={saveItem}>Salva</Button>
+                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.hazard.cancel")}</Button>
+                <Button icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.hazard.save")}</Button>
             </div>
         </div>
     );
@@ -210,9 +213,9 @@ export default function SecurityHazardousRegisterPage() {
                 <span style={{ ...SECURITY_BADGE_STYLE, background: LIVELLO_COLOR[h.livello], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>{LIVELLO_LABEL[h.livello]}</span>
             </div>
             {[
-                ["Descrizione", h.descrizione], ["Segnalato da", h.trovato_da],
-                ["Proprietario", h.proprietario_nickname], ["ID Proprietario", h.proprietario_id],
-                ["Data", h.data ? new Date(h.data).toLocaleString() : undefined],
+                [t("furpanel.admin.security_management.hazard.description"), h.descrizione], [t("furpanel.admin.security_management.hazard.reported_by"), h.trovato_da],
+                [t("furpanel.admin.security_management.hazard.owner_nickname"), h.proprietario_nickname], [t("furpanel.admin.security_management.hazard.owner_id"), h.proprietario_id],
+                [t("furpanel.admin.security_management.hazard.date"), h.data ? new Date(h.data).toLocaleString() : undefined],
             ].filter(([, v]) => !!v).map(([label, value]) => (
                 <div key={label} className="horizontal-list gap-2mm" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
                     <span className="title small color-subtitle" style={{ minWidth: 160 }}>{label}</span>
@@ -221,15 +224,15 @@ export default function SecurityHazardousRegisterPage() {
             ))}
             {(h.foto?.length ?? 0) > 0 && (
                 <div className="vertical-list gap-2mm">
-                    <span className="title small color-subtitle">Foto ({h.foto!.length})</span>
+                    <span className="title small color-subtitle">{t("furpanel.admin.security_management.hazard.photo")} ({h.foto!.length})</span>
                     <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
                         {h.foto!.map((img, idx) => (
                             <ImagePreviewModal
                                 key={idx}
-                                imageUrl={`/api/image-proxy?url=${encodeURIComponent(img.url)}`}
-                                alt={`${h.titolo} — foto ${idx + 1}`}
+                                imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                alt={`${h.titolo} — ${t("furpanel.admin.security_management.hazard.photo")} ${idx + 1}`}
                                 thumbSize={SECURITY_IMAGE_THUMB_SIZE}
-                                title={`${h.titolo || "Segnalazione"} — foto ${idx + 1}`}
+                                title={`${h.titolo || t("furpanel.admin.security_management.hazard.title")} — ${t("furpanel.admin.security_management.hazard.photo")} ${idx + 1}`}
                             />
                         ))}
                     </div>
@@ -255,11 +258,11 @@ export default function SecurityHazardousRegisterPage() {
                     <Icon icon="ARROW_BACK" />
                 </span>
                 <div className="horizontal-list gap-2mm">
-                    <span className="title medium">Hazardous Register</span>
+                    <span className="title medium">{t("furpanel.admin.security_management.hazard.hazardous_register")}</span>
                 </div>
                 <div className="spacer" />
-                {view === "list" && <Button icon="ADD" onClick={openAdd}>Aggiungi segnalazione</Button>}
-                {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>Modifica</Button>}
+                {view === "list" && <Button icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.hazard.add_report")}</Button>}
+                {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.hazard.edit")}</Button>}
             </div>
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}

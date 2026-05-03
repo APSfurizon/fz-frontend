@@ -3,7 +3,7 @@ import { routing } from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   API_BASE_URL, REGEX_UNAUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
-  TOKEN_STORAGE_NAME, ADMIN_TOKEN_STORAGE_NAME
+  TOKEN_STORAGE_NAME, MOBILE_ADMIN_TOKEN_STORAGE_NAME
 } from './lib/constants';
 
 const intlMiddleware = createMiddleware(routing);
@@ -101,7 +101,7 @@ async function verifyToken(clientIp: string | null, token: string): Promise<Toke
 
 const stripToken = (res: NextResponse): NextResponse => {
   res.cookies.delete(TOKEN_STORAGE_NAME);
-  res.cookies.delete(ADMIN_TOKEN_STORAGE_NAME);
+  res.cookies.delete(MOBILE_ADMIN_TOKEN_STORAGE_NAME);
   return res;
 }
 

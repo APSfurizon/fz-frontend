@@ -15,6 +15,7 @@ export interface AdminCapabilitesResponse extends ApiResponse {
     canExportHotelList?: boolean,
     canExportShirtList?: boolean,
     canExportBadges?: boolean,
+    security?: boolean
 }
 
 export class GetAdminCapabilitiesApiAction extends ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {

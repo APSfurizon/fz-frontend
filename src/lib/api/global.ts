@@ -1,6 +1,6 @@
 import { FormApiAction } from "@/lib/components/dataForm"
 import {
-    ADMIN_TOKEN_STORAGE_NAME,
+    MOBILE_ADMIN_TOKEN_STORAGE_NAME,
     API_BASE_URL,
     API_MOBILE_URL,
     MOBILE_FURIZON_AUTH_HEADER,
@@ -97,7 +97,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
         if (data.body instanceof FormData == false) headers.append("Content-type", "application/json");
 
         const token = getToken();
-        const adminToken = getCookie(ADMIN_TOKEN_STORAGE_NAME);
+        const adminToken = getCookie(MOBILE_ADMIN_TOKEN_STORAGE_NAME);
 
         headers.append("Accept-Language", getCookie("NEXT_LOCALE"));
 
@@ -129,8 +129,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
         const fetchOptions: RequestInit = {
             method: data.action.method,
             body: data.body ? data.body instanceof FormData ? data.body : JSON.stringify(data.body) : null,
-            headers: headers,
-            cache: "no-store"
+            headers: headers
         }
 
         // Execute fetch
