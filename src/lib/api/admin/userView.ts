@@ -85,6 +85,46 @@ export interface GetUserAdminViewResponse extends ApiResponse {
     permissions: Permissions[]
 }
 
+export interface GetUserSecurityViewResponse extends ApiResponse {
+    firstName: string | null,
+    lastName: string | null,
+    sex: string | null,
+    gender: string | null,
+    birthday: string | null,
+    phoneNumber: string | null,
+    prefixPhoneNumber: string | null,
+    allergies: string | null,
+    telegramUsername: string | null,
+    currentMembershipCard: MembershipCard | null,
+    email: string | null,
+    currentOrder: SecurityOrder | null,
+    currentRoomdata?: RoomInfoResponse,
+    badgeData: BadgeStatusApiResponse,
+    roles: UserViewRoles[],
+    sponsorNames: SecuritySponsorEntry[]
+}
+
+export interface SecurityOrder {
+    code: string,
+    orderStatus: OrderStatus,
+    sponsorship: SponsorshipType,
+    dailyDaysDates: string[],
+    board: string,
+    dailyDays: string[],
+    pretixRoomItemId: number,
+    roomCapacity: number,
+    hotelInternalName: string,
+    roomInternalName: string,
+    orderSerialInEvent: number,
+    id: number,
+    daily: boolean,
+}
+
+export interface SecuritySponsorEntry {
+    eventId: number,
+    sponsorNames: { sponsors: { sponsor: string; sponsorNames: Record<string, string> }[] },
+}
+
 /**
  * Uses path param: users/view/id
  */
@@ -93,6 +133,16 @@ export class GetUserAdminViewAction extends ApiAction<GetUserAdminViewResponse, 
     method = RequestType.GET;
     hasPathParams = true;
     urlAction = "users/view/{id}";
+}
+
+/**
+ * Uses path param: users/security/view/{id}
+ */
+export class GetUserSecurityViewAction extends ApiAction<GetUserSecurityViewResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    hasPathParams = true;
+    urlAction = "users/security/view/{id}";
 }
 
 export interface UserIdRequestData {

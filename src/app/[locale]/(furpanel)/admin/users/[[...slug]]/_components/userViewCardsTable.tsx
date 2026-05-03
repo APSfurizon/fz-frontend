@@ -59,7 +59,15 @@ export default function UserViewCardsTable({
             cell: props => <Checkbox initialValue={props.getValue()}
                 onClick={(event, checked, setChecked, setBusy) =>
                     markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)} />
-        })
+        }),
+        cardColHelper.accessor('signedAt', {
+            id: 'signedAt',
+            header: t("furpanel.admin.users.accounts.view.cards_table.aps_form_signed")
+        }),
+        cardColHelper.accessor('sentByEmail', {
+            id: 'sentByEmail',
+            header: t("furpanel.admin.users.accounts.view.cards_table.sent_by_email")
+        }),
     ]);
 
     return <FpTable<MembershipCard> rows={userData?.membershipCards}

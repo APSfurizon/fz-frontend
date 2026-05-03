@@ -6,7 +6,7 @@ import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
 import { useEffect, useState } from 'react';
 import "@/styles/components/header.css";
-import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED } from '@/lib/constants';
+import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED, SCHEDULE_ENABLED, DEALER_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import { isMobile, UA } from '@/lib/userAgent';
 import { OSName } from 'ua-parser-js/enums';
@@ -36,6 +36,7 @@ export default function Header() {
     const language = locale.split('-')[0];
     const deviceTypeLower = type.toString().toLowerCase();
     const appBadgeSrc = `/images/app-badge/${deviceTypeLower}/${deviceTypeLower}_${language}.png`;
+    const closeHamburgerMenu = () => setHamburgerOpen(false);
 
     useEffect(() => document.body.addEventListener('scroll', () => setNewScroll(document.body.scrollTop)), []);
 
@@ -72,14 +73,26 @@ export default function Header() {
                 </div>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
-                <Link href="/home" className="header-link medium">
+                <Link href="/home" className="header-link medium" onClick={closeHamburgerMenu}>
                     <Icon style={{ fontSize: "24px" }} icon="HOME" />
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                { NOSECOUNT_ENABLED && <>
-                    <Link href={`/nosecount`} className="header-link medium">
+                {NOSECOUNT_ENABLED && <>
+                    <Link href={`/nosecount`} className="header-link medium" onClick={closeHamburgerMenu}>
                         <Icon style={{ fontSize: "24px" }} icon="GROUPS" />
                         <span className="title semibold">{t('header.nose_count')}</span>
+                    </Link>
+                </>}
+                {SCHEDULE_ENABLED && <>
+                    <Link href={`/schedule`} className="header-link medium" onClick={closeHamburgerMenu}>
+                        <Icon style={{ fontSize: "24px" }} icon="EVENT" />
+                        <span className="title semibold">{t('header.schedule')}</span>
+                    </Link>
+                </>}
+                {DEALER_ENABLED && <>
+                    <Link href={`/dealer`} className="header-link medium" onClick={closeHamburgerMenu}>
+                        <Icon style={{ fontSize: "24px" }} icon="STORE" />
+                        <span className="title semibold">{t('header.dealer')}</span>
                     </Link>
                 </>}
                 {/* <a className="header-link">
@@ -97,7 +110,7 @@ export default function Header() {
                     <div className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
                         <span className="descriptive small color-subtitle">{t("header.app_badge")}</span>
                         <div className="spacer"></div>
-                        <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""}>
+                        <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""} onClick={closeHamburgerMenu}>
                             <Image className="app-badge" src={appBadgeSrc} width={120} height={40} alt={t("header.alt_app_badge")}></Image>
                         </a>
                     </div>

@@ -11,7 +11,9 @@ export interface MembershipCard {
     issueYear: number,
     userOwnerId: number,
     createdForOrderId: number,
-    registered: true,
+    registered: boolean,
+    signedAt: string | null,
+    sentByEmail: boolean,
 }
 
 export interface UserCardData {

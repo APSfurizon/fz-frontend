@@ -1,11 +1,23 @@
 .main-dialog {
+    width: 95vw;
+    max-width: 95vw;
+    transition: width 120ms;
+
     &:not(:has(.stretch-page)) {
         width: 210mm;
     }
 
-    width: 95vw;
-    max-width: 95vw;
-    transition: width 120ms;
+    &:has(.stretch-page.compact-main) {
+        width: fit-content;
+        min-width: min(95vw, 210mm);
+        max-width: 95vw;
+    }
+}
+
+.furpanel-table-container {
+    overflow: hidden;
+    background-color: var(--table-bg);
+    padding: 0.625em;
 }
 
 span:has(.hamburger),
@@ -13,7 +25,7 @@ span:has(.hamburger),
     display: none;
 }
 
-@media (max-width:800px) {
+@media (max-width:1300px) {
 
     span:has(.hamburger),
     .hamburger {
@@ -33,6 +45,12 @@ span:has(.hamburger),
 
     .main-dialog {
         min-width: 100vw;
+
+        &:has(.stretch-page.compact-main) {
+            width: 95vw;
+            min-width: 95vw;
+            max-width: 95vw;
+        }
 
         .tools-list {
             transition-duration: 120ms;

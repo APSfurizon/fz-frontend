@@ -1,0 +1,875 @@
+.schedule-page {
+    padding-inline: 0;
+}
+
+@media (max-width: 800px) {
+    .schedule-page {
+        padding-inline: 2mm;
+    }
+
+    .schedule-page .schedule-dialog {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        align-self: stretch;
+        margin-inline: 0;
+    }
+
+    .schedule-page .schedule-wrapper,
+    .schedule-page .schedule-wrapper.mobile {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        margin-inline: 0;
+    }
+}
+
+.schedule-dialog {
+    padding: 1.25em;
+    margin: 0 auto 8mm auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+    width: fit-content;
+    /*min-width: 75vw; */
+    /*max-width: 95vw;*/
+    box-shadow: 0px 3px 20px 1px #0000003F;
+    background-color: var(--main-dialog-background);
+}
+
+
+.schedule-wrapper {
+    min-width: 74vw;
+    max-width: 1320px;
+    flex: 1;
+    min-height: 600px;
+    margin-inline: auto;
+    color-scheme: only light;
+    forced-color-adjust: none;
+}
+
+/* Override react-big-calendar styles to match app theme */
+.rbc-calendar {
+    background-color: var(--main-dialog-background);
+    border-radius: 8px;
+    border: 1px solid #cccccc40;
+    font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+    height: 100%;
+    color-scheme: only light;
+    forced-color-adjust: none;
+}
+
+.rbc-header {
+    background-color: var(--header-bg);
+    color: var(--foreground);
+    border-bottom: 0px solid #cccccc60;
+    padding: 0.5em;
+    font-weight: 600;
+}
+
+.rbc-time-view-resources .rbc-time-header,
+.rbc-time-view-resources .rbc-time-header-content {
+    align-items: stretch;
+}
+
+.rbc-resource-grouping.rbc-time-header-content,
+.rbc-time-view-resources .rbc-time-header,
+.rbc-time-view-resources .rbc-time-header-content,
+.rbc-time-view-resources .rbc-time-header-content>.rbc-row.rbc-row-resource {
+    height: auto;
+    min-height: 0;
+}
+
+.rbc-time-view-resources .rbc-time-header>.rbc-row:first-child {
+    display: none;
+}
+
+.rbc-time-view-resources .rbc-time-header-content>.rbc-row.rbc-row-resource {
+    flex: 0 0 auto;
+}
+
+.rbc-time-view-resources .rbc-time-header-content>.rbc-row.rbc-row-resource .rbc-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    height: auto;
+    padding-block: 0.9em;
+}
+
+.rbc-time-header.rbc-overflowing {
+    margin-right: 0;
+}
+
+.rbc-time-header-content .rbc-header {
+    min-width: 140px;
+    white-space: nowrap;
+}
+
+.rbc-toolbar {
+    display: none;
+}
+
+/* Custom day tabs toolbar */
+.schedule-day-toolbar {
+    display: flex;
+    gap: 0;
+    background-color: var(--header-bg);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid #cccccc40;
+    overflow: hidden;
+}
+
+.schedule-day-tab {
+    flex: 1;
+    padding: 0.65em 1em;
+    background: transparent;
+    border: none;
+    border-right: 1px solid #cccccc40;
+    color: var(--foreground);
+    font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: capitalize;
+    transition: background 0.15s, color 0.15s;
+}
+
+.schedule-day-tab:last-child {
+    border-right: none;
+}
+
+.schedule-day-tab:hover {
+    background: var(--tool-link-bg-hover);
+    color: #fff;
+}
+
+.schedule-day-tab.active {
+    background: var(--button-bg-normal);
+    color: #fff;
+    font-weight: 700;
+}
+
+.rbc-day-bg+.rbc-day-bg,
+.rbc-month-row+.rbc-month-row {
+    border-color: #cccccc40;
+}
+
+.rbc-time-content,
+.rbc-time-header-content {
+    border-color: #cccccc40;
+}
+
+.rbc-time-header,
+.rbc-time-header>.rbc-row:first-child,
+.rbc-time-header>.rbc-row.rbc-row-resource,
+.rbc-time-header-content+.rbc-time-header-content,
+.rbc-time-header-content>.rbc-row.rbc-row-resource,
+.rbc-time-content>*+*>*,
+.rbc-time-view .rbc-time-gutter,
+.rbc-time-view-resources .rbc-time-gutter,
+.rbc-time-view-resources .rbc-time-header-gutter,
+.rbc-time-view-resources .rbc-time-header-content,
+.rbc-time-view-resources .rbc-header,
+.rbc-time-view-resources .rbc-day-bg {
+    border-color: #cccccc40 !important;
+}
+
+.rbc-time-view .rbc-allday-cell,
+.rbc-time-view-resources .rbc-allday-cell {
+    display: none;
+}
+
+.rbc-time-gutter,
+.rbc-time-header-gutter,
+.rbc-time-view-resources .rbc-time-gutter,
+.rbc-time-view-resources .rbc-time-header-gutter,
+.rbc-time-content>.rbc-time-gutter {
+    background-color: var(--background);
+}
+
+.rbc-time-content {
+    min-width: 980px;
+    border-top-color: #cccccc40 !important;
+}
+
+.rbc-day-slot .rbc-events-container {
+    margin-right: 0;
+}
+
+.rbc-time-slot {
+    border-color: transparent !important;
+}
+
+.rbc-timeslot-group {
+    border-bottom-color: #cccccc40 !important;
+}
+
+.rbc-current-time-indicator {
+    background-color: var(--highlight);
+}
+
+.rbc-event {
+    background: var(--button-bg-normal);
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
+    font-size: 0.98em;
+    padding: 0.25em 0.4em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.rbc-day-slot .rbc-event {
+    min-height: 0 !important;
+}
+
+.rbc-day-slot .rbc-event-content {
+    min-height: 0 !important;
+}
+
+.rbc-event:focus,
+.rbc-event:hover {
+    background: var(--button-bg-hover);
+}
+
+.rbc-day-slot .rbc-event-label {
+    display: none;
+}
+
+.rbc-event-label {
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.schedule-event-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.12em;
+    line-height: 1.08;
+    font-size: 0.9em;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.schedule-event-heading {
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-self: center;
+    gap: 0.18em;
+    width: auto;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.schedule-event-emote {
+    flex: 0 0 auto;
+    line-height: 1;
+    font-size: 1.05em;
+}
+
+.schedule-event-title {
+    font-size: 1.08em;
+    font-weight: 700;
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.schedule-event-card.compact {
+    justify-content: center;
+}
+
+.schedule-event-card.compact .schedule-event-title {
+    line-height: 1.02;
+    font-size: 0.96em;
+}
+
+.schedule-event-card.compact .schedule-event-emote {
+    font-size: 0.95em;
+}
+
+.schedule-event-card.tight .schedule-event-title {
+    font-size: 0.88em;
+    line-height: 1;
+}
+
+.schedule-event-host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.22em;
+    font-size: 0.9em;
+    font-weight: 500;
+    opacity: 0.82;
+    width: 100%;
+    color: #000 !important;
+    forced-color-adjust: none;
+}
+
+.schedule-event-host span {
+    color: #000 !important;
+}
+
+.schedule-event-host-icon {
+    color: #5b95df !important;
+    font-size: 1.05em;
+    forced-color-adjust: none;
+}
+
+.rbc-today {
+    background-color: #eb961610;
+}
+
+.rbc-off-range-bg {
+    background-color: #00000008;
+}
+
+.rbc-show-more {
+    color: var(--text-link);
+}
+
+/* Day columns header date link */
+.rbc-header a,
+.rbc-header a:visited {
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+.rbc-time-view {
+    border-color: #cccccc40 !important;
+    border-radius: 0 0 8px 8px;
+}
+
+.rbc-agenda-view table.rbc-agenda-table {
+    border-color: #cccccc40;
+}
+
+.rbc-agenda-view table.rbc-agenda-table tbody>tr>td+td {
+    border-color: #cccccc40;
+}
+
+.rbc-agenda-view table.rbc-agenda-table .rbc-agenda-time-cell {
+    color: var(--text-subtitle);
+    font-size: 0.85em;
+}
+
+.rbc-agenda-empty {
+    color: var(--text-subtitle);
+    padding: 1em;
+    text-align: center;
+}
+
+/* Tipologia event colors (same palette in light and dark mode) */
+.rbc-event.tipologia-panel {
+    background: #ffd35f;
+    color: #000;
+}
+
+.rbc-event.tipologia-panel:hover {
+    background: #f3bf3e;
+    color: #000;
+}
+
+.rbc-event.tipologia-panel:focus {
+    background: #e8af1f;
+    color: #000;
+}
+
+.rbc-event.tipologia-event {
+    background: #8eb8e2;
+    color: #000;
+}
+
+.rbc-event.tipologia-event:hover {
+    background: #79a9d9;
+    color: #000;
+}
+
+.rbc-event.tipologia-event:focus {
+    background: #6599cf;
+    color: #000;
+}
+
+.rbc-event.tipologia-game {
+    background: #b999c8;
+    color: #000;
+}
+
+.rbc-event.tipologia-game:hover {
+    background: #ac86be;
+    color: #000;
+}
+
+.rbc-event.tipologia-game:focus {
+    background: #9e72b5;
+    color: #000;
+}
+
+.rbc-event.tipologia-tournament {
+    background: #b7d96b;
+    color: #000;
+}
+
+.rbc-event.tipologia-tournament:hover {
+    background: #a8cf56;
+    color: #000;
+}
+
+.rbc-event.tipologia-tournament:focus {
+    background: #99c243;
+    color: #000;
+}
+
+.rbc-event.tipologia-dealers {
+    background: #f3a06a;
+    color: #000;
+}
+
+.rbc-event.tipologia-dealers:hover {
+    background: #ea8f52;
+    color: #000;
+}
+
+.rbc-event.tipologia-dealers:focus {
+    background: #df8040;
+    color: #000;
+}
+
+.rbc-event.tipologia-explorers {
+    background: #e65052;
+    color: #000;
+}
+
+.rbc-event.tipologia-explorers:hover {
+    background: #dd3f42;
+    color: #000;
+}
+
+.rbc-event.tipologia-explorers:focus {
+    background: #d13235;
+    color: #000;
+}
+
+.rbc-event.tipologia-supersponsors {
+    background: #f98286;
+    color: #000;
+}
+
+/* For tiny red slots (<20m): keep box in timeslot, show title slightly above it */
+.rbc-day-slot .rbc-event.tipologia-explorers.duration-under-20,
+.rbc-day-slot .rbc-event.tipologia-supersponsors.duration-under-20 {
+    overflow: visible;
+    z-index: 25;
+}
+
+.rbc-day-slot .rbc-event.tipologia-explorers.duration-under-20 .schedule-event-card,
+.rbc-day-slot .rbc-event.tipologia-supersponsors.duration-under-20 .schedule-event-card {
+    position: relative;
+    overflow: visible;
+}
+
+.rbc-day-slot .rbc-event.tipologia-explorers.duration-under-20 .schedule-event-heading,
+.rbc-day-slot .rbc-event.tipologia-supersponsors.duration-under-20 .schedule-event-heading {
+    position: absolute;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: none;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    overflow: visible;
+    padding: 0.08em 0.42em;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #00000022;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 1px 3px #00000026;
+    text-shadow: 0 1px 0 #ffffff99;
+}
+
+.rbc-day-slot .rbc-event.tipologia-explorers.duration-under-20 .schedule-event-heading {
+    background: #e65052;
+    border-color: #b83033;
+}
+
+.rbc-day-slot .rbc-event.tipologia-supersponsors.duration-under-20 .schedule-event-heading {
+    background: #f98286;
+    border-color: #d95d62;
+}
+
+.rbc-day-slot .rbc-event.tipologia-explorers.duration-under-20 .schedule-event-heading {
+    top: -0.96em;
+}
+
+.rbc-day-slot .rbc-event.tipologia-supersponsors.duration-under-20 .schedule-event-heading {
+    top: -0.46em;
+}
+
+.rbc-day-slot .rbc-event.tipologia-explorers.duration-under-20 .schedule-event-title,
+.rbc-day-slot .rbc-event.tipologia-supersponsors.duration-under-20 .schedule-event-title {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    font-size: 0.98em !important;
+    font-weight: 800;
+}
+
+.rbc-event.tipologia-supersponsors:hover {
+    background: #f46f74;
+    color: #000;
+}
+
+.rbc-event.tipologia-supersponsors:focus {
+    background: #ee5f66;
+    color: #000;
+}
+
+.rbc-event.tipologia-other {
+    background: #daf0fb;
+    color: #000;
+}
+
+.rbc-event.tipologia-other:hover {
+    background: #c2e4f6;
+    color: #000;
+}
+
+.rbc-event.tipologia-other:focus {
+    background: #abd8f0;
+    color: #000;
+}
+
+/* Canceled events keep visibility but use neutral styling */
+.rbc-event.canceled {
+    background: #b6bcc4;
+    color: #000;
+}
+
+.rbc-event.canceled:hover {
+    background: #a6adb7;
+    color: #000;
+}
+
+.rbc-event.canceled:focus {
+    background: #969faa;
+    color: #000;
+}
+
+.rbc-event.canceled .schedule-event-title {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+/*MOBILE*/
+.schedule-wrapper.mobile {
+    height: auto;
+    min-height: unset;
+    --schedule-mobile-toolbar-bg: #e9eef3ee;
+    --schedule-mobile-tab-text: var(--foreground);
+    --schedule-mobile-tab-border: #8da0b4;
+    --schedule-mobile-tab-active: var(--highlight);
+    --schedule-mobile-tab-hover-bg: #dfe7ef;
+    --schedule-mobile-hour-text: #203244;
+    --schedule-mobile-line-bg: #8fa3b8;
+    --schedule-mobile-dot-bg: #f7f9fc;
+    --schedule-mobile-dot-ring: #38485a44;
+    --schedule-mobile-card-bg: #d6e0ea;
+    --schedule-mobile-card-text: #172636;
+    --schedule-mobile-card-subtext: #2c4257;
+    --schedule-mobile-empty-text: var(--text-subtitle);
+}
+
+@media (prefers-color-scheme: dark) {
+    .schedule-wrapper.mobile {
+        --schedule-mobile-toolbar-bg: rgba(10, 24, 32, 0.96);
+        --schedule-mobile-tab-text: rgba(255, 255, 255, 0.85);
+        --schedule-mobile-tab-border: rgba(255, 255, 255, 0.35);
+        --schedule-mobile-tab-active: #f19b73;
+        --schedule-mobile-tab-hover-bg: #ffffff10;
+        --schedule-mobile-hour-text: rgba(255, 255, 255, 0.82);
+        --schedule-mobile-line-bg: rgba(255, 255, 255, 0.18);
+        --schedule-mobile-dot-bg: #ffffff;
+        --schedule-mobile-dot-ring: rgba(255, 255, 255, 0.22);
+        --schedule-mobile-card-bg: rgba(48, 61, 70, 0.95);
+        --schedule-mobile-card-text: #ffffff;
+        --schedule-mobile-card-subtext: rgba(255, 255, 255, 0.84);
+        --schedule-mobile-empty-text: rgba(255, 255, 255, 0.75);
+    }
+}
+
+/* Tabs giorni stile app */
+.schedule-wrapper.mobile .schedule-day-toolbar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 10px 12px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--schedule-mobile-toolbar-bg);
+    backdrop-filter: blur(8px);
+}
+
+.schedule-wrapper.mobile .schedule-day-tab {
+    border: 0;
+    border-bottom: 3px solid var(--schedule-mobile-tab-border);
+    border-radius: 0;
+    background: transparent;
+    color: var(--schedule-mobile-tab-text);
+    padding: 6px 4px 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.schedule-wrapper.mobile .schedule-day-tab.active {
+    color: var(--schedule-mobile-tab-active);
+    border-bottom-color: var(--schedule-mobile-tab-active);
+}
+
+.schedule-wrapper.mobile .schedule-day-tab:hover {
+    background: var(--schedule-mobile-tab-hover-bg);
+}
+
+/* Timeline */
+.schedule-mobile-timeline {
+    padding: 10px 10px 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.schedule-mobile-empty {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--schedule-mobile-empty-text);
+}
+
+.schedule-mobile-row {
+    display: grid;
+    grid-template-columns: 54px 16px 1fr;
+    column-gap: 8px;
+    position: relative;
+    min-height: 104px;
+    width: 100%;
+    min-width: 0;
+}
+
+.schedule-mobile-row>* {
+    min-width: 0;
+}
+
+.schedule-mobile-hour {
+    position: relative;
+    text-align: right;
+    padding-top: 7px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--schedule-mobile-hour-text);
+}
+
+.schedule-mobile-line {
+    width: 3px;
+    height: calc(100% - 32px);
+    min-height: 48px;
+    margin-left: auto;
+    margin-right: 12px;
+    margin-top: 10px;
+    border-radius: 99px;
+    background: var(--schedule-mobile-line-bg);
+}
+
+.schedule-mobile-dot {
+    width: 13px;
+    height: 13px;
+    margin-top: 13px;
+    border-radius: 50%;
+    background: var(--schedule-mobile-dot-bg);
+    box-shadow: 0 0 0 2px var(--schedule-mobile-dot-ring);
+}
+
+/* Card evento */
+.schedule-mobile-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 14px;
+    border: 0;
+    border-radius: 14px;
+    padding: 13px 14px;
+    text-align: left;
+    color: var(--schedule-mobile-card-text);
+    background: var(--schedule-mobile-card-bg);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.schedule-mobile-card:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    opacity: 0.88;
+}
+
+.schedule-mobile-card-title {
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.schedule-mobile-card-room {
+    font-size: 12.5px;
+    font-weight: 600;
+    opacity: 0.82;
+    margin-bottom: 4px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    color: var(--schedule-mobile-card-subtext);
+}
+
+.schedule-mobile-card-duration {
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.75;
+}
+
+.schedule-mobile-card-time {
+    margin-top: 5px;
+    font-size: 12px;
+    opacity: 0.55;
+}
+
+.schedule-mobile-card .schedule-detail-info-field {
+    padding: 0;
+    margin: 0;
+    gap: 0.4rem;
+    opacity: 1;
+}
+
+.schedule-mobile-card .schedule-detail-info-icon {
+    font-size: 0.9rem;
+    opacity: 0.88;
+    color: var(--schedule-mobile-card-subtext);
+}
+
+.schedule-mobile-card .schedule-detail-info-value {
+    font-size: 12px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    color: var(--schedule-mobile-card-subtext);
+}
+
+.schedule-mobile-card.canceled {
+    opacity: 0.55;
+    text-decoration: line-through;
+}
+
+.schedule-mobile-dot.now {
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
+}
+
+.schedule-mobile-dot.past {
+    background: #777;
+    opacity: 0.55;
+}
+
+.schedule-mobile-row.past .schedule-mobile-hour {
+    opacity: 0.45;
+}
+
+.schedule-mobile-row.past .schedule-mobile-line {
+    opacity: 0.65;
+}
+
+.schedule-mobile-card.now {
+    border-left: 4px solid #22c55e;
+}
+
+.schedule-mobile-card.past {
+    opacity: 0.55;
+    filter: grayscale(0.35);
+}
+
+/*LEGENDA*/
+.schedule-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    justify-content: center;
+    font-size: 13px;
+}
+
+@media (max-width: 799px) {
+    .schedule-legend {
+        display: none;
+    }
+}
+
+.schedule-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.9;
+}
+
+.schedule-legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* COLORI (devono matchare quelli del calendario) */
+
+.schedule-legend-color.tipologia-panel {
+    background-color: #f4d35e;
+}
+
+.schedule-legend-color.tipologia-event {
+    background-color: #90caf9;
+}
+
+.schedule-legend-color.tipologia-game {
+    background-color: #cdb4db;
+}
+
+.schedule-legend-color.tipologia-tournament {
+    background-color: #c5e478;
+}
+
+.schedule-legend-color.tipologia-dealers {
+    background-color: #f4a261;
+}
+
+.schedule-legend-color.tipologia-explorers {
+    background-color: #e63946;
+}
+
+.schedule-legend-color.tipologia-supersponsors {
+    background-color: #ff8fab;
+}
+
+.schedule-legend-color.tipologia-other {
+    background-color: #cfd8dc;
+}

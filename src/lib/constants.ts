@@ -2,12 +2,15 @@ export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9090/api/v1/';
 export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
+export const MOBILE_ADMIN_TOKEN_STORAGE_NAME = "fz-mobile-token";
+export const API_MOBILE_URL = process.env.NEXT_PUBLIC_API_MOBILE_BASE_URL;
+export const MOBILE_FURIZON_AUTH_HEADER = process.env.NEXT_PUBLIC_MOBILE_FURIZON_AUTH_HEADER ?? "";
 
 export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "";
 export const APP_VERSION = process.env.version;
 export const APP_GIT = "https://github.com/APSfurizon/";
 export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";
-export const APP_GIT_PROJECT_RELEASE  = new URL("releases/tag/"+APP_VERSION, APP_GIT_PROJECT);
+export const APP_GIT_PROJECT_RELEASE = new URL("releases/tag/" + APP_VERSION, APP_GIT_PROJECT);
 export const DEFAULT_TRANSLATION_KEY = "en-gb";
 
 export const READ_CHANGELOG_STORAGE_NAME = "fz-read-changelog";
@@ -69,5 +72,7 @@ export const BOOKING_ENABLED = (process.env.NEXT_PUBLIC_BOOKING_ENABLED ?? false
 export const BADGE_ENABLED = (process.env.NEXT_PUBLIC_BADGE_ENABLED ?? false) === "true";
 export const ROOM_ENABLED = (process.env.NEXT_PUBLIC_ROOM_ENABLED ?? false) === "true";
 export const NOSECOUNT_ENABLED = (process.env.NEXT_PUBLIC_NOSECOUNT_ENABLED ?? false) === "true";
+export const SCHEDULE_ENABLED = (process.env.NEXT_PUBLIC_SCHEDULE_ENABLED ?? false) === "true";
+export const DEALER_ENABLED = (process.env.NEXT_PUBLIC_DEALER_ENABLED ?? false) === "true";
 export const UPLOAD_ENABLED = (process.env.NEXT_PUBLIC_UPLOAD_ENABLED ?? false) === "true";
 export const DEBUG_ENABLED = (process.env.NEXT_PUBLIC_DEBUG_ENABLED ?? false) === "true";

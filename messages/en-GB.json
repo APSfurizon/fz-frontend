@@ -16,6 +16,8 @@
       "information": "About",
       "login": "Login",
       "nose_count": "Nose count",
+      "schedule": "Schedule",
+      "dealer": "Dealers' Den",
       "dropdown": {
         "logout": "Logout",
         "language": {
@@ -68,6 +70,38 @@
     "changelog": {
       "title": "Furpanel was updated",
       "description": "Read the changelog at <a></a>"
+    },
+    "schedule_detail": {
+      "back_to_schedule": "Back to schedule",
+      "info_title": "Activity Information",
+      "labels": {
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration",
+        "description": "Description",
+        "host": "Host",
+        "location": "Location",
+        "language": "Language"
+      },
+      "tags": {
+        "explorer": "Explorer",
+        "super_sponsor": "Super Sponsor",
+        "sponsor": "Sponsor",
+        "cancelled": "Cancelled"
+      },
+      "errors": {
+        "invalid_activity_id": "Invalid activity ID."
+      }
+    },
+    "schedule": {
+      "labels": {
+        "all_day": "All day",
+        "no_events": "No events scheduled for this day.",
+        "date": "Date",
+        "time": "Time",
+        "event": "Event",
+        "others": "others"
+      }
     },
     "success": "Success"
   },
@@ -664,7 +698,13 @@
             },
             "membership_cards": "Membership cards",
             "cards_table": {
+              "card_no": "Card no.",
               "issue_year": "Issued year",
+              "id_in_year": "No. in year",
+              "signed_at": "Signed at",
+              "aps_form": "APS form",
+              "aps_form_signed": "Signed",
+              "sent_by_email": "Sent by email",
               "created_for_order_id": "Created for order"
             },
             "badge": "Badge",
@@ -738,6 +778,58 @@
         },
         "security": {
           "title": "Security",
+          "user_search": {
+            "title": "User search",
+            "input": {
+              "search_user": {
+                "label": "Search user"
+              }
+            },
+            "sections": {
+              "user_data": "User data",
+              "user_info": "User info",
+              "user_order_room": "User order / room"
+            },
+            "fields": {
+              "name": "Name",
+              "surname": "Surname",
+              "mail": "Mail",
+              "sex": "Sex",
+              "gender": "Gender",
+              "birthday": "Birthday",
+              "allergies": "Allergies",
+              "telegram": "Telegram",
+              "phone": "Phone",
+              "permissions": "Permissions",
+              "roles": "Roles",
+              "have_order": "Have order",
+              "have_room": "Have room",
+              "is_owner": "Owner",
+              "owner_label": "(Owner)",
+              "room_name": "Room name",
+              "check_in_out": "Check-in/out",
+              "guests": "Guests",
+              "bring_to_event": "Bring to event",
+              "room_capacity": "Room capacity",
+              "room_type": "Room type",
+              "board": "Board"
+            },
+            "actions": {
+              "call": "Call",
+              "view_user": "View user"
+            },
+            "values": {
+              "yes": "Yes",
+              "no": "No",
+              "none": "None",
+              "banned": "Banned",
+              "to": "to"
+            },
+            "alt": {
+              "user": "User",
+              "fursuit": "Fursuit"
+            }
+          },
           "roles": {
             "title": "Roles",
             "list": {
@@ -808,6 +900,174 @@
           "title": "Roles"
         }
       },
+      "security_management": {
+        "title_hazardous_register": "Hazardous Register",
+        "title_asset_register": "Asset Register",
+        "title_lost_and_found": "Lost and Found",
+        "title_incident_log": "Incident Log",
+        "title_documents": "Documents",
+        "title": "Security Management",
+        "users_and_docs": {
+          "title": "Users and Documents",
+          "user_search": "User Search",
+          "documents": "Documents"
+        },
+        "reports": {
+          "title": "Reports",
+          "incident_log": "Incident Log"
+        },
+        "logs": {
+          "title": "Logs",
+          "asset_manager": "Asset Manager",
+          "hazardous_register": "Hazardous Register",
+          "lost_and_found": "Lost and Found"
+        },
+        "hazard": {
+          "hazardous_register": "Hazard register",
+          "edit_title": "Edit Report",
+          "new_title": "New Report",
+          "title": "Title",
+          "title_placeholder": "Title hazard",
+          "description": "Description",
+          "description_placeholder": "Object description",
+          "owner_nickname_placeholder": "Owner Nickname",
+          "owner_nickname": "Owner nickname",
+          "owner_id": "Owner Id",
+          "owner_id_placeholder": "Owner Id",
+          "cancel": "Cancel",
+          "save": "Save",
+          "level": "Level",
+          "photo": "Photo",
+          "add_report": "Add report",
+          "edit": "Edit",
+          "reported_by": "Reported by",
+          "date": "Date",
+          "report": "Report",
+          "no_reports": "No reports",
+          "all": "All",
+          "search_placeholder": "Find by title,description and nickname",
+          "missing_title": "Title is mandatory",
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "critical": "Critical",
+          "error": "Error",
+          "missing_dati": "Required fields"
+        },
+        "assets": {
+          "asset": "Asset",
+          "asset_manager": "Asset Manager",
+          "search_placeholder": "Search by tag, type, model or serial",
+          "all": "All",
+          "no_items": "No assets",
+          "edit_title": "Edit asset",
+          "new_title": "New asset",
+          "tag_label": "Tag / Label",
+          "tag_placeholder": "Ex. RADIO-01",
+          "type_label": "Device type",
+          "type_placeholder": "Ex. Radio, Tablet...",
+          "model_label": "Model",
+          "model_placeholder": "Ex. Motorola XT1234",
+          "serial_label": "Serial number",
+          "serial_placeholder": "S/N",
+          "notes_label": "Condition notes",
+          "notes_placeholder": "Conditions, damages...",
+          "state_label": "Status",
+          "state_available": "Available",
+          "state_in_use": "In use",
+          "state_unavailable": "Unavailable",
+          "cancel": "Cancel",
+          "save": "Save",
+          "detail_fallback": "Asset details",
+          "user_label": "Current user",
+          "photo": "Photo",
+          "transfer": "Return / Transfer",
+          "logs_title": "Asset logs",
+          "no_logs": "No logs available",
+          "add": "Add asset",
+          "edit": "Edit",
+          "view_logs": "View logs",
+          "transfer_modal_title": "Return / Transfer",
+          "new_user_label": "New user",
+          "new_user_placeholder": "Person name",
+          "not_set": "Not set"
+        },
+        "lost_found": {
+          "title": "Lost and Found",
+          "search_placeholder": "Search by place, description or owner",
+          "status_lost": "Lost",
+          "status_delivered": "Delivered",
+          "no_items": "No items",
+          "item": "Item",
+          "edit_title": "Edit item",
+          "new_title": "New lost item",
+          "place_label": "Found location",
+          "place_placeholder": "Ex. Hall A, entrance...",
+          "description_label": "Description",
+          "description_placeholder": "Item description...",
+          "found_by_label": "Found by",
+          "found_by_placeholder": "Name of finder",
+          "owner_label": "Owner",
+          "owner_placeholder": "Owner name (if known)",
+          "cancel": "Cancel",
+          "save": "Save",
+          "found_date_label": "Found date",
+          "return_date_label": "Return date",
+          "inserted_by_label": "Inserted by",
+          "created_at_label": "Recorded on",
+          "photo": "Photo",
+          "confirm_delivery": "Confirm item delivery?",
+          "mark_delivered": "Mark delivered",
+          "add": "New lost item",
+          "edit": "Edit",
+          "missing_data_title": "Missing data",
+          "missing_data_description": "Enter at least the description or the place"
+        },
+        "incidents": {
+          "incident_log": "Incident Log",
+          "refresh": "Refresh",
+          "add": "Add",
+          "edit": "Edit",
+          "history": "History",
+          "reports": "Reports",
+          "important_reports": "Important reports",
+          "suspended_reports": "Suspended reports",
+          "no_history": "No reports in history",
+          "no_important_reports": "No important reports",
+          "no_active_reports": "No active reports",
+          "no_suspended_reports": "No suspended reports",
+          "messages": "Messages",
+          "important": "Important",
+          "suspended": "Suspended",
+          "untitled": "Untitled",
+          "new_report": "New report",
+          "title": "Title",
+          "title_placeholder": "Report title",
+          "people_involved": "People involved",
+          "people_placeholder": "Name1, Name2, ...",
+          "description": "Description",
+          "description_placeholder": "Describe the incident...",
+          "screenshot": "Screenshot / image",
+          "mark_important": "Mark as important",
+          "cancel": "Cancel",
+          "send": "Send",
+          "report": "Report",
+          "reported_by": "Reported by",
+          "attachment": "attachment",
+          "image_preview": "Image preview",
+          "no_messages": "No messages available",
+          "add_message": "Add message",
+          "write_message": "Write a message...",
+          "send_message": "Send message",
+          "edit_report": "Edit report",
+          "suspend_report": "Suspend report",
+          "archive_report": "Archive report",
+          "update": "Update",
+          "default_author": "Security",
+          "missing_data_title": "Missing data",
+          "missing_data_description": "Enter a description of at least 3 characters"
+        }
+      },
       "system": {
         "title": "System",
         "server": {
@@ -815,6 +1075,9 @@
           "ping": "Ping"
         }
       }
+    },
+    "security": {
+      "title": "Security"
     }
   },
   "authentication": {
@@ -1079,6 +1342,27 @@
       "input": {
         "select_event": "Select event"
       }
+    },
+    "schedule": {
+      "no_events": "No events scheduled for this day.",
+      "all_day": "All day",
+      "nav": {
+        "today": "Today",
+        "back": "Back",
+        "next": "Next"
+      },
+      "views": {
+        "day": "Day",
+        "week": "Week",
+        "agenda": "Agenda"
+      }
+    }
+  },
+  "login": {
+    "errors": {
+      "secondary_login_failed": "Login Security Failed",
+      "secondary_login_failed_description": "Security resources not lodead",
+      "secondary_login_failed_fetch": "Failed to fetch user Security permission"
     }
   }
 }
