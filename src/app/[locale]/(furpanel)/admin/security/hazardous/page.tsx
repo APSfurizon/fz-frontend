@@ -58,7 +58,7 @@ export default function SecurityHazardousRegisterPage() {
         setLoading(true);
         runRequest({ action: new GetSecurityHazardsApiAction() })
             .then((res) => setHazards(res.hazards ?? []))
-            .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+            .catch((err) => showModal(t("furpanel.admin.security_management.hazard.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
 
@@ -83,7 +83,7 @@ export default function SecurityHazardousRegisterPage() {
 
     const saveItem = () => {
         if (!fTitolo.trim()) {
-            showModal("Dati mancanti", <span>{t("furpanel.admin.security_management.hazard.missing_title")}</span>);
+            showModal(t("furpanel.admin.security_management.hazard.missing_dati"), <span>{t("furpanel.admin.security_management.hazard.missing_title")}</span>);
             return;
         }
         const body = new FormData();

@@ -948,7 +948,9 @@
           "low": "Basso",
           "medium": "Medio",
           "high": "Alto",
-          "critical": "Critico"
+          "critical": "Critico",
+          "error": "Errore",
+          "missing_dati": "Dati mancanti"
         },
         "assets": {
           "asset": "Asset",
