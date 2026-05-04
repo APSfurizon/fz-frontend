@@ -618,7 +618,7 @@
     gap: 8px;
     padding: 10px 12px 12px;
     position: sticky;
-    top: 0;
+    top: var(--app-header-offset, 0px);
     z-index: 20;
     background: var(--schedule-mobile-toolbar-bg);
     backdrop-filter: blur(8px);
