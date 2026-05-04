@@ -4,7 +4,7 @@ import Image from "next/image";
 import Icon from './icon';
 import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import "@/styles/components/header.css";
 import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED, SCHEDULE_ENABLED, DEALER_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
@@ -33,6 +33,7 @@ export default function Header() {
     const [collapsed, setCollapsed] = useState(false);
     const [latestScroll, setLatestScroll] = useState<number>();
     const [newScroll, setNewScroll] = useState<number>();
+    const headerRef = useRef<HTMLElement>(null);
     const language = locale.split('-')[0];
     const deviceTypeLower = type.toString().toLowerCase();
     const appBadgeSrc = `/images/app-badge/${deviceTypeLower}/${deviceTypeLower}_${language}.png`;
@@ -56,8 +57,39 @@ export default function Header() {
         setLatestScroll(newScroll);
     }, [newScroll])
 
+    useEffect(() => {
+        const headerEl = headerRef.current;
+        if (!headerEl) return;
+
+        const updateHeaderOffset = () => {
+            const rect = headerEl.getBoundingClientRect();
+            const visibleOffset = Math.max(0, Math.round(rect.bottom));
+            document.documentElement.style.setProperty("--app-header-offset", `${visibleOffset}px`);
+        };
+
+        updateHeaderOffset();
+
+        const observer = new ResizeObserver(updateHeaderOffset);
+        observer.observe(headerEl);
+        window.addEventListener("resize", updateHeaderOffset);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("resize", updateHeaderOffset);
+        };
+    }, []);
+
+    useEffect(() => {
+        const headerEl = headerRef.current;
+        if (!headerEl) return;
+
+        const rect = headerEl.getBoundingClientRect();
+        const visibleOffset = Math.max(0, Math.round(rect.bottom));
+        document.documentElement.style.setProperty("--app-header-offset", `${visibleOffset}px`);
+    }, [newScroll, collapsed, hamburgerOpen]);
+
     return (
-        <header className={`header ${collapsed ? "collapsed" : ""}`}>
+        <header ref={headerRef} className={`header ${collapsed ? "collapsed" : ""}`}>
             <div className="logo-container center">
                 <picture className="header-logo">
                     <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
