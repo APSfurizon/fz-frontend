@@ -1131,7 +1131,12 @@
             "duration": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}, {milliseconds} milliseconds"
           },
           "information_panel": {
-            "title": "Information"
+            "photo": {
+              "title": "Photo"
+            },
+            "video": {
+              "title": "Video"
+            }
           }
         }
       },
@@ -1140,6 +1145,14 @@
       },
       "media": {
         "status": {}
+      },
+      "modal": {
+        "information_panel": {
+          "title": "Information"
+        },
+        "share": {
+          "copy_message": "Link copied successfully"
+        }
       }
     }
   }

@@ -91,7 +91,7 @@
             &:not(.open) {
                 border-color: transparent;
 
-                span.title {
+                h3.title {
                     display: none;
                 }
 

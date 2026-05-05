@@ -113,6 +113,7 @@ export const ICONS = {
     SECURITY: "security",
     SEND: "send",
     SETTINGS: "settings",
+    SHARE: "share",
     SHOPPING_CART: "shopping_cart",
     SHOPPING_CART_CHECKOUT: "shopping_cart_checkout",
     SHUTTER_SPEED: "shutter_speed",

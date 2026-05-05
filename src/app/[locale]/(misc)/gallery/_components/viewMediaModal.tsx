@@ -14,6 +14,8 @@ import LoadingPanel from "@/components/loadingPanel";
 import { translate } from "@/lib/translations";
 import { getCountdown } from "@/lib/utils";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
+import { shareMediaUrl } from "@/lib/api/gallery/util";
+import { useModalUpdate } from "@/components/context/modalProvider";
 
 export default function ViewMediaModal() {
     const { currentMedia, closeMedia, modalOpen, goNext, goBack } = useGallery();
@@ -142,6 +144,15 @@ export default function ViewMediaModal() {
         }
     }
 
+    const { showModal } = useModalUpdate();
+
+    const onShare = () => {
+        if (!currentMedia?.id) return;
+        if (!shareMediaUrl(currentMedia.id)) {
+            showModal(t("common.success"), t("misc.gallery.modal.share.copy_message"), "CONTENT_COPY", 501);
+        }
+    }
+
     const duration = fullMedia?.videoMetadata?.durationMs
         ? getCountdown(fullMedia?.videoMetadata?.durationMs)
         : undefined;
@@ -174,6 +185,11 @@ export default function ViewMediaModal() {
                                 width={32} height={32} />
                             <span>{fullMedia.photographer.fursonaName}</span>
                         </div>
+                        <a className="vertical-align-middle"
+                            href="#"
+                            onClick={onShare}>
+                            <Icon icon="SHARE" />
+                        </a>
                         <div className="spacer"></div>
                         {fullMedia?.downloadMedia && <a className="vertical-align-middle"
                             href={fullMedia.downloadMedia.mediaUrl}
@@ -185,7 +201,7 @@ export default function ViewMediaModal() {
                     { /* Information panel */}
                     <div className={["information-panel", "rounded-m", dataPanelOpen ? "open" : ""].join(" ")}>
                         <div className="header horizontal-list">
-                            <span className="title medium">{t("misc.gallery.upload.modal.information_panel.title")}</span>
+                            <h3 className="title medium">{t("misc.gallery.modal.information_panel.title")}</h3>
                             <div className="spacer"></div>
                             <a title={(dataPanelOpen ? t("common.close") : t("common.open")) + " (I)"}
                                 className="toggle-button rounded-m"
@@ -198,25 +214,30 @@ export default function ViewMediaModal() {
                             <span className="vertical-align-bottom"><Icon icon="COPYRIGHT" />
                                 {translate(copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.translatedDescription ?? {}, locale)}
                             </span>
-                            <span className="vertical-align-bottom"><Icon icon="DRAFT" />{currentMedia?.fileName}</span>
                             <span className="vertical-align-bottom"><Icon icon="LOCAL_ACTIVITY" />{translate(fullMedia.event.eventNames, locale)}</span>
                             <span className="vertical-align-bottom"><Icon icon="FLAG" />{mapStatus(fullMedia.status)}</span>
                             {fullMedia.photoMetadata && <>
-                                <span className="vertical-align-bottom"><Icon icon="PHOTO_CAMERA" />{fullMedia.photoMetadata.cameraMaker} {fullMedia.photoMetadata.cameraModel}</span>
-                                <span className="vertical-align-bottom"><Icon icon="MOTION_MODE" />{fullMedia.photoMetadata.lensMaker} {fullMedia.photoMetadata.lensModel}</span>
-                                <span className="vertical-align-bottom"><Icon icon="STRAIGHTEN" />{fullMedia.photoMetadata.focal}</span>
-                                <span className="vertical-align-bottom"><Icon icon="SHUTTER_SPEED" />{fullMedia.photoMetadata.shutter}</span>
-                                <span className="vertical-align-bottom"><Icon icon="CAMERA" />{fullMedia.photoMetadata.aperture}</span>
-                                <span className="vertical-align-bottom"><Icon icon="EXPOSURE" />{fullMedia.photoMetadata.iso}</span>
+                                <h4 className="title">{t("misc.gallery.upload.modal.information_panel.photo.title")}</h4>
+                                <div className="margin-left-2mm">
+                                    <span className="vertical-align-bottom"><Icon icon="PHOTO_CAMERA" />{fullMedia.photoMetadata.cameraMaker} {fullMedia.photoMetadata.cameraModel}</span>
+                                    <span className="vertical-align-bottom"><Icon icon="MOTION_MODE" />{fullMedia.photoMetadata.lensMaker} {fullMedia.photoMetadata.lensModel}</span>
+                                    <span className="vertical-align-bottom"><Icon icon="STRAIGHTEN" />{fullMedia.photoMetadata.focal}</span>
+                                    <span className="vertical-align-bottom"><Icon icon="SHUTTER_SPEED" />{fullMedia.photoMetadata.shutter}</span>
+                                    <span className="vertical-align-bottom"><Icon icon="CAMERA" />{fullMedia.photoMetadata.aperture}</span>
+                                    <span className="vertical-align-bottom"><Icon icon="EXPOSURE" />{fullMedia.photoMetadata.iso}</span>
+                                </div>
                             </>}
                             {fullMedia.videoMetadata && <>
-                                <span className="vertical-align-bottom"><Icon icon="_24FPS_SELECT" />{fullMedia.videoMetadata.framerate}</span>
-                                <span className="vertical-align-bottom"><Icon icon="AV_TIMER" />{t("misc.gallery.upload.modal.video.duration", {
-                                    hours: duration![1],
-                                    minutes: duration![2],
-                                    seconds: duration![3],
-                                    milliseconds: duration![4]
-                                })}</span>
+                                <h4 className="title">{t("misc.gallery.upload.modal.information_panel.video.title")}</h4>
+                                <div className="margin-left-2mm">
+                                    <span className="vertical-align-bottom"><Icon icon="_24FPS_SELECT" />{fullMedia.videoMetadata.framerate}</span>
+                                    <span className="vertical-align-bottom"><Icon icon="AV_TIMER" />{t("misc.gallery.upload.modal.video.duration", {
+                                        hours: duration![1],
+                                        minutes: duration![2],
+                                        seconds: duration![3],
+                                        milliseconds: duration![4]
+                                    })}</span>
+                                </div>~
                             </>}
                         </div>
                     </div>

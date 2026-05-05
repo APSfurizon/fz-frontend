@@ -55,6 +55,14 @@
     margin-left: auto;
 }
 
+.margin-left-1mm {
+    margin-left: 1mm;
+}
+
+.margin-left-2mm {
+    margin-left: 2mm;
+}
+
 .margin-right-auto {
     margin-right: auto;
 }
