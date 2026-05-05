@@ -195,7 +195,9 @@ export function templateReplace(toReplace: string, templateMap: Record<string, a
 export const SCHEDULE_DEFAULT_TIME_ZONE = "Europe/Rome";
 
 function toTimeZoneWallClock(date: Date, timeZone: string): Date {
-    const formatter = new Intl.DateTimeFormat("en-CA", {
+    const formatter = new Intl.DateTimeFormat(undefined, {
+        calendar: "gregory",
+        numberingSystem: "latn",
         timeZone,
         year: "numeric",
         month: "2-digit",
