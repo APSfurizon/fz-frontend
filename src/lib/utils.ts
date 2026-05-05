@@ -191,3 +191,81 @@ export function templateReplace(toReplace: string, templateMap: Record<string, a
     }
     return toReturn;
 }
+
+export const SCHEDULE_DEFAULT_TIME_ZONE = "Europe/Rome";
+
+function toTimeZoneWallClock(date: Date, timeZone: string): Date {
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+        timeZone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+    });
+
+    const values = formatter
+        .formatToParts(date)
+        .reduce<Record<string, number>>((acc, part) => {
+            if (part.type !== "literal") {
+                acc[part.type] = Number.parseInt(part.value, 10);
+            }
+            return acc;
+        }, {});
+
+    return new Date(
+        values.year,
+        (values.month ?? 1) - 1,
+        values.day ?? 1,
+        values.hour ?? 0,
+        values.minute ?? 0,
+        values.second ?? 0,
+    );
+}
+
+function parseDateWithoutTimeZone(value: string): Date | null {
+    const match = value.match(
+        /^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2})(?::(\d{2}))?)?$/,
+    );
+    if (!match) {
+        return null;
+    }
+
+    const [, year, month, day, hour = "00", minute = "00", second = "00"] = match;
+    return new Date(
+        Number.parseInt(year, 10),
+        Number.parseInt(month, 10) - 1,
+        Number.parseInt(day, 10),
+        Number.parseInt(hour, 10),
+        Number.parseInt(minute, 10),
+        Number.parseInt(second, 10),
+    );
+}
+
+export function parseDateForTimeZone(
+    value?: string | null,
+    timeZone: string = SCHEDULE_DEFAULT_TIME_ZONE,
+): Date | null {
+    const raw = value?.trim();
+    if (!raw) {
+        return null;
+    }
+
+    const hasExplicitTimeZone = /([zZ]|[+-]\d{2}:?\d{2})$/.test(raw);
+
+    if (!hasExplicitTimeZone) {
+        const localDate = parseDateWithoutTimeZone(raw);
+        if (localDate && !Number.isNaN(localDate.getTime())) {
+            return localDate;
+        }
+    }
+
+    const parsed = new Date(raw);
+    if (Number.isNaN(parsed.getTime())) {
+        return null;
+    }
+
+    return toTimeZoneWallClock(parsed, timeZone);
+}
