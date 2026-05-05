@@ -9,6 +9,7 @@ import { loadScheduleActivityDetail } from "@/lib/api/schedule_detail";
 import { ApiErrorResponse } from "@/lib/api/global";
 import { ScheduleActivityApiItem } from "@/lib/schedule";
 import { API_MOBILE_URL, EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { parseDateForTimeZone, SCHEDULE_DEFAULT_TIME_ZONE } from "@/lib/utils";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -109,20 +110,33 @@ export default function ScheduleDetailPage() {
         return activity.about.trim() || activity.aboutIT?.trim() || "";
     }, [activity, isItalian]);
 
+    const startAt = useMemo(() => parseDateForTimeZone(activity?.start), [activity?.start]);
+
+    const endAt = useMemo(() => parseDateForTimeZone(activity?.end), [activity?.end]);
+
     const startDate = useMemo(() => {
-        if (!activity) return null;
-        return formatter.dateTime(new Date(activity.start), { dateStyle: "short" });
-    }, [activity, formatter]);
+        if (!startAt) return null;
+        return formatter.dateTime(startAt, {
+            dateStyle: "short",
+            timeZone: SCHEDULE_DEFAULT_TIME_ZONE,
+        });
+    }, [startAt, formatter]);
 
     const startTime = useMemo(() => {
-        if (!activity) return null;
-        return formatter.dateTime(new Date(activity.start), { timeStyle: "short" });
-    }, [activity, formatter]);
+        if (!startAt) return null;
+        return formatter.dateTime(startAt, {
+            timeStyle: "short",
+            timeZone: SCHEDULE_DEFAULT_TIME_ZONE,
+        });
+    }, [startAt, formatter]);
 
     const endTime = useMemo(() => {
-        if (!activity?.end) return null;
-        return formatter.dateTime(new Date(activity.end), { timeStyle: "short" });
-    }, [activity, formatter]);
+        if (!endAt) return null;
+        return formatter.dateTime(endAt, {
+            timeStyle: "short",
+            timeZone: SCHEDULE_DEFAULT_TIME_ZONE,
+        });
+    }, [endAt, formatter]);
 
     return (
         <div className="page schedule-detail-page">
