@@ -9,11 +9,11 @@ import {
 import { useModalUpdate } from '@/components/context/modalProvider';
 import Modal from '@/components/modal';
 import { useEffect, useState } from 'react';
-import "@/styles/furpanel/layout.css";
 import { useUser } from '@/components/context/userProvider';
 import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { shouldShowChangelog } from '@/lib/utils';
+import "@/styles/furpanel/layout.css";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const t = useTranslations();
@@ -56,7 +56,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">
-                        <Icon icon="DESIGN_SERVICES"/>
+                        <Icon icon="DESIGN_SERVICES" />
                         <span className="titular bold highlight">furpanel</span>
                     </span>
                 </span>
@@ -100,11 +100,10 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 </div>
                 <span>
                     <div role="button" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
-                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}/>
+                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"} />
                     </div>
                 </span>
             </div>
-
             {children}
         </div>
         <Modal icon={icon} title={title} open={isOpen} onClose={hideModal} zIndex={600}>{modalChildren}</Modal>

@@ -178,6 +178,7 @@ export type FormRequestData<
     action: FormApiAction<T, U, V>;
     additionalPath?: string[];
     body: FormData;
+    bodyModification?: (data: T) => T;
     searchParams?: URLSearchParams;
     pathParams?: Record<string, any>;
 }
@@ -190,7 +191,10 @@ export function runFormRequest<
     // Build the DTO if present
     let body: any = undefined;
     if (data) {
-        body = data.action.dtoBuilder.mapToDTO(data.body);
+        const parsedBody = data.action.dtoBuilder.mapToDTO(data.body);
+        body = data.bodyModification
+            ? data.bodyModification(parsedBody)
+            : parsedBody
     }
     return runRequest({
         body,

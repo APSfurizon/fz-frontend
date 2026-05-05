@@ -24,29 +24,29 @@ export class InputEntity {
     icon?: MaterialIcon | string;
     imageUrl?: string;
     iconCSS?: CSSProperties;
-    public getDescription (): string {
+    public getDescription(): string {
         return this.description
-        ?? this.id?.toString()
-        ?? this.code
-        ?? "";
+            ?? this.id?.toString()
+            ?? this.code
+            ?? "";
     }
     constructor(id?: number, code?: string, description?: string,
         icon?: MaterialIcon, imageUrl?: string, iconCSS?: CSSProperties) {
-            this.id = id;
-            this.code = code;
-            this.description = description;
-            this.icon = icon;
-            this.imageUrl = imageUrl;
-            this.iconCSS = iconCSS;
+        this.id = id;
+        this.code = code;
+        this.description = description;
+        this.icon = icon;
+        this.imageUrl = imageUrl;
+        this.iconCSS = iconCSS;
     }
 }
 
 export const inputEntityIdExtractor = (entity: InputEntity) => {
-    if (!entity.id) throw `Invalid id on entity ${JSON.stringify(entity)}`;
-    return entity.id;
+    if (entity && !entity.id) throw `Invalid id on entity ${JSON.stringify(entity)}`;
+    return entity?.id;
 }
 
 export const inputEntityCodeExtractor = (entity: InputEntity) => {
-    if (!entity.code) throw `Invalid code on entity ${JSON.stringify(entity)}`;
-    return entity.code;
+    if (entity && !entity.code) throw `Invalid code on entity ${JSON.stringify(entity)}`;
+    return entity?.code;
 }

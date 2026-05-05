@@ -174,7 +174,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
         reloadAll: reloadData
     }}>
         <div className="stretch-page">
-            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+            <div className="horizontal-list align-items-center gap-4mm flex-wrap">
                 <Link href={getParentDirectory(path, userId ? 2 : 1)}><Icon icon="ARROW_BACK" /></Link>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.users.accounts.view.title")}</span>

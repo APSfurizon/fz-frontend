@@ -294,7 +294,7 @@ export default function AutoInput({
     const renderResult = (element: AutoInputSearchResult, index: number) => {
         return <button key={index}
             tabIndex={0}
-            className="search-result horizontal-list flex-vertical-center rounded-s"
+            className="search-result horizontal-list align-items-center rounded-s"
             onClick={() => { addItem(element) }}
             onBlur={onBlur}
             ref={index == 0 ? firstSearchResultRef : undefined}>
@@ -320,7 +320,7 @@ export default function AutoInput({
     );
 
     const renderSelected = (element: AutoInputSearchResult, index: number) => {
-        const selectedClass = "selected-value horizontal-list flex-vertical-center" +
+        const selectedClass = "selected-value horizontal-list align-items-center" +
             ((selectedIds.length == 1 && !multiple) ? " single" : "");
         return <div key={index}
             className={selectedClass}>
@@ -368,7 +368,7 @@ export default function AutoInput({
                 value={renderedValue.join(",") ?? ""}
                 required={forceRequired} onChange={checkChange} />
             <div style={{ position: 'relative' }}>
-                <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
+                <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm"
                     style={anchorNameStyle}>
                     {selectedValues?.map((element, index) => renderSelected(element, index))}
                     {

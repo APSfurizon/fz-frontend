@@ -68,6 +68,7 @@ export default function Home() {
       </Modal>
       <Button onClick={() => { setOpen(true); }} icon="BED">Modal</Button>
       <FpSelect fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></FpSelect>
+
     </div>
   );
 }

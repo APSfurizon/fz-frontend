@@ -11,8 +11,8 @@ export default function OrderItem({
     description?: string | React.ReactNode,
     className?: string
 }>) {
-    return <div className={`item vertical-list flex-vertical-center ${className ?? ""}`}>
-        <Icon className="x-large" icon={icon}/>
+    return <div className={`item vertical-list align-items-center ${className ?? ""}`}>
+        <Icon className="x-large" icon={icon} />
         <span className="descriptive small item-name">{title}</span>
         {description && <span className="descriptive tiny item-subtitle">{description}</span>}
     </div>

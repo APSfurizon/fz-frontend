@@ -138,7 +138,7 @@ export default function RolesListPage() {
 
     return <>
         <div className="stretch-page">
-            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+            <div className="horizontal-list align-items-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(path)}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.users.security.roles.title")}</span>

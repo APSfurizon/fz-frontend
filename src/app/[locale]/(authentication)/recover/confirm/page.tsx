@@ -45,9 +45,9 @@ export default function RecoverConfirm() {
   const passwordMatch = confirmPassword === password;
 
   return <>
-    <div className="horizontal-list gap-4mm flex-center">
+    <div className="horizontal-list gap-4mm justify-content-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"/>
+        <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">
@@ -67,30 +67,30 @@ export default function RecoverConfirm() {
       onBeforeSubmit={onLoading}
       onSuccess={manageSuccess}
       hideSave>
-        <input type="hidden"
-          name="resetPwId"
-          value={params.get("id") ?? ""}/>
-        <FpInput fieldName="password"
-          required
-          inputType="password"
-          busy={loading}
-          label={t("authentication.recover_confirm.input.new_password.label")}
-          placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
-          helpText={t("authentication.recover_confirm.input.new_password.help")}
-          onChange={(e) => setPassword(e.currentTarget.value)}/>
-        <FpInput required
-          inputType="password"
-          busy={loading}
-          label={t("authentication.recover_confirm.input.confirm_password.label")}
-          placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
-          onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
-        <div className="horizontal-list flex-center">
-          <Button type="submit"
-            icon="SAVE"
-            disabled={!passwordMatch}>
-              {t("common.CRUD.save")}
-          </Button>
-        </div>
+      <input type="hidden"
+        name="resetPwId"
+        value={params.get("id") ?? ""} />
+      <FpInput fieldName="password"
+        required
+        inputType="password"
+        busy={loading}
+        label={t("authentication.recover_confirm.input.new_password.label")}
+        placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
+        helpText={t("authentication.recover_confirm.input.new_password.help")}
+        onChange={(e) => setPassword(e.currentTarget.value)} />
+      <FpInput required
+        inputType="password"
+        busy={loading}
+        label={t("authentication.recover_confirm.input.confirm_password.label")}
+        placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
+        onChange={(e) => setConfirmPassword(e.currentTarget.value)} />
+      <div className="horizontal-list justify-content-center">
+        <Button type="submit"
+          icon="SAVE"
+          disabled={!passwordMatch}>
+          {t("common.CRUD.save")}
+        </Button>
+      </div>
     </DataForm>
   </>;
 }

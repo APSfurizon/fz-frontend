@@ -189,7 +189,7 @@ export default function Upload({
                 className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
                 {label}
             </label>}
-            <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
+            <div className="upload-container vertical-list align-items-center rounded-l gap-2mm">
                 <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
                     <Image unoptimized className="upload-picture"
                         src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}

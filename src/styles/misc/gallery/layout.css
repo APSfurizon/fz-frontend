@@ -1,0 +1,59 @@
+.main-dialog {
+    &:not(:has(.stretch-page)) {
+        width: 210mm;
+    }
+
+    width: 95vw;
+    max-width: 95vw;
+    transition: width 120ms;
+}
+
+span:has(.hamburger),
+.hamburger {
+    display: none;
+}
+
+@media (max-width:1000px) {
+
+    span:has(.hamburger),
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    .hamburger {
+        padding: .3125em;
+    }
+
+    .hamburger:active {
+        background-color: var(--tool-link-hambuger-hover-bg);
+    }
+
+    .main-dialog {
+        min-width: 100vw;
+
+        .tools-list {
+            transition-duration: 120ms;
+            width: 100%;
+        }
+
+        .tools-list:not(.expanded) .tool-link:not(.active) {
+            max-height: 0px;
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+            background: none;
+            border: none;
+        }
+
+        .tools-list:not(.expanded) {
+            gap: 0px;
+        }
+    }
+
+    .tools-list {
+        flex-direction: column;
+    }
+}

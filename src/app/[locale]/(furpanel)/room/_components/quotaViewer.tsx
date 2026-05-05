@@ -39,7 +39,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: R
     }, [roomsData, isOpen]);
 
     return <>
-        <div className="horizontal-list gap-4mm flex-vertical-center">
+        <div className="horizontal-list gap-4mm align-items-center">
             <NoticeBox theme={NoticeTheme.FAQ}>
                 {t("furpanel.room.quota_viewer.description")}
             </NoticeBox>
@@ -58,7 +58,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: R
             <ul className="vertical-list gap-4mm">
                 {roomsData?.rooms?.map((roomInfo, index) =>
                     <li key={index}>
-                        <a className="room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m">
+                        <a className="room-type-container horizontal-list gap-2mm align-items-center rounded-m">
                             <div className="vertical-list">
                                 <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
                                 <span className="descriptive color-subtitle">

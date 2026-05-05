@@ -44,9 +44,9 @@ export default function Login() {
   useTitle(t("authentication.recover.title"));
 
   return <>
-    <div className="horizontal-list gap-4mm flex-center">
+    <div className="horizontal-list gap-4mm justify-content-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"/>
+        <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('authentication.recover.title').toLowerCase()}</span>
@@ -58,7 +58,7 @@ export default function Login() {
     {error &&
       <span className="error-container title small center">
         {t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}
-    </span>}
+      </span>}
     {success && <NoticeBox theme={NoticeTheme.Success} title={t("authentication.recover.messages.email_success.title")}>
       {t("authentication.recover.messages.email_success.description")}
     </NoticeBox>}
@@ -70,21 +70,21 @@ export default function Login() {
       onFail={(err) => manageError(err)}
       onBeforeSubmit={onLoading}
       hideSave>
-        <FpInput fieldName="email"
-          required
-          inputType="email"
-          label={t("authentication.recover.input.email.label")}
-          placeholder={t("authentication.login.placeholder_email")}/>
-        <div className="horizontal-list flex-center">
-          <Button type="submit"
-            icon="MAIL">
-              {t("authentication.recover.actions.send_verification")}
-          </Button>
-        </div>
+      <FpInput fieldName="email"
+        required
+        inputType="email"
+        label={t("authentication.recover.input.email.label")}
+        placeholder={t("authentication.login.placeholder_email")} />
+      <div className="horizontal-list justify-content-center">
+        <Button type="submit"
+          icon="MAIL">
+          {t("authentication.recover.actions.send_verification")}
+        </Button>
+      </div>
     </DataForm>
     <Link href={`/login?${params.toString()}`}
       className="suggestion title small center color-subtitle underlined">
-        {t('common.back')}
+      {t('common.back')}
     </Link>
   </>;
 }

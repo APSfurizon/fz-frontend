@@ -7,7 +7,7 @@
     padding: 10mm 2mm 5mm 2mm;
 }
 
-@media (max-width:800px) {
+@media (max-width:1000px) {
     .footer-info {
         flex-direction: column;
         align-items: center;
@@ -15,6 +15,7 @@
 }
 
 @media (prefers-color-scheme: light) {
+
     img.footer-logo-instagram,
     img.footer-logo-twitter {
         filter: invert(1);

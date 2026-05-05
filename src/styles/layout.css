@@ -47,15 +47,27 @@
     margin-top: 2mm;
 }
 
-.flex-center {
+.margin-auto {
+    margin: auto;
+}
+
+.margin-left-auto {
+    margin-left: auto;
+}
+
+.margin-right-auto {
+    margin-right: auto;
+}
+
+.justify-content-center {
     justify-content: center;
 }
 
-.flex-vertical-center {
+.align-items-center {
     align-items: center;
 }
 
-.flex-vertical-bottom {
+.align-items-bottom {
     align-items: end;
 }
 
@@ -81,6 +93,10 @@
 
 .vertical-align-middle * {
     vertical-align: middle;
+}
+
+.vertical-align-bottom * {
+    vertical-align: bottom;
 }
 
 .center {

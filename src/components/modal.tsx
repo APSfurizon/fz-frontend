@@ -18,7 +18,7 @@ export const useModalContext: () => ModalUpdate = () => {
     if (!context) {
         return {
             loading: false,
-            setLoading: () => {}
+            setLoading: () => { }
         };
     }
     return context;
@@ -29,7 +29,7 @@ export default function Modal({ children, className, icon, onClose, busy, open, 
 }>) {
     const t = useTranslations("components");
     const [container, setContainer] = useState<HTMLElement>();
-    const [loading, setLoading] = useState (false);
+    const [loading, setLoading] = useState(false);
 
     const definitiveLoading = useMemo(() => busy || loading, [busy, loading]);
 
@@ -42,20 +42,18 @@ export default function Modal({ children, className, icon, onClose, busy, open, 
             style={{ zIndex, ...overlayStyle }}></div>
         <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`}
             style={{ zIndex, ...style }}>
-            {
-                showHeader && (
-                    <div className="modal-header horizontal-list gap-2mm">
-                        {icon && <Icon style={{ marginRight: ".25em" }} icon={icon}/>}
-                        <p className="header-title title bold medium">{title}</p>
-                        <div className="spacer"></div>
-                        {definitiveLoading
-                            ? <Icon className="loading-animation" icon="PROGRESS_ACTIVITY"/>
-                            : <a className="header-close" onClick={(e) => !definitiveLoading && onClose(e)} title={t("modal.close")}>
-                                <Icon icon="CANCEL" />
-                            </a>
-                        }
-                    </div>
-                )
+            {showHeader &&
+                <div className="modal-header horizontal-list gap-2mm">
+                    {icon && <Icon style={{ marginRight: ".25em" }} icon={icon} />}
+                    <p className="header-title title bold medium">{title}</p>
+                    <div className="spacer"></div>
+                    {definitiveLoading
+                        ? <Icon className="loading-animation" icon="PROGRESS_ACTIVITY" />
+                        : <a className="header-close" onClick={(e) => !definitiveLoading && onClose(e)} title={t("modal.close")}>
+                            <Icon icon="CANCEL" />
+                        </a>
+                    }
+                </div>
             }
             <ModalContext.Provider value={{
                 loading: loading,
