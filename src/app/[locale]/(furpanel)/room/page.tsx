@@ -365,7 +365,7 @@ export default function RoomPage() {
 
       {/* Your room */}
       <div className="actions-panel rounded-m vertical-list gap-2mm">
-        <span className="title small horizontal-list gap-2mm flex-vertical-center flex-wrap">
+        <span className="title small horizontal-list gap-2mm align-items-center flex-wrap">
           <Icon icon="BEDROOM_PARENT" />
           {t("furpanel.room.your_room")}
           <div className="spacer"></div>
@@ -397,11 +397,11 @@ export default function RoomPage() {
         {/* View when user has no room */}
         {data && !data.currentRoomInfo && <>
           <div className="room-invite actions-panel rounded-m">
-            <span className="title small horizontal-list gap-2mm flex-vertical-center">
+            <span className="title small horizontal-list gap-2mm align-items-center">
               <Icon icon="BEDROOM_PARENT" />
               {data.canCreateRoom ? t("furpanel.room.can_create") : t("furpanel.room.no_room")}
             </span>
-            <div className="horizontal-list flex-center flex-vertical-center gap-4mm flex-wrap"
+            <div className="horizontal-list justify-content-center align-items-center gap-4mm flex-wrap"
               style={{ marginTop: "1em" }}>
               {data.canCreateRoom == true
                 ? <>
@@ -451,7 +451,7 @@ export default function RoomPage() {
         {/* Room data */}
         {data?.currentRoomInfo && <>
           <div className="room-invite vertical-list gap-4mm rounded-s">
-            <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
+            <span className="invite-title semibold title small horizontal-list align-items-center gap-2mm">
               <Icon icon="BED" />
               <span className="limit-view">{data?.currentRoomInfo.roomName}</span>
               <div className="spacer" style={{ flexGrow: "300" }}></div>
@@ -476,7 +476,7 @@ export default function RoomPage() {
 
             </span>
             {/* Room guests */}
-            <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly flex-wrap">
+            <div className="room-guests horizontal-list gap-4mm justify-content-center flex-space-evenly flex-wrap">
               {data?.currentRoomInfo.guests.map((guest, key) => <div key={key}
                 className={"guest-container vertical-list gap-2mm"
                   + cssClass({ "invited": !!!guest.roomGuest.confirmed })}>
@@ -563,7 +563,7 @@ export default function RoomPage() {
       {/* Invites */}
       {data?.invitations && data.invitations.length > 0 && <>
         <div className="actions-panel rounded-m vertical-list gap-2mm">
-          <span className="title small horizontal-list gap-2mm flex-vertical-center">
+          <span className="title small horizontal-list gap-2mm align-items-center">
             <Icon icon="MAIL" />
             {t("furpanel.room.invite.header", { amount: 1 })}
           </span>

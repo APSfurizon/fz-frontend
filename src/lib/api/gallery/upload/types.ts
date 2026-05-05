@@ -1,5 +1,5 @@
-import { ApiResponse } from "../../global";
-import { UploadRepostPermissions } from "../types";
+import { ApiRequest, ApiResponse } from "../../global";
+import { GalleryUploadedMedia, UploadRepostPermissions } from "../types";
 import { GalleryUpload } from "./main";
 
 /**
@@ -50,6 +50,22 @@ export type GalleryUploadData = {
     uploadRepostPermissions?: UploadRepostPermissions
 }
 
+export type GalleryUploadThumbnail = {
+    blob: Blob,
+    url: string
+}
+
 export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED"
 export type GalleryUploadEventParams = { data: GalleryUpload, error?: any, upload?: ApiResponse }
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;
+
+export interface UploadsApiResponse extends ApiResponse {
+    results: GalleryUploadedMedia[]
+}
+
+export interface GalleryUpdateBody extends ApiRequest {
+    uploadIds: number[],
+    newStatus?: string,
+    newPhotographerUserId?: number,
+    newEventUid?: number
+}

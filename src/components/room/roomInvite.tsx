@@ -19,7 +19,7 @@ export default function RoomInvite({ busy, onAccept, onReject, inviteData }: Rea
     const locale = useLocale();
     return <>
         <div className="room-invite vertical-list gap-4mm rounded-s">
-            <span className="invite-title semibold title small horizontal-list flex-vertical-center gap-2mm">
+            <span className="invite-title semibold title small horizontal-list align-items-center gap-2mm">
                 <UserPicture size={24} userData={inviteData.room.roomOwner} hideEffect />
                 {t.rich("room.invite.title",
                     {
@@ -29,7 +29,7 @@ export default function RoomInvite({ busy, onAccept, onReject, inviteData }: Rea
                     },)
                 }
             </span>
-            <div className="room-guests horizontal-list gap-4mm flex-center flex-space-evenly flex-wrap">
+            <div className="room-guests horizontal-list gap-4mm justify-content-center flex-space-evenly flex-wrap">
                 {inviteData.room.guests.filter(usr => usr.roomGuest.confirmed)
                     .map((usr, key) => <div key={key} className="guest-container vertical-list gap-2mm">
                         <UserPicture key={key} size={64} userData={usr.user} showNickname showFlag />
@@ -40,9 +40,9 @@ export default function RoomInvite({ busy, onAccept, onReject, inviteData }: Rea
             </div>
             <div className="invite-toolbar horizontal-list gap-4mm">
                 <StatusBox>{translate(inviteData.room.roomData.roomTypeNames, locale)}</StatusBox>
-                {inviteData.room.extraDays && inviteData.room.extraDays !== "NONE" && 
+                {inviteData.room.extraDays && inviteData.room.extraDays !== "NONE" &&
                     <StatusBox>{t(`booking.items.extra_days_${inviteData.room.extraDays}`)}</StatusBox>}
-                    {inviteData.room.board && inviteData.room.board !== "NONE" && 
+                {inviteData.room.board && inviteData.room.board !== "NONE" &&
                     <StatusBox>{t(`booking.items.board_${inviteData.room.board}`)}</StatusBox>}
                 <div className="spacer"></div>
                 <div className="horizontal-list gap-4mm">
@@ -50,14 +50,14 @@ export default function RoomInvite({ busy, onAccept, onReject, inviteData }: Rea
                         className="danger"
                         icon="DO_NOT_DISTURB_ON"
                         onClick={() => onReject(inviteData)}>
-                            {t("room.actions.refuse")}
-                        </Button>
+                        {t("room.actions.refuse")}
+                    </Button>
                     <Button busy={busy}
                         className="success"
                         icon="PERSON_ADD"
                         onClick={() => onAccept(inviteData)}>
-                            {t("room.actions.accept")}
-                        </Button>
+                        {t("room.actions.accept")}
+                    </Button>
                 </div>
             </div>
         </div>

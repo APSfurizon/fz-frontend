@@ -2,6 +2,7 @@ import { CSSProperties } from "react";
 import "@/styles/components/icon.css";
 
 export const ICONS = {
+    _24FPS_SELECT: "24fps_select",
     ACCOUNT_CIRCLE: "account_circle",
     ACCOUNT_CIRCLE_OFF: "account_circle_off",
     ADD: "add",
@@ -12,15 +13,19 @@ export const ICONS = {
     ARROW_DROP_UP: "arrow_drop_up",
     ARROW_BACK: "arrow_back",
     ARROW_FORWARD: "arrow_forward",
+    AV_TIMER: "av_timer",
     BADGE: "badge",
     BED: "bed",
     BEDROOM_PARENT: "bedroom_parent",
+    BROWSE: "browse",
     BUG_REPORT: "bug_report",
     BOOKMARK_STAR: "bookmark_star",
+    CAMERA: "camera",
     CALENDAR_ADD_ON: "calendar_add_on",
     CANCEL: "cancel",
     CHECK: "check",
     CHECK_CIRCLE: "check_circle",
+    CIRCLE: "circle",
     CLOSE: "close",
     CLOUD_UPLOAD: "cloud_upload",
     CONFIRMATION_NUMBER: "confirmation_number",
@@ -28,6 +33,7 @@ export const ICONS = {
     CONSTRUCTION: "construction",
     CONTENT_COPY: "content_copy",
     CONTEXTUAL_TOKEN: "contextual_token",
+    COPYRIGHT: "copyright",
     CROWN: "crown",
     DATE_RANGE: "date_range",
     DELETE: "delete",
@@ -38,11 +44,13 @@ export const ICONS = {
     DO_NOT_DISTURB_ON: "do_not_disturb_on",
     DOOR_OPEN: "door_open",
     DOWNLOAD: "download",
+    DRAFT: "draft",
     DRAG_HANDLE: "drag_handle",
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
     ERROR: "error",
     EVENT_REPEAT: "event_repeat",
+    EXPOSURE: "exposure",
     FEATURED_SEASONAL_AND_GIFTS: "featured_seasonal_and_gifts",
     FEMALE: "female",
     FIBER_MANUAL_RECORD: "fiber_manual_record",
@@ -50,6 +58,7 @@ export const ICONS = {
     FILE_OPEN: "file_open",
     FILTER_LIST: "filter_list",
     FIND_IN_PAGE: "find_in_page",
+    FLAG: "flag",
     FOREST: "forest",
     GROUPS: "groups",
     HELP: "help",
@@ -57,6 +66,7 @@ export const ICONS = {
     HOME: "home",
     HOURGLASS_DISABLED: "hourglass_disabled",
     ID_CARD: "id_card",
+    IMAGE: "image",
     INFO: "info",
     KEEP: "keep",
     KEY: "key",
@@ -74,6 +84,8 @@ export const ICONS = {
     MAIL: "mail",
     MALE: "male",
     MENU: "menu",
+    MORE_VERT: "more_vert",
+    MOTION_MODE: "motion_mode",
     OPEN_IN_NEW: "open_in_new",
     PACKAGE_2: "package_2",
     PERSON: "person",
@@ -87,8 +99,10 @@ export const ICONS = {
     PROGRESS_ACTIVITY: "progress_activity",
     QR_CODE: "qr_code",
     QUESTION_MARK: "question_mark",
+    READ_MORE: "read_more",
     REFRESH: "refresh",
     REMOVE: "remove",
+    REMOVE_SELECTION: "remove_selection",
     REPLAY: "replay",
     RESET_SETTINGS: "reset_settings",
     ROOM_SERVICE: "room_service",
@@ -101,8 +115,11 @@ export const ICONS = {
     SETTINGS: "settings",
     SHOPPING_CART: "shopping_cart",
     SHOPPING_CART_CHECKOUT: "shopping_cart_checkout",
+    SHUTTER_SPEED: "shutter_speed",
     SNOOZE: "snooze",
     STAR: "star",
+    STRAIGHTEN: "straighten",
+    STOP: "stop",
     SYNC: "sync",
     TRANSGENDER: "transgender",
     TRIP: "trip",
@@ -119,14 +136,15 @@ type IconProps = {
     icon: MaterialIcon,
     style?: CSSProperties,
     className?: string,
+    containerClassName?: string,
     title?: string
 }
 
 export default function Icon(props: Readonly<IconProps>) {
-    return <span className="icon-container" data-nosnippet aria-hidden>
+    return <span className={`icon-container ${props.containerClassName ?? ""}`} data-nosnippet aria-hidden>
         <i translate="no"
             className={`icon mdi ${props.className ?? ""}`}
-            style={{ ...props.style }}
+            style={props.style}
             title={props.title}>
             {props.icon}
         </i>

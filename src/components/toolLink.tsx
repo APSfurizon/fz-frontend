@@ -5,7 +5,6 @@ import Link from "next/link";
 import Icon, { MaterialIcon } from "./icon";
 import "@/styles/components/toolLink.css";
 import { CSSProperties, MouseEventHandler } from "react";
-import { useLocale } from "next-intl";
 
 export default function ToolLink({
     icon,
@@ -31,7 +30,7 @@ export default function ToolLink({
         onClick={onClick}
         className={`tool-link rounded-m ${activeClass} ${className ?? ""}`}
         style={{ ...style }}>
-        {icon !== undefined && <Icon icon={icon} style={{ ...iconStyle }}/>}
+        {icon !== undefined && <Icon icon={icon} style={{ ...iconStyle }} />}
         <span className="title small semibold">{children}</span>
     </Link>
 }

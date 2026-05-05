@@ -136,7 +136,7 @@ export default function FpInput({
                 htmlFor={inputFieldName}>
                 {label}
             </label>}
-            <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm"
+            <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm"
                 onClick={() => inputRef.current?.focus()}>
                 {prefix && <span className="title small color-subtitle">
                     {prefix}

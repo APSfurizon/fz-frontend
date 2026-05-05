@@ -66,7 +66,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                         busy={actionLoading}
                         disabled={data?.shouldUpdateInfo}
                         onClick={requestShopLink}>
-                        <div className="vertical-list flex-vertical-center">
+                        <div className="vertical-list align-items-center">
                             <span className="title large">
                                 {data?.shouldUpdateInfo &&
                                     <Icon style={{ marginRight: ".2em" }} icon="LOCK" />}

@@ -3,7 +3,7 @@ div.form-pair div.autocomplete-input {
     flex: 1;
 }
 
-@media (max-width:800px) {
+@media (max-width:1000px) {
     .form-pair {
         flex-direction: column;
     }

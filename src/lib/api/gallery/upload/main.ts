@@ -16,9 +16,13 @@ import {
     GalleryUploadEvent,
     GalleryUploadEventCallback,
     GalleryUploadEventParams,
+    GalleryUploadThumbnail,
     UploadProgress,
     UploadProgressStatus
 } from "./types";
+import { SelectItem } from "@/lib/components/fpSelect";
+import * as uploadComponentLib from "@/lib/components/upload";
+import * as mediaUtil from "@/lib/utils/media";
 
 const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> = {
     INITIALIZING: 1,
@@ -36,13 +40,14 @@ const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> 
  * @author Drew
  */
 export class GalleryUpload {
-    private abortController: AbortController;
-    public id: string;
-    public progress: UploadProgress;
+    private readonly abortController: AbortController;
+    public readonly id: string;
+    private progress: UploadProgress;
     private eventHandlers: Record<GalleryUploadEvent, GalleryUploadEventCallback[]>;
 
-    private file: File;
-    private eventId: number;
+    private readonly file: File;
+    private thumbnail: GalleryUploadThumbnail | undefined;
+    private readonly eventId: number;
     private userId: number;
     private autoConfirm: boolean;
     public uploadRepostPermissions: UploadRepostPermissions;
@@ -57,7 +62,7 @@ export class GalleryUpload {
     } | undefined;
 
     public constructor(data: GalleryUploadData, begin: boolean = false) {
-        this.id = self.crypto.randomUUID();
+        this.id = globalThis.crypto.randomUUID();
         this.file = data.file;
         this.eventId = data.eventId;
         this.userId = data.userId;
@@ -74,9 +79,11 @@ export class GalleryUpload {
         }
 
         if (begin) {
-            this.upload();
+            this.start();
         }
     }
+
+    public getProgress() { return this.progress; }
 
     public addEventHandler(eventType: GalleryUploadEvent, callback: GalleryUploadEventCallback) {
         if (this.eventHandlers[eventType]) {
@@ -251,8 +258,8 @@ export class GalleryUpload {
      * Begins upload
      * @returns 
      */
-    public upload() {
-        if (this.progress.status !== "IDLE") { return Promise.reject("Upload already began"); }
+    public start() {
+        if (this.progress.status !== "IDLE") { return Promise.reject("Upload already started"); }
         this.abortController.signal.throwIfAborted();
         this.updateProgress({ status: "INITIALIZING" });
         return runRequest({
@@ -339,6 +346,38 @@ export class GalleryUpload {
         this.updateProgress({ status: "ABORTED" });
         this.dispatchEvent("ABORTED", { error: "Aborted", upload: this.uploadedMedia });
     }
+
+    public dispose() {
+        // Clear event handlers
+        Object.keys(this.eventHandlers).forEach(k => this.eventHandlers[k as GalleryUploadEvent] = []);
+        // Revoke thumbnail data
+        if (this.thumbnail) URL.revokeObjectURL(this.thumbnail.url);
+    }
+
+    public getThumbnail(): Promise<GalleryUploadThumbnail> {
+        return new Promise((resolve, reject) => {
+            // Do not re-process if already present
+            if (this.thumbnail) {
+                resolve(this.thumbnail);
+                return;
+            }
+
+            // Get image sizes
+            return mediaUtil.getThumbnail(this.file)
+                .then(thumbnailBlob => {
+                    this.thumbnail = {
+                        blob: thumbnailBlob,
+                        url: URL.createObjectURL(thumbnailBlob)
+                    };
+                    // Finally return new thumbnail
+                    resolve(this.thumbnail);
+                }).catch(e => reject(e));
+        });
+    }
+
+    public getFileName(): string {
+        return this.file.name;
+    }
 }
 
 function slidingWindow<T, U>(data: T[], windowSize: number, onWindow: (data: T[]) => U) {
@@ -349,3 +388,53 @@ function slidingWindow<T, U>(data: T[], windowSize: number, onWindow: (data: T[]
         onWindow(arr.slice(str, end));
     }
 }
+
+export const copyrightValues: SelectItem[] = [
+    new SelectItem(
+        undefined,
+        "PHOTOGRAPHER_DISCRETION",
+        "Photographer discretion",
+        undefined,
+        undefined,
+        undefined,
+        { "it-it": "Discrezione del fotografo", "en-gb": "Photographer discretion" }
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY_NC_ND",
+        "CC BY-NC-ND"
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY_NC",
+        "CC BY-NC"
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY_ND",
+        "CC BY-ND"
+    ),
+    new SelectItem(
+        undefined,
+        "CC_BY",
+        "CC BY"
+    ),
+    new SelectItem(
+        undefined,
+        "PUBLIC_DOMAIN",
+        "Public domain",
+        undefined,
+        undefined,
+        undefined,
+        { "it-it": "Pubblico dominio", "en-gb": "Public domain" }
+    ),
+    new SelectItem(
+        undefined,
+        "ALL_RIGHTS_RESERVED",
+        "All rights reserved",
+        undefined,
+        undefined,
+        undefined,
+        { "it-it": "Tutti i diritti riservati", "en-gb": "All rights reserved" }
+    )
+]

@@ -15,7 +15,7 @@ export function nullifyEmptyStrings(values?: (string | undefined)[]) {
 }
 
 export function nullifyEmptyString(value?: string) {
-    return value && value.length > 0 ? value.trim() : undefined;
+    return value && value.trim().length > 0 ? value.trim() : null;
 }
 
 export function stripProperties(toChange: any, fields: string[]) {
@@ -36,11 +36,17 @@ export function getCountdown(ts: number): number[] {
     const minutes = Math.floor(base / MINUTE_TS);
     base -= minutes * MINUTE_TS;
     const seconds = Math.floor(base / SECOND_TS);
-    return [days, hours, minutes, seconds];
+    base -= seconds * SECOND_TS;
+    return [days, hours, minutes, seconds, base];
 }
 
 export function isEmpty(str?: string) {
     return !str || !str.length;
+}
+
+export function isNumeric(str: string) {
+    if (typeof str != "string") return false;
+    return !isNaN(parseFloat(str));
 }
 
 export function copyContent(e: HTMLElement | HTMLInputElement) {

@@ -34,10 +34,10 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
     return (
         <div className="user-dropdown rounded-m">
             <button tabIndex={0}
-                className="dropdown-button horizontal-list flex-vertical-center gap-2mm rounded-m"
+                className="dropdown-button horizontal-list align-items-center gap-2mm rounded-m"
                 popoverTarget={id}>
                 {loading && <LoadingPanel />}
-                {!userData && !loading && <div className="horizontal-list flex-vertical-center gap-2mm">
+                {!userData && !loading && <div className="horizontal-list align-items-center gap-2mm">
                     <Icon icon="KEY" />
                     <Link className="title small" href="/login">{t('header.login')}</Link>
                 </div>}

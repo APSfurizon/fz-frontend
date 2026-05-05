@@ -24,7 +24,8 @@
         }
       },
       "app_badge": "Download now the official app!",
-      "alt_app_badge": "Mobile application download button"
+      "alt_app_badge": "Mobile application download button",
+      "gallery": "Gallery"
     },
     "reload": "Reload",
     "loading": "Loading...",
@@ -69,7 +70,10 @@
       "title": "Furpanel was updated",
       "description": "Read the changelog at <a></a>"
     },
-    "success": "Success"
+    "success": "Success",
+    "help": "Help",
+    "open": "Open",
+    "close": "Close"
   },
   "components": {
     "autoinput": {
@@ -117,6 +121,22 @@
     "common": {
       "CRUD": {
         "reset": "Reset"
+      }
+    },
+    "gallery": {
+      "grid": {
+        "end_label": "End of gallery message",
+        "end_message": "You've reached the bottom of the gallery",
+        "toolbar": {
+          "deselect_all": "De-select all"
+        }
+      },
+      "media": {
+        "status": {
+          "approved": "Approved",
+          "pending": "Pending review",
+          "rejected": "Rejected"
+        }
       }
     }
   },
@@ -1070,6 +1090,56 @@
       "total_count": "{count, plural, =1 {ONE attendee} other {# attendees}}",
       "input": {
         "select_event": "Select event"
+      }
+    },
+    "gallery": {
+      "explore": {
+        "title": "Explore"
+      },
+      "upload": {
+        "title": "Upload",
+        "form": {
+          "event": {
+            "label": "Event",
+            "placeholder": "Select an event"
+          },
+          "copyright": {
+            "label": "Distribution license",
+            "placeholder": "Select a license",
+            "help": {
+              "text": "<a>What is this?</a>",
+              "modal": {
+                "title": "What is the distribution license?",
+                "source": "Visit the Creative commons website",
+                "text": "Creative Commons licenses offer a standardized, legally-sound way to grant permission in advance, so that creators can clearly communicate how their work may be used, without negotiating individual permissions every time. This enables access to knowledge by offering a “some rights reserved” option for content that would otherwise be closed off."
+              }
+            }
+          },
+          "picker": {
+            "hint": "Drag photos and videos here, or else <f>select files</f>"
+          }
+        },
+        "grid": {
+          "title": "Your media"
+        },
+        "queue": {
+          "title": "Uploading..."
+        },
+        "modal": {
+          "title": "View picture",
+          "video": {
+            "duration": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}, {milliseconds} milliseconds"
+          },
+          "information_panel": {
+            "title": "Information"
+          }
+        }
+      },
+      "admin": {
+        "title": "Administration"
+      },
+      "media": {
+        "status": {}
       }
     }
   }

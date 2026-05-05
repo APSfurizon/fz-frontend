@@ -121,7 +121,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         columnHelper.accessor('user.fursonaName', {
             id: 'user',
             header: t("furpanel.admin.membership_manager.columns.user"),
-            cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
+            cell: props => <div className="data horizontal-list align-items-center gap-2mm">
                 <UserPicture key={props.row.original.user.userId} userData={props.row.original.user}></UserPicture>
                 <span className="title small">{props.row.original.user.fursonaName}</span>
             </div>
@@ -145,7 +145,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         columnHelper.display({
             id: 'anomalies',
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
-            cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
+            cell: props => <div className="horizontal-list align-items-center gap-2mm">
                 {props.row.original.duplicate && <>
                     <Icon icon="FILE_COPY" />
                     <span className="highlight small">
@@ -273,7 +273,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
     return <>
         <div className="stretch-page">
-            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+            <div className="horizontal-list align-items-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">

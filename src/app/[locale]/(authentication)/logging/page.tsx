@@ -17,7 +17,7 @@ export default function Logging() {
     }, [])
 
     return <>
-        <div className="horizontal-list gap-4mm flex-center">
+        <div className="horizontal-list gap-4mm justify-content-center">
             <span className="title-pair">
                 <Icon icon="DESIGN_SERVICES" />
                 <span className="titular bold highlight">furpanel</span>

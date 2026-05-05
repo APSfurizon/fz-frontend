@@ -59,8 +59,8 @@ export default function Header() {
         <header className={`header ${collapsed ? "collapsed" : ""}`}>
             <div className="logo-container center">
                 <picture className="header-logo">
-                    <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
-                    <Image className="header-logo" src="/images/logo-light.png"
+                    <source srcSet="/images/logo_dark.svg" media="(prefers-color-scheme: dark)" />
+                    <Image className="header-logo" src="/images/logo_light.svg"
                         alt={t('header.alt_logo')}
                         width={175}
                         height={40} />
@@ -71,17 +71,21 @@ export default function Header() {
                     <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"} />
                 </div>
             </span>
-            <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
+            <div className={`header-link-container horizontal-list align-items-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <Link href="/home" className="header-link medium">
                     <Icon style={{ fontSize: "24px" }} icon="HOME" />
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                { NOSECOUNT_ENABLED && <>
+                {NOSECOUNT_ENABLED && <>
                     <Link href={`/nosecount`} className="header-link medium">
                         <Icon style={{ fontSize: "24px" }} icon="GROUPS" />
                         <span className="title semibold">{t('header.nose_count')}</span>
                     </Link>
                 </>}
+                <Link href="/gallery/explore" className="header-link medium">
+                    <Icon style={{ fontSize: "24px" }} icon="IMAGE" />
+                    <span className="title semibold">{t('header.gallery')}</span>
+                </Link>
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} icon="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>
@@ -94,7 +98,7 @@ export default function Header() {
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>
                 {/* Phone app */}
                 {[DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
-                    <div className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
+                    <div className='horizontal-list gap-4mm align-items-center' style={{ width: '100%' }}>
                         <span className="descriptive small color-subtitle">{t("header.app_badge")}</span>
                         <div className="spacer"></div>
                         <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""}>

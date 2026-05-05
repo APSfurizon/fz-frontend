@@ -1,5 +1,9 @@
+import { DummyDTOBuilder, FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { AllEventsResponse } from "../../counts";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
 import { UploadRepostPermissions } from "../types";
+import { GalleryUpdateBody, UploadsApiResponse } from "./types";
+import { nullifyEmptyString } from "@/lib/utils";
 
 export type GalleryUploadApiBody = {
     fileSize: number;
@@ -57,4 +61,36 @@ export class GalleryUploadAbortApiAction extends ApiAction<boolean, ApiErrorResp
     authenticated = true;
     method = RequestType.POST;
     urlAction = "gallery/upload/abort";
+}
+
+export class AttendedEventsApiAction extends ApiAction<AllEventsResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "events/attended"
+}
+
+export class MyUploadsApiAction extends ApiAction<UploadsApiResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "gallery/my-uploads"
+}
+
+
+class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
+    mapToDTO(data: FormData) {
+        const newEventIdStr = data.get("newEventId")?.toString();
+        const newPhotographerUserIdStr = data.get("newPhotographerUserId")?.toString();
+        nullifyEmptyString
+        return {
+            newEventUid: Number(newEventIdStr),
+            newPhotographerUserId: Number(newPhotographerUserIdStr)
+        } as GalleryUpdateBody;
+    };
+}
+
+export class GalleryUpdateFormApiAction extends FormApiAction<GalleryUpdateBody, boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "gallery/manage/update";
+    dtoBuilder = new GalleryUpdateDtoBuilder();
 }

@@ -2,12 +2,13 @@ import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import { ChangeEvent, CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useMemo, useState } from "react";
 import "@/styles/components/fpSelect.css";
 import { useLocale } from "next-intl";
 import { useFormContext } from "./dataForm";
 
-const renderItems = (items: (SelectGroup | SelectItem)[], itemExtractor: (entity: InputEntity) => string | number, locale: string) => {
+function renderItems(items: (SelectGroup | SelectItem)[],
+    itemExtractor: (entity: InputEntity) => string | number | undefined, locale: string) {
     return <>
         {items.map((item, idx) => {
             if (item instanceof SelectGroup) {
@@ -26,12 +27,7 @@ const renderItems = (items: (SelectGroup | SelectItem)[], itemExtractor: (entity
 }
 
 
-export default function FpSelect({
-    items, className, style, labelStyle, label, hasError = false,
-    onChange, placeholder, readOnly = false, required = false,
-    disabled = false, initialValue = "", fieldName, inputStyle,
-    itemExtractor = inputEntityIdExtractor
-}: Readonly<{
+type FpSelectProps = {
     fieldName?: string,
     items: (SelectGroup | SelectItem)[],
     className?: string,
@@ -46,9 +42,17 @@ export default function FpSelect({
     disabled?: boolean,
     initialValue?: string,
     inputStyle?: CSSProperties,
-    itemExtractor?: (entity: InputEntity) => string | number,
-    hasError?: boolean
-}>) {
+    itemExtractor?: (entity: InputEntity) => string | number | undefined,
+    hasError?: boolean,
+    helpText?: string | React.ReactNode
+};
+
+export default function FpSelect({
+    items, className, style, labelStyle, label, hasError = false,
+    onChange, placeholder, readOnly = false, required = false,
+    disabled = false, initialValue = "", fieldName, inputStyle,
+    itemExtractor = inputEntityIdExtractor, helpText
+}: Readonly<FpSelectProps>) {
     const locale = useLocale();
     const [selectedItem, setSelectedItem] = useState<InputEntity>();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
@@ -56,7 +60,7 @@ export default function FpSelect({
     const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
     const defaultValue = useMemo(() => required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined, [mappedItems]);
     const selectDefaultValue = useMemo(() => {
-        const item = selectedItem ?? defaultValue;  
+        const item = selectedItem ?? defaultValue;
         return item ? itemExtractor(item) ?? "" : "";
     }, [selectedItem, defaultValue]);
     const isDisabled = formDisabled || disabled || formLoading;
@@ -111,7 +115,7 @@ export default function FpSelect({
             style={{ ...labelStyle }}>{label}</label>}
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
             defaultValue={selectDefaultValue} required={required}></input>
-        <div className="input-container horizontal-list flex-vertical-center rounded-s margin-bottom-1mm">
+        <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm">
             <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
                 id={selectLabel}
                 value={selectDefaultValue}
@@ -122,5 +126,9 @@ export default function FpSelect({
                 {renderItems(items, itemExtractor, locale)}
             </select>
         </div>
+        {helpText &&
+            <span className="help-text tiny descriptive color-subtitle">
+                {helpText}
+            </span>}
     </div>
 }

@@ -17,7 +17,7 @@ export default function RoleEditorLayout({ children }: Readonly<{ children: Reac
     const { entity, entityChanged, saveEntity, loading } = useEntityEditor<RoleData, RoleData>();
 
     return <>
-        <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
             <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">
@@ -37,7 +37,7 @@ export default function RoleEditorLayout({ children }: Readonly<{ children: Reac
             </ToolLink>
         </div>
         {children}
-        <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
             <div className="spacer"></div>
             <Button disabled={!entity || !entityChanged} icon="SAVE" onClick={() => { saveEntity(entity) }} busy={loading}>{t("common.CRUD.save")}</Button>
         </div>

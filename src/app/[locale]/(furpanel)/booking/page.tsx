@@ -175,9 +175,9 @@ export default function BookingPage() {
                 </>}
                 {pageData.hasOrder && <>
                     {/* Order view */}
-                    <div className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
+                    <div className="horizontal-list align-items-center gap-2mm flex-wrap">
                         <span className="title medium">{t("furpanel.booking.your_booking")}</span>
-                        <div className="horizontal-list flex-vertical-center gap-2mm flex-wrap">
+                        <div className="horizontal-list align-items-center gap-2mm flex-wrap">
                             <span className="title medium">({t("furpanel.booking.items.code")}&nbsp;
                                 <b className="highlight">{bookingData?.order?.code}</b>
                                 )</span>

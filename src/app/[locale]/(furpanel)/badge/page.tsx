@@ -216,7 +216,7 @@ export default function BadgePage() {
       </span>
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
-        <div className="vertical-list flex-vertical-center">
+        <div className="vertical-list align-items-center">
           <DataForm hideSave busy={loading} setBusy={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop busy={loading}
               setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}
@@ -225,7 +225,7 @@ export default function BadgePage() {
           </DataForm>
         </div>
         <div className="vertical-list gap-2mm">
-          <div className="fursona-change rounded-m horizontal-list flex-vertical-center gap-2mm flex-wrap">
+          <div className="fursona-change rounded-m horizontal-list align-items-center gap-2mm flex-wrap">
             <div className="vertical-list">
               <span className="title"><b>{t("furpanel.badge.name")}</b>: {badgeStatus?.mainBadge?.fursonaName}</span>
               <span className="title bold">
@@ -256,7 +256,7 @@ export default function BadgePage() {
               b: (chunks) => <b className="highlight">{chunks}</b>
             })}
         </NoticeBox>}
-        <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
+        <div className="fursuit-header rounded-s horizontal-list align-items-center gap-2mm flex-wrap">
           <Icon icon="PETS" />
           <span className="title average">
             {t("furpanel.badge.your_fursuits", { amount: badgeStatus?.fursuits.length ?? 0 })}

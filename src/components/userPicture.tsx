@@ -67,7 +67,7 @@ export default function UserPicture({
     const isFursuit = !userData && fursuitData;
 
     return (
-        <div className="user-picture-container vertical-list flex-vertical-center">
+        <div className="user-picture-container vertical-list align-items-center">
             <div className={borderClassName}>
                 <Image unoptimized className="rounded-m profile-picture"
                     src={getImageUrl(pictureData?.propic?.mediaUrl)
