@@ -17,12 +17,18 @@ type GalleryGridViewProps = {
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
     const { medias, setGalleryMedias, openMedia, closeMedia, ended, getNextData, onRefresh, galleryLoading, selectedMediaIdMap, onSelect, setSelection } = useGallery();
+    const [refreshKey, setRefreshKey] = useState(0);
     const { userDisplayRef, userLoading } = useUser();
     const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
     const sortFn = ((a: [number, GalleryUploadedMedia], b: [number, GalleryUploadedMedia]) => b[0] - a[0]);
 
     // Edit modal logic
     const [editModalOpen, setEditModalOpen] = useState(false);
+
+    const onRefreshClick = () => {
+        setRefreshKey(p => p + 1);
+        onRefresh();
+    }
 
     return <>
         <div className="gallery__grid">
@@ -34,7 +40,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                     <span className="title">{selectedMediaIdMap.size}/{medias.size}</span>
                 </>}
                 <Button className="margin-left-auto" icon="REFRESH"
-                    onClick={onRefresh}
+                    onClick={onRefreshClick}
                     busy={galleryLoading}>
                     {t("common.reload")}
                 </Button>
@@ -47,6 +53,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                 }
             </div>
             <InfiniteScroll
+                key={refreshKey}
                 dataLength={medias.size}
                 next={getNextData}
                 hasMore={!ended}

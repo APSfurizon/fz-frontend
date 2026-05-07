@@ -59,10 +59,6 @@ export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED"
 export type GalleryUploadEventParams = { data: GalleryUpload, error?: any, upload?: ApiResponse }
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;
 
-export interface UploadsApiResponse extends ApiResponse {
-    results: GalleryUploadedMedia[]
-}
-
 export interface GalleryUpdateBody extends ApiRequest {
     uploadIds: number[],
     newStatus?: string,

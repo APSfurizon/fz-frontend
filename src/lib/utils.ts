@@ -49,6 +49,13 @@ export function isNumeric(str: string) {
     return !isNaN(parseFloat(str));
 }
 
+export function parseId(str: string) {
+    const parsed = parseInt(str);
+    return Number.isFinite(parsed)
+        ? parsed
+        : undefined
+}
+
 export function copyContent(e: HTMLElement | HTMLInputElement) {
     if (e.textContent) {
         navigator.clipboard.writeText(e.textContent);

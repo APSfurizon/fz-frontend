@@ -1,8 +1,8 @@
 import { DummyDTOBuilder, FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { AllEventsResponse } from "../../counts";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
-import { UploadRepostPermissions } from "../types";
-import { GalleryUpdateBody, UploadsApiResponse } from "./types";
+import { GalleryMediaApiResponse, UploadRepostPermissions } from "../types";
+import { GalleryUpdateBody } from "./types";
 import { nullifyEmptyString } from "@/lib/utils";
 
 export type GalleryUploadApiBody = {
@@ -69,12 +69,11 @@ export class AttendedEventsApiAction extends ApiAction<AllEventsResponse, ApiErr
     urlAction = "events/attended"
 }
 
-export class MyUploadsApiAction extends ApiAction<UploadsApiResponse, ApiErrorResponse> {
+export class MyUploadsApiAction extends ApiAction<GalleryMediaApiResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "gallery/my-uploads"
 }
-
 
 class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
     mapToDTO(data: FormData) {

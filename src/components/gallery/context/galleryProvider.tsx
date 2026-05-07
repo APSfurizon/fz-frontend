@@ -92,6 +92,7 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
 
     const closeMedia = useCallback(() => {
         setModalOpen(false);
+        window.history.replaceState({}, '', window.location.pathname);
     }, []);
 
     const getNextMedia = useCallback((current?: Partial<GalleryUploadedMedia>) => {
@@ -128,8 +129,7 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
         const newParams = new URLSearchParams(params);
         newParams.delete(MEDIA_SEARCH_PARAM);
         newParams.append(MEDIA_SEARCH_PARAM, String(mediaId));
-        console.log(currentPath + `?${newParams.toString()}`);
-        router.push(currentPath + `?${newParams.toString()}`);
+        window.history.pushState({}, '', `?${newParams.toString()}`);
     }
 
     useEffect(() => {

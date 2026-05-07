@@ -40,7 +40,9 @@ export function HeaderProvider({ children }: Readonly<{ children: React.ReactNod
         handleUserUpdate(true);
     }, []);
 
-    return <UserContext.Provider value={{ updateUser, setUpdateUser, userDisplay, setUserDisplay, userLoading, userDisplayRef }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ updateUser, setUpdateUser, userDisplay, setUserDisplay, userLoading, userDisplayRef }}>
+        {children}
+    </UserContext.Provider>;
 };
 
 export const useUser = () => {
