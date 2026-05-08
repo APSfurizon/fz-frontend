@@ -1,4 +1,4 @@
-.main-dialog {
+.main-dialog.furpanel-main-dialog {
     width: 95vw;
     max-width: 95vw;
     transition: width 120ms;
@@ -43,7 +43,7 @@ span:has(.hamburger),
         background-color: var(--tool-link-hambuger-hover-bg);
     }
 
-    .main-dialog {
+    .main-dialog.furpanel-main-dialog {
         min-width: 100vw;
 
         &:has(.stretch-page.compact-main) {

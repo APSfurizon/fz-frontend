@@ -229,10 +229,6 @@ export default function AdminPage() {
           <Button icon="SEARCH" onClick={() => router.push(`/${locale}/admin/security/lost-found`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.lost_and_found")}
           </Button>
-          <Button icon="MAIL" onClick={sendMembershipCardByMail} debounce={5000}
-            busy={sendMembershipCardByMailLoading} disabled={!capabilities?.canManageMembershipCards}>
-            {t("furpanel.admin.membership_manager.send_card_by_mail")}
-          </Button>
         </FpSection>
       </FpMacroSection>
       {!securityOnlyMode && <>
@@ -317,6 +313,10 @@ export default function AdminPage() {
             <Button icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
               disabled={!capabilities?.canManageMembershipCards}>
               {t("furpanel.admin.membership_manager.title")}
+            </Button>
+            <Button icon="MAIL" onClick={sendMembershipCardByMail} debounce={5000}
+              busy={sendMembershipCardByMailLoading} disabled={!capabilities?.canManageMembershipCards}>
+              {t("furpanel.admin.membership_manager.send_card_by_mail")}
             </Button>
           </FpSection>
         </FpMacroSection>

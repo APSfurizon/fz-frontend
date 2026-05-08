@@ -952,7 +952,7 @@
           "critical": "Critico",
           "error": "Errore",
           "missing_dati": "Dati mancanti",
-          "modified_by": "Modificato da"
+          "edited_by_nickname": "Modificato da"
         },
         "assets": {
           "asset": "Asset",
@@ -1068,7 +1068,8 @@
           "update": "Aggiorna",
           "default_author": "Security",
           "missing_data_title": "Dati mancanti",
-          "missing_data_description": "Inserisci una descrizione di almeno 3 caratteri"
+          "missing_data_description": "Inserisci una descrizione di almeno 3 caratteri",
+          "invalid_image": "Immagine non valida"
         }
       },
       "system": {

@@ -215,6 +215,7 @@ export default function SecurityUserSearchPage() {
                                     : <div style={{ width: 80, height: 80, borderRadius: 12, background: "#2c3e50", flexShrink: 0 }}></div>}
                                 <div className="security-data-grid" style={{ flex: 1 }}>
                                     <DataField label={t("furpanel.admin.users.accounts.view.badges.fursona_name")} value={userData.badgeData?.mainBadge?.fursonaName} />
+                                    <DataField label={t("furpanel.admin.users.accounts.view.orders_table.order_code")} value={userData.currentOrder?.code} />
                                     <DataField label={t("furpanel.admin.users.accounts.view.badges.user_id")} value={userData.badgeData?.mainBadge?.userId} />
                                     <DataField label={t("furpanel.admin.users.accounts.view.badges.locale")} value={userData.badgeData?.mainBadge?.locale} />
                                     <DataField label={t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")} value={userData.badgeData?.fursuits?.length ?? 0} />

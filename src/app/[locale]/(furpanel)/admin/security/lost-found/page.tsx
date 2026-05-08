@@ -11,6 +11,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
+import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
@@ -52,6 +53,7 @@ export default function SecurityLostAndFoundPage() {
     const [fFoundBy, setFFoundBy] = useState("");
     const [fProprietario, setFProprietario] = useState("");
     const [fStatus, setFStatus] = useState<"smarrito" | "consegnato">("smarrito");
+    const [fFormImage, setFFormImage] = useState<File | null>(null);
 
     const loadItems = () => {
         setLoading(true);
@@ -77,7 +79,7 @@ export default function SecurityLostAndFoundPage() {
     });
 
     const resetForm = () => {
-        setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFProprietario(""); setFStatus("smarrito");
+        setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFProprietario(""); setFStatus("smarrito"); setFFormImage(null);
     };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
@@ -98,6 +100,7 @@ export default function SecurityLostAndFoundPage() {
         body.append("found_by", fFoundBy.trim());
         body.append("proprietario", fProprietario.trim());
         body.append("status", fStatus);
+        if (fFormImage) body.append("immagini", fFormImage);
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
@@ -196,6 +199,16 @@ export default function SecurityLostAndFoundPage() {
             <FpInput required label={t("furpanel.admin.security_management.lost_found.description_label")} initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.description_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.lost_found.found_by_label")} initialValue={fFoundBy} onChange={(e) => setFFoundBy(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.found_by_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.lost_found.owner_label")} initialValue={fProprietario} onChange={(e) => setFProprietario(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.owner_placeholder")} />
+            <div className="vertical-list gap-2mm">
+                <span className="title small">{t("furpanel.admin.security_management.lost_found.photo")}</span>
+                <ImagePickerWithCrop
+                    imageFile={fFormImage}
+                    onImageSelected={setFFormImage}
+                    onImageRemove={() => setFFormImage(null)}
+                    label={t("furpanel.admin.security_management.lost_found.photo")}
+                    title={t("furpanel.admin.security_management.lost_found.item")}
+                />
+            </div>
             <div className="horizontal-list gap-4mm" style={{ flexWrap: "wrap", marginTop: 10, marginBottom: 10 }}>
                 {(["smarrito", "consegnato"] as const).map((s) => (
                     <label key={s} className="small" htmlFor={`status_${s}`} style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}>

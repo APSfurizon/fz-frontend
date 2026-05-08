@@ -12,6 +12,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
+import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import Modal from "@/components/modal";
 import LoadingPanel from "@/components/loadingPanel";
@@ -62,6 +63,7 @@ export default function SecurityAssetManagerPage() {
     const [fSerial, setFSerial] = useState("");
     const [fNote, setFNote] = useState("");
     const [fStato, setFStato] = useState<string>("disponibile");
+    const [fFormImage, setFFormImage] = useState<File | null>(null);
 
     const STATO_LABEL: Record<string, string> = {
         disponibile: t("furpanel.admin.security_management.assets.state_available"),
@@ -83,7 +85,7 @@ export default function SecurityAssetManagerPage() {
         loadAssets();
     }, []);
 
-    const resetForm = () => { setFTag(""); setFTipo(""); setFModello(""); setFSerial(""); setFNote(""); setFStato("disponibile"); };
+    const resetForm = () => { setFTag(""); setFTipo(""); setFModello(""); setFSerial(""); setFNote(""); setFStato("disponibile"); setFFormImage(null); };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
     const openEdit = (a: SecurityAsset) => {
@@ -100,6 +102,7 @@ export default function SecurityAssetManagerPage() {
         body.append("device_serial_number", fSerial.trim());
         body.append("note_condizioni", fNote.trim());
         body.append("stato", fStato);
+        if (fFormImage) body.append("foto", fFormImage);
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
@@ -228,6 +231,16 @@ export default function SecurityAssetManagerPage() {
             <FpInput label={t("furpanel.admin.security_management.assets.model_label")} initialValue={fModello} onChange={(e) => setFModello(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.assets.model_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.assets.serial_label")} initialValue={fSerial} onChange={(e) => setFSerial(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.assets.serial_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.assets.notes_label")} initialValue={fNote} onChange={(e) => setFNote(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.assets.notes_placeholder")} />
+            <div className="vertical-list gap-2mm">
+                <span className="title small">{t("furpanel.admin.security_management.assets.photo")}</span>
+                <ImagePickerWithCrop
+                    imageFile={fFormImage}
+                    onImageSelected={setFFormImage}
+                    onImageRemove={() => setFFormImage(null)}
+                    label={t("furpanel.admin.security_management.assets.photo")}
+                    title={t("furpanel.admin.security_management.assets.asset")}
+                />
+            </div>
             <div style={{ marginTop: 6 }}>
                 <span className="title small" style={{ display: "block", marginBottom: 6 }}>{t("furpanel.admin.security_management.assets.state_label")}</span>
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>

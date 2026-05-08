@@ -11,6 +11,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
+import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
@@ -56,6 +57,7 @@ export default function SecurityHazardousRegisterPage() {
     const [fLivello, setFLivello] = useState<string>("basso");
     const [fProprietarioNick, setFProprietarioNick] = useState("");
     const [fProprietarioId, setFProprietarioId] = useState("");
+    const [fFormImage, setFFormImage] = useState<File | null>(null);
 
     const loadHazards = () => {
         setLoading(true);
@@ -79,7 +81,7 @@ export default function SecurityHazardousRegisterPage() {
 
     const resetForm = () => {
         setFTitolo(""); setFDescrizione(""); setFLivello("basso");
-        setFProprietarioNick(""); setFProprietarioId("");
+        setFProprietarioNick(""); setFProprietarioId(""); setFFormImage(null);
     };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
@@ -88,6 +90,12 @@ export default function SecurityHazardousRegisterPage() {
         setFLivello(h.livello); setFProprietarioNick(h.proprietario_nickname ?? "");
         setFProprietarioId(h.proprietario_id ?? "");
         setSelected(h); setIsEdit(true); setView("form");
+    };
+
+    const loadCurrentUser = () => {
+        runRequest({ action: new UserDisplayAction() })
+            .then((response) => setCurrentUserName(response.display?.fursonaName ?? ""))
+            .catch(() => setCurrentUserName(""));
     };
 
     const saveItem = () => {
@@ -101,7 +109,8 @@ export default function SecurityHazardousRegisterPage() {
         body.append("livello", fLivello);
         body.append("proprietario_nickname", fProprietarioNick.trim());
         body.append("proprietario_id", fProprietarioId.trim());
-        body.append("modificato_da", currentUserName);
+        body.append("modificato_da", currentUserName)
+        if (fFormImage) body.append("foto", fFormImage);
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
@@ -123,6 +132,10 @@ export default function SecurityHazardousRegisterPage() {
         return [h.titolo, h.descrizione, h.proprietario_nickname]
             .some((value) => String(value ?? "").toLowerCase().includes(normalizedSearch));
     });
+
+    useEffect(() => {
+        loadCurrentUser();
+    }, []);
 
     const renderList = () => (
         <div className="vertical-list gap-2mm">
@@ -199,6 +212,16 @@ export default function SecurityHazardousRegisterPage() {
             <FpInput label={t("furpanel.admin.security_management.hazard.description")} initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.description_placeholder")} />
             <FpInput required label={t("furpanel.admin.security_management.hazard.owner_nickname")} initialValue={fProprietarioNick} onChange={(e) => setFProprietarioNick(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_nickname_placeholder")} />
             <FpInput required label={t("furpanel.admin.security_management.hazard.owner_id")} initialValue={fProprietarioId} onChange={(e) => setFProprietarioId(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_id_placeholder")} />
+            <div className="vertical-list gap-2mm">
+                <span className="title small">{t("furpanel.admin.security_management.hazard.photo")}</span>
+                <ImagePickerWithCrop
+                    imageFile={fFormImage}
+                    onImageSelected={setFFormImage}
+                    onImageRemove={() => setFFormImage(null)}
+                    label={t("furpanel.admin.security_management.hazard.photo")}
+                    title={t("furpanel.admin.security_management.hazard.title")}
+                />
+            </div>
             <div style={{ marginTop: 6 }}>
                 <span className="title small" style={{ display: "block", marginBottom: 6 }}>{t("furpanel.admin.security_management.hazard.level")}</span>
                 <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
@@ -228,7 +251,7 @@ export default function SecurityHazardousRegisterPage() {
                     [t("furpanel.admin.security_management.hazard.description"), h.descrizione], [t("furpanel.admin.security_management.hazard.reported_by"), h.trovato_da],
                     [t("furpanel.admin.security_management.hazard.owner_nickname"), h.proprietario_nickname], [t("furpanel.admin.security_management.hazard.owner_id"), h.proprietario_id],
                     [t("furpanel.admin.security_management.hazard.date"), h.data ? new Date(h.data).toLocaleString() : undefined],
-                    [t("furpanel.admin.security_management.hazard.modified_by"), h.modificato_da],
+                    [t("furpanel.admin.security_management.hazard.edited_by_nickname"), h.modificato_da],
                 ].filter(([, v]) => !!v).map(([label, value]) => (
                     <div key={label} className="horizontal-list gap-2mm security-asset-detail-row" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
                         <span className="title small color-subtitle security-asset-detail-label" style={{ minWidth: 160 }}>{label}</span>

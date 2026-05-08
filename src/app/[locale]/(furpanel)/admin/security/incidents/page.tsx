@@ -6,6 +6,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Modal from "@/components/modal";
 import ImagePreviewModal from "@/components/imagePreviewModal";
+import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
 import Icon from "@/components/icon";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
@@ -71,6 +72,7 @@ export default function SecurityIncidentsPage() {
 
     const [replyMessage, setReplyMessage] = useState("");
     const [replyImage, setReplyImage] = useState<File | null>(null);
+
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
     const [detailPeople, setDetailPeople] = useState("");
     const [detailImportant, setDetailImportant] = useState(false);
@@ -361,8 +363,13 @@ export default function SecurityIncidentsPage() {
             </div>
             <div className="vertical-list gap-2mm">
                 <span className="title small">{t("furpanel.admin.security_management.incidents.screenshot")}</span>
-                <input type="file" accept="image/*" onChange={(e) => setNewImage(e.target.files?.[0] ?? null)} />
-                {newImage && <span className="title small color-subtitle">{newImage.name}</span>}
+                <ImagePickerWithCrop
+                    imageFile={newImage}
+                    onImageSelected={setNewImage}
+                    onImageRemove={() => setNewImage(null)}
+                    label={t("furpanel.admin.security_management.incidents.screenshot")}
+                    title={t("furpanel.admin.security_management.incidents.image_preview")}
+                />
             </div>
             <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
                 <input type="checkbox" checked={newImportant} onChange={(e) => setNewImportant(e.target.checked)} />
@@ -461,8 +468,15 @@ export default function SecurityIncidentsPage() {
                             placeholder={t("furpanel.admin.security_management.incidents.write_message")}
                             style={{ minHeight: 100, padding: 12, borderRadius: 10, border: "1px solid #ffffff15", background: "#0e1621", color: "#fff", resize: "vertical" }}
                         />
-                        <input type="file" accept="image/*" onChange={(e) => setReplyImage(e.target.files?.[0] ?? null)} />
-                        {replyImage && <span className="title small color-subtitle">{replyImage.name}</span>}
+                        <div className="gap-2mm margin-bottom-2mm vertical-list">
+                            <ImagePickerWithCrop
+                                imageFile={replyImage}
+                                onImageSelected={setReplyImage}
+                                onImageRemove={() => setReplyImage(null)}
+                                label={t("furpanel.admin.security_management.incidents.screenshot")}
+                                title={t("furpanel.admin.security_management.incidents.image_preview")}
+                            />
+                        </div>
                     </div>
                 )}
 
