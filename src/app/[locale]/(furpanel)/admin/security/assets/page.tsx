@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
@@ -33,6 +33,7 @@ const SECURITY_BADGE_STYLE = {
 
 export default function SecurityAssetManagerPage() {
     const t = useTranslations();
+    const locale = useLocale();
     useTitle(t("furpanel.admin.security_management.title_asset_register"));
     const { showModal } = useModalUpdate();
     const router = useRouter();
@@ -189,14 +190,15 @@ export default function SecurityAssetManagerPage() {
                         <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 0 }}>
                             <span className="title small" style={{ background: "#1f3a5f", color: "#9ec1fa", padding: "2px 8px", borderRadius: 6, fontWeight: 700, alignSelf: "flex-start" }}>{a.tag}</span>
                             <span className="title normal" style={{ fontWeight: 700 }}>{[a.device_tipo, a.device_modello].filter(Boolean).join(" — ")}</span>
-                            {a.utilizzatore_attuale && <span className="title small color-subtitle">👤 {a.utilizzatore_attuale}</span>}
+                            <span className="title small color-subtitle">S/N: {a.device_serial_number}</span>
+                            {a.utilizzatore_attuale && <span className="title small color-subtitle"><Icon icon="PERSON" className="medium" /> {a.utilizzatore_attuale}</span>}
                         </div>
                         {/* Right: status top, photo indicator bottom */}
                         <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end", justifyContent: "center", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
                             <span className="title small" style={{ color: STATO_COLOR[a.stato], fontWeight: 700 }}>{STATO_LABEL[a.stato]}</span>
                             <div style={{ display: "flex", flexDirection: "row", gap: 6, alignItems: "center", justifyContent: "flex-end" }}>
                                 {(a.foto?.length ?? 0) > 1 && (
-                                    <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {a.foto!.length}</span>
+                                    <span style={{ background: "#1f6feb", color: "#fff", padding: "3px 8px", borderRadius: 8, fontSize: 12 }}><Icon icon="PHOTO_CAMERA" className="small" /> {a.foto!.length}</span>
                                 )}
                                 {(a.foto?.length ?? 0) > 0 ? (
                                     <div onClick={(e) => e.stopPropagation()}>
@@ -246,54 +248,64 @@ export default function SecurityAssetManagerPage() {
 
     const renderDetail = (a: SecurityAsset) => (
         <div className="vertical-list gap-3mm">
-            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 6 }}>
-                <span className="title large" style={{ flex: 1 }}>{[a.tag, a.device_modello].filter(Boolean).join(" — ") || t("furpanel.admin.security_management.assets.detail_fallback")}</span>
-                <span style={{ ...SECURITY_BADGE_STYLE, background: STATO_COLOR[a.stato], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>{STATO_LABEL[a.stato]}</span>
+            <div className="horizontal-list gap-2mm flex-vertical-center security-asset-detail-header">
+                <span className="title large security-asset-detail-title">{[a.tag, a.device_modello].filter(Boolean).join(" — ") || t("furpanel.admin.security_management.assets.detail_fallback")}</span>
+                <span className="security-asset-state-badge" style={{ ...SECURITY_BADGE_STYLE, background: STATO_COLOR[a.stato] }}>{STATO_LABEL[a.stato]}</span>
             </div>
-            {[
-                [t("furpanel.admin.security_management.assets.type_label"), a.device_tipo], [t("furpanel.admin.security_management.assets.model_label"), a.device_modello], [t("furpanel.admin.security_management.assets.serial_label"), a.device_serial_number],
-                [t("furpanel.admin.security_management.assets.user_label"), a.utilizzatore_attuale], [t("furpanel.admin.security_management.assets.notes_label"), a.note_condizioni],
-            ].filter(([, v]) => !!v).map(([label, value]) => (
-                <div key={label} className="horizontal-list gap-2mm" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
-                    <span className="title small color-subtitle" style={{ minWidth: 140 }}>{label}</span>
-                    <span className="title small">{value}</span>
-                </div>
-            ))}
-            {(a.foto?.length ?? 0) > 0 && (
-                <div className="vertical-list gap-2mm">
-                    <span className="title small color-subtitle">{t("furpanel.admin.security_management.assets.photo")} ({a.foto!.length})</span>
-                    <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                        {a.foto!.map((img, idx) => (
-                            <ImagePreviewModal
-                                key={idx}
-                                imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(img.url)}`}
-                                alt={`${a.tag} — foto ${idx + 1}`}
-                                thumbSize={SECURITY_IMAGE_THUMB_SIZE}
-                                title={`${a.tag || t("furpanel.admin.security_management.assets.asset")} — foto ${idx + 1}`}
-                            />
-                        ))}
+            <div className="vertical-list gap-2mm security-asset-detail-list">
+                {[
+                    [t("furpanel.admin.security_management.assets.tag_label"), a.tag], [t("furpanel.admin.security_management.assets.type_label"), a.device_tipo], [t("furpanel.admin.security_management.assets.model_label"), a.device_modello], [t("furpanel.admin.security_management.assets.serial_label"), a.device_serial_number],
+                    [t("furpanel.admin.security_management.assets.user_label"), a.utilizzatore_attuale],
+                    [t("furpanel.admin.security_management.assets.utilizzatore_precedente_label"), a.utilizzatore_precedente],
+                    [t("furpanel.admin.security_management.assets.data_modifica_label"), a.data_modifica ? new Date(a.data_modifica).toLocaleString() : undefined],
+                    [t("furpanel.admin.security_management.assets.modificato_da_label"), a.modificato_da],
+                    [t("furpanel.admin.security_management.assets.notes_label"), a.note_condizioni],
+                ].filter(([, v]) => !!v).map(([label, value]) => (
+                    <div key={label} className="horizontal-list gap-2mm security-asset-detail-row">
+                        <span className="title small color-subtitle security-asset-detail-label">{label}</span>
+                        <span className="title small security-asset-detail-value">{value}</span>
                     </div>
-                </div>
-            )}
-            <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap", marginTop: 10 }}>
-                <Button icon="SYNC" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>{t("furpanel.admin.security_management.assets.transfer")}</Button>
+                ))}
+                {(a.foto?.length ?? 0) > 0 && (
+                    <div className="vertical-list gap-2mm">
+                        <span className="title small color-subtitle security-asset-photo-title">{t("furpanel.admin.security_management.assets.photo")} ({a.foto!.length})</span>
+                        <div className="horizontal-list gap-2mm security-asset-photo-gallery">
+                            {a.foto!.map((img, idx) => (
+                                <div key={idx} className="security-asset-photo-item">
+                                    <ImagePreviewModal
+                                        imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                        alt={`${a.tag} — foto ${idx + 1}`}
+                                        thumbSize={SECURITY_IMAGE_THUMB_SIZE}
+                                        title={`${a.tag || t("furpanel.admin.security_management.assets.asset")} — foto ${idx + 1}`}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className="horizontal-list gap-2mm security-asset-detail-actions">
+                <Button className="security-asset-transfer-btn" icon="SYNC" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>{t("furpanel.admin.security_management.assets.transfer")}</Button>
             </div>
         </div>
     );
 
     const renderLogs = () => (
         <div className="vertical-list gap-2mm">
-            <span className="title large">{t("furpanel.admin.security_management.assets.logs_title")}: {selected?.tag}</span>
+            <span className="title large">{t("furpanel.admin.security_management.assets.logs_title")}: {selected?.tag} - {selected?.device_modello}</span>
             {logsLoading && <LoadingPanel />}
             {!logsLoading && logs.length === 0 && <span className="title normal color-subtitle">{t("furpanel.admin.security_management.assets.no_logs")}</span>}
             {logs.map((l, idx) => (
-                <div key={l.id ?? idx} className="main-dialog rounded-m" style={{ padding: "0.6em 0.75em" }}>
+                <div key={l.id ?? idx} className="stretch-page rounded-m security-asset-log-card">
                     <div className="horizontal-list gap-2mm flex-vertical-center">
-                        <span style={{ background: "#2d3f54", color: "#c8ddff", fontWeight: 700, fontSize: 11, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase" }}>{l.azione}</span>
+                        <span style={{ ...SECURITY_BADGE_STYLE, background: STATO_COLOR[l.stato], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>{STATO_LABEL[l.stato]}</span>
                         <span className="title small color-subtitle" style={{ marginLeft: "auto" }}>{l.data_aggiornamento ? new Date(l.data_aggiornamento).toLocaleString() : ""}</span>
                     </div>
-                    {l.utilizzatore && <span className="title small">👤 {l.utilizzatore}</span>}
-                    {l.note && <span className="title small color-subtitle">{l.note}</span>}
+                    <div className="horizontal-list gap-2mm flex-vertical-center">
+                        <span className="title small">{t("furpanel.admin.security_management.assets.user_label")}: {l.utilizzatore ?? ""}</span>
+                        <span style={{ background: "#2d3f54", color: "#c8ddff", fontWeight: 700, fontSize: 11, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", marginLeft: "auto" }}>{l.azione} by {l.modificato_da}</span>
+                    </div>
+                    {l.note && <span className="title small color-subtitle">{t("furpanel.admin.security_management.assets.notes_label")}: {l.note}</span>}
                 </div>
             ))}
         </div>
@@ -304,7 +316,7 @@ export default function SecurityAssetManagerPage() {
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
                 <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
-                        router.push("/admin");
+                        router.push(`/${locale}/admin`);
                         return;
                     }
                     if (view === "form") setView(isEdit ? "detail" : "list");

@@ -16,7 +16,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import "@/styles/furpanel/admin/security-pages.css";
 
 const SECURITY_IMAGE_THUMB_SIZE = 108;
@@ -35,6 +35,7 @@ export default function SecurityLostAndFoundPage() {
     useTitle(t("furpanel.admin.security_management.title_lost_and_found"));
     const { showModal } = useModalUpdate();
     const router = useRouter();
+    const locale = useLocale();
 
     const [items, setItems] = useState<SecurityLostItem[]>([]);
     const [loading, setLoading] = useState(false);
@@ -231,37 +232,41 @@ export default function SecurityLostAndFoundPage() {
         ];
         return (
             <div className="vertical-list gap-3mm">
-                <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 6 }}>
+                <div className="horizontal-list gap-2mm flex-vertical-center security-asset-detail-header" style={{ marginBottom: 6 }}>
                     <span className="title large" style={{ flex: 1 }}>{item.descrizione || "—"}</span>
                     <span style={{ ...SECURITY_BADGE_STYLE, background: isConsegnato ? "#27ae60" : "#c0392b", color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>
                         {isConsegnato ? t("furpanel.admin.security_management.lost_found.status_delivered").toUpperCase() : t("furpanel.admin.security_management.lost_found.status_lost").toUpperCase()}
                     </span>
                 </div>
-                {rows.filter(([, v]) => !!v).map(([label, value]) => (
-                    <div key={label} className="horizontal-list gap-2mm" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
-                        <span className="title small color-subtitle" style={{ minWidth: 160 }}>{label}</span>
-                        <span className="title small">{value}</span>
-                    </div>
-                ))}
-                {(item.immagini?.length ?? 0) > 0 && (
-                    <div className="vertical-list gap-2mm" style={{ marginTop: 8 }}>
-                        <span className="title small color-subtitle">{t("furpanel.admin.security_management.lost_found.photo")} ({item.immagini?.length ?? 0})</span>
-                        <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                            {(item.immagini ?? []).map((img: { url: string }, idx: number) => {
-                                const url = typeof img === "string" ? img : img.url;
-                                return (
-                                    <ImagePreviewModal
-                                        key={idx}
-                                        imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(url)}`}
-                                        alt={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} — ${t("furpanel.admin.security_management.lost_found.photo")} ${idx + 1}`}
-                                        thumbSize={SECURITY_IMAGE_THUMB_SIZE}
-                                        title={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} — ${t("furpanel.admin.security_management.lost_found.photo")} ${idx + 1}`}
-                                    />
-                                );
-                            })}
+                <div className="vertical-list gap-2mm security-asset-detail-list">
+                    {rows.filter(([, v]) => !!v).map(([label, value]) => (
+                        <div key={label} className="horizontal-list gap-2mm security-asset-detail-row" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
+                            <span className="title small color-subtitle security-asset-detail-label" style={{ minWidth: 160 }}>{label}</span>
+                            <span className="title small security-asset-detail-value">{value}</span>
                         </div>
-                    </div>
-                )}
+                    ))}
+                    {(item.immagini?.length ?? 0) > 0 && (
+                        <div className="vertical-list gap-2mm" style={{ marginTop: 8 }}>
+                            <span className="title small color-subtitle security-asset-photo-title">{t("furpanel.admin.security_management.lost_found.photo")} ({item.immagini?.length ?? 0})</span>
+                            <div className="horizontal-list gap-2mm security-asset-photo-gallery" style={{ flexWrap: "wrap" }}>
+                                {(item.immagini ?? []).map((img: { url: string }, idx: number) => {
+                                    const url = typeof img === "string" ? img : img.url;
+                                    return (
+                                        <div key={idx} className="security-asset-photo-item">
+                                            <ImagePreviewModal
+                                                key={idx}
+                                                imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(url)}`}
+                                                alt={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} — ${t("furpanel.admin.security_management.lost_found.photo")} ${idx + 1}`}
+                                                thumbSize={SECURITY_IMAGE_THUMB_SIZE}
+                                                title={`${item.descrizione || t("furpanel.admin.security_management.lost_found.item")} — ${t("furpanel.admin.security_management.lost_found.photo")} ${idx + 1}`}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
                 {!isConsegnato && (
                     <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap", marginTop: 10 }}>
                         <Button icon="CHECK" style={{ background: "#27ae60" }} onClick={() => {
@@ -278,7 +283,7 @@ export default function SecurityLostAndFoundPage() {
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
                 <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
-                        router.push("/admin");
+                        router.push(`/${locale}/admin`);
                         return;
                     }
                     if (view === "form") {

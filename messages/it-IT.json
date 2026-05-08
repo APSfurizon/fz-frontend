@@ -951,7 +951,8 @@
           "high": "Alto",
           "critical": "Critico",
           "error": "Errore",
-          "missing_dati": "Dati mancanti"
+          "missing_dati": "Dati mancanti",
+          "modified_by": "Modificato da"
         },
         "assets": {
           "asset": "Asset",
@@ -989,7 +990,10 @@
           "transfer_modal_title": "Rendi / Trasferisci",
           "new_user_label": "Nuovo utilizzatore",
           "new_user_placeholder": "Nome persona",
-          "not_set": "Non impostato"
+          "not_set": "Non impostato",
+          "utilizzatore_precedente_label": "Utilizzatore precedente",
+          "data_modifica_label": "Data modifica",
+          "modificato_da_label": "Modificato da"
         },
         "lost_found": {
           "title": "Smarriti e Ritrovati",

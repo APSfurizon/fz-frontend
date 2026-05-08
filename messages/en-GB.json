@@ -952,7 +952,8 @@
           "high": "High",
           "critical": "Critical",
           "error": "Error",
-          "missing_dati": "Required fields"
+          "missing_dati": "Required fields",
+          "modified_by": "Edited by"
         },
         "assets": {
           "asset": "Asset",
@@ -990,7 +991,10 @@
           "transfer_modal_title": "Return / Transfer",
           "new_user_label": "New user",
           "new_user_placeholder": "Person name",
-          "not_set": "Not set"
+          "not_set": "Not set",
+          "utilizzatore_precedente_label": "Previous user",
+          "data_modifica_label": "Edit date",
+          "modificato_da_label": "Edit by"
         },
         "lost_found": {
           "title": "Lost and Found",

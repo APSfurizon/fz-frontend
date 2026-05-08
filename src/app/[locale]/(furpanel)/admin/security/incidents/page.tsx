@@ -20,7 +20,7 @@ import {
 import { UserDisplayAction } from "@/lib/api/user";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const INCIDENT_BADGE_STYLE = {
     display: "inline-flex",
@@ -47,6 +47,7 @@ function formatReportDate(value?: number) {
 
 export default function SecurityIncidentsPage() {
     const t = useTranslations();
+    const locale = useLocale();
     useTitle(t("furpanel.admin.security_management.title_incident_log"));
     const router = useRouter();
     const { showModal } = useModalUpdate();
@@ -481,7 +482,7 @@ export default function SecurityIncidentsPage() {
                             setShowHistory(false);
                             return;
                         }
-                        router.push("/admin");
+                        router.push(`/${locale}/admin`);
                         return;
                     }
                     setView("list");

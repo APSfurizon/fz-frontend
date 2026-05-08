@@ -16,7 +16,8 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { UserDisplayAction } from "@/lib/api/user";
 import "@/styles/furpanel/admin/security-pages.css";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
@@ -32,6 +33,7 @@ const SECURITY_BADGE_STYLE = {
 
 export default function SecurityHazardousRegisterPage() {
     const t = useTranslations();
+    const locale = useLocale();
     useTitle(t("furpanel.admin.security_management.title_hazardous_register"));
     const { showModal } = useModalUpdate();
     const router = useRouter();
@@ -46,6 +48,7 @@ export default function SecurityHazardousRegisterPage() {
     const [selected, setSelected] = useState<SecurityHazard | null>(null);
     const [isEdit, setIsEdit] = useState(false);
     const initialLoadDone = useRef(false);
+    const [currentUserName, setCurrentUserName] = useState("");
 
     // Form state
     const [fTitolo, setFTitolo] = useState("");
@@ -61,6 +64,12 @@ export default function SecurityHazardousRegisterPage() {
             .catch((err) => showModal(t("furpanel.admin.security_management.hazard.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     };
+
+    useEffect(() => {
+        runRequest({ action: new UserDisplayAction() })
+            .then((res) => setCurrentUserName(res.display?.fursonaName ?? ""))
+            .catch(() => setCurrentUserName(""));
+    }, []);
 
     useEffect(() => {
         if (initialLoadDone.current) return;
@@ -92,6 +101,7 @@ export default function SecurityHazardousRegisterPage() {
         body.append("livello", fLivello);
         body.append("proprietario_nickname", fProprietarioNick.trim());
         body.append("proprietario_id", fProprietarioId.trim());
+        body.append("modificato_da", currentUserName);
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
             if (selected.fileName) body.append("fileName", selected.fileName);
@@ -209,36 +219,41 @@ export default function SecurityHazardousRegisterPage() {
 
     const renderDetail = (h: SecurityHazard) => (
         <div className="vertical-list gap-3mm">
-            <div className="horizontal-list gap-2mm flex-vertical-center" style={{ marginBottom: 6 }}>
+            <div className="horizontal-list gap-2mm flex-vertical-center security-asset-detail-header" style={{ marginBottom: 6 }}>
                 <span className="title large" style={{ flex: 1 }}>{h.titolo}</span>
                 <span style={{ ...SECURITY_BADGE_STYLE, background: LIVELLO_COLOR[h.livello], color: "#fff", padding: "4px 14px", borderRadius: 8, fontWeight: 700, whiteSpace: "nowrap" }}>{LIVELLO_LABEL[h.livello]}</span>
             </div>
-            {[
-                [t("furpanel.admin.security_management.hazard.description"), h.descrizione], [t("furpanel.admin.security_management.hazard.reported_by"), h.trovato_da],
-                [t("furpanel.admin.security_management.hazard.owner_nickname"), h.proprietario_nickname], [t("furpanel.admin.security_management.hazard.owner_id"), h.proprietario_id],
-                [t("furpanel.admin.security_management.hazard.date"), h.data ? new Date(h.data).toLocaleString() : undefined],
-            ].filter(([, v]) => !!v).map(([label, value]) => (
-                <div key={label} className="horizontal-list gap-2mm" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
-                    <span className="title small color-subtitle" style={{ minWidth: 160 }}>{label}</span>
-                    <span className="title small">{value}</span>
-                </div>
-            ))}
-            {(h.foto?.length ?? 0) > 0 && (
-                <div className="vertical-list gap-2mm">
-                    <span className="title small color-subtitle">{t("furpanel.admin.security_management.hazard.photo")} ({h.foto!.length})</span>
-                    <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                        {h.foto!.map((img, idx) => (
-                            <ImagePreviewModal
-                                key={idx}
-                                imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(img.url)}`}
-                                alt={`${h.titolo} — ${t("furpanel.admin.security_management.hazard.photo")} ${idx + 1}`}
-                                thumbSize={SECURITY_IMAGE_THUMB_SIZE}
-                                title={`${h.titolo || t("furpanel.admin.security_management.hazard.title")} — ${t("furpanel.admin.security_management.hazard.photo")} ${idx + 1}`}
-                            />
-                        ))}
+            <div className="vertical-list gap-2mm security-asset-detail-list">
+                {[
+                    [t("furpanel.admin.security_management.hazard.description"), h.descrizione], [t("furpanel.admin.security_management.hazard.reported_by"), h.trovato_da],
+                    [t("furpanel.admin.security_management.hazard.owner_nickname"), h.proprietario_nickname], [t("furpanel.admin.security_management.hazard.owner_id"), h.proprietario_id],
+                    [t("furpanel.admin.security_management.hazard.date"), h.data ? new Date(h.data).toLocaleString() : undefined],
+                    [t("furpanel.admin.security_management.hazard.modified_by"), h.modificato_da],
+                ].filter(([, v]) => !!v).map(([label, value]) => (
+                    <div key={label} className="horizontal-list gap-2mm security-asset-detail-row" style={{ borderBottom: "1px solid #ffffff15", paddingBottom: 6 }}>
+                        <span className="title small color-subtitle security-asset-detail-label" style={{ minWidth: 160 }}>{label}</span>
+                        <span className="title small security-asset-detail-value">{value}</span>
                     </div>
-                </div>
-            )}
+                ))}
+                {(h.foto?.length ?? 0) > 0 && (
+                    <div className="vertical-list gap-2mm">
+                        <span className="title small color-subtitle security-asset-photo-title">{t("furpanel.admin.security_management.hazard.photo")} ({h.foto!.length})</span>
+                        <div className="horizontal-list gap-2mm security-asset-photo-gallery" style={{ flexWrap: "wrap" }}>
+                            {h.foto!.map((img, idx) => (
+                                <div key={idx} className="security-asset-photo-item">
+                                    <ImagePreviewModal
+                                        key={idx}
+                                        imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(img.url)}`}
+                                        alt={`${h.titolo} — ${t("furpanel.admin.security_management.hazard.photo")} ${idx + 1}`}
+                                        thumbSize={SECURITY_IMAGE_THUMB_SIZE}
+                                        title={`${h.titolo || t("furpanel.admin.security_management.hazard.title")} — ${t("furpanel.admin.security_management.hazard.photo")} ${idx + 1}`}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 
@@ -247,7 +262,7 @@ export default function SecurityHazardousRegisterPage() {
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
                 <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => {
                     if (view === "list") {
-                        router.push("/admin");
+                        router.push(`/${locale}/admin`);
                         return;
                     }
                     if (view === "form") {

@@ -157,7 +157,7 @@ export default function SecurityUserSearchPage() {
     return (
         <div className="stretch-page compact-main">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => router.push("/admin")}>
+                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => router.push(`/${locale}/admin`)}>
                     <Icon icon="ARROW_BACK" />
                 </span>
                 <div className="horizontal-list gap-2mm">
