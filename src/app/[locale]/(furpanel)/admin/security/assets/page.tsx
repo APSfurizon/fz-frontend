@@ -19,6 +19,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
+import { UserDisplayAction } from "@/lib/api/user";
 import "@/styles/furpanel/admin/security-pages.css";
 
 const STATI = ["disponibile", "in_uso", "non_disponibile"] as const;
@@ -64,6 +65,7 @@ export default function SecurityAssetManagerPage() {
     const [fNote, setFNote] = useState("");
     const [fStato, setFStato] = useState<string>("disponibile");
     const [fFormImage, setFFormImage] = useState<File | null>(null);
+    const [currentUserName, setCurrentUserName] = useState("");
 
     const STATO_LABEL: Record<string, string> = {
         disponibile: t("furpanel.admin.security_management.assets.state_available"),
@@ -93,6 +95,11 @@ export default function SecurityAssetManagerPage() {
         setFSerial(a.device_serial_number ?? ""); setFNote(a.note_condizioni ?? ""); setFStato(a.stato);
         setSelected(a); setIsEdit(true); setView("form");
     };
+    useEffect(() => {
+        runRequest({ action: new UserDisplayAction() })
+            .then((res) => setCurrentUserName(res.display?.fursonaName ?? ""))
+            .catch(() => setCurrentUserName(""));
+    }, []);
 
     const saveItem = () => {
         const body = new FormData();
@@ -100,6 +107,7 @@ export default function SecurityAssetManagerPage() {
         body.append("device_tipo", fTipo.trim());
         body.append("device_modello", fModello.trim());
         body.append("device_serial_number", fSerial.trim());
+        body.append('modificato_da', currentUserName);
         body.append("note_condizioni", fNote.trim());
         body.append("stato", fStato);
         if (fFormImage) body.append("foto", fFormImage);
@@ -124,6 +132,8 @@ export default function SecurityAssetManagerPage() {
         if (selected.updateId) body.append("expectedUpdateId", selected.updateId);
         body.append("utilizzatore_attuale", tUtilizzatore.trim() || t("furpanel.admin.security_management.assets.not_set"));
         body.append("utilizzatore_precedente", selected.utilizzatore_attuale ?? t("furpanel.admin.security_management.assets.not_set"));
+
+        body.append('modificato_da', currentUserName);
         body.append("note_condizioni", tNote.trim());
         body.append("stato", tStato);
         setLoading(true);
