@@ -6,6 +6,8 @@ import { ChangeEvent, CSSProperties, useEffect, useMemo, useState } from "react"
 import "@/styles/components/fpSelect.css";
 import { useLocale } from "next-intl";
 import { useFormContext } from "./dataForm";
+import Icon, { MaterialIcon } from "../icon";
+import Image from "next/image";
 
 function renderItems(items: (SelectGroup | SelectItem)[],
     itemExtractor: (entity: InputEntity) => string | number | undefined, locale: string) {
@@ -116,6 +118,10 @@ export default function FpSelect({
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
             defaultValue={selectDefaultValue} required={required}></input>
         <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm">
+            {selectedItem && <>
+                {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon as MaterialIcon} />}
+                {selectedItem.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={selectedItem.imageUrl} />}
+            </>}
             <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
                 id={selectLabel}
                 value={selectDefaultValue}

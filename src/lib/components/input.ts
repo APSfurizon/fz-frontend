@@ -10,6 +10,14 @@ export const HUNDRED_YEARS_AFTER_TODAY = new Date((new Date().getTime() / 1000 +
 export const MIN_DATE = dateToParam(HUNDRED_YEARS_BEFORE_TODAY);
 export const MAX_DATE = dateToParam(HUNDRED_YEARS_AFTER_TODAY);
 
+type OneIdentityAtLeast = { code: string; id: number; } | { code?: string; id: number; } | { code: string; id?: number }
+export type InputEntityInit = OneIdentityAtLeast & {
+    description?: string;
+    icon?: MaterialIcon;
+    imageUrl?: string;
+    iconCSS?: CSSProperties;
+}
+
 /**
  * Defines an entity that points to a specific object or table in the backend.
  * 
@@ -38,6 +46,10 @@ export class InputEntity {
         this.icon = icon;
         this.imageUrl = imageUrl;
         this.iconCSS = iconCSS;
+    }
+
+    static of(data: InputEntityInit): InputEntity {
+        return new InputEntity(data.id, data.code, data.description, data.icon, data.imageUrl, data.iconCSS)
     }
 }
 

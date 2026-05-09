@@ -26,7 +26,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const onRefreshClick = () => {
-        setRefreshKey(p => p + 1);
+        setRefreshKey(p => (p + 1) % 10);
         onRefresh();
     }
 

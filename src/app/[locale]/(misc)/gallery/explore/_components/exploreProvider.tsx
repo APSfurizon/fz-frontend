@@ -2,18 +2,23 @@ import { ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAc
 import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
 import { runRequest } from "@/lib/api/global";
 import { buildSearchParams } from "@/lib/utils";
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-type ExploreFilter = {
-    event?: ExploreEvent,
-    photographer?: ExplorePhotographer
+class ExploreFilter {
+    event?: ExploreEvent;
+    photographer?: ExplorePhotographer;
+
+    constructor(prev: ExploreFilter) {
+        this.event = prev.event;
+        this.photographer = prev.photographer;
+    }
 }
 
 interface ExploreProviderType {
     events: Map<number, ExploreEvent>;
     photographers: Map<number, ExplorePhotographer>;
-    setFixedEvent(eventId: number): void;
-    setFixedPhotographer(photographerId: number): void;
+    setFixedEvent(eventId?: number): void;
+    setFixedPhotographer(photographerId?: number): void;
     searchEvent(eventId: number): void;
     searchPhotographer(photographerId: number): void;
     searchData(eventId: number, photographerId: number): Promise<any>;
@@ -32,12 +37,22 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
 
     const [loading, setLoading] = useState(false);
 
-    const setFixedEvent = useCallback((eventId: number) => {
-        setCurrentFilter(prev => ({ ...prev, event: events.get(eventId) ?? prev?.event }));
+    const setFixedEvent = useCallback((eventId?: number) => {
+        setCurrentFilter(prev => new ExploreFilter({
+            ...prev,
+            event: eventId
+                ? events.get(eventId) ?? prev?.event
+                : undefined
+        }));
     }, [events]);
 
-    const setFixedPhotographer = useCallback((photographerId: number) => {
-        setCurrentFilter(prev => ({ ...prev, photographer: photographers.get(photographerId) ?? prev?.photographer }));
+    const setFixedPhotographer = useCallback((photographerId?: number) => {
+        setCurrentFilter(prev => new ExploreFilter({
+            ...prev,
+            photographer: photographerId
+                ? photographers.get(photographerId) ?? prev?.photographer
+                : undefined
+        }));
     }, [photographers]);
 
     const searchData = useCallback((eventId?: number, photographerId?: number) => {
@@ -57,7 +72,7 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
         setLoading(true);
         return Promise.all([eventSearch, photographerSearch])
             .then(([event, photographer]) => {
-                setCurrentFilter(prev => ({
+                setCurrentFilter(prev => new ExploreFilter({
                     event: event ?? prev?.event,
                     photographer: photographer ?? prev?.photographer
                 }))
@@ -72,7 +87,10 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
         return searchData(undefined, photographerId);
     }, []);
 
-
+    useEffect(() => {
+        if (!currentFilter) return;
+        reloadData();
+    }, [currentFilter]);
 
     const reloadData = () => {
         setLoading(true);
