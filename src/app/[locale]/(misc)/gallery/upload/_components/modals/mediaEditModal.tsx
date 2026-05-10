@@ -1,4 +1,4 @@
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
 import FpSelect from "@/components/input/fpSelect";
 import Modal from "@/components/modal";
@@ -58,19 +58,19 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
                     label={t("misc.gallery.upload.form.copyright.label")}
                     placeholder={t("misc.gallery.upload.form.copyright.placeholder")} />
                 <div className="bottom-toolbar">
-                    <Button className="danger"
+                    <FpButton className="danger"
                         title={t("common.cancel")}
                         icon="CANCEL"
                         type="button"
                         onClick={() => props.onClose()}>
                         {t("common.cancel")}
-                    </Button>
+                    </FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit"
+                    <FpButton type="submit"
                         title={t("common.CRUD.save")}
                         icon="SAVE">
                         {t("common.CRUD.save")}
-                    </Button>
+                    </FpButton>
                 </div>
             </div>
         </DataForm>

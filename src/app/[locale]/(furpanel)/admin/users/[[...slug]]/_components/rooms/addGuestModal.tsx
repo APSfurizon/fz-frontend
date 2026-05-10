@@ -1,5 +1,5 @@
 import AutoInput from "@/components/input/autoInput";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
 import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomInviteFormAction } from "@/lib/api/room";
@@ -45,11 +45,11 @@ export default function AddGuestModal({
             <input type="hidden" name="force" value="true" />
             <input type="hidden" name="forceExit" value="true" />
             <div className="horizontal-list gap-4mm">
-                <Button icon="CANCEL" onClick={onClose}>{t("common.cancel")}</Button>
+                <FpButton icon="CANCEL" onClick={onClose}>{t("common.cancel")}</FpButton>
                 <div className="spacer"></div>
-                <Button type="submit" icon="PERSON_ADD">
+                <FpButton type="submit" icon="PERSON_ADD">
                     {t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
-                </Button>
+                </FpButton>
             </div>
         </DataForm>
     </Modal>

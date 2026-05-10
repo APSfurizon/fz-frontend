@@ -1,5 +1,5 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Checkbox from "@/components/input/checkbox";
 import ErrorMessage from "@/components/errorMessage";
 import StatusBox from "@/components/statusBox";
@@ -93,11 +93,11 @@ export default function UserViewOrdersTable({
             id: 'actionViewOrder',
             header: '',
             cell: props => <div className="horizontal-list gap-2mm">
-                <Button icon="OPEN_IN_NEW"
+                <FpButton icon="OPEN_IN_NEW"
                     key={`op-${props.row.original.eventId}-${props.row.original.code}`}
                     onClick={() => viewOrder(props.row.original.eventId, props.row.original.code)}
                     busy={viewOrderLoading} />
-                <Button icon="QR_CODE"
+                <FpButton icon="QR_CODE"
                     key={`qr-${props.row.original.eventId}-${props.row.original.code}`}
                     onClick={() => showModal(t("furpanel.admin.users.accounts.view.orders_table.actions.view_qr.title"),
                         <div className="vertical-list">

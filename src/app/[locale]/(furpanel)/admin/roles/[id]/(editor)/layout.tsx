@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import Icon from "@/components/icon";
 import ToolLink from "@/components/toolLink";
@@ -39,7 +39,7 @@ export default function RoleEditorLayout({ children }: Readonly<{ children: Reac
         {children}
         <div className="horizontal-list align-items-center gap-4mm flex-wrap">
             <div className="spacer"></div>
-            <Button disabled={!entity || !entityChanged} icon="SAVE" onClick={() => { saveEntity(entity) }} busy={loading}>{t("common.CRUD.save")}</Button>
+            <FpButton disabled={!entity || !entityChanged} icon="SAVE" onClick={() => { saveEntity(entity) }} busy={loading}>{t("common.CRUD.save")}</FpButton>
         </div>
     </>
 }

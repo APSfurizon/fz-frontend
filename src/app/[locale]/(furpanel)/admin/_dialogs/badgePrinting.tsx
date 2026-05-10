@@ -1,5 +1,5 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
@@ -65,15 +65,15 @@ export default function BadgePrintingDialog({
         {step == StepType.CHOOSE_PRINT_MODE && <>
             <span className="title">{t("furpanel.admin.events.badges.print.select_mode")}</span>
             <div className="horizontal-list gap-4mm">
-                <Button busy={loading} onClick={() => setStep(StepType.SIMPLE)} icon="CHECK_CIRCLE">{t("furpanel.admin.events.badges.print.simple_mode.title")}</Button>
-                <Button busy={loading} onClick={() => router.push('admin/badge/print')} icon="TUNE">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</Button>
+                <FpButton busy={loading} onClick={() => setStep(StepType.SIMPLE)} icon="CHECK_CIRCLE">{t("furpanel.admin.events.badges.print.simple_mode.title")}</FpButton>
+                <FpButton busy={loading} onClick={() => router.push('admin/badge/print')} icon="TUNE">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</FpButton>
             </div>
         </>}
         {step == StepType.SIMPLE && <>
             <span className="title">{t("furpanel.admin.events.badges.print.simple_mode.choose_badge")}</span>
             <div className="horizontal-list gap-4mm">
-                <Button busy={loading} onClick={() => renderCommon()} icon="PERSON">{t("furpanel.admin.events.badges.print.simple_mode.common")}</Button>
-                <Button busy={loading} onClick={() => renderFursuit()} icon="PETS">{t("furpanel.admin.events.badges.print.simple_mode.fursuit")}</Button>
+                <FpButton busy={loading} onClick={() => renderCommon()} icon="PERSON">{t("furpanel.admin.events.badges.print.simple_mode.common")}</FpButton>
+                <FpButton busy={loading} onClick={() => renderFursuit()} icon="PETS">{t("furpanel.admin.events.badges.print.simple_mode.fursuit")}</FpButton>
             </div>
         </>}
     </Modal>

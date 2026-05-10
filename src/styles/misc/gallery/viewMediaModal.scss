@@ -1,0 +1,189 @@
+.view-media-modal {
+    min-width: 95vw;
+
+    &__grid {
+        display: grid;
+        overflow-y: scroll;
+        scrollbar-width: none;
+        gap: 2mm;
+        grid-template-columns: 2em 1fr min-content 2em;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "back-button media-container information-panel forward-button"
+            "bottom-toolbar bottom-toolbar bottom-toolbar bottom-toolbar";
+    }
+
+    &__forward-button,
+    &__back-button {
+        align-content: center;
+    }
+
+    &__back-button {
+        grid-area: back-button;
+    }
+
+    &__media {
+        grid-area: media-container;
+        background-color: black;
+        overflow: hidden;
+        min-height: 75svh;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    &__panel {
+        grid-area: information-panel;
+        text-align: left;
+        padding: .5em;
+        transition: border-color 300ms;
+        border: 2px solid transparent;
+
+        &--open {
+            border-color: var(--button-border-normal);
+        }
+    }
+
+    &__panel-title {
+        max-width: 0px;
+        transition: max-width 300ms;
+        overflow: hidden;
+    }
+
+    &__panel--open &__panel-title {
+        max-width: 300px;
+    }
+
+    &__panel-data {
+        margin-top: 2mm;
+        transition: max-width 200ms, opacity 300ms;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 100vw;
+        /* Closed state */
+        max-width: 0px;
+        opacity: 0;
+    }
+
+    &__panel--open &__panel-data {
+        max-width: 30svw;
+        opacity: 1;
+    }
+
+    &__panel-header {
+        margin-top: 2mm;
+    }
+
+    &__data {
+        margin-bottom: 1mm;
+
+        &__text {
+            margin-left: 1mm;
+        }
+    }
+}
+
+.view-media-modal__forward-button {
+    grid-area: forward-button;
+}
+
+.view-media-modal__toolbar {
+    grid-area: bottom-toolbar;
+}
+
+.view_media_modal_author {
+    border: 2px solid var(--button-border-normal);
+    border-radius: 10em;
+    overflow: hidden;
+    padding: 0mm 2mm 0mm 0mm;
+}
+
+.view-media-modal__toggle-panel {
+    &:hover {
+        background: var(--button-bg-hover);
+    }
+
+    &:active {
+        background: var(--button-bg-down);
+    }
+}
+
+.view-media-modal {
+
+    .view-grid {
+        .information-panel {
+
+            .data {
+
+
+                .icon {
+                    margin-right: 2mm;
+                    user-select: none;
+                }
+            }
+
+            &:not(.open) {
+                border-color: transparent;
+
+                h3.title {
+                    display: none;
+                }
+
+                .data {
+                    max-width: 0px;
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
+
+@media (pointer: coarse) {
+    .view-media-modal__grid {
+        grid-template-areas:
+            "media-container media-container media-container information-panel"
+            "bottom-toolbar bottom-toolbar bottom-toolbar bottom-toolbar";
+    }
+}
+
+@media screen and (max-width: 1200) {
+    .view-media-modal__grid {
+        grid-template-columns: 2em auto 2em;
+        grid-template-rows: 1fr min-content max-content;
+        grid-template-areas:
+            "back-button media-container forward-button"
+            "bottom-toolbar bottom-toolbar bottom-toolbar"
+            "information-panel information-panel information-panel";
+    }
+
+    .view-media-modal {
+        &__panel-data {
+            transition: max-height 200ms, opacity 300ms;
+            max-height: 0px;
+            opacity: 0;
+        }
+
+        &__panel--open &__panel-data {
+            max-height: 100svh;
+            opacity: 1;
+        }
+    }
+
+    @media (pointer: coarse) {
+        .view-media-modal__grid {
+            grid-template-areas:
+                "media-container media-container media-container"
+                "bottom-toolbar bottom-toolbar bottom-toolbar"
+                "information-panel information-panel information-panel";
+        }
+
+        .view-media-modal__back-button,
+        .view-media-modal__forward-button {
+            display: none;
+        }
+
+    }
+}

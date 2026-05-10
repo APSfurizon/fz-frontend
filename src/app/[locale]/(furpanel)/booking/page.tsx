@@ -1,6 +1,6 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
@@ -157,18 +157,18 @@ export default function BookingPage() {
                         {t("furpanel.booking.messages.review_info.description")}
                         <span className="horizontal-list gap-2mm" style={{ marginTop: ".5em" }}>
                             <div className="spacer"></div>
-                            <Button className="success"
+                            <FpButton className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
                                 icon="CHECK">
                                 {t("furpanel.booking.actions.confirm_info")}
-                            </Button>
-                            <Button className="warning"
+                            </FpButton>
+                            <FpButton className="warning"
                                 busy={actionLoading}
                                 onClick={() => router.push("/user")}
                                 icon="OPEN_IN_NEW">
                                 {t("furpanel.booking.actions.review_info")}
-                            </Button>
+                            </FpButton>
                         </span>
 
                     </NoticeBox>
@@ -255,30 +255,30 @@ export default function BookingPage() {
 
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
-                            {pageData?.shouldRetry && <Button className="action-button"
+                            {pageData?.shouldRetry && <FpButton className="action-button"
                                 icon="REPLAY"
                                 busy={actionLoading}
                                 onClick={requestRetryPaymentLink}>
                                 {t("furpanel.booking.retry_payment")}
-                            </Button>}
+                            </FpButton>}
                             {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret} />}
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
                             <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
                                 style={{ flexGrow: "1" }}>
-                                <Button className="action-button"
+                                <FpButton className="action-button"
                                     disabled={isEditLocked}
                                     icon="OPEN_IN_NEW"
                                     busy={actionLoading}
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
-                                </Button>
-                                {bookingData?.exchangeSupported && <Button className="action-button danger"
+                                </FpButton>
+                                {bookingData?.exchangeSupported && <FpButton className="action-button danger"
                                     disabled={isEditLocked}
                                     icon="SEND"
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.transfer_order")}
-                                </Button>}
+                                </FpButton>}
                             </div>
                         </div>
 
@@ -332,9 +332,9 @@ export default function BookingPage() {
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" icon="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <FpButton type="button" className="danger" icon="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" icon="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
+                    <FpButton type="submit" className="success" icon="CHECK" busy={modalLoading}>{t("common.confirm")}</FpButton>
                 </div>
             </DataForm>
         </Modal>

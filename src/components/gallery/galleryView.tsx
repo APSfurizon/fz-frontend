@@ -4,7 +4,7 @@ import { useUser } from "@/components/context/userProvider";
 import { Permissions } from "@/lib/api/permission";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { RefObject, useImperativeHandle, useMemo, useRef, useState } from "react";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useTranslations } from "next-intl";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingPanel from "@/components/loadingPanel";
@@ -35,22 +35,22 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
         <div className="gallery__grid">
             <div className="gallery__grid__toolbar horizontal-list gap-2mm align-items-center">
                 {canManageMedias && <>
-                    <Button icon="REMOVE_SELECTION"
+                    <FpButton icon="REMOVE_SELECTION"
                         title={t("components.gallery.grid.toolbar.deselect_all")}
                         onClick={() => setSelection(new Set())} />
                     <span className="title">{selectedMediaIdMap.size}/{medias.size}</span>
                 </>}
-                <Button className="margin-left-auto" icon="REFRESH"
+                <FpButton className="margin-left-auto" icon="REFRESH"
                     onClick={refreshRef.current}
                     busy={galleryLoading}>
                     {t("common.reload")}
-                </Button>
+                </FpButton>
                 {canManageMedias &&
-                    <Button icon="EDIT"
+                    <FpButton icon="EDIT"
                         disabled={galleryLoading || !selectedMediaIdMap.size}
                         onClick={() => setEditModalOpen(true)}>
                         {t("common.CRUD.edit")}
-                    </Button>
+                    </FpButton>
                 }
             </div>
             <InfiniteScroll

@@ -124,7 +124,7 @@ export default function FpSelect({
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
             defaultValue={selectDefaultValue} required={required}></input>
         <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm">
-            {showMedia && (selectedItem && selectedItem.icon && selectedItem.imageUrl
+            {showMedia && (selectedItem && (selectedItem.icon || selectedItem.imageUrl)
                 ? <>
                     {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon as MaterialIcon} />}
                     {selectedItem.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={selectedItem.imageUrl} />}

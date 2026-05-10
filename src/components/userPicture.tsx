@@ -13,6 +13,7 @@ import StatusBox from './statusBox';
 
 export default function UserPicture({
     size,
+    className,
     userData,
     fursuitData,
     extraDays = ExtraDays.NONE,
@@ -21,6 +22,7 @@ export default function UserPicture({
     hideEffect = false
 }: Readonly<{
     size?: number,
+    className?: string,
     userData?: UserData | Promise<UserData>,
     fursuitData?: FursuitDetails | Promise<FursuitDetails>,
     extraDays?: ExtraDays,
@@ -67,7 +69,7 @@ export default function UserPicture({
     const isFursuit = !userData && fursuitData;
 
     return (
-        <div className="user-picture-container vertical-list align-items-center">
+        <div className={["user-picture-container", "vertical-list", "align-items-center", className ?? ""].join(" ")}>
             <div className={borderClassName}>
                 <Image unoptimized className="rounded-m profile-picture"
                     src={getImageUrl(pictureData?.propic?.mediaUrl)

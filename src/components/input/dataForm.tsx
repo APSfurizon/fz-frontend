@@ -7,7 +7,7 @@ import {
     useMemo
 } from "react";
 import { useTranslations } from "next-intl";
-import Button from "./button";
+import FpButton from "./fpButton";
 import { FormApiAction, FormValidationError, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
@@ -214,19 +214,19 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         {showBottomToolbar && (
             <div className="toolbar-bottom gap-2mm">
                 <div className="spacer"></div>
-                {!props.hideSave && <Button type="submit"
+                {!props.hideSave && <FpButton type="submit"
                     disabled={props.disableSave}
                     icon={props.saveButton?.icon ?? "SAVE"}
                     busy={loading}>
                     {props.saveButton?.text ?? t("common.CRUD.save")}
                     {isEntityChanged && !!props.initialEntity ? "*" : ""}
-                </Button>}
-                {props.showReset && <Button type="reset"
+                </FpButton>}
+                {props.showReset && <FpButton type="reset"
                     icon="REPLAY"
                     disabled={!isEntityChanged}
                     busy={loading}>
                     {t("common.CRUD.reset")}
-                </Button>}
+                </FpButton>}
                 {props.additionalButtons}
             </div>
         )}

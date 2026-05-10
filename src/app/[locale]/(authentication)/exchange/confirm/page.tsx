@@ -11,7 +11,7 @@ import {
 } from "@/lib/api/exchange";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import ErrorMessage from "@/components/errorMessage";
 import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
@@ -194,13 +194,13 @@ export default function ExchangeConfirm() {
         </div>
       </div>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
+        <FpButton className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
           {t("common.accept")}
-        </Button>
+        </FpButton>
         <div className="spacer"></div>
-        <Button className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
+        <FpButton className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
           {t("common.refuse")}
-        </Button>
+        </FpButton>
       </div>
     </>}
   </>;

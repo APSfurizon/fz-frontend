@@ -3,19 +3,30 @@ import Modal from "@/components/modal";
 import { useGallery } from "../../../../../components/gallery/context/galleryProvider";
 import Image from "next/image";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
-import Icon from "@/components/icon";
+import Icon, { MaterialIcon } from "@/components/icon";
 import { useLocale, useTranslations } from "next-intl";
-import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
 import { GetFullMediaApiAction } from "@/lib/api/gallery/api";
-import "@/styles/misc/gallery/viewMediaModal.css";
+import "@/styles/misc/gallery/viewMediaModal.scss";
 import LoadingPanel from "@/components/loadingPanel";
 import { translate } from "@/lib/translations";
 import { getCountdown } from "@/lib/utils";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { shareMediaUrl } from "@/lib/api/gallery/util";
 import { useModalUpdate } from "@/components/context/modalProvider";
+import UserPicture from "@/components/userPicture";
+
+function ModalPanelData(props: Readonly<{
+    icon: MaterialIcon,
+    text: string
+}>) {
+    return <div className="view-media-modal__data vertical-align-middle">
+        <Icon icon={props.icon} />
+        <span className="view-media-modal__data__text title small">{props.text}</span>
+    </div>
+}
 
 export default function ViewMediaModal() {
     const { currentMedia, closeMedia, modalOpen, goNext, goBack } = useGallery();
@@ -164,27 +175,25 @@ export default function ViewMediaModal() {
         title={t("misc.gallery.upload.modal.title")}
         className="view-media-modal no-bottom">
         { /* Main image view */}
-        <div className="view-grid">
-            <div className="back-button">
+        <div className="view-media-modal__grid">
+            <div className="view-media-modal__back-button">
                 <a href="#" onClick={() => goBack()}><Icon icon="ARROW_BACK" /></a>
             </div>
-            <div className="media-container rounded-m"
+            <div className="view-media-modal__media rounded-m"
                 style={{ transform: `translate(${swipeDiff ?? 0}px, 0px)` }}>
                 {currentMedia
-                    ? <img alt="gallery image" ref={mediaRef} src={currentMedia?.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC} />
+                    ? <img alt="gallery image" ref={mediaRef} src={fullMedia?.displayMedia?.mediaUrl ?? currentMedia?.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC} />
                     : <LoadingPanel />}
             </div>
-            <div className="forward-button align-right">
+            <div className="view-media-modal__forward-button align-right">
                 <a href="#" onClick={() => goNext()}><Icon icon="ARROW_FORWARD" /></a>
             </div>
+
             {fullMedia
                 ? <>
-                    <div className="bottom-toolbar horizontal-list gap-2mm align-items-center">
-                        <div className="horizontal-list author align-items-center">
-                            <Image alt="image author" src={fullMedia.photographer.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC}
-                                width={32} height={32} />
-                            <span>{fullMedia.photographer.fursonaName}</span>
-                        </div>
+                    <div className="view-media-modal__toolbar horizontal-list gap-2mm align-items-center">
+                        <UserPicture className="view_media_modal_author_picture" userData={fullMedia.photographer} />
+                        <span>{fullMedia.photographer.fursonaName}</span>
                         <a className="vertical-align-middle"
                             href="#"
                             onClick={onShare}>
@@ -199,45 +208,42 @@ export default function ViewMediaModal() {
                         </a>}
                     </div>
                     { /* Information panel */}
-                    <div className={["information-panel", "rounded-m", dataPanelOpen ? "open" : ""].join(" ")}>
-                        <div className="header horizontal-list">
-                            <h3 className="title medium">{t("misc.gallery.modal.information_panel.title")}</h3>
+                    <div className={["view-media-modal__panel", dataPanelOpen ? "view-media-modal__panel--open" : "", "rounded-m"].join(" ")}>
+                        <div className="horizontal-list">
+                            <h3 className="view-media-modal__panel-title title medium">{t("misc.gallery.modal.information_panel.title")}</h3>
                             <div className="spacer"></div>
                             <a title={(dataPanelOpen ? t("common.close") : t("common.open")) + " (I)"}
-                                className="toggle-button rounded-m"
+                                className="view-media-modal__toggle-panel rounded-m"
                                 href="#"
                                 onClick={() => setDataPanelOpen(prev => !prev)}>
                                 <Icon icon={dataPanelOpen ? "CLOSE" : "MORE_VERT"} />
                             </a>
                         </div>
-                        <div className="data vertical-list gap-2mm">
-                            <span className="vertical-align-bottom"><Icon icon="COPYRIGHT" />
-                                {translate(copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.translatedDescription ?? {}, locale)}
-                            </span>
-                            <span className="vertical-align-bottom"><Icon icon="LOCAL_ACTIVITY" />{translate(fullMedia.event.eventNames, locale)}</span>
-                            <span className="vertical-align-bottom"><Icon icon="FLAG" />{mapStatus(fullMedia.status)}</span>
+                        <div className="view-media-modal__panel-data">
+                            <ModalPanelData icon="COPYRIGHT" text={translate(copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.translatedDescription ?? {}, locale)} />
+                            <ModalPanelData icon="LOCAL_ACTIVITY" text={translate(fullMedia.event.eventNames, locale)} />
+                            <ModalPanelData icon="FLAG" text={mapStatus(fullMedia.status)} />
                             {fullMedia.photoMetadata && <>
-                                <h4 className="title">{t("misc.gallery.upload.modal.information_panel.photo.title")}</h4>
-                                <div className="margin-left-2mm">
-                                    <span className="vertical-align-bottom"><Icon icon="PHOTO_CAMERA" />{fullMedia.photoMetadata.cameraMaker} {fullMedia.photoMetadata.cameraModel}</span>
-                                    <span className="vertical-align-bottom"><Icon icon="MOTION_MODE" />{fullMedia.photoMetadata.lensMaker} {fullMedia.photoMetadata.lensModel}</span>
-                                    <span className="vertical-align-bottom"><Icon icon="STRAIGHTEN" />{fullMedia.photoMetadata.focal}</span>
-                                    <span className="vertical-align-bottom"><Icon icon="SHUTTER_SPEED" />{fullMedia.photoMetadata.shutter}</span>
-                                    <span className="vertical-align-bottom"><Icon icon="CAMERA" />{fullMedia.photoMetadata.aperture}</span>
-                                    <span className="vertical-align-bottom"><Icon icon="EXPOSURE" />{fullMedia.photoMetadata.iso}</span>
+                                <h4 className="view-media-modal__panel-header title">{t("misc.gallery.upload.modal.information_panel.photo.title")}</h4>
+                                <div className="margin-left-2mm vertical-list">
+                                    <ModalPanelData icon="PHOTO_CAMERA" text={`${fullMedia.photoMetadata.cameraMaker} ${fullMedia.photoMetadata.cameraModel}`} />
+                                    {fullMedia.photoMetadata.lensModel && <ModalPanelData icon="MOTION_MODE" text={`${fullMedia.photoMetadata.lensMaker} ${fullMedia.photoMetadata.lensModel}`} />}
+                                    <ModalPanelData icon="SHUTTER_SPEED" text={fullMedia.photoMetadata.shutter} />
+                                    <ModalPanelData icon="CAMERA" text={fullMedia.photoMetadata.aperture} />
+                                    <ModalPanelData icon="EXPOSURE" text={fullMedia.photoMetadata.iso} />
                                 </div>
                             </>}
                             {fullMedia.videoMetadata && <>
-                                <h4 className="title">{t("misc.gallery.upload.modal.information_panel.video.title")}</h4>
-                                <div className="margin-left-2mm">
-                                    <span className="vertical-align-bottom"><Icon icon="_24FPS_SELECT" />{fullMedia.videoMetadata.framerate}</span>
-                                    <span className="vertical-align-bottom"><Icon icon="AV_TIMER" />{t("misc.gallery.upload.modal.video.duration", {
+                                <h4 className="view-media-modal__panel-header title">{t("misc.gallery.upload.modal.information_panel.video.title")}</h4>
+                                <div className="margin-left-2mm vertical-list">
+                                    <ModalPanelData icon="_24FPS_SELECT" text={fullMedia.videoMetadata.framerate} />
+                                    <ModalPanelData icon="AV_TIMER" text={t("misc.gallery.upload.modal.video.duration", {
                                         hours: duration![1],
                                         minutes: duration![2],
                                         seconds: duration![3],
                                         milliseconds: duration![4]
-                                    })}</span>
-                                </div>~
+                                    })} />
+                                </div>
                             </>}
                         </div>
                     </div>

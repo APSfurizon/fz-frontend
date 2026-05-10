@@ -11,7 +11,7 @@ import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { RecoverFormAction } from "@/lib/api/authentication/recover";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 
 export default function Login() {
   const t = useTranslations();
@@ -76,10 +76,10 @@ export default function Login() {
         label={t("authentication.recover.input.email.label")}
         placeholder={t("authentication.login.placeholder_email")} />
       <div className="horizontal-list justify-content-center">
-        <Button type="submit"
+        <FpButton type="submit"
           icon="MAIL">
           {t("authentication.recover.actions.send_verification")}
-        </Button>
+        </FpButton>
       </div>
     </DataForm>
     <Link href={`/login?${params.toString()}`}
