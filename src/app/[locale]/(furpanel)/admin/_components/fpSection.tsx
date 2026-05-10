@@ -16,10 +16,10 @@ export default function FpSection({
 }>) {
     return <div style={{ ...style }} className="vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-            {icon && <Icon className="large" icon={icon}/>}
+            {icon && <Icon className="large" icon={icon} />}
             <span style={{ ...titleStyle }} className="title average">{title}</span>
         </div>
-        <div className="horizontal-list gap-2mm">
+        <div className="horizontal-list flex-wrap gap-2mm">
             {children}
         </div>
     </div>

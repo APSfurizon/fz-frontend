@@ -37,7 +37,9 @@ export interface SecurityAssetLog {
     azione: string;
     data_aggiornamento: number;
     utilizzatore?: string;
+    stato: "disponibile" | "in_uso" | "non_disponibile";
     note?: string;
+    modificato_da?: string;
 }
 
 export class GetSecurityAssetsApiAction extends MobileApiAction<SecurityAssetsResponse, ApiErrorResponse> {
@@ -77,6 +79,7 @@ export interface SecurityHazard {
     trovato_da?: string;
     proprietario_id?: string;
     proprietario_nickname?: string;
+    modificato_da?: string;
     foto?: { url: string }[];
 }
 

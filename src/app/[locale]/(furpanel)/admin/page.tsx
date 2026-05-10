@@ -2,7 +2,7 @@
 import Button from "@/components/input/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
@@ -31,6 +31,7 @@ function normalizeRole(internalName?: string) {
 
 export default function AdminPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const { showModal } = useModalUpdate();
   useTitle(t("furpanel.admin.title"));
@@ -206,31 +207,27 @@ export default function AdminPage() {
       {/* Security area */}
       <FpMacroSection title={t("furpanel.admin.security_management.title")} icon="SECURITY">
         <FpSection title={t("furpanel.admin.security_management.users_and_docs.title")}>
-          <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/security/user-search")} disabled={!capabilities?.security}>
+          <Button icon="PERSON_SEARCH" onClick={() => router.push(`/${locale}/admin/security/user-search`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.users_and_docs.user_search")}
           </Button>
-          <Button icon="FIND_IN_PAGE" onClick={() => router.push("/admin/security/documents")} disabled={!capabilities?.security}>
+          <Button icon="FIND_IN_PAGE" onClick={() => router.push(`/${locale}/admin/security/documents`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.users_and_docs.documents")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.security_management.reports.title")}>
-          <Button icon="BOOKMARK_STAR" onClick={() => router.push("/admin/security/incidents")} disabled={!capabilities?.security}>
+          <Button icon="BOOKMARK_STAR" onClick={() => router.push(`/${locale}/admin/security/incidents`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.reports.incident_log")}
           </Button>
         </FpSection>
         <FpSection title={t("furpanel.admin.security_management.logs.title")}>
-          <Button icon="PACKAGE_2" onClick={() => router.push("/admin/security/assets")} disabled={!capabilities?.security}>
+          <Button icon="PACKAGE_2" onClick={() => router.push(`/${locale}/admin/security/assets`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.asset_manager")}
           </Button>
-          <Button icon="ERROR" onClick={() => router.push("/admin/security/hazardous")} disabled={!capabilities?.security}>
+          <Button icon="ERROR" onClick={() => router.push(`/${locale}/admin/security/hazardous`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.hazardous_register")}
           </Button>
-          <Button icon="SEARCH" onClick={() => router.push("/admin/security/lost-found")} disabled={!capabilities?.security}>
+          <Button icon="SEARCH" onClick={() => router.push(`/${locale}/admin/security/lost-found`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.lost_and_found")}
-          </Button>
-          <Button icon="MAIL" onClick={sendMembershipCardByMail} debounce={5000}
-            busy={sendMembershipCardByMailLoading} disabled={!capabilities?.canManageMembershipCards}>
-            {t("furpanel.admin.membership_manager.send_card_by_mail")}
           </Button>
         </FpSection>
       </FpMacroSection>
@@ -316,6 +313,10 @@ export default function AdminPage() {
             <Button icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
               disabled={!capabilities?.canManageMembershipCards}>
               {t("furpanel.admin.membership_manager.title")}
+            </Button>
+            <Button icon="MAIL" onClick={sendMembershipCardByMail} debounce={5000}
+              busy={sendMembershipCardByMailLoading} disabled={!capabilities?.canManageMembershipCards}>
+              {t("furpanel.admin.membership_manager.send_card_by_mail")}
             </Button>
           </FpSection>
         </FpMacroSection>

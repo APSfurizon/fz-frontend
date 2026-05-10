@@ -952,7 +952,8 @@
           "high": "High",
           "critical": "Critical",
           "error": "Error",
-          "missing_dati": "Required fields"
+          "missing_dati": "Required fields",
+          "edited_by_nickname": "Edited by"
         },
         "assets": {
           "asset": "Asset",
@@ -990,7 +991,10 @@
           "transfer_modal_title": "Return / Transfer",
           "new_user_label": "New user",
           "new_user_placeholder": "Person name",
-          "not_set": "Not set"
+          "not_set": "Not set",
+          "utilizzatore_precedente_label": "Previous user",
+          "data_modifica_label": "Edit date",
+          "modificato_da_label": "Edit by"
         },
         "lost_found": {
           "title": "Lost and Found",
@@ -1047,14 +1051,12 @@
           "people_placeholder": "Name1, Name2, ...",
           "description": "Description",
           "description_placeholder": "Describe the incident...",
-          "screenshot": "Screenshot / image",
           "mark_important": "Mark as important",
           "cancel": "Cancel",
           "send": "Send",
           "report": "Report",
           "reported_by": "Reported by",
           "attachment": "attachment",
-          "image_preview": "Image preview",
           "no_messages": "No messages available",
           "add_message": "Add message",
           "write_message": "Write a message...",
@@ -1065,7 +1067,10 @@
           "update": "Update",
           "default_author": "Security",
           "missing_data_title": "Missing data",
-          "missing_data_description": "Enter a description of at least 3 characters"
+          "missing_data_description": "Enter a description of at least 3 characters",
+          "invalid_image": "Not valid image",
+          "photo_preview": "Photo preview",
+          "photo": "Photo"
         }
       },
       "system": {

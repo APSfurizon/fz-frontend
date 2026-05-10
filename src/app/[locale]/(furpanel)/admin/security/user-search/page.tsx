@@ -5,6 +5,7 @@ import useTitle from "@/components/hooks/useTitle";
 import Icon from "@/components/icon";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import Button from "@/components/input/button";
+import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { GetUserSecurityViewAction, GetUserSecurityViewResponse } from "@/lib/api/admin/userView";
@@ -38,15 +39,6 @@ type UserSearchConfig = {
     manager: AutoInputManager,
     minDecodeSize: number,
     type?: HTMLInputTypeAttribute
-}
-
-function DataField({ label, value }: { label: string; value?: string | number | null | false | React.ReactNode }) {
-    return (
-        <div className="security-data-field">
-            <span className="security-data-label">{label}</span>
-            <span className="security-data-value">{value || "-"}</span>
-        </div>
-    );
 }
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
@@ -157,7 +149,7 @@ export default function SecurityUserSearchPage() {
     return (
         <div className="stretch-page compact-main">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => router.push("/admin")}>
+                <span style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => router.push(`/${locale}/admin`)}>
                     <Icon icon="ARROW_BACK" />
                 </span>
                 <div className="horizontal-list gap-2mm">
@@ -214,10 +206,11 @@ export default function SecurityUserSearchPage() {
                                     />
                                     : <div style={{ width: 80, height: 80, borderRadius: 12, background: "#2c3e50", flexShrink: 0 }}></div>}
                                 <div className="security-data-grid" style={{ flex: 1 }}>
-                                    <DataField label={t("furpanel.admin.users.accounts.view.badges.fursona_name")} value={userData.badgeData?.mainBadge?.fursonaName} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.badges.user_id")} value={userData.badgeData?.mainBadge?.userId} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.badges.locale")} value={userData.badgeData?.mainBadge?.locale} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")} value={userData.badgeData?.fursuits?.length ?? 0} />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.badges.fursona_name")} initialValue={userData.badgeData?.mainBadge?.fursonaName ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.order_code")} initialValue={userData.currentOrder?.code ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.badges.user_id")} initialValue={userData.badgeData?.mainBadge?.userId != null ? String(userData.badgeData.mainBadge.userId) : ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.badges.locale")} initialValue={userData.badgeData?.mainBadge?.locale ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")} initialValue={String(userData.badgeData?.fursuits?.length ?? 0)} readOnly />
                                 </div>
                             </div>
                         </SectionCard>
@@ -225,26 +218,27 @@ export default function SecurityUserSearchPage() {
                         {/* Personal Info */}
                         <SectionCard title={t("furpanel.admin.users.security.user_search.sections.user_info")}>
                             <div className="security-data-grid-3">
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.name")} value={userData.firstName} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.surname")} value={userData.lastName} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.mail")} value={userData.email} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.sex")} value={userData.sex ? (sexOptions[userData.sex] ?? userData.sex) : null} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.gender")} value={userData.gender ? (genderOptions[userData.gender] ?? userData.gender) : null} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.birthday")} value={userData.birthday} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.allergies")} value={userData.allergies} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.telegram")} value={userData.telegramUsername} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.phone")} value={`${userData.prefixPhoneNumber || ""} ${userData.phoneNumber || ""}`.trim() || null} />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.name")} initialValue={userData.firstName ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.surname")} initialValue={userData.lastName ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.mail")} initialValue={userData.email ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.sex")} initialValue={userData.sex ? (sexOptions[userData.sex] ?? userData.sex) : ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.gender")} initialValue={userData.gender ? (genderOptions[userData.gender] ?? userData.gender) : ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.birthday")} initialValue={userData.birthday ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.allergies")} initialValue={userData.allergies ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.telegram")} initialValue={userData.telegramUsername ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.phone")} initialValue={`${userData.prefixPhoneNumber || ""} ${userData.phoneNumber || ""}`.trim()} readOnly />
                             </div>
                             <div className="horizontal-list gap-2mm" style={{ marginTop: "0.8em" }}>
                                 <Button icon="SEND" onClick={() => openTelegram(userData.telegramUsername ?? undefined)}>Telegram</Button>
                                 <Button onClick={() => openPhone(userData.prefixPhoneNumber ?? undefined, userData.phoneNumber ?? undefined)}>{t("furpanel.admin.users.security.user_search.actions.call")}</Button>
                             </div>
                             {(userData.roles?.length ?? 0) > 0 && (
-                                <div className="security-data-field" style={{ marginTop: "0.8em" }}>
-                                    <span className="security-data-label">{t("furpanel.admin.users.security.user_search.fields.roles")}</span>
-                                    <span className="security-data-value">
-                                        {[...userData.roles].sort((a, b) => (a.roleId ?? 0) - (b.roleId ?? 0)).map(r => r.displayName).join("\n")}
-                                    </span>
+                                <div style={{ marginTop: "0.8em" }}>
+                                    <FpInput
+                                        label={t("furpanel.admin.users.security.user_search.fields.roles")}
+                                        initialValue={[...userData.roles].sort((a, b) => (a.roleId ?? 0) - (b.roleId ?? 0)).map(r => r.displayName).join(", ")}
+                                        readOnly
+                                    />
                                 </div>
                             )}
                         </SectionCard>
@@ -253,11 +247,11 @@ export default function SecurityUserSearchPage() {
                         {userData.currentMembershipCard && (
                             <SectionCard title={t("furpanel.admin.users.accounts.view.membership_cards")}>
                                 <div className="security-data-grid">
-                                    <DataField label={t("furpanel.admin.users.accounts.view.cards_table.card_no")} value={userData.currentMembershipCard.cardNo} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.cards_table.issue_year")} value={userData.currentMembershipCard.issueYear} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.cards_table.id_in_year")} value={userData.currentMembershipCard.idInYear} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.cards_table.aps_form")} value={userData.currentMembershipCard.signedAt ? t("furpanel.admin.users.accounts.view.cards_table.aps_form_signed") : null} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.cards_table.sent_by_email")} value={userData.currentMembershipCard.sentByEmail ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.cards_table.card_no")} initialValue={userData.currentMembershipCard.cardNo ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.cards_table.issue_year")} initialValue={userData.currentMembershipCard.issueYear != null ? String(userData.currentMembershipCard.issueYear) : ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.cards_table.id_in_year")} initialValue={userData.currentMembershipCard.idInYear != null ? String(userData.currentMembershipCard.idInYear) : ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.cards_table.aps_form")} initialValue={userData.currentMembershipCard.signedAt ? t("furpanel.admin.users.accounts.view.cards_table.aps_form_signed") : ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.cards_table.sent_by_email")} initialValue={userData.currentMembershipCard.sentByEmail ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} readOnly />
                                 </div>
                             </SectionCard>
                         )}
@@ -266,14 +260,13 @@ export default function SecurityUserSearchPage() {
                         {userData.currentOrder && (
                             <SectionCard title={t("furpanel.admin.users.accounts.view.orders")}>
                                 <div className="security-data-grid">
-                                    <DataField label={t("furpanel.admin.users.accounts.view.orders_table.order_code")} value={userData.currentOrder.code} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.orders_table.event_order_serial")} value={userData.currentOrder.orderSerialInEvent} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.orders_table.order_status")} value={userData.currentOrder.orderStatus} />
-                                    <DataField label={t("furpanel.admin.users.accounts.view.orders_table.sponsorship_type")} value={userData.currentOrder.sponsorship} />
-                                    <DataField label={t("furpanel.admin.users.security.user_search.fields.board")} value={userData.currentOrder.board} />
-                                    <div className="security-data-field" style={{ gridColumn: "span 2" }}>
-                                        <span className="security-data-label">{t("furpanel.admin.users.accounts.view.orders_table.daily_days")}</span>
-                                        <span className="security-data-value">{userData.currentOrder?.dailyDaysDates?.length ? [...userData.currentOrder?.dailyDaysDates].sort().join(", ") : "-"}</span>
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.order_code")} initialValue={userData.currentOrder.code ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.event_order_serial")} initialValue={userData.currentOrder.orderSerialInEvent != null ? String(userData.currentOrder.orderSerialInEvent) : ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.order_status")} initialValue={userData.currentOrder.orderStatus ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.sponsorship_type")} initialValue={userData.currentOrder.sponsorship ?? ""} readOnly />
+                                    <FpInput label={t("furpanel.admin.users.security.user_search.fields.board")} initialValue={userData.currentOrder.board ?? ""} readOnly />
+                                    <div style={{ gridColumn: "span 2" }}>
+                                        <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.daily_days")} initialValue={userData.currentOrder?.dailyDaysDates?.length ? [...userData.currentOrder.dailyDaysDates].sort().join(", ") : ""} readOnly />
                                     </div>
                                 </div>
                             </SectionCard>
@@ -282,26 +275,21 @@ export default function SecurityUserSearchPage() {
                         {/* Order & Room */}
                         <SectionCard title={t("furpanel.admin.users.security.user_search.sections.user_order_room")}>
                             <div className="security-data-grid-3">
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.have_order")} value={userData.currentRoomdata?.hasOrder ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.have_room")} value={userData.currentRoomdata?.currentRoomInfo?.roomId ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.is_owner")} value={roomOwnerUserId === userData.badgeData?.mainBadge?.userId ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.room_name")} value={userData.currentRoomdata?.currentRoomInfo?.roomName} />
-                                <DataField label="Hotel / Room Type" value={userData.currentRoomdata?.currentRoomInfo?.roomData?.roomTypeNames?.["en"] ?? userData.currentRoomdata?.currentRoomInfo?.roomData?.roomInternalName} />
-                                <DataField label={t("furpanel.admin.users.security.user_search.fields.room_capacity")} value={userData.currentRoomdata?.currentRoomInfo?.roomData?.roomCapacity} />
-                                <DataField label={t("furpanel.admin.users.accounts.view.orders_table.extra_days")} value={userData.currentRoomdata?.currentRoomInfo?.extraDays} />
-                                <div className="security-data-field" style={{ gridColumn: "span 2" }}>
-                                    <span className="security-data-label">{t("furpanel.admin.users.security.user_search.fields.check_in_out")}</span>
-                                    <span className="security-data-value">
-                                        {userData.currentRoomdata?.currentRoomInfo
-                                            ? (
-                                                <div style={{ display: "flex", alignItems: "center", gap: "0.5em" }}>
-                                                    <span>{String(userData.currentRoomdata.currentRoomInfo.checkinDate)}</span>
-                                                    <Icon icon="ARROW_FORWARD" style={{ fontSize: "1em" }} />
-                                                    <span>{String(userData.currentRoomdata.currentRoomInfo.checkoutDate)}</span>
-                                                </div>
-                                            )
-                                            : "-"}
-                                    </span>
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.have_order")} initialValue={userData.currentRoomdata?.hasOrder ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.have_room")} initialValue={userData.currentRoomdata?.currentRoomInfo?.roomId ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.is_owner")} initialValue={roomOwnerUserId === userData.badgeData?.mainBadge?.userId ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.room_name")} initialValue={userData.currentRoomdata?.currentRoomInfo?.roomName ?? ""} readOnly />
+                                <FpInput label="Hotel / Room Type" initialValue={userData.currentRoomdata?.currentRoomInfo?.roomData?.roomTypeNames?.["en"] ?? userData.currentRoomdata?.currentRoomInfo?.roomData?.roomInternalName ?? ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.security.user_search.fields.room_capacity")} initialValue={userData.currentRoomdata?.currentRoomInfo?.roomData?.roomCapacity != null ? String(userData.currentRoomdata.currentRoomInfo.roomData.roomCapacity) : ""} readOnly />
+                                <FpInput label={t("furpanel.admin.users.accounts.view.orders_table.extra_days")} initialValue={userData.currentRoomdata?.currentRoomInfo?.extraDays != null ? String(userData.currentRoomdata.currentRoomInfo.extraDays) : ""} readOnly />
+                                <div style={{ gridColumn: "span 2" }}>
+                                    <FpInput
+                                        label={t("furpanel.admin.users.security.user_search.fields.check_in_out")}
+                                        initialValue={userData.currentRoomdata?.currentRoomInfo
+                                            ? `${userData.currentRoomdata.currentRoomInfo.checkinDate} → ${userData.currentRoomdata.currentRoomInfo.checkoutDate}`
+                                            : ""}
+                                        readOnly
+                                    />
                                 </div>
 
                             </div>
@@ -370,10 +358,10 @@ export default function SecurityUserSearchPage() {
                                                         />
                                                         : <div style={{ width: 80, height: 80, borderRadius: 12, background: "#2c3e50", flexShrink: 0 }}></div>}
                                                     <div className="security-data-grid" style={{ flex: 1 }}>
-                                                        <DataField label="ID" value={item.fursuit?.id} />
-                                                        <DataField label={t("furpanel.admin.users.accounts.view.fursuit_table.name")} value={item.fursuit?.name} />
-                                                        <DataField label={t("furpanel.admin.users.accounts.view.fursuit_table.species")} value={item.fursuit?.species} />
-                                                        <DataField label={t("furpanel.admin.users.security.user_search.fields.bring_to_event")} value={item.bringingToEvent ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} />
+                                                        <FpInput label="ID" initialValue={item.fursuit?.id != null ? String(item.fursuit.id) : ""} readOnly />
+                                                        <FpInput label={t("furpanel.admin.users.accounts.view.fursuit_table.name")} initialValue={item.fursuit?.name ?? ""} readOnly />
+                                                        <FpInput label={t("furpanel.admin.users.accounts.view.fursuit_table.species")} initialValue={item.fursuit?.species ?? ""} readOnly />
+                                                        <FpInput label={t("furpanel.admin.users.security.user_search.fields.bring_to_event")} initialValue={item.bringingToEvent ? t("furpanel.admin.users.security.user_search.values.yes") : t("furpanel.admin.users.security.user_search.values.no")} readOnly />
                                                     </div>
                                                 </div>
                                             </div>

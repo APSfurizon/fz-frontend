@@ -951,7 +951,8 @@
           "high": "Alto",
           "critical": "Critico",
           "error": "Errore",
-          "missing_dati": "Dati mancanti"
+          "missing_dati": "Dati mancanti",
+          "edited_by_nickname": "Modificato da"
         },
         "assets": {
           "asset": "Asset",
@@ -989,7 +990,10 @@
           "transfer_modal_title": "Rendi / Trasferisci",
           "new_user_label": "Nuovo utilizzatore",
           "new_user_placeholder": "Nome persona",
-          "not_set": "Non impostato"
+          "not_set": "Non impostato",
+          "utilizzatore_precedente_label": "Utilizzatore precedente",
+          "data_modifica_label": "Data modifica",
+          "modificato_da_label": "Modificato da"
         },
         "lost_found": {
           "title": "Smarriti e Ritrovati",
@@ -1046,14 +1050,12 @@
           "people_placeholder": "Nome1, Nome2, ...",
           "description": "Descrizione",
           "description_placeholder": "Descrivi l'incidente...",
-          "screenshot": "Screenshot / immagine",
           "mark_important": "Segna come importante",
           "cancel": "Annulla",
           "send": "Invia",
           "report": "Segnalazione",
           "reported_by": "Segnalato da",
           "attachment": "allegato",
-          "image_preview": "Anteprima immagine",
           "no_messages": "Nessun messaggio disponibile",
           "add_message": "Aggiungi messaggio",
           "write_message": "Scrivi un messaggio...",
@@ -1064,7 +1066,10 @@
           "update": "Aggiorna",
           "default_author": "Security",
           "missing_data_title": "Dati mancanti",
-          "missing_data_description": "Inserisci una descrizione di almeno 3 caratteri"
+          "missing_data_description": "Inserisci una descrizione di almeno 3 caratteri",
+          "invalid_image": "Immagine non valida",
+          "photo_preview": "Anteprima foto",
+          "photo": "Foto"
         }
       },
       "system": {
