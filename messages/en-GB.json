@@ -1051,14 +1051,12 @@
           "people_placeholder": "Name1, Name2, ...",
           "description": "Description",
           "description_placeholder": "Describe the incident...",
-          "screenshot": "Screenshot / image",
           "mark_important": "Mark as important",
           "cancel": "Cancel",
           "send": "Send",
           "report": "Report",
           "reported_by": "Reported by",
           "attachment": "attachment",
-          "image_preview": "Image preview",
           "no_messages": "No messages available",
           "add_message": "Add message",
           "write_message": "Write a message...",
@@ -1070,7 +1068,9 @@
           "default_author": "Security",
           "missing_data_title": "Missing data",
           "missing_data_description": "Enter a description of at least 3 characters",
-          "invalid_image": "Not valid image"
+          "invalid_image": "Not valid image",
+          "photo_preview": "Photo preview",
+          "photo": "Photo"
         }
       },
       "system": {

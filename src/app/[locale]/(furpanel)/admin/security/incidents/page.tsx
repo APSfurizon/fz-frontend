@@ -6,7 +6,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import Modal from "@/components/modal";
 import ImagePreviewModal from "@/components/imagePreviewModal";
-import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
+import Upload from "@/components/input/upload";
 import Icon from "@/components/icon";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { runRequest } from "@/lib/api/global";
@@ -68,10 +68,10 @@ export default function SecurityIncidentsPage() {
     const [newDescription, setNewDescription] = useState("");
     const [newPeople, setNewPeople] = useState("");
     const [newImportant, setNewImportant] = useState(true);
-    const [newImage, setNewImage] = useState<File | null>(null);
+    const [newImage, setNewImage] = useState<Blob | undefined>(undefined);
 
     const [replyMessage, setReplyMessage] = useState("");
-    const [replyImage, setReplyImage] = useState<File | null>(null);
+    const [replyImage, setReplyImage] = useState<Blob | undefined>(undefined);
 
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
     const [detailPeople, setDetailPeople] = useState("");
@@ -87,7 +87,7 @@ export default function SecurityIncidentsPage() {
         setNewDescription("");
         setNewPeople("");
         setNewImportant(true);
-        setNewImage(null);
+        setNewImage(undefined);
     };
 
     const loadCurrentUser = () => {
@@ -148,7 +148,7 @@ export default function SecurityIncidentsPage() {
                 setSelected(report);
                 setView("detail");
                 setReplyMessage("");
-                setReplyImage(null);
+                setReplyImage(undefined);
             })
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
@@ -204,7 +204,7 @@ export default function SecurityIncidentsPage() {
                 };
                 setSelected(report);
                 setReplyMessage("");
-                setReplyImage(null);
+                setReplyImage(undefined);
                 refreshList();
             })
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
@@ -362,13 +362,13 @@ export default function SecurityIncidentsPage() {
                 />
             </div>
             <div className="vertical-list gap-2mm">
-                <span className="title small">{t("furpanel.admin.security_management.incidents.screenshot")}</span>
-                <ImagePickerWithCrop
-                    imageFile={newImage}
-                    onImageSelected={setNewImage}
-                    onImageRemove={() => setNewImage(null)}
-                    label={t("furpanel.admin.security_management.incidents.screenshot")}
-                    title={t("furpanel.admin.security_management.incidents.image_preview")}
+                <span className="title small">{t("furpanel.admin.security_management.incidents.photo")}</span>
+                <Upload
+                    setBlob={setNewImage}
+                    requireCrop
+                    cropAspectRatio="any"
+                    label={t("furpanel.admin.security_management.incidents.photo")}
+                    cropTitle={t("furpanel.admin.security_management.incidents.photo_preview")}
                 />
             </div>
             <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
@@ -450,7 +450,7 @@ export default function SecurityIncidentsPage() {
                                         imageUrl={`/api/mobile/image-proxy?url=${encodeURIComponent(message.logoUrl)}`}
                                         alt={`${item.titolo || t("furpanel.admin.security_management.incidents.report")} - ${t("furpanel.admin.security_management.incidents.attachment")} ${idx + 1}`}
                                         thumbSize={108}
-                                        title={(message.messaggio?.trim() || item.titolo || t("furpanel.admin.security_management.incidents.image_preview")).slice(0, 48)}
+                                        title={(message.messaggio?.trim() || item.titolo || t("furpanel.admin.security_management.incidents.photo_preview")).slice(0, 48)}
                                     />
                                 </div>
                             )}
@@ -461,28 +461,29 @@ export default function SecurityIncidentsPage() {
 
                 {item.folder !== "cronologia" && (
                     <div className="vertical-list gap-2mm" style={{ marginTop: "0.8em" }}>
-                        <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.add_message")}</span>
-                        <textarea
-                            value={replyMessage}
-                            onChange={(e) => setReplyMessage(e.target.value)}
-                            placeholder={t("furpanel.admin.security_management.incidents.write_message")}
-                            style={{ minHeight: 100, padding: 12, borderRadius: 10, border: "1px solid #ffffff15", background: "#0e1621", color: "#fff", resize: "vertical" }}
-                        />
-                        <div className="gap-2mm margin-bottom-2mm vertical-list">
-                            <ImagePickerWithCrop
-                                imageFile={replyImage}
-                                onImageSelected={setReplyImage}
-                                onImageRemove={() => setReplyImage(null)}
-                                label={t("furpanel.admin.security_management.incidents.screenshot")}
-                                title={t("furpanel.admin.security_management.incidents.image_preview")}
+                        <div className="horizontal-list gap-2mm">
+                            <Upload
+                                setBlob={setReplyImage}
+                                requireCrop
+                                cropAspectRatio="any"
+                                label={t("furpanel.admin.security_management.incidents.photo")}
+                                cropTitle={t("furpanel.admin.security_management.incidents.photo_preview")}
                             />
+                            <div className="vertical-list gap-2mm" style={{ flex: 1 }}>
+                                <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.add_message")}</span>
+                                <textarea
+                                    value={replyMessage}
+                                    onChange={(e) => setReplyMessage(e.target.value)}
+                                    placeholder={t("furpanel.admin.security_management.incidents.write_message")}
+                                    style={{ minHeight: 100, padding: 12, borderRadius: 10, border: "1px solid #ffffff15", background: "#0e1621", color: "#fff", resize: "vertical", width: "100%" }}
+                                />
+                                <div className="horizontal-list gap-2mm" style={{ justifyContent: "flex-end" }}>
+                                    <Button icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>{t("furpanel.admin.security_management.incidents.send_message")}</Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
-
-                <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap" }}>
-                    {item.folder !== "cronologia" && <Button icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>{t("furpanel.admin.security_management.incidents.send_message")}</Button>}
-                </div>
             </div>
         );
     };

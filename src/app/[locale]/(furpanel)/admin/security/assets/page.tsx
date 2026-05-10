@@ -12,7 +12,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
-import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
+import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import Modal from "@/components/modal";
 import LoadingPanel from "@/components/loadingPanel";
@@ -64,7 +64,7 @@ export default function SecurityAssetManagerPage() {
     const [fSerial, setFSerial] = useState("");
     const [fNote, setFNote] = useState("");
     const [fStato, setFStato] = useState<string>("disponibile");
-    const [fFormImage, setFFormImage] = useState<File | null>(null);
+    const [fFormImage, setFFormImage] = useState<Blob | undefined>(undefined);
     const [currentUserName, setCurrentUserName] = useState("");
 
     const STATO_LABEL: Record<string, string> = {
@@ -87,7 +87,7 @@ export default function SecurityAssetManagerPage() {
         loadAssets();
     }, []);
 
-    const resetForm = () => { setFTag(""); setFTipo(""); setFModello(""); setFSerial(""); setFNote(""); setFStato("disponibile"); setFFormImage(null); };
+    const resetForm = () => { setFTag(""); setFTipo(""); setFModello(""); setFSerial(""); setFNote(""); setFStato("disponibile"); setFFormImage(undefined); };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
     const openEdit = (a: SecurityAsset) => {
@@ -243,12 +243,12 @@ export default function SecurityAssetManagerPage() {
             <FpInput label={t("furpanel.admin.security_management.assets.notes_label")} initialValue={fNote} onChange={(e) => setFNote(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.assets.notes_placeholder")} />
             <div className="vertical-list gap-2mm">
                 <span className="title small">{t("furpanel.admin.security_management.assets.photo")}</span>
-                <ImagePickerWithCrop
-                    imageFile={fFormImage}
-                    onImageSelected={setFFormImage}
-                    onImageRemove={() => setFFormImage(null)}
+                <Upload
+                    setBlob={setFFormImage}
+                    requireCrop
+                    cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.assets.photo")}
-                    title={t("furpanel.admin.security_management.assets.asset")}
+                    cropTitle={t("furpanel.admin.security_management.assets.asset")}
                 />
             </div>
             <div style={{ marginTop: 6 }}>

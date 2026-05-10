@@ -11,7 +11,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
-import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
+import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
@@ -53,7 +53,7 @@ export default function SecurityLostAndFoundPage() {
     const [fFoundBy, setFFoundBy] = useState("");
     const [fProprietario, setFProprietario] = useState("");
     const [fStatus, setFStatus] = useState<"smarrito" | "consegnato">("smarrito");
-    const [fFormImage, setFFormImage] = useState<File | null>(null);
+    const [fFormImage, setFFormImage] = useState<Blob | undefined>(undefined);
 
     const loadItems = () => {
         setLoading(true);
@@ -79,7 +79,7 @@ export default function SecurityLostAndFoundPage() {
     });
 
     const resetForm = () => {
-        setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFProprietario(""); setFStatus("smarrito"); setFFormImage(null);
+        setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFProprietario(""); setFStatus("smarrito"); setFFormImage(undefined);
     };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
@@ -201,12 +201,12 @@ export default function SecurityLostAndFoundPage() {
             <FpInput label={t("furpanel.admin.security_management.lost_found.owner_label")} initialValue={fProprietario} onChange={(e) => setFProprietario(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.owner_placeholder")} />
             <div className="vertical-list gap-2mm">
                 <span className="title small">{t("furpanel.admin.security_management.lost_found.photo")}</span>
-                <ImagePickerWithCrop
-                    imageFile={fFormImage}
-                    onImageSelected={setFFormImage}
-                    onImageRemove={() => setFFormImage(null)}
+                <Upload
+                    setBlob={setFFormImage}
+                    requireCrop
+                    cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.lost_found.photo")}
-                    title={t("furpanel.admin.security_management.lost_found.item")}
+                    cropTitle={t("furpanel.admin.security_management.lost_found.item")}
                 />
             </div>
             <div className="horizontal-list gap-4mm" style={{ flexWrap: "wrap", marginTop: 10, marginBottom: 10 }}>

@@ -1050,14 +1050,12 @@
           "people_placeholder": "Nome1, Nome2, ...",
           "description": "Descrizione",
           "description_placeholder": "Descrivi l'incidente...",
-          "screenshot": "Screenshot / immagine",
           "mark_important": "Segna come importante",
           "cancel": "Annulla",
           "send": "Invia",
           "report": "Segnalazione",
           "reported_by": "Segnalato da",
           "attachment": "allegato",
-          "image_preview": "Anteprima immagine",
           "no_messages": "Nessun messaggio disponibile",
           "add_message": "Aggiungi messaggio",
           "write_message": "Scrivi un messaggio...",
@@ -1069,7 +1067,9 @@
           "default_author": "Security",
           "missing_data_title": "Dati mancanti",
           "missing_data_description": "Inserisci una descrizione di almeno 3 caratteri",
-          "invalid_image": "Immagine non valida"
+          "invalid_image": "Immagine non valida",
+          "photo_preview": "Anteprima foto",
+          "photo": "Foto"
         }
       },
       "system": {

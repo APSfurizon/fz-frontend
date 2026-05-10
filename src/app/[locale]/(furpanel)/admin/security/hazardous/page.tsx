@@ -11,7 +11,7 @@ import {
 } from "@/lib/api/admin/security";
 import Button from "@/components/input/button";
 import FpInput from "@/components/input/fpInput";
-import ImagePickerWithCrop from "@/components/imagePickerWithCrop";
+import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
@@ -57,7 +57,7 @@ export default function SecurityHazardousRegisterPage() {
     const [fLivello, setFLivello] = useState<string>("basso");
     const [fProprietarioNick, setFProprietarioNick] = useState("");
     const [fProprietarioId, setFProprietarioId] = useState("");
-    const [fFormImage, setFFormImage] = useState<File | null>(null);
+    const [fFormImage, setFFormImage] = useState<Blob | undefined>(undefined);
 
     const loadHazards = () => {
         setLoading(true);
@@ -81,7 +81,7 @@ export default function SecurityHazardousRegisterPage() {
 
     const resetForm = () => {
         setFTitolo(""); setFDescrizione(""); setFLivello("basso");
-        setFProprietarioNick(""); setFProprietarioId(""); setFFormImage(null);
+        setFProprietarioNick(""); setFProprietarioId(""); setFFormImage(undefined);
     };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
@@ -214,12 +214,12 @@ export default function SecurityHazardousRegisterPage() {
             <FpInput required label={t("furpanel.admin.security_management.hazard.owner_id")} initialValue={fProprietarioId} onChange={(e) => setFProprietarioId(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_id_placeholder")} />
             <div className="vertical-list gap-2mm">
                 <span className="title small">{t("furpanel.admin.security_management.hazard.photo")}</span>
-                <ImagePickerWithCrop
-                    imageFile={fFormImage}
-                    onImageSelected={setFFormImage}
-                    onImageRemove={() => setFFormImage(null)}
+                <Upload
+                    setBlob={setFFormImage}
+                    requireCrop
+                    cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.hazard.photo")}
-                    title={t("furpanel.admin.security_management.hazard.title")}
+                    cropTitle={t("furpanel.admin.security_management.hazard.title")}
                 />
             </div>
             <div style={{ marginTop: 6 }}>
