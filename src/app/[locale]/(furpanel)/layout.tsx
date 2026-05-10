@@ -59,7 +59,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
 
     return <>
-        <div className="main-dialog furpanel-main-dialog rounded-s">
+        <div className="main-dialog rounded-s">
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">
