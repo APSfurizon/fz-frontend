@@ -1095,7 +1095,15 @@
     },
     "gallery": {
       "explore": {
-        "title": "Esplora"
+        "title": "Esplora",
+        "advanced": {
+          "event": {
+            "label": "Evento"
+          },
+          "photographer": {
+            "label": "Fotografo"
+          }
+        }
       },
       "upload": {
         "title": "Carica",

@@ -2,7 +2,7 @@ import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import { ChangeEvent, CSSProperties, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import "@/styles/components/fpSelect.css";
 import { useLocale } from "next-intl";
 import { useFormContext } from "./dataForm";
@@ -66,6 +66,7 @@ export default function FpSelect({
         return item ? itemExtractor(item) ?? "" : "";
     }, [selectedItem, defaultValue]);
     const isDisabled = formDisabled || disabled || formLoading;
+    const selectRef = useRef<HTMLSelectElement>(null!);
 
     function getMappedItems(items: (SelectGroup | SelectItem)[]): Record<string, InputEntity> {
         let mappedItems: Record<string, InputEntity> = {};
@@ -88,7 +89,12 @@ export default function FpSelect({
             return;
         }
         setMappedItems(getMappedItems(items));
-    }, [items])
+    }, [items]);
+
+    const showMedia = useMemo(() => [
+        ...items.filter(i => i instanceof SelectItem),
+        ...items.filter(i => i instanceof SelectGroup).flatMap(i => i.items)
+    ].some(i => i.icon || i.imageUrl), [items]);
 
     useEffect(() => {
         if (mappedItems && Object.keys(mappedItems ?? {}).length > 0 && initialValue !== undefined && (!areEquals(initialValue, lastInitialValue) || formReset)) {
@@ -118,12 +124,16 @@ export default function FpSelect({
         <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
             defaultValue={selectDefaultValue} required={required}></input>
         <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm">
-            {selectedItem && <>
-                {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon as MaterialIcon} />}
-                {selectedItem.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={selectedItem.imageUrl} />}
-            </>}
+            {showMedia && (selectedItem && selectedItem.icon && selectedItem.imageUrl
+                ? <>
+                    {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon as MaterialIcon} />}
+                    {selectedItem.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={selectedItem.imageUrl} />}
+                </>
+                : <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
+            )}
             <select disabled={readOnly || isDisabled} aria-readonly={readOnly}
                 id={selectLabel}
+                ref={selectRef}
                 value={selectDefaultValue}
                 style={{ ...inputStyle }}
                 onChange={onSelect}

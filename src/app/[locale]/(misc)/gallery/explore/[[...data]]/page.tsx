@@ -2,12 +2,14 @@
 import Gallery from "@/components/gallery";
 import { useExplore } from "../_components/exploreProvider";
 import { runRequest } from "@/lib/api/global";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { ExploreApiAction, ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
 import { buildSearchParams, parseId } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { SelectItem } from "@/lib/components/fpSelect";
 import FpSelect from "@/components/input/fpSelect";
+import { useTranslations } from "next-intl";
+import useTitle from "@/components/hooks/useTitle";
 
 const EVENT_PATH = "events";
 const PHOTOGRAPHER_PATH = "photographers";
@@ -23,6 +25,8 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
     */
     const router = useRouter();
     const { events, photographers, loading, reloadData, setFixedEvent, setFixedPhotographer, searchPhotographer, searchEvent, searchData, currentFilter } = useExplore();
+    const t = useTranslations();
+    const refreshGallery = useRef<() => void>(null!);
 
     const selectEventItems = useMemo(() => [...events.entries()].map(([id, exploreEvent]) =>
         SelectItem.of({
@@ -62,17 +66,17 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
     }, [params]);
 
     // Update url based off filters
-    /*useEffect(() => {
+    useEffect(() => {
         const values = [];
         if (currentFilter?.event) {
-            values.push("event", currentFilter.event.event.id);
+            values.push(EVENT_PATH, currentFilter.event.event.id);
         }
         if (currentFilter?.photographer) {
-            values.push("event", currentFilter.photographer.user.userId);
+            values.push(PHOTOGRAPHER_PATH, currentFilter.photographer.user.userId);
         }
-        //window.history.pushState({}, '', `/gallery/explore/${values.join("/")}`);
-        console.log(`/gallery/explore/${values.join("/")}`);
-    }, [currentFilter])*/
+        window.history.pushState({}, '', `/gallery/explore/${values.join("/")}`);
+        refreshGallery.current && refreshGallery.current();
+    }, [currentFilter])
 
     const nextData = (currentCursor: number) => {
         return runRequest({
@@ -85,16 +89,26 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
         }).then(r => r.results);
     }
 
+    useTitle(t("misc.gallery.explore.title"))
+
     return <>
-        <div className="horizontal-list">
-            <FpSelect fieldName="event" items={selectEventItems} initialValue={String(currentFilter?.event?.event.id)}
+        <div className="horizontal-list gap-4mm">
+            <FpSelect fieldName="event"
+                className="spacer"
+                label={t("misc.gallery.explore.advanced.event.label")}
+                items={selectEventItems}
+                initialValue={String(currentFilter?.event?.event.id)}
                 onChange={e => setFixedEvent(e?.id)} />
-            <FpSelect fieldName="photographer" items={selectPhotographerItems} initialValue={String(currentFilter?.photographer?.user.userId)}
+            <FpSelect fieldName="photographer"
+                className="spacer"
+                label={t("misc.gallery.explore.advanced.photographer.label")}
+                items={selectPhotographerItems}
+                initialValue={String(currentFilter?.photographer?.user.userId)}
                 onChange={e => setFixedPhotographer(e?.id)} />
         </div>
-        {!!currentFilter?.event || !!currentFilter?.photographer &&
+        {(!!currentFilter?.event || !!currentFilter?.photographer) &&
             <Gallery.Root getNextData={nextData} className="explore-gallery">
-                <Gallery.GridView />
+                <Gallery.GridView refresh={refreshGallery} />
             </Gallery.Root>
         }
     </>;

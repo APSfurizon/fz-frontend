@@ -3,7 +3,7 @@ import { useGallery } from "./context/galleryProvider";
 import { useUser } from "@/components/context/userProvider";
 import { Permissions } from "@/lib/api/permission";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
-import { useMemo, useState } from "react";
+import { RefObject, useImperativeHandle, useMemo, useRef, useState } from "react";
 import Button from "@/components/input/button";
 import { useTranslations } from "next-intl";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -12,7 +12,7 @@ import Image from "next/image";
 import GalleryMedia from "@/components/gallery/galleryMedia";
 
 type GalleryGridViewProps = {
-
+    refresh?: RefObject<() => void>
 }
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
@@ -25,10 +25,11 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     // Edit modal logic
     const [editModalOpen, setEditModalOpen] = useState(false);
 
-    const onRefreshClick = () => {
+    const refreshRef = useRef<() => void>(() => {
         setRefreshKey(p => (p + 1) % 10);
         onRefresh();
-    }
+    });
+    useImperativeHandle(props.refresh, () => refreshRef.current);
 
     return <>
         <div className="gallery__grid">
@@ -40,7 +41,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                     <span className="title">{selectedMediaIdMap.size}/{medias.size}</span>
                 </>}
                 <Button className="margin-left-auto" icon="REFRESH"
-                    onClick={onRefreshClick}
+                    onClick={refreshRef.current}
                     busy={galleryLoading}>
                     {t("common.reload")}
                 </Button>
