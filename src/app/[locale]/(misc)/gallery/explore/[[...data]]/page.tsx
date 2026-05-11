@@ -24,7 +24,7 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
             /
     */
     const router = useRouter();
-    const { events, photographers, loading, reloadData, setFixedEvent, setFixedPhotographer, searchPhotographer, searchEvent, searchData, currentFilter } = useExplore();
+    const { cache, events, photographers, loading, reloadData, setFixedEvent, setFixedPhotographer, searchPhotographer, searchEvent, searchData, currentFilter } = useExplore();
     const t = useTranslations();
     const refreshGallery = useRef<() => void>(null!);
 
@@ -108,7 +108,7 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
         </div>
         {(!!currentFilter?.event || !!currentFilter?.photographer) &&
             <Gallery.Root getNextData={nextData} className="explore-gallery">
-                <Gallery.GridView refresh={refreshGallery} />
+                <Gallery.GridView refresh={refreshGallery} getFullMedia={(id) => cache.get(id)} />
             </Gallery.Root>
         }
     </>;

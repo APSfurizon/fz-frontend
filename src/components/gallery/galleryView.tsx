@@ -2,7 +2,7 @@ import ViewMediaModal from "@/app/[locale]/(misc)/gallery/_components/viewMediaM
 import { useGallery } from "./context/galleryProvider";
 import { useUser } from "@/components/context/userProvider";
 import { Permissions } from "@/lib/api/permission";
-import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
+import { GalleryUploadedFullMedia, GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { RefObject, useImperativeHandle, useMemo, useRef, useState } from "react";
 import FpButton from "@/components/input/fpButton";
 import { useTranslations } from "next-intl";
@@ -12,7 +12,8 @@ import Image from "next/image";
 import GalleryMedia from "@/components/gallery/galleryMedia";
 
 type GalleryGridViewProps = {
-    refresh?: RefObject<() => void>
+    refresh?: RefObject<() => void>,
+    getFullMedia?(id: number): Promise<GalleryUploadedFullMedia>
 }
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
@@ -80,7 +81,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                 )}
             </InfiniteScroll>
         </div>
-        <ViewMediaModal />
+        <ViewMediaModal getFullMedia={props.getFullMedia} />
         {/*<MediaEditModal events={eventItems}
             medias={selectedMedias}
             open={editModalOpen}

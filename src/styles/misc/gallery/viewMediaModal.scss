@@ -1,5 +1,6 @@
 .view-media-modal {
     min-width: 95vw;
+    height: 90svh;
 
     &__grid {
         display: grid;
@@ -150,16 +151,9 @@
 }
 
 @media screen and (max-width: 1200) {
-    .view-media-modal__grid {
-        grid-template-columns: 2em auto 2em;
-        grid-template-rows: 1fr min-content max-content;
-        grid-template-areas:
-            "back-button media-container forward-button"
-            "bottom-toolbar bottom-toolbar bottom-toolbar"
-            "information-panel information-panel information-panel";
-    }
-
     .view-media-modal {
+        height: 100svh;
+
         &__panel-data {
             transition: max-height 200ms, opacity 300ms;
             max-height: 0px;
@@ -169,6 +163,15 @@
         &__panel--open &__panel-data {
             max-height: 100svh;
             opacity: 1;
+        }
+
+        &__grid {
+            grid-template-columns: 2em auto 2em;
+            grid-template-rows: 1fr min-content max-content;
+            grid-template-areas:
+                "back-button media-container forward-button"
+                "bottom-toolbar bottom-toolbar bottom-toolbar"
+                "information-panel information-panel information-panel";
         }
     }
 

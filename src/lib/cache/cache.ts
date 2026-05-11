@@ -10,25 +10,37 @@ export function getParamsHash(...p: any[]) {
     return shasum.digest('hex');
 }
 
+export type CacheTuple<T = any> = {
+    /**UTC Fetch time in milliseconds (unix epoch)*/
+    fetchTime: number,
+    /**Actual stored value*/
+    value: T
+}
+
+const DEFAULT_CACHE_DURATION = 5 * 60 * 1000; // 2 minutes
+
 export abstract class CachedData<T> {
-    duration: number = 120000;
+    duration: number = DEFAULT_CACHE_DURATION;
     abstract loadData(...p: any[]): Promise<T>;
-    lastFetchTime: Date = new Date();
-    cachedDataMap?: Record<string, T>;
+    cachedDataMap: Map<string, CacheTuple<T>> = new Map();
+
     get(...p: any[]): Promise<T> {
         if (!p) p = [];
         const paramsHash = getParamsHash(p);
         return new Promise((resolve, reject) => {
-            const now = new Date();
-            const diff = this.lastFetchTime.getTime() - now.getTime();
-            if (diff < this.duration && this.cachedDataMap && this.cachedDataMap[paramsHash]) {
-                resolve(this.cachedDataMap[paramsHash]);
+            const now = Date.now();
+            const data = this.cachedDataMap.get(paramsHash);
+            const diff = now - (data?.fetchTime ?? 0);
+            if (data && diff < this.duration) {
+                resolve(data!.value);
             } else {
                 this.loadData(p)
                     .then((result: T) => {
-                        if (!this.cachedDataMap) this.cachedDataMap = {};
-                        this.lastFetchTime = now;
-                        this.cachedDataMap[paramsHash] = result;
+                        const data: CacheTuple<T> = {
+                            fetchTime: now,
+                            value: result
+                        };
+                        this.cachedDataMap.set(paramsHash, data);
                         resolve(result);
                     }).catch((err) => reject(err));
             }

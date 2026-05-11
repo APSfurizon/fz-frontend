@@ -1,6 +1,9 @@
 import { ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAction, ExplorePhotographersApiAction } from "@/lib/api/gallery/explore/api";
+import { CachedFullMedias } from "@/lib/api/gallery/explore/main";
 import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
+import { GalleryUploadedFullMedia } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
+import { CachedData } from "@/lib/cache/cache";
 import { buildSearchParams } from "@/lib/utils";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
@@ -25,6 +28,7 @@ interface ExploreProviderType {
     currentFilter?: ExploreFilter,
     reloadData(): void;
     loading: boolean;
+    cache: CachedFullMedias;
 }
 
 const ExploreContext = createContext<ExploreProviderType>(undefined as any);
@@ -36,6 +40,8 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
     const [currentFilter, setCurrentFilter] = useState<ExploreFilter>();
 
     const [loading, setLoading] = useState(false);
+
+    const [cache] = useState(new CachedFullMedias());
 
     const setFixedEvent = useCallback((eventId?: number) => {
         setCurrentFilter(prev => new ExploreFilter({
@@ -131,7 +137,8 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
         searchData,
         currentFilter,
         reloadData,
-        loading
+        loading,
+        cache
     }}>
         {children}
     </ExploreContext.Provider>

@@ -28,7 +28,12 @@ function ModalPanelData(props: Readonly<{
     </div>
 }
 
-export default function ViewMediaModal() {
+type ViewMediaModalProps = {
+    /**Defines a custom fullmedia retrieving logic, for external caching */
+    getFullMedia?(id: number): Promise<GalleryUploadedFullMedia>
+}
+
+export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     const { currentMedia, closeMedia, modalOpen, goNext, goBack } = useGallery();
     const t = useTranslations();
     const locale = useLocale();
@@ -117,15 +122,18 @@ export default function ViewMediaModal() {
     }
 
     useEffect(() => {
-        if (!currentMedia) {
+        if (fullMedia && fullMedia.id !== currentMedia?.id) {
             setFullMedia(undefined);
-            return;
         }
+        if (!currentMedia) { return; }
         setLoading(true);
-        runRequest({
-            action: new GetFullMediaApiAction(),
-            pathParams: { "id": currentMedia.id }
-        }).then(setFullMedia)
+        (props.getFullMedia
+            ? props.getFullMedia(currentMedia.id!)
+            : runRequest({
+                action: new GetFullMediaApiAction(),
+                pathParams: { "id": currentMedia.id }
+            })
+        ).then(setFullMedia)
             .finally(() => setLoading(false))
     }, [currentMedia]);
 
