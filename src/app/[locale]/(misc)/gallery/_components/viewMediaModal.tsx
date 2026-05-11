@@ -1,7 +1,6 @@
 "use client"
 import Modal from "@/components/modal";
 import { useGallery } from "../../../../../components/gallery/context/galleryProvider";
-import Image from "next/image";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import Icon, { MaterialIcon } from "@/components/icon";
 import { useLocale, useTranslations } from "next-intl";

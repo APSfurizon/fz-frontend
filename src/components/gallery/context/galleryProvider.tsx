@@ -122,6 +122,14 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
             .then(newValue => setCurrentMedia(prev => newValue ?? prev));
     }, [getPreviousMedia, currentMedia]);
 
+    useEffect(() => {
+        if (currentMedia) {
+            updateSelectedMediaParam(currentMedia.id!);
+        } else {
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+    }, [currentMedia])
+
     // Search params handling
     const params = useSearchParams();
 
