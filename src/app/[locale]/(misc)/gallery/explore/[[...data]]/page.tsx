@@ -3,13 +3,14 @@ import Gallery from "@/components/gallery";
 import { useExplore } from "../_components/exploreProvider";
 import { runRequest } from "@/lib/api/global";
 import { useEffect, useMemo, useRef } from "react";
-import { ExploreApiAction, ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
-import { buildSearchParams, parseId } from "@/lib/utils";
+import { ExploreApiAction } from "@/lib/api/gallery/explore/api";
+import { buildSearchParams } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { SelectItem } from "@/lib/components/fpSelect";
 import FpSelect from "@/components/input/fpSelect";
 import { useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
+import EventCard from "../_components/eventCard";
 
 const EVENT_PATH = "events";
 const PHOTOGRAPHER_PATH = "photographers";
@@ -24,7 +25,7 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
             /
     */
     const router = useRouter();
-    const { cache, events, photographers, loading, reloadData, setFixedEvent, setFixedPhotographer, searchPhotographer, searchEvent, searchData, currentFilter } = useExplore();
+    const { cache, events, photographers, loading, reloadData, setFilter, searchFilter, currentFilter } = useExplore();
     const t = useTranslations();
     const refreshGallery = useRef<() => void>(null!);
 
@@ -50,11 +51,11 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
             const url = (s.data ?? []).join("/");
             if (PATH_REGEX.test(url)) {
                 if (path1 === EVENT_PATH && path2 === PHOTOGRAPHER_PATH) {
-                    searchData(parseInt(param1), parseInt(param2));
+                    searchFilter({ eventId: parseInt(param1), photographerId: parseInt(param2) });
                 } else if (path1 === EVENT_PATH) {
-                    searchEvent(parseInt(param1));
+                    searchFilter({ eventId: parseInt(param1) });
                 } else if (path1 === PHOTOGRAPHER_PATH) {
-                    searchPhotographer(parseInt(param1));
+                    searchFilter({ photographerId: parseInt(param1) });
                 } else {
                     reloadData();
                 }
@@ -67,6 +68,7 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
 
     // Update url based off filters
     useEffect(() => {
+        console.log("was");
         const values = [];
         if (currentFilter?.event) {
             values.push(EVENT_PATH, currentFilter.event.event.id);
@@ -98,14 +100,15 @@ export default function GalleryExploreEventPage({ params }: { params: Promise<{ 
                 label={t("misc.gallery.explore.advanced.event.label")}
                 items={selectEventItems}
                 initialValue={String(currentFilter?.event?.event.id)}
-                onChange={e => setFixedEvent(e?.id)} />
+                onChange={e => setFilter({ eventId: e?.id ?? null })} />
             <FpSelect fieldName="photographer"
                 className="spacer"
                 label={t("misc.gallery.explore.advanced.photographer.label")}
                 items={selectPhotographerItems}
                 initialValue={String(currentFilter?.photographer?.user.userId)}
-                onChange={e => setFixedPhotographer(e?.id)} />
+                onChange={e => setFilter({ photographerId: e?.id ?? null })} />
         </div>
+        {[...events.entries()].map(([id, value]) => <EventCard key={id} event={value} />)}
         {(!!currentFilter?.event || !!currentFilter?.photographer) &&
             <Gallery.Root getNextData={nextData} className="explore-gallery">
                 <Gallery.GridView refresh={refreshGallery} getFullMedia={(id) => cache.get(id)} />

@@ -1102,6 +1102,11 @@
           "photographer": {
             "label": "Photographer"
           }
+        },
+        "events": {
+          "card": {
+            "photo_count": "{count, plural, =1 {One element} other {# elements}}"
+          }
         }
       },
       "upload": {

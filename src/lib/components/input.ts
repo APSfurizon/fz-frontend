@@ -10,8 +10,17 @@ export const HUNDRED_YEARS_AFTER_TODAY = new Date((new Date().getTime() / 1000 +
 export const MIN_DATE = dateToParam(HUNDRED_YEARS_BEFORE_TODAY);
 export const MAX_DATE = dateToParam(HUNDRED_YEARS_AFTER_TODAY);
 
-type OneIdentityAtLeast = { code: string; id: number; } | { code?: string; id: number; } | { code: string; id?: number }
-export type InputEntityInit = OneIdentityAtLeast & {
+/**
+ * At least one defined property of a type
+ */
+export type Leastwise<A = {}> = {
+    [K in keyof A]:
+    Required<Pick<A, K>> &
+    Partial<Omit<A, K>>
+}[keyof A]
+
+type InputEntityCode = Leastwise<{ code: string; id: number }>;
+export type InputEntityInit = InputEntityCode & {
     description?: string;
     icon?: MaterialIcon;
     imageUrl?: string;

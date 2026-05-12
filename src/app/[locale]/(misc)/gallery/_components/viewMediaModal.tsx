@@ -234,6 +234,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                     </a>
                 </div>
                 {fullMedia && <div className="view-media-modal__panel-data">
+                    <p>{copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.getDescription(locale)}</p>
                     <ModalPanelData icon="COPYRIGHT" text={translate(copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.translatedDescription ?? {}, locale)} />
                     <ModalPanelData icon="LOCAL_ACTIVITY" text={translate(fullMedia.event.eventNames, locale)} />
                     <ModalPanelData icon="FLAG" text={mapStatus(fullMedia.status)} />
@@ -250,13 +251,13 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                     {fullMedia.videoMetadata && <>
                         <h4 className="view-media-modal__panel-header title">{t("misc.gallery.upload.modal.information_panel.video.title")}</h4>
                         <div className="margin-left-2mm vertical-list">
-                            <ModalPanelData icon="_24FPS_SELECT" text={fullMedia.videoMetadata.framerate} />
-                            <ModalPanelData icon="AV_TIMER" text={t("misc.gallery.upload.modal.video.duration", {
-                                hours: duration![1],
-                                minutes: duration![2],
-                                seconds: duration![3],
-                                milliseconds: duration![4]
-                            })} />
+                            <ModalPanelData icon="24FPS_SELECT" text={fullMedia.videoMetadata.framerate} />
+                            {duration && <ModalPanelData icon="AV_TIMER" text={t("misc.gallery.upload.modal.video.duration", {
+                                hours: duration[1],
+                                minutes: duration[2],
+                                seconds: duration[3],
+                                milliseconds: duration[4]
+                            })} />}
                         </div>
                     </>}
                 </div>}

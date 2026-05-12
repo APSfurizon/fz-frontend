@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import "@/styles/components/icon.css";
 
 export const ICONS = {
-    _24FPS_SELECT: "24fps_select",
+    "24FPS_SELECT": "24fps_select",
     ACCOUNT_CIRCLE: "account_circle",
     ACCOUNT_CIRCLE_OFF: "account_circle_off",
     ADD: "add",
