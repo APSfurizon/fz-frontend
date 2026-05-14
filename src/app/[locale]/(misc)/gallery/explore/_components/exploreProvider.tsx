@@ -2,9 +2,10 @@ import { ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAc
 import { CachedFullMedias } from "@/lib/api/gallery/explore/main";
 import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
 import { runRequest } from "@/lib/api/global";
-import { Leastwise } from "@/lib/components/input";
 import { buildSearchParams } from "@/lib/utils";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { Leastwise } from "@/lib/utils/types";
+import { useParams, useSearchParams } from "next/navigation";
+import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
 
 class ExploreFilter {
     event: ExploreEvent | null;
@@ -29,6 +30,8 @@ interface ExploreProviderType {
     reloadData(): void;
     loading: boolean;
     cache: CachedFullMedias;
+    showFilters: boolean;
+    setShowFilters: Dispatch<SetStateAction<boolean>>;
 }
 
 const ExploreContext = createContext<ExploreProviderType>(undefined as any);
@@ -42,6 +45,8 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
     const [loading, setLoading] = useState(false);
 
     const [cache] = useState(new CachedFullMedias());
+
+    const [showFilters, setShowFilters] = useState(false);
 
     const setFilter = useCallback((data: FilterSetterData) => {
         setCurrentFilter(prev => new ExploreFilter({
@@ -120,6 +125,10 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
         }).finally(() => setLoading(false));
     }
 
+    // History management
+    const pathParams = useParams();
+    const searchParams = useSearchParams();
+
     return <ExploreContext.Provider value={{
         events,
         photographers,
@@ -128,7 +137,9 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
         currentFilter,
         reloadData,
         loading,
-        cache
+        cache,
+        showFilters,
+        setShowFilters
     }}>
         {children}
     </ExploreContext.Provider>

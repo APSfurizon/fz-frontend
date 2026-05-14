@@ -28,10 +28,9 @@ export default function GalleryExploreEventPage() {
     */
     const params = useParams();
     const router = useRouter();
-    const { cache, events, photographers, loading, reloadData, searchFilter, currentFilter } = useExplore();
+    const { cache, events, photographers, loading, reloadData, searchFilter, currentFilter, showFilters, setShowFilters } = useExplore();
     const t = useTranslations();
     const refreshGallery = useRef<() => void>(null!);
-    const [showAdvanced, setShowAdvanced] = useState(false);
 
     const selectEventItems = useMemo(() => [...events.entries()].map(([id, exploreEvent]) =>
         SelectItem.of({
@@ -103,12 +102,14 @@ export default function GalleryExploreEventPage() {
         <div className="gallery-explore__header horizontal-list">
             <span role="title" className="title x-large bold">{t("misc.gallery.explore.header.title")}</span>
             <div className="spacer"></div>
-            <FpButton icon={showAdvanced ? "FILTER_ALT_OFF" : "FILTER_ALT"}
+            <FpButton iconButton
+                icon={showFilters ? "FILTER_ALT_OFF" : "FILTER_ALT"}
+                iconClass="large"
                 title={t("misc.gallery.explore.advanced.title")}
-                onClick={() => setShowAdvanced(prev => !prev)} />
+                onClick={() => setShowFilters(prev => !prev)} />
 
         </div>
-        {showAdvanced && <div className="horizontal-list gallery-explore__advanced gap-4mm">
+        {showFilters && <div className="horizontal-list gallery-explore__advanced gap-4mm">
             <FpSelect fieldName="event"
                 className="spacer"
                 label={t("misc.gallery.explore.advanced.event.label")}
@@ -123,7 +124,7 @@ export default function GalleryExploreEventPage() {
                 onChange={e => setFilter({ photographerId: e?.id ?? null })} />
         </div>}
 
-        {!showAdvanced && !currentFilter?.event && [...events.entries()].map(([id, value]) => <EventCard key={id} event={value} onClick={e => setFilter({ eventId: e.event.id })} />)}
+        {!showFilters && !currentFilter?.event && [...events.entries()].map(([id, value]) => <EventCard key={id} event={value} onClick={e => setFilter({ eventId: e.event.id })} />)}
         {(!!currentFilter?.event || !!currentFilter?.photographer) &&
             <Gallery.Root getNextData={nextData} className="explore-gallery">
                 <Gallery.GridView refresh={refreshGallery} getFullMedia={(id) => cache.get(id)} />

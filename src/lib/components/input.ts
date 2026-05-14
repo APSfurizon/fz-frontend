@@ -1,6 +1,7 @@
 import { MaterialIcon } from "@/components/icon";
 import { CSSProperties } from "react";
 import { dateToParam } from "../utils";
+import { Leastwise } from "../utils/types";
 
 
 const HUNDRED_DAYS_IN_SECONDS = 3155760000;
@@ -9,15 +10,6 @@ export const HUNDRED_YEARS_BEFORE_TODAY = new Date((new Date().getTime() / 1000 
 export const HUNDRED_YEARS_AFTER_TODAY = new Date((new Date().getTime() / 1000 + HUNDRED_DAYS_IN_SECONDS) * 1000);
 export const MIN_DATE = dateToParam(HUNDRED_YEARS_BEFORE_TODAY);
 export const MAX_DATE = dateToParam(HUNDRED_YEARS_AFTER_TODAY);
-
-/**
- * At least one defined property of a type
- */
-export type Leastwise<A = {}> = {
-    [K in keyof A]:
-    Required<Pick<A, K>> &
-    Partial<Omit<A, K>>
-}[keyof A]
 
 type InputEntityCode = Leastwise<{ code: string; id: number }>;
 export type InputEntityInit = InputEntityCode & {

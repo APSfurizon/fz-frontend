@@ -1,6 +1,6 @@
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { isNumeric } from "@/lib/utils";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 
 type GalleryMediaCallback = (current: GalleryUploadedMedia) => GalleryUploadedMedia | undefined
@@ -19,7 +19,7 @@ type GalleryContextType = {
     getNextData: () => Promise<GalleryUploadedMedia[]>,
     galleryLoading: boolean;
     ended: boolean;
-    selectedMediaIdMap: Set<number>;
+    selectedMediaIds: Set<number>;
     onSelect: (id: number, selected: boolean) => void;
     setSelection: React.Dispatch<React.SetStateAction<Set<number>>>;
 }
@@ -34,8 +34,6 @@ type GalleryProviderProps = {
 const MEDIA_SEARCH_PARAM = "media";
 
 export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
-    const router = useRouter();
-    const currentPath = usePathname();
 
     // Data holding logic
     const [loading, setLoading] = useState(false);
@@ -143,6 +141,7 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
 
     // TODO: Understand going back in history not opening modal
     useEffect(() => {
+        console.log("Search params!");
         if (params.has(MEDIA_SEARCH_PARAM)) {
             const value = params.get(MEDIA_SEARCH_PARAM);
             if (!value || !isNumeric(value)) return;
@@ -168,7 +167,7 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
         goNext,
         goBack,
         galleryLoading: loading,
-        selectedMediaIdMap: selection,
+        selectedMediaIds: selection,
         ended,
         getNextData,
         onSelect,

@@ -3,7 +3,7 @@ import Modal from "@/components/modal";
 import { useGallery } from "../../../../../components/gallery/context/galleryProvider";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import Icon, { MaterialIcon } from "@/components/icon";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
@@ -16,6 +16,7 @@ import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { shareMediaUrl } from "@/lib/api/gallery/util";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import UserPicture from "@/components/userPicture";
+import FpButton from "@/components/input/fpButton";
 
 function ModalPanelData(props: Readonly<{
     icon: MaterialIcon,
@@ -35,6 +36,7 @@ type ViewMediaModalProps = {
 export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     const { currentMedia, closeMedia, modalOpen, goNext, goBack } = useGallery();
     const t = useTranslations();
+    const formatter = useFormatter();
     const locale = useLocale();
 
     const [loading, setLoading] = useState(false);
@@ -175,6 +177,10 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         ? getCountdown(fullMedia?.videoMetadata?.durationMs)
         : undefined;
 
+    const shotDate = useMemo(() => !fullMedia
+        ? null
+        : formatter.dateTime(new Date(fullMedia.shotDate), { dateStyle: "full", timeStyle: "medium" }), [fullMedia]);
+
     return <Modal open={modalOpen}
         onClose={closeModal}
         icon="IMAGE"
@@ -184,7 +190,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         { /* Main image view */}
         <div className="view-media-modal__grid">
             <div className="view-media-modal__back-button">
-                <a href="#" onClick={() => goBack()}><Icon icon="ARROW_BACK" /></a>
+                <FpButton iconButton iconClass="large" icon="ARROW_BACK" onClick={goBack} />
             </div>
             <div className="view-media-modal__media rounded-m"
                 style={{ transform: `translate(${swipeDiff ?? 0}px, 0px)` }}>
@@ -193,7 +199,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                     : <LoadingPanel />}
             </div>
             <div className="view-media-modal__forward-button align-right">
-                <a href="#" onClick={() => goNext()}><Icon icon="ARROW_FORWARD" /></a>
+                <FpButton iconButton iconClass="large" icon="ARROW_FORWARD" onClick={goNext} />
             </div>
 
             <div className="view-media-modal__toolbar horizontal-list gap-2mm align-items-center">
@@ -204,11 +210,9 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                     </>
                     : <LoadingPanel />
                 }
-                <a className="vertical-align-middle"
-                    href="#"
-                    onClick={onShare}>
-                    <Icon icon="SHARE" />
-                </a>
+                <FpButton iconButton
+                    icon="SHARE"
+                    onClick={onShare} />
                 <div className="spacer"></div>
                 {fullMedia?.downloadMedia && <a className="vertical-align-middle"
                     href={fullMedia.downloadMedia.mediaUrl}
@@ -226,18 +230,18 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 <div className="horizontal-list">
                     <h3 className="view-media-modal__panel-title title medium">{t("misc.gallery.modal.information_panel.title")}</h3>
                     <div className="spacer"></div>
-                    <a title={(fullMedia && dataPanelOpen ? t("common.close") : t("common.open")) + " (I)"}
+                    <FpButton iconButton
+                        icon={dataPanelOpen ? "CLOSE" : "MORE_VERT"}
+                        title={(fullMedia && dataPanelOpen ? t("common.close") : t("common.open")) + " (I)"}
                         className="view-media-modal__toggle-panel rounded-m"
-                        href="#"
-                        onClick={() => setDataPanelOpen(prev => !!fullMedia && !prev)}>
-                        <Icon icon={dataPanelOpen ? "CLOSE" : "MORE_VERT"} />
-                    </a>
+                        onClick={() => setDataPanelOpen(prev => !!fullMedia && !prev)} />
                 </div>
                 <hr></hr>
                 {fullMedia && <div className="view-media-modal__panel-data">
                     <ModalPanelData icon="COPYRIGHT" text={copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.getDescription(locale)!} />
                     <ModalPanelData icon="LOCAL_ACTIVITY" text={translate(fullMedia.event.eventNames, locale)} />
                     <ModalPanelData icon="FLAG" text={mapStatus(fullMedia.status)} />
+                    {shotDate && <ModalPanelData icon="EVENT" text={shotDate} />}
                     {fullMedia.photoMetadata && <>
                         <h4 className="view-media-modal__panel-header title">{t("misc.gallery.upload.modal.information_panel.photo.title")}</h4>
                         <div className="vertical-list">

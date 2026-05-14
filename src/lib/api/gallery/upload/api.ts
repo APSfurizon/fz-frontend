@@ -79,10 +79,12 @@ class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
     mapToDTO(data: FormData) {
         const newEventIdStr = data.get("newEventId")?.toString();
         const newPhotographerUserIdStr = data.get("newPhotographerUserId")?.toString();
+        const newRepostPermissions = data.get("newRepostPermissions")?.toString();
         nullifyEmptyString
         return {
             newEventUid: Number(newEventIdStr),
-            newPhotographerUserId: Number(newPhotographerUserIdStr)
+            newPhotographerUserId: Number(newPhotographerUserIdStr),
+            newRepostPermissions: newRepostPermissions
         } as GalleryUpdateBody;
     };
 }

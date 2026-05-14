@@ -11,17 +11,27 @@ import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { runRequest } from "@/lib/api/global";
+import { ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
+import { ExploreEvent } from "@/lib/api/gallery/explore/type";
 
 type MediaEditModalProps = {
     medias: GalleryUploadedMedia[],
-    events: SelectItem[],
     open: boolean,
     onClose: () => void,
     onRefresh: () => void,
 }
 export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
     const t = useTranslations("");
+
+    const [loading, setLoading] = useState(false);
+    const [events, setEvents] = useState<ExploreEvent[]>([]);
+    const eventItems = useMemo(() => events.map(e => SelectItem.of({
+        id: e.event.id,
+        code: e.event.slug,
+        translatedDescription: e.event.eventNames
+    })), [events]);
 
     const eventEditingLocked = useMemo(() => new Set(props.medias.map(m => m.eventId)).size > 1, []);
 
@@ -32,11 +42,23 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
         };
     }
 
-    return <Modal icon="EDIT_SQUARE" open={props.open} onClose={props.onClose} title={t("common.CRUD.edit")}>
+    useEffect(() => {
+        if (!props.open) return;
+        setLoading(true);
+        runRequest({ action: new ExploreEventsApiAction() })
+            .then(r => setEvents(r.events))
+            .finally(() => setLoading(false));
+    }, [props.open]);
+
+    return <Modal icon="EDIT_SQUARE" open={props.open} onClose={props.onClose} title={t("common.CRUD.edit")} busy={loading}>
         <DataForm className="vertical-list gap-2mm"
             hideSave
             action={new GalleryUpdateFormApiAction}
-            editBodyData={editRequestData}>
+            editBodyData={editRequestData}
+            onSuccess={() => {
+                props.onClose();
+                props.onRefresh();
+            }}>
             <div className="upload-input-data gap-4mm">
                 {/* Event selector */}
                 <FpSelect required
@@ -47,12 +69,12 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
                             : undefined
                     }
                     disabled={eventEditingLocked}
-                    items={props.events}
+                    items={eventItems}
                     label={t("misc.gallery.upload.form.event.label")}
                     placeholder={t("misc.gallery.upload.form.event.placeholder")} />
                 {/* Copyright selector */}
                 <FpSelect required
-                    fieldName="copyright"
+                    fieldName="newRepostPermissions"
                     itemExtractor={inputEntityCodeExtractor}
                     items={copyrightValues}
                     label={t("misc.gallery.upload.form.copyright.label")}

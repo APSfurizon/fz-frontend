@@ -17,7 +17,7 @@ type GalleryMediaProps = {
 export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
     const t = useTranslations("");
     const imageSource = props.image.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC;
-    const checkEvent = (e: MouseEvent<HTMLDivElement> | ChangeEvent<HTMLInputElement>) => {
+    const checkEvent = (e?: MouseEvent<HTMLDivElement> | ChangeEvent<HTMLInputElement>) => {
         if (!props.checkbox) return;
         props.onSelect(props.image.id, !props.selected);
     }
@@ -28,8 +28,7 @@ export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
     return <div className="gallery-media"
         aria-roledescription="image"
         tabIndex={0}
-        onDoubleClick={checkEvent}
-        onClick={() => props.onClick(props.image)}>
+        onClick={() => props.checkbox ? checkEvent() : props.onClick(props.image)}>
         {props.checkbox &&
             <input type="checkbox"
                 tabIndex={0}

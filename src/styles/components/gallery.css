@@ -46,6 +46,7 @@
 }
 
 .gallery-media {
+    user-select: none;
     aspect-ratio: 1;
     width: 1fr;
     height: auto;

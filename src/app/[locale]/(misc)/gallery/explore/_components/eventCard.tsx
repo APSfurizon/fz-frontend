@@ -3,6 +3,7 @@ import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl"
 import "@/styles/misc/gallery/explore/eventCard.scss";
+import FpButton from "@/components/input/fpButton";
 
 type EventCardProps = {
     event: ExploreEvent,
