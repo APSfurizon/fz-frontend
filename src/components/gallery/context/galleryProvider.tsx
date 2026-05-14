@@ -85,13 +85,14 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
     const [currentMedia, setCurrentMedia] = useState<Partial<GalleryUploadedMedia>>();
 
     const openMedia = useCallback((id: number) => {
-        setCurrentMedia(medias.get(id));
-        setModalOpen(true);
+        //setCurrentMedia(medias.get(id));
+        //setModalOpen(true);
         updateSelectedMediaParam(id);
     }, [medias]);
 
     const closeMedia = useCallback(() => {
         setModalOpen(false);
+        setCurrentMedia(undefined);
         window.history.replaceState({}, '', window.location.pathname);
     }, []);
 
@@ -140,15 +141,21 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
         window.history.pushState({}, '', `?${newParams.toString()}`);
     }
 
+    // TODO: Understand going back in history not opening modal
     useEffect(() => {
         if (params.has(MEDIA_SEARCH_PARAM)) {
             const value = params.get(MEDIA_SEARCH_PARAM);
             if (!value || !isNumeric(value)) return;
             const id = parseInt(value);
-            setCurrentMedia({ id });
-            setModalOpen(true);
+            if (currentMedia?.id !== id) {
+                setCurrentMedia({ id });
+                setModalOpen(true);
+            }
+        } else {
+            setModalOpen(false);
+            setCurrentMedia(undefined);
         }
-    }, []);
+    }, [params]);
 
     return <GalleryContext.Provider value={{
         medias,

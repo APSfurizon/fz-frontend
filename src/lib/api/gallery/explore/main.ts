@@ -4,7 +4,7 @@ import { runRequest } from "../../global";
 import { GetFullMediaApiAction } from "../api";
 
 export class CachedFullMedias extends CachedData<GalleryUploadedFullMedia> {
-    duration: number = 1 * 60 * 1000; // 1 minute
+    duration: number = 20 * 60 * 1000; // 20 minutes
     loadData(...p: any[]): Promise<GalleryUploadedFullMedia> {
         return runRequest({
             action: new GetFullMediaApiAction(),

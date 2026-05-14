@@ -112,36 +112,6 @@
     }
 }
 
-.view-media-modal {
-
-    .view-grid {
-        .information-panel {
-
-            .data {
-
-
-                .icon {
-                    margin-right: 2mm;
-                    user-select: none;
-                }
-            }
-
-            &:not(.open) {
-                border-color: transparent;
-
-                h3.title {
-                    display: none;
-                }
-
-                .data {
-                    max-width: 0px;
-                    opacity: 0;
-                }
-            }
-        }
-    }
-}
-
 @media (pointer: coarse) {
     .view-media-modal__grid {
         grid-template-areas:
@@ -162,6 +132,7 @@
 
         &__panel--open &__panel-data {
             max-height: 100svh;
+            max-width: 100svw;
             opacity: 1;
         }
 

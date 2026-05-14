@@ -1102,12 +1102,16 @@
           },
           "photographer": {
             "label": "Fotografo"
-          }
+          },
+          "title": "Filtri"
         },
         "events": {
           "card": {
             "photo_count": "{count, plural, =1 {Un elemento} other {# elementi}}"
           }
+        },
+        "header": {
+          "title": "Esplora la galleria"
         }
       },
       "upload": {

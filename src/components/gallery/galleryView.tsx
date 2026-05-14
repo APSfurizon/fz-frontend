@@ -10,6 +10,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingPanel from "@/components/loadingPanel";
 import Image from "next/image";
 import GalleryMedia from "@/components/gallery/galleryMedia";
+import { useSearchParams } from "next/navigation";
 
 type GalleryGridViewProps = {
     refresh?: RefObject<() => void>,
@@ -17,7 +18,7 @@ type GalleryGridViewProps = {
 }
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
-    const { medias, setGalleryMedias, openMedia, closeMedia, ended, getNextData, onRefresh, galleryLoading, selectedMediaIdMap, onSelect, setSelection } = useGallery();
+    const { medias, openMedia, ended, getNextData, onRefresh, galleryLoading, selectedMediaIdMap, onSelect, setSelection } = useGallery();
     const [refreshKey, setRefreshKey] = useState(0);
     const { userDisplayRef, userLoading } = useUser();
     const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
@@ -71,7 +72,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                             src={"/images/chibi/furizonchibi-social.png"} />
                     </div>
                 }
-                className="gallery__grid__container gap-4mm">
+                className="gallery__grid__container">
                 {[...medias.entries()].sort(sortFn).map(([id, u]) => <GalleryMedia key={id}
                     image={u}
                     checkbox={canManageMedias}

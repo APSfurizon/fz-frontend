@@ -25,7 +25,7 @@ export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
         e.stopPropagation();
     }
 
-    return <div className="gallery__grid__media rounded-m"
+    return <div className="gallery-media"
         aria-roledescription="image"
         tabIndex={0}
         onDoubleClick={checkEvent}
@@ -34,12 +34,12 @@ export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
             <input type="checkbox"
                 tabIndex={0}
                 checked={props.selected}
-                className="gallery__grid__media__selection"
+                className="gallery-media__selection"
                 onChange={checkEvent}
                 onClick={onSelectClick} />
         }
         <Image draggable="false"
-            className="gallery__grid__media__thumbnail"
+            className="gallery-media__thumbnail"
             alt="thumbnail"
             width={140}
             height={140}

@@ -56,6 +56,8 @@ export const ICONS = {
     FIBER_MANUAL_RECORD: "fiber_manual_record",
     FILE_COPY: "file_copy",
     FILE_OPEN: "file_open",
+    FILTER_ALT: "filter_alt",
+    FILTER_ALT_OFF: "filter_alt_off",
     FILTER_LIST: "filter_list",
     FIND_IN_PAGE: "find_in_page",
     FLAG: "flag",

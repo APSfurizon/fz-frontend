@@ -1,0 +1,15 @@
+@keyframes advanced_show {
+    0% {
+        max-height: 0px;
+    }
+
+    100% {
+        max-height: 100px;
+    }
+}
+
+.gallery-explore__advanced {
+    overflow: hidden;
+    padding: 1mm;
+    animation: advanced_show 100ms ease-in 1 forwards;
+}

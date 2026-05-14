@@ -22,7 +22,7 @@ function ModalPanelData(props: Readonly<{
     text: string
 }>) {
     return <div className="view-media-modal__data vertical-align-middle">
-        <Icon icon={props.icon} />
+        <Icon className="medium" icon={props.icon} />
         <span className="view-media-modal__data__text title small">{props.text}</span>
     </div>
 }
@@ -233,14 +233,14 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                         <Icon icon={dataPanelOpen ? "CLOSE" : "MORE_VERT"} />
                     </a>
                 </div>
+                <hr></hr>
                 {fullMedia && <div className="view-media-modal__panel-data">
-                    <p>{copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.getDescription(locale)}</p>
-                    <ModalPanelData icon="COPYRIGHT" text={translate(copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.translatedDescription ?? {}, locale)} />
+                    <ModalPanelData icon="COPYRIGHT" text={copyrightValues.find(v => v.code === fullMedia?.repostPermissions)?.getDescription(locale)!} />
                     <ModalPanelData icon="LOCAL_ACTIVITY" text={translate(fullMedia.event.eventNames, locale)} />
                     <ModalPanelData icon="FLAG" text={mapStatus(fullMedia.status)} />
                     {fullMedia.photoMetadata && <>
                         <h4 className="view-media-modal__panel-header title">{t("misc.gallery.upload.modal.information_panel.photo.title")}</h4>
-                        <div className="margin-left-2mm vertical-list">
+                        <div className="vertical-list">
                             <ModalPanelData icon="PHOTO_CAMERA" text={`${fullMedia.photoMetadata.cameraMaker} ${fullMedia.photoMetadata.cameraModel}`} />
                             {fullMedia.photoMetadata.lensModel && <ModalPanelData icon="MOTION_MODE" text={`${fullMedia.photoMetadata.lensMaker} ${fullMedia.photoMetadata.lensModel}`} />}
                             <ModalPanelData icon="SHUTTER_SPEED" text={fullMedia.photoMetadata.shutter} />
@@ -250,7 +250,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                     </>}
                     {fullMedia.videoMetadata && <>
                         <h4 className="view-media-modal__panel-header title">{t("misc.gallery.upload.modal.information_panel.video.title")}</h4>
-                        <div className="margin-left-2mm vertical-list">
+                        <div className="vertical-list">
                             <ModalPanelData icon="24FPS_SELECT" text={fullMedia.videoMetadata.framerate} />
                             {duration && <ModalPanelData icon="AV_TIMER" text={t("misc.gallery.upload.modal.video.duration", {
                                 hours: duration[1],

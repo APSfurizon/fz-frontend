@@ -6,7 +6,7 @@ import {
     FULL_UPLOAD_MAX_HEIGHT
 } from '@/lib/constants';
 import Image from 'next/image';
-import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
+import { VALID_FILE_TYPES, validateImage, scaleBlob } from '@/lib/components/upload';
 import FpButton from '@/components/input/fpButton';
 import Modal from '@/components/modal';
 import { useModalUpdate } from '@/components/context/modalProvider';
@@ -16,6 +16,7 @@ import { areEquals, getImageUrl } from '@/lib/utils';
 import { useFormContext } from '@/components/input/dataForm';
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { imageToBlob } from '@/lib/utils/media';
 
 export default function Upload({
     children,
