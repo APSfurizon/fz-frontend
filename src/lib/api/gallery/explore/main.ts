@@ -11,4 +11,9 @@ export class CachedFullMedias extends CachedData<GalleryUploadedFullMedia> {
             pathParams: { "id": p[0] }
         })
     }
+
+    // Can cache ONLY if the picture's approved and processed
+    override canStoreInCache(data: GalleryUploadedFullMedia): boolean {
+        return data?.status === "APPROVED" && !!data?.displayMedia
+    }
 }

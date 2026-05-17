@@ -7,11 +7,16 @@
         overflow-y: scroll;
         scrollbar-width: none;
         gap: 2mm;
-        grid-template-columns: 2em 1fr min-content 2em;
+        grid-template-columns: 3em 1fr 3em 3em;
         grid-template-rows: 1fr auto;
         grid-template-areas:
             "back-button media-container information-panel forward-button"
             "bottom-toolbar bottom-toolbar bottom-toolbar bottom-toolbar";
+        transition: all 300ms;
+
+        &:has(.view-media-modal__panel--open) {
+            grid-template-columns: 3em 1fr 0.25fr 3em;
+        }
     }
 
     &__forward-button,
@@ -49,13 +54,11 @@
     }
 
     &__panel-title {
-        max-width: 0px;
-        transition: max-width 300ms;
         overflow: hidden;
     }
 
     &__panel--open &__panel-title {
-        max-width: 300px;
+        /*max-width: 50svw;*/
     }
 
     &__panel-data {
@@ -137,12 +140,20 @@
         }
 
         &__grid {
-            grid-template-columns: 2em auto 2em;
+            grid-template-columns: 3em auto 3em;
             grid-template-rows: 1fr min-content max-content;
             grid-template-areas:
                 "back-button media-container forward-button"
                 "bottom-toolbar bottom-toolbar bottom-toolbar"
                 "information-panel information-panel information-panel";
+
+            &:has(.view-media-modal__panel--open) {
+                grid-template-columns: 3em auto 3em;
+            }
+        }
+
+        &__toggle-panel .icon-container i {
+            transform: rotate(270deg);
         }
     }
 

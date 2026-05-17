@@ -68,7 +68,6 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
 
     // TODO: understand with usePathname and useParams
     const searchFilter = useCallback((data: FilterSetterSearchData) => {
-        console.log(data);
         const eventSearch = data.eventId !== undefined && data.eventId !== null
             ? runRequest({
                 action: new ExploreEventApiAction(),

@@ -34,9 +34,9 @@ export default function UserPicture({
     const [isLoading, setLoading] = useState(true);
     const [pictureData, setPictureData] = useState<UserData>();
     const [fursuitPictureData, setFursuitPictureData] = useState<FursuitDetails>();
-    if (!userData && !fursuitData) throw new Error("User picture without both fursuit and user data");
 
     useEffect(() => {
+        setLoading(false);
         if (userData) {
             if (userData instanceof Promise) {
                 setLoading(true);
@@ -59,8 +59,12 @@ export default function UserPicture({
                 setLoading(false);
                 setFursuitPictureData(fursuitData);
             }
+        } else {
+            setPictureData(undefined);
+            setFursuitPictureData(undefined);
+            setLoading(true);
         }
-    }, []);
+    }, [userData]);
 
     const borderClassName = useMemo(() =>
         `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,

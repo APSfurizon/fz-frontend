@@ -3,7 +3,6 @@ import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import Image from "next/image";
 import "@/styles/misc/gallery/upload/uploadedMedia.css";
 import { ChangeEvent, MouseEvent } from "react";
-import Icon from "@/components/icon";
 import { useTranslations } from "next-intl";
 
 type GalleryMediaProps = {
@@ -15,7 +14,7 @@ type GalleryMediaProps = {
 }
 
 export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
-    const t = useTranslations("");
+    const t = useTranslations();
     const imageSource = props.image.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC;
     const checkEvent = (e?: MouseEvent<HTMLDivElement> | ChangeEvent<HTMLInputElement>) => {
         if (!props.checkbox) return;
@@ -37,11 +36,19 @@ export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
                 onChange={checkEvent}
                 onClick={onSelectClick} />
         }
-        <Image draggable="false"
+        <object data={imageSource}
+            draggable={false}
             className="gallery-media__thumbnail"
-            alt="thumbnail"
+            aria-valuetext="thumbnail"
             width={140}
             height={140}
-            src={imageSource} />
+            type={props.image.thumbnailMedia?.mimeType ?? "image/webp"}>
+            <img draggable="false"
+                className="gallery-media__thumbnail"
+                alt="thumbnail"
+                width={140}
+                height={140}
+                src={EMPTY_PROFILE_PICTURE_SRC} />
+        </object>
     </div>
 }

@@ -16,11 +16,11 @@
     align-items: center;
     transition: transform 120ms;
 
-    &:not(--off):hover {
+    &:not(:disabled):hover {
         background: var(--fp-button__bg--hover);
     }
 
-    &:not(&--off):active {
+    &:not(:disabled):active {
         background: var(--fp-button__bg--active);
         border-color: var(--fp-button__border--down);
         transform: scale(0.95);

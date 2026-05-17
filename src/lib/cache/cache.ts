@@ -36,16 +36,32 @@ export abstract class CachedData<T> {
             } else {
                 this.loadData(p)
                     .then((result: T) => {
-                        const data: CacheTuple<T> = {
-                            fetchTime: now,
-                            value: result
-                        };
-                        this.cachedDataMap.set(paramsHash, data);
+                        if (this.canStoreInCache(result)) {
+                            const data: CacheTuple<T> = {
+                                fetchTime: now,
+                                value: result
+                            };
+                            this.cachedDataMap.set(paramsHash, data);
+                        }
                         resolve(result);
                     }).catch((err) => reject(err));
             }
         });
     };
+
+    canStoreInCache(data: T): boolean {
+        return true;
+    }
+
+    evict(...p: any[]): T | undefined {
+        let toReturn = undefined;
+        const paramsHash = getParamsHash(p);
+        if (this.cachedDataMap.has(paramsHash)) {
+            toReturn = this.cachedDataMap.get(paramsHash)!.value;
+            this.cachedDataMap.delete(paramsHash);
+        }
+        return toReturn;
+    }
 }
 
 export class CachedCountries extends CachedData<boolean | PlaceApiResponse | ApiErrorResponse> {

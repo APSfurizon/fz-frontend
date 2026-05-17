@@ -10,31 +10,27 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingPanel from "@/components/loadingPanel";
 import Image from "next/image";
 import GalleryMedia from "@/components/gallery/galleryMedia";
-import { useSearchParams } from "next/navigation";
 import MediaEditModal from "@/app/[locale]/(misc)/gallery/upload/_components/modals/mediaEditModal";
+import { useGallerySelection } from "./context/gallerySelectionProvider";
+import { useGalleryView } from "./context/galleryViewProvider";
 
 type GalleryGridViewProps = {
     refresh?: RefObject<() => void>,
-    getFullMedia?(id: number): Promise<GalleryUploadedFullMedia>
+    getFullMedia?(id: number): Promise<GalleryUploadedFullMedia>,
+    onUpdatedMedias?(mediaIds: number[]): void;
 }
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
-    const { medias, openMedia, ended, getNextData, onRefresh, galleryLoading, selectedMediaIds, onSelect, setSelection } = useGallery();
+    const { medias, ended, getNextData, onRefresh, galleryLoading } = useGallery();
+    const { openMedia } = useGalleryView();
+    const { selectedIds, selectionEnabled, setSelectionEnabled, select, clearSelection } = useGallerySelection();
     const [refreshKey, setRefreshKey] = useState(0);
     const { userDisplayRef, userLoading } = useUser();
     const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
     const sortFn = ((a: [number, GalleryUploadedMedia], b: [number, GalleryUploadedMedia]) => b[0] - a[0]);
 
     // Selection logic
-    const [enableSelection, setEnableSelection] = useState(false);
-
-    useEffect(() => {
-        if (!enableSelection) {
-            setSelection(new Set());
-        }
-    }, [enableSelection]);
-
-    const selectedMedias = useMemo(() => [...selectedMediaIds].map(id => medias.get(id)).filter(v => !!v), [selectedMediaIds]);
+    const selectedMedias = useMemo(() => [...selectedIds].map(id => medias.get(id)).filter(v => !!v), [selectedIds]);
 
     // Edit modal logic
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -45,29 +41,38 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     });
     useImperativeHandle(props.refresh, () => refreshRef.current);
 
+    const onEditedMedias = (mediaIds: number[]) => {
+        props.onUpdatedMedias?.(mediaIds);
+        refreshRef.current?.();
+    }
+
     return <>
         <div className="gallery__grid">
             <div className="gallery__grid__toolbar horizontal-list gap-2mm align-items-center">
-                {enableSelection
+                {selectionEnabled
                     ? <>
                         <FpButton icon="REMOVE_SELECTION"
                             title={t("components.gallery.grid.toolbar.deselect_all")}
-                            onClick={() => setEnableSelection(false)} />
-                        <span className="title">{selectedMediaIds.size}/{medias.size}</span>
+                            onClick={() => setSelectionEnabled(false)} />
+                        <span className="title">{selectedIds.size}/{medias.size}</span>
                     </>
-                    : <FpButton icon="LIBRARY_ADD_CHECK" onClick={() => setEnableSelection(true)} />
+                    : <FpButton icon="LIBRARY_ADD_CHECK"
+                        title={t("components.gallery.grid.toolbar.select_medias")}
+                        onClick={() => setSelectionEnabled(true)} />
                 }
                 <FpButton className="margin-left-auto" icon="REFRESH"
                     onClick={refreshRef.current}
-                    busy={galleryLoading}>
+                    busy={galleryLoading}
+                    title={t("common.reload")}>
                     {t("common.reload")}
                 </FpButton>
-                {enableSelection && <>
+                {selectionEnabled && <>
                     <FpButton icon="DOWNLOAD"
-                        disabled={galleryLoading || !selectedMediaIds.size} />
+                        title={t("components.gallery.grid.toolbar.download")}
+                        disabled={galleryLoading || !selectedIds.size} />
                     {canManageMedias &&
                         <FpButton icon="EDIT"
-                            disabled={galleryLoading || !selectedMediaIds.size}
+                            disabled={galleryLoading || !selectedIds.size}
                             onClick={() => setEditModalOpen(true)}>
                             {t("common.CRUD.edit")}
                         </FpButton>
@@ -92,12 +97,12 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                     </div>
                 }
                 className="gallery__grid__container">
-                {[...medias.entries()].sort(sortFn).map(([id, u]) => <GalleryMedia key={id}
+                {Array.from(medias.entries()).sort(sortFn).map(([id, u]) => <GalleryMedia key={id}
                     image={u}
-                    checkbox={enableSelection}
-                    onSelect={onSelect}
+                    checkbox={selectionEnabled}
+                    onSelect={select}
                     onClick={m => openMedia(m.id)}
-                    selected={selectedMediaIds.has(id)} />
+                    selected={selectedIds.has(id)} />
                 )}
             </InfiniteScroll>
         </div>
@@ -106,6 +111,6 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
             medias={selectedMedias}
             open={editModalOpen}
             onClose={() => setEditModalOpen(false)}
-            onRefresh={refreshRef.current} />
+            onUpdatedMedia={onEditedMedias} />
     </>;
 }

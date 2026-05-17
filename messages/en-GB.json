@@ -128,7 +128,9 @@
         "end_label": "End of gallery message",
         "end_message": "You've reached the bottom of the gallery",
         "toolbar": {
-          "deselect_all": "De-select all"
+          "deselect_all": "De-select all",
+          "select_medias": "Select",
+          "download": "Download"
         }
       },
       "media": {
@@ -1169,6 +1171,13 @@
         },
         "share": {
           "copy_message": "Link copied successfully"
+        },
+        "actions": {
+          "share": "Share",
+          "admin": {
+            "approve": "Approve",
+            "reject": "Reject"
+          }
         }
       }
     }

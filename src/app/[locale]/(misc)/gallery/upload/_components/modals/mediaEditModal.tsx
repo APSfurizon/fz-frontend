@@ -20,7 +20,7 @@ type MediaEditModalProps = {
     medias: GalleryUploadedMedia[],
     open: boolean,
     onClose: () => void,
-    onRefresh: () => void,
+    onUpdatedMedia: (id: number[]) => void,
 }
 export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
     const t = useTranslations("");
@@ -57,7 +57,7 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
             editBodyData={editRequestData}
             onSuccess={() => {
                 props.onClose();
-                props.onRefresh();
+                props.onUpdatedMedia([...props.medias.keys()]);
             }}>
             <div className="upload-input-data gap-4mm">
                 {/* Event selector */}
@@ -96,5 +96,5 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
                 </div>
             </div>
         </DataForm>
-    </Modal>
+    </Modal >
 }

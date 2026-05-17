@@ -1,7 +1,5 @@
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
-import { isNumeric } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react"
 
 type GalleryMediaCallback = (current: GalleryUploadedMedia) => GalleryUploadedMedia | undefined
 
@@ -10,28 +8,17 @@ type GalleryContextType = {
     setGalleryMedias: React.Dispatch<React.SetStateAction<Map<number, GalleryUploadedMedia>>>;
     /** Closes the media modal, empties the medias map, its selections and  */
     onRefresh: () => void;
-    openMedia(id: number): void;
-    closeMedia(): void;
-    currentMedia?: Partial<GalleryUploadedMedia>;
-    modalOpen: boolean;
-    goNext(): void;
-    goBack(): void;
     getNextData: () => Promise<GalleryUploadedMedia[]>,
     galleryLoading: boolean;
     ended: boolean;
-    selectedMediaIds: Set<number>;
-    onSelect: (id: number, selected: boolean) => void;
-    setSelection: React.Dispatch<React.SetStateAction<Set<number>>>;
 }
 
 const GalleryContext = createContext<GalleryContextType>(undefined as any);
 
 type GalleryProviderProps = {
-    children?: React.ReactNode,
-    getNextData: (currentCursor: number) => Promise<GalleryUploadedMedia[]>
+    children?: React.ReactNode;
+    getNextData: (currentCursor: number) => Promise<GalleryUploadedMedia[]>;
 }
-
-const MEDIA_SEARCH_PARAM = "media";
 
 export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
 
@@ -43,7 +30,7 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
     const minKey = useMemo(() => medias.keys().reduce((prev, next) => Math.min(prev, next), Number.MAX_SAFE_INTEGER), [medias]);
 
     const onRefresh = useCallback(() => {
-        closeMedia();
+        //TODO: closeMedia();
         setGalleryMedias(new Map());
         setEnded(false);
     }, []);
@@ -63,115 +50,13 @@ export function GalleryProvider(props: Readonly<GalleryProviderProps>) {
             }).finally(() => setLoading(false));
     }
 
-    // Selection logic
-    const [selection, setSelection] = useState<Set<number>>(new Set());
-
-    const onSelect = useCallback((id: number, selected: boolean) => {
-        setSelection(prev => {
-            const next = new Set(prev);
-            if (selected) {
-                next.add(id);
-            } else {
-                next.delete(id);
-            }
-            return next;
-        });
-    }, [medias])
-
-    // Modal handling
-    const [modalOpen, setModalOpen] = useState(false);
-    const [currentMedia, setCurrentMedia] = useState<Partial<GalleryUploadedMedia>>();
-
-    const openMedia = useCallback((id: number) => {
-        //setCurrentMedia(medias.get(id));
-        //setModalOpen(true);
-        updateSelectedMediaParam(id);
-    }, [medias]);
-
-    const closeMedia = useCallback(() => {
-        setModalOpen(false);
-        setCurrentMedia(undefined);
-        window.history.replaceState({}, '', window.location.pathname);
-    }, []);
-
-    const getNextMedia = useCallback((current?: Partial<GalleryUploadedMedia>) => {
-        if (!current) return Promise.resolve(undefined);
-        const keys = [...medias.keys()].sort((a, b) => b - a);
-        const toReturn = medias.get(keys[keys.indexOf(current.id!) + 1]);
-        return toReturn
-            ? Promise.resolve(toReturn)
-            : getNextData().then(result => result[0])
-    }, [medias]);
-
-    const getPreviousMedia = useCallback((current?: Partial<GalleryUploadedMedia>) => {
-        if (!current) return Promise.resolve(undefined);
-        const keys = [...medias.keys()].sort((a, b) => b - a);
-        return Promise.resolve(medias.get(keys[keys.indexOf(current.id!) - 1]));
-    }, [medias]);
-
-    const goNext = useCallback(() => {
-        if (!currentMedia?.id) return;
-        getNextMedia(currentMedia)
-            .then(newValue => setCurrentMedia(prev => newValue ?? prev));
-    }, [getNextMedia, currentMedia]);
-
-    const goBack = useCallback(() => {
-        if (!currentMedia?.id) return;
-        getPreviousMedia(currentMedia)
-            .then(newValue => setCurrentMedia(prev => newValue ?? prev));
-    }, [getPreviousMedia, currentMedia]);
-
-    useEffect(() => {
-        if (currentMedia) {
-            updateSelectedMediaParam(currentMedia.id!);
-        } else {
-            window.history.replaceState({}, '', window.location.pathname);
-        }
-    }, [currentMedia])
-
-    // Search params handling
-    const params = useSearchParams();
-
-    const updateSelectedMediaParam = (mediaId: number) => {
-        const newParams = new URLSearchParams(params);
-        newParams.delete(MEDIA_SEARCH_PARAM);
-        newParams.append(MEDIA_SEARCH_PARAM, String(mediaId));
-        window.history.pushState({}, '', `?${newParams.toString()}`);
-    }
-
-    // TODO: Understand going back in history not opening modal
-    useEffect(() => {
-        console.log("Search params!");
-        if (params.has(MEDIA_SEARCH_PARAM)) {
-            const value = params.get(MEDIA_SEARCH_PARAM);
-            if (!value || !isNumeric(value)) return;
-            const id = parseInt(value);
-            if (currentMedia?.id !== id) {
-                setCurrentMedia({ id });
-                setModalOpen(true);
-            }
-        } else {
-            setModalOpen(false);
-            setCurrentMedia(undefined);
-        }
-    }, [params]);
-
     return <GalleryContext.Provider value={{
         medias,
         setGalleryMedias,
         onRefresh,
-        currentMedia,
-        openMedia,
-        closeMedia,
-        modalOpen,
-        goNext,
-        goBack,
         galleryLoading: loading,
-        selectedMediaIds: selection,
         ended,
-        getNextData,
-        onSelect,
-        setSelection
+        getNextData
     }}>
         {props.children}
     </GalleryContext.Provider>

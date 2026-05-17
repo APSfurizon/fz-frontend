@@ -128,7 +128,9 @@
         "end_label": "Messaggio di fondo galleria",
         "end_message": "Hai raggiunto il fondo della galleria",
         "toolbar": {
-          "deselect_all": "Deseleziona tutto"
+          "deselect_all": "Deseleziona tutto",
+          "select_medias": "Seleziona",
+          "download": "Scarica"
         }
       },
       "media": {
@@ -1170,6 +1172,13 @@
         },
         "share": {
           "copy_message": "Link copiato con successo"
+        },
+        "actions": {
+          "share": "Condividi",
+          "admin": {
+            "approve": "Approva",
+            "reject": "Rifiuta"
+          }
         }
       }
     }

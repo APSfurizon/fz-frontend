@@ -3,26 +3,26 @@ import { GalleryMediaApiResponse } from "../types";
 import { ExploreEvent, ExploreEventsApiResponse, ExplorePhotographer, ExplorePhotographersApiResponse } from "./type";
 
 export class ExploreEventsApiAction extends ApiAction<ExploreEventsApiResponse, ApiErrorResponse> {
-    authenticated = false;
+    authenticated = true;
     method = RequestType.GET;
     urlAction = "gallery/pub/events";
 }
 
 export class ExploreEventApiAction extends ApiAction<ExploreEvent & ApiResponse, ApiErrorResponse> {
-    authenticated = false;
+    authenticated = true;
     method = RequestType.GET;
     hasPathParams = true;
     urlAction = "gallery/pub/events/{id}";
 }
 
 export class ExplorePhotographersApiAction extends ApiAction<ExplorePhotographersApiResponse, ApiErrorResponse> {
-    authenticated = false;
+    authenticated = true;
     method = RequestType.GET;
     urlAction = "gallery/pub/photographers";
 }
 
 export class ExplorePhotographerApiAction extends ApiAction<ExplorePhotographer & ApiResponse, ApiErrorResponse> {
-    authenticated = false;
+    authenticated = true;
     method = RequestType.GET;
     hasPathParams = true;
     urlAction = "gallery/pub/photographers/{id}";
