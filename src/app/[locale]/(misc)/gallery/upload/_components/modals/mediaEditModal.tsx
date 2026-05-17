@@ -3,7 +3,7 @@ import DataForm from "@/components/input/dataForm";
 import FpSelect from "@/components/input/fpSelect";
 import Modal from "@/components/modal";
 import { ConventionEvent } from "@/lib/api/counts";
-import { GalleryUpdateFormApiAction } from "@/lib/api/gallery/upload/api";
+import { GalleryUpdateFormApiAction } from "@/lib/api/gallery/admin/api";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { GalleryUpdateBody } from "@/lib/api/gallery/upload/types";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";

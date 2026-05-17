@@ -106,7 +106,8 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                 )}
             </InfiniteScroll>
         </div>
-        <ViewMediaModal getFullMedia={props.getFullMedia} />
+        <ViewMediaModal getFullMedia={props.getFullMedia}
+            onUpdatedFullMedia={(id) => props.onUpdatedMedias?.([id])} />
         <MediaEditModal
             medias={selectedMedias}
             open={editModalOpen}

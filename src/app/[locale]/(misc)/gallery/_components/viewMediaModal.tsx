@@ -20,6 +20,8 @@ import { useUser } from "@/components/context/userProvider";
 import { Permissions } from "@/lib/api/permission";
 import Image from "next/image";
 import { useGalleryView } from "@/components/gallery/context/galleryViewProvider";
+import { setStatus } from "@/lib/api/gallery/admin/main";
+import { useExplore } from "../explore/_components/exploreProvider";
 
 function ModalPanelData(props: Readonly<{
     icon: MaterialIcon,
@@ -33,12 +35,14 @@ function ModalPanelData(props: Readonly<{
 
 type ViewMediaModalProps = {
     /**Defines a custom fullmedia retrieving logic, for external caching */
-    getFullMedia?(id: number): Promise<GalleryUploadedFullMedia>
+    getFullMedia?(id: number): Promise<GalleryUploadedFullMedia>;
+    onUpdatedFullMedia?(id: number): void;
 }
 
 export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     const { medias } = useGallery();
     const { currentMediaId, closeMedia, goNext, goBack } = useGalleryView();
+    const { } = useExplore();
     const t = useTranslations();
     const formatter = useFormatter();
     const locale = useLocale();
@@ -136,6 +140,11 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
             setFullMedia(undefined);
             return;
         }
+        loadFullMedia();
+    }, [currentMediaId]);
+
+    const loadFullMedia = () => {
+        if (!currentMediaId) return;
         setLoading(true);
         (props.getFullMedia
             ? props.getFullMedia(currentMediaId)
@@ -145,7 +154,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
             })
         ).then(setFullMedia)
             .finally(() => setLoading(false))
-    }, [currentMediaId]);
+    }
 
     const downloadFile = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
@@ -209,6 +218,21 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         ) ?? EMPTY_PROFILE_PICTURE_SRC
         , [fullMedia, currentMediaId, error]);
 
+    const updateStatus = (newStatus: GalleryUploadedMediaStatus) => {
+        if (!fullMedia) { return; }
+        const status: GalleryUploadedMediaStatus =
+            fullMedia.status === newStatus
+                ? "PENDING"
+                : newStatus;
+        setLoading(true);
+        setStatus([fullMedia.id], status)
+            .then(f => {
+                props.onUpdatedFullMedia?.(fullMedia.id);
+                loadFullMedia();
+            })
+            .finally(() => setLoading(false));
+    }
+
     return <Modal open={!!currentMediaId}
         onClose={closeModal}
         icon="IMAGE"
@@ -246,12 +270,16 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 {isAdmin && <>
                     <FpButton disabled={!fullMedia}
                         success={(fullMedia?.status === "APPROVED" as never)}
-                        off={(fullMedia?.status !== "APPROVED") as never} icon="THUMB_UP">
+                        off={(fullMedia?.status !== "APPROVED") as never} icon="THUMB_UP"
+                        onClick={() => updateStatus("APPROVED")}
+                        busy={loading}>
                         {t("misc.gallery.modal.actions.admin.approve")}
                     </FpButton>
                     <FpButton disabled={!fullMedia}
                         danger={(fullMedia?.status === "REJECTED" as never)}
-                        off={(fullMedia?.status !== "REJECTED") as never} icon="THUMB_DOWN">
+                        off={(fullMedia?.status !== "REJECTED") as never} icon="THUMB_DOWN"
+                        onClick={() => updateStatus("REJECTED")}
+                        busy={loading}>
                         {t("misc.gallery.modal.actions.admin.reject")}
                     </FpButton>
                 </>}
