@@ -6,13 +6,16 @@ import { GalleryUploadedFullMedia, GalleryUploadedMedia } from "@/lib/api/galler
 import { RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import FpButton from "@/components/input/fpButton";
 import { useTranslations } from "next-intl";
-import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingPanel from "@/components/loadingPanel";
 import Image from "next/image";
 import GalleryMedia from "@/components/gallery/galleryMedia";
 import MediaEditModal from "@/app/[locale]/(misc)/gallery/upload/_components/modals/mediaEditModal";
 import { useGallerySelection } from "./context/gallerySelectionProvider";
 import { useGalleryView } from "./context/galleryViewProvider";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import useResizeObserver from "../hooks/useResizeObserver";
+import { throttle } from "lodash";
+import GalleryVirtualizedGrid from "./galleryVirtualizedGrid";
 
 type GalleryGridViewProps = {
     refresh?: RefObject<() => void>,
@@ -27,7 +30,6 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const [refreshKey, setRefreshKey] = useState(0);
     const { userDisplayRef, userLoading } = useUser();
     const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
-    const sortFn = ((a: [number, GalleryUploadedMedia], b: [number, GalleryUploadedMedia]) => b[0] - a[0]);
 
     // Selection logic
     const selectedMedias = useMemo(() => [...selectedIds].map(id => medias.get(id)).filter(v => !!v), [selectedIds]);
@@ -45,6 +47,12 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
         props.onUpdatedMedias?.(mediaIds);
         refreshRef.current?.();
     }
+
+    useEffect(() => {
+        if (medias.size === 0 && !galleryLoading && !ended) {
+            getNextData();
+        }
+    }, [refreshKey]);
 
     return <>
         <div className="gallery__grid">
@@ -79,32 +87,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
                     }
                 </>}
             </div>
-            <InfiniteScroll
-                key={refreshKey}
-                dataLength={medias.size}
-                next={getNextData}
-                hasMore={!ended}
-                loader={<div className="gallery__grid__container__bottom"><LoadingPanel /></div>}
-                endMessage={
-                    <div className="gallery__grid__container__bottom align-center">
-                        <span aria-label={t("components.gallery.grid.end_label")} className="descriptive medium">
-                            {t("components.gallery.grid.end_message")}
-                        </span><br />
-                        <Image alt=""
-                            width={100}
-                            height={100}
-                            src={"/images/chibi/furizonchibi-social.png"} />
-                    </div>
-                }
-                className="gallery__grid__container">
-                {Array.from(medias.entries()).sort(sortFn).map(([id, u]) => <GalleryMedia key={id}
-                    image={u}
-                    checkbox={selectionEnabled}
-                    onSelect={select}
-                    onClick={m => openMedia(m.id)}
-                    selected={selectedIds.has(id)} />
-                )}
-            </InfiniteScroll>
+            <GalleryVirtualizedGrid key={refreshKey} />
         </div>
         <ViewMediaModal getFullMedia={props.getFullMedia}
             onUpdatedFullMedia={(id) => props.onUpdatedMedias?.([id])} />

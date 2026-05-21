@@ -42,7 +42,6 @@ type ViewMediaModalProps = {
 export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     const { medias } = useGallery();
     const { currentMediaId, closeMedia, goNext, goBack } = useGalleryView();
-    const { } = useExplore();
     const t = useTranslations();
     const formatter = useFormatter();
     const locale = useLocale();

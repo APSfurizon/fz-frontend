@@ -21,13 +21,6 @@ const PHOTOGRAPHER_PATH = "photographers";
 const PATH_REGEX = /^$|^(events\/\d+)\/?$|^(photographers\/\d+)\/?$|^(events\/\d+)\/(photographers\/\d+)$/;
 
 export default function GalleryExploreEventPage() {
-    /* 
-        Handle urls:
-            /events/[eventid]/photographers/[photographerid]
-            /events/[eventid]
-            /photographers/[photographerid]
-            /
-    */
     const params = useParams();
     const router = useRouter();
     const { cache, events, photographers, loading, reloadData, searchFilter, currentFilter, showFilters, setShowFilters } = useExplore();
@@ -131,7 +124,12 @@ export default function GalleryExploreEventPage() {
                     onChange={e => setFilter({ photographerId: e?.id ?? null })} />
             </div>
             {isAdmin && <div className="horizontal-list">
-
+                <FpSelect fieldName="photographer"
+                    className="spacer"
+                    label={t("misc.gallery.explore.advanced.photographer.label")}
+                    items={selectPhotographerItems}
+                    initialValue={String(currentFilter?.photographer?.user.userId)}
+                    onChange={e => setFilter({ photographerId: e?.id ?? null })} />
             </div>}
         </div>}
 

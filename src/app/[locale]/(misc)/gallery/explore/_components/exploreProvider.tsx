@@ -17,7 +17,7 @@ class ExploreFilter {
     }
 }
 
-type FilterSetterBaseData = { eventId: number | null, photographerId: number | null };
+type FilterSetterBaseData = { eventId: number | null, photographerId: number | null, status: string | null };
 export type FilterSetterData = Partial<FilterSetterBaseData>;
 type FilterSetterSearchData = Leastwise<FilterSetterBaseData>;
 
