@@ -3,7 +3,7 @@ import Button from "@/components/input/button";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/booking";
 import { runRequest } from "@/lib/api/global";
@@ -30,9 +30,9 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
     const requestShopLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new ShopLinkApiAction())
+        runRequest({ action: new ShopLinkApiAction() })
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 
@@ -69,7 +69,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                         <div className="vertical-list flex-vertical-center">
                             <span className="title large">
                                 {data?.shouldUpdateInfo &&
-                                    <Icon style={{ marginRight: ".2em" }} icon={"LOCK"} />}
+                                    <Icon style={{ marginRight: ".2em" }} icon="LOCK" />}
                                 {t("furpanel.booking.book_now")}
                             </span>
                             {data?.shouldUpdateInfo && <>

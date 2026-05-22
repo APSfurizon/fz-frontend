@@ -63,8 +63,8 @@ export default function Login() {
       {t("authentication.recover.messages.email_success.description")}
     </NoticeBox>}
     <DataForm className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
+      busy={loading}
+      setBusy={setLoading}
       onSuccess={manageSuccess}
       action={new RecoverFormAction}
       onFail={(err) => manageError(err)}
@@ -77,7 +77,7 @@ export default function Login() {
           placeholder={t("authentication.login.placeholder_email")}/>
         <div className="horizontal-list flex-center">
           <Button type="submit"
-            iconName="MAIL">
+            icon="MAIL">
               {t("authentication.recover.actions.send_verification")}
           </Button>
         </div>

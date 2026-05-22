@@ -7,9 +7,9 @@ import { useTranslations } from "next-intl";
 import DataForm from "@/components/input/dataForm";
 import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import FpInput from "@/components/input/fpInput";
-import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
+import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import LoadingPanel from "@/components/loadingPanel";
 import "@/styles/furpanel/user.css";
 import UserViewPersonalInfo from "../admin/users/[[...slug]]/_components/userViewPersonalInfo";
@@ -26,9 +26,9 @@ export default function UserPage() {
 
   useEffect(() => {
     if (personalInformation) return;
-    runRequest(new GetPersonalInfoAction(), undefined, undefined, undefined)
+    runRequest({ action: new GetPersonalInfoAction() })
       .then((result) => setPersonalInformation(result))
-      .catch((err) => showModal(t("common.error"), <ModalError error={err} />));
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />));
   }, [personalInformation])
 
   // Password change logic
@@ -36,7 +36,7 @@ export default function UserPage() {
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
-  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ModalError error={err} />, "ERROR");
+  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
 
   useTitle(t("furpanel.user.title"));
 
@@ -45,7 +45,7 @@ export default function UserPage() {
       {/* User area */}
       <div className="section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-          <Icon className="x-large" icon="PERSON"/>
+          <Icon className="x-large" icon="PERSON" />
           <span className="title medium">{t("furpanel.user.sections.user")}</span>
         </div>
         {/* Personal info manager */}
@@ -64,7 +64,7 @@ export default function UserPage() {
       {/* User area */}
       <div className="section vertical-list gap-2mm">
         <div className="horizontal-list section-title gap-2mm flex-vertical-center">
-          <Icon className="x-large" icon="SECURITY"/>
+          <Icon className="x-large" icon="SECURITY" />
           <span className="title medium">{t("furpanel.user.sections.security")}</span>
         </div>
         <div className="vertical-list gap-2mm">
@@ -83,9 +83,9 @@ export default function UserPage() {
             </span>
           </div>
           <DataForm className="login-form gap-4mm"
-            loading={passwordChangeLoading}
-            setLoading={setPasswordChangeLoading}
-            action={new ResetPasswordFormAction}
+            busy={passwordChangeLoading}
+            setBusy={setPasswordChangeLoading}
+            action={new ChangePasswordFormAction}
             onFail={(err) => passwordChangeError(err)}
             disableSave={!passwordMatch}>
             <FpInput fieldName="password"

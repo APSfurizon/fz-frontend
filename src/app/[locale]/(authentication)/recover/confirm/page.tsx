@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
-import { ResetPasswordFormAction } from "@/lib/api/authentication/recover";
+import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import Button from "@/components/input/button";
 
 export default function RecoverConfirm() {
@@ -60,9 +60,9 @@ export default function RecoverConfirm() {
     </span>}
 
     <DataForm className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
-      action={new ResetPasswordFormAction}
+      busy={loading}
+      setBusy={setLoading}
+      action={new ChangePasswordFormAction}
       onFail={(err) => manageError(err)}
       onBeforeSubmit={onLoading}
       onSuccess={manageSuccess}
@@ -86,7 +86,7 @@ export default function RecoverConfirm() {
           onChange={(e) => setConfirmPassword(e.currentTarget.value)}/>
         <div className="horizontal-list flex-center">
           <Button type="submit"
-            iconName="SAVE"
+            icon="SAVE"
             disabled={!passwordMatch}>
               {t("common.CRUD.save")}
           </Button>

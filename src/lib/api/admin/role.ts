@@ -1,24 +1,20 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global"
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global"
 import { UserData } from "../user";
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
-import { CACHED_PERMISSIONS, CachedPermissions } from "@/lib/cache/cache";
+import { CACHED_PERMISSIONS } from "@/lib/cache/cache";
 
-export interface RoleInfo {
-    roleId: number,
-    roleInternalName: string,
-    roleDisplayName: string,
-    showInNosecount: boolean,
+export interface RoleInfo extends Omit<RoleBaseData, "roleAdmincountPriority"> {
     permanentUsersNumber: number,
     temporaryUsersNumber: number,
     permissionsNumber: number
 }
 
-export interface AllRolesResponse extends ApiResponse {
-    roles: RoleInfo[]
+export interface MultipleRolesResponse<T extends RoleInfo | RoleBaseData> extends ApiResponse {
+    roles: T[]
 }
 
-export class GetRolesApiAction extends ApiAction<AllRolesResponse, ApiErrorResponse> {
+export class GetAllRolesApiAction extends ApiAction<MultipleRolesResponse<RoleInfo>, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "roles/";
@@ -29,22 +25,32 @@ export interface RoleMember {
     displayData: UserData
 }
 
-export interface RoleData {
+export interface RoleBaseData {
     roleId: number,
     internalName?: string,
     displayName?: string,
     showInAdminCount: boolean,
-    enabledPermissions: string[],
-    users: RoleMember[],
     roleAdmincountPriority: number
 }
 
-export interface RoleDataResponse extends ApiResponse { }
+export interface RoleData extends RoleBaseData {
+    enabledPermissions: string[],
+    users: RoleMember[]
+}
+
+export interface RoleDataResponse extends ApiResponse, RoleData { }
 
 export class GetRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
-    urlAction = "roles";
+    hasPathParams = true;
+    urlAction = "roles/{id}";
+}
+
+export class SearchRoleApiAction extends ApiAction<MultipleRolesResponse<RoleBaseData>, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "roles/search";
 }
 
 export interface RoleOutputMember {
@@ -52,13 +58,9 @@ export interface RoleOutputMember {
     tempRole: boolean
 }
 
-export interface RoleOutputData {
-    roleInternalName?: string,
-    roleDisplayName?: string,
-    showInAdminCount: boolean,
+export interface RoleOutputData extends Omit<RoleBaseData, "roleId"> {
     enabledPermissions: string[],
-    users: RoleOutputMember[],
-    roleAdmincountPriority: number
+    users: RoleOutputMember[]
 }
 
 export interface AddRoleApiData {
@@ -71,7 +73,7 @@ export interface AddRoleApiResponse extends ApiResponse {
 
 export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
     mapToDTO = (data: FormData) => {
-        let toReturn: AddRoleApiData = {
+        const toReturn: AddRoleApiData = {
             internalName: data.get("internalName")!.toString()
         };
         return toReturn;
@@ -88,19 +90,21 @@ export class AddRoleFormAction extends FormApiAction<AddRoleApiData, AddRoleApiR
 export class DeleteRolesApiAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
-    urlAction = "roles";
+    hasPathParams = true;
+    urlAction = "roles/{id}";
 }
 
 export class UpdateRoleByIdApiAction extends ApiAction<RoleDataResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.POST;
-    urlAction = "roles";
+    hasPathParams = true;
+    urlAction = "roles/{id}";
 }
 
 export function roleToOutput(view: RoleData): RoleOutputData {
     return {
-        roleDisplayName: view.displayName,
-        roleInternalName: view.internalName,
+        displayName: view.displayName,
+        internalName: view.internalName,
         showInAdminCount: view.showInAdminCount,
         enabledPermissions: view.enabledPermissions,
         users: view.users.map(vu => {
@@ -145,15 +149,15 @@ export class AutoInputPermissionsManager implements AutoInputManager {
     codeOnly: boolean = true;
 
     loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             getAutoInputPermissions().then(results => {
                 resolve(filterLoaded(results, filter));
             });
         });
     }
 
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        return new Promise((resolve, reject) => {
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
+        return new Promise((resolve) => {
             getAutoInputPermissions().then(results => {
                 resolve(
                     filterLoaded(results, filter, filterOut)
@@ -162,5 +166,5 @@ export class AutoInputPermissionsManager implements AutoInputManager {
         });
     }
 
-    isPresent(additionalValue?: any): Promise<boolean> { return new Promise((resolve, reject) => resolve(true)); };
+    isPresent(): Promise<boolean> { return new Promise((resolve) => resolve(true)); };
 }

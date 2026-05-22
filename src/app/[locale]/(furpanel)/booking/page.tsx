@@ -7,6 +7,7 @@ import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { isMobile } from '@/lib/userAgent';
 import {
     Board,
     BookingOrderApiAction, BookingOrderResponse, BookingOrderUiData, BookingTicketData, calcTicketData,
@@ -14,7 +15,7 @@ import {
     OrderRetryLinkApiAction
 } from "@/lib/api/booking";
 import { translate } from "@/lib/translations";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
 import StatusBox from "@/components/statusBox";
@@ -55,7 +56,7 @@ export default function BookingPage() {
 
     const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
         setExchangeModalOpen(false);
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
     }
 
     const exchangeSuccess = () => {
@@ -75,9 +76,9 @@ export default function BookingPage() {
     useEffect(() => {
         if (!!!bookingData) {
             setLoading(true);
-            runRequest(new BookingOrderApiAction())
+            runRequest({ action: new BookingOrderApiAction() })
                 .then((result) => setBookingData(result))
-                .catch((err) => showModal(t("common.error"), <ModalError error={err} />, "ERROR"))
+                .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
                 .finally(() => setLoading(false));
             return;
         }
@@ -106,27 +107,27 @@ export default function BookingPage() {
     const requestOrderEditLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new OrderEditLinkApiAction())
+        runRequest({ action: new OrderEditLinkApiAction() })
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 
     const requestRetryPaymentLink = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new OrderRetryLinkApiAction())
+        runRequest({ action: new OrderRetryLinkApiAction() })
             .then((result) => router.push(result.link))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 
     const confirmMembershipData = () => {
         if (actionLoading) return;
         setActionLoading(true);
-        runRequest(new ConfirmMembershipDataApiAction())
+        runRequest({ action: new ConfirmMembershipDataApiAction() })
             .then(() => setBookingData(undefined))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setActionLoading(false));
     }
 
@@ -138,10 +139,13 @@ export default function BookingPage() {
     const formattedDailyDays = pageData?.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
 
     const allDaysRange = pageData?.hasOrder && bookingData?.order?.noRoomTicketFromDate && bookingData?.order?.noRoomTicketToDate
-            ? formatter.dateTimeRange(new Date (bookingData.order.noRoomTicketFromDate), new Date (bookingData.order.noRoomTicketToDate), {dateStyle: "medium"})
-            : undefined;
+        ? formatter.dateTimeRange(new Date(bookingData.order.noRoomTicketFromDate), new Date(bookingData.order.noRoomTicketToDate), { dateStyle: "medium" })
+        : undefined;
 
-    const geoLink = bookingData ? `geo:${bookingData.geoLatitude},${bookingData.geoLongitude}?q=Devero%20Hotel` : ""
+    const desktopGeoLink = `https://www.google.com/maps/search/?api=1&query=${bookingData?.geoLatitude},${bookingData?.geoLongitude}`;
+    const mobileGeoLink = `geo:${bookingData?.geoLatitude},${bookingData?.geoLongitude}?q=Devero%20Hotel`;
+    const geoLink = bookingData ? (isMobile() ? mobileGeoLink : desktopGeoLink) : "";
+    const showGeoData = bookingData?.geoLatitude && bookingData?.geoLongitude;
 
     return <>
         <div className="page">
@@ -156,13 +160,13 @@ export default function BookingPage() {
                             <Button className="success"
                                 busy={actionLoading}
                                 onClick={confirmMembershipData}
-                                iconName="CHECK">
+                                icon="CHECK">
                                 {t("furpanel.booking.actions.confirm_info")}
                             </Button>
                             <Button className="warning"
                                 busy={actionLoading}
                                 onClick={() => router.push("/user")}
-                                iconName="OPEN_IN_NEW">
+                                icon="OPEN_IN_NEW">
                                 {t("furpanel.booking.actions.review_info")}
                             </Button>
                         </span>
@@ -184,13 +188,13 @@ export default function BookingPage() {
                     </div>
 
                     {/* Reservation info */}
-                    <div className="booking-information gap-4mm">
+                    <div className="booking-information flex-wrap gap-4mm">
                         {bookingData?.order.checkinDate && <p>
                             <Icon className="x-large" icon="CONCIERGE" />
                             <span>
                                 {t.rich("furpanel.booking.information.check_in_date", {
                                     b: (chunks) => <b>{chunks}</b>,
-                                    checkinDate: formatter.dateTime (new Date (bookingData!.order.checkinDate), {dateStyle: "medium"})
+                                    checkinDate: formatter.dateTime(new Date(bookingData!.order.checkinDate), { dateStyle: "medium" })
                                 })}
                             </span>
                         </p>}
@@ -199,29 +203,29 @@ export default function BookingPage() {
                             <span>
                                 {t.rich("furpanel.booking.information.check_out_date", {
                                     b: (chunks) => <b>{chunks}</b>,
-                                    checkoutDate: formatter.dateTime (new Date (bookingData!.order.checkoutDate), {dateStyle: "medium"})
+                                    checkoutDate: formatter.dateTime(new Date(bookingData!.order.checkoutDate), { dateStyle: "medium" })
                                 })}
                             </span>
                         </p>}
-                        <p>
+                        {showGeoData && <p>
                             <Icon className="x-large" icon="LOCATION_ON" />
                             <span>
                                 {t.rich("furpanel.booking.information.location", {
                                     b: (chunks) => <b>{chunks}</b>,
-                                    a: (chunks) => <Link className="highlight hoverable" href={geoLink}>
-                                            {chunks}<Icon className="medium" icon="OPEN_IN_NEW" />
-                                        </Link>,
+                                    a: (chunks) => <Link className="highlight hoverable" target={isMobile() ? "_self" : "_blank"} href={geoLink}>
+                                        {chunks}<Icon className="medium" icon="OPEN_IN_NEW" />
+                                    </Link>,
                                     link: "Devero hotel"
                                 })}
                             </span>
-                        </p>
+                        </p>}
                     </div>
-                    
+
                     {/* Order Items */}
                     <div className="order-data">
                         <div className="order-items-container horizontal-list flex-same-base gap-4mm flex-wrap">
                             {/* Ticket item */}
-                            <OrderItem icon={"LOCAL_ACTIVITY"}
+                            <OrderItem icon="LOCAL_ACTIVITY"
                                 title={
                                     t.rich(`furpanel.booking.items.${pageData.ticketName}`, {
                                         sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
@@ -232,10 +236,10 @@ export default function BookingPage() {
                                     ? t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })
                                     : allDaysRange} />
                             {/* Membership item */}
-                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon={"ID_CARD"}
+                            {bookingData!.hasActiveMembershipForEvent && <OrderItem icon="ID_CARD"
                                 title={t("furpanel.booking.items.membership_card")} />}
                             {/* Extra days */}
-                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon={"CALENDAR_ADD_ON"}
+                            {bookingData!.order.extraDays !== "NONE" && <OrderItem icon="CALENDAR_ADD_ON"
                                 title={t("furpanel.booking.items.extra_days")}
                                 description={t(`furpanel.booking.items.extra_days_${bookingData!.order.extraDays}`)} />}
                             {/* Room */}
@@ -246,31 +250,31 @@ export default function BookingPage() {
                                     { capacity: bookingData!.order.room.roomCapacity })} />}
                             {/* Board */}
                             {!!bookingData!.order.board && bookingData!.order.board != Board.NONE && <OrderItem icon="DINING"
-                                title={t(`furpanel.booking.items.board_${bookingData!.order.board}`)}/>}
+                                title={t(`furpanel.booking.items.board_${bookingData!.order.board}`)} />}
                         </div>
 
                         {/* Order actions */}
                         <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
                             {pageData?.shouldRetry && <Button className="action-button"
-                                iconName="REPLAY"
+                                icon="REPLAY"
                                 busy={actionLoading}
                                 onClick={requestRetryPaymentLink}>
                                 {t("furpanel.booking.retry_payment")}
                             </Button>}
-                            {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret}/>}
+                            {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret} />}
                             <div className="spacer" style={{ flexGrow: "300" }}></div>
                             <div className="horizontal-list gap-4mm flex-wrap flex-space-between"
                                 style={{ flexGrow: "1" }}>
                                 <Button className="action-button"
                                     disabled={isEditLocked}
-                                    iconName="OPEN_IN_NEW"
+                                    icon="OPEN_IN_NEW"
                                     busy={actionLoading}
                                     onClick={requestOrderEditLink}>
                                     {t("furpanel.booking.edit_booking")}
                                 </Button>
                                 {bookingData?.exchangeSupported && <Button className="action-button danger"
                                     disabled={isEditLocked}
-                                    iconName="SEND"
+                                    icon="SEND"
                                     busy={actionLoading}
                                     onClick={() => promptExchange()}>
                                     {t("furpanel.booking.actions.transfer_order")}
@@ -291,7 +295,7 @@ export default function BookingPage() {
 
                             {GROUP_CHAT_URL &&
                                 <NoticeBox theme={NoticeTheme.FAQ}
-                                    customIcon={"GROUPS"}
+                                    icon="GROUPS"
                                     title={t("furpanel.booking.messages.invite_group.title")}>
                                     {t.rich("furpanel.booking.messages.invite_group.description",
                                         {
@@ -320,17 +324,17 @@ export default function BookingPage() {
             </>}
         </div>
         {/* Order exchange modal */}
-        <Modal icon={"SEND"} open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
+        <Modal icon="SEND" open={exchangeModalOpen} title={t("furpanel.booking.actions.transfer_order")} onClose={() => setExchangeModalOpen(false)} busy={modalLoading}>
             <span className="descriptive small">{t("furpanel.booking.messages.transfer_explanation")}</span>
-            <DataForm action={new OrderExchangeFormAction} loading={modalLoading} setLoading={setModalLoading} onSuccess={exchangeSuccess}
+            <DataForm action={new OrderExchangeFormAction} busy={modalLoading} setBusy={setModalLoading} onSuccess={exchangeSuccess}
                 onFail={exchangeFail} hideSave className="vertical-list gap-2mm" shouldReset={!exchangeModalOpen}>
                 <input type="hidden" name="userId" value={userDisplay?.display?.userId ?? ""}></input>
                 <AutoInput fieldName="recipientId" required manager={new AutoInputOrderExchangeManager()} multiple={false} disabled={modalLoading}
                     label={t("furpanel.booking.input.transfer_user.label")} placeholder={t("furpanel.booking.input.transfer_user.placeholder")} style={{ maxWidth: "500px" }} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
+                    <Button type="button" className="danger" icon="CANCEL" busy={modalLoading} onClick={() => setExchangeModalOpen(false)}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" icon="CHECK" busy={modalLoading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

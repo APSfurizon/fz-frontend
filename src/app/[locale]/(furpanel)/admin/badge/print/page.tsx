@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import BadgeTable from "./badgeTable";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
 
 export default function AdvancedBadgePrint() {
@@ -85,12 +85,20 @@ export default function AdvancedBadgePrint() {
         const fursuitBadgeCodes = fursuitBadgeRows.map(row => row.fursuit.id).join(",");
         const promises: Promise<any>[] = [];
         if (!isEmpty(regularBadgeCodes)) {
-            promises.push(runRequest(new GetRenderedCommonBadgesApiAction(), undefined, undefined,
-                buildSearchParams({ "userIds": [regularBadgeCodes] })));
+            promises.push(
+                runRequest({
+                    action: new GetRenderedCommonBadgesApiAction(),
+                    searchParams: buildSearchParams({ "userIds": [regularBadgeCodes] })
+                })
+            );
         }
         if (!isEmpty(fursuitBadgeCodes)) {
-            promises.push(runRequest(new GetRenderedFursuitBadgesApiAction(), undefined, undefined,
-                buildSearchParams({ "fursuitIds": [fursuitBadgeCodes] })));
+            promises.push(
+                runRequest({
+                    action: new GetRenderedFursuitBadgesApiAction(),
+                    searchParams: buildSearchParams({ "fursuitIds": [fursuitBadgeCodes] })
+                })
+            );
         }
         Promise.all(promises)
             .then(responses => responses.forEach(response => {
@@ -103,13 +111,13 @@ export default function AdvancedBadgePrint() {
             }))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setPrintLoading(false));
     }
 
-    return <div className="page">
+    return <div className="stretch-page">
         <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon={"ARROW_BACK"} /></Link>
+            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</span>
             </div>
@@ -124,7 +132,7 @@ export default function AdvancedBadgePrint() {
                 searchAction={new SearchRegularBadgesApiAction()}
                 getRowId={(row) => "" + row.user.userId}
                 getRowsFromResult={(result) => result.userBadges}
-                icon={"PERSON_BOOK"} />
+                icon="PERSON_BOOK" />
 
             {/* Fursuit badges */}
             <BadgeTable<FursuitBadge, SearchFursuitBadgesResponse>
@@ -135,10 +143,10 @@ export default function AdvancedBadgePrint() {
                 searchAction={new SearchFursuitBadgesApiAction()}
                 getRowId={(row) => "" + row.fursuit.id}
                 getRowsFromResult={(result) => result.fursuitBadges}
-                icon={"PETS"} />
+                icon="PETS" />
             <div className="horizontal-list">
                 <div className="spacer"></div>
-                <Button iconName={"PRINT"} disabled={!canPrint} busy={printLoading} onClick={runPrint}>
+                <Button icon="PRINT" disabled={!canPrint} busy={printLoading} onClick={runPrint}>
                     {t("furpanel.admin.events.badges.print.advanced_mode.print")}
                 </Button>
             </div>

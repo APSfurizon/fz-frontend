@@ -9,10 +9,8 @@ import {
     RequestType
 } from "./global";
 import { MediaData } from "./media";
-import { UAParser } from "ua-parser-js";
 import { SelectItem } from "../components/fpSelect";
-
-export const REG_ITALIAN_FISCAL_CODE = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/gmi;
+import { MouseEvent } from "react";
 
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
     propic?: MediaData
@@ -101,10 +99,55 @@ export interface UserSearchResponse extends ApiResponse {
     users: UserSearchResult[]
 }
 
+export class GetUserByIdAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/by-user-id";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "id": value });
+    }
+}
+
 export class UserSearchAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "users/search/current-event";
+}
+
+export class UserSearchByOrderSerialAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/current-event/by-order-serial";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "orders": value });
+    }
+}
+
+export class UserSearchByOrderCodeAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/current-event/by-order-code";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "orders": value });
+    }
+}
+
+export class UserSearchByMembershipNumberAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/by-membership-number";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "number": value });
+    }
+}
+
+export class UserSearchByFursuitIdAction extends ApiAction<UserSearchResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "users/search/by-fursuit-id";
+    static getParams: (value: string, additionalValues?: any) => URLSearchParams = (value) => {
+        return buildSearchParams({ "id": value });
+    }
 }
 
 /**
@@ -113,22 +156,44 @@ export class UserSearchAction extends ApiAction<UserSearchResponse, ApiErrorResp
  */
 export class AutoInputUsersManager implements AutoInputManager {
     codeOnly: boolean = false;
+    searchAction: ApiAction<UserSearchResponse, ApiErrorResponse>;
+    getParams: (value: string, additionalValues?: any) => URLSearchParams;
+
+    constructor(searchAction?: ApiAction<UserSearchResponse, ApiErrorResponse>,
+        getParams?: (value: string, additionalValues?: any) => URLSearchParams) {
+        if (!searchAction) {
+            this.searchAction = new UserSearchAction();
+        } else {
+            this.searchAction = searchAction;
+        }
+        if (!getParams) {
+            this.getParams = (value, additionalValues) => {
+                const params = [...(additionalValues || [])]
+                return buildSearchParams({ "name": value, "is-admin-search": params[0] ?? false });
+            }
+        } else {
+            this.getParams = getParams;
+        }
+    }
 
     loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
             const params = buildSearchParams({ "id": filter.filteredIds.map(num => "" + num) })
-            runRequest(new UserSearchAction(), ["by-id"], undefined, params).then(results => {
-                const users = results.users.map(usr => toSearchResult(usr));
+            runRequest({ action: new GetUserByIdAction(), searchParams: params }).then(results => {
+                const users = results.users?.map(usr => toSearchResult(usr));
                 resolve(filterLoaded(users, filter));
             });
         });
     }
 
-    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
-        const params = [...(additionalValues || [])]
+    searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter,
+        additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            runRequest(new UserSearchAction(), undefined, undefined, buildSearchParams({ "name": value, "is-admin-search": params[0] ?? false })).then(results => {
-                const users = results.users.map(usr => toSearchResult(usr));
+            runRequest({
+                action: this.searchAction,
+                searchParams: this.getParams(value, additionalValues)
+            }).then(results => {
+                const users = results.users?.map(usr => toSearchResult(usr));
                 resolve(
                     filterLoaded(users, filter, filterOut)
                 );
@@ -157,14 +222,15 @@ export class AutoInputRoomInviteManager extends AutoInputUsersManager {
     searchByValues(value: string, locale?: string, filter?: AutoInputFilter,
         filterOut?: AutoInputFilter): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            runRequest(new UserSearchAction(), undefined, undefined,
-                buildSearchParams({ "name": value, "filter-not-in-room": "true" }))
-                .then(results => {
-                    const users = results.users.map(usr => toSearchResult(usr));
-                    resolve(
-                        filterLoaded(users, filter, filterOut)
-                    );
-                });
+            runRequest({
+                action: new UserSearchAction(),
+                searchParams: buildSearchParams({ "name": value, "filter-not-in-room": "true" })
+            }).then(results => {
+                const users = results.users.map(usr => toSearchResult(usr));
+                resolve(
+                    filterLoaded(users, filter, filterOut)
+                );
+            });
         });
     }
 }
@@ -202,6 +268,14 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
         };
         return toReturn;
     }
+}
+
+export class UpdatePersonalInfoAdminFormAction extends FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
+    method = RequestType.POST;
+    authenticated = true;
+    dtoBuilder = new UpdatePersonalInfoDTOBuilder();
+    hasPathParams = true;
+    urlAction = "membership/update-personal-user-information/{id}";
 }
 
 export class UpdatePersonalInfoFormAction extends FormApiAction<UserPersonalInfo, SimpleApiResponse, ApiErrorResponse> {
@@ -442,9 +516,13 @@ export class ChangeLanguageAction extends ApiAction<boolean, ApiErrorResponse> {
     urlAction = "users/changeLanguage";
 }
 
-export function changeLanguage(language: string, userDisplay?: UserData) {
+export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: string, userDisplay?: UserData) {
+    e.preventDefault();
     return new Promise((resolve) => resolve(!!userDisplay
-        ? runRequest(new ChangeLanguageAction(), undefined, { languageCode: language })
+        ? runRequest({
+            action: new ChangeLanguageAction(),
+            body: { languageCode: language }
+        })
         : Promise.resolve(null)))
         .then(() => {
             setCookie("NEXT_LOCALE", language, new Date(Date.now() + (1000 * 3600 * 24 * 365)));

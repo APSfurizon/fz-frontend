@@ -8,7 +8,7 @@ import { CSSProperties, MouseEventHandler } from "react";
 import { useLocale } from "next-intl";
 
 export default function ToolLink({
-    iconName,
+    icon,
     iconStyle,
     href,
     children,
@@ -16,7 +16,7 @@ export default function ToolLink({
     className,
     onClick
 }: Readonly<{
-    iconName: MaterialIcon,
+    icon: MaterialIcon,
     iconStyle?: CSSProperties,
     href: Url,
     children?: React.ReactNode,
@@ -31,7 +31,7 @@ export default function ToolLink({
         onClick={onClick}
         className={`tool-link rounded-m ${activeClass} ${className ?? ""}`}
         style={{ ...style }}>
-        {iconName !== undefined && <Icon icon={iconName} style={{ ...iconStyle }}/>}
+        {icon !== undefined && <Icon icon={icon} style={{ ...iconStyle }}/>}
         <span className="title small semibold">{children}</span>
     </Link>
 }

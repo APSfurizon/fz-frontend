@@ -110,10 +110,10 @@ export default function RoleMembersEditor() {
     return <>
         <div className="horizontal-list gap-2mm">
             <div className="spacer"></div>
-            <Button className="danger" iconName={"HOURGLASS_DISABLED"} onClick={() => { purgeTemporaryMembers() }}>
+            <Button className="danger" icon="HOURGLASS_DISABLED" onClick={() => { purgeTemporaryMembers() }}>
                 {t("furpanel.admin.users.security.roles.actions.purge_temporary_roles")}
             </Button>
-            <Button iconName={"ADD"} onClick={() => { setAddMemberOpen(true) }}>
+            <Button icon="ADD" onClick={() => { setAddMemberOpen(true) }}>
                 {t("common.CRUD.add")}
             </Button>
         </div>
@@ -136,7 +136,7 @@ export default function RoleMembersEditor() {
                         </Checkbox>
                     </div>
                     <div className="data">
-                        <Button iconName={"DELETE"} onClick={() => removeMember(roleMember.displayData.userId)} />
+                        <Button icon="DELETE" onClick={() => removeMember(roleMember.displayData.userId)} />
                     </div>
                 </div>)}
             </div>
@@ -159,10 +159,10 @@ export default function RoleMembersEditor() {
                 </div>
             </DataForm>
             <div className="horizontal-list gap-4mm">
-                <Button type="button" className="danger" iconName={"CANCEL"}
+                <Button type="button" className="danger" icon="CANCEL"
                     onClick={() => setAddMemberOpen(false)}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" iconName={"CHECK"}
+                <Button type="submit" className="success" icon="CHECK"
                     onClick={() => addMember()} disabled={!!!selectedUserTemp}>
                     {t("common.confirm")}
                 </Button>

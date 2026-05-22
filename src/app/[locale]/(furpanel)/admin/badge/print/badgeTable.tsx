@@ -46,7 +46,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
         const params = new URLSearchParams();
         if (badgeSearchQuery?.serialQuery) params.append("orderSerials", badgeSearchQuery?.serialQuery);
         if (badgeSearchQuery?.orderQuery) params.append("orderCodes", badgeSearchQuery?.orderQuery);
-        runRequest(searchAction, undefined, undefined, params)
+        runRequest({ action: searchAction, searchParams: params })
             .then((result) => {
                 const response = result as U;
                 setRows(prev => {
@@ -88,7 +88,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
                 disabled={badgeLoading} />
             <Button busy={badgeLoading}
                 className="margin-bottom-1mm"
-                iconName={"SEARCH"}
+                icon="SEARCH"
                 onClick={searchBadges}>
                 {t("furpanel.admin.events.badges.print.advanced_mode.Search")}
             </Button>

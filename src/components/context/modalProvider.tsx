@@ -13,7 +13,7 @@ interface ModalUpdateType {
 
 const ModalContext = createContext<ModalUpdateType>(undefined as any);
 
-export function ModalProvider ({children}: Readonly<{children: React.ReactNode}>) {
+export function ModalProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const [isOpen, setOpen] = useState(false);
     const [icon, setIcon] = useState<MaterialIcon>();
     const [title, setModalTitle] = useState<string>();
@@ -27,7 +27,7 @@ export function ModalProvider ({children}: Readonly<{children: React.ReactNode}>
         setOpen(true);
     }
     const hideModal = () => setOpen(false);
-    return <ModalContext.Provider value={{isOpen, title, icon, modalChildren, zIndex, showModal, hideModal}}>{children}</ModalContext.Provider>;
+    return <ModalContext.Provider value={{ isOpen, title, icon, modalChildren, zIndex, showModal, hideModal }}>{children}</ModalContext.Provider>;
 };
 
 export const useModalUpdate = () => {

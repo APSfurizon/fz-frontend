@@ -2,13 +2,13 @@
 import Checkbox from "@/components/input/checkbox";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import FpInput from "@/components/input/fpInput";
-import { RoleData, RoleOutputData } from "@/lib/api/admin/role";
+import { RoleData } from "@/lib/api/admin/role";
 import { nullifyEmptyString } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 export default function RoleDataEditor() {
     const t = useTranslations("furpanel");
-    const { loading, entity, entityChanged, setEntity } = useEntityEditor<RoleData, RoleData>();
+    const { loading, entity, setEntity } = useEntityEditor<RoleData, RoleData>();
 
     const onChange = (e: Partial<RoleData>) => {
         const newData = { ...entity, ...e };

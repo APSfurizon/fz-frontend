@@ -1,7 +1,7 @@
 "use client"
 import { EntityEditorProvider } from "@/components/context/entityEditorProvider";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { GetRoleByIdApiAction, RoleData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
 import { runRequest } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,7 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
     // Parse params
     useEffect(() => {
         params.then((loadedParams) => {
-            let newId = parseInt (loadedParams.id);
+            const newId = parseInt(loadedParams.id);
             if (newId === undefined || isNaN(newId)) {
                 notFound();
             }
@@ -34,14 +34,14 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
         setLoading(true);
         getEntity()
             .then((response) => setEntity(response as RoleData))
-            .catch((err) => showModal(t("error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [roleId]);
 
     // Get the entity
     const getEntity = () => {
         if (roleId === undefined) return Promise.reject(null);
-        return runRequest(new GetRoleByIdApiAction(), [roleId.toString()])
+        return runRequest({ action: new GetRoleByIdApiAction(), pathParams: { "id": roleId } })
     }
 
     // Save entity
@@ -50,14 +50,19 @@ export default function ViewRoleLayout({ params, children }: Readonly<{ params: 
             if (!toSave) return;
             setLoading(true);
             const toSend = roleToOutput(toSave);
-            runRequest(new UpdateRoleByIdApiAction(), ["" + toSave.roleId], toSend)
-                .then((response) => {
-                    getEntity()
-                        .then((data) => resolve(data as RoleData))
-                        .catch((err) => reject(err));
-                })
+            runRequest({
+                action: new UpdateRoleByIdApiAction(),
+                pathParams: {
+                    "id": roleId
+                },
+                body: toSend
+            }).then(() => {
+                getEntity()
+                    .then((data) => resolve(data))
+                    .catch((err) => reject(err));
+            })
                 .catch((err) => {
-                    showModal(t("error"), <ModalError error={err} />);
+                    showModal(t("error"), <ErrorMessage error={err} />);
                     reject(err);
                 })
                 .finally(() => setLoading(false));

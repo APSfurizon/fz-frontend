@@ -12,6 +12,7 @@ export interface ExchangeStatusApiResponse extends ApiResponse {
     fullOrderExchange?: OrderData,
     sourceRoomExchange?: RoomData,
     sourceExtraDays: ExtraDays,
+    sourceBoard?: Board,
     targetRoomInfoHidden: boolean,
     targetRoomExchange: RoomData,
     targetExtraDays?: ExtraDays,

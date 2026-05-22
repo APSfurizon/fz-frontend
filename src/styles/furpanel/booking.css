@@ -124,6 +124,7 @@ div.booking-information {
     }
     p i {
         margin-right: 1mm;
+        vertical-align: middle;
     }
 }
 

@@ -19,6 +19,7 @@ function scrollToFocus(e: FocusEvent<HTMLInputElement>) {
 }
 
 export default function FpInput({
+    autocorrect = true,
     busy = false,
     className,
     disabled = false,
@@ -46,6 +47,7 @@ export default function FpInput({
     initialValue,
     autocomplete
 }: Readonly<{
+    autocorrect?: boolean,
     busy?: boolean,
     className?: string,
     disabled?: boolean,
@@ -78,9 +80,12 @@ export default function FpInput({
     const [inputValue, setInputValue] = useState(initialValue ?? "");
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const [visiblePassword, setVisiblePassword] = useState(false);
-    const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
+    const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
     const inputRef = useRef<HTMLInputElement>(null);
     const t = useTranslations("components");
+
+    // Handle field registration
+    useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
 
     // Detect reset
     useEffect(() => {
@@ -106,6 +111,7 @@ export default function FpInput({
     /* Change handling */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
+        e.target.setCustomValidity("");
         if (onChange) onChange(e);
         if (pattern) patternValidity(e);
         onFormChange(fieldName);
@@ -163,10 +169,11 @@ export default function FpInput({
                     ref={inputRef}
                     onFocus={scrollToFocus}
                     lang={requiresLocale ? locale : undefined}
+                    autoCorrect={autocorrect ? "on" : "off"}
                 />
                 <span className={`${isBusy || isPassword ? "icon-container" : ""}`}>
                     {(isBusy) && (
-                        <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY"/>
+                        <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY" />
                     )}
                     {!(isBusy) && (isPassword) && (
                         <a style={{ cursor: 'pointer', visibility: showViewPassword ? 'visible' : 'hidden' }}

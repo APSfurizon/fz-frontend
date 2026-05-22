@@ -2,9 +2,9 @@ import { ApiErrorResponse, runRequest } from "../api/global";
 import { AutoInputCountriesApiAction, AutoInputStatesApiAction, PlaceApiResponse } from "../api/geo";
 import { buildSearchParams } from "../utils";
 import { GetPermissionsApiAction, GetPermissionsResponse } from "../api/admin/role";
+import * as crypto from "crypto";
 
 export function getParamsHash(...p: any[]) {
-    const crypto = require('crypto')
     const shasum = crypto.createHash('sha1');
     shasum.update(JSON.stringify(p));
     return shasum.digest('hex');
@@ -39,7 +39,7 @@ export abstract class CachedData<T> {
 export class CachedCountries extends CachedData<boolean | PlaceApiResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData() {
-        return runRequest(new AutoInputCountriesApiAction());
+        return runRequest({ action: new AutoInputCountriesApiAction() });
     }
 }
 
@@ -48,8 +48,10 @@ export const CACHED_COUNTRIES = new CachedCountries();
 export class CachedStates extends CachedData<boolean | PlaceApiResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData(...p: string[]) {
-        return runRequest(new AutoInputStatesApiAction(), undefined, undefined,
-            buildSearchParams({ "code": p[0] ?? "" }));
+        return runRequest({
+            action: new AutoInputStatesApiAction(),
+            searchParams: buildSearchParams({ "code": p[0] ?? "" })
+        });
     }
 }
 
@@ -58,7 +60,7 @@ export const CACHED_STATES = new CachedStates();
 export class CachedPermissions extends CachedData<boolean | GetPermissionsResponse | ApiErrorResponse> {
     duration: number = 1 * 24 * 60 * 60; // One day
     loadData() {
-        return runRequest(new GetPermissionsApiAction());
+        return runRequest({ action: new GetPermissionsApiAction() });
     }
 }
 

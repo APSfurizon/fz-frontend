@@ -1,7 +1,6 @@
 "use client"
-import Icon from "@/components/icon";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import { runRequest } from "@/lib/api/global";
 import { UserOrderLinkingAction, UserOrderLinkingData } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -28,13 +27,19 @@ export default function OrderLinkPage() {
             orderCode: code!,
             orderSecret: secret!
         }
-        runRequest(new UserOrderLinkingAction(), undefined, userOrderLinkData)
-            .then(() => router.replace("/booking"))
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+        runRequest({
+            action: new UserOrderLinkingAction(),
+            body: userOrderLinkData
+        }).then(() => router.replace("/booking"))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
     }, [])
 
-    return <Modal open={true} busy={loading} onClose={() => { router.replace("/home") }} title={t("furpanel.user.linking.title")} icon={"LOCAL_ACTIVITY"}>
+    return <Modal open
+        busy={loading}
+        onClose={() => { router.replace("/home") }}
+        title={t("furpanel.user.linking.title")}
+        icon="LOCAL_ACTIVITY">
         {loading && <LoadingPanel>{t("furpanel.user.linking.description")}</LoadingPanel>}
     </Modal>
 }

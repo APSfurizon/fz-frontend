@@ -15,6 +15,10 @@ import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { shouldShowChangelog } from '@/lib/utils';
 
+function normalizeRole(internalName?: string) {
+    return (internalName ?? "").toLowerCase().trim();
+}
+
 export default function Layout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const t = useTranslations();
     const { isOpen, icon, title, modalChildren, hideModal, showModal } = useModalUpdate();
@@ -51,12 +55,15 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         setToolListExpanded(false);
     }
 
+    const roles = userDisplay?.roles ?? [];
+    const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
+
     return <>
         <div className="main-dialog rounded-s">
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">
-                        <Icon icon="DESIGN_SERVICES"/>
+                        <Icon icon="DESIGN_SERVICES" />
                         <span className="titular bold highlight">furpanel</span>
                     </span>
                 </span>
@@ -65,43 +72,43 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     style={{ justifyContent: 'flex-end' }}>
                     {BOOKING_ENABLED && <ToolLink onClick={toolClick}
                         href="/booking"
-                        iconName={"LOCAL_ACTIVITY"}>
+                        icon="LOCAL_ACTIVITY">
                         {t('furpanel.booking.title')}
                     </ToolLink>}
                     {BADGE_ENABLED && <ToolLink onClick={toolClick}
                         href="/badge"
-                        iconName={"PERSON_BOOK"}>
+                        icon="PERSON_BOOK">
                         {t('furpanel.badge.title')}
                     </ToolLink>}
                     {ROOM_ENABLED && <ToolLink onClick={toolClick}
                         href="/room"
-                        iconName={"BED"}>
+                        icon="BED">
                         {t('furpanel.room.title')}
                     </ToolLink>}
                     {UPLOAD_ENABLED && <ToolLink onClick={toolClick}
                         href="/upload-area"
-                        iconName={"PHOTO_CAMERA"}>
+                        icon="PHOTO_CAMERA">
                         {t('furpanel.upload_area.title')}
                     </ToolLink>}
                     <ToolLink onClick={toolClick}
                         href="/user"
-                        iconName={"PERSON"}>
+                        icon="PERSON">
                         {t('furpanel.user.title')}
                     </ToolLink>
-                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
+                    {canSeeAdminPages && <ToolLink onClick={toolClick}
                         href="/admin"
-                        iconName={"SECURITY"}>
+                        icon="SECURITY">
                         {t('furpanel.admin.title')}
                     </ToolLink>}
                     {DEBUG_ENABLED && <ToolLink href="/debug"
-                        iconName={"BUG_REPORT"}>
+                        icon="BUG_REPORT">
                         {t('furpanel.debug.title')}
                     </ToolLink>}
                 </div>
                 <span>
-                    <a href="#" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
-                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"}/>
-                    </a>
+                    <div role="button" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>
+                        <Icon icon={toolListExpanded ? "CLOSE" : "MENU"} />
+                    </div>
                 </span>
             </div>
 

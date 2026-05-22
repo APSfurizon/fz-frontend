@@ -33,7 +33,8 @@ div.room-invite {
 div.guest-container {
     position: relative;
 
-    a.action-kick {
+    div.action-kick {
+        cursor: pointer;
         position: absolute;
         right: -.5em;
         top: -.5em;
@@ -41,14 +42,16 @@ div.guest-container {
         padding: .2em;
         margin: 0px;
         background-color: var(--room-invite-kick);
+        -webkit-user-drag: none;
+        user-select: none;
     }
 
-    a.action-kick:hover {
-        filter: brightness(1.1);
+    div.action-kick:hover {
+        filter: brightness(1.8);
     }
 
-    a.action-kick:active {
-        filter: brightness(0.8);
+    div.action-kick:active {
+        filter: brightness(0.8) saturate(0.7);
     }
 }
 

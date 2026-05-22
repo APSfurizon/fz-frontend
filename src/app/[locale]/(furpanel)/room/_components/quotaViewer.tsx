@@ -1,14 +1,18 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Button from "@/components/input/button";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { getRemainingRoomType, RoomStoreItemsApiAction, RoomStoreItemsApiResponse } from "@/lib/api/flows/roomOrderFlow";
+import {
+    getRemainingRoomType,
+    RoomStoreItemsApiAction,
+    RoomStoreItemsApiResponse
+} from "@/lib/api/flows/roomOrderFlow";
 import { runRequest } from "@/lib/api/global";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, close }: Readonly<{
+export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: Readonly<{
     isOpen: boolean,
     modalLoading: boolean,
     setModalLoading: Dispatch<SetStateAction<boolean>>,
@@ -26,10 +30,10 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, clo
     useEffect(() => {
         if (roomsData || !isOpen) return;
         setModalLoading(true);
-        runRequest(new RoomStoreItemsApiAction(), undefined, undefined, undefined)
+        runRequest({ action: new RoomStoreItemsApiAction() })
             .then(data => setRoomsData(data))
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />, "ERROR");
+                showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
                 setRoomsData(undefined);
             }).finally(() => setModalLoading(false));
     }, [roomsData, isOpen]);
@@ -41,7 +45,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading, clo
             </NoticeBox>
             <div className="spacer"></div>
             <div>
-                <Button iconName={"REFRESH"}
+                <Button icon="REFRESH"
                     onClick={() => setRoomsData(null)}
                     debounce={3000}
                     busy={modalLoading}>

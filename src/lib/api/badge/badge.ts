@@ -21,7 +21,7 @@ export class GetBadgeStatusAction extends ApiAction<BadgeStatusApiResponse, ApiE
     urlAction = "badge/";
 }
 
-export interface BadgeUploadResponse extends MediaData, ApiResponse {}
+export interface BadgeUploadResponse extends MediaData, ApiResponse { }
 
 export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
     authenticated = true;
@@ -29,10 +29,24 @@ export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorRe
     urlAction = "badge/user/upload";
 }
 
+export class UploadBadgeAdminAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    hasPathParams = true;
+    urlAction = "badge/user/upload/{id}";
+}
+
 export class DeleteBadgeAction extends ApiAction<boolean, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.DELETE;
     urlAction = "badge/user/";
+}
+
+export class DeleteBadgeAdminAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.DELETE;
+    hasPathParams = true;
+    urlAction = "badge/user/{id}";
 }
 
 export interface BadgeDataChangeData {
@@ -44,8 +58,8 @@ export interface BadgeDataChangeData {
 export class BadgeDataChangeDTOBuilder implements FormDTOBuilder<BadgeDataChangeData> {
     mapToDTO = (data: FormData) => {
         return {
-            userId: parseInt(data.get('userId')?.toString () ?? ""),
-            fursonaName: data.get('fursonaName')?.toString () ?? "",
+            userId: parseInt(data.get('userId')?.toString() ?? ""),
+            fursonaName: data.get('fursonaName')?.toString() ?? "",
             locale: data.get('locale')?.toString() ?? ""
         };
     }
@@ -54,6 +68,6 @@ export class BadgeDataChangeDTOBuilder implements FormDTOBuilder<BadgeDataChange
 export class BadgeDataChangeFormAction extends FormApiAction<BadgeDataChangeData, boolean, ApiErrorResponse> {
     method = RequestType.POST;
     authenticated = true;
-    dtoBuilder = new BadgeDataChangeDTOBuilder ();
+    dtoBuilder = new BadgeDataChangeDTOBuilder();
     urlAction = "badge/update-user-badge-info";
 }

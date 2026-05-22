@@ -28,6 +28,8 @@ export const ICONS = {
     CONSTRUCTION: "construction",
     CONTENT_COPY: "content_copy",
     CONTEXTUAL_TOKEN: "contextual_token",
+    CROWN: "crown",
+    DATE_RANGE: "date_range",
     DELETE: "delete",
     DESIGN_SERVICES: "design_services",
     DINING: "dining",
@@ -40,6 +42,7 @@ export const ICONS = {
     EDIT: "edit",
     EDIT_SQUARE: "edit_square",
     ERROR: "error",
+    EVENT: "event",
     EVENT_REPEAT: "event_repeat",
     FEATURED_SEASONAL_AND_GIFTS: "featured_seasonal_and_gifts",
     FEMALE: "female",
@@ -50,6 +53,7 @@ export const ICONS = {
     FIND_IN_PAGE: "find_in_page",
     FOREST: "forest",
     GROUPS: "groups",
+    GPP_GOOD: "gpp_good",
     HELP: "help",
     HIDE_IMAGE: "hide_image",
     HOME: "home",
@@ -63,6 +67,7 @@ export const ICONS = {
     KEYBOARD_ARROW_RIGHT: "keyboard_arrow_right",
     KEYBOARD_ARROW_UP: "keyboard_arrow_up",
     LANGUAGE: "language",
+    LINK: "link",
     LOCAL_ACTIVITY: "local_activity",
     LOCATION_CITY: "location_city",
     LOCATION_ON: "location_on",
@@ -100,13 +105,16 @@ export const ICONS = {
     SHOPPING_CART_CHECKOUT: "shopping_cart_checkout",
     SNOOZE: "snooze",
     STAR: "star",
+    STORE: "store",
     SYNC: "sync",
+    TIMELAPSE: "timelapse",
     TRANSGENDER: "transgender",
     TRIP: "trip",
     TUNE: "tune",
     VISIBILITY: "visibility",
     VISIBILITY_OFF: "visibility_off",
-    VITAL_SIGNS: "vital_signs"
+    VITAL_SIGNS: "vital_signs",
+    WORKSPACE_PREMIUM: "workspace_premium"
 } as const;
 
 export type MaterialIcon = keyof typeof ICONS;
@@ -114,12 +122,16 @@ export type MaterialIcon = keyof typeof ICONS;
 type IconProps = {
     icon: MaterialIcon,
     style?: CSSProperties,
-    className?: string
+    className?: string,
+    title?: string
 }
 
 export default function Icon(props: Readonly<IconProps>) {
     return <span className="icon-container" data-nosnippet aria-hidden>
-        <i translate="no" className={`icon mdi ${props.className ?? ""}`} style={{ ...props.style }}>
+        <i translate="no"
+            className={`icon mdi ${props.className ?? ""}`}
+            style={{ ...props.style }}
+            title={props.title}>
             {props.icon}
         </i>
     </span>

@@ -2,15 +2,14 @@
 import { useLocale, useTranslations } from 'next-intl';
 import Image from "next/image";
 import Icon from './icon';
-import { useRouter } from "next/navigation";
 import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import "@/styles/components/header.css";
-import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED } from '@/lib/constants';
+import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED, SCHEDULE_ENABLED, DEALER_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import { isMobile, UA } from '@/lib/userAgent';
-import { OS } from 'ua-parser-js/enums';
+import { OSName } from 'ua-parser-js/enums';
 
 enum DEVICE_TYPE {
     APPLE = "apple",
@@ -19,9 +18,9 @@ enum DEVICE_TYPE {
 }
 
 const type = isMobile()
-    ? UA.os.is(OS.ANDROID)
+    ? UA.os.is(OSName.ANDROID)
         ? DEVICE_TYPE.ANDROID
-        : UA.os.is(OS.IOS)
+        : UA.os.is(OSName.IOS)
             ? DEVICE_TYPE.APPLE
             : DEVICE_TYPE.GENERIC
     : DEVICE_TYPE.GENERIC;
@@ -34,12 +33,13 @@ export default function Header() {
     const [collapsed, setCollapsed] = useState(false);
     const [latestScroll, setLatestScroll] = useState<number>();
     const [newScroll, setNewScroll] = useState<number>();
+    const headerRef = useRef<HTMLElement>(null);
     const language = locale.split('-')[0];
     const deviceTypeLower = type.toString().toLowerCase();
     const appBadgeSrc = `/images/app-badge/${deviceTypeLower}/${deviceTypeLower}_${language}.png`;
+    const closeHamburgerMenu = () => setHamburgerOpen(false);
 
-    useEffect(() => document.body.addEventListener('scroll',
-        (e: Event) => setNewScroll(document.body.scrollTop)), []);
+    useEffect(() => document.body.addEventListener('scroll', () => setNewScroll(document.body.scrollTop)), []);
 
     useEffect(() => {
         if (newScroll === undefined) return;
@@ -57,37 +57,83 @@ export default function Header() {
         setLatestScroll(newScroll);
     }, [newScroll])
 
+    useEffect(() => {
+        const headerEl = headerRef.current;
+        if (!headerEl) return;
+
+        const updateHeaderOffset = () => {
+            const rect = headerEl.getBoundingClientRect();
+            const visibleOffset = Math.max(0, Math.round(rect.bottom));
+            document.documentElement.style.setProperty("--app-header-offset", `${visibleOffset}px`);
+        };
+
+        updateHeaderOffset();
+
+        const observer = new ResizeObserver(updateHeaderOffset);
+        observer.observe(headerEl);
+        window.addEventListener("resize", updateHeaderOffset);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("resize", updateHeaderOffset);
+        };
+    }, []);
+
+    useEffect(() => {
+        const headerEl = headerRef.current;
+        if (!headerEl) return;
+
+        const rect = headerEl.getBoundingClientRect();
+        const visibleOffset = Math.max(0, Math.round(rect.bottom));
+        document.documentElement.style.setProperty("--app-header-offset", `${visibleOffset}px`);
+    }, [newScroll, collapsed, hamburgerOpen]);
+
     return (
-        <header className={`header ${collapsed ? "collapsed" : ""}`}>
+        <header ref={headerRef} className={`header ${collapsed ? "collapsed" : ""}`}>
             <div className="logo-container center">
                 <picture className="header-logo">
                     <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
-                    <Image className="header-logo" src="/images/logo-light.png" alt={t('header.alt_logo')} width={175} height={40}></Image>
+                    <Image className="header-logo" src="/images/logo-light.png"
+                        alt={t('header.alt_logo')}
+                        width={175}
+                        height={40} />
                 </picture>
             </div>
             <span>
-                <a href="#" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
+                <div role="button" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
                     <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"} />
-                </a>
+                </div>
             </span>
             <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
-                <Link href="/home" className="header-link medium">
+                <Link href="/home" className="header-link medium" onClick={closeHamburgerMenu}>
                     <Icon style={{ fontSize: "24px" }} icon="HOME" />
                     <span className="title semibold">{t('header.home')}</span>
                 </Link>
-                { NOSECOUNT_ENABLED && <>
-                    <Link href={`/nosecount`} className="header-link medium">
+                {NOSECOUNT_ENABLED && <>
+                    <Link href={`/nosecount`} className="header-link medium" onClick={closeHamburgerMenu}>
                         <Icon style={{ fontSize: "24px" }} icon="GROUPS" />
                         <span className="title semibold">{t('header.nose_count')}</span>
                     </Link>
                 </>}
+                {SCHEDULE_ENABLED && <>
+                    <Link href={`/schedule`} className="header-link medium" onClick={closeHamburgerMenu}>
+                        <Icon style={{ fontSize: "24px" }} icon="EVENT" />
+                        <span className="title semibold">{t('header.schedule')}</span>
+                    </Link>
+                </>}
+                {DEALER_ENABLED && <>
+                    <Link href={`/dealer`} className="header-link medium" onClick={closeHamburgerMenu}>
+                        <Icon style={{ fontSize: "24px" }} icon="STORE" />
+                        <span className="title semibold">{t('header.dealer')}</span>
+                    </Link>
+                </>}
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName="INFO"/>
+                    <Icon style={{fontSize: "24px"}} icon="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>
                 </a> */}
                 <div className="spacer"></div>
                 {/* <a className="header-link">
-                    <Icon style={{fontSize: "24px"}} iconName="BOOKMARK_STAR"/>
+                    <Icon style={{fontSize: "24px"}} icon="BOOKMARK_STAR"/>
                     <span className="title semibold">{t('header.archive')}</span>
                 </a> */}
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>
@@ -96,7 +142,7 @@ export default function Header() {
                     <div className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
                         <span className="descriptive small color-subtitle">{t("header.app_badge")}</span>
                         <div className="spacer"></div>
-                        <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""}>
+                        <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""} onClick={closeHamburgerMenu}>
                             <Image className="app-badge" src={appBadgeSrc} width={120} height={40} alt={t("header.alt_app_badge")}></Image>
                         </a>
                     </div>

@@ -11,7 +11,9 @@ export interface MembershipCard {
     issueYear: number,
     userOwnerId: number,
     createdForOrderId: number,
-    registered: true,
+    registered: boolean,
+    signedAt: string | null,
+    sentByEmail: boolean,
 }
 
 export interface UserCardData {
@@ -49,14 +51,18 @@ export class ChangeCardRegisterStatusApiAction extends ApiAction<boolean, ApiErr
 export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
     searchByValues(value: string, locale?: string, filter?: AutoInputFilter, filterOut?: AutoInputFilter, additionalValues?: any): Promise<AutoInputSearchResult[]> {
         return new Promise((resolve) => {
-            runRequest(new UserSearchAction(), undefined, undefined,
-                buildSearchParams({ "name": value, "filter-no-membership-card-for-year": additionalValues[0] }))
-                .then(results => {
-                    const users = results.users.map(usr => toSearchResult(usr));
-                    resolve(
-                        filterLoaded(users, filter, filterOut)
-                    );
-                });
+            runRequest({
+                action: new UserSearchAction(),
+                searchParams: buildSearchParams({
+                    "name": value,
+                    "filter-no-membership-card-for-year": additionalValues[0]
+                })
+            }).then(results => {
+                const users = results.users.map(usr => toSearchResult(usr));
+                resolve(
+                    filterLoaded(users, filter, filterOut)
+                );
+            });
         });
     }
 }

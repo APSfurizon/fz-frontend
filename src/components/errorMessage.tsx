@@ -8,7 +8,7 @@ type ErrorData = {
     message: string
 }
 
-export default function ModalError({ error }: Readonly<{ error?: ApiErrorResponse }>) {
+export default function ErrorMessage({ error }: Readonly<{ error?: ApiErrorResponse }>) {
     const t = useTranslations();
     const errors = useMemo(() => {
         const toReturn: ErrorData[] = [];

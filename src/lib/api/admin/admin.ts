@@ -1,25 +1,21 @@
+import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
-    canUpgradeUser: boolean,
-    canBanUsers: boolean,
-    canManageMembershipCards: boolean,
-    canRefreshPretixCache: boolean,
-    canRemindOrderLinking: boolean,
-    canRemindBadgeUploads: boolean,
-    canRemindRoomsNotFull: boolean,
-    canExportHotelList: boolean
-}
-
-export const EMPTY_CAPABILITIES: AdminCapabilitesResponse = {
-    canUpgradeUser: false,
-    canBanUsers: false,
-    canManageMembershipCards: false,
-    canRefreshPretixCache: false,
-    canRemindOrderLinking: false,
-    canRemindBadgeUploads: false,
-    canRemindRoomsNotFull: false,
-    canExportHotelList: false
+    canUpgradeUser?: boolean,
+    canBanUsers?: boolean,
+    canChangeLoginData?: boolean,
+    canManageMembershipCards?: boolean,
+    canRefreshPretixCache?: boolean,
+    canRemindOrderLinking?: boolean,
+    canRemindBadgeUploads?: boolean,
+    canRemindRoomsNotFull?: boolean,
+    canRemindFursuitBringToEvent?: boolean,
+    canViewUsers?: boolean
+    canExportHotelList?: boolean,
+    canExportShirtList?: boolean,
+    canExportBadges?: boolean,
+    security?: boolean
 }
 
 export class GetAdminCapabilitiesApiAction extends ApiAction<AdminCapabilitesResponse, ApiErrorResponse> {
@@ -33,4 +29,33 @@ export class ExportHotelRoomsApiAction extends ApiAction<Response, ApiErrorRespo
     method = RequestType.GET;
     urlAction = "admin/export/hotel-user-list";
     rawResponse?: boolean = true;
+}
+
+export class ExportTShirtsApiAction extends ApiAction<Response, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "admin/export/shirt-user-list";
+    rawResponse?: boolean = true;
+}
+
+export interface ManualLinkOrderData {
+    orderCode: string,
+    userId: number
+}
+
+class ManuallyLinkOrderDTOBuilder implements FormDTOBuilder<ManualLinkOrderData> {
+    mapToDTO = (data: FormData) => {
+        const toReturn: ManualLinkOrderData = {
+            orderCode: data.get("orderCode")!.toString(),
+            userId: parseInt(data.get("userId")!.toString())
+        };
+        return toReturn;
+    };
+}
+
+export class ManuallyLinkOrderFormAction extends FormApiAction<ManualLinkOrderData, Response, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    dtoBuilder = new ManuallyLinkOrderDTOBuilder();
+    urlAction = "orders-workflow/manual-order-link";
 }

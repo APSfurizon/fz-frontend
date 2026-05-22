@@ -2,7 +2,7 @@
 import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import Modal from "@/components/modal";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import {
     AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction,
     ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse,
@@ -51,11 +51,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             membershipCardId: cardId,
             registered: checked
         }
-        runRequest(new ChangeCardRegisterStatusApiAction(), undefined, data, undefined)
-            .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />);
-                setChecked(!checked);
-            })
+        runRequest({
+            action: new ChangeCardRegisterStatusApiAction(),
+            body: data
+        }).catch((err) => {
+            showModal(t("common.error"), <ErrorMessage error={err} />);
+            setChecked(!checked);
+        })
             .finally(() => setBusy(false));
     };
 
@@ -69,7 +71,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
     const addCardFail = (err: any) => {
         setAddModalOpen(false);
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
     }
 
     // Select year
@@ -93,10 +95,12 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     useEffect(() => {
         if (!selectedYear || isNaN(selectedYear) || cardsData) return;
         setLoading(true);
-        runRequest(new GetCardsApiAction(), undefined, undefined, new URLSearchParams({ "year": "" + selectedYear }))
-            .then((value) => setCardsData(value))
+        runRequest({
+            action: new GetCardsApiAction(),
+            searchParams: new URLSearchParams({ "year": "" + selectedYear })
+        }).then((value) => setCardsData(value))
             .catch((err) => {
-                showModal(t("common.error"), <ModalError error={err} />);
+                showModal(t("common.error"), <ErrorMessage error={err} />);
                 setCardsData(null);
             }).finally(() => setLoading(false));
     }, [cardsData])
@@ -118,7 +122,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             id: 'user',
             header: t("furpanel.admin.membership_manager.columns.user"),
             cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
-                <UserPicture userData={props.row.original.user}></UserPicture>
+                <UserPicture key={props.row.original.user.userId} userData={props.row.original.user}></UserPicture>
                 <span className="title small">{props.row.original.user.fursonaName}</span>
             </div>
         }),
@@ -143,13 +147,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
             cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
                 {props.row.original.duplicate && <>
-                    <Icon icon={"FILE_COPY"} />
+                    <Icon icon="FILE_COPY" />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}
                     </span>
                 </>}
                 {!props.row.original.membershipCard && <>
-                    <Icon icon={"QUESTION_MARK"} />
+                    <Icon icon="QUESTION_MARK" />
                     <span className="highlight small">
                         {t("furpanel.admin.membership_manager.errors.CARD_MISSING")}
                     </span>
@@ -162,9 +166,8 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             cell: props => <>
                 {props.row.original.membershipCard
                     ? <Checkbox initialValue={props.row.original.membershipCard.registered}
-                        onClick={(event: MouseEvent<HTMLButtonElement>,
-                            checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
-                            setBusy: Dispatch<SetStateAction<boolean>>) => markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
+                        onClick={(event, checked, setChecked, setBusy) =>
+                            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
                         {t("furpanel.admin.membership_manager.table.headers.registered")}
                     </Checkbox>
                     : undefined
@@ -176,52 +179,125 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     const hasDetails = () => true;
 
     const showDetails = (row: Row<UserCardData>) => <>
-        <div className="vertical-list flex-wrap" style={{ gap: ".4em", padding: "0.625em", maxWidth: tableRef.current?.clientWidth }}>
+        <div className="vertical-list flex-wrap"
+            style={{ gap: ".4em", padding: "0.625em", maxWidth: tableRef.current?.clientWidth }}>
             <div className="horizontal-list flex-wrap gap-4mm">
-                <FpInput className="hoverable" label={t("authentication.register.form.first_name.label")} readOnly initialValue={row.original.userInfo.firstName} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.last_name.label")} readOnly initialValue={row.original.userInfo.lastName} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.sex.label")} readOnly initialValue={row.original.userInfo.sex} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.email.label")} readOnly initialValue={row.original.email} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.first_name.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.firstName}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.last_name.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.lastName}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.sex.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.sex}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.email.label")}
+                    readOnly
+                    initialValue={row.original.email}
+                    onClick={(e) => copyContent(e.currentTarget)} />
                 {row.original.userInfo.fiscalCode &&
-                    <FpInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")} readOnly initialValue={row.original.userInfo.fiscalCode} onClick={(e) => copyContent(e.currentTarget)}></FpInput>}
+                    <FpInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")}
+                        readOnly
+                        initialValue={row.original.userInfo.fiscalCode}
+                        onClick={(e) => copyContent(e.currentTarget)} />}
             </div>
             <hr></hr>
             <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
             <div className="horizontal-list flex-wrap gap-4mm">
-                <FpInput className="hoverable" label={t("authentication.register.form.birth_country.label")} readOnly initialValue={row.original.userInfo.birthCountry} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.birth_country.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.birthCountry}
+                    onClick={(e) => copyContent(e.currentTarget)} />
                 {row.original.userInfo.birthRegion &&
-                    <FpInput className="hoverable" label={t("authentication.register.form.birth_region.label")} readOnly initialValue={row.original.userInfo.birthRegion} onClick={(e) => copyContent(e.currentTarget)}></FpInput>}
-                <FpInput className="hoverable" label={t("authentication.register.form.birth_city.label")} readOnly initialValue={row.original.userInfo.birthCity} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.birthday.label")} readOnly initialValue={row.original.userInfo.birthday} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
+                    <FpInput className="hoverable"
+                        label={t("authentication.register.form.birth_region.label")}
+                        readOnly
+                        initialValue={row.original.userInfo.birthRegion}
+                        onClick={(e) => copyContent(e.currentTarget)} />}
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.birth_city.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.birthCity}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.birthday.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.birthday}
+                    onClick={(e) => copyContent(e.currentTarget)} />
             </div>
             <hr></hr>
             <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
             <div className="horizontal-list flex-wrap gap-4mm">
-                <FpInput className="hoverable" label={t("authentication.register.form.residence_country.label")} readOnly initialValue={row.original.userInfo.residenceCountry} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.residence_country.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.residenceCountry}
+                    onClick={(e) => copyContent(e.currentTarget)} />
                 {row.original.userInfo.residenceRegion &&
-                    <FpInput className="hoverable" label={t("authentication.register.form.residence_region.label")} readOnly initialValue={row.original.userInfo.residenceRegion} onClick={(e) => copyContent(e.currentTarget)}></FpInput>}
-                <FpInput className="hoverable" label={t("authentication.register.form.residence_city.label")} readOnly initialValue={row.original.userInfo.residenceCity} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.residence_zip_code.label")} readOnly initialValue={row.original.userInfo.residenceZipCode} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.residence_address.label")} readOnly initialValue={row.original.userInfo.residenceAddress} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
-                <FpInput className="hoverable" label={t("authentication.register.form.phone_number.label")} readOnly initialValue={(row.original.userInfo.prefixPhoneNumber ?? "") + (row.original.userInfo.phoneNumber ?? "")} onClick={(e) => copyContent(e.currentTarget)}></FpInput>
+                    <FpInput className="hoverable"
+                        label={t("authentication.register.form.residence_region.label")}
+                        readOnly
+                        initialValue={row.original.userInfo.residenceRegion}
+                        onClick={(e) => copyContent(e.currentTarget)} />}
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.residence_city.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.residenceCity}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.residence_zip_code.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.residenceZipCode}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.residence_address.label")}
+                    readOnly
+                    initialValue={row.original.userInfo.residenceAddress}
+                    onClick={(e) => copyContent(e.currentTarget)} />
+                <FpInput className="hoverable"
+                    label={t("authentication.register.form.phone_number.label")}
+                    readOnly
+                    initialValue={(row.original.userInfo.prefixPhoneNumber ?? "") + (row.original.userInfo.phoneNumber ?? "")}
+                    onClick={(e) => copyContent(e.currentTarget)} />
             </div>
         </div>
     </>
 
     return <>
-        <div className="page">
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon={"ARROW_BACK"} /></a>
+                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
-                    <span className="title medium">{t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}</span>
-                    <select className="title average" value={selectedYear ?? ""} onChange={(e) => router.push(e.target.value)}>
+                    <span className="title medium">
+                        {t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}
+                    </span>
+                    <select className="title average"
+                        value={selectedYear ?? ""}
+                        onChange={(e) => router.push(e.target.value)}>
                         {years.map((o, k) => <option key={k}>{o}</option>)}
                     </select>
                 </div>
 
                 <div className="spacer"></div>
-                <Button iconName={"REFRESH"} onClick={() => setCardsData(undefined)} debounce={3000}>{t("common.reload")}</Button>
-                <Button onClick={() => setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} iconName={"ADD"}>{t("furpanel.admin.membership_manager.actions.add")}</Button>
+                <Button icon="REFRESH"
+                    onClick={() => setCardsData(undefined)}
+                    debounce={3000}>
+                    {t("common.reload")}
+                </Button>
+                <Button onClick={() => setAddModalOpen(true)}
+                    busy={loading}
+                    disabled={!cardsData?.canAddCards}
+                    icon="ADD">
+                    {t("furpanel.admin.membership_manager.actions.add")}
+                </Button>
             </div>
             <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
                 <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>
@@ -237,21 +313,43 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
             {loading && <div className="row"><LoadingPanel className="data" /></div>}
             {cardsData && cardsData?.cards &&
-                <FpTable<UserCardData> columns={columns} rows={rows} enableSearch hasDetails={hasDetails} getDetails={showDetails}
-                    enablePagination pageSize={20} pinnedColumns={{ left: [], right: ['registered'] }} tableElementRef={tableRef} />}
+                <FpTable<UserCardData> columns={columns}
+                    rows={rows}
+                    enableSearch
+                    hasDetails={hasDetails}
+                    getDetails={showDetails}
+                    enablePagination
+                    pageSize={20}
+                    pinnedColumns={{ left: [], right: ['registered'] }}
+                    tableElementRef={tableRef} />}
         </div>
         {/* Add card */}
-        <Modal icon={"ADD"} title={t("furpanel.admin.membership_manager.actions.add")} open={addModalOpen && (cardsData?.canAddCards ?? false)}
-            onClose={() => setAddModalOpen(false)} busy={loading}>
-            <DataForm action={new AddCardFormAction} loading={loading} setLoading={setLoading} hideSave className="vertical-list gap-2mm" onSuccess={addCardSuccess} onFail={addCardFail}>
-                <AutoInput fieldName="userId" manager={new AutoInputUserAddCardManager} label={t("furpanel.admin.membership_manager.input.user.label")}
-                    param={[selectedYear]}></AutoInput>
+        <Modal icon="ADD"
+            title={t("furpanel.admin.membership_manager.actions.add")}
+            open={addModalOpen && (cardsData?.canAddCards ?? false)}
+            onClose={() => setAddModalOpen(false)}
+            busy={loading}>
+            <DataForm action={new AddCardFormAction}
+                busy={loading}
+                setBusy={setLoading}
+                hideSave
+                className="vertical-list gap-2mm"
+                onSuccess={addCardSuccess}
+                onFail={addCardFail}>
+                <AutoInput fieldName="userId"
+                    manager={new AutoInputUserAddCardManager}
+                    label={t("furpanel.admin.membership_manager.input.user.label")}
+                    param={[selectedYear]} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" iconName={"CANCEL"} busy={loading} onClick={() => setAddModalOpen(false)}>
+                    <Button type="button"
+                        className="danger"
+                        icon="CANCEL"
+                        busy={loading}
+                        onClick={() => setAddModalOpen(false)}>
                         {t("common.cancel")}
                     </Button>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" iconName={"CHECK"} busy={loading}>{t("common.confirm")}</Button>
+                    <Button type="submit" className="success" icon="CHECK" busy={loading}>{t("common.confirm")}</Button>
                 </div>
             </DataForm>
         </Modal>

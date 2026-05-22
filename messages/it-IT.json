@@ -11,6 +11,8 @@
     "header": {
       "home": "Home",
       "nose_count": "Nose count",
+      "schedule": "Programma",
+      "dealer": "Dealers' Den",
       "information": "Informazioni",
       "archive": "Archivio",
       "login": "Accedi",
@@ -68,6 +70,38 @@
     "changelog": {
       "title": "Il Furpanel si è aggiornato",
       "description": "Leggi le ultime novità su <a></a>"
+    },
+    "schedule_detail": {
+      "back_to_schedule": "Torna al programma",
+      "info_title": "Informazioni su Questa Attività",
+      "labels": {
+        "date": "Data",
+        "time": "Orario",
+        "duration": "Durata",
+        "description": "Descrizione",
+        "host": "Presentatore",
+        "location": "Luogo",
+        "language": "Lingua"
+      },
+      "tags": {
+        "explorer": "Explorer",
+        "super_sponsor": "Super Sponsor",
+        "sponsor": "Sponsor",
+        "cancelled": "Cancellato"
+      },
+      "errors": {
+        "invalid_activity_id": "ID attivita non valido."
+      }
+    },
+    "schedule": {
+      "labels": {
+        "all_day": "Tutto il giorno",
+        "no_events": "Nessun evento programmato per questo giorno.",
+        "date": "Data",
+        "time": "Orario",
+        "event": "Evento",
+        "others": "altri"
+      }
     },
     "success": "Successo"
   },
@@ -505,6 +539,7 @@
           "print_badges": "Stampa badge",
           "remind_badges": "Notifica badge mancanti",
           "remind_fursuits": "Notifica fursuit mancanti",
+          "remind_fursuits_bring_to_event": "Notifica fursuit da portare all'evento",
           "print": {
             "select_mode": "Seleziona modalità stampa",
             "simple_mode": {
@@ -550,7 +585,8 @@
         "orders": {
           "title": "Ordini",
           "remind_order_linking": "Notifica ordini disconnessi",
-          "export_rooms": "Esporta stanze hotel"
+          "export_rooms": "Esporta stanze hotel",
+          "export_tshirts": "Esporta taglia magliette"
         },
         "rooms": {
           "title": "Stanze",
@@ -560,6 +596,7 @@
       "membership_manager": {
         "title": "Gestione tessere",
         "header": "Tessere del ",
+        "send_card_by_mail": "Invia tessere via email",
         "actions": {
           "add": "Aggiungi tessera",
           "show_missing_cards": "Mostra mancanti",
@@ -601,6 +638,15 @@
               "selected_user": {
                 "label": "Utente selezionato",
                 "placeholder": "Cerca un utente"
+              },
+              "search_type": {
+                "common": "Dati comuni",
+                "title": "Criteri di ricerca",
+                "order_serial": "Codice seriale ordine",
+                "order_code": "Codice ordine",
+                "membership_card": "Tessera socio",
+                "user_id": "Numero utente",
+                "fursuit_id": "Numero fursuit"
               }
             },
             "personal_info": "Dati personali",
@@ -613,12 +659,28 @@
               "is_daily": "Giornaliero",
               "sponsorship_type": "Sponsor",
               "extra_days": "Giorni extra",
-              "room_type": "Tipo stanza"
+              "room_type": "Tipo stanza",
+              "actions": {
+                "link_order": {
+                  "title": "Collega un ordine",
+                  "description": "Collega un ordine a <b>{user}</b>",
+                  "order_code": {
+                    "label": "Codice ordine"
+                  }
+                },
+                "view_qr": {
+                  "title": "Mostra codice QR"
+                }
+              },
+              "event_order_serial": "Seriale",
+              "daily_days": "Giorni daily"
             },
             "actions": {
               "ban": "Ban",
               "unban": "Riammetti",
-              "view_order": "Vedi ordine"
+              "view_order": "Vedi ordine",
+              "change_email": "Cambia email",
+              "change_password": "Cambia password"
             },
             "messages": {
               "confirm_ban": {
@@ -635,21 +697,31 @@
               "PERMISSION_NOT_FOUND": "Non hai i permessi necessari."
             },
             "cards_table": {
-              "issue_year": "Anno emissione"
+              "card_no": "N° tessera",
+              "issue_year": "Anno emissione",
+              "id_in_year": "N° nell'anno",
+              "signed_at": "Firmata il",
+              "aps_form": "Modulo APS",
+              "aps_form_signed": "Firmato",
+              "sent_by_email": "Inviata via email",
+              "created_for_order_id": "Creato per l'ordine"
             },
             "membership_cards": "Tessere socio",
             "badge": "Badge",
             "badges": {
               "fursona_name": "Nome fursona",
+              "user_id": "Numero utente",
               "locale": "Localizzazione",
               "delete_badge_picture": "Elimina immagine",
               "hide_from_nosecount": "Nascondi dal nosecount",
-              "show_from_nosecount": "Mostra nel nosecount"
+              "show_from_nosecount": "Mostra nel nosecount",
+              "fursuit_badges_available": "Badge fursuit disponibili"
             },
             "fursuit_table": {
               "picture": "Fotografia",
               "name": "Nome",
-              "species": "Specie"
+              "species": "Specie",
+              "id": "Numero fursuit"
             },
             "fursuits": "Fursuit",
             "rooms_table": {
@@ -667,15 +739,97 @@
                   "select_guest": {
                     "label": "Seleziona l'ospite da rimuovere dalla stanza"
                   }
+                },
+                "rename": {
+                  "title": "Rinomina stanza"
+                },
+                "delete": {
+                  "title": "Elimina stanza",
+                  "description": "Eliminare la stanza {roomName}? I compagni di stanza verranno rimossi"
                 }
               },
-              "board": "Pensione"
+              "board": "Pensione",
+              "check_in_date": "Data check in",
+              "check_out_date": "Data check out"
             },
-            "rooms": "Stanze"
+            "rooms": "Stanze",
+            "permissions_table": {
+              "permission": "Permesso"
+            },
+            "roles_table": {
+              "display_name": "Nome",
+              "internal_name": "Nome interno",
+              "show_in_nosecount": "Mostra nel nosecount",
+              "actions": {
+                "add_role": {
+                  "title": "Aggiungi ruolo",
+                  "form": {
+                    "role": {
+                      "label": "Ruolo"
+                    },
+                    "temporary": {
+                      "label": "Temporaneo"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": {
           "title": "Sicurezza",
+          "user_search": {
+            "title": "Ricerca utente",
+            "input": {
+              "search_user": {
+                "label": "Cerca utente"
+              }
+            },
+            "sections": {
+              "user_data": "Dati utente",
+              "user_info": "Informazioni utente",
+              "user_order_room": "Ordine / stanza utente"
+            },
+            "fields": {
+              "name": "Nome",
+              "surname": "Cognome",
+              "mail": "Email",
+              "sex": "Sesso",
+              "gender": "Genere",
+              "birthday": "Data di nascita",
+              "allergies": "Allergie",
+              "telegram": "Telegram",
+              "phone": "Telefono",
+              "permissions": "Permessi",
+              "roles": "Ruoli",
+              "have_order": "Ha un ordine",
+              "have_room": "Ha una stanza",
+              "is_owner": "Proprietario",
+              "owner_label": "(Proprietario)",
+              "room_name": "Nome stanza",
+              "check_in_out": "Check-in/out",
+              "guests": "Ospiti",
+              "bring_to_event": "Portata all'evento",
+              "room_capacity": "Capienza stanza",
+              "room_type": "Tipo stanza",
+              "board": "Pensione"
+            },
+            "actions": {
+              "call": "Chiama",
+              "view_user": "Vedi utente"
+            },
+            "values": {
+              "yes": "Sì",
+              "no": "No",
+              "none": "Nessuno",
+              "banned": "Bandito",
+              "to": "a"
+            },
+            "alt": {
+              "user": "Utente",
+              "fursuit": "Fursuit"
+            }
+          },
           "roles": {
             "title": "Ruoli",
             "list": {
@@ -737,6 +891,185 @@
               "temporary_members_count": "Membri temporanei"
             }
           }
+        },
+        "permissions": {
+          "title": "Permessi"
+        },
+        "roles": {
+          "title": "Ruoli"
+        }
+      },
+      "security_management": {
+        "title_hazardous_register": "Registro oggetti pericolosi",
+        "title_asset_register": "Registro asset",
+        "title_lost_and_found": "Smarriti e Ritrovati",
+        "title_incident_log": "Registro incidenti",
+        "title_documents": "Documenti",
+        "title": "Gestione Sicurezza",
+        "users_and_docs": {
+          "title": "Utenti e Documenti",
+          "user_search": "Ricerca Utente",
+          "documents": "Documenti"
+        },
+        "reports": {
+          "title": "Segnalazioni",
+          "incident_log": "Registro Incidenti"
+        },
+        "logs": {
+          "title": "Registri",
+          "asset_manager": "Gestione Asset",
+          "hazardous_register": "Oggetti Pericolosi",
+          "lost_and_found": "Smarriti e Ritrovati"
+        },
+        "hazard": {
+          "hazardous_register": "Registro oggetti pericolosi",
+          "edit_title": "Modifica Segnalazione",
+          "new_title": "Nuova Segnalazione",
+          "title": "Titolo",
+          "title_placeholder": "Titolo pericolo",
+          "description": "Descrizione",
+          "description_placeholder": "Descrizione oggetto",
+          "owner_nickname_placeholder": "Nickname del proprietario",
+          "owner_nickname": "Nickname proprietario",
+          "owner_id": "Id proprietario",
+          "owner_id_placeholder": "Id proprietario",
+          "cancel": "Annulla",
+          "save": "Salva",
+          "level": "Livello",
+          "photo": "Foto",
+          "add_report": "Aggiungi segnalazione",
+          "edit": "Modifica",
+          "reported_by": "Segnalato da",
+          "date": "Data",
+          "report": "Segnalazione",
+          "no_reports": "Nessuna segnalazione",
+          "all": "Tutti",
+          "search_placeholder": "Cerca per titolo,descrizione e nickname",
+          "missing_title": "Il titolo è obbligatorio",
+          "low": "Basso",
+          "medium": "Medio",
+          "high": "Alto",
+          "critical": "Critico",
+          "error": "Errore",
+          "missing_dati": "Dati mancanti",
+          "edited_by_nickname": "Modificato da"
+        },
+        "assets": {
+          "asset": "Asset",
+          "asset_manager": "Gestione Asset",
+          "search_placeholder": "Cerca per tag, tipo, modello o seriale",
+          "all": "Tutti",
+          "no_items": "Nessun asset",
+          "edit_title": "Modifica asset",
+          "new_title": "Nuovo asset",
+          "tag_label": "Tag / Etichetta",
+          "tag_placeholder": "Es. RADIO-01",
+          "type_label": "Tipo dispositivo",
+          "type_placeholder": "Es. Radio, Tablet...",
+          "model_label": "Modello",
+          "model_placeholder": "Es. Motorola XT1234",
+          "serial_label": "Numero seriale",
+          "serial_placeholder": "S/N",
+          "notes_label": "Note condizioni",
+          "notes_placeholder": "Condizioni, danni...",
+          "state_label": "Stato",
+          "state_available": "Disponibile",
+          "state_in_use": "In uso",
+          "state_unavailable": "Non disponibile",
+          "cancel": "Annulla",
+          "save": "Salva",
+          "detail_fallback": "Dettaglio asset",
+          "user_label": "Utilizzatore",
+          "photo": "Foto",
+          "transfer": "Rendi / Trasferisci",
+          "logs_title": "Log asset",
+          "no_logs": "Nessun log disponibile",
+          "add": "Aggiungi asset",
+          "edit": "Modifica",
+          "view_logs": "Vedi log",
+          "transfer_modal_title": "Rendi / Trasferisci",
+          "new_user_label": "Nuovo utilizzatore",
+          "new_user_placeholder": "Nome persona",
+          "not_set": "Non impostato",
+          "utilizzatore_precedente_label": "Utilizzatore precedente",
+          "data_modifica_label": "Data modifica",
+          "modificato_da_label": "Modificato da"
+        },
+        "lost_found": {
+          "title": "Smarriti e Ritrovati",
+          "search_placeholder": "Cerca per luogo, descrizione o proprietario",
+          "status_lost": "Smarriti",
+          "status_delivered": "Consegnati",
+          "no_items": "Nessun oggetto",
+          "item": "Oggetto",
+          "edit_title": "Modifica oggetto",
+          "new_title": "Nuovo oggetto smarrito",
+          "place_label": "Luogo di ritrovamento",
+          "place_placeholder": "Es. Padiglione A, ingresso...",
+          "description_label": "Descrizione",
+          "description_placeholder": "Descrizione dell'oggetto...",
+          "found_by_label": "Trovato da",
+          "found_by_placeholder": "Nome di chi ha trovato",
+          "owner_label": "Proprietario",
+          "owner_placeholder": "Nome del proprietario (se noto)",
+          "cancel": "Annulla",
+          "save": "Salva",
+          "found_date_label": "Data ritrovo",
+          "return_date_label": "Data riconsegna",
+          "inserted_by_label": "Inserito da",
+          "created_at_label": "Registrato il",
+          "photo": "Foto",
+          "confirm_delivery": "Confermi la consegna dell'oggetto?",
+          "mark_delivered": "Segna consegnato",
+          "add": "Nuovo oggetto smarrito",
+          "edit": "Modifica",
+          "missing_data_title": "Dati mancanti",
+          "missing_data_description": "Inserisci almeno la descrizione o il luogo"
+        },
+        "incidents": {
+          "incident_log": "Registro incidenti",
+          "refresh": "Aggiorna",
+          "add": "Aggiungi",
+          "edit": "Modifica",
+          "history": "Storico",
+          "reports": "Segnalazioni",
+          "important_reports": "Segnalazioni importanti",
+          "suspended_reports": "Segnalazioni sospese",
+          "no_history": "Nessuna segnalazione nello storico",
+          "no_important_reports": "Nessuna segnalazione importante",
+          "no_active_reports": "Nessuna segnalazione attiva",
+          "no_suspended_reports": "Nessuna segnalazione sospesa",
+          "messages": "Messaggi",
+          "important": "Importante",
+          "suspended": "Sospesa",
+          "untitled": "Senza titolo",
+          "new_report": "Nuova segnalazione",
+          "title": "Titolo",
+          "title_placeholder": "Titolo segnalazione",
+          "people_involved": "Persone coinvolte",
+          "people_placeholder": "Nome1, Nome2, ...",
+          "description": "Descrizione",
+          "description_placeholder": "Descrivi l'incidente...",
+          "mark_important": "Segna come importante",
+          "cancel": "Annulla",
+          "send": "Invia",
+          "report": "Segnalazione",
+          "reported_by": "Segnalato da",
+          "attachment": "allegato",
+          "no_messages": "Nessun messaggio disponibile",
+          "add_message": "Aggiungi messaggio",
+          "write_message": "Scrivi un messaggio...",
+          "send_message": "Invia messaggio",
+          "edit_report": "Modifica segnalazione",
+          "suspend_report": "Sospendi segnalazione",
+          "archive_report": "Storicizza segnalazione",
+          "update": "Aggiorna",
+          "default_author": "Security",
+          "missing_data_title": "Dati mancanti",
+          "missing_data_description": "Inserisci una descrizione di almeno 3 caratteri",
+          "invalid_image": "Immagine non valida",
+          "photo_preview": "Anteprima foto",
+          "photo": "Foto"
         }
       },
       "system": {
@@ -746,6 +1079,9 @@
           "ping": "Ping"
         }
       }
+    },
+    "security": {
+      "title": "Sicurezza"
     }
   },
   "authentication": {
@@ -778,7 +1114,8 @@
         "new_password": {
           "label": "Nuova password",
           "placeholder": "Crea una nuova password",
-          "help": "Deve essere lunga almeno 6 caratteri"
+          "help": "Deve essere lunga almeno 6 caratteri",
+          "mismatch": "Nuova password e conferma non corrispondono"
         },
         "confirm_password": {
           "label": "Conferma password",
@@ -860,7 +1197,8 @@
         "confirm_password": {
           "help": "Deve combaciare con la password",
           "label": "Conferma password",
-          "placeholder": "Conferma la tua password"
+          "placeholder": "Conferma la tua password",
+          "mismatch": "Le password non corrispondono"
         },
         "email": {
           "label": "Email",
@@ -868,7 +1206,8 @@
         },
         "confirm_email": {
           "label": "Conferma email",
-          "placeholder": "esempio@furroso.com"
+          "placeholder": "esempio@furroso.com",
+          "mismatch": "Le email non corrispondono"
         },
         "first_name": {
           "label": "Nome",
@@ -929,10 +1268,12 @@
         },
         "disclaimer_tos": {
           "label": "Spuntando questa casella, accetto i <terms>termini e condizioni</terms> e dichiaro di essere maggiorenne.",
-          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf",
+          "missing": "Devi accettare i termini e condizioni"
         },
         "disclaimer_data_protection": {
-          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza."
+          "label": "Spuntando questa casella, accetto di condividere i miei dati personali per eseguire la registrazione, come spiegato nelle politiche sulla riservatezza.",
+          "missing": "Devi accettare la privacy policy"
         },
         "sex": {
           "label": "Sesso (Documento di identità)",
@@ -996,12 +1337,7 @@
   },
   "misc": {
     "nosecount": {
-      "title": "Tutti",
-      "sections": {
-        "fursuits": "Incontra i fursuiter",
-        "sponsors": "Un grazie di ❤️ ai nostri sponsor",
-        "nosecount": "Scopri gli ospiti nel <b>nosecount!</b>"
-      },
+      "title": "Tutti gli ospiti",
       "links": {
         "fursuits": "Fursuit",
         "sponsors": "Sponsor"
@@ -1011,6 +1347,27 @@
       "input": {
         "select_event": "Seleziona evento"
       }
+    },
+    "schedule": {
+      "no_events": "Nessun evento programmato per questo giorno.",
+      "all_day": "Tutto il giorno",
+      "nav": {
+        "today": "Oggi",
+        "back": "Indietro",
+        "next": "Avanti"
+      },
+      "views": {
+        "day": "Giorno",
+        "week": "Settimana",
+        "agenda": "Agenda"
+      }
+    }
+  },
+  "login": {
+    "errors": {
+      "secondary_login_failed": "Login Security non riuscito",
+      "secondary_login_failed_description": "Risorse Security non caricate",
+      "secondary_login_failed_fetch": "Errore recupero dei permessi Security"
     }
   }
 }

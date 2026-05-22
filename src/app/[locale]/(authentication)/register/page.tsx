@@ -2,7 +2,7 @@
 import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/lib/api/global";
 import { useTranslations } from "next-intl";
 import { redirect, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import DataForm from "@/components/input/dataForm";
 import Icon from "@/components/icon";
@@ -20,6 +20,7 @@ import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAn
 import Button from "@/components/input/button";
 import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
+import { FormValidationError } from "@/lib/components/dataForm";
 
 export default function Register() {
 
@@ -29,15 +30,6 @@ export default function Register() {
   const [birthCountry, setBirthCountry] = useState<string | undefined>();
   const [residenceCountry, setResidenceCountry] = useState<string>();
   const [phonePrefix, setPhonePrefix] = useState<string>();
-
-  const [email, setEmail] = useState<string>("s");
-  const [confirmEmail, setConfirmEmail] = useState<string>();
-
-  const [password, setPassword] = useState<string>("s");
-  const [confirmPassword, setConfirmPassword] = useState<string>();
-
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
-  const [tosAccepted, setTosAccepted] = useState(false);
 
   const params = useSearchParams();
 
@@ -51,11 +43,44 @@ export default function Register() {
     }
   }
 
-  const passwordMatch = confirmPassword === password;
-
-  const emailMatch = confirmEmail === email;
-
-  const checkForm = () => tosAccepted && privacyAccepted && passwordMatch && emailMatch;
+  const checkForm = useCallback((e: FormData) => {
+    const toReturn: FormValidationError[] = [];
+    // Evaluate fields
+    const tosAccepted = e.get("tosAccepted")?.valueOf() === "true";
+    const privacyAccepted = e.get("privacyAccepted")?.valueOf() === "true";
+    const emailMatch = e.get("email")?.toString() == e.get("confirmEmail")?.toString();
+    const passwordMatch = e.get("password")?.toString() == e.get("confirmPassword")?.toString();
+    // Add fails
+    if (!tosAccepted) {
+      toReturn.push({
+        field: "tosAccepted",
+        error: t("register.form.disclaimer_tos.missing")
+      });
+    }
+    if (!privacyAccepted) {
+      toReturn.push({
+        field: "privacyAccepted",
+        error: t("register.form.disclaimer_data_protection.missing")
+      });
+    }
+    if (!passwordMatch) {
+      toReturn.push(
+        {
+          field: "confirmPassword",
+          error: t("register.form.confirm_password.mismatch")
+        }
+      );
+    }
+    if (!emailMatch) {
+      toReturn.push(
+        {
+          field: "confirmEmail",
+          error: t("register.form.confirm_email.mismatch")
+        }
+      );
+    }
+    return toReturn;
+  }, []);
 
   const manageSuccess = () => setTimeout(() => {
     const newParams = new URLSearchParams(params);
@@ -71,7 +96,7 @@ export default function Register() {
   return <>
     <div className="horizontal-list gap-4mm flex-center">
       <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"/>
+        <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
         <span> - </span>
         <span className="titular bold">{t('register.title').toLowerCase()}</span>
@@ -82,13 +107,12 @@ export default function Register() {
     </span>}
     <DataForm checkFn={checkForm}
       className="vertical-list login-form"
-      loading={loading}
-      setLoading={setLoading}
+      busy={loading}
+      setBusy={setLoading}
       action={new RegisterFormAction}
       onSuccess={manageSuccess}
       onFail={(err) => manageError(err)}
       hideSave
-      disableSave={!tosAccepted || !privacyAccepted || !passwordMatch || !emailMatch}
       resetOnFail={false}>
       {/* Ask user for username and password */}
       <FpInput fieldName="fursonaName"
@@ -96,30 +120,24 @@ export default function Register() {
         inputType="text"
         helpText={t("register.form.nickname.help")}
         label={t("register.form.nickname.label")} placeholder={t("register.form.nickname.placeholder")} />
-      <FpInput fieldName="email" required={true} inputType="email" label={t("register.form.email.label")}
-        placeholder={t("register.form.email.placeholder")} onChange={(e) => setEmail(e.target.value)} />
-      <FpInput required={true} inputType="email" label={t("register.form.confirm_email.label")}
-        placeholder={t("register.form.confirm_email.placeholder")} onChange={(e) => setConfirmEmail(e.target.value)}
-        className={`${emailMatch ? 'success' : 'danger'}`} />
+      <FpInput fieldName="email" required inputType="email" label={t("register.form.email.label")}
+        placeholder={t("register.form.email.placeholder")} />
+      <FpInput fieldName="confirmEmail" required inputType="email" label={t("register.form.confirm_email.label")}
+        placeholder={t("register.form.confirm_email.placeholder")} />
       <FpInput fieldName="password"
         minLength={6}
-        required={true}
+        required
         inputType="password"
         helpText={t("register.form.password.help")}
         label={t("register.form.password.label")}
-        placeholder={t("register.form.password.placeholder")}
-        onChange={(e) => setPassword(e.currentTarget.value)} />
+        placeholder={t("register.form.password.placeholder")} />
       <FpInput fieldName="confirmPassword"
         minLength={6}
-        required={true}
+        required
         inputType="password"
         helpText={t("register.form.confirm_password.help")}
         label={t("register.form.confirm_password.label")}
-        placeholder={t("register.form.confirm_password.placeholder")}
-        onChange={
-          (e) => setConfirmPassword(e.currentTarget.value)
-        }
-        className={`${passwordMatch ? 'success' : 'danger'}`} />
+        placeholder={t("register.form.confirm_password.placeholder")} />
       <hr></hr>
       {/* Ask user for name data*/}
       <span className="title medium bold highlight">{t("register.form.section.personal_info")}</span>
@@ -130,7 +148,7 @@ export default function Register() {
           label={t("register.form.first_name.label")}
           placeholder={t("register.form.first_name.placeholder")} />
         <FpInput fieldName="lastName"
-          required={true}
+          required
           inputType="text"
           label={t("register.form.last_name.label")}
           placeholder={t("register.form.last_name.placeholder")} />
@@ -227,7 +245,7 @@ export default function Register() {
       <span className="title medium bold highlight">{t("register.form.section.residence_data")}</span>
       <div className="form-pair horizontal-list gap-4mm">
         <AutoInput fieldName="residenceCountry"
-          required={true}
+          required
           minDecodeSize={2}
           manager={new AutoInputCountriesManager}
           onChange={
@@ -279,7 +297,7 @@ export default function Register() {
           }
           emptyIfUnselected />
         <FpInput fieldName="phoneNumber"
-          required={true}
+          required
           inputType="text"
           label={t("register.form.phone_number.label")}
           placeholder={t("register.form.phone_number.placeholder")}
@@ -304,18 +322,18 @@ export default function Register() {
         className="descriptive">
         {t("register.question.description")}
       </NoticeBox>
-      <Checkbox onClick={(e, checked) => setTosAccepted(checked)}>
+      <Checkbox fieldName="tosAccepted">
         {t.rich("register.form.disclaimer_tos.label", {
           terms: (chunks) => <Link target="_blank"
             href={t("register.form.disclaimer_tos.link")}
             className="highlight underlined">{chunks}</Link>
         })}
       </Checkbox>
-      <Checkbox onClick={(e, checked) => setPrivacyAccepted(checked)}>
+      <Checkbox fieldName="privacyAccepted">
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" iconName={"KEY"} >{t("register.register")}</Button>
+        <Button type="submit" icon="KEY" >{t("register.register")}</Button>
       </div>
     </DataForm>
     <div>

@@ -2,10 +2,10 @@
 import Button from "@/components/input/button";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
-import ModalError from "@/components/modalError";
+import ErrorMessage from "@/components/errorMessage";
 import {
-    AddRoleApiResponse, AddRoleFormAction, AllRolesResponse,
-    DeleteRolesApiAction, GetRolesApiAction, RoleInfo
+    AddRoleApiResponse, AddRoleFormAction, DeleteRolesApiAction, GetAllRolesApiAction,
+    RoleInfo
 } from "@/lib/api/admin/role";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -37,11 +37,11 @@ export default function RolesListPage() {
         if (loading) return;
         setRoles([]);
         setLoading(true);
-        runRequest(new GetRolesApiAction())
+        runRequest({ action: new GetAllRolesApiAction() })
             .then((response) => setRoles(response.roles))
             .catch((err) => showModal(
                 t("common.error"),
-                <ModalError error={err} />
+                <ErrorMessage error={err} />
             )).finally(() => setLoading(false));
     }
 
@@ -61,7 +61,7 @@ export default function RolesListPage() {
     }
 
     const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(t("common.error"), <ModalError error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setAddRoleModalOpen(false);
     }
 
@@ -84,9 +84,9 @@ export default function RolesListPage() {
     const deleteRole = (roleId?: number) => {
         if (!roleId) return;
         setLoading(true);
-        runRequest(new DeleteRolesApiAction(), ["" + roleId])
+        runRequest({ action: new DeleteRolesApiAction(), pathParams: { "id": roleId } })
             .then(() => loadRoles())
-            .catch((err) => showModal(t("common.error"), <ModalError error={err} />))
+            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => {
                 setLoading(false);
                 closeDeleteRoleModal();
@@ -103,10 +103,10 @@ export default function RolesListPage() {
 
     const [columns] = useState(() => {
         return [
-            columnHelper.accessor('roleDisplayName', {
+            columnHelper.accessor('displayName', {
                 header: t("furpanel.admin.users.security.roles.columns.name")
             }),
-            columnHelper.accessor('roleInternalName', {
+            columnHelper.accessor('internalName', {
                 header: t("furpanel.admin.users.security.roles.columns.internal_name")
             }),
             columnHelper.accessor('permissionsNumber', {
@@ -125,11 +125,11 @@ export default function RolesListPage() {
                 size: 88,
                 cell: props => <div className="horizontal-list gap-2mm">
                     <Button onClick={() => editRole(props.row.original)}
-                        iconName={"EDIT"}
+                        icon="EDIT"
                         title={t("common.CRUD.edit")} />
                     <Button className="danger"
                         onClick={(e) => promptDeleteRole(e, props.row.original)}
-                        iconName={"DELETE"}
+                        icon="DELETE"
                         title={t("common.CRUD.delete")} />
                 </div>
             })
@@ -137,16 +137,16 @@ export default function RolesListPage() {
     });
 
     return <>
-        <div className="page">
+        <div className="stretch-page">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(path)}><Icon icon={"ARROW_BACK"} /></a>
+                <a href={getParentDirectory(path)}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">{t("furpanel.admin.users.security.roles.title")}</span>
                 </div>
 
                 <div className="spacer"></div>
-                <Button iconName={"REFRESH"} onClick={() => loadRoles()} debounce={3000}>{t("common.reload")}</Button>
-                <Button iconName={"ADD"} onClick={promptCreateRole} >{t("common.CRUD.add")}</Button>
+                <Button icon="REFRESH" onClick={() => loadRoles()} debounce={3000}>{t("common.reload")}</Button>
+                <Button icon="ADD" onClick={promptCreateRole} >{t("common.CRUD.add")}</Button>
             </div>
 
             {loading && <div className="row"><LoadingPanel className="data" /></div>}
@@ -158,17 +158,17 @@ export default function RolesListPage() {
         {/* Role creation modal */}
         <Modal open={addRoleModalOpen} onClose={() => setAddRoleModalOpen(false)}
             title={t("furpanel.admin.users.security.roles.actions.add_role")}>
-            <DataForm shouldReset={!addRoleModalOpen} setLoading={setLoading} loading={loading}
+            <DataForm shouldReset={!addRoleModalOpen} setBusy={setLoading} busy={loading}
                 action={new AddRoleFormAction} onSuccess={(data) => onAddSuccess(data as AddRoleApiResponse)}
                 onFail={onAddFail} resetOnSuccess hideSave className="vertical-list gap-2mm">
                 <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>
-                <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/gmi}></FpInput>
+                <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/}></FpInput>
                 <div className="bottom-toolbar">
                     <Button title={t("common.cancel")} className="danger" onClick={() => setAddRoleModalOpen(false)}
-                        iconName={"CANCEL"} busy={loading}>{t("common.cancel")}</Button>
+                        icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
                     <div className="spacer"></div>
                     <Button title={t("common.CRUD.add")} type="submit"
-                        iconName={"ADD_CIRCLE"} busy={loading}>{t("common.CRUD.add")}</Button>
+                        icon="ADD_CIRCLE" busy={loading}>{t("common.CRUD.add")}</Button>
                 </div>
             </DataForm>
         </Modal>
@@ -177,17 +177,17 @@ export default function RolesListPage() {
             title={t("furpanel.admin.users.security.roles.actions.delete_role")}>
             <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.confirm_deletion",
                 {
-                    roleName: selectedRole?.roleDisplayName ?? selectedRole?.roleInternalName ?? "",
+                    roleName: selectedRole?.displayName ?? selectedRole?.internalName ?? "",
                     members: selectedRole?.permanentUsersNumber ?? 0,
                     tempMembers: selectedRole?.temporaryUsersNumber ?? 0
                 })}
             </span>
             <div className="bottom-toolbar">
                 <Button title={t("common.cancel")} className="danger" onClick={closeDeleteRoleModal}
-                    iconName={"CANCEL"} busy={loading}>{t("common.cancel")}</Button>
+                    icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
                 <div className="spacer"></div>
                 <Button title={t("common.CRUD.delete")} onClick={() => deleteRole(selectedRole?.roleId)}
-                    iconName={"DELETE"} busy={loading}>{t("common.CRUD.delete")}</Button>
+                    icon="DELETE" busy={loading}>{t("common.CRUD.delete")}</Button>
             </div>
         </Modal>
     </>
