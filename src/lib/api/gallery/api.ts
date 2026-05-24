@@ -13,3 +13,10 @@ export class BulkDownloadApiAction extends ApiAction<BulkDownloadApiResponse, Ap
     method = RequestType.POST;
     urlAction = "gallery/bulk-download";
 }
+
+export class DeleteMediaApiAction extends ApiAction<boolean, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.DELETE;
+    urlAction = "gallery/manage/{uploadId}";
+    hasPathParams = true;
+}

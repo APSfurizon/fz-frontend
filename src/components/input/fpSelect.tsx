@@ -69,7 +69,10 @@ export default function FpSelect({
         }
     }, [items]);
 
-    const showMedia = useMemo(() => [
+    /**
+     * Whether to reserve space for icons and images of items, for added ui stability
+     */
+    const shouldReserveMediaSpace = useMemo(() => [
         ...items.filter(i => i instanceof SelectItem),
         ...items.filter(i => i instanceof SelectGroup).flatMap(i => i.items)
     ].some(i => i.icon || i.imageUrl), [items]);
@@ -120,6 +123,7 @@ export default function FpSelect({
                 </div>
             } else {
                 return <button key={index}
+                    type="button"
                     tabIndex={0}
                     onClick={() => onSelect(itemExtractor(item))}
                     className={[
@@ -131,7 +135,7 @@ export default function FpSelect({
                         isSelected(item) ? "fp-select__option--selected" : ""
                     ].join(" ")}
                     aria-selected={isSelected(item)}>
-                    {showMedia && (item.icon || item.imageUrl
+                    {shouldReserveMediaSpace && (item.icon || item.imageUrl
                         ? <>
                             {item.icon && <Icon style={item.iconCSS} icon={item.icon as MaterialIcon} />}
                             {item.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />}
@@ -144,7 +148,7 @@ export default function FpSelect({
                 </button>
             }
         })
-    }, [showMedia, selectedItem]);
+    }, [shouldReserveMediaSpace, selectedItem]);
 
     const popoverRef = useRef<HTMLDivElement>(null);
     const [listOpen, setListOpen] = useState(false);
@@ -158,7 +162,7 @@ export default function FpSelect({
 
     return <>
         <div className={`fp-input ${className ?? ""}`}
-            style={{ ...style, ...anchorNameStyle }}>
+            style={style}>
             {label && <label htmlFor={selectLabel} className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
                 style={{ ...labelStyle }}>{label}</label>}
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
@@ -174,8 +178,9 @@ export default function FpSelect({
                     "rounded-s",
                     "margin-bottom-1mm",
                     listOpen ? "input-container--open" : ""
-                ].join(" ")}>
-                {showMedia && (selectedItem && (selectedItem.icon || selectedItem.imageUrl)
+                ].join(" ")}
+                style={{ ...anchorNameStyle }}>
+                {shouldReserveMediaSpace && (selectedItem && (selectedItem.icon || selectedItem.imageUrl)
                     ? <>
                         {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon as MaterialIcon} />}
                         {selectedItem.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={selectedItem.imageUrl} />}
@@ -185,7 +190,7 @@ export default function FpSelect({
                 {selectedItem && <span className="fp-select__text title small">
                     {selectedItem?.getDescription(locale) ?? placeholder}
                 </span>}
-                {!selectedItem && <span className="title small color-subtitle">
+                {!selectedItem && <span className="fp-select__text title small color-subtitle">
                     {placeholder}
                 </span>}
                 <div className="spacer"></div>

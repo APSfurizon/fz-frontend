@@ -28,9 +28,8 @@ type GalleryGridViewProps = {
 }
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
-    const { medias, ended, getNextData, onRefresh, galleryLoading } = useGallery();
+    const { medias, setGalleryMedias, ended, getNextData, onRefresh, galleryLoading } = useGallery();
     const { showModal } = useModalUpdate();
-    const { openMedia } = useGalleryView();
     const { selectedIds, setSelectedIds, selectionEnabled, setSelectionEnabled, clearSelection } = useGallerySelection();
     const [refreshKey, setRefreshKey] = useState(0);
     const { userDisplayRef, userLoading } = useUser();
@@ -55,6 +54,17 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const onEditedMedias = (mediaIds: number[]) => {
         props.onUpdatedMedias?.(mediaIds);
         refreshRef.current?.();
+    }
+
+    const onViewEditedMedias = (mediaId: number, deleted?: boolean) => {
+        props.onUpdatedMedias?.([mediaId]);
+        if (deleted) {
+            setGalleryMedias(prev => {
+                const newMedias = new Map(prev);
+                newMedias.delete(mediaId);
+                return newMedias;
+            })
+        }
     }
 
     useEffect(() => {
@@ -122,7 +132,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
             <GalleryVirtualizedGrid key={refreshKey} />
         </div>
         <ViewMediaModal getFullMedia={props.getFullMedia}
-            onUpdatedFullMedia={(id) => props.onUpdatedMedias?.([id])} />
+            onUpdatedFullMedia={onViewEditedMedias} />
         <MediaEditModal
             medias={selectedMedias}
             open={editModalOpen}

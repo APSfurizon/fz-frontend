@@ -73,6 +73,7 @@ div.fp-input {
     &__list {
         z-index: 100;
         position: fixed;
+        margin-block-start: 0.5em;
         padding: 0.5em 0.6em;
         top: anchor(bottom);
         left: anchor(left);

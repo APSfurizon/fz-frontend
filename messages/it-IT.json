@@ -463,9 +463,6 @@
         "description": "Queste sono le stanze disponibili che puoi ottenere, una volta confermata la stanza."
       }
     },
-    "upload_area": {
-      "title": "Upload"
-    },
     "user": {
       "title": "Utente",
       "sections": {
@@ -1147,20 +1144,6 @@
         },
         "queue": {
           "title": "Caricamento..."
-        },
-        "modal": {
-          "title": "Visualizza immagine",
-          "video": {
-            "duration": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}, {milliseconds} millisecondi"
-          },
-          "information_panel": {
-            "photo": {
-              "title": "Foto"
-            },
-            "video": {
-              "title": "Video"
-            }
-          }
         }
       },
       "admin": {
@@ -1170,8 +1153,16 @@
         "status": {}
       },
       "modal": {
+        "title": "Visualizza immagine",
         "information_panel": {
-          "title": "Informazioni"
+          "title": "Informazioni",
+          "photo": {
+            "title": "Foto"
+          },
+          "video": {
+            "title": "Video",
+            "duration": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}, {milliseconds} millisecondi"
+          }
         },
         "share": {
           "copy_message": "Link copiato con successo"
@@ -1180,7 +1171,14 @@
           "share": "Condividi",
           "admin": {
             "approve": "Approva",
-            "reject": "Rifiuta"
+            "reject": "Rifiuta",
+            "select": "Imposta banner evento",
+            "selected": "Banner attuale evento",
+            "unselect": "Rimuovi banner evento"
+          },
+          "download": "Scarica",
+          "delete": {
+            "message": "Vuoi eliminare questo media?"
           }
         }
       }

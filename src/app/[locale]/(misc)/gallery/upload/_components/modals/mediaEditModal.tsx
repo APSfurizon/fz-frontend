@@ -5,7 +5,7 @@ import Modal from "@/components/modal";
 import { ConventionEvent } from "@/lib/api/counts";
 import { GalleryUpdateFormApiAction } from "@/lib/api/gallery/admin/api";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
-import { GalleryUpdateBody } from "@/lib/api/gallery/upload/types";
+import { GalleryUpdateBody } from "@/lib/api/gallery/admin/types";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";

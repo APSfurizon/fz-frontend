@@ -1,7 +1,8 @@
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { GalleryUpdateBody } from "../admin/types";
 import { nullifyEmptyString } from "@/lib/utils";
-import { ApiErrorResponse, RequestType } from "../../global";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
+import { GalleryUploadedFullMedia } from "../types";
 
 class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
     mapToDTO(data: FormData) {
@@ -24,4 +25,10 @@ export class GalleryUpdateFormApiAction extends FormApiAction<GalleryUpdateBody,
     method = RequestType.POST;
     urlAction = "gallery/manage/update";
     dtoBuilder = new GalleryUpdateDtoBuilder();
+}
+
+export class GallerySelectMediaFormApiAction extends ApiAction<GalleryUploadedFullMedia & ApiResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "gallery/manage/set-selected";
 }

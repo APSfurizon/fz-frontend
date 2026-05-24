@@ -2,7 +2,7 @@
 import Gallery from "@/components/gallery";
 import { FilterSetterData, useExplore } from "../_components/exploreProvider";
 import { runRequest } from "@/lib/api/global";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ExploreApiAction } from "@/lib/api/gallery/explore/api";
 import { buildSearchParams } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
@@ -125,7 +125,7 @@ export default function GalleryExploreEventPage() {
         router.push(`/gallery/explore/${values.join("/")}`);
     }
 
-    useEffect(() => refreshGallery.current?.(), [currentFilter])
+    useEffect(() => refreshGallery.current?.(), [currentFilter]);
 
     useTitle(t("misc.gallery.explore.title"));
 
