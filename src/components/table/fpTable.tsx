@@ -240,7 +240,7 @@ export default function FpTable<T>({
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
             {children}
         </div>}
-        <div className="table rounded-s gap-2mm" ref={tableRef}
+        <div role="grid" className="table rounded-s gap-2mm" ref={tableRef}
             style={{ ...columnSizeVars, width: '100%', ...tableStyle }}>
             <div className="table-data rounded-s" style={{ width: tableWrapper.getTotalSize() }}>
                 {/**Header groups */}
@@ -252,8 +252,10 @@ export default function FpTable<T>({
                                 style={{
                                     width: `var(--header-${header?.id}-size)`,
                                     ...getCommonPinningStyles(header.column)
-                                }}>
-                                <div className="header-data" onClick={header.column.getToggleSortingHandler()}>
+                                }}
+                                role="columnheader">
+                                <div className="header-data"
+                                    onClick={header.column.getToggleSortingHandler()}>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                     {header.column.getIsSorted() && <Icon icon={{
                                         asc: "ARROW_DROP_UP",
@@ -289,13 +291,15 @@ export default function FpTable<T>({
                 }
                 {/**Rows */}
                 {tableWrapper.getRowModel().rows.map(row => <Fragment key={row.id}>
-                    <div className={"table-row "
+                    <div role="row" className={"table-row "
+                        // TODO: Check if in future we might want a custom selectDescendants option
                         + (row.getIsSelected() || row.getIsSomeSelected() ? "row-selected" : "")
                         + " "
                         + (row.getCanSelect() ? "selectable" : "")}
                         onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
                         {row.getVisibleCells().map(cell =>
                             <div key={cell.id}
+                                role="gridcell"
                                 className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`}
                                 style={{
                                     width: `var(--col-${cell.column.id}-size)`,

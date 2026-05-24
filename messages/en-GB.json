@@ -1104,7 +1104,10 @@
           "photographer": {
             "label": "Photographer"
           },
-          "title": "Filters"
+          "title": "Filters",
+          "status": {
+            "label": "Status"
+          }
         },
         "events": {
           "card": {

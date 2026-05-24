@@ -15,10 +15,42 @@ import FpButton from "@/components/input/fpButton";
 import "@/styles/misc/gallery/explore/explore.scss";
 import { useUser } from "@/components/context/userProvider";
 import { Permissions } from "@/lib/api/permission";
+import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
+import { inputEntityCodeExtractor } from "@/lib/components/input";
 
 const EVENT_PATH = "events";
 const PHOTOGRAPHER_PATH = "photographers";
 const PATH_REGEX = /^$|^(events\/\d+)\/?$|^(photographers\/\d+)\/?$|^(events\/\d+)\/(photographers\/\d+)$/;
+
+const statusSelectItems = [
+    SelectItem.of({
+        code: "PENDING" as GalleryUploadedMediaStatus,
+        icon: "HISTORY_TOGGLE_OFF",
+        description: "pending",
+        translatedDescription: {
+            "it-it": "In attesa",
+            "en-gb": "Pending"
+        }
+    }),
+    SelectItem.of({
+        code: "APPROVED" as GalleryUploadedMediaStatus,
+        icon: "THUMB_UP",
+        description: "approved",
+        translatedDescription: {
+            "it-it": "Approvato",
+            "en-gb": "Approved"
+        }
+    }),
+    SelectItem.of({
+        code: "REJECTED" as GalleryUploadedMediaStatus,
+        icon: "THUMB_DOWN",
+        description: "rejected",
+        translatedDescription: {
+            "it-it": "Rifiutato",
+            "en-gb": "Rejected"
+        }
+    })
+];
 
 export default function GalleryExploreEventPage() {
     const params = useParams();
@@ -123,13 +155,14 @@ export default function GalleryExploreEventPage() {
                     initialValue={String(currentFilter?.photographer?.user.userId)}
                     onChange={e => setFilter({ photographerId: e?.id ?? null })} />
             </div>
-            {isAdmin && <div className="horizontal-list">
-                <FpSelect fieldName="photographer"
+            {isAdmin && <div className="horizontal-list gallery-explore__advanced">
+                <FpSelect fieldName="status"
                     className="spacer"
-                    label={t("misc.gallery.explore.advanced.photographer.label")}
-                    items={selectPhotographerItems}
-                    initialValue={String(currentFilter?.photographer?.user.userId)}
-                    onChange={e => setFilter({ photographerId: e?.id ?? null })} />
+                    label={t("misc.gallery.explore.advanced.status.label")}
+                    items={statusSelectItems}
+                    itemExtractor={inputEntityCodeExtractor}
+                    initialValue={String(currentFilter?.status)}
+                    onChange={e => setFilter({ status: e?.code as GalleryUploadedMediaStatus ?? null })} />
             </div>}
         </div>}
 

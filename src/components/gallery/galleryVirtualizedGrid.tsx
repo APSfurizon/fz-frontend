@@ -52,6 +52,7 @@ export default function GalleryVirtualizedGrid() {
         estimateSize: () => itemSize.height + gap.y,
         overscan: 3,
         getScrollElement: () => (typeof document !== "undefined" ? document.body : null),
+        scrollMargin: listOffsetRef.current,
         onChange: (instance) => {
             const items = instance.getVirtualItems();
 
@@ -76,8 +77,8 @@ export default function GalleryVirtualizedGrid() {
     const getItemGap = (width: number) => {
         if (width <= BREAKPOINT.xs) {
             return {
-                x: 0,
-                y: 7.5
+                x: 5,
+                y: 5
             }
         }
 
@@ -155,11 +156,11 @@ export default function GalleryVirtualizedGrid() {
                     key={virtualRow.key}
                     style={{
                         position: "absolute",
-                        top: 0,
+                        top: `${virtualRow.start - listOffsetRef.current}px`,
                         left: 0,
                         width: '100%',
                         height: `${virtualRow.size}px`,
-                        transform: `translateY(${virtualRow.start}px)`,
+                        //transform: `translateY(${virtualRow.start}px)`,
                     }}>
                     {rowItems.map(([id, media], index) => <GalleryMedia
                         key={id}

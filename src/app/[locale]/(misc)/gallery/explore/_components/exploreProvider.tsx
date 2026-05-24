@@ -1,6 +1,7 @@
 import { ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAction, ExplorePhotographersApiAction } from "@/lib/api/gallery/explore/api";
 import { CachedFullMedias } from "@/lib/api/gallery/explore/main";
 import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
+import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
 import { buildSearchParams } from "@/lib/utils";
 import { Leastwise } from "@/lib/utils/types";
@@ -10,14 +11,16 @@ import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEf
 class ExploreFilter {
     event: ExploreEvent | null;
     photographer: ExplorePhotographer | null;
+    status: GalleryUploadedMediaStatus | null;
 
     constructor(prev: ExploreFilter) {
         this.event = prev.event;
         this.photographer = prev.photographer;
+        this.status = prev.status;
     }
 }
 
-type FilterSetterBaseData = { eventId: number | null, photographerId: number | null, status: string | null };
+type FilterSetterBaseData = { eventId: number | null, photographerId: number | null, status: GalleryUploadedMediaStatus | null };
 export type FilterSetterData = Partial<FilterSetterBaseData>;
 type FilterSetterSearchData = Leastwise<FilterSetterBaseData>;
 
@@ -60,6 +63,11 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
                 data.photographerId
                     ? photographers.get(data.photographerId) ?? prev?.photographer
                     : data.photographerId === null ? null : prev?.photographer
+            ) ?? null,
+            status: (
+                data.status
+                    ? data.status
+                    : data.status === null ? null : prev?.status
             ) ?? null
         }));
 
@@ -81,11 +89,12 @@ export function ExploreProvider({ children }: Readonly<{ children: React.ReactNo
             })
             : Promise.resolve(data.photographerId);
         setLoading(true);
-        return Promise.all([eventSearch, photographerSearch])
-            .then(([event, photographer]) => {
+        return Promise.all([eventSearch, photographerSearch, Promise.resolve(data.status)])
+            .then(([event, photographer, status]) => {
                 setCurrentFilter(prev => new ExploreFilter({
                     event: event == null ? null : (event ?? prev?.event ?? null),
-                    photographer: photographer == null ? null : (photographer ?? prev?.photographer ?? null)
+                    photographer: photographer == null ? null : (photographer ?? prev?.photographer ?? null),
+                    status: status == null ? null : (status ?? prev?.status ?? null)
                 }))
             }).finally(() => setLoading(false));
     }, []);

@@ -24,10 +24,22 @@ export default function Home() {
     new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
     new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
   ], "gouppone", { "it": "Gruppo", "en": "Group" })
+  const group2 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  ], "gouppone", { "it": "Gruppo", "en": "Group" })
+  const group3 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  ], "gouppone", { "it": "Gruppo", "en": "Group" })
+  const group4 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  ], "gouppone", { "it": "Gruppo", "en": "Group" })
   const item3 = new SelectItem(3, "cc", "cLetter", "BED", undefined, undefined, { "it": "Libro", "en": "Book" });
 
   const selectItems: (SelectItem | SelectGroup)[] = [
-    group1, item3
+    group1, item3, group2, group3, group4
   ]
 
   return (
@@ -67,7 +79,12 @@ export default function Home() {
         <span>a modal</span>
       </Modal>
       <FpButton onClick={() => { setOpen(true); }} icon="BED">Modal</FpButton>
-      <FpSelect fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></FpSelect>
+      <FpSelect fieldName="d"
+        items={selectItems}
+        hasError
+        label="WoW"
+        placeholder="select"
+        itemExtractor={inputEntityCodeExtractor} />
 
     </div>
   );

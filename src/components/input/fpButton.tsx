@@ -43,7 +43,7 @@ export default function FpButton(props: Readonly<FpButtonProps>) {
     const isCooldown = !finalBusy && props.debounce !== undefined && disabledState && !props.disabled;
 
     return (
-        <button type={props.type} onClick={onClickEvent}
+        <button type={props.type ?? "button"} onClick={onClickEvent}
             title={props.title}
             disabled={finalBusy || disabledState}
             className={[

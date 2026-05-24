@@ -350,8 +350,8 @@ export default function AutoInput({
         setIsValid((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
     }
 
-    const anchorNameStyle = { anchorName: `--${id}` } as CSSProperties;
-    const anchorPositionStyle = { positionAnchor: `--${id}` } as CSSProperties;
+    const anchorNameStyle: CSSProperties = { anchorName: `--${id}` };
+    const anchorPositionStyle: CSSProperties = { positionAnchor: `--${id}` };
 
     return <>
         <div className={`autocomplete-input ${className ?? ""} ${isDisabled ? "disabled" : ""}`}

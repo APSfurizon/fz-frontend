@@ -5,7 +5,7 @@ div.table-container {
     div.table-toolbar {
         padding-bottom: 0.3125em;
 
-        div.table-search div.input-container {
+        div.table-search .input-container {
             margin-bottom: 0px;
         }
     }

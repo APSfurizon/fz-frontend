@@ -76,7 +76,7 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
             <span className="title horizontal-list align-items-center flex-horizontal-center gap-2mm flex-wrap">
                 <Icon icon="CLOUD_UPLOAD"></Icon>
                 {t.rich("misc.gallery.upload.form.picker.hint", {
-                    f: chunks => <FpButton onClick={() => fileRef.current?.showPicker()}>{chunks}</FpButton>
+                    f: chunks => <FpButton type="button" onClick={() => fileRef.current?.showPicker()}>{chunks}</FpButton>
                 })}
             </span>
         </div>

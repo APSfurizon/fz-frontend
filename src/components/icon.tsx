@@ -68,6 +68,7 @@ export const ICONS = {
     GROUPS: "groups",
     HELP: "help",
     HIDE_IMAGE: "hide_image",
+    HISTORY_TOGGLE_OFF: "history_toggle_off",
     HOME: "home",
     HOURGLASS_DISABLED: "hourglass_disabled",
     ID_CARD: "id_card",

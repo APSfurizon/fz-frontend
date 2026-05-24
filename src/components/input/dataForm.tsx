@@ -4,7 +4,8 @@ import {
     createContext, useContext,
     useImperativeHandle,
     RefObject,
-    useMemo
+    useMemo,
+    SubmitEvent
 } from "react";
 import { useTranslations } from "next-intl";
 import FpButton from "./fpButton";
@@ -130,7 +131,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         }
     }, [])
 
-    const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const onFormSubmit = (e: SubmitEvent<HTMLFormElement>) => {
         if (isBusy) { return; }
         try {
             if (!props.action) throw new Error("dataform must have an action to be submitted")

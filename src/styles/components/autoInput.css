@@ -14,7 +14,7 @@ div.autocomplete-input {
         color: red;
     }
 
-    div.input-container {
+    .input-container {
         background: var(--text-input-bg);
         outline: 1px solid var(--text-input-border-normal);
         gap: 0.2em;
@@ -36,7 +36,7 @@ div.autocomplete-input {
     }
 
     /* Focus style */
-    div.input-container:has(input.input-field:focus) {
+    .input-container:has(input.input-field:focus) {
         outline-width: 2px;
     }
 
@@ -46,7 +46,7 @@ div.autocomplete-input {
     }
 
     /* Disabled style */
-    div.input-container:has(input.input-field:disabled) {
+    .input-container:has(input.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);
         background-color: var(--text-input-bg-disabled);
     }
@@ -56,7 +56,7 @@ div.autocomplete-input {
     }
 
     /* Error style */
-    div.input-container:has(input.input-field.danger) {
+    .input-container:has(input.input-field.danger) {
         outline-color: var(--text-input-border-danger);
     }
 
@@ -86,7 +86,7 @@ div.autocomplete-input {
 
         max-height: 20rem;
         overflow-y: auto;
-        
+
         cursor: pointer;
         border: 0px solid var(--text-input-border-normal);
         color: var(--text-input-color);
@@ -139,6 +139,7 @@ div.autocomplete-input {
         .action-delete {
             background-color: transparent;
             border: none;
+
             .delete-selection {
                 margin-right: 0.1em;
                 cursor: pointer;
