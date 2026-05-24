@@ -88,7 +88,8 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     }
 
     // Keyboard listener
-    const keyEventHandler = (e: globalThis.KeyboardEvent) => {
+    const keyEventHandler = useCallback((e: globalThis.KeyboardEvent) => {
+        console.log(e.code);
         switch (e.code) {
             case "KeyI":
                 togglePanel();
@@ -102,8 +103,17 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
             case "ArrowRight":
                 goNext();
                 break;
+            case "KeyP":
+                updateStatus("APPROVED");
+                break;
+            case "KeyU":
+                updateStatus("PENDING");
+                break;
+            case "KeyX":
+                updateStatus("REJECTED");
+                break;
         }
-    }
+    }, [fullMedia]);
 
     useEffect(() => {
         if (!!currentMediaId) {
@@ -217,7 +227,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         ) ?? EMPTY_PROFILE_PICTURE_SRC
         , [fullMedia, currentMediaId, error]);
 
-    const updateStatus = (newStatus: GalleryUploadedMediaStatus) => {
+    const updateStatus = useCallback((newStatus: GalleryUploadedMediaStatus) => {
         if (!fullMedia) { return; }
         const status: GalleryUploadedMediaStatus =
             fullMedia.status === newStatus
@@ -230,7 +240,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 loadFullMedia();
             })
             .finally(() => setLoading(false));
-    }
+    }, [fullMedia]);
 
     return <Modal open={!!currentMediaId}
         onClose={closeModal}
@@ -257,7 +267,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 <FpButton iconButton iconClass="large" icon="ARROW_FORWARD" onClick={goNext} />
             </div>
 
-            <div className="view-media-modal__toolbar horizontal-list gap-2mm align-items-center">
+            <div className="view-media-modal__toolbar horizontal-list gap-2mm align-items-center flex-wrap">
                 <UserPicture className="view_media_modal_author_picture" userData={fullMedia?.photographer} />
                 <span>{fullMedia?.photographer && fullMedia.photographer.fursonaName}</span>
                 <FpButton iconButton

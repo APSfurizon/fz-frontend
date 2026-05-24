@@ -1,9 +1,15 @@
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global"
-import { GalleryUploadedFullMedia } from "./types"
+import { BulkDownloadApiResponse, GalleryUploadedFullMedia } from "./types"
 
 export class GetFullMediaApiAction extends ApiAction<ApiResponse & GalleryUploadedFullMedia, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
     urlAction = "gallery/pub/{id}";
     hasPathParams = true;
+}
+
+export class BulkDownloadApiAction extends ApiAction<BulkDownloadApiResponse, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.POST;
+    urlAction = "gallery/bulk-download";
 }

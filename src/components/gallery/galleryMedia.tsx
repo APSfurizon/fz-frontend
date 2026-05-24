@@ -31,7 +31,8 @@ export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
         style={props.style}
         aria-roledescription="image"
         tabIndex={0}
-        onClick={() => props.checkbox ? checkEvent() : props.onClick(props.source)}>
+        onClick={() => props.checkbox ? checkEvent() : props.onClick(props.source)}
+        onContextMenu={() => props.onClick(props.source)}>
         {props.checkbox &&
             <input type="checkbox"
                 tabIndex={0}

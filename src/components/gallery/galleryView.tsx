@@ -3,7 +3,7 @@ import { useGallery } from "./context/galleryProvider";
 import { useUser } from "@/components/context/userProvider";
 import { Permissions } from "@/lib/api/permission";
 import { GalleryUploadedFullMedia, GalleryUploadedMedia } from "@/lib/api/gallery/types";
-import { RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import FpButton from "@/components/input/fpButton";
 import { useTranslations } from "next-intl";
 import LoadingPanel from "@/components/loadingPanel";
@@ -16,6 +16,10 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import useResizeObserver from "../hooks/useResizeObserver";
 import { throttle } from "lodash";
 import GalleryVirtualizedGrid from "./galleryVirtualizedGrid";
+import { runRequest } from "@/lib/api/global";
+import { BulkDownloadApiAction } from "@/lib/api/gallery/api";
+import { useModalUpdate } from "../context/modalProvider";
+import ErrorMessage from "../errorMessage";
 
 type GalleryGridViewProps = {
     refresh?: RefObject<() => void>,
@@ -25,14 +29,19 @@ type GalleryGridViewProps = {
 export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     const t = useTranslations();
     const { medias, ended, getNextData, onRefresh, galleryLoading } = useGallery();
+    const { showModal } = useModalUpdate();
     const { openMedia } = useGalleryView();
-    const { selectedIds, selectionEnabled, setSelectionEnabled, select, clearSelection } = useGallerySelection();
+    const { selectedIds, setSelectedIds, selectionEnabled, setSelectionEnabled, clearSelection } = useGallerySelection();
     const [refreshKey, setRefreshKey] = useState(0);
     const { userDisplayRef, userLoading } = useUser();
     const canManageMedias = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
 
     // Selection logic
     const selectedMedias = useMemo(() => [...selectedIds].map(id => medias.get(id)).filter(v => !!v), [selectedIds]);
+
+    useEffect(() => {
+        clearSelection();
+    }, [medias]);
 
     // Edit modal logic
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -54,30 +63,53 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
         }
     }, [refreshKey]);
 
+    // Bulk download logic
+    const [downloadLoading, setDownloadLoading] = useState(false);
+
+    const downloadMedia = useCallback(() => {
+        if (downloadLoading || !selectedIds.size) { return; }
+        setDownloadLoading(true);
+        runRequest({ action: new BulkDownloadApiAction(), body: { "ids": [...selectedIds] } })
+            .then(async (result) => {
+                const response = await fetch(result.url, {
+                    method: "POST",
+                    body: result.body
+                });
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                window.open(url);
+                URL.revokeObjectURL(url);
+            }).catch(err => showModal(t("common.error"), <ErrorMessage error={err} />))
+            .finally(() => setDownloadLoading(false));
+    }, [selectedIds, downloadLoading]);
+
     return <>
         <div className="gallery__grid">
             <div className="gallery__grid__toolbar horizontal-list gap-2mm align-items-center">
-                {selectionEnabled
-                    ? <>
-                        <FpButton icon="REMOVE_SELECTION"
-                            title={t("components.gallery.grid.toolbar.deselect_all")}
-                            onClick={() => setSelectionEnabled(false)} />
-                        <span className="title">{selectedIds.size}/{medias.size}</span>
-                    </>
-                    : <FpButton icon="LIBRARY_ADD_CHECK"
-                        title={t("components.gallery.grid.toolbar.select_medias")}
-                        onClick={() => setSelectionEnabled(true)} />
-                }
+                {userDisplayRef.current && (
+                    selectionEnabled
+                        ? <>
+                            <FpButton icon="REMOVE_SELECTION"
+                                title={t("components.gallery.grid.toolbar.deselect_all")}
+                                onClick={() => setSelectionEnabled(false)} />
+                            <span className="title">{selectedIds.size}/{medias.size}</span>
+                        </>
+                        : <FpButton icon="LIBRARY_ADD_CHECK"
+                            title={t("components.gallery.grid.toolbar.select_medias")}
+                            onClick={() => setSelectionEnabled(true)} />
+                )}
                 <FpButton className="margin-left-auto" icon="REFRESH"
                     onClick={refreshRef.current}
                     busy={galleryLoading}
                     title={t("common.reload")}>
                     {t("common.reload")}
                 </FpButton>
-                {selectionEnabled && <>
+                {selectionEnabled && userDisplayRef.current?.display.userId && <>
                     <FpButton icon="DOWNLOAD"
                         title={t("components.gallery.grid.toolbar.download")}
-                        disabled={galleryLoading || !selectedIds.size} />
+                        busy={downloadLoading}
+                        disabled={galleryLoading || !selectedIds.size}
+                        onClick={downloadMedia} />
                     {canManageMedias &&
                         <FpButton icon="EDIT"
                             disabled={galleryLoading || !selectedIds.size}

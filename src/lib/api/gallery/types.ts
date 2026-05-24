@@ -64,3 +64,8 @@ export interface GalleryUploadedFullMedia extends GalleryUploadedMedia {
 export interface GalleryMediaApiResponse extends ApiResponse {
     results: GalleryUploadedMedia[]
 }
+
+export interface BulkDownloadApiResponse extends ApiResponse {
+    url: string,
+    body: string
+}

@@ -2,6 +2,7 @@ import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEf
 
 type GallerySelectionProviderType = {
     selectedIds: Set<number>;
+    setSelectedIds: Dispatch<SetStateAction<Set<number>>>;
     selectionEnabled: boolean;
     setSelectionEnabled: Dispatch<SetStateAction<boolean>>;
     select(id: number, selected: boolean): void;
@@ -40,6 +41,7 @@ export function GallerySelectionProvider(props: Readonly<GallerySelectionProvide
 
     return <GallerySelectionContext.Provider value={{
         selectedIds: selection,
+        setSelectedIds: setSelection,
         selectionEnabled,
         setSelectionEnabled,
         select,
