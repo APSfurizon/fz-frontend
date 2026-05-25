@@ -47,6 +47,7 @@
         padding: .5em;
         transition: border-color 300ms;
         border: 2px solid transparent;
+        overflow: hidden;
 
         &--open {
             border-color: var(--button-border-normal);

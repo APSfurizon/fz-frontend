@@ -15,7 +15,7 @@ export function nullifyEmptyStrings(values?: (string | undefined)[]) {
 }
 
 export function nullifyEmptyString(value?: string) {
-    return value && value.trim().length > 0 ? value.trim() : null;
+    return value && value.trim().length > 0 ? value.trim() : undefined;
 }
 
 export function stripProperties(toChange: any, fields: string[]) {

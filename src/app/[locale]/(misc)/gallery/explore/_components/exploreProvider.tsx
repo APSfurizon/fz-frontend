@@ -1,153 +1,48 @@
-import { ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAction, ExplorePhotographersApiAction } from "@/lib/api/gallery/explore/api";
-import { CachedFullMedias } from "@/lib/api/gallery/explore/main";
+import { useUser } from "@/components/context/userProvider";
+import { ExploreApiAction, ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAction, ExplorePhotographersApiAction } from "@/lib/api/gallery/explore/api";
+import { CachedFullMedias, ExploreUrl, parseExploreSlug } from "@/lib/api/gallery/explore/main";
 import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
-import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
+import { GalleryUploadedMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
+import { Permissions } from "@/lib/api/permission";
 import { buildSearchParams } from "@/lib/utils";
 import { Leastwise } from "@/lib/utils/types";
-import { useParams, useSearchParams } from "next/navigation";
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
-
-class ExploreFilter {
-    event: ExploreEvent | null;
-    photographer: ExplorePhotographer | null;
-    status: GalleryUploadedMediaStatus | null;
-
-    constructor(prev: ExploreFilter) {
-        this.event = prev.event;
-        this.photographer = prev.photographer;
-        this.status = prev.status;
-    }
-}
-
-type FilterSetterBaseData = { eventId: number | null, photographerId: number | null, status: GalleryUploadedMediaStatus | null };
-export type FilterSetterData = Partial<FilterSetterBaseData>;
-type FilterSetterSearchData = Leastwise<FilterSetterBaseData>;
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useExploreNavigation } from "./exploreNavigationProvider";
 
 interface ExploreProviderType {
-    events: Map<number, ExploreEvent>;
-    photographers: Map<number, ExplorePhotographer>;
-    setFilter(data: FilterSetterData): void;
-    searchFilter(data: FilterSetterSearchData): void;
-    currentFilter?: ExploreFilter,
-    reloadData(): void;
-    loading: boolean;
     cache: CachedFullMedias;
-    showFilters: boolean;
-    setShowFilters: Dispatch<SetStateAction<boolean>>;
+    nextData: (currentCursor: number) => Promise<GalleryUploadedMedia[]>;
 }
 
 const ExploreContext = createContext<ExploreProviderType>(undefined as any);
 
 export function ExploreProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-    const [events, setEvents] = useState<Map<number, ExploreEvent>>(new Map());
-    const [photographers, setPhotographers] = useState<Map<number, ExplorePhotographer>>(new Map());
-
-    const [currentFilter, setCurrentFilter] = useState<ExploreFilter>();
-
-    const [loading, setLoading] = useState(false);
-
+    const { userDisplayRef } = useUser();
+    const isAdmin = useMemo(() => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS), [userDisplayRef.current]);
     const [cache] = useState(new CachedFullMedias());
+    const { currentFilter } = useExploreNavigation();
 
-    const [showFilters, setShowFilters] = useState(false);
+    // Fetching logic
 
-    const setFilter = useCallback((data: FilterSetterData) => {
-        setCurrentFilter(prev => new ExploreFilter({
-            ...prev,
-            event: (
-                data.eventId
-                    ? events.get(data.eventId) ?? prev?.event
-                    : data.eventId === null ? null : prev?.event
-            ) ?? null,
-            photographer: (
-                data.photographerId
-                    ? photographers.get(data.photographerId) ?? prev?.photographer
-                    : data.photographerId === null ? null : prev?.photographer
-            ) ?? null,
-            status: (
-                data.status
-                    ? data.status
-                    : data.status === null ? null : prev?.status
-            ) ?? null
-        }));
-
-
-    }, [events, photographers]);
-
-    // TODO: understand with usePathname and useParams
-    const searchFilter = useCallback((data: FilterSetterSearchData) => {
-        const eventSearch = data.eventId !== undefined && data.eventId !== null
-            ? runRequest({
-                action: new ExploreEventApiAction(),
-                pathParams: { "id": data.eventId }
+    const nextData = useCallback((currentCursor: number) => {
+        console.debug("Fetching", currentFilter);
+        return runRequest({
+            action: new ExploreApiAction(),
+            searchParams: buildSearchParams({
+                photographerUserId: String(currentFilter?.photographerId ?? ""),
+                eventId: String(currentFilter?.eventId ?? ""),
+                uploadStatus: isAdmin ? currentFilter?.status ?? "" : "",
+                fromUploadId: String(currentCursor)
             })
-            : Promise.resolve(data.eventId);
-        const photographerSearch = data.photographerId !== undefined && data.photographerId !== null
-            ? runRequest({
-                action: new ExplorePhotographerApiAction(),
-                pathParams: { "id": data.photographerId }
-            })
-            : Promise.resolve(data.photographerId);
-        setLoading(true);
-        return Promise.all([eventSearch, photographerSearch, Promise.resolve(data.status)])
-            .then(([event, photographer, status]) => {
-                setCurrentFilter(prev => new ExploreFilter({
-                    event: event == null ? null : (event ?? prev?.event ?? null),
-                    photographer: photographer == null ? null : (photographer ?? prev?.photographer ?? null),
-                    status: status == null ? null : (status ?? prev?.status ?? null)
-                }))
-            }).finally(() => setLoading(false));
-    }, []);
-
-    useEffect(() => {
-        if (!currentFilter) return;
-        reloadData();
+        }).then(r => r.results);
     }, [currentFilter]);
 
-    const reloadData = () => {
-        setLoading(true);
-        Promise.all([
-            runRequest({
-                action: new ExploreEventsApiAction(),
-                searchParams: buildSearchParams({ "photographerUserId": String(currentFilter?.photographer?.user.userId ?? "") })
-            }),
-            runRequest({
-                action: new ExplorePhotographersApiAction(),
-                searchParams: buildSearchParams({ "eventId": String(currentFilter?.event?.event.id ?? "") })
-            }),
-        ]).then(([eventsRes, photographersRes]) => {
-            setEvents(prev => {
-                const next = new Map();
-                for (const evt of eventsRes.events) {
-                    next.set(evt.event.id, evt);
-                }
-                return next;
-            });
-            setPhotographers(prev => {
-                const next = new Map();
-                for (const pht of photographersRes.photographers) {
-                    next.set(pht.user.userId, pht);
-                }
-                return next;
-            })
-        }).finally(() => setLoading(false));
-    }
-
-    // History management
-    const pathParams = useParams();
-    const searchParams = useSearchParams();
 
     return <ExploreContext.Provider value={{
-        events,
-        photographers,
-        setFilter,
-        searchFilter,
-        currentFilter,
-        reloadData,
-        loading,
         cache,
-        showFilters,
-        setShowFilters
+        nextData
     }}>
         {children}
     </ExploreContext.Provider>

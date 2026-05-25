@@ -33,7 +33,7 @@ export function GalleryViewProvider(props: Readonly<GalleryViewProviderProps>) {
         if (mediaId) {
             newParams.append(MEDIA_SEARCH_PARAM, String(mediaId));
         }
-        window.history.pushState({}, '', newParams.size > 0 ? `?${newParams.toString()}` : window.location.pathname);
+        window.history.replaceState({}, '', newParams.size > 0 ? `?${newParams.toString()}` : window.location.pathname);
     }
 
     // Only on load for shareability
