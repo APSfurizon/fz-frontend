@@ -1,4 +1,5 @@
 "use client"
+import "@/styles/furpanel/layout.css";
 import { useTranslations } from 'next-intl';
 import Icon from "@/components/icon";
 import ToolLink from "@/components/toolLink";
@@ -9,7 +10,6 @@ import {
 import { useModalUpdate } from '@/components/context/modalProvider';
 import Modal from '@/components/modal';
 import { useEffect, useState } from 'react';
-import "@/styles/furpanel/layout.css";
 import { useUser } from '@/components/context/userProvider';
 import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -59,7 +59,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
 
     return <>
-        <div className="main-dialog rounded-s">
+        <div className="main-dialog furpanel-dialog rounded-s">
             <div className="horizontal-list gap-4mm">
                 <span>
                     <span className="title-pair">

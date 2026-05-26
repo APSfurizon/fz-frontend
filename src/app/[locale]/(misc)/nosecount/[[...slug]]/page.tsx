@@ -128,7 +128,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
     }, [mode]);
     useTitle(title);
 
-    return <div className="page">
+    return <div className="page nosecount-content-page">
         {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel /></div>}
         {error && <ErrorMessage error={error} />}
 

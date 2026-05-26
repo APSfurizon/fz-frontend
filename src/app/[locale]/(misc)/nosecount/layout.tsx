@@ -79,41 +79,43 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
         router.push(["/nosecount", selectedEvent?.slug, mode].join("/"));
     }
 
-    return <div className="main-dialog rounded-s">
-        <div className="page">
-            <div className="horizontal-list gap-4mm flex-wrap">
-                <Button className={(viewMode != CountViewMode.NORMAL ? "off" : "")
-                    + " margin-bottom-1mm"}
-                    icon="GROUPS"
-                    onClick={() => onSelectMode(CountViewMode.NORMAL)}>
-                    {t("misc.nosecount.title")}
-                </Button>
-                <Button className={(viewMode != CountViewMode.FURSUIT ? "off" : "")
-                    + " margin-bottom-1mm"}
-                    icon="PETS"
-                    onClick={() => onSelectMode(CountViewMode.FURSUIT)}>
-                    {t("misc.nosecount.links.fursuits")}
-                </Button>
-                <Button className={(viewMode != CountViewMode.SPONSOR ? "off" : "")
-                    + " margin-bottom-1mm"}
-                    icon="WORKSPACE_PREMIUM"
-                    onClick={() => onSelectMode(CountViewMode.SPONSOR)}>
-                    {t("misc.nosecount.links.sponsors")}
-                </Button>
-                <div className="spacer"></div>
-                <FpSelect itemExtractor={inputEntityCodeExtractor}
-                    required
-                    items={items}
-                    placeholder={t("misc.nosecount.input.select_event")}
-                    disabled={(events || []).length == 0}
-                    initialValue={selectedEvent?.slug}
-                    onChange={onSelectEvent} />
-                <Button icon="REFRESH"
-                    className="margin-bottom-1mm"
-                    title={t("common.reload")}
-                    onClick={() => setEvents(undefined)}
-                    busy={loading}
-                    debounce={3000} />
+    return <div className="main-dialog nosecount-dialog rounded-s">
+        <div className="page nosecount-layout-page">
+            <div className="nosecount-toolbar">
+                <div className="nosecount-mode-buttons">
+                    <Button className={(viewMode != CountViewMode.NORMAL ? "off" : "")}
+                        icon="GROUPS"
+                        onClick={() => onSelectMode(CountViewMode.NORMAL)}>
+                        {t("misc.nosecount.title")}
+                    </Button>
+                    <Button className={(viewMode != CountViewMode.FURSUIT ? "off" : "")}
+                        icon="PETS"
+                        onClick={() => onSelectMode(CountViewMode.FURSUIT)}>
+                        {t("misc.nosecount.links.fursuits")}
+                    </Button>
+                    <Button className={(viewMode != CountViewMode.SPONSOR ? "off" : "")}
+                        icon="WORKSPACE_PREMIUM"
+                        onClick={() => onSelectMode(CountViewMode.SPONSOR)}>
+                        {t("misc.nosecount.links.sponsors")}
+                    </Button>
+                </div>
+                <div className="spacer nosecount-toolbar-spacer"></div>
+                <div className="nosecount-event-controls">
+                    <FpSelect className="nosecount-event-select"
+                        itemExtractor={inputEntityCodeExtractor}
+                        required
+                        items={items}
+                        placeholder={t("misc.nosecount.input.select_event")}
+                        disabled={(events || []).length == 0}
+                        initialValue={selectedEvent?.slug}
+                        onChange={onSelectEvent} />
+                    <Button icon="REFRESH"
+                        className="nosecount-refresh-button"
+                        title={t("common.reload")}
+                        onClick={() => setEvents(undefined)}
+                        busy={loading}
+                        debounce={3000} />
+                </div>
             </div>
             <NosecountContext.Provider value={{
                 event: selectedEvent,

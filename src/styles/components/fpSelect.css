@@ -73,4 +73,5 @@ div.fp-input {
     padding: 0px;
     outline: none;
     border: none;
+    position: absolute;
 }
