@@ -1,14 +1,11 @@
 import { useUser } from "@/components/context/userProvider";
-import { ExploreApiAction, ExploreEventApiAction, ExploreEventsApiAction, ExplorePhotographerApiAction, ExplorePhotographersApiAction } from "@/lib/api/gallery/explore/api";
-import { CachedFullMedias, ExploreUrl, parseExploreSlug } from "@/lib/api/gallery/explore/main";
-import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
-import { GalleryUploadedMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
+import { ExploreApiAction } from "@/lib/api/gallery/explore/api";
+import { CachedFullMedias } from "@/lib/api/gallery/explore/main";
+import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { runRequest } from "@/lib/api/global";
 import { Permissions } from "@/lib/api/permission";
 import { buildSearchParams } from "@/lib/utils";
-import { Leastwise } from "@/lib/utils/types";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { useExploreNavigation } from "./exploreNavigationProvider";
 
 interface ExploreProviderType {

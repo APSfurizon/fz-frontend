@@ -4,6 +4,7 @@
 .input-container {
     width: 100%;
     border: none;
+    overflow: hidden;
 }
 
 /* Error style */
@@ -100,6 +101,7 @@ div.fp-input {
     }
 
     &__option {
+        text-align: left;
         margin-bottom: 2mm;
         cursor: pointer;
         padding: 1mm 1mm;
@@ -137,5 +139,9 @@ div.fp-input {
 
     &__text {
         margin-left: 2mm;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: min-content;
     }
 }

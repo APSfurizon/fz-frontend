@@ -6,7 +6,8 @@ import FpButton from "@/components/input/fpButton";
 import "@/styles/misc/gallery/upload/filePicker.css";
 
 type GalleryFilePickerProps = {
-    onFilesSelected: (files: File[]) => void
+    onFilesSelected: (files: File[]) => void;
+    disabled?: boolean;
 };
 
 function isSupportedMedia(data: DataTransferItem) {
@@ -26,11 +27,14 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
                 e.stopPropagation();
             }
         }
-        window.addEventListener("drop", handler);
+        if (props.disabled) {
+            window.addEventListener("drop", handler);
+        }
         return () => window.removeEventListener("drop", handler);
-    })
+    }, [props.disabled]);
 
     const dragOverHandler = useCallback((e: DragEvent<HTMLDivElement>) => {
+        if (props.disabled) { return; }
         e.preventDefault();
         if (formLoading) {
             e.dataTransfer.dropEffect = "none";
@@ -43,21 +47,23 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
             e.dataTransfer.dropEffect = "copy";
             setHover(true);
         }
-    }, []);
+    }, [props.disabled]);
 
     const dropHandler = useCallback((e: DragEvent<HTMLDivElement>) => {
+        if (props.disabled) { return; }
         setHover(false);
         e.preventDefault();
         const fileItems = [...e.dataTransfer.items].filter(item => item.kind === "file");
         if (fileItems.some(d => !isSupportedMedia(d))) { return; }
         props.onFilesSelected(fileItems.map(v => v.getAsFile()).filter(v => !!v));
-    }, []);
+    }, [props.disabled]);
 
     const filePickerHandler = useCallback((e: ChangeEvent) => {
+        if (props.disabled) { return; }
         if (!fileRef.current?.files?.length) return;
         props.onFilesSelected([...fileRef.current.files]);
         fileRef.current.value = "";
-    }, []);
+    }, [props.disabled]);
 
     const s = undefined;
 
@@ -76,7 +82,11 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
             <span className="title horizontal-list align-items-center flex-horizontal-center gap-2mm flex-wrap">
                 <Icon icon="CLOUD_UPLOAD"></Icon>
                 {t.rich("misc.gallery.upload.form.picker.hint", {
-                    f: chunks => <FpButton type="button" onClick={() => fileRef.current?.showPicker()}>{chunks}</FpButton>
+                    f: chunks => <FpButton type="button"
+                        onClick={() => fileRef.current?.showPicker()}
+                        disabled={props.disabled}>
+                        {chunks}
+                    </FpButton>
                 })}
             </span>
         </div>

@@ -10,7 +10,7 @@ import { runRequest } from "@/lib/api/global";
 import { DeleteMediaApiAction, GetFullMediaApiAction } from "@/lib/api/gallery/api";
 import "@/styles/misc/gallery/viewMediaModal.scss";
 import { translate } from "@/lib/translations";
-import { getCountdown } from "@/lib/utils";
+import { getCountdown, humanFileSize } from "@/lib/utils";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { shareMediaUrl } from "@/lib/api/gallery/util";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -173,13 +173,22 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 goNext();
                 break;
             case "KeyP":
+                if (!e.altKey) break;
                 updateStatus("APPROVED");
+                e.stopPropagation();
+                e.preventDefault();
                 break;
             case "KeyU":
+                if (!e.altKey) break;
                 updateStatus("PENDING");
+                e.stopPropagation();
+                e.preventDefault();
                 break;
             case "KeyX":
+                if (!e.altKey) break;
                 updateStatus("REJECTED");
+                e.stopPropagation();
+                e.preventDefault();
                 break;
             case "Delete":
                 promptDelete();
@@ -397,6 +406,9 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                         </ModalPanelData>
                         {isAdmin && <ModalPanelData icon="FLAG" text={mapStatus(fullMedia.status)} />}
                         {shotDate && <ModalPanelData icon="EVENT" text={shotDate} />}
+                        <ModalPanelData icon="DESCRIPTION" text={fullMedia.fileName} />
+                        <ModalPanelData icon="CROP" text={`${fullMedia.width} x ${fullMedia.height}`} />
+                        <ModalPanelData icon="STORAGE" text={humanFileSize(fullMedia.fileSize, true)} />
                         {fullMedia.photoMetadata && <>
                             <h4 className="view-media-modal__panel-header title">{t("misc.gallery.modal.information_panel.photo.title")}</h4>
                             <div className="vertical-list">

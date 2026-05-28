@@ -1099,7 +1099,10 @@
             "label": "Event"
           },
           "photographer": {
-            "label": "Photographer"
+            "label": "Photographer",
+            "list": {
+              "official": "Official photographer"
+            }
           },
           "title": "Filters",
           "status": {
@@ -1143,6 +1146,12 @@
         },
         "queue": {
           "title": "Uploading..."
+        },
+        "limits": {
+          "max_number_per_event": "You can upload up to {count, plural, =1 {one media} other {# medias}} per event.",
+          "no_limit_per_event": "You have no upload count limits per event.",
+          "size_limit": "You can upload files up to {size}.",
+          "no_size_limit": "You don't have any upload size limit."
         }
       },
       "admin": {

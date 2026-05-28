@@ -1100,7 +1100,10 @@
             "label": "Evento"
           },
           "photographer": {
-            "label": "Fotografo"
+            "label": "Fotografo",
+            "list": {
+              "official": "Fotografo ufficiale"
+            }
           },
           "title": "Filtri",
           "status": {
@@ -1144,6 +1147,12 @@
         },
         "queue": {
           "title": "Caricamento..."
+        },
+        "limits": {
+          "max_number_per_event": "Puoi caricare fino a {count, plural, =1 {un elemento} other {# elementi}} per evento.",
+          "no_limit_per_event": "Non hai limiti di caricamenti per evento.",
+          "size_limit": "Puoi caricare file fino a {size}.",
+          "no_size_limit": "Non hai limiti sulle dimensioni."
         }
       },
       "admin": {

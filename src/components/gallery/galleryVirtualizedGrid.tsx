@@ -11,8 +11,8 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const BREAKPOINT = {
-    xs: 375,
-    sm: 640,
+    xs: 400,
+    sm: 700,
     lg: 1024
 };
 
@@ -101,10 +101,10 @@ export default function GalleryVirtualizedGrid() {
         }
 
         if (width <= BREAKPOINT.sm) {
-            return 5;
+            return 4;
         }
 
-        return 4;
+        return 5;
     };
 
     const getItemWidth = (width: number, columns: number, gapX: number) => {

@@ -1,3 +1,4 @@
+import { ConventionEvent } from "../../counts";
 import { ApiRequest, ApiResponse } from "../../global";
 import { GalleryUploadedMedia, UploadRepostPermissions } from "../types";
 import { GalleryUpload } from "./main";
@@ -59,3 +60,16 @@ export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED"
 export type GalleryUploadEventParams = { data: GalleryUpload, error?: any, upload?: ApiResponse }
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;
 
+export type ConventionEventUploadData = {
+    event: ConventionEvent,
+    uploadedCount: number
+}
+
+export interface UploadLimitsResponse extends ApiResponse {
+    uploadableEvents: ConventionEventUploadData[];
+    bannedFromUploading: boolean;
+    uploadMaxFileSize: number;
+    maxUploadsNumberPerEvent: number;
+    allowedMimeTypes: string[];
+    allowedFileExtensions: string[];
+}

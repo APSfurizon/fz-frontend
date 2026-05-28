@@ -22,3 +22,10 @@ export class SelectGroup {
     }
 
 }
+
+export type OptionRendererParams = {
+    id: any;
+    item: SelectItem;
+    selected: boolean;
+    onClick: () => void
+};

@@ -25,9 +25,6 @@ export default function UploadContainer(props: Readonly<UploadContainerProps>) {
     /** The key of the latest media uploaded, also being the first in the grid */
     const maxKey = useMemo(() => medias.keys().reduce((prev, next) => Math.max(prev, next), 0), [medias]);
 
-    const [eventItems, setEventItems] = useState<SelectItem[]>([]);
-    const [editModalOpen, setEditModalOpen] = useState(false);
-
     // Append the latest uploaded medias
     const timeoutHandle = useRef<any>(null!);
     const isPrependRunning = useRef(false);
@@ -83,8 +80,7 @@ export default function UploadContainer(props: Readonly<UploadContainerProps>) {
 
     return <>
         <UploadPanel onUploadUpdate={(u) => setUploads(u)}
-            onCompletedUpload={prependUploadedMedias}
-            onEventItemsLoaded={e => setEventItems(e)} />
+            onCompletedUpload={prependUploadedMedias} />
         <div className="upload-queue">
             <h3 className="title medium margin-bottom-1mm">{t("misc.gallery.upload.queue.title")}</h3>
             <div className="container rounded-l vertical-list">

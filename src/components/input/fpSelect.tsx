@@ -1,4 +1,4 @@
-import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
+import { OptionRendererParams, SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
@@ -26,25 +26,29 @@ type FpSelectProps = {
     inputStyle?: CSSProperties,
     itemExtractor?: (entity: TranslatableInputEntity) => string | number | undefined,
     hasError?: boolean,
-    helpText?: string | React.ReactNode
+    helpText?: string | React.ReactNode,
+    optionRenderer?: (params: OptionRendererParams) => React.ReactNode
 };
 
 export default function FpSelect({
     items, className, style, labelStyle, label, hasError = false,
     onChange, placeholder, readOnly = false, required = false,
-    disabled = false, initialValue = "", fieldName, inputStyle,
-    itemExtractor = inputEntityIdExtractor, helpText
+    disabled = false, initialValue, fieldName, inputStyle,
+    itemExtractor = inputEntityIdExtractor, helpText,
+    optionRenderer
 }: Readonly<FpSelectProps>) {
     const locale = useLocale();
     const [selectedItem, setSelectedItem] = useState<TranslatableInputEntity>();
     const [lastInitialValue, setLastInitialValue] = useState<string | number>();
     const mappedItems = useMemo(() => getMappedItems(items), [items]);
     const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
-    const defaultValue = useMemo(() => required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined, [mappedItems]);
-    const selectDefaultValue = useMemo(() => {
-        const item = selectedItem ?? defaultValue;
+
+    const defaultItem = useMemo(() => required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined, [mappedItems]);
+    const defaultItemValue = useMemo(() => {
+        const item = selectedItem ?? defaultItem;
         return item ? itemExtractor(item) ?? "" : "";
-    }, [selectedItem, defaultValue]);
+    }, [selectedItem, defaultItem]);
+
     const isDisabled = formDisabled || disabled || formLoading;
 
     function getMappedItems(items: (SelectGroup | SelectItem)[]): Record<string, TranslatableInputEntity> {
@@ -82,8 +86,10 @@ export default function FpSelect({
             setSelectedItem(mappedItems[initialValue]);
             setLastInitialValue(initialValue);
         } else if (formReset) {
-            setSelectedItem(mappedItems ? mappedItems[initialValue] : undefined);
+            setSelectedItem(mappedItems && initialValue ? mappedItems[initialValue] : undefined);
             if (onFormChange) onFormChange(fieldName);
+        } else if (!initialValue) {
+            onSelect(defaultItemValue);
         }
     }, [initialValue, mappedItems, formReset]);
 
@@ -122,33 +128,40 @@ export default function FpSelect({
                     </div>
                 </div>
             } else {
-                return <button key={index}
-                    type="button"
-                    tabIndex={0}
-                    onClick={() => onSelect(itemExtractor(item))}
-                    className={[
-                        "fp-select__option",
-                        "rounded-s",
-                        "horizontal-list",
-                        "align-items-center",
-                        "gap-2mm",
-                        isSelected(item) ? "fp-select__option--selected" : ""
-                    ].join(" ")}
-                    aria-selected={isSelected(item)}>
-                    {shouldReserveMediaSpace && (item.icon || item.imageUrl
-                        ? <>
-                            {item.icon && <Icon style={item.iconCSS} icon={item.icon as MaterialIcon} />}
-                            {item.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />}
-                        </>
-                        : <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
-                    )}
-                    <span className="title small">
-                        {item.getDescription(locale)}
-                    </span>
-                </button>
+                return optionRenderer
+                    ? optionRenderer({
+                        id: itemExtractor(item),
+                        item,
+                        selected: isSelected(item),
+                        onClick: () => onSelect(itemExtractor(item))
+                    })
+                    : <button key={index}
+                        type="button"
+                        tabIndex={0}
+                        onClick={() => onSelect(itemExtractor(item))}
+                        className={[
+                            "fp-select__option",
+                            "rounded-s",
+                            "horizontal-list",
+                            "align-items-center",
+                            "gap-2mm",
+                            isSelected(item) ? "fp-select__option--selected" : ""
+                        ].join(" ")}
+                        aria-selected={isSelected(item)}>
+                        {shouldReserveMediaSpace && (item.icon || item.imageUrl
+                            ? <>
+                                {item.icon && <Icon style={item.iconCSS} icon={item.icon as MaterialIcon} />}
+                                {item.imageUrl && <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />}
+                            </>
+                            : <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
+                        )}
+                        <span className="title small">
+                            {item.getDescription(locale)}
+                        </span>
+                    </button>
             }
         })
-    }, [shouldReserveMediaSpace, selectedItem]);
+    }, [shouldReserveMediaSpace, selectedItem, optionRenderer]);
 
     const popoverRef = useRef<HTMLDivElement>(null);
     const [listOpen, setListOpen] = useState(false);
@@ -166,7 +179,7 @@ export default function FpSelect({
             {label && <label htmlFor={selectLabel} className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
                 style={{ ...labelStyle }}>{label}</label>}
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
-                defaultValue={selectDefaultValue} required={required}></input>
+                defaultValue={defaultItemValue} required={required}></input>
             <button role="listbox"
                 type="button"
                 disabled={isDisabled}

@@ -9,104 +9,28 @@ import { Leastwise } from "@/lib/utils/types";
 import { useParams, useRouter } from "next/navigation";
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-class ExploreFilterData {
-    event: ExploreEvent | null;
-    photographer: ExplorePhotographer | null;
-    status: GalleryUploadedMediaStatus | null;
-
-    constructor(prev: ExploreFilterData) {
-        this.event = prev.event;
-        this.photographer = prev.photographer;
-        this.status = prev.status;
-    }
-}
-
 type ExploreFilter = {
     eventId: number | null;
     photographerId: number | null;
     status: string | null;
 }
 
-type FilterSetterBaseData = { eventId: number | null, photographerId: number | null, status: GalleryUploadedMediaStatus | null };
+export type FilterSetterBaseData = { eventId: number | null, photographerId: number | null, status: GalleryUploadedMediaStatus | null };
 export type FilterSetterData = Partial<FilterSetterBaseData>;
-type FilterSetterSearchData = Leastwise<FilterSetterBaseData>;
+export type FilterSetterSearchData = Leastwise<FilterSetterBaseData>;
 
 interface ExploreNavigationProviderType {
-    events: Map<number, ExploreEvent>;
-    photographers: Map<number, ExplorePhotographer>;
     currentFilter?: ExploreFilter;
-    currentFilterData?: ExploreFilterData;
     showFilters: boolean;
     setShowFilters: Dispatch<SetStateAction<boolean>>;
     setFilter(data: FilterSetterData): void;
-    loading: boolean;
 }
 
 const ExploreNavigationContext = createContext<ExploreNavigationProviderType>(undefined as any);
 
 export function ExploreNavigationProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const [currentFilter, setCurrentFilter] = useState<ExploreFilter>();
-    const [currentFilterData, setCurrentFilterData] = useState<ExploreFilterData>();
     const [showFilters, setShowFilters] = useState(false);
-    const [events, setEvents] = useState<Map<number, ExploreEvent>>(new Map());
-    const [photographers, setPhotographers] = useState<Map<number, ExplorePhotographer>>(new Map());
-
-    const [loading, setLoading] = useState(false);
-    const [definitiveLoading, setDefinitiveLoading] = useState(false);
-
-    // TODO: understand with usePathname and useParams
-    const loadFilterData = useCallback((data: FilterSetterSearchData) => {
-        const exists = (value: any) => value !== undefined && value !== null;
-        const coalesce = (value: any, fallback: any) => value === null ? null : value ?? fallback;
-
-        const eventSearch = exists(data.eventId)
-            ? runRequest({
-                action: new ExploreEventApiAction(),
-                pathParams: { "id": data.eventId }
-            })
-            : Promise.resolve(data.eventId);
-        const photographerSearch = exists(data.photographerId)
-            ? runRequest({
-                action: new ExplorePhotographerApiAction(),
-                pathParams: { "id": data.photographerId }
-            })
-            : Promise.resolve(data.photographerId);
-        const allEvents = runRequest({
-            action: new ExploreEventsApiAction(),
-            searchParams: buildSearchParams({ "photographerUserId": String(data.photographerId ?? "") })
-        });
-        const allPhotographers = runRequest({
-            action: new ExplorePhotographersApiAction(),
-            searchParams: buildSearchParams({ "eventId": String(data.eventId ?? "") })
-        });
-
-        setLoading(true);
-        return Promise.all([eventSearch, photographerSearch, Promise.resolve(data.status), allEvents, allPhotographers])
-            .then(([eventRes, photographerRes, statusRes, allEventsRes, allPhotographersRes]) => {
-                setCurrentFilterData(prev => new ExploreFilterData({
-                    event: coalesce(eventRes, prev?.event),
-                    photographer: coalesce(photographerRes, prev?.photographer),
-                    status: coalesce(statusRes, prev?.status)
-                }));
-                setEvents(prev => {
-                    const next = new Map();
-                    for (const evt of allEventsRes.events) {
-                        next.set(evt.event.id, evt);
-                    }
-                    return next;
-                });
-                setPhotographers(prev => {
-                    const next = new Map();
-                    for (const pht of allPhotographersRes.photographers) {
-                        next.set(pht.user.userId, pht);
-                    }
-                    return next;
-                })
-            }).finally(() => {
-                setLoading(false);
-                setDefinitiveLoading(false);
-            });
-    }, []);
 
     // URL Parsing logic
     const router = useRouter();
@@ -115,8 +39,6 @@ export function ExploreNavigationProvider({ children }: Readonly<{ children: Rea
     const { event, photographer, status } = parseExploreSlug(slug);
 
     useEffect(() => {
-        setDefinitiveLoading(true);
-        loadFilterData({ eventId: event, photographerId: photographer, status: status });
         setCurrentFilter({
             eventId: event,
             photographerId: photographer,
@@ -158,14 +80,10 @@ export function ExploreNavigationProvider({ children }: Readonly<{ children: Rea
     }
 
     return <ExploreNavigationContext.Provider value={{
-        events,
-        photographers,
         currentFilter,
-        currentFilterData,
         showFilters,
         setShowFilters,
         setFilter,
-        loading: definitiveLoading
     }}>
         {children}
     </ExploreNavigationContext.Provider>
