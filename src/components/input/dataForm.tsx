@@ -5,7 +5,8 @@ import {
     useImperativeHandle,
     RefObject,
     useMemo,
-    SubmitEvent
+    SubmitEvent,
+    useCallback
 } from "react";
 import { useTranslations } from "next-intl";
 import FpButton from "./fpButton";
@@ -178,14 +179,14 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         e.stopPropagation();
     }
 
-    const onFormChange = (fieldName?: string, value?: any) => {
-        if (!fieldName || !props.formRef?.current) return;
-        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(props.formRef.current));
+    const onFormChange = useCallback((fieldName?: string, value?: any) => {
+        if (!fieldName || !inputRef?.current) return;
+        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(inputRef.current));
         if (entity && value) {
             entity[fieldName] = value;
         }
         setCurrentEntity(entity);
-    };
+    }, [props.formRef?.current]);
 
     useEffect(() => {
         const isChanged = !props.initialEntity

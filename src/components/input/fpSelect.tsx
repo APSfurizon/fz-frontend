@@ -179,7 +179,7 @@ export default function FpSelect({
             {label && <label htmlFor={selectLabel} className={`title semibold small margin-bottom-1mm ${required ? "required" : ""}`}
                 style={{ ...labelStyle }}>{label}</label>}
             <input tabIndex={-1} className="suppressed-input" type="text" name={fieldName}
-                defaultValue={defaultItemValue} required={required}></input>
+                value={defaultItemValue ?? ""} required={required} readOnly></input>
             <button role="listbox"
                 type="button"
                 disabled={isDisabled}

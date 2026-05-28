@@ -10,6 +10,7 @@ import "@/styles/misc/gallery/explore/explore.scss";
 import { useExploreNavigation } from "../_components/exploreNavigationProvider";
 import ExploreFilter from "../exploreFilter";
 import GalleryEvents from "../_components/galleryEvents";
+import GalleryBanner from "../_components/galleryBanner";
 
 export default function GalleryExploreEventPage() {
     const { cache, nextData } = useExplore();
@@ -32,6 +33,7 @@ export default function GalleryExploreEventPage() {
         </div>
         <ExploreFilter />
         <GalleryEvents />
+        <GalleryBanner />
         {(!!currentFilter?.eventId || !!currentFilter?.photographerId) &&
             <Gallery.Root getNextData={nextData} className="explore-gallery">
                 <Gallery.GridView refresh={refreshGallery}

@@ -15,6 +15,7 @@ import { useEffect, useMemo, useState } from "react";
 import { runRequest } from "@/lib/api/global";
 import { ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
 import { ExploreEvent } from "@/lib/api/gallery/explore/type";
+import { STATUS_FILTER_ITEMS } from "@/lib/api/gallery/explore/main";
 
 type MediaEditModalProps = {
     medias: GalleryUploadedMedia[],
@@ -71,6 +72,7 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
                     disabled={eventEditingLocked}
                     items={eventItems}
                     label={t("misc.gallery.upload.form.event.label")}
+                    initialValue={!eventEditingLocked ? String(props.medias[0]?.eventId) : undefined}
                     placeholder={t("misc.gallery.upload.form.event.placeholder")} />
                 {/* Copyright selector */}
                 <FpSelect required
@@ -79,6 +81,12 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
                     items={copyrightValues}
                     label={t("misc.gallery.upload.form.copyright.label")}
                     placeholder={t("misc.gallery.upload.form.copyright.placeholder")} />
+                {/* Copyright selector */}
+                <FpSelect required
+                    fieldName="newStatus"
+                    itemExtractor={inputEntityCodeExtractor}
+                    items={STATUS_FILTER_ITEMS}
+                    label={t("misc.gallery.explore.advanced.status.label")} />
                 <div className="bottom-toolbar">
                     <FpButton className="danger"
                         title={t("common.cancel")}
