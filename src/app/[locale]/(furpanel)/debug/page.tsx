@@ -1,6 +1,6 @@
 'use client'
 import Checkbox from "@/components/input/checkbox";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useState } from "react";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import FpInput from "@/components/input/fpInput";
@@ -24,10 +24,22 @@ export default function Home() {
     new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
     new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
   ], "gouppone", { "it": "Gruppo", "en": "Group" })
+  const group2 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  ], "gouppone", { "it": "Gruppo", "en": "Group" })
+  const group3 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  ], "gouppone", { "it": "Gruppo", "en": "Group" })
+  const group4 = new SelectGroup([
+    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
+    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
+  ], "gouppone", { "it": "Gruppo", "en": "Group" })
   const item3 = new SelectItem(3, "cc", "cLetter", "BED", undefined, undefined, { "it": "Libro", "en": "Book" });
 
   const selectItems: (SelectItem | SelectGroup)[] = [
-    group1, item3
+    group1, item3, group2, group3, group4
   ]
 
   return (
@@ -35,8 +47,8 @@ export default function Home() {
       <div className="container">
         <Upload busy={false} label="Profile picture" requireCrop cropAspectRatio="square"></Upload>
       </div>
-      <Button className="danger" onClick={() => setBusy(false)} icon="ADD_CIRCLE">Busy off</Button>
-      <Button busy={isBusy} onClick={() => { setBusy(true); }} icon="EDIT">Busy on</Button>
+      <FpButton className="danger" onClick={() => setBusy(false)} icon="ADD_CIRCLE">Busy off</FpButton>
+      <FpButton busy={isBusy} onClick={() => { setBusy(true); }} icon="EDIT">Busy on</FpButton>
       <Checkbox>Wofe</Checkbox>
       <Checkbox busy={isBusy}>Wofe</Checkbox>
       <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
@@ -66,8 +78,13 @@ export default function Home() {
       <Modal title="A title" open={isOpen} onClose={() => setOpen(false)}>
         <span>a modal</span>
       </Modal>
-      <Button onClick={() => { setOpen(true); }} icon="BED">Modal</Button>
-      <FpSelect fieldName="d" items={selectItems} hasError label="WOW" placeholder="select" itemExtractor={inputEntityCodeExtractor} required></FpSelect>
+      <FpButton onClick={() => { setOpen(true); }} icon="BED">Modal</FpButton>
+      <FpSelect fieldName="d"
+        items={selectItems}
+        hasError
+        label="WoW"
+        placeholder="select"
+        itemExtractor={inputEntityCodeExtractor} />
 
     </div>
   );

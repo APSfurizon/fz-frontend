@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
@@ -124,10 +124,10 @@ export default function RolesListPage() {
                 maxSize: 88,
                 size: 88,
                 cell: props => <div className="horizontal-list gap-2mm">
-                    <Button onClick={() => editRole(props.row.original)}
+                    <FpButton onClick={() => editRole(props.row.original)}
                         icon="EDIT"
                         title={t("common.CRUD.edit")} />
-                    <Button className="danger"
+                    <FpButton className="danger"
                         onClick={(e) => promptDeleteRole(e, props.row.original)}
                         icon="DELETE"
                         title={t("common.CRUD.delete")} />
@@ -145,8 +145,8 @@ export default function RolesListPage() {
                 </div>
 
                 <div className="spacer"></div>
-                <Button icon="REFRESH" onClick={() => loadRoles()} debounce={3000}>{t("common.reload")}</Button>
-                <Button icon="ADD" onClick={promptCreateRole} >{t("common.CRUD.add")}</Button>
+                <FpButton icon="REFRESH" onClick={() => loadRoles()} debounce={3000}>{t("common.reload")}</FpButton>
+                <FpButton icon="ADD" onClick={promptCreateRole} >{t("common.CRUD.add")}</FpButton>
             </div>
 
             {loading && <div className="row"><LoadingPanel className="data" /></div>}
@@ -164,11 +164,11 @@ export default function RolesListPage() {
                 <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>
                 <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/}></FpInput>
                 <div className="bottom-toolbar">
-                    <Button title={t("common.cancel")} className="danger" onClick={() => setAddRoleModalOpen(false)}
-                        icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
+                    <FpButton title={t("common.cancel")} className="danger" onClick={() => setAddRoleModalOpen(false)}
+                        icon="CANCEL" busy={loading}>{t("common.cancel")}</FpButton>
                     <div className="spacer"></div>
-                    <Button title={t("common.CRUD.add")} type="submit"
-                        icon="ADD_CIRCLE" busy={loading}>{t("common.CRUD.add")}</Button>
+                    <FpButton title={t("common.CRUD.add")} type="submit"
+                        icon="ADD_CIRCLE" busy={loading}>{t("common.CRUD.add")}</FpButton>
                 </div>
             </DataForm>
         </Modal>
@@ -183,11 +183,11 @@ export default function RolesListPage() {
                 })}
             </span>
             <div className="bottom-toolbar">
-                <Button title={t("common.cancel")} className="danger" onClick={closeDeleteRoleModal}
-                    icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
+                <FpButton title={t("common.cancel")} className="danger" onClick={closeDeleteRoleModal}
+                    icon="CANCEL" busy={loading}>{t("common.cancel")}</FpButton>
                 <div className="spacer"></div>
-                <Button title={t("common.CRUD.delete")} onClick={() => deleteRole(selectedRole?.roleId)}
-                    icon="DELETE" busy={loading}>{t("common.CRUD.delete")}</Button>
+                <FpButton title={t("common.CRUD.delete")} onClick={() => deleteRole(selectedRole?.roleId)}
+                    icon="DELETE" busy={loading}>{t("common.CRUD.delete")}</FpButton>
             </div>
         </Modal>
     </>

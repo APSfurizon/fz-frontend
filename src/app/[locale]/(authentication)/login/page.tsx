@@ -13,7 +13,7 @@ import "@/styles/authentication/login.css";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -90,9 +90,9 @@ export default function Login() {
         label={t("login.label_password")}
         placeholder={t("login.placeholder_password")} />
       <div className="toolbar-bottom">
-        <Button type="submit" icon="KEY">
+        <FpButton type="submit" icon="KEY">
           {t("login.login")}
-        </Button>
+        </FpButton>
       </div>
     </DataForm>
     <div className="horizontal-list">

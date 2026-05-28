@@ -1,7 +1,7 @@
 "use client"
 
 import { useUser } from "@/components/context/userProvider"
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { GalleryUpload } from "@/lib/api/gallery/upload/main";
 import { UploadProgress } from "@/lib/api/gallery/upload/types";
 import { ChangeEvent, useState } from "react";
@@ -37,15 +37,15 @@ export default function DebugUpload() {
         {!!progress && <>
             <progress max={progress.totalSize} value={progress.uploadedSize} />
             <p>{progress.status}</p>
-            <Button className="danger"
+            <FpButton className="danger"
                 icon="CANCEL"
                 onClick={() => upload?.abort()}
                 disabled={["ABORTED", "ERROR", "UPLOAD_COMPLETE"].includes(progress?.status)}>
                 ABORT
-            </Button>
+            </FpButton>
         </>}
-        <Button onClick={() => upload?.confirmUpload()} disabled={progress?.status !== "UPLOAD_COMPLETE"}>
+        <FpButton onClick={() => upload?.confirmUpload()} disabled={progress?.status !== "UPLOAD_COMPLETE"}>
             Confirm
-        </Button>
+        </FpButton>
     </div>
 }

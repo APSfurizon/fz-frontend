@@ -17,10 +17,10 @@ export default function RoleDataEditor() {
 
     return <>
         <div className="form-pair horizontal-list gap-2mm">
-            <FpInput required initialValue={entity?.internalName} busy={loading}
+            <FpInput required initialValue={entity?.internalName ?? ""} busy={loading}
                 label={t("admin.users.security.roles.input.internal_name.label")}
                 onChange={(e) => onChange({ internalName: nullifyEmptyString(e.target.value) })}></FpInput>
-            <FpInput initialValue={entity?.displayName} busy={loading}
+            <FpInput initialValue={entity?.displayName ?? ""} busy={loading}
                 label={t("admin.users.security.roles.input.display_name.label")}
                 onChange={(e) => onChange({ displayName: nullifyEmptyString(e.target.value) })}></FpInput>
 

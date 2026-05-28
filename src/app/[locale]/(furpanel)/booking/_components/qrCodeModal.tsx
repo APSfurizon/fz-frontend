@@ -1,22 +1,22 @@
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
 import { qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
 import { useTranslations } from "next-intl";
 import { useQRCode } from "next-qrcode";
 import { useState } from "react";
 
-export default function QrCodeModal({secret} : Readonly<{secret: string}>) {
+export default function QrCodeModal({ secret }: Readonly<{ secret: string }>) {
     // order QR logic
     const [qrModalOpen, setQrModalOpen] = useState(false);
     const { Canvas } = useQRCode();
     const t = useTranslations();
 
     return <>
-        <Button icon="QR_CODE"
+        <FpButton icon="QR_CODE"
             onClick={() => setQrModalOpen(true)}
             title={t("furpanel.booking.actions.show_qr")}>
             {t("furpanel.booking.actions.show_qr")}
-        </Button>
+        </FpButton>
         <Modal open={qrModalOpen}
             icon="QR_CODE"
             title={t("furpanel.booking.reservation_qr")}

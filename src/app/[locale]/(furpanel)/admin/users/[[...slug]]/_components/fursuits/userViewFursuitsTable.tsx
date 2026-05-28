@@ -1,4 +1,4 @@
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpTable from "@/components/table/fpTable";
 import UserPicture from "@/components/userPicture";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
@@ -89,9 +89,9 @@ export default function UserViewFursuitsTable({
             enableResizing: false,
             maxSize: 90,
             cell: props => <div className="horizontal-list gap-2mm">
-                <Button icon="EDIT_SQUARE"
+                <FpButton icon="EDIT_SQUARE"
                     onClick={() => promptEditFursuit(props.row.original)} />
-                <Button icon="DELETE"
+                <FpButton icon="DELETE"
                     onClick={() => promptDeleteFursuit(props.row.original)} />
             </div>
         })
@@ -117,19 +117,19 @@ export default function UserViewFursuitsTable({
                     { name: fursuit?.fursuit.name ?? "" })}
             </span>
             <div className="horizontal-list gap-4mm">
-                <Button className="danger"
+                <FpButton className="danger"
                     icon="CANCEL"
                     busy={deleteLoading}
                     onClick={closeDeleteFursuit}>
                     {t("common.cancel")}
-                </Button>
+                </FpButton>
                 <div className="spacer"></div>
-                <Button className="success"
+                <FpButton className="success"
                     icon="CHECK"
                     busy={deleteLoading}
                     onClick={deleteFursuit}>
                     {t("common.confirm")}
-                </Button>
+                </FpButton>
             </div>
         </Modal>
     </>;

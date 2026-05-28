@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
 import { ConventionEvent, CountViewMode, GetAllEventsApiAction, NosecountContext } from "@/lib/api/counts";
 import { runRequest } from "@/lib/api/global";
@@ -82,24 +82,24 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
     return <div className="main-dialog rounded-s">
         <div className="page">
             <div className="horizontal-list gap-4mm flex-wrap">
-                <Button className={(viewMode != CountViewMode.NORMAL ? "off" : "")
+                <FpButton className={(viewMode != CountViewMode.NORMAL ? "off" : "")
                     + " margin-bottom-1mm"}
                     icon="GROUPS"
                     onClick={() => onSelectMode(CountViewMode.NORMAL)}>
                     {t("misc.nosecount.title")}
-                </Button>
-                <Button className={(viewMode != CountViewMode.FURSUIT ? "off" : "")
+                </FpButton>
+                <FpButton className={(viewMode != CountViewMode.FURSUIT ? "off" : "")
                     + " margin-bottom-1mm"}
                     icon="PETS"
                     onClick={() => onSelectMode(CountViewMode.FURSUIT)}>
                     {t("misc.nosecount.links.fursuits")}
-                </Button>
-                <Button className={(viewMode != CountViewMode.SPONSOR ? "off" : "")
+                </FpButton>
+                <FpButton className={(viewMode != CountViewMode.SPONSOR ? "off" : "")
                     + " margin-bottom-1mm"}
                     icon="WORKSPACE_PREMIUM"
                     onClick={() => onSelectMode(CountViewMode.SPONSOR)}>
                     {t("misc.nosecount.links.sponsors")}
-                </Button>
+                </FpButton>
                 <div className="spacer"></div>
                 <FpSelect itemExtractor={inputEntityCodeExtractor}
                     required
@@ -108,7 +108,7 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
                     disabled={(events || []).length == 0}
                     initialValue={selectedEvent?.slug}
                     onChange={onSelectEvent} />
-                <Button icon="REFRESH"
+                <FpButton icon="REFRESH"
                     className="margin-bottom-1mm"
                     title={t("common.reload")}
                     onClick={() => setEvents(undefined)}

@@ -13,6 +13,7 @@ import StatusBox from './statusBox';
 
 export default function UserPicture({
     size,
+    className,
     userData,
     fursuitData,
     extraDays = ExtraDays.NONE,
@@ -21,6 +22,7 @@ export default function UserPicture({
     hideEffect = false
 }: Readonly<{
     size?: number,
+    className?: string,
     userData?: UserData | Promise<UserData>,
     fursuitData?: FursuitDetails | Promise<FursuitDetails>,
     extraDays?: ExtraDays,
@@ -32,9 +34,9 @@ export default function UserPicture({
     const [isLoading, setLoading] = useState(true);
     const [pictureData, setPictureData] = useState<UserData>();
     const [fursuitPictureData, setFursuitPictureData] = useState<FursuitDetails>();
-    if (!userData && !fursuitData) throw new Error("User picture without both fursuit and user data");
 
     useEffect(() => {
+        setLoading(false);
         if (userData) {
             if (userData instanceof Promise) {
                 setLoading(true);
@@ -57,8 +59,12 @@ export default function UserPicture({
                 setLoading(false);
                 setFursuitPictureData(fursuitData);
             }
+        } else {
+            setPictureData(undefined);
+            setFursuitPictureData(undefined);
+            setLoading(true);
         }
-    }, []);
+    }, [userData]);
 
     const borderClassName = useMemo(() =>
         `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
@@ -67,7 +73,7 @@ export default function UserPicture({
     const isFursuit = !userData && fursuitData;
 
     return (
-        <div className="user-picture-container vertical-list align-items-center">
+        <div className={["user-picture-container", "vertical-list", "align-items-center", className ?? ""].join(" ")}>
             <div className={borderClassName}>
                 <Image unoptimized className="rounded-m profile-picture"
                     src={getImageUrl(pictureData?.propic?.mediaUrl)

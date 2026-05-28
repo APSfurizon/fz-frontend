@@ -1,15 +1,13 @@
 import { copyrightValues, GalleryUpload } from "@/lib/api/gallery/upload/main";
-import { GalleryUploadEventParams, UploadProgress, UploadProgressStatus } from "@/lib/api/gallery/upload/types";
+import { ConventionEventUploadData, GalleryUploadEventParams, UploadLimitsResponse, UploadProgress, UploadProgressStatus } from "@/lib/api/gallery/upload/types";
 import { useUser } from "@/components/context/userProvider";
-import { useRouter } from "next/router";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ConventionEvent } from "@/lib/api/counts";
-import { SelectItem } from "@/lib/components/fpSelect";
-import { translate } from "@/lib/translations";
-import { runRequest } from "@/lib/api/global";
-import { AttendedEventsApiAction } from "@/lib/api/gallery/upload/api";
+import { OptionRendererParams, SelectItem } from "@/lib/components/fpSelect";
+import { TranslatableInputEntityInit } from "@/lib/translations";
+import { RequestType, runRequest } from "@/lib/api/global";
+import { UploadLimitsApiAction } from "@/lib/api/gallery/upload/api";
 import ErrorMessage from "@/components/errorMessage";
 import { UploadRepostPermissions } from "@/lib/api/gallery/types";
 import DataForm from "@/components/input/dataForm";
@@ -17,6 +15,10 @@ import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import GalleryFilePicker from "./filePicker";
 import Modal from "@/components/modal";
+import { debounce } from "lodash";
+import Icon from "@/components/icon";
+import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { humanFileSize } from "@/lib/utils";
 
 const MAXIMUM_RUNNING_UPLOADS = 1;
 
@@ -38,50 +40,127 @@ const CLEARING_STATUSES: UploadProgressStatus[] = [
 type UploadPanelProps = {
     onUploadUpdate: (updates: Map<string, UploadState>) => void,
     onCompletedUpload: () => void,
-    onEventItemsLoaded: (values: SelectItem[]) => void,
+    onEventItemsLoaded?: (values: SelectItem[]) => void
 }
+
+class EventSelectItem extends SelectItem {
+    uploadedCount: number = 0;
+
+    static of(data: TranslatableInputEntityInit & { uploadedCount: number }) {
+        const toReturn = Object.assign(new EventSelectItem(), data);
+        toReturn.uploadedCount = data.uploadedCount;
+        return toReturn;
+    }
+}
+
+type UploadFormData = {
+    eventId?: number;
+    copyright?: string;
+}
+
+class UploadDataFormDtoBuilder implements FormDTOBuilder<UploadFormData> {
+    mapToDTO = (data: FormData) => {
+        return {
+            eventId: parseInt(data.get("eventId")?.toString() ?? "") ?? undefined,
+            copyright: data.get("copyright")?.toString()
+        } as UploadFormData;
+    }
+}
+
+class UploadDataFormApiAction extends FormApiAction<UploadFormData, any, any> {
+    authenticated = false;
+    method = RequestType.GET;
+    urlAction = "";
+    dtoBuilder = new UploadDataFormDtoBuilder();
+}
+
 export default function UploadPanel(props: Readonly<UploadPanelProps>) {
     const { userDisplayRef } = useUser();
     const { showModal } = useModalUpdate();
     const formRef = useRef<HTMLFormElement>(null!);
-    const t = useTranslations("");
+    const [limits, setLimits] = useState<UploadLimitsResponse>();
     const locale = useLocale();
+    const t = useTranslations("");
 
     // Events logic
     const [eventsLoading, setEventsLoading] = useState(false);
-    const [events, setEvents] = useState<ConventionEvent[]>([]);
+    const [events, setEvents] = useState<ConventionEventUploadData[]>([]);
     const eventsItems = useMemo(() =>
-        events?.map(evt => new SelectItem(evt.id,
-            evt.slug,
-            translate(evt.eventNames, locale),
-            undefined,
-            undefined,
-            undefined,
-            evt.eventNames)) ?? [], [events]);
+        events?.map(data => EventSelectItem.of({
+            id: data.event.id,
+            code: data.event.slug,
+            translatedDescription: data.event.eventNames,
+            uploadedCount: data.uploadedCount
+        })) ?? [], [events]);
 
-    useEffect(() => props.onEventItemsLoaded(eventsItems), [eventsItems]);
+    const eventOptionRenderer = useCallback((params: OptionRendererParams) => {
+        const option = params.item as EventSelectItem;
+        return <button key={params.id}
+            type="button"
+            tabIndex={0}
+            onClick={params.onClick}
+            className={[
+                "fp-select__option",
+                "rounded-s",
+                "horizontal-list",
+                "align-items-center",
+                "gap-2mm",
+                params.selected ? "fp-select__option--selected" : ""
+            ].join(" ")}
+            aria-selected={params.selected}>
+            <span className="title small">{params.item.getDescription(locale)}</span>
+            <div className="spacer"></div>
+            {limits && <p className="title average vertical-align-middle">
+                <span>
+                    {option.uploadedCount}
+                    {limits.maxUploadsNumberPerEvent
+                        ? "/" + limits.maxUploadsNumberPerEvent
+                        : ""}
+                </span>
+                <Icon icon="IMAGE"
+                    className="color-subtitle"
+                    containerClassName="margin-left-1mm" />
+            </p>}
+        </button>
+    }, [limits]);
+
+    useEffect(() => props.onEventItemsLoaded?.(eventsItems), [eventsItems]);
+
+    // Events refresh logic
+    /**
+     * A debounced method that refreshes the event limits for the user
+     * to have updated stats each time
+     */
+    const refreshEvents = debounce(() => {
+        setEventsLoading(true);
+        runRequest({ action: new UploadLimitsApiAction() })
+            .then(r => {
+                setEvents(r.uploadableEvents);
+                setLimits(r);
+            }).catch(e => showModal(t("common.error"), <ErrorMessage error={e} />))
+            .finally(() => setEventsLoading(false));
+    }, 1000);
 
     useEffect(() => {
-        setEventsLoading(true);
-        runRequest({ action: new AttendedEventsApiAction() })
-            .then(r => setEvents(r.events))
-            .catch(e => showModal(t("common.error"), <ErrorMessage error={e} />))
-            .finally(() => setEventsLoading(false));
+        // First time load events
+        refreshEvents();
+        refreshEvents.flush();
     }, []);
 
     // Upload objects
     const [uploads, setUploads] = useState<Map<string, UploadState>>(new Map());
+    const uploadFormDataRef = useRef<UploadFormData | undefined>({});
+    const [uploadFormData, setUploadFormData] = useState<UploadFormData>();
 
     const onFilesSelected = useCallback((files: File[]) => {
         if (!userDisplayRef.current) return;
-        const form = new FormData(formRef.current);
         setUploads(prev => {
             const next = new Map(prev);
             files.forEach(f => {
                 // Create upload object
                 const upload = new GalleryUpload({
-                    eventId: Number.parseInt(form.get("eventId")?.toString() ?? "0"),
-                    uploadRepostPermissions: form.get("copyright")!.toString() as UploadRepostPermissions,
+                    eventId: uploadFormDataRef.current?.eventId ?? 0,
+                    uploadRepostPermissions: uploadFormDataRef.current?.copyright as UploadRepostPermissions,
                     file: f,
                     userId: userDisplayRef.current!.display.userId,
                     autoConfirm: true
@@ -161,6 +240,7 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
 
                 // Fire on complete
                 props.onCompletedUpload();
+                refreshEvents();
                 entry.upload.dispose();
                 timers.current.delete(id);
             }, 3100);
@@ -187,10 +267,18 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
 
     return <div className="upload-panel horizontal-list">
         <DataForm formRef={formRef}
+            action={new UploadDataFormApiAction}
+            initialEntity={{}}
             className="vertical-list login-form gap-2mm"
             busy={eventsLoading}
             hideSave
-            style={{ width: "100vw" }}>
+            style={{ width: "100vw" }}
+            onChange={(changed, newEntity) => {
+                if (changed) {
+                    uploadFormDataRef.current = newEntity;
+                    setUploadFormData(newEntity);
+                }
+            }}>
             <div className="upload-input-data gap-4mm">
                 {/* Event selector */}
                 <FpSelect required
@@ -198,7 +286,8 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
                     fieldName="eventId"
                     items={eventsItems}
                     label={t("misc.gallery.upload.form.event.label")}
-                    placeholder={t("misc.gallery.upload.form.event.placeholder")} />
+                    placeholder={t("misc.gallery.upload.form.event.placeholder")}
+                    optionRenderer={eventOptionRenderer} />
                 {/* Copyright selector */}
                 <FpSelect required
                     fieldName="copyright"
@@ -210,7 +299,21 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
                         a: chunks => <a href="#" onClick={() => showCopyrightExplainationModal()}>{chunks}</a>
                     })} />
             </div>
-            <GalleryFilePicker onFilesSelected={onFilesSelected} />
+            <GalleryFilePicker onFilesSelected={(files) => onFilesSelected(files)}
+                disabled={limits?.bannedFromUploading || !uploadFormData?.eventId || !uploadFormData?.copyright} />
+            <span className="descriptive small align-right">
+                {limits && <>
+                    {limits.maxUploadsNumberPerEvent
+                        ? t("misc.gallery.upload.limits.max_number_per_event", { count: limits.maxUploadsNumberPerEvent })
+                        : t("misc.gallery.upload.limits.no_limit_per_event")
+                    }
+                    <br />
+                    {
+                        limits.uploadMaxFileSize
+                            ? t("misc.gallery.upload.limits.size_limit", { size: humanFileSize(limits.uploadMaxFileSize, true) })
+                            : t("misc.gallery.upload.limits.no_size_limit")
+                    }
+                </>}</span>
         </DataForm>
         <Modal open={copyrightExplainationOpen}
             onClose={() => setCopyrightExplainationOpen(false)}

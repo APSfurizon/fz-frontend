@@ -1,4 +1,5 @@
 import { ConventionEvent } from "../counts";
+import { ApiResponse } from "../global";
 import { MediaData } from "../media";
 import { UserData } from "../user";
 
@@ -58,4 +59,13 @@ export interface GalleryUploadedFullMedia extends GalleryUploadedMedia {
     event: ConventionEvent;
     photoMetadata: PhotoMetadata;
     videoMetadata: VideoMetadata;
+}
+
+export interface GalleryMediaApiResponse extends ApiResponse {
+    results: GalleryUploadedMedia[]
+}
+
+export interface BulkDownloadApiResponse extends ApiResponse {
+    url: string,
+    body: string
 }

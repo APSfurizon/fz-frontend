@@ -3,22 +3,13 @@ import { GalleryUpload } from "@/lib/api/gallery/upload/main";
 import { UploadProgress } from "@/lib/api/gallery/upload/types";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { useCallback, useMemo, useRef, useState } from "react";
-import UploadPanel from "./uploadPanel/uploadPanel";
+import UploadPanel, { UploadState } from "./uploadPanel/uploadPanel";
 import { runRequest } from "@/lib/api/global";
 import { MyUploadsApiAction } from "@/lib/api/gallery/upload/api";
 import { buildSearchParams } from "@/lib/utils";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import UploadStatusBox from "./uploadStatusBox";
 import { useTranslations } from "next-intl";
-
-export type UploadState = {
-    upload: GalleryUpload,
-    progress: UploadProgress,
-    createdAt: number,
-    started: boolean,
-    _launched: boolean,
-    ended: boolean
-};
 
 type UploadContainerProps = {
     children?: React.ReactNode;
@@ -34,30 +25,27 @@ export default function UploadContainer(props: Readonly<UploadContainerProps>) {
     /** The key of the latest media uploaded, also being the first in the grid */
     const maxKey = useMemo(() => medias.keys().reduce((prev, next) => Math.max(prev, next), 0), [medias]);
 
-    const [eventItems, setEventItems] = useState<SelectItem[]>([]);
-    const [editModalOpen, setEditModalOpen] = useState(false);
-
-    // Append the latest uploaded images
+    // Append the latest uploaded medias
     const timeoutHandle = useRef<any>(null!);
     const isPrependRunning = useRef(false);
     const shouldRePrepend = useRef(false);
 
-    const prependUploadedImages = useCallback(() => {
+    const prependUploadedMedias = useCallback(() => {
         // Cleanup timer
         if (timeoutHandle.current) window.clearTimeout(timeoutHandle.current);
         // Define the retrieving logic
-        const request = (lastImageId: number) => runRequest({
+        const request = (lastMediaId: number) => runRequest({
             action: new MyUploadsApiAction(),
             searchParams: buildSearchParams({
-                "fromUploadId": String(lastImageId ?? ""),
+                "fromUploadId": String(lastMediaId ?? ""),
                 "invertOrder": String(true)
             })
         });
 
         // Define the loop promise logic
-        const requestLoop = async (lastImageId: number) => {
+        const requestLoop = async (lastMediaId: number) => {
             const toReturn: GalleryUploadedMedia[] = [];
-            let idToUse = lastImageId;
+            let idToUse = lastMediaId;
             let lastRetrievedItems: GalleryUploadedMedia[] = [];
             do {
                 lastRetrievedItems = (await request(idToUse)).results;
@@ -67,7 +55,7 @@ export default function UploadContainer(props: Readonly<UploadContainerProps>) {
             return toReturn;
         };
 
-        // Load batches of the latest images until every new image has been recovered
+        // Load batches of the latest medias until every new media has been recovered
         timeoutHandle.current = window.setTimeout(async () => {
             if (isPrependRunning.current) {
                 shouldRePrepend.current = true;
@@ -92,8 +80,7 @@ export default function UploadContainer(props: Readonly<UploadContainerProps>) {
 
     return <>
         <UploadPanel onUploadUpdate={(u) => setUploads(u)}
-            onCompletedUpload={prependUploadedImages}
-            onEventItemsLoaded={e => setEventItems(e)} />
+            onCompletedUpload={prependUploadedMedias} />
         <div className="upload-queue">
             <h3 className="title medium margin-bottom-1mm">{t("misc.gallery.upload.queue.title")}</h3>
             <div className="container rounded-l vertical-list">

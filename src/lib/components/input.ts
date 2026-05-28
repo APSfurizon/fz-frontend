@@ -1,6 +1,7 @@
 import { MaterialIcon } from "@/components/icon";
 import { CSSProperties } from "react";
 import { dateToParam } from "../utils";
+import { Leastwise } from "../utils/types";
 
 
 const HUNDRED_DAYS_IN_SECONDS = 3155760000;
@@ -9,6 +10,14 @@ export const HUNDRED_YEARS_BEFORE_TODAY = new Date((new Date().getTime() / 1000 
 export const HUNDRED_YEARS_AFTER_TODAY = new Date((new Date().getTime() / 1000 + HUNDRED_DAYS_IN_SECONDS) * 1000);
 export const MIN_DATE = dateToParam(HUNDRED_YEARS_BEFORE_TODAY);
 export const MAX_DATE = dateToParam(HUNDRED_YEARS_AFTER_TODAY);
+
+type InputEntityCode = Leastwise<{ code: string; id: number }>;
+export type InputEntityInit = InputEntityCode & {
+    description?: string;
+    icon?: MaterialIcon;
+    imageUrl?: string;
+    iconCSS?: CSSProperties;
+}
 
 /**
  * Defines an entity that points to a specific object or table in the backend.
@@ -38,6 +47,10 @@ export class InputEntity {
         this.icon = icon;
         this.imageUrl = imageUrl;
         this.iconCSS = iconCSS;
+    }
+
+    static of(data: InputEntityInit): InputEntity {
+        return new InputEntity(data.id, data.code, data.description, data.icon, data.imageUrl, data.iconCSS)
     }
 }
 

@@ -1,5 +1,5 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import {
@@ -45,12 +45,12 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: R
             </NoticeBox>
             <div className="spacer"></div>
             <div>
-                <Button icon="REFRESH"
+                <FpButton icon="REFRESH"
                     onClick={() => setRoomsData(null)}
                     debounce={3000}
                     busy={modalLoading}>
                     {t("common.reload")}
-                </Button>
+                </FpButton>
             </div>
 
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "@/components/icon";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import UserPicture from "@/components/userPicture";
 import {
     FursuitBadge, RegularBadge, SearchFursuitBadgesApiAction, SearchFursuitBadgesResponse,
@@ -146,9 +146,9 @@ export default function AdvancedBadgePrint() {
                 icon="PETS" />
             <div className="horizontal-list">
                 <div className="spacer"></div>
-                <Button icon="PRINT" disabled={!canPrint} busy={printLoading} onClick={runPrint}>
+                <FpButton icon="PRINT" disabled={!canPrint} busy={printLoading} onClick={runPrint}>
                     {t("furpanel.admin.events.badges.print.advanced_mode.print")}
-                </Button>
+                </FpButton>
             </div>
         </div>
     </div>

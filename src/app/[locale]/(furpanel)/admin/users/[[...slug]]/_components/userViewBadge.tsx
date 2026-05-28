@@ -1,6 +1,6 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import AutoInput from "@/components/input/autoInput";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
@@ -50,13 +50,13 @@ export default function UserViewBadge({
             <div className="vertical-list gap-2mm">
                 <span>{t("furpanel.badge.messages.confirm_deletion.description")}</span>
                 <div className="horizontal-list">
-                    <Button type="button" className="danger" icon="CANCEL"
-                        onClick={hideModal}>{t("common.cancel")}</Button>
+                    <FpButton type="button" className="danger" icon="CANCEL"
+                        onClick={hideModal}>{t("common.cancel")}</FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" icon="CHECK"
+                    <FpButton type="submit" className="success" icon="CHECK"
                         onClick={() => deleteBadge(userData.personalInfo.userId!)}>
                         {t("common.confirm")}
-                    </Button>
+                    </FpButton>
                 </div>
             </div>,
             "DELETE"
@@ -124,16 +124,16 @@ export default function UserViewBadge({
                 <div className="spacer" />
                 <div className="horizontal-list gap-2mm flex-wrap">
                     <div className="spacer"></div>
-                    <Button icon={userData.showInNousecount ? "VISIBILITY_OFF" : "VISIBILITY"}
+                    <FpButton icon={userData.showInNousecount ? "VISIBILITY_OFF" : "VISIBILITY"}
                         busy={nosecountSetLoading}
                         onClick={() => toggleShowInNosecount(!userData.showInNousecount)}>
                         {userData.showInNousecount
                             ? t("furpanel.admin.users.accounts.view.badges.hide_from_nosecount")
                             : t("furpanel.admin.users.accounts.view.badges.show_from_nosecount")}
-                    </Button>
-                    <Button busy={badgeLoading} icon="EDIT_SQUARE" onClick={() => setChangeDataModalOpen(true)}>
+                    </FpButton>
+                    <FpButton busy={badgeLoading} icon="EDIT_SQUARE" onClick={() => setChangeDataModalOpen(true)}>
                         {t("furpanel.badge.actions.edit_badge")}
-                    </Button>
+                    </FpButton>
                 </div>
             </div>
         </div>
@@ -159,11 +159,11 @@ export default function UserViewBadge({
                         ? [userData.badgeData.mainBadge?.locale]
                         : undefined} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" icon="CANCEL" busy={badgeLoading}
-                        onClick={() => setChangeDataModalOpen(false)}>{t("common.cancel")}</Button>
+                    <FpButton type="button" className="danger" icon="CANCEL" busy={badgeLoading}
+                        onClick={() => setChangeDataModalOpen(false)}>{t("common.cancel")}</FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" icon="CHECK" busy={badgeLoading}>
-                        {t("common.confirm")}</Button>
+                    <FpButton type="submit" className="success" icon="CHECK" busy={badgeLoading}>
+                        {t("common.confirm")}</FpButton>
                 </div>
             </DataForm>
         </Modal>

@@ -128,7 +128,9 @@
         "end_label": "End of gallery message",
         "end_message": "You've reached the bottom of the gallery",
         "toolbar": {
-          "deselect_all": "De-select all"
+          "deselect_all": "De-select all",
+          "select_medias": "Select",
+          "download": "Download"
         }
       },
       "media": {
@@ -460,9 +462,6 @@
         "available_types": "Available rooms",
         "description": "These are the current available room types that you can claim once your room is confirmed."
       }
-    },
-    "upload_area": {
-      "title": "Upload"
     },
     "user": {
       "title": "User",
@@ -1094,7 +1093,30 @@
     },
     "gallery": {
       "explore": {
-        "title": "Explore"
+        "title": "Explore",
+        "advanced": {
+          "event": {
+            "label": "Event"
+          },
+          "photographer": {
+            "label": "Photographer",
+            "list": {
+              "official": "Official photographer"
+            }
+          },
+          "title": "Filters",
+          "status": {
+            "label": "Status"
+          }
+        },
+        "events": {
+          "card": {
+            "photo_count": "{count, plural, =1 {One element} other {# elements}}"
+          }
+        },
+        "header": {
+          "title": "Explore the gallery"
+        }
       },
       "upload": {
         "title": "Upload",
@@ -1125,14 +1147,11 @@
         "queue": {
           "title": "Uploading..."
         },
-        "modal": {
-          "title": "View picture",
-          "video": {
-            "duration": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}, {milliseconds} milliseconds"
-          },
-          "information_panel": {
-            "title": "Information"
-          }
+        "limits": {
+          "max_number_per_event": "You can upload up to {count, plural, =1 {one media} other {# medias}} per event.",
+          "no_limit_per_event": "You have no upload count limits per event.",
+          "size_limit": "You can upload files up to {size}.",
+          "no_size_limit": "You don't have any upload size limit."
         }
       },
       "admin": {
@@ -1140,6 +1159,36 @@
       },
       "media": {
         "status": {}
+      },
+      "modal": {
+        "title": "View picture",
+        "information_panel": {
+          "title": "Information",
+          "photo": {
+            "title": "Photo"
+          },
+          "video": {
+            "title": "Video",
+            "duration": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}, {milliseconds} milliseconds"
+          }
+        },
+        "share": {
+          "copy_message": "Link copied successfully"
+        },
+        "actions": {
+          "share": "Share",
+          "admin": {
+            "approve": "Approve",
+            "reject": "Reject",
+            "select": "Set event banner",
+            "selected": "Current event banner",
+            "unselect": "Remove event banner"
+          },
+          "download": "Download",
+          "delete": {
+            "message": "Do you want to delete this media?"
+          }
+        }
       }
     }
   }

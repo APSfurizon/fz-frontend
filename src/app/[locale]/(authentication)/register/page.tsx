@@ -17,7 +17,7 @@ import "@/styles/authentication/register.css";
 import { firstOrUndefined, today } from "@/lib/utils";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAnswers } from "@/lib/api/user";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
 import { FormValidationError } from "@/lib/components/dataForm";
@@ -353,7 +353,7 @@ export default function Register() {
         {t("register.form.disclaimer_data_protection.label")}
       </Checkbox>
       <div className="toolbar-bottom">
-        <Button type="submit" icon="KEY" >{t("register.register")}</Button>
+        <FpButton type="submit" icon="KEY" >{t("register.register")}</FpButton>
       </div>
     </DataForm>
     <div>

@@ -4,6 +4,7 @@ export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
 
 export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "";
+export const ALLOWED_DEV_ORIGINS = (process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS ?? "").split(",");
 export const APP_VERSION = process.env.version;
 export const APP_GIT = "https://github.com/APSfurizon/";
 export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";

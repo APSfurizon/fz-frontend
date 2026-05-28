@@ -9,7 +9,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import "@/styles/authentication/login.css";
 import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 
 export default function RecoverConfirm() {
   const t = useTranslations();
@@ -85,11 +85,11 @@ export default function RecoverConfirm() {
         placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
         onChange={(e) => setConfirmPassword(e.currentTarget.value)} />
       <div className="horizontal-list justify-content-center">
-        <Button type="submit"
+        <FpButton type="submit"
           icon="SAVE"
           disabled={!passwordMatch}>
           {t("common.CRUD.save")}
-        </Button>
+        </FpButton>
       </div>
     </DataForm>
   </>;

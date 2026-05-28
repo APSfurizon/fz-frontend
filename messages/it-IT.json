@@ -128,7 +128,9 @@
         "end_label": "Messaggio di fondo galleria",
         "end_message": "Hai raggiunto il fondo della galleria",
         "toolbar": {
-          "deselect_all": "Deseleziona tutto"
+          "deselect_all": "Deseleziona tutto",
+          "select_medias": "Seleziona",
+          "download": "Scarica"
         }
       },
       "media": {
@@ -460,9 +462,6 @@
         "available_types": "Stanze disponibili",
         "description": "Queste sono le stanze disponibili che puoi ottenere, una volta confermata la stanza."
       }
-    },
-    "upload_area": {
-      "title": "Upload"
     },
     "user": {
       "title": "Utente",
@@ -1095,7 +1094,30 @@
     },
     "gallery": {
       "explore": {
-        "title": "Esplora"
+        "title": "Esplora",
+        "advanced": {
+          "event": {
+            "label": "Evento"
+          },
+          "photographer": {
+            "label": "Fotografo",
+            "list": {
+              "official": "Fotografo ufficiale"
+            }
+          },
+          "title": "Filtri",
+          "status": {
+            "label": "Stato"
+          }
+        },
+        "events": {
+          "card": {
+            "photo_count": "{count, plural, =1 {Un elemento} other {# elementi}}"
+          }
+        },
+        "header": {
+          "title": "Esplora la galleria"
+        }
       },
       "upload": {
         "title": "Carica",
@@ -1126,14 +1148,11 @@
         "queue": {
           "title": "Caricamento..."
         },
-        "modal": {
-          "title": "Visualizza immagine",
-          "video": {
-            "duration": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}, {milliseconds} millisecondi"
-          },
-          "information_panel": {
-            "title": "Informazioni"
-          }
+        "limits": {
+          "max_number_per_event": "Puoi caricare fino a {count, plural, =1 {un elemento} other {# elementi}} per evento.",
+          "no_limit_per_event": "Non hai limiti di caricamenti per evento.",
+          "size_limit": "Puoi caricare file fino a {size}.",
+          "no_size_limit": "Non hai limiti sulle dimensioni."
         }
       },
       "admin": {
@@ -1141,6 +1160,36 @@
       },
       "media": {
         "status": {}
+      },
+      "modal": {
+        "title": "Visualizza immagine",
+        "information_panel": {
+          "title": "Informazioni",
+          "photo": {
+            "title": "Foto"
+          },
+          "video": {
+            "title": "Video",
+            "duration": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}, {milliseconds} millisecondi"
+          }
+        },
+        "share": {
+          "copy_message": "Link copiato con successo"
+        },
+        "actions": {
+          "share": "Condividi",
+          "admin": {
+            "approve": "Approva",
+            "reject": "Rifiuta",
+            "select": "Imposta banner evento",
+            "selected": "Banner attuale evento",
+            "unselect": "Rimuovi banner evento"
+          },
+          "download": "Scarica",
+          "delete": {
+            "message": "Vuoi eliminare questo media?"
+          }
+        }
       }
     }
   }

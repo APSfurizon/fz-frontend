@@ -4,10 +4,12 @@ import {
     createContext, useContext,
     useImperativeHandle,
     RefObject,
-    useMemo
+    useMemo,
+    SubmitEvent,
+    useCallback
 } from "react";
 import { useTranslations } from "next-intl";
-import Button from "./button";
+import FpButton from "./fpButton";
 import { FormApiAction, FormValidationError, InferRequest } from "@/lib/components/dataForm";
 import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
 import "@/styles/components/dataForm.css";
@@ -130,7 +132,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         }
     }, [])
 
-    const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const onFormSubmit = (e: SubmitEvent<HTMLFormElement>) => {
         if (isBusy) { return; }
         try {
             if (!props.action) throw new Error("dataform must have an action to be submitted")
@@ -177,14 +179,14 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         e.stopPropagation();
     }
 
-    const onFormChange = (fieldName?: string, value?: any) => {
-        if (!fieldName || !props.formRef?.current) return;
-        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(props.formRef.current));
+    const onFormChange = useCallback((fieldName?: string, value?: any) => {
+        if (!fieldName || !inputRef?.current) return;
+        const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(inputRef.current));
         if (entity && value) {
             entity[fieldName] = value;
         }
         setCurrentEntity(entity);
-    };
+    }, [props.formRef?.current]);
 
     useEffect(() => {
         const isChanged = !props.initialEntity
@@ -214,19 +216,19 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         {showBottomToolbar && (
             <div className="toolbar-bottom gap-2mm">
                 <div className="spacer"></div>
-                {!props.hideSave && <Button type="submit"
+                {!props.hideSave && <FpButton type="submit"
                     disabled={props.disableSave}
                     icon={props.saveButton?.icon ?? "SAVE"}
                     busy={loading}>
                     {props.saveButton?.text ?? t("common.CRUD.save")}
                     {isEntityChanged && !!props.initialEntity ? "*" : ""}
-                </Button>}
-                {props.showReset && <Button type="reset"
+                </FpButton>}
+                {props.showReset && <FpButton type="reset"
                     icon="REPLAY"
                     disabled={!isEntityChanged}
                     busy={loading}>
                     {t("common.CRUD.reset")}
-                </Button>}
+                </FpButton>}
                 {props.additionalButtons}
             </div>
         )}

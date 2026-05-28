@@ -1,6 +1,6 @@
 "use client"
 import AutoInput from "@/components/input/autoInput";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import Modal from "@/components/modal";
 import { RoleData, RoleMember } from "@/lib/api/admin/role";
@@ -110,12 +110,12 @@ export default function RoleMembersEditor() {
     return <>
         <div className="horizontal-list gap-2mm">
             <div className="spacer"></div>
-            <Button className="danger" icon="HOURGLASS_DISABLED" onClick={() => { purgeTemporaryMembers() }}>
+            <FpButton className="danger" icon="HOURGLASS_DISABLED" onClick={() => { purgeTemporaryMembers() }}>
                 {t("furpanel.admin.users.security.roles.actions.purge_temporary_roles")}
-            </Button>
-            <Button icon="ADD" onClick={() => { setAddMemberOpen(true) }}>
+            </FpButton>
+            <FpButton icon="ADD" onClick={() => { setAddMemberOpen(true) }}>
                 {t("common.CRUD.add")}
-            </Button>
+            </FpButton>
         </div>
         {/* Permissions table */}
         <div className="table-container rounded-m">
@@ -136,7 +136,7 @@ export default function RoleMembersEditor() {
                         </Checkbox>
                     </div>
                     <div className="data">
-                        <Button icon="DELETE" onClick={() => removeMember(roleMember.displayData.userId)} />
+                        <FpButton icon="DELETE" onClick={() => removeMember(roleMember.displayData.userId)} />
                     </div>
                 </div>)}
             </div>
@@ -159,13 +159,13 @@ export default function RoleMembersEditor() {
                 </div>
             </DataForm>
             <div className="horizontal-list gap-4mm">
-                <Button type="button" className="danger" icon="CANCEL"
-                    onClick={() => setAddMemberOpen(false)}>{t("common.cancel")}</Button>
+                <FpButton type="button" className="danger" icon="CANCEL"
+                    onClick={() => setAddMemberOpen(false)}>{t("common.cancel")}</FpButton>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" icon="CHECK"
+                <FpButton type="submit" className="success" icon="CHECK"
                     onClick={() => addMember()} disabled={!!!selectedUserTemp}>
                     {t("common.confirm")}
-                </Button>
+                </FpButton>
             </div>
         </Modal>
     </>

@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
@@ -62,7 +62,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                     }
                 </p>
                 : data && !data.hasOrder && <div className="action-container">
-                    <Button className="action-button book-now"
+                    <FpButton className="action-button book-now"
                         busy={actionLoading}
                         disabled={data?.shouldUpdateInfo}
                         onClick={requestShopLink}>
@@ -78,7 +78,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                                 </span>
                             </>}
                         </div>
-                    </Button>
+                    </FpButton>
                 </div>
             }
         </div>

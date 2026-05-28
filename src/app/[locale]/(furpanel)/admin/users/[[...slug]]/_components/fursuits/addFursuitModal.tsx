@@ -1,5 +1,5 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Checkbox from "@/components/input/checkbox";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
@@ -105,18 +105,18 @@ export default function AddFursuitModal({
                 {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
             </Checkbox>
             <div className="horizontal-list gap-4mm margin-top-2mm">
-                <Button type="button"
+                <FpButton type="button"
                     className="danger"
                     icon="CANCEL"
                     onClick={beforeClose}>
                     {t("common.cancel")}
-                </Button>
+                </FpButton>
                 <div className="spacer"></div>
-                <Button type="submit"
+                <FpButton type="submit"
                     className="success"
                     icon="CHECK">
                     {t("common.confirm")}
-                </Button>
+                </FpButton>
             </div>
         </DataForm>
     </Modal>

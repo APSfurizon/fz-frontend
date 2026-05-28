@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Icon from "@/components/icon";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { translate } from "@/lib/translations";
 import {
@@ -102,11 +102,11 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                 <div className="horizontal-list align-items-center">
                     <span className="title">{t("furpanel.room.order_flow.select_type")}</span>
                     <div className="spacer"></div>
-                    <Button icon="REFRESH"
+                    <FpButton icon="REFRESH"
                         onClick={() => setRoomsData(null)}
                         debounce={3000}>
                         {t("common.reload")}
-                    </Button>
+                    </FpButton>
                 </div>
 
                 <div className="vertical-list gap-4mm room-container">
@@ -137,19 +137,19 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                     {!roomsData?.rooms || roomsData?.rooms?.length == 0 && <span className="title">{t("furpanel.room.order_flow.no_room_type")}</span>}
                 </div>
                 <div className="horizontal-list gap-4mm">
-                    <Button className="danger"
+                    <FpButton className="danger"
                         icon="CANCEL"
                         busy={modalLoading}
                         onClick={() => close()}>
                         {t("common.cancel")}
-                    </Button>
+                    </FpButton>
                     <div className="spacer" />
-                    <Button icon="ARROW_FORWARD"
+                    <FpButton icon="ARROW_FORWARD"
                         disabled={!selectedType}
                         busy={modalLoading}
                         onClick={() => setStep(step + 1)}>
                         {t("common.next")}
-                    </Button>
+                    </FpButton>
                 </div>
             </>;
         case STEPS.REVIEW:
@@ -174,20 +174,20 @@ export default function RoomOrderFlow({ isOpen, modalLoading, setModalLoading, c
                         </Checkbox>
                     </NoticeBox>
                     <div className="horizontal-list gap-4mm">
-                        <Button className="danger"
+                        <FpButton className="danger"
                             icon="ARROW_BACK"
                             busy={modalLoading} onClick={() => {
                                 setStep(step => step - 1);
                                 setLatestError(undefined);
                             }}>
                             {t("common.back")}
-                        </Button>
+                        </FpButton>
                         <div className="spacer"></div>
-                        <Button icon="SHOPPING_CART_CHECKOUT"
+                        <FpButton icon="SHOPPING_CART_CHECKOUT"
                             disabled={!selectedType || !warningAccepted}
                             busy={modalLoading} onClick={changeOrder}>
                             {t("furpanel.room.order_flow.complete_order")}
-                        </Button>
+                        </FpButton>
                     </div>
                 </div>
             </>;
