@@ -14,15 +14,18 @@ import Image from "next/image";
 import Icon from "@/components/icon";
 
 type SelectPhotographerItemInit = TranslatableInputEntityInit & {
-    officialPhotographer: boolean
+    officialPhotographer: boolean;
+    photoNumber: number;
 }
 
 class SelectPhotographerItem extends SelectItem {
     officialPhotographer: boolean = false;
+    photoNumber: number = 0;
 
     static of(data: SelectPhotographerItemInit): SelectPhotographerItem {
         const toReturn = Object.assign(new SelectPhotographerItem(), data);
         toReturn.officialPhotographer = data.officialPhotographer;
+        toReturn.photoNumber = data.photoNumber;
         return toReturn;
     }
 }
@@ -48,7 +51,8 @@ export default function ExploreFilter() {
             id,
             description: photographer.user.fursonaName,
             imageUrl: photographer.user.propic?.mediaUrl,
-            officialPhotographer: photographer.officialPhotographer
+            officialPhotographer: photographer.officialPhotographer,
+            photoNumber: photographer.photoNumber
         })), [events]);
 
     const photographerOptionRenderer = (params: OptionRendererParams) => {
@@ -72,6 +76,7 @@ export default function ExploreFilter() {
             }
             <span className="title small">{params.item.getDescription(locale)}</span>
             <div className="spacer"></div>
+            <span className="descriptive">{option.photoNumber}</span>
             {option.officialPhotographer && <Icon icon="STAR"
                 className="highlight"
                 containerClassName="highlight"
