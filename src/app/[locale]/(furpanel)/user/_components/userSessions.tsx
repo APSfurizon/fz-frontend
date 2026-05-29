@@ -1,5 +1,5 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import LoadingPanel from "@/components/loadingPanel";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
@@ -60,15 +60,15 @@ export default function UserSessions() {
       <>
         <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_session")}</span>
         <div className="bottom-toolbar">
-          <Button title={t("common.cancel")} className="danger" onClick={() => hideModal()}
-            icon="CANCEL" busy={loading}>{t("common.cancel")}</Button>
+          <FpButton title={t("common.cancel")} className="danger" onClick={() => hideModal()}
+            icon="CANCEL" busy={loading}>{t("common.cancel")}</FpButton>
           <div className="spacer"></div>
-          <Button title={t("furpanel.user.sessions.actions.terminate_session")}
+          <FpButton title={t("furpanel.user.sessions.actions.terminate_session")}
             onClick={() => destroySession(sessionId)}
             icon="CLOSE"
             busy={loading}>
             {t("furpanel.user.sessions.actions.terminate_session")}
-          </Button>
+          </FpButton>
         </div>
       </>
     )
@@ -107,7 +107,7 @@ export default function UserSessions() {
     sessionColHelper.display({
       id: "terminate",
       header: "",
-      cell: (props) => <Button onClick={() => promptDestroySession(props.row.original.sessionId)}
+      cell: (props) => <FpButton onClick={() => promptDestroySession(props.row.original.sessionId)}
         icon="CLOSE" title={t("furpanel.user.sessions.actions.terminate_session")}
         busy={loading}
         style={{ display: 'inline' }} />,
@@ -126,28 +126,28 @@ export default function UserSessions() {
     }
     <div className="horizontal-list">
       <div className="spacer"></div>
-      <Button className="danger" icon="CLOSE" onClick={() => setDestroyConfirmModalOpen(true)}>
+      <FpButton className="danger" icon="CLOSE" onClick={() => setDestroyConfirmModalOpen(true)}>
         {t("furpanel.user.sessions.actions.terminate_all_sessions")}
-      </Button>
+      </FpButton>
     </div>
     <Modal open={destroyConfirmModalOpen} onClose={() => setDestroyConfirmModalOpen(false)}
       title={t("furpanel.user.sessions.actions.terminate_all_sessions")}>
       <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_all_sessions")}</span>
       <div className="bottom-toolbar">
-        <Button title={t("common.cancel")}
+        <FpButton title={t("common.cancel")}
           className="danger"
           onClick={() => setDestroyConfirmModalOpen(false)}
           icon="CANCEL"
           busy={loading}>
           {t("common.cancel")}
-        </Button>
+        </FpButton>
         <div className="spacer" />
-        <Button title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
+        <FpButton title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
           onClick={() => destroyAllSessions()}
           icon="CLOSE"
           busy={loading}>
           {t("furpanel.user.sessions.actions.terminate_all_sessions")}
-        </Button>
+        </FpButton>
       </div>
     </Modal>
   </>

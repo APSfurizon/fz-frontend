@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Icon from "@/components/icon";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
@@ -121,7 +121,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         columnHelper.accessor('user.fursonaName', {
             id: 'user',
             header: t("furpanel.admin.membership_manager.columns.user"),
-            cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
+            cell: props => <div className="data horizontal-list align-items-center gap-2mm">
                 <UserPicture key={props.row.original.user.userId} userData={props.row.original.user}></UserPicture>
                 <span className="title small">{props.row.original.user.fursonaName}</span>
             </div>
@@ -145,7 +145,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
         columnHelper.display({
             id: 'anomalies',
             header: t("furpanel.admin.membership_manager.columns.anomalies"),
-            cell: props => <div className="horizontal-list flex-vertical-center gap-2mm">
+            cell: props => <div className="horizontal-list align-items-center gap-2mm">
                 {props.row.original.duplicate && <>
                     <Icon icon="FILE_COPY" />
                     <span className="highlight small">
@@ -273,7 +273,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
     return <>
         <div className="stretch-page">
-            <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+            <div className="horizontal-list align-items-center gap-4mm flex-wrap">
                 <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
                 <div className="horizontal-list gap-2mm">
                     <span className="title medium">
@@ -287,17 +287,17 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                 </div>
 
                 <div className="spacer"></div>
-                <Button icon="REFRESH"
+                <FpButton icon="REFRESH"
                     onClick={() => setCardsData(undefined)}
                     debounce={3000}>
                     {t("common.reload")}
-                </Button>
-                <Button onClick={() => setAddModalOpen(true)}
+                </FpButton>
+                <FpButton onClick={() => setAddModalOpen(true)}
                     busy={loading}
                     disabled={!cardsData?.canAddCards}
                     icon="ADD">
                     {t("furpanel.admin.membership_manager.actions.add")}
-                </Button>
+                </FpButton>
             </div>
             <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
                 <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>
@@ -341,15 +341,15 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
                     label={t("furpanel.admin.membership_manager.input.user.label")}
                     param={[selectedYear]} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button"
+                    <FpButton type="button"
                         className="danger"
                         icon="CANCEL"
                         busy={loading}
                         onClick={() => setAddModalOpen(false)}>
                         {t("common.cancel")}
-                    </Button>
+                    </FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" icon="CHECK" busy={loading}>{t("common.confirm")}</Button>
+                    <FpButton type="submit" className="success" icon="CHECK" busy={loading}>{t("common.confirm")}</FpButton>
                 </div>
             </DataForm>
         </Modal>

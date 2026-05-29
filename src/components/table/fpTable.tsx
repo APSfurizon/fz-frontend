@@ -12,7 +12,7 @@ import {
 } from "react";
 import FpInput from "../input/fpInput";
 import { useTranslations } from "next-intl";
-import Button from "../input/button";
+import FpButton from "../input/fpButton";
 import { getCountArray } from "@/lib/utils";
 import { useWindowSize } from "../hooks/useWindowSize";
 
@@ -235,12 +235,12 @@ export default function FpTable<T>({
                 onChange={(e) => tableWrapper.setGlobalFilter(String(e.target.value))}
                 autocorrect={false}
                 icon="FILTER_LIST" />}
-            {showAddButton && <Button icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
-            {showDeleteButton && <Button icon="DELETE" onClick={onDelete} title={t("table.delete.title")}
+            {showAddButton && <FpButton icon="ADD" onClick={onAdd} title={t("table.add.title")} />}
+            {showDeleteButton && <FpButton icon="DELETE" onClick={onDelete} title={t("table.delete.title")}
                 disabled={!tableWrapper.getIsSomeRowsSelected() && !tableWrapper.getIsAllRowsSelected()} />}
             {children}
         </div>}
-        <div className="table rounded-s gap-2mm" ref={tableRef}
+        <div role="grid" className="table rounded-s gap-2mm" ref={tableRef}
             style={{ ...columnSizeVars, width: '100%', ...tableStyle }}>
             <div className="table-data rounded-s" style={{ width: tableWrapper.getTotalSize() }}>
                 {/**Header groups */}
@@ -252,8 +252,10 @@ export default function FpTable<T>({
                                 style={{
                                     width: `var(--header-${header?.id}-size)`,
                                     ...getCommonPinningStyles(header.column)
-                                }}>
-                                <div className="header-data" onClick={header.column.getToggleSortingHandler()}>
+                                }}
+                                role="columnheader">
+                                <div className="header-data"
+                                    onClick={header.column.getToggleSortingHandler()}>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                     {header.column.getIsSorted() && <Icon icon={{
                                         asc: "ARROW_DROP_UP",
@@ -289,13 +291,15 @@ export default function FpTable<T>({
                 }
                 {/**Rows */}
                 {tableWrapper.getRowModel().rows.map(row => <Fragment key={row.id}>
-                    <div className={"table-row "
+                    <div role="row" className={"table-row "
+                        // TODO: Check if in future we might want a custom selectDescendants option
                         + (row.getIsSelected() || row.getIsSomeSelected() ? "row-selected" : "")
                         + " "
                         + (row.getCanSelect() ? "selectable" : "")}
                         onClick={row.getToggleSelectedHandler()} onDoubleClick={row.getToggleExpandedHandler()}>
                         {row.getVisibleCells().map(cell =>
                             <div key={cell.id}
+                                role="gridcell"
                                 className={`table-cell ${cell.column.getIsPinned() ? "pinned" : ""}`}
                                 style={{
                                     width: `var(--col-${cell.column.id}-size)`,
@@ -314,15 +318,15 @@ export default function FpTable<T>({
         </div>
         {enablePagination && <div className="table-pages horizontal-list gap-4mm">
             <div className="spacer"></div>
-            <Button className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
-                icon="ARROW_BACK" onClick={tableWrapper.previousPage}></Button>
-            {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i) => <Button key={i}
+            <FpButton className="page-change page-arrow" disabled={!tableWrapper.getCanPreviousPage()}
+                icon="ARROW_BACK" onClick={tableWrapper.previousPage}></FpButton>
+            {getCountArray(pagination.pageIndex, 5, 0, tableWrapper.getPageCount()).map((i) => <FpButton key={i}
                 className={`page-change ${pagination.pageIndex == i ? "selected" : ""}`}
                 onClick={() => tableWrapper.setPageIndex(i)}
                 disabled={pagination.pageIndex == i}>{i + 1}
-            </Button>)}
-            <Button className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
-                icon="ARROW_FORWARD" onClick={tableWrapper.nextPage}></Button>
+            </FpButton>)}
+            <FpButton className="page-change page-arrow" disabled={!tableWrapper.getCanNextPage()}
+                icon="ARROW_FORWARD" onClick={tableWrapper.nextPage}></FpButton>
             <div className="spacer"></div>
         </div>}
     </div>

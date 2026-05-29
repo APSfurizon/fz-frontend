@@ -6,21 +6,21 @@ div.fp-input:has(input:required) label::after {
 }
 
 /* Error style */
-div.input-container:has(input.input-field.danger),
-div.fp-input.danger>div.input-container,
-div.input-container:has(input.input-field:user-invalid) {
+.input-container:has(input.input-field.danger),
+div.fp-input.danger>.input-container,
+.input-container:has(input.input-field:user-invalid) {
     outline-color: var(--text-input-border-danger);
 }
 
 /* Success style */
-div.input-container:has(input.input-field.success),
-div.fp-input.success>div.input-container:has(input.input-field:user-valid) {
+.input-container:has(input.input-field.success),
+div.fp-input.success>.input-container:has(input.input-field:user-valid) {
     outline-color: var(--text-input-border-success);
 }
 
 div.fp-input {
 
-    div.input-container:has(input.input-field:read-only) {
+    .input-container:has(input.input-field:read-only) {
         outline-width: 0px;
     }
 
@@ -29,7 +29,8 @@ div.fp-input {
         display: inline-block;
     }
 
-    div.input-container {
+    .input-container {
+        min-height: 36px;
         background: var(--text-input-bg);
         outline: 1px solid var(--text-input-border-normal);
     }
@@ -51,7 +52,7 @@ div.fp-input {
     }
 
     /* Focus style */
-    div.input-container:has(input.input-field:focus) {
+    .input-container:has(input.input-field:focus) {
         outline-width: 2px;
     }
 
@@ -61,7 +62,7 @@ div.fp-input {
     }
 
     /* Disabled style */
-    div.input-container:has(input.input-field:disabled) {
+    .input-container:has(input.input-field:disabled) {
         outline-color: var(--text-input-border-disabled);
         background-color: var(--text-input-bg-disabled);
     }
@@ -87,15 +88,15 @@ div.fp-input {
     }
 }
 
-div.fp-input.hoverable div.input-container {
+div.fp-input.hoverable .input-container {
     transition-duration: 120ms;
 }
 
-div.fp-input.hoverable:hover div.input-container {
+div.fp-input.hoverable:hover .input-container {
     outline-color: var(--text-link);
 }
 
-div.fp-input.hoverable:active div.input-container {
+div.fp-input.hoverable:active .input-container {
     outline-color: var(--highlight);
 }
 

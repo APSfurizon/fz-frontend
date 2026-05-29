@@ -12,5 +12,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "always"
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "i18n-ally.sourceLanguage": "en-GB"
 }

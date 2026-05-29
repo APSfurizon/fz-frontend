@@ -1,0 +1,57 @@
+@import url('../colors.css');
+
+.fp-button {
+    --fp-button__bg: var(--button-bg-normal);
+    --fp-button__bg--hover: var(--button-bg-hover);
+    --fp-button__bg--active: var(--button-bg-down);
+    --fp-button__border: var(--button-border-normal);
+    --fp-button__border--down: var(--button-border-down);
+
+    background: var(--fp-button__bg);
+    border: 1px solid var(--fp-button__border);
+    min-height: 1.625em;
+    padding: 0.375em 0.4375em;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    transition: transform 120ms;
+
+    &:not(:disabled):hover {
+        background: var(--fp-button__bg--hover);
+    }
+
+    &:not(:disabled):active {
+        background: var(--fp-button__bg--active);
+        border-color: var(--fp-button__border--down);
+        transform: scale(0.95);
+    }
+
+    &--success {
+        --fp-button__bg: var(--button-success-bg-normal);
+        --fp-button__bg--hover: var(--button-success-bg-hover);
+        --fp-button__bg--active: var(--button-success-bg-down);
+    }
+
+    &--danger {
+        --fp-button__bg: var(--button-danger-bg-normal);
+        --fp-button__bg--hover: var(--button-danger-bg-hover);
+        --fp-button__bg--active: var(--button-danger-bg-down);
+    }
+
+    &--off {
+        color: var(--foreground);
+        filter: grayscale(1);
+    }
+
+    &--icon {
+        background: none;
+        border: none;
+        display: block;
+        aspect-ratio: 1;
+        border-radius: 50%;
+    }
+
+    &--icon:active {
+        border: 1px solid var(--fp-button__border--down);
+    }
+}

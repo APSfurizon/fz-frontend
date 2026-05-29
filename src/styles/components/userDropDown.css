@@ -65,7 +65,7 @@ span.nickname {
     text-overflow: ellipsis;
 }
 
-@media (max-width:800px) {
+@media (max-width:1000px) {
     div.user-dropdown {
         flex-direction: row-reverse;
         margin-left: -0.3125em;

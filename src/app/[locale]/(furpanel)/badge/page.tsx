@@ -1,6 +1,6 @@
 'use client'
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useEffect, useMemo, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useFormatter, useTranslations } from "next-intl";
@@ -65,11 +65,11 @@ export default function BadgePage() {
       <div className="vertical-list gap-2mm">
         <span>{t("furpanel.badge.messages.confirm_deletion.description")}</span>
         <div className="horizontal-list">
-          <Button type="button" className="danger" icon="CANCEL"
-            onClick={hideModal}>{t("common.cancel")}</Button>
+          <FpButton type="button" className="danger" icon="CANCEL"
+            onClick={hideModal}>{t("common.cancel")}</FpButton>
           <div className="spacer"></div>
-          <Button type="submit" className="success" icon="CHECK"
-            onClick={() => deleteBadge()}>{t("common.confirm")}</Button>
+          <FpButton type="submit" className="success" icon="CHECK"
+            onClick={() => deleteBadge()}>{t("common.confirm")}</FpButton>
         </div>
       </div>,
       "DELETE"
@@ -216,7 +216,7 @@ export default function BadgePage() {
       </span>
       {/* Generic badge */}
       <div className="badge-container gap-4mm">
-        <div className="vertical-list flex-vertical-center">
+        <div className="vertical-list align-items-center">
           <DataForm hideSave busy={loading} setBusy={setLoading}>
             <Upload initialMedia={badgeStatus?.mainBadge?.propic} requireCrop busy={loading}
               setBlob={uploadBadge} onDelete={promptBadgeDelete} viewSize={130}
@@ -225,7 +225,7 @@ export default function BadgePage() {
           </DataForm>
         </div>
         <div className="vertical-list gap-2mm">
-          <div className="fursona-change rounded-m horizontal-list flex-vertical-center gap-2mm flex-wrap">
+          <div className="fursona-change rounded-m horizontal-list align-items-center gap-2mm flex-wrap">
             <div className="vertical-list">
               <span className="title"><b>{t("furpanel.badge.name")}</b>: {badgeStatus?.mainBadge?.fursonaName}</span>
               <span className="title bold">
@@ -234,10 +234,10 @@ export default function BadgePage() {
               </span>
             </div>
             <div className="spacer"></div>
-            <Button busy={loading} icon="EDIT_SQUARE" onClick={() => setChangeDataModalOpen(true)}
+            <FpButton busy={loading} icon="EDIT_SQUARE" onClick={() => setChangeDataModalOpen(true)}
               disabled={!badgeStatus?.allowedModifications}>
               {t("furpanel.badge.actions.edit_badge")}
-            </Button>
+            </FpButton>
           </div>
           <div className="spacer"></div>
           <NoticeBox theme={NoticeTheme.FAQ} title={t("furpanel.badge.messages.what_to_upload.title")}>
@@ -256,15 +256,15 @@ export default function BadgePage() {
               b: (chunks) => <b className="highlight">{chunks}</b>
             })}
         </NoticeBox>}
-        <div className="fursuit-header rounded-s horizontal-list flex-vertical-center gap-2mm flex-wrap">
+        <div className="fursuit-header rounded-s horizontal-list align-items-center gap-2mm flex-wrap">
           <Icon icon="PETS" />
           <span className="title average">
             {t("furpanel.badge.your_fursuits", { amount: badgeStatus?.fursuits.length ?? 0 })}
           </span>
           {loading && <Icon icon="PROGRESS_ACTIVITY" className="loading-animation" />}
           <div className="spacer"></div>
-          <Button icon="ADD_CIRCLE" title={t("common.CRUD.add")} onClick={promptAddFursuit}>
-            {t("common.CRUD.add")}</Button>
+          <FpButton icon="ADD_CIRCLE" title={t("common.CRUD.add")} onClick={promptAddFursuit}>
+            {t("common.CRUD.add")}</FpButton>
         </div>
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
@@ -298,19 +298,19 @@ export default function BadgePage() {
               </div>
               <div className="spacer"></div>
               <div className="fursuit-actions gap-2mm">
-                <Button className="danger" icon="DELETE" busy={loading}
+                <FpButton className="danger" icon="DELETE" busy={loading}
                   onClick={() => promptDeleteFursuit(fursuitData)}
                   title={t("furpanel.badge.messages.confirm_fursuit_deletion.title",
                     { name: fursuitData.fursuit.name })}
                   disabled={!badgeStatus.allowedModifications}>
                   {t("common.CRUD.delete")}
-                </Button>
+                </FpButton>
                 <div className="spacer"></div>
-                <Button icon="EDIT_SQUARE" onClick={() => promptEditFursuit(fursuitData)}
+                <FpButton icon="EDIT_SQUARE" onClick={() => promptEditFursuit(fursuitData)}
                   busy={loading} title={t("furpanel.badge.actions.edit_fursuit", { name: fursuitData.fursuit.name })}
                   disabled={!badgeStatus.allowedModifications}>
                   {t("common.CRUD.edit")}
-                </Button>
+                </FpButton>
               </div>
             </div>)}
         </div>
@@ -344,11 +344,11 @@ export default function BadgePage() {
           helpText={t("furpanel.badge.input.new_locale.help")}
           initialData={badgeStatus?.mainBadge?.locale ? [badgeStatus?.mainBadge?.locale] : undefined} />
         <div className="horizontal-list gap-4mm">
-          <Button type="button" className="danger" icon="CANCEL" busy={loading}
-            onClick={() => setChangeDataModalOpen(false)}>{t("common.cancel")}</Button>
+          <FpButton type="button" className="danger" icon="CANCEL" busy={loading}
+            onClick={() => setChangeDataModalOpen(false)}>{t("common.cancel")}</FpButton>
           <div className="spacer"></div>
-          <Button type="submit" className="success" icon="CHECK" busy={loading}>
-            {t("common.confirm")}</Button>
+          <FpButton type="submit" className="success" icon="CHECK" busy={loading}>
+            {t("common.confirm")}</FpButton>
         </div>
       </DataForm>
     </Modal>
@@ -407,13 +407,13 @@ export default function BadgePage() {
           {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
         </Checkbox>
         <div className="horizontal-list gap-4mm margin-top-2mm">
-          <Button type="button" className="danger" icon="CANCEL" busy={loading}
+          <FpButton type="button" className="danger" icon="CANCEL" busy={loading}
             onClick={closeAddFursuitModal}>
             {t("common.cancel")}
-          </Button>
+          </FpButton>
           <div className="spacer"></div>
-          <Button type="submit" className="success" icon="CHECK" busy={loading}>
-            {t("common.confirm")}</Button>
+          <FpButton type="submit" className="success" icon="CHECK" busy={loading}>
+            {t("common.confirm")}</FpButton>
         </div>
       </DataForm>
     </Modal>
@@ -426,11 +426,11 @@ export default function BadgePage() {
           { name: currentFursuit?.fursuit.name ?? "" })}
       </span>
       <div className="horizontal-list gap-4mm">
-        <Button className="danger" icon="CANCEL" busy={loading} onClick={closeDeleteFursuit}>
-          {t("common.cancel")}</Button>
+        <FpButton className="danger" icon="CANCEL" busy={loading} onClick={closeDeleteFursuit}>
+          {t("common.cancel")}</FpButton>
         <div className="spacer"></div>
-        <Button className="success" icon="CHECK" busy={loading} onClick={deleteFursuit}>
-          {t("common.confirm")}</Button>
+        <FpButton className="success" icon="CHECK" busy={loading} onClick={deleteFursuit}>
+          {t("common.confirm")}</FpButton>
       </div>
     </Modal>
   </>;

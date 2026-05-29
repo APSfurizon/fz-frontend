@@ -6,8 +6,8 @@ import {
     FULL_UPLOAD_MAX_HEIGHT
 } from '@/lib/constants';
 import Image from 'next/image';
-import { VALID_FILE_TYPES, validateImage, imageToBlob, scaleBlob } from '@/lib/components/upload';
-import Button from '@/components/input/button';
+import { VALID_FILE_TYPES, validateImage, scaleBlob } from '@/lib/components/upload';
+import FpButton from '@/components/input/fpButton';
 import Modal from '@/components/modal';
 import { useModalUpdate } from '@/components/context/modalProvider';
 import "@/styles/components/userUpload.css";
@@ -16,6 +16,7 @@ import { areEquals, getImageUrl } from '@/lib/utils';
 import { useFormContext } from '@/components/input/dataForm';
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { imageToBlob } from '@/lib/utils/media';
 
 export default function Upload({
     children,
@@ -192,7 +193,7 @@ export default function Upload({
                 className={`upload-label margin-bottom-1mm title semibold small ${isRequired ? "required" : ""}`}>
                 {label}
             </label>}
-            <div className="upload-container vertical-list flex-vertical-center rounded-l gap-2mm">
+            <div className="upload-container vertical-list align-items-center rounded-l gap-2mm">
                 <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
                     <Image unoptimized className="upload-picture"
                         src={previewUrl ? previewUrl : getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
@@ -209,13 +210,13 @@ export default function Upload({
                 </div>
                 <div className="vertical-list gap-2mm">
                     {/* Upload button */}
-                    {!media && <Button title={t('components.upload.open')} onClick={() => openFileDialog()}
+                    {!media && <FpButton title={t('components.upload.open')} onClick={() => openFileDialog()}
                         icon="CLOUD_UPLOAD" disabled={readonly || formDisabled} busy={isBusy}>
-                        {!media && t('components.upload.open')}</Button>}
+                        {!media && t('components.upload.open')}</FpButton>}
                     {/* Delete button */}
-                    {(media || previewUrl) && <Button title={t('components.upload.delete')} className="danger"
+                    {(media || previewUrl) && <FpButton title={t('components.upload.delete')} className="danger"
                         onClick={() => onDeleteRequest()} icon="DELETE" disabled={readonly || formDisabled}
-                        busy={isBusy}>{t('components.upload.delete')}</Button>}
+                        busy={isBusy}>{t('components.upload.delete')}</FpButton>}
                 </div>
                 {children}
             </div>
@@ -244,19 +245,19 @@ export default function Upload({
                 style={{ maxHeight: '75vh', width: '100%', aspectRatio: imageToCrop.width / imageToCrop.height }}>
             </Cropper>}
             <div className="horizontal-list gap-2mm">
-                <Button icon="ROTATE_LEFT" onClick={() => cropperRef.current?.cropper.rotate(-45)}></Button>
-                <Button icon="ROTATE_RIGHT" onClick={() => cropperRef.current?.cropper.rotate(45)}></Button>
+                <FpButton icon="ROTATE_LEFT" onClick={() => cropperRef.current?.cropper.rotate(-45)}></FpButton>
+                <FpButton icon="ROTATE_RIGHT" onClick={() => cropperRef.current?.cropper.rotate(45)}></FpButton>
                 <div className="spacer"></div>
-                <Button icon="RESET_SETTINGS" onClick={() => cropperRef.current?.cropper.reset()}></Button>
+                <FpButton icon="RESET_SETTINGS" onClick={() => cropperRef.current?.cropper.reset()}></FpButton>
             </div>
             <div className="bottom-toolbar">
-                <Button title={t('common.cancel')} className="danger" onClick={() => onCropCanceled()}
+                <FpButton title={t('common.cancel')} className="danger" onClick={() => onCropCanceled()}
                     icon="CANCEL" disabled={readonly || formDisabled}
-                    busy={isBusy}>{t('common.cancel')}</Button>
+                    busy={isBusy}>{t('common.cancel')}</FpButton>
                 <div className="spacer"></div>
-                <Button title={t('components.upload.upload')} onClick={() => onFileUpload(imageToCrop!)}
+                <FpButton title={t('components.upload.upload')} onClick={() => onFileUpload(imageToCrop!)}
                     icon="CLOUD_UPLOAD" disabled={readonly || formDisabled}
-                    busy={isBusy}>{!media && t('components.upload.upload')}</Button>
+                    busy={isBusy}>{!media && t('components.upload.upload')}</FpButton>
             </div>
         </Modal>
     </>

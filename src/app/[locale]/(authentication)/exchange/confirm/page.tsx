@@ -11,7 +11,7 @@ import {
 } from "@/lib/api/exchange";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import ErrorMessage from "@/components/errorMessage";
 import { useUser } from "@/components/context/userProvider";
 import UserPicture from "@/components/userPicture";
@@ -32,16 +32,16 @@ export default function ExchangeConfirm() {
 
   const renderRoom = (userData: UserData, data: RoomData, extraDays?: ExtraDays, board?: Board) => {
     return <>
-      <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
+      <span className="title item-title horizontal-list align-items-center gap-2mm">
         <Icon className="large" icon="PACKAGE_2"></Icon>
         {t.rich("authentication.transfer_confirm.room.room_title", {
           user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
         })}
       </span>
-      <div className="horizontal-list item-content flex-vertical-center gap-2mm rounded-m">
+      <div className="horizontal-list item-content align-items-center gap-2mm rounded-m">
         <Icon className="xx-large" icon="BEDROOM_PARENT" />
         <div className="vertical-list">
-          <span className="title horizontal-list flex-vertical-center">
+          <span className="title horizontal-list align-items-center">
             {translate(data.roomTypeNames, locale)}
           </span>
           <span className="small descriptive color-subtitle">
@@ -107,7 +107,7 @@ export default function ExchangeConfirm() {
 
   const board = exchangeData?.fullOrderExchange?.board ?? exchangeData?.sourceRoomExchange
   return <>
-    <div className="horizontal-list gap-4mm flex-center">
+    <div className="horizontal-list gap-4mm justify-content-center">
       <span className="title-pair">
         <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
@@ -119,7 +119,7 @@ export default function ExchangeConfirm() {
     {loading && <LoadingPanel />}
     {exchangeData && userDisplay && <>
       <div className="exchange-info rounded-l vertical-list gap-2mm">
-        <span className="title bold exchange-title rounded-m horizontal-list gap-2mm flex-vertical-center flex-wrap">
+        <span className="title bold exchange-title rounded-m horizontal-list gap-2mm align-items-center flex-wrap">
           {t.rich(`authentication.transfer_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
             source: () => <><UserPicture userData={exchangeData.sourceUser} />{exchangeData.sourceUser.fursonaName}</>,
             target: () => <><UserPicture userData={exchangeData.targetUser} />{exchangeData.targetUser.fursonaName}</>,
@@ -145,7 +145,7 @@ export default function ExchangeConfirm() {
           {/* Order data */}
           {exchangeData.fullOrderExchange && ticketData && <>
             <div className="item-info vertical-list rounded-m">
-              <span className="title item-title horizontal-list flex-vertical-center gap-2mm">
+              <span className="title item-title horizontal-list align-items-center gap-2mm">
                 <Icon className="large" icon="LOCAL_ACTIVITY" />
                 {t.rich("authentication.transfer_confirm.order.order_title", {
                   user: () => <>
@@ -194,13 +194,13 @@ export default function ExchangeConfirm() {
         </div>
       </div>
       <div className="horizontal-list gap-4mm">
-        <Button className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
+        <FpButton className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
           {t("common.accept")}
-        </Button>
+        </FpButton>
         <div className="spacer"></div>
-        <Button className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
+        <FpButton className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
           {t("common.refuse")}
-        </Button>
+        </FpButton>
       </div>
     </>}
   </>;

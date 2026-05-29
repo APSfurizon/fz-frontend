@@ -44,13 +44,13 @@ export default function UserPage() {
     <div className="page">
       {/* User area */}
       <div className="section vertical-list gap-2mm">
-        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+        <div className="horizontal-list section-title gap-2mm align-items-center">
           <Icon className="x-large" icon="PERSON" />
           <span className="title medium">{t("furpanel.user.sections.user")}</span>
         </div>
         {/* Personal info manager */}
         <div className="vertical-list gap-2mm">
-          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <div className="horizontal-list section-title gap-2mm align-items-center">
             <span className="title average">
               {t("furpanel.user.sections.user_info")}
             </span>
@@ -63,12 +63,12 @@ export default function UserPage() {
       </div>
       {/* User area */}
       <div className="section vertical-list gap-2mm">
-        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+        <div className="horizontal-list section-title gap-2mm align-items-center">
           <Icon className="x-large" icon="SECURITY" />
           <span className="title medium">{t("furpanel.user.sections.security")}</span>
         </div>
         <div className="vertical-list gap-2mm">
-          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <div className="horizontal-list section-title gap-2mm align-items-center">
             <span className="title average">
               {t("furpanel.user.sections.sessions")}
             </span>
@@ -77,7 +77,7 @@ export default function UserPage() {
         </div>
         {/* New password */}
         <div className="vertical-list gap-2mm">
-          <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+          <div className="horizontal-list section-title gap-2mm align-items-center">
             <span className="title average">
               {t("furpanel.user.sections.security_password")}
             </span>

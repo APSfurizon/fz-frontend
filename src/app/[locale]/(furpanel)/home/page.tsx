@@ -6,8 +6,8 @@ export default function HomePage() {
   const t = useTranslations('furpanel');
   return (
     <div className="page">
-      <div className="large title horizontal-list flex-vertical-center flex-center">
-        <Icon className="x-large" style={{ marginRight: '.1em' }} icon="CONTEXTUAL_TOKEN"/>
+      <div className="large title horizontal-list align-items-center justify-content-center">
+        <Icon className="x-large" style={{ marginRight: '.1em' }} icon="CONTEXTUAL_TOKEN" />
         <span>{t.rich('home.header', {
           highlighted: (chunks) => <b className="highlight">{chunks}</b>
         })}</span>

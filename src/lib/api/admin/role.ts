@@ -27,8 +27,8 @@ export interface RoleMember {
 
 export interface RoleBaseData {
     roleId: number,
-    internalName?: string,
-    displayName?: string,
+    internalName?: string | null,
+    displayName?: string | null,
     showInAdminCount: boolean,
     roleAdmincountPriority: number
 }
