@@ -1,6 +1,6 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useUser } from "@/components/context/userProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import Modal from "@/components/modal";
@@ -101,24 +101,24 @@ export default function UserViewSecurity({
                     initialValue={userData.email} />
             </div>
             <div className="horizontal-list gap-2mm">
-                {!userData.banned && <Button icon="ACCOUNT_CIRCLE_OFF"
+                {!userData.banned && <FpButton icon="ACCOUNT_CIRCLE_OFF"
                     onClick={promptBan}
                     disabled={isSelf}>
                     {t("furpanel.admin.users.accounts.view.actions.ban")}
-                </Button>}
-                {userData.banned && <Button icon="ACCOUNT_CIRCLE"
+                </FpButton>}
+                {userData.banned && <FpButton icon="ACCOUNT_CIRCLE"
                     onClick={promptUnban}
                     disabled={isSelf}>
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
-                </Button>}
-                <Button icon="MAIL"
+                </FpButton>}
+                <FpButton icon="MAIL"
                     onClick={() => setChangeEmailModalOpen(true)}>
                     {t("furpanel.admin.users.accounts.view.actions.change_email")}
-                </Button>
-                <Button icon="KEY"
+                </FpButton>
+                <FpButton icon="KEY"
                     onClick={() => setChangePasswordModalOpen(true)}>
                     {t("furpanel.admin.users.accounts.view.actions.change_password")}
-                </Button>
+                </FpButton>
             </div>
         </div>
         <Modal open={banModalOpen} onClose={() => setBanModalOpen(false)} busy={loading}
@@ -127,20 +127,20 @@ export default function UserViewSecurity({
                 {t("furpanel.admin.users.accounts.view.messages.confirm_ban.description")}
             </span>
             <div className="bottom-toolbar">
-                <Button title={t("common.cancel")}
+                <FpButton title={t("common.cancel")}
                     className="danger"
                     onClick={() => setBanModalOpen(false)}
                     icon="CANCEL"
                     busy={loading}>
                     {t("common.cancel")}
-                </Button>
+                </FpButton>
                 <div className="spacer"></div>
-                <Button title={t("furpanel.admin.users.accounts.view.actions.ban")}
+                <FpButton title={t("furpanel.admin.users.accounts.view.actions.ban")}
                     onClick={() => ban()}
                     icon="ACCOUNT_CIRCLE_OFF"
                     busy={loading}>
                     {t("furpanel.admin.users.accounts.view.actions.ban")}
-                </Button>
+                </FpButton>
             </div>
         </Modal>
         <Modal open={unbanModalOpen} onClose={() => setUnbanModalOpen(false)} busy={loading}
@@ -149,20 +149,20 @@ export default function UserViewSecurity({
                 {t("furpanel.admin.users.accounts.view.messages.confirm_unban.description")}
             </span>
             <div className="bottom-toolbar">
-                <Button title={t("common.cancel")}
+                <FpButton title={t("common.cancel")}
                     className="danger"
                     onClick={() => setUnbanModalOpen(false)}
                     icon="CANCEL"
                     busy={loading}>
                     {t("common.cancel")}
-                </Button>
+                </FpButton>
                 <div className="spacer"></div>
-                <Button title={t("furpanel.admin.users.accounts.view.actions.unban")}
+                <FpButton title={t("furpanel.admin.users.accounts.view.actions.unban")}
                     onClick={() => unban()}
                     icon="ACCOUNT_CIRCLE"
                     busy={loading}>
                     {t("furpanel.admin.users.accounts.view.actions.unban")}
-                </Button>
+                </FpButton>
             </div>
         </Modal>
         <Modal open={changeEmailModalOpen}
@@ -179,13 +179,13 @@ export default function UserViewSecurity({
                     label={t("authentication.register.form.email.label")}
                     placeholder={t("authentication.register.form.email.placeholder")} />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
+                    <FpButton type="button" className="danger" icon="CANCEL" onClick={() => setChangeEmailModalOpen(false)}>
                         {t("common.cancel")}
-                    </Button>
+                    </FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit" className="success" icon="CHECK">
+                    <FpButton type="submit" className="success" icon="CHECK">
                         {t("common.confirm")}
-                    </Button>
+                    </FpButton>
                 </div>
             </DataForm>
         </Modal>
@@ -213,18 +213,18 @@ export default function UserViewSecurity({
                     placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
                     autocomplete="new-password" />
                 <div className="horizontal-list gap-4mm">
-                    <Button type="button"
+                    <FpButton type="button"
                         className="danger"
                         icon="CANCEL"
                         onClick={() => setChangeEmailModalOpen(false)}>
                         {t("common.cancel")}
-                    </Button>
+                    </FpButton>
                     <div className="spacer"></div>
-                    <Button type="submit"
+                    <FpButton type="submit"
                         className="success"
                         icon="CHECK">
                         {t("common.confirm")}
-                    </Button>
+                    </FpButton>
                 </div>
             </DataForm>
         </Modal>

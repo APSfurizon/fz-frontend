@@ -9,7 +9,7 @@ import {
     CreateSecurityHazardApiAction,
     UpdateSecurityHazardApiAction,
 } from "@/lib/api/admin/security";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
@@ -234,8 +234,8 @@ export default function SecurityHazardousRegisterPage() {
                 </div>
             </div>
             <div className="horizontal-list gap-2mm" style={{ marginTop: 10 }}>
-                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.hazard.cancel")}</Button>
-                <Button icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.hazard.save")}</Button>
+                <FpButton onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.hazard.cancel")}</FpButton>
+                <FpButton icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.hazard.save")}</FpButton>
             </div>
         </div>
     );
@@ -300,8 +300,8 @@ export default function SecurityHazardousRegisterPage() {
                     <span className="title medium">{t("furpanel.admin.security_management.hazard.hazardous_register")}</span>
                 </div>
                 <div className="spacer" />
-                {view === "list" && <Button icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.hazard.add_report")}</Button>}
-                {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.hazard.edit")}</Button>}
+                {view === "list" && <FpButton icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.hazard.add_report")}</FpButton>}
+                {view === "detail" && selected && <FpButton icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.hazard.edit")}</FpButton>}
             </div>
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}

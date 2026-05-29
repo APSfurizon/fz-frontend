@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "@/components/icon";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import UserPicture from "@/components/userPicture";
 import {
     FursuitBadge, RegularBadge, SearchFursuitBadgesApiAction, SearchFursuitBadgesResponse,
@@ -35,7 +35,7 @@ export default function AdvancedBadgePrint() {
         regularColumnHelper.accessor('user', {
             id: 'user',
             header: t("furpanel.admin.events.badges.print.advanced_mode.regular.columns.user"),
-            cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
+            cell: props => <div className="data horizontal-list align-items-center gap-2mm">
                 <UserPicture userData={props.row.original.user} hideEffect></UserPicture>
                 <span className="title small">{props.row.original.user.fursonaName}</span>
             </div>
@@ -57,7 +57,7 @@ export default function AdvancedBadgePrint() {
         fursuitColumnHelper.accessor('fursuit', {
             id: 'fursuit',
             header: t("furpanel.admin.events.badges.print.advanced_mode.fursuit.columns.sona_name"),
-            cell: props => <div className="data horizontal-list flex-vertical-center gap-2mm">
+            cell: props => <div className="data horizontal-list align-items-center gap-2mm">
                 <UserPicture fursuitData={props.row.original.fursuit} hideEffect></UserPicture>
                 <span className="title small">{props.row.original.fursuit.name}</span>
             </div>
@@ -116,7 +116,7 @@ export default function AdvancedBadgePrint() {
     }
 
     return <div className="stretch-page">
-        <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap">
+        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
             <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
             <div className="horizontal-list gap-2mm">
                 <span className="title medium">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</span>
@@ -146,9 +146,9 @@ export default function AdvancedBadgePrint() {
                 icon="PETS" />
             <div className="horizontal-list">
                 <div className="spacer"></div>
-                <Button icon="PRINT" disabled={!canPrint} busy={printLoading} onClick={runPrint}>
+                <FpButton icon="PRINT" disabled={!canPrint} busy={printLoading} onClick={runPrint}>
                     {t("furpanel.admin.events.badges.print.advanced_mode.print")}
-                </Button>
+                </FpButton>
             </div>
         </div>
     </div>

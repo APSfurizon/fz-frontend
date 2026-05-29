@@ -25,7 +25,7 @@ import {
   TOKEN_STORAGE_NAME
 } from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { UserDisplayAction } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
 
@@ -123,7 +123,7 @@ export default function Login() {
   useTitle(t("login.title"));
 
   return <>
-    <div className="horizontal-list gap-4mm flex-center">
+    <div className="horizontal-list gap-4mm justify-content-center">
       <span className="title-pair">
         <Icon icon="DESIGN_SERVICES" />
         <span className="titular bold highlight">furpanel</span>
@@ -157,20 +157,18 @@ export default function Login() {
       <FpInput fieldName="email"
         required
         inputType="email"
-        onChange={(e) => setEmail(e.target.value ?? "")}
         label={t("login.label_email")}
         placeholder={t("login.placeholder_email")} />
       <FpInput fieldName="password"
         minLength={6}
         required
         inputType="password"
-        onChange={(e) => setPassword(e.target.value ?? "")}
         label={t("login.label_password")}
         placeholder={t("login.placeholder_password")} />
       <div className="toolbar-bottom">
-        <Button type="submit" icon="KEY">
+        <FpButton type="submit" icon="KEY">
           {t("login.login")}
-        </Button>
+        </FpButton>
       </div>
     </DataForm>
     <div className="horizontal-list">

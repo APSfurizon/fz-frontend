@@ -1,5 +1,5 @@
 'use client'
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -207,117 +207,105 @@ export default function AdminPage() {
       {/* Security area */}
       <FpMacroSection title={t("furpanel.admin.security_management.title")} icon="SECURITY">
         <FpSection title={t("furpanel.admin.security_management.users_and_docs.title")}>
-          <Button icon="PERSON_SEARCH" onClick={() => router.push(`/${locale}/admin/security/user-search`)} disabled={!capabilities?.security}>
+          <FpButton icon="PERSON_SEARCH" onClick={() => router.push(`/${locale}/admin/security/user-search`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.users_and_docs.user_search")}
-          </Button>
-          <Button icon="FIND_IN_PAGE" onClick={() => router.push(`/${locale}/admin/security/documents`)} disabled={!capabilities?.security}>
+          </FpButton>
+          <FpButton icon="FIND_IN_PAGE" onClick={() => router.push(`/${locale}/admin/security/documents`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.users_and_docs.documents")}
-          </Button>
+          </FpButton>
         </FpSection>
         <FpSection title={t("furpanel.admin.security_management.reports.title")}>
-          <Button icon="BOOKMARK_STAR" onClick={() => router.push(`/${locale}/admin/security/incidents`)} disabled={!capabilities?.security}>
+          <FpButton icon="BOOKMARK_STAR" onClick={() => router.push(`/${locale}/admin/security/incidents`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.reports.incident_log")}
-          </Button>
+          </FpButton>
         </FpSection>
         <FpSection title={t("furpanel.admin.security_management.logs.title")}>
-          <Button icon="PACKAGE_2" onClick={() => router.push(`/${locale}/admin/security/assets`)} disabled={!capabilities?.security}>
+          <FpButton icon="PACKAGE_2" onClick={() => router.push(`/${locale}/admin/security/assets`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.asset_manager")}
-          </Button>
-          <Button icon="ERROR" onClick={() => router.push(`/${locale}/admin/security/hazardous`)} disabled={!capabilities?.security}>
+          </FpButton>
+          <FpButton icon="ERROR" onClick={() => router.push(`/${locale}/admin/security/hazardous`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.hazardous_register")}
-          </Button>
-          <Button icon="SEARCH" onClick={() => router.push(`/${locale}/admin/security/lost-found`)} disabled={!capabilities?.security}>
+          </FpButton>
+          <FpButton icon="SEARCH" onClick={() => router.push(`/${locale}/admin/security/lost-found`)} disabled={!capabilities?.security}>
             {t("furpanel.admin.security_management.logs.lost_and_found")}
-          </Button>
+          </FpButton>
         </FpSection>
       </FpMacroSection>
       {!securityOnlyMode && <>
         {/* System area */}
         <FpMacroSection title={t("furpanel.admin.system.title")} icon="CONFIRMATION_NUMBER">
           <FpSection title={t("furpanel.admin.system.server.title")}>
-            <Button icon="VITAL_SIGNS" onClick={ping} debounce={5000}
+            <FpButton icon="VITAL_SIGNS" onClick={ping} debounce={5000}
               busy={pingLoading} disabled={!capabilities?.canRefreshPretixCache}>
               {t("furpanel.admin.system.server.ping")}
-            </Button>
+            </FpButton>
           </FpSection>
         </FpMacroSection>
         {/* Pretix area */}
         <FpMacroSection title={t("furpanel.admin.pretix.title")} icon="CONFIRMATION_NUMBER">
           <FpSection title={t("furpanel.admin.pretix.data.title")}>
-            <Button icon="EVENT_REPEAT" onClick={reloadEvent} debounce={5000}
+            <FpButton icon="EVENT_REPEAT" onClick={reloadEvent} debounce={5000}
               busy={reloadEventLoading} disabled={!capabilities?.canRefreshPretixCache}>
               {t("furpanel.admin.pretix.data.reload_event")}
-            </Button>
-            <Button icon="SYNC" onClick={reloadOrders} debounce={5000}
+            </FpButton>
+            <FpButton icon="SYNC" onClick={reloadOrders} debounce={5000}
               busy={reloadOrdersLoading} disabled={!capabilities?.canRefreshPretixCache}>
               {t("furpanel.admin.pretix.data.reload_orders")}
-            </Button>
+            </FpButton>
           </FpSection>
         </FpMacroSection>
         {/* Event area */}
         <FpMacroSection title={t("furpanel.admin.events.title")} icon="LOCAL_ACTIVITY">
           <FpSection title={t("furpanel.admin.events.badges.title")}>
-            <Button icon="PRINT" onClick={() => setRenderBadgesModalOpen(true)}
-              busy={renderBadgesLoading} disabled={!capabilities?.canExportBadges}>
+            <FpButton icon="PRINT" onClick={() => setRenderBadgesModalOpen(true)}
+              busy={renderBadgesLoading} disabled={!capabilities?.canRefreshPretixCache}>
               {t("furpanel.admin.events.badges.print_badges")}
-            </Button>
-            <Button icon="MAIL" onClick={remindBadges} debounce={5000}
+            </FpButton>
+            <FpButton icon="MAIL" onClick={remindBadges} debounce={5000}
               busy={remindBadgesLoading} disabled={!capabilities?.canRemindBadgeUploads}>
               {t("furpanel.admin.events.badges.remind_badges")}
-            </Button>
-            <Button icon="MAIL" onClick={remindFursuitBadges} debounce={5000}
+            </FpButton>
+            <FpButton icon="MAIL" onClick={remindFursuitBadges} debounce={5000}
               busy={remindFursuitBadgesLoading} disabled={!capabilities?.canRemindBadgeUploads}>
               {t("furpanel.admin.events.badges.remind_fursuits")}
-            </Button>
-            <Button icon="MAIL" onClick={remindFursuitBringToEvent} debounce={5000}
-              busy={remindFursuitBringToEventLoading} disabled={!capabilities?.canRemindFursuitBringToEvent}>
-              {t("furpanel.admin.events.badges.remind_fursuits_bring_to_event")}
-            </Button>
+            </FpButton>
           </FpSection>
           <FpSection title={t("furpanel.admin.events.rooms.title")}>
-            <Button icon="MAIL" onClick={remindRoomsNotFull} debounce={5000}
+            <FpButton icon="MAIL" onClick={remindRoomsNotFull} debounce={5000}
               busy={remindRoomsNotFullLoading} disabled={!capabilities?.canRemindRoomsNotFull}>
               {t("furpanel.admin.events.rooms.remind_rooms_not_full")}
-            </Button>
+            </FpButton>
           </FpSection>
           <FpSection title={t("furpanel.admin.events.orders.title")}>
-            <Button icon="DOWNLOAD" onClick={exportRooms} debounce={5000}
+            <FpButton icon="DOWNLOAD" onClick={exportRooms} debounce={5000}
               busy={exportRoomsLoading} disabled={!capabilities?.canExportHotelList}>
               {t("furpanel.admin.events.orders.export_rooms")}
-            </Button>
-            <Button icon="DOWNLOAD" onClick={exportShirts} debounce={5000}
-              busy={exportShirtsLoading} disabled={!capabilities?.canExportShirtList}>
-              {t("furpanel.admin.events.orders.export_tshirts")}
-            </Button>
-            <Button icon="MAIL" onClick={remindOrderLink} debounce={5000}
+            </FpButton>
+            <FpButton icon="MAIL" onClick={remindOrderLink} debounce={5000}
               busy={remindOrderLinkLoading} disabled={!capabilities?.canRemindOrderLinking}>
               {t("furpanel.admin.events.orders.remind_order_linking")}
-            </Button>
+            </FpButton>
           </FpSection>
         </FpMacroSection>
         {/** Users area */}
         <FpMacroSection title={t("furpanel.admin.users.title")} icon="PERSON">
           <FpSection title={t("furpanel.admin.users.accounts.title")}>
-            <Button icon="PERSON_SEARCH" onClick={() => router.push("/admin/users/")}
+            <FpButton icon="PERSON_SEARCH" onClick={() => router.push("/admin/users/")}
               disabled={!capabilities?.canViewUsers}>
               {t("furpanel.admin.users.accounts.view.title")}
-            </Button>
+            </FpButton>
           </FpSection>
           <FpSection title={t("furpanel.admin.users.security.title")}>
-            <Button icon="GROUPS" onClick={() => router.push("/admin/roles/")}
+            <FpButton icon="GROUPS" onClick={() => router.push("/admin/roles/")}
               disabled={!capabilities?.canUpgradeUser}>
               {t("furpanel.admin.users.security.roles.title")}
-            </Button>
+            </FpButton>
           </FpSection>
           <FpSection title={t("furpanel.admin.membership.title")}>
-            <Button icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
+            <FpButton icon="ID_CARD" onClick={() => router.push("/admin/memberships/a")}
               disabled={!capabilities?.canManageMembershipCards}>
               {t("furpanel.admin.membership_manager.title")}
-            </Button>
-            <Button icon="MAIL" onClick={sendMembershipCardByMail} debounce={5000}
-              busy={sendMembershipCardByMailLoading} disabled={!capabilities?.canManageMembershipCards}>
-              {t("furpanel.admin.membership_manager.send_card_by_mail")}
-            </Button>
+            </FpButton>
           </FpSection>
         </FpMacroSection>
       </>}

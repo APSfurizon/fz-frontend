@@ -13,10 +13,16 @@
     "project": "./tsconfig.json" // Ensures TypeScript is linted according to the project's tsconfig.json
   },
   "rules": {
-    "deprecation/deprecation": "warn",
+    "@typescript-eslint/no-deprecated": "error",
     "import/no-deprecated": "warn",
-    "max-len": ["warn", {"code": 120}],
+    "max-len": [
+      "warn",
+      {
+        "code": 120
+      }
+    ],
     "@typescript-eslint/no-explicit-any": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "no-warning-comments": "warn"
   }
 }

@@ -10,7 +10,7 @@ import {
     CreateSecurityAssetApiAction, UpdateSecurityAssetApiAction,
     TransferSecurityAssetApiAction,
 } from "@/lib/api/admin/security";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
@@ -263,8 +263,8 @@ export default function SecurityAssetManagerPage() {
                 </div>
             </div>
             <div className="horizontal-list gap-2mm" style={{ marginTop: 10 }}>
-                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.assets.cancel")}</Button>
-                <Button icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.assets.save")}</Button>
+                <FpButton onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.assets.cancel")}</FpButton>
+                <FpButton icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.assets.save")}</FpButton>
             </div>
         </div>
     );
@@ -308,7 +308,7 @@ export default function SecurityAssetManagerPage() {
                 )}
             </div>
             <div className="horizontal-list gap-2mm security-asset-detail-actions">
-                <Button className="security-asset-transfer-btn" icon="SYNC" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>{t("furpanel.admin.security_management.assets.transfer")}</Button>
+                <FpButton className="security-asset-transfer-btn" icon="SYNC" onClick={() => { setTUtilizzatore(""); setTNote(""); setTStato("disponibile"); setTransferOpen(true); }}>{t("furpanel.admin.security_management.assets.transfer")}</FpButton>
             </div>
         </div>
     );
@@ -352,11 +352,11 @@ export default function SecurityAssetManagerPage() {
                     <span className="title medium">{t("furpanel.admin.security_management.assets.asset_manager")}</span>
                 </div>
                 <div className="spacer" />
-                {view === "list" && <Button icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.assets.add")}</Button>}
+                {view === "list" && <FpButton icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.assets.add")}</FpButton>}
                 {view === "detail" && selected && (
                     <>
-                        <Button icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.assets.edit")}</Button>
-                        <Button icon="FIND_IN_PAGE" onClick={() => loadLogs(selected)}>{t("furpanel.admin.security_management.assets.view_logs")}</Button>
+                        <FpButton icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.assets.edit")}</FpButton>
+                        <FpButton icon="FIND_IN_PAGE" onClick={() => loadLogs(selected)}>{t("furpanel.admin.security_management.assets.view_logs")}</FpButton>
                     </>
                 )}
             </div>
@@ -391,13 +391,13 @@ export default function SecurityAssetManagerPage() {
                             </div>
                         </div>
                         <div className="bottom-toolbar" style={{ marginTop: 10 }}>
-                            <Button type="button" className="danger" icon="CANCEL" busy={loading} onClick={() => setTransferOpen(false)}>
+                            <FpButton type="button" className="danger" icon="CANCEL" busy={loading} onClick={() => setTransferOpen(false)}>
                                 {t("common.cancel")}
-                            </Button>
+                            </FpButton>
                             <div className="spacer"></div>
-                            <Button type="button" className="success" icon="CHECK" busy={loading} onClick={saveTransfer}>
+                            <FpButton type="button" className="success" icon="CHECK" busy={loading} onClick={saveTransfer}>
                                 {t("common.confirm")}
-                            </Button>
+                            </FpButton>
                         </div>
                     </div>
                 </Modal>

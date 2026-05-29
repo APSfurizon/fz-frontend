@@ -6,7 +6,7 @@ import UserDropDown from './userDropdown';
 import { useUser } from '@/components/context/userProvider';
 import { useEffect, useRef, useState } from 'react';
 import "@/styles/components/header.css";
-import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED, SCHEDULE_ENABLED, DEALER_ENABLED } from '@/lib/constants';
+import { APP_LINKS, SHOW_APP_BANNER, NOSECOUNT_ENABLED, SCHEDULE_ENABLED, DEALER_ENABLED, GALLERY_ENABLED } from '@/lib/constants';
 import Link from 'next/link';
 import { isMobile, UA } from '@/lib/userAgent';
 import { OSName } from 'ua-parser-js/enums';
@@ -92,8 +92,8 @@ export default function Header() {
         <header ref={headerRef} className={`header ${collapsed ? "collapsed" : ""}`}>
             <div className="logo-container center">
                 <picture className="header-logo">
-                    <source srcSet="/images/logo-dark.png" media="(prefers-color-scheme: dark)" />
-                    <Image className="header-logo" src="/images/logo-light.png"
+                    <source srcSet="/images/logo_dark.svg" media="(prefers-color-scheme: dark)" />
+                    <Image className="header-logo" src="/images/logo_light.svg"
                         alt={t('header.alt_logo')}
                         width={175}
                         height={40} />
@@ -104,7 +104,7 @@ export default function Header() {
                     <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"} />
                 </div>
             </span>
-            <div className={`header-link-container horizontal-list flex-vertical-center ${hamburgerOpen ? "expanded" : ""}`}>
+            <div className={`header-link-container horizontal-list align-items-center ${hamburgerOpen ? "expanded" : ""}`}>
                 <Link href="/home" className="header-link medium" onClick={closeHamburgerMenu}>
                     <Icon style={{ fontSize: "24px" }} icon="HOME" />
                     <span className="title semibold">{t('header.home')}</span>
@@ -127,6 +127,10 @@ export default function Header() {
                         <span className="title semibold">{t('header.dealer')}</span>
                     </Link>
                 </>}
+                {GALLERY_ENABLED && <Link href="/gallery/explore" className="header-link medium">
+                    <Icon style={{ fontSize: "24px" }} icon="IMAGE" />
+                    <span className="title semibold">{t('header.gallery')}</span>
+                </Link>}
                 {/* <a className="header-link">
                     <Icon style={{fontSize: "24px"}} icon="INFO"/>
                     <span className="title semibold">{t('header.information')}</span>
@@ -139,7 +143,7 @@ export default function Header() {
                 <UserDropDown userData={userDisplay?.display} loading={userLoading}></UserDropDown>
                 {/* Phone app */}
                 {[DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && <>
-                    <div className='horizontal-list gap-4mm flex-vertical-center' style={{ width: '100%' }}>
+                    <div className='horizontal-list gap-4mm align-items-center' style={{ width: '100%' }}>
                         <span className="descriptive small color-subtitle">{t("header.app_badge")}</span>
                         <div className="spacer"></div>
                         <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""} onClick={closeHamburgerMenu}>
