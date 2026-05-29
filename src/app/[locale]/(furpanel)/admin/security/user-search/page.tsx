@@ -4,7 +4,7 @@ import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
 import Icon from "@/components/icon";
 import ImagePreviewModal from "@/components/imagePreviewModal";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -229,8 +229,8 @@ export default function SecurityUserSearchPage() {
                                 <FpInput label={t("furpanel.admin.users.security.user_search.fields.phone")} initialValue={`${userData.prefixPhoneNumber || ""} ${userData.phoneNumber || ""}`.trim()} readOnly />
                             </div>
                             <div className="horizontal-list gap-2mm" style={{ marginTop: "0.8em" }}>
-                                <Button icon="SEND" onClick={() => openTelegram(userData.telegramUsername ?? undefined)}>Telegram</Button>
-                                <Button onClick={() => openPhone(userData.prefixPhoneNumber ?? undefined, userData.phoneNumber ?? undefined)}>{t("furpanel.admin.users.security.user_search.actions.call")}</Button>
+                                <FpButton icon="SEND" onClick={() => openTelegram(userData.telegramUsername ?? undefined)}>Telegram</FpButton>
+                                <FpButton onClick={() => openPhone(userData.prefixPhoneNumber ?? undefined, userData.phoneNumber ?? undefined)}>{t("furpanel.admin.users.security.user_search.actions.call")}</FpButton>
                             </div>
                             {(userData.roles?.length ?? 0) > 0 && (
                                 <div style={{ marginTop: "0.8em" }}>

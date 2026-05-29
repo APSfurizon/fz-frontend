@@ -13,7 +13,7 @@ span:has(.hamburger),
     display: none;
 }
 
-@media (max-width:1000px) {
+@media (max-width:1300px) {
 
     span:has(.hamburger),
     .hamburger {

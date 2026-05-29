@@ -9,7 +9,7 @@ import {
     CreateSecurityLostItemApiAction,
     UpdateSecurityLostItemApiAction,
 } from "@/lib/api/admin/security";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
@@ -225,8 +225,8 @@ export default function SecurityLostAndFoundPage() {
                 ))}
             </div>
             <div className="horizontal-list gap-2mm" style={{ marginTop: 10 }}>
-                <Button onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.lost_found.cancel")}</Button>
-                <Button icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.lost_found.save")}</Button>
+                <FpButton onClick={() => { resetForm(); setView(isEdit ? "detail" : "list"); }}>{t("furpanel.admin.security_management.lost_found.cancel")}</FpButton>
+                <FpButton icon="SAVE" busy={loading} onClick={saveItem}>{t("furpanel.admin.security_management.lost_found.save")}</FpButton>
             </div>
         </div>
     );
@@ -282,9 +282,9 @@ export default function SecurityLostAndFoundPage() {
                 </div>
                 {!isConsegnato && (
                     <div className="horizontal-list gap-2mm" style={{ flexWrap: "wrap", marginTop: 10 }}>
-                        <Button icon="CHECK" style={{ background: "#27ae60" }} onClick={() => {
+                        <FpButton icon="CHECK" style={{ background: "#27ae60" }} onClick={() => {
                             if (confirm(t("furpanel.admin.security_management.lost_found.confirm_delivery"))) markConsegnato(item);
-                        }}>{t("furpanel.admin.security_management.lost_found.mark_delivered")}</Button>
+                        }}>{t("furpanel.admin.security_management.lost_found.mark_delivered")}</FpButton>
                     </div>
                 )}
             </div>
@@ -311,8 +311,8 @@ export default function SecurityLostAndFoundPage() {
                     <span className="title medium">{t("furpanel.admin.security_management.lost_found.title")}</span>
                 </div>
                 <div className="spacer" />
-                {view === "list" && <Button icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.lost_found.add")}</Button>}
-                {view === "detail" && selected && <Button icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.lost_found.edit")}</Button>}
+                {view === "list" && <FpButton icon="ADD" onClick={openAdd}>{t("furpanel.admin.security_management.lost_found.add")}</FpButton>}
+                {view === "detail" && selected && <FpButton icon="EDIT" onClick={() => openEdit(selected)}>{t("furpanel.admin.security_management.lost_found.edit")}</FpButton>}
             </div>
             {loading && view === "list" && <LoadingPanel />}
             {!loading && view === "list" && renderList()}

@@ -1,7 +1,7 @@
 "use client";
 import Gallery from "@/components/gallery";
 import { useExplore } from "../_components/exploreProvider";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
 import EventCard from "../_components/eventCard";
@@ -35,7 +35,7 @@ export default function GalleryExploreEventPage() {
         <GalleryEvents />
         <GalleryBanner />
         {(!!currentFilter?.eventId || !!currentFilter?.photographerId) &&
-            <Gallery.Root getNextData={nextData} className="explore-gallery">
+            <Gallery.Root key={("" + currentFilter.eventId + currentFilter.photographerId)} getNextData={nextData} className="explore-gallery">
                 <Gallery.GridView refresh={refreshGallery}
                     getFullMedia={(id) => cache.get(id)}
                     onUpdatedMedias={(ids) => ids.forEach(id => cache.evict(id))} />

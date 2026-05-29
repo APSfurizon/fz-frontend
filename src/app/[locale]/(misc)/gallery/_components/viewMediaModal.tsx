@@ -276,7 +276,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
 
     const onShare = () => {
         if (!currentMediaId) return;
-        if (!shareMediaUrl(currentMediaId)) {
+        if (!shareMediaUrl()) {
             showModal(t("common.success"), t("misc.gallery.modal.share.copy_message"), "CONTENT_COPY", 501);
         }
     }
