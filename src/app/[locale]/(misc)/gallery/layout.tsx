@@ -39,11 +39,11 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     icon="CLOUD_UPLOAD">
                     {t('misc.gallery.upload.title')}
                 </ToolLink>}
-                {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
+                {/*hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
                     href="/gallery/admin"
                     icon="SECURITY">
                     {t('misc.gallery.admin.title')}
-                </ToolLink>}
+                </ToolLink>*/}
             </div>
             <span>
                 <div role="button" className="hamburger rounded-l" onClick={() => setToolListExpanded(!toolListExpanded)}>

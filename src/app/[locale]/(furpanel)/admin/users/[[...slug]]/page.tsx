@@ -6,9 +6,11 @@ import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admi
 import { ApiErrorResponse, runRequest } from "@/lib/api/global";
 import {
     AutoInputUsersManager,
+    GetUserByIdAction,
     UserSearchByMembershipNumberAction,
     UserSearchByOrderCodeAction,
-    UserSearchByOrderSerialAction
+    UserSearchByOrderSerialAction,
+    UserSearchByFursuitIdAction
 } from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -51,7 +53,9 @@ enum SearchCriteria {
     COMMON = "searchTypeCommon",
     ORDER_SERIAL = "searchTypeOrderSerial",
     ORDER_CODE = "searchTypeOrderCode",
-    MEMBERSHIP_CARD = "searchTypeMembershipCard"
+    MEMBERSHIP_CARD = "searchTypeMembershipCard",
+    USER_ID = "searchTypeUserId",
+    FURSUIT_ID = "searchTypeFursuitId"
 }
 
 type UserSearchConfig = {
@@ -95,6 +99,16 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
             label: t("furpanel.admin.users.accounts.view.input.search_type.membership_card"),
             value: SearchCriteria.MEMBERSHIP_CARD
         },
+        {
+            name: "searchType",
+            label: t("furpanel.admin.users.accounts.view.input.search_type.user_id"),
+            value: SearchCriteria.USER_ID
+        },
+        {
+            name: "searchType",
+            label: t("furpanel.admin.users.accounts.view.input.search_type.fursuit_id"),
+            value: SearchCriteria.FURSUIT_ID
+        }
     ], []);
 
     const searchConfig: UserSearchConfig = useMemo(() => {
@@ -122,6 +136,20 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                     manager: new AutoInputUsersManager(new UserSearchByMembershipNumberAction(),
                         UserSearchByMembershipNumberAction.getParams),
                     minDecodeSize: 7
+                };
+            case SearchCriteria.USER_ID:
+                return {
+                    manager: new AutoInputUsersManager(new GetUserByIdAction(),
+                        GetUserByIdAction.getParams),
+                    minDecodeSize: 1,
+                    type: "number"
+                };
+            case SearchCriteria.FURSUIT_ID:
+                return {
+                    manager: new AutoInputUsersManager(new UserSearchByFursuitIdAction(),
+                        UserSearchByFursuitIdAction.getParams),
+                    minDecodeSize: 1,
+                    type: "number"
                 };
         }
     }, [currentCriteria]);

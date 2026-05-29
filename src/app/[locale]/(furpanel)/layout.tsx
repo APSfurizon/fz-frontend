@@ -4,7 +4,7 @@ import Icon from "@/components/icon";
 import ToolLink from "@/components/toolLink";
 import {
     APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, ROOM_ENABLED,
-    TOKEN_STORAGE_NAME, UPLOAD_ENABLED, READ_CHANGELOG_STORAGE_NAME
+    TOKEN_STORAGE_NAME, READ_CHANGELOG_STORAGE_NAME
 } from '@/lib/constants';
 import { useModalUpdate } from '@/components/context/modalProvider';
 import Modal from '@/components/modal';
@@ -14,6 +14,10 @@ import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { shouldShowChangelog } from '@/lib/utils';
 import "@/styles/furpanel/layout.css";
+
+function normalizeRole(internalName?: string) {
+    return (internalName ?? "").toLowerCase().trim();
+}
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const t = useTranslations();
@@ -51,6 +55,9 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         setToolListExpanded(false);
     }
 
+    const roles = userDisplay?.roles ?? [];
+    const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
+
     return <>
         <div className="main-dialog rounded-s">
             <div className="horizontal-list gap-4mm">
@@ -78,17 +85,12 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         icon="BED">
                         {t('furpanel.room.title')}
                     </ToolLink>}
-                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick}
-                        href="/upload-area"
-                        icon="PHOTO_CAMERA">
-                        {t('furpanel.upload_area.title')}
-                    </ToolLink>}
                     <ToolLink onClick={toolClick}
                         href="/user"
                         icon="PERSON">
                         {t('furpanel.user.title')}
                     </ToolLink>
-                    {hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay) && <ToolLink onClick={toolClick}
+                    {canSeeAdminPages && <ToolLink onClick={toolClick}
                         href="/admin"
                         icon="SECURITY">
                         {t('furpanel.admin.title')}

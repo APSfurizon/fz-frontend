@@ -83,6 +83,10 @@ export default function UserViewFursuitsTable({
             id: "fursuitSpecies",
             header: t("furpanel.admin.users.accounts.view.fursuit_table.species")
         }),
+        fursuitColHelper.accessor('fursuit.id', {
+            id: "fursuitId",
+            header: t("furpanel.admin.users.accounts.view.fursuit_table.id")
+        }),
         fursuitColHelper.display({
             id: "actions",
             header: '',

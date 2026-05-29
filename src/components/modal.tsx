@@ -24,8 +24,8 @@ export const useModalContext: () => ModalUpdate = () => {
     return context;
 };
 
-export default function Modal({ children, className, icon, onClose, busy, open, overlayClassName, overlayStyle, showHeader = true, style, title, zIndex = 500 }: Readonly<{
-    children?: React.ReactNode, className?: string, icon?: MaterialIcon, onClose: (e?: MouseEvent) => void, busy?: boolean, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, showHeader?: boolean, style?: CSSProperties, title?: string, zIndex?: number;
+export default function Modal({ children, className, icon, onClose, busy, open, overlayClassName, overlayStyle, closeOnOverlayClick = false, showHeader = true, style, title, zIndex = 500 }: Readonly<{
+    children?: React.ReactNode, className?: string, icon?: MaterialIcon, onClose: (e?: MouseEvent) => void, busy?: boolean, open: boolean, overlayClassName?: string, overlayStyle?: CSSProperties, closeOnOverlayClick?: boolean, showHeader?: boolean, style?: CSSProperties, title?: string, zIndex?: number;
 }>) {
     const t = useTranslations("components");
     const [container, setContainer] = useState<HTMLElement>();
@@ -39,6 +39,7 @@ export default function Modal({ children, className, icon, onClose, busy, open, 
 
     return container ? ReactDOM.createPortal(<>
         <div className={`modal-overlay ${overlayClassName ?? ""} ${open ? "open" : ""}`}
+            onClick={(e) => closeOnOverlayClick && !definitiveLoading && onClose(e)}
             style={{ zIndex, ...overlayStyle }}></div>
         <div className={`modal-dialog rounded-s vertical-list ${className ?? ""} ${open ? "open" : ""}`}
             style={{ zIndex, ...style }}>

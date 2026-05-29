@@ -26,6 +26,12 @@ export class RemindFursuitBadgesApiAction extends ApiAction<any, ApiErrorRespons
     urlAction = "admin/mail-reminders/fursuit-badge-upload";
 }
 
+export class RemindFursuitBringToEventApiAction extends ApiAction<any, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "admin/mail-reminders/fursuit-bring-to-event";
+}
+
 export class RemindOrderLinkApiAction extends ApiAction<any, ApiErrorResponse> {
     authenticated = true;
     method = RequestType.GET;
@@ -36,4 +42,10 @@ export class RemindRoomsNotFullApiAction extends ApiAction<any, ApiErrorResponse
     authenticated = true;
     method = RequestType.GET;
     urlAction = "admin/mail-reminders/room-not-full";
+}
+
+export class SendMembershipCardByMailApiAction extends ApiAction<any, ApiErrorResponse> {
+    authenticated = true;
+    method = RequestType.GET;
+    urlAction = "admin/mail-reminders/send-membership-card";
 }

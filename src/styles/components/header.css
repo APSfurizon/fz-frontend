@@ -73,7 +73,9 @@ header {
     }
 }
 
-@media (max-width:1000px) {
+
+
+@media (max-width:1300px) {
     header span div.hamburger {
         display: block;
         max-width: fit-content;
