@@ -1,5 +1,5 @@
 import AutoInput from "@/components/input/autoInput";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
 import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomInviteFormAction, RoomRenameFormAction } from "@/lib/api/room";
@@ -19,7 +19,7 @@ export default function RenameRoomModal({
     roomInfo?: RoomInfoResponse
 }>) {
     const t = useTranslations();
-    const {reloadAll} = useUserViewContext();
+    const { reloadAll } = useUserViewContext();
 
     const onSuccess = () => {
         onClose();
@@ -46,11 +46,11 @@ export default function RenameRoomModal({
                 minLength={2}
                 maxLength={254} />
             <div className="horizontal-list gap-4mm">
-                <Button icon="CANCEL" onClick={onClose}>{t("common.cancel")}</Button>
+                <FpButton icon="CANCEL" onClick={onClose}>{t("common.cancel")}</FpButton>
                 <div className="spacer"></div>
-                <Button type="submit" icon="EDIT">
+                <FpButton type="submit" icon="EDIT">
                     {t("furpanel.admin.users.accounts.view.rooms_table.actions.rename.title")}
-                </Button>
+                </FpButton>
             </div>
         </DataForm>
     </Modal>

@@ -129,7 +129,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
     useTitle(title);
 
     return <div className="page">
-        {loading && <div className="vertical-list flex-vertical-center"><LoadingPanel /></div>}
+        {loading && <div className="vertical-list align-items-center"><LoadingPanel /></div>}
         {error && <ErrorMessage error={error} />}
 
         {/* Rendering sponsors */}
@@ -169,13 +169,13 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             {/* Hotel */}
             <div className="vertical-list gap-4mm">
                 {roomsData.hotels.map((hotel, hi) => <div key={hi} className="hotel-container">
-                    <p className="title medium horizontal-list gap-2mm flex-vertical-center">
+                    <p className="title medium horizontal-list gap-2mm align-items-center">
                         <Icon icon="LOCATION_CITY" />
                         {translate(hotel.displayName, locale)}
                     </p>
                     {/* Room type */}
                     {hotel.roomTypes.map((roomType, rti) => <div key={`rt${hi}-${rti}`} className="room-type">
-                        <p className="title average horizontal-list gap-2mm flex-vertical-center">
+                        <p className="title average horizontal-list gap-2mm align-items-center">
                             <Icon icon="BEDROOM_PARENT" />
                             {translate(roomType.roomData.roomTypeNames, locale)}
                         </p>
@@ -184,7 +184,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
                             {roomType.rooms.map((room, ri) => <div key={`ri-${hi}-${rti}-${ri}`}
                                 className="room-container">
                                 <div key={`rh${hi}-${rti}-${ri}`}
-                                    className="title large bold horizontal-list gap-2mm flex-vertical-center">
+                                    className="title large bold horizontal-list gap-2mm align-items-center">
                                     <Icon icon="BED" />
                                     <span>{room.roomName}</span>
                                     {room.roomExtraDays && room.roomExtraDays != ExtraDays.NONE && <StatusBox>
@@ -211,7 +211,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
             </div>
             {/* Rendering daily furs */}
             {Object.keys(roomsData.dailyFurs).length > 0 && <>
-                <p className="title average horizontal-list gap-2mm flex-vertical-center">
+                <p className="title average horizontal-list gap-2mm align-items-center">
                     <Icon icon="DATE_RANGE" />
                     {t("misc.nosecount.daily_furs")}
                 </p>

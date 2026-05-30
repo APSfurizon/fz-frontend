@@ -1,4 +1,4 @@
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
 import { EMPTY_ROOM_INFO, RoomDeleteAction, RoomEditData, RoomInfoResponse } from "@/lib/api/room";
 import { useTranslations } from "next-intl";
@@ -54,18 +54,18 @@ export default function DeleteRoomModal({
             })}
         </p>
         <div className="horizontal-list gap-4mm">
-            <Button icon="CANCEL"
+            <FpButton icon="CANCEL"
                 onClick={onClose}
                 busy={loading}>
                 {t("common.cancel")}
-            </Button>
+            </FpButton>
             <div className="spacer"></div>
-            <Button className="danger"
+            <FpButton className="danger"
                 icon="DELETE"
                 onClick={() => deleteRoom(roomInfo.currentRoomInfo.roomId)}
                 busy={loading}>
                 {t("furpanel.admin.users.accounts.view.rooms_table.actions.delete.title")}
-            </Button>
+            </FpButton>
         </div>
     </Modal>
 }

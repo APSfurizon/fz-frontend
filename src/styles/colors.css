@@ -30,8 +30,8 @@
   --button-success-bg-hover: linear-gradient(0deg, #8edd92 0%, #8fda89 100%);
   --button-success-bg-down: linear-gradient(0deg, #4ea243 0%, #398332 100%);
 
-  --button-border-normal: #FFFFFF4C;
-  --button-border-down: #FFFFFFCC;
+  --button-border-normal: #0000005e;
+  --button-border-down: #000000a0;
 
   /* Checkbox */
   --checkbox-bg-unchecked: none;

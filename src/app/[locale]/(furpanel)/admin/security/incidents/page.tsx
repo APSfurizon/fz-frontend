@@ -1,6 +1,6 @@
 'use client'
 import useTitle from "@/components/hooks/useTitle";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
@@ -376,8 +376,8 @@ export default function SecurityIncidentsPage() {
                 <span className="title small">{t("furpanel.admin.security_management.incidents.mark_important")}</span>
             </label>
             <div className="horizontal-list gap-2mm">
-                <Button onClick={() => { resetCreateForm(); setView("list"); }}>{t("furpanel.admin.security_management.incidents.cancel")}</Button>
-                <Button icon="SEND" busy={loading} onClick={saveIncident}>{t("furpanel.admin.security_management.incidents.send")}</Button>
+                <FpButton onClick={() => { resetCreateForm(); setView("list"); }}>{t("furpanel.admin.security_management.incidents.cancel")}</FpButton>
+                <FpButton icon="SEND" busy={loading} onClick={saveIncident}>{t("furpanel.admin.security_management.incidents.send")}</FpButton>
             </div>
         </div>
     );
@@ -479,7 +479,7 @@ export default function SecurityIncidentsPage() {
                                     style={{ minHeight: 100, padding: 12, borderRadius: 10, border: "1px solid #ffffff15", background: "#0e1621", color: "#fff", resize: "vertical", width: "100%" }}
                                 />
                                 <div className="horizontal-list gap-2mm" style={{ justifyContent: "flex-end" }}>
-                                    <Button icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>{t("furpanel.admin.security_management.incidents.send_message")}</Button>
+                                    <FpButton icon="SEND" busy={loading} disabled={!replyMessage.trim()} onClick={sendReply}>{t("furpanel.admin.security_management.incidents.send_message")}</FpButton>
                                 </div>
                             </div>
                         </div>
@@ -509,18 +509,18 @@ export default function SecurityIncidentsPage() {
                     <span className="title medium">{t("furpanel.admin.security_management.incidents.incident_log")}</span>
                 </div>
 
-                {view === "list" && <Button onClick={refreshList} busy={refreshing}>{t("furpanel.admin.security_management.incidents.refresh")}</Button>}
+                {view === "list" && <FpButton onClick={refreshList} busy={refreshing}>{t("furpanel.admin.security_management.incidents.refresh")}</FpButton>}
 
                 <div className="spacer" />
 
                 {view === "list" && (
                     <>
-                        {!showHistory && <Button icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>{t("furpanel.admin.security_management.incidents.add")}</Button>}
-                        <Button onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? t("furpanel.admin.security_management.incidents.reports") : t("furpanel.admin.security_management.incidents.history")}</Button>
+                        {!showHistory && <FpButton icon="ADD" onClick={() => { resetCreateForm(); setView("create"); }}>{t("furpanel.admin.security_management.incidents.add")}</FpButton>}
+                        <FpButton onClick={() => setShowHistory((prev) => !prev)}>{showHistory ? t("furpanel.admin.security_management.incidents.reports") : t("furpanel.admin.security_management.incidents.history")}</FpButton>
                     </>
                 )}
 
-                {view === "detail" && selected && <Button icon="EDIT" onClick={openEditMeta}>{t("furpanel.admin.security_management.incidents.edit")}</Button>}
+                {view === "detail" && selected && <FpButton icon="EDIT" onClick={openEditMeta}>{t("furpanel.admin.security_management.incidents.edit")}</FpButton>}
             </div>
 
             {loading && view === "list" && <LoadingPanel />}
@@ -571,8 +571,8 @@ export default function SecurityIncidentsPage() {
                         <span className="title small">{t("furpanel.admin.security_management.incidents.archive_report")}</span>
                     </label>
                     <div className="horizontal-list gap-2mm" style={{ marginTop: "0.5em" }}>
-                        <Button onClick={() => setDetailsModalOpen(false)}>{t("furpanel.admin.security_management.incidents.cancel")}</Button>
-                        <Button icon="CHECK" busy={loading} onClick={saveMeta}>{t("furpanel.admin.security_management.incidents.update")}</Button>
+                        <FpButton onClick={() => setDetailsModalOpen(false)}>{t("furpanel.admin.security_management.incidents.cancel")}</FpButton>
+                        <FpButton icon="CHECK" busy={loading} onClick={saveMeta}>{t("furpanel.admin.security_management.incidents.update")}</FpButton>
                     </div>
                 </div>
             </Modal>

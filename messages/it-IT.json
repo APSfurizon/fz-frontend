@@ -26,7 +26,8 @@
         }
       },
       "app_badge": "Scarica ora l'app ufficiale!",
-      "alt_app_badge": "Bottone per scaricare l'applicazione mobile"
+      "alt_app_badge": "Bottone per scaricare l'applicazione mobile",
+      "gallery": "Galleria"
     },
     "reload": "Ricarica",
     "loading": "Caricamento...",
@@ -103,7 +104,10 @@
         "others": "altri"
       }
     },
-    "success": "Successo"
+    "success": "Successo",
+    "help": "Aiuto",
+    "open": "Apri",
+    "close": "Chiudi"
   },
   "components": {
     "autoinput": {
@@ -151,6 +155,24 @@
     "common": {
       "CRUD": {
         "reset": "Ripristina"
+      }
+    },
+    "gallery": {
+      "grid": {
+        "end_label": "Messaggio di fondo galleria",
+        "end_message": "Hai raggiunto il fondo della galleria",
+        "toolbar": {
+          "deselect_all": "Deseleziona tutto",
+          "select_medias": "Seleziona",
+          "download": "Scarica"
+        }
+      },
+      "media": {
+        "status": {
+          "approved": "Approvata",
+          "pending": "Valutazione in attesa",
+          "rejected": "Rifiutato"
+        }
       }
     }
   },
@@ -474,9 +496,6 @@
         "available_types": "Stanze disponibili",
         "description": "Queste sono le stanze disponibili che puoi ottenere, una volta confermata la stanza."
       }
-    },
-    "upload_area": {
-      "title": "Upload"
     },
     "user": {
       "title": "Utente",
@@ -1352,6 +1371,106 @@
       "total_count": "{count, plural, =1 {UN ospite} other {# ospiti}}",
       "input": {
         "select_event": "Seleziona evento"
+      }
+    },
+    "gallery": {
+      "explore": {
+        "title": "Esplora",
+        "advanced": {
+          "event": {
+            "label": "Evento"
+          },
+          "photographer": {
+            "label": "Fotografo",
+            "list": {
+              "official": "Fotografo ufficiale"
+            }
+          },
+          "title": "Filtri",
+          "status": {
+            "label": "Stato"
+          }
+        },
+        "events": {
+          "card": {
+            "photo_count": "{count, plural, =1 {Un elemento} other {# elementi}}"
+          }
+        },
+        "header": {
+          "title": "Esplora la galleria"
+        }
+      },
+      "upload": {
+        "title": "Carica",
+        "form": {
+          "copyright": {
+            "label": "Licenza di distribuzione",
+            "placeholder": "Seleziona una licenza",
+            "help": {
+              "text": "<a>Cosa è questo?</a>",
+              "modal": {
+                "title": "Cosa è la licenza di distribuzione?",
+                "source": "Visita il sito di Creative commons",
+                "text": "Le licenze Creative Commons offrono un metodo standardizzato, pseudo-legale, per i creatori di lavori che vogliono garantire permessi agli usufruitori, senza dover negoziare permessi individuali. Queste licenze si offrono come punto intermedio tra \"Tutti i diritti riservati\" e \"pubblico dominio\"."
+              }
+            }
+          },
+          "event": {
+            "label": "Evento",
+            "placeholder": "Seleziona un evento"
+          },
+          "picker": {
+            "hint": "Trascina foto e video qui, oppure <f>seleziona file</f>"
+          }
+        },
+        "grid": {
+          "title": "I tuoi contenuti multimediali"
+        },
+        "queue": {
+          "title": "Caricamento..."
+        },
+        "limits": {
+          "max_number_per_event": "Puoi caricare fino a {count, plural, =1 {un elemento} other {# elementi}} per evento.",
+          "no_limit_per_event": "Non hai limiti di caricamenti per evento.",
+          "size_limit": "Puoi caricare file fino a {size}.",
+          "no_size_limit": "Non hai limiti sulle dimensioni."
+        }
+      },
+      "admin": {
+        "title": "Amministrazione"
+      },
+      "media": {
+        "status": {}
+      },
+      "modal": {
+        "title": "Visualizza immagine",
+        "information_panel": {
+          "title": "Informazioni",
+          "photo": {
+            "title": "Foto"
+          },
+          "video": {
+            "title": "Video",
+            "duration": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}, {milliseconds} millisecondi"
+          }
+        },
+        "share": {
+          "copy_message": "Link copiato con successo"
+        },
+        "actions": {
+          "share": "Condividi",
+          "admin": {
+            "approve": "Approva",
+            "reject": "Rifiuta",
+            "select": "Imposta banner evento",
+            "selected": "Banner attuale evento",
+            "unselect": "Rimuovi banner evento"
+          },
+          "download": "Scarica",
+          "delete": {
+            "message": "Vuoi eliminare questo media?"
+          }
+        }
       }
     },
     "schedule": {

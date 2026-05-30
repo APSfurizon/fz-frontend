@@ -1,6 +1,6 @@
 'use client'
 import useTitle from "@/components/hooks/useTitle";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +13,7 @@ export default function SecurityDocumentsPage() {
     return (
         <div className="stretch-page compact-main">
             <div style={{ marginBottom: 8 }}>
-                <Button icon="ARROW_BACK" onClick={() => router.push(`/${locale}/admin`)}>Indietro</Button>
+                <FpButton icon="ARROW_BACK" onClick={() => router.push(`/${locale}/admin`)}>Indietro</FpButton>
             </div>
             {/* TODO: Documents */}
         </div>

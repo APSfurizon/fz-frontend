@@ -250,9 +250,9 @@ export class AutoInputRolesManager implements AutoInputManager {
     toSearchResult(data: RoleBaseData) {
         const toReturn = new AutoInputSearchResult();
         toReturn.id = data.roleId;
-        toReturn.code = data.internalName;
+        toReturn.code = data.internalName ?? undefined;
         toReturn.icon = "GROUPS";
-        toReturn.description = data.displayName;
+        toReturn.description = data.displayName ?? undefined;
         return toReturn;
     }
 }

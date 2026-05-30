@@ -55,7 +55,9 @@ export async function proxy(req: NextRequest) {
 
   if (tokenResult.status == TokenVerification.SUCCESS) {
     if (tokenResult.language) {
-      intlMiddlewareResult.cookies.set("NEXT_LOCALE", tokenResult.language, intlMiddlewareResult.cookies.get("NEXT_LOCALE"));
+      intlMiddlewareResult.cookies.set("NEXT_LOCALE",
+        tokenResult.language,
+        intlMiddlewareResult.cookies.get("NEXT_LOCALE"));
     }
     if (shouldSkipIfAuthenticated) {
       return redirectToUrl(params.get("continue") ?? "/home", req);

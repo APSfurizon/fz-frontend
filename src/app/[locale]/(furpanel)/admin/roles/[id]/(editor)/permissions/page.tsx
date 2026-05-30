@@ -2,7 +2,7 @@
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import { AutoInputPermissionsManager, RoleData } from "@/lib/api/admin/role";
 import { useTranslations } from "next-intl";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import { useState } from "react";
 import Modal from "@/components/modal";
 import AutoInput from "@/components/input/autoInput";
@@ -43,18 +43,18 @@ export default function RolePermissionsEditor() {
     return <>
         <div className="horizontal-list gap-2mm">
             <div className="spacer"></div>
-            <Button icon="ADD" onClick={() => { setAddPermissionOpen(true) }}>{t("common.CRUD.add")}</Button>
+            <FpButton icon="ADD" onClick={() => { setAddPermissionOpen(true) }}>{t("common.CRUD.add")}</FpButton>
         </div>
         {/* Permissions table */}
         <div className="table-container rounded-m">
             <div className="table rounded-m">
-                {entity?.enabledPermissions?.map((permission, pi) => <div key={pi} className="row horizontal-list flex-vertical-center gap-2mm flex-wrap">
+                {entity?.enabledPermissions?.map((permission, pi) => <div key={pi} className="row horizontal-list align-items-center gap-2mm flex-wrap">
                     <div className="data">
                         <span className="title average">{permission}</span>
                     </div>
                     <div className="spacer"></div>
                     <div className="data">
-                        <Button icon="DELETE" onClick={() => removePermission(permission)}></Button>
+                        <FpButton icon="DELETE" onClick={() => removePermission(permission)}></FpButton>
                     </div>
                 </div>)}
             </div>
@@ -68,13 +68,13 @@ export default function RolePermissionsEditor() {
                 </AutoInput>
             </DataForm>
             <div className="horizontal-list gap-4mm">
-                <Button type="button" className="danger" icon="CANCEL"
-                    onClick={() => setAddPermissionOpen(false)}>{t("common.cancel")}</Button>
+                <FpButton type="button" className="danger" icon="CANCEL"
+                    onClick={() => setAddPermissionOpen(false)}>{t("common.cancel")}</FpButton>
                 <div className="spacer"></div>
-                <Button type="submit" className="success" icon="CHECK"
+                <FpButton type="submit" className="success" icon="CHECK"
                     onClick={() => addPermission()} disabled={!!!selectedPermissionTemp}>
                     {t("common.confirm")}
-                </Button>
+                </FpButton>
             </div>
         </Modal>
     </>

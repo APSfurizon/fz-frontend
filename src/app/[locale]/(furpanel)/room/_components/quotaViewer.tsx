@@ -1,5 +1,5 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import {
@@ -39,18 +39,18 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: R
     }, [roomsData, isOpen]);
 
     return <>
-        <div className="horizontal-list gap-4mm flex-vertical-center">
+        <div className="horizontal-list gap-4mm align-items-center">
             <NoticeBox theme={NoticeTheme.FAQ}>
                 {t("furpanel.room.quota_viewer.description")}
             </NoticeBox>
             <div className="spacer"></div>
             <div>
-                <Button icon="REFRESH"
+                <FpButton icon="REFRESH"
                     onClick={() => setRoomsData(null)}
                     debounce={3000}
                     busy={modalLoading}>
                     {t("common.reload")}
-                </Button>
+                </FpButton>
             </div>
 
         </div>
@@ -58,7 +58,7 @@ export default function QuotaViewer({ isOpen, modalLoading, setModalLoading }: R
             <ul className="vertical-list gap-4mm">
                 {roomsData?.rooms?.map((roomInfo, index) =>
                     <li key={index}>
-                        <a className="room-type-container horizontal-list gap-2mm flex-vertical-center rounded-m">
+                        <a className="room-type-container horizontal-list gap-2mm align-items-center rounded-m">
                             <div className="vertical-list">
                                 <span className="title">{translate(roomInfo.data.roomTypeNames, locale)}</span>
                                 <span className="descriptive color-subtitle">

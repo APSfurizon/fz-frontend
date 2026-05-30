@@ -15,7 +15,7 @@ export default function FpSection({
     style?: CSSProperties
 }>) {
     return <div style={{ ...style }} className="vertical-list gap-2mm">
-        <div className="horizontal-list section-title gap-2mm flex-vertical-center">
+        <div className="horizontal-list section-title gap-2mm align-items-center">
             {icon && <Icon className="large" icon={icon} />}
             <span style={{ ...titleStyle }} className="title average">{title}</span>
         </div>

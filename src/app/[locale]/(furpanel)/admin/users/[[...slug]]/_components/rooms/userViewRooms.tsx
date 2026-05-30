@@ -7,7 +7,7 @@ import { ConventionEvent } from "@/lib/api/counts";
 import { useLocale, useTranslations } from "next-intl";
 import { translate } from "@/lib/translations";
 import FpTable from "@/components/table/fpTable";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import RemoveGuestModal from "./removeGuestModal";
 import AddGuestModal from "./addGuestModal";
 import RenameRoomModal from "./renameRoomModal";
@@ -93,19 +93,19 @@ export default function UserViewRooms({
                 !events[props.row.original.currentRoomInfo.eventId].current
                     ? undefined
                     : <div className="horizontal-list flex-wrap gap-2mm">
-                        <Button icon="PERSON_ADD"
+                        <FpButton icon="PERSON_ADD"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
                             onClick={() => promptAddGuest(props.row.original)}
                             disabled={roomInfo(props).guests.length >= roomInfo(props).roomData.roomCapacity} />
-                        <Button icon="PERSON_REMOVE"
+                        <FpButton icon="PERSON_REMOVE"
                             className="danger"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
                             onClick={() => promptRemoveGuest(props.row.original)}
                             disabled={roomInfo(props).guests.length == 0} />
-                        <Button icon="EDIT"
+                        <FpButton icon="EDIT"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.rename.title")}
                             onClick={() => promptRename(props.row.original)} />
-                        <Button icon="DELETE"
+                        <FpButton icon="DELETE"
                             className="danger"
                             title={t("furpanel.admin.users.accounts.view.rooms_table.actions.delete.title")}
                             onClick={() => promptDelete(props.row.original)} />

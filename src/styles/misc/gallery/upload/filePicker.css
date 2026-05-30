@@ -1,0 +1,56 @@
+:root {
+    --file-picker-background: #49aee93b;
+}
+
+@keyframes bouncy {
+    0% {
+        transform: translateY(0) scaleY(1);
+    }
+
+    20% {
+        transform: translateY(2px) scaleY(0.9);
+    }
+
+    50% {
+        transform: translateY(-.25em) scaleY(1.1);
+    }
+
+    100% {
+        transform: translateY(0) scaleY(1);
+    }
+}
+
+.gallery-file-picker {
+    padding: .5em;
+    outline: 1px solid var(--button-border-normal);
+    background: var(--file-picker-background);
+    transition-property: background;
+    transition-duration: 100ms;
+
+    &.hover {
+        outline-style: dashed;
+        outline-width: 3px;
+        background: color-mix(var(--file-picker-background), #afafaf);
+        background-blend-mode: multiply;
+
+        @media (prefers-reduced-motion: no-preference) {
+            i.icon {
+                animation: bouncy 0.5s infinite ease-in-out 0ms;
+            }
+        }
+    }
+
+    .prompt {
+        width: fit-content;
+        height: 6em;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 800px) {}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --file-picker-background: #53287e3b;
+    }
+}

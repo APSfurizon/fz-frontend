@@ -4,16 +4,16 @@ import Icon from "@/components/icon";
 import ToolLink from "@/components/toolLink";
 import {
     APP_GIT_PROJECT_RELEASE, APP_VERSION, BADGE_ENABLED, BOOKING_ENABLED, DEBUG_ENABLED, ROOM_ENABLED,
-    TOKEN_STORAGE_NAME, UPLOAD_ENABLED, READ_CHANGELOG_STORAGE_NAME
+    TOKEN_STORAGE_NAME, READ_CHANGELOG_STORAGE_NAME
 } from '@/lib/constants';
 import { useModalUpdate } from '@/components/context/modalProvider';
 import Modal from '@/components/modal';
 import { useEffect, useState } from 'react';
-import "@/styles/furpanel/layout.css";
 import { useUser } from '@/components/context/userProvider';
 import { hasPermission, Permissions } from '@/lib/api/permission';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { shouldShowChangelog } from '@/lib/utils';
+import "@/styles/furpanel/layout.css";
 
 function normalizeRole(internalName?: string) {
     return (internalName ?? "").toLowerCase().trim();
@@ -85,11 +85,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         icon="BED">
                         {t('furpanel.room.title')}
                     </ToolLink>}
-                    {UPLOAD_ENABLED && <ToolLink onClick={toolClick}
-                        href="/upload-area"
-                        icon="PHOTO_CAMERA">
-                        {t('furpanel.upload_area.title')}
-                    </ToolLink>}
                     <ToolLink onClick={toolClick}
                         href="/user"
                         icon="PERSON">
@@ -111,7 +106,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     </div>
                 </span>
             </div>
-
             {children}
         </div>
         <Modal icon={icon} title={title} open={isOpen} onClose={hideModal} zIndex={600}>{modalChildren}</Modal>

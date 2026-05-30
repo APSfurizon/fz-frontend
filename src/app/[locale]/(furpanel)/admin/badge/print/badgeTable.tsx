@@ -1,6 +1,6 @@
 "use client"
 import Icon, { MaterialIcon } from "@/components/icon";
-import Button from "@/components/input/button";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import FpTable from "@/components/table/fpTable";
 import {
@@ -69,7 +69,7 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
     }
 
     return (<div className="vertical-list gap-2mm">
-        <div className="horizontal-list flex-vertical-center">
+        <div className="horizontal-list align-items-center">
             <Icon icon={icon} />
             <span className="title small">{title}</span>
         </div>
@@ -86,12 +86,12 @@ export default function BadgeTable<T extends FursuitBadge | RegularBadge,
                 onChange={e => setBadgeSearchQuery({ orderQuery: e.target.value })}
                 initialValue={badgeSearchQuery?.orderQuery}
                 disabled={badgeLoading} />
-            <Button busy={badgeLoading}
+            <FpButton busy={badgeLoading}
                 className="margin-bottom-1mm"
                 icon="SEARCH"
                 onClick={searchBadges}>
                 {t("furpanel.admin.events.badges.print.advanced_mode.Search")}
-            </Button>
+            </FpButton>
         </div>
         <span className="descriptive tiny color-subtitle">
             {t("furpanel.admin.events.badges.print.advanced_mode.search.help")}
