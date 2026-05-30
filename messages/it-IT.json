@@ -1024,7 +1024,13 @@
           "add": "Nuovo oggetto smarrito",
           "edit": "Modifica",
           "missing_data_title": "Dati mancanti",
-          "missing_data_description": "Inserisci almeno la descrizione o il luogo"
+          "missing_data_description": "Inserisci almeno la descrizione o il luogo",
+          "delivered_by_label": "Consegnato da",
+          "delivered_by_placeholder": "Nome di chi consegna l'oggetto",
+          "delivered_to_label": "Consegnato a",
+          "delivered_to_placeholder": "Nome di chi riceve l'oggetto",
+          "delivered_to_required": "Il campo \"Consegnato a\" e' obbligatorio se il proprietario non e' indicato.",
+          "delivered_to_owner_help": "Compilato automaticamente con il nome del proprietario dichiarato."
         },
         "incidents": {
           "incident_log": "Registro incidenti",

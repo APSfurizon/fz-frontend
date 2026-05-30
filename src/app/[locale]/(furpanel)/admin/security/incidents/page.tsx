@@ -336,12 +336,12 @@ export default function SecurityIncidentsPage() {
                         t("furpanel.admin.security_management.incidents.no_active_reports"),
                         regularReports
                     )}
-                    {renderReportGroup(
+                    {/* {renderReportGroup(
                         `${t("furpanel.admin.security_management.incidents.suspended_reports")} (${disabledReports.length})`,
                         t("furpanel.admin.security_management.incidents.no_suspended_reports"),
                         disabledReports,
                         true
-                    )}
+                    )} */}
                 </>
             )}
         </div>
@@ -362,13 +362,13 @@ export default function SecurityIncidentsPage() {
                 />
             </div>
             <div className="vertical-list gap-2mm">
-                <span className="title small">{t("furpanel.admin.security_management.incidents.photo")}</span>
                 <Upload
                     setBlob={setNewImage}
                     requireCrop
                     cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.incidents.photo")}
                     cropTitle={t("furpanel.admin.security_management.incidents.photo_preview")}
+                    maxOutputSizeKB={500}
                 />
             </div>
             <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content" }}>
@@ -468,6 +468,7 @@ export default function SecurityIncidentsPage() {
                                 cropAspectRatio="any"
                                 label={t("furpanel.admin.security_management.incidents.photo")}
                                 cropTitle={t("furpanel.admin.security_management.incidents.photo_preview")}
+                                maxOutputSizeKB={500}
                             />
                             <div className="vertical-list gap-2mm" style={{ flex: 1 }}>
                                 <span className="title small color-subtitle">{t("furpanel.admin.security_management.incidents.add_message")}</span>
@@ -547,7 +548,7 @@ export default function SecurityIncidentsPage() {
                         }} />
                         <span className="title small">{t("furpanel.admin.security_management.incidents.mark_important")}</span>
                     </label>
-                    <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content", marginTop: "0.2em" }}>
+                    {/* <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content", marginTop: "0.2em" }}>
                         <input type="checkbox" checked={detailSuspend} onChange={(e) => {
                             const checked = e.target.checked;
                             setDetailSuspend(checked);
@@ -557,7 +558,7 @@ export default function SecurityIncidentsPage() {
                             }
                         }} />
                         <span className="title small">{t("furpanel.admin.security_management.incidents.suspend_report")}</span>
-                    </label>
+                    </label> */}
                     <label className="horizontal-list gap-2mm flex-vertical-center" style={{ width: "fit-content", marginTop: "0.2em" }}>
                         <input type="checkbox" checked={detailHistory} onChange={(e) => {
                             const checked = e.target.checked;

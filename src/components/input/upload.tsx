@@ -30,6 +30,7 @@ export default function Upload({
     requireCrop = false,
     viewSize = 96,
     cropAspectRatio = "square",
+    maxOutputSizeKB,
     setBlob,
     onDelete
 }: Readonly<{
@@ -45,6 +46,7 @@ export default function Upload({
     readonly?: boolean,
     viewSize?: number,
     cropAspectRatio?: "any" | "square",
+    maxOutputSizeKB?: number,
     setBlob?: (blob?: Blob) => any,
     onDelete?: (mediaId: number) => any
 }>) {
@@ -138,7 +140,7 @@ export default function Upload({
         cropPromise.then((imageBlob) => {
             const isProfile = cropAspectRatio === 'square';
             scaleBlob(imageBlob, isProfile ? PROFILE_UPLOAD_MAX_SIZE : FULL_UPLOAD_MAX_WIDTH,
-                isProfile ? PROFILE_UPLOAD_MAX_SIZE : FULL_UPLOAD_MAX_HEIGHT)
+                isProfile ? PROFILE_UPLOAD_MAX_SIZE : FULL_UPLOAD_MAX_HEIGHT, maxOutputSizeKB)
                 .then((scaledBlob) => {
                     if (previewUrl) URL.revokeObjectURL(previewUrl);
                     setPreviewUrl(URL.createObjectURL(scaledBlob));

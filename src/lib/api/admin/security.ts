@@ -118,6 +118,8 @@ export interface SecurityLostItem {
     ricognizione?: string;
     status: "smarrito" | "consegnato";
     immagini?: { url: string }[];
+    consegnato_da?: string;
+    consegnato_a?: string;
 }
 
 export interface SecurityLostItemsResponse extends ApiResponse {
