@@ -74,7 +74,7 @@ export function mapScheduleActivityToEvent(
     activity: ScheduleActivityApiItem,
     locale: string,
 ): ScheduleEvent | null {
-    if (activity.visibile === false && activity.cancellato !== true) {
+    if (activity.visibile === false) {
         return null;
     }
 
