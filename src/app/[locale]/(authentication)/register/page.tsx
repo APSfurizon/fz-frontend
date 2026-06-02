@@ -307,7 +307,7 @@ export default function Register() {
       <div className="form-pair horizontal-list gap-4mm">
         {/* Telegram username */}
         <FpInput fieldName="telegramUsername" required inputType="text"
-          pattern={/^@?[a-z0-9_]{5,32}$/i}
+          pattern={/^@?[a-zA-Z0-9_]{5,32}$/i}
           label={t("register.form.telegram_username.label")}
           placeholder={t("register.form.telegram_username.placeholder")}
           helpText={t("register.form.telegram_username.help")} />
