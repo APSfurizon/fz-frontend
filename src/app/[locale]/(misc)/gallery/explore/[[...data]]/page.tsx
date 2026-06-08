@@ -29,7 +29,6 @@ export default function GalleryExploreEventPage() {
                 iconClass="large"
                 title={t("misc.gallery.explore.advanced.title")}
                 onClick={() => setShowFilters(prev => !prev)} />
-
         </div>
         <ExploreFilter />
         <GalleryEvents />
