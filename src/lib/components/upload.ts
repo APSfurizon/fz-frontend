@@ -33,7 +33,21 @@ export function scaleBlob(b: Blob, maxWidth: number, maxHeight: number): Promise
         } else {
             const toReturn = await mediaUtil.imageToBlob(imageToReturn, true);
             resolve(toReturn);
+            return;
         }
+        // Iterative JPEG quality reduction until blob is under the target size
+        const canvas = new OffscreenCanvas(imageToReturn.width, imageToReturn.height);
+        const ctx = canvas.getContext("bitmaprenderer");
+        ctx?.transferFromImageBitmap(imageToReturn);
+        const maxBytes = maxOutputSizeKB * 1024;
+        let quality = 0.92;
+        let result: Blob | null = null;
+        while (quality > 0.05) {
+            result = await canvas.convertToBlob({ type: "image/jpeg", quality });
+            if (result.size <= maxBytes) break;
+            quality = parseFloat((quality - 0.05).toFixed(2));
+        }
+        resolve(result ?? await canvas.convertToBlob({ type: "image/jpeg", quality: 0.05 }));
     })
 }
 

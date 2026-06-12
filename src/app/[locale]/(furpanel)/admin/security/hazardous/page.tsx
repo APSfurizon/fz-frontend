@@ -213,13 +213,13 @@ export default function SecurityHazardousRegisterPage() {
             <FpInput required label={t("furpanel.admin.security_management.hazard.owner_nickname")} initialValue={fProprietarioNick} onChange={(e) => setFProprietarioNick(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_nickname_placeholder")} />
             <FpInput required label={t("furpanel.admin.security_management.hazard.owner_id")} initialValue={fProprietarioId} onChange={(e) => setFProprietarioId(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.hazard.owner_id_placeholder")} />
             <div className="vertical-list gap-2mm">
-                <span className="title small">{t("furpanel.admin.security_management.hazard.photo")}</span>
                 <Upload
                     setBlob={setFFormImage}
                     requireCrop
                     cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.hazard.photo")}
                     cropTitle={t("furpanel.admin.security_management.hazard.title")}
+                    maxOutputSizeKB={500}
                 />
             </div>
             <div style={{ marginTop: 6 }}>

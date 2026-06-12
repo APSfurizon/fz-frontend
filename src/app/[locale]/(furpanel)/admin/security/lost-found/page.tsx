@@ -14,10 +14,12 @@ import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
+import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
+import { UserDisplayAction } from "@/lib/api/user";
 import "@/styles/furpanel/admin/security-pages.css";
 
 const SECURITY_IMAGE_THUMB_SIZE = 108;
@@ -44,6 +46,10 @@ export default function SecurityLostAndFoundPage() {
     const [searchText, setSearchText] = useState("");
     const [view, setView] = useState<"list" | "form" | "detail">("list");
     const [selected, setSelected] = useState<SecurityLostItem | null>(null);
+    const [deliveryModalItem, setDeliveryModalItem] = useState<SecurityLostItem | null>(null);
+    const [deliveryModalBy, setDeliveryModalBy] = useState("");
+    const [deliveryModalTo, setDeliveryModalTo] = useState("");
+    const [deliveryModalError, setDeliveryModalError] = useState("");
     const [isEdit, setIsEdit] = useState(false);
     const initialLoadDone = useRef(false);
 
@@ -54,6 +60,9 @@ export default function SecurityLostAndFoundPage() {
     const [fProprietario, setFProprietario] = useState("");
     const [fStatus, setFStatus] = useState<"smarrito" | "consegnato">("smarrito");
     const [fFormImage, setFFormImage] = useState<Blob | undefined>(undefined);
+    const [currentUserName, setCurrentUserName] = useState("");
+    const [fConsegnatoDa, setFConsegnatoDa] = useState("");
+    const [fConsegnatoA, setFConsegnatoA] = useState("");
 
     const loadItems = () => {
         setLoading(true);
@@ -79,14 +88,15 @@ export default function SecurityLostAndFoundPage() {
     });
 
     const resetForm = () => {
-        setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFProprietario(""); setFStatus("smarrito"); setFFormImage(undefined);
+        setFLuogo(""); setFDescrizione(""); setFFoundBy(""); setFConsegnatoDa(""); setFConsegnatoA(""); setFStatus("smarrito"); setFFormImage(undefined); setFProprietario("");
     };
 
     const openAdd = () => { resetForm(); setIsEdit(false); setView("form"); };
     const openEdit = (item: SecurityLostItem) => {
         setFLuogo(item.luogo_ritrovo ?? ""); setFDescrizione(item.descrizione ?? "");
-        setFFoundBy(item.found_by ?? ""); setFProprietario(item.proprietario ?? "");
+        setFFoundBy(item.found_by ?? ""); setFConsegnatoDa(item.consegnato_da ?? ""); setFConsegnatoA(item.consegnato_a ?? "");
         setFStatus(item.status); setSelected(item); setIsEdit(true); setView("form");
+        setFProprietario(item.proprietario ?? "");
     };
 
     const saveItem = () => {
@@ -99,7 +109,10 @@ export default function SecurityLostAndFoundPage() {
         body.append("descrizione", fDescrizione.trim());
         body.append("found_by", fFoundBy.trim());
         body.append("proprietario", fProprietario.trim());
+        body.append("consegnato_da", fConsegnatoDa.trim());
+        body.append("consegnato_a", fConsegnatoA.trim());
         body.append("status", fStatus);
+        body.append("ricognizione", currentUserName);
         if (fFormImage) body.append("immagini", fFormImage);
         if (isEdit && selected) {
             body.append("itemId", String(selected.data));
@@ -114,23 +127,68 @@ export default function SecurityLostAndFoundPage() {
             .finally(() => setLoading(false));
     };
 
-    const markConsegnato = (item: SecurityLostItem) => {
+    const markConsegnato = (item: SecurityLostItem, deliveredBy: string, deliveredTo: string) => {
         const body = new FormData();
         body.append("itemId", String(item.data));
         if (item.fileName) body.append("fileName", item.fileName);
         if (item.updateId) body.append("expectedUpdateId", String(item.updateId));
         body.append("status", "consegnato");
+        body.append("consegnato_da", deliveredBy);
+        body.append("consegnato_a", deliveredTo);
         setLoading(true);
         runRequest({ action: new UpdateSecurityLostItemApiAction(), body })
-            .then(() => { loadItems(); setView("list"); })
+            .then(() => {
+                setDeliveryModalError("");
+                setDeliveryModalItem(null);
+                loadItems();
+                setView("list");
+            })
             .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
             .finally(() => setLoading(false));
+    };
+
+    const promptMarkConsegnato = (item: SecurityLostItem) => {
+        setDeliveryModalBy(item.consegnato_da?.trim() || "");
+        setDeliveryModalTo(item.consegnato_a?.trim() || "");
+        setDeliveryModalError("");
+        setDeliveryModalItem(item);
+    };
+
+    const closeDeliveryModal = () => {
+        setDeliveryModalError("");
+        setDeliveryModalItem(null);
+    };
+
+    const submitDeliveryModal = () => {
+        if (!deliveryModalItem) return;
+        const deliveredByFallback = currentUserName.trim();
+        const deliveredToFallback = deliveryModalItem.proprietario?.trim() || "";
+        const normalizedDeliveredBy = deliveryModalBy.trim() || deliveredByFallback;
+        const normalizedDeliveredTo = deliveryModalTo.trim() || deliveredToFallback;
+        const requiresDeliveredTo = !deliveredToFallback;
+
+        if (requiresDeliveredTo && !normalizedDeliveredTo) {
+            setDeliveryModalError(t("furpanel.admin.security_management.lost_found.delivered_to_required"));
+            return;
+        }
+
+        setDeliveryModalError("");
+        markConsegnato(deliveryModalItem, normalizedDeliveredBy, normalizedDeliveredTo);
     };
 
     const formatDateTime = (value?: number) => {
         if (!value) return undefined;
         return new Date(value).toLocaleString();
     };
+    const loadCurrentUser = () => {
+        runRequest({ action: new UserDisplayAction() })
+            .then((response) => setCurrentUserName(response.display?.fursonaName ?? ""))
+            .catch(() => setCurrentUserName(""));
+    };
+
+    useEffect(() => {
+        loadCurrentUser();
+    }, []);
 
     const renderList = () => (
         <div className="vertical-list gap-2mm">
@@ -167,7 +225,7 @@ export default function SecurityLostAndFoundPage() {
                             {item.found_by && <span className="title small color-subtitle" style={{ display: "block" }}><Icon icon="PERSON" className="medium" />  {item.found_by}</span>}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", justifyContent: "flex-start", flexShrink: 0, minWidth: SECURITY_LIST_MEDIA_SLOT_WIDTH }}>
-                            <span className="title small color-subtitle" style={{ opacity: 0.7 }}>{item.data ? new Date(item.data).toLocaleDateString() : ""}</span>
+                            <span className="title small color-subtitle" style={{ opacity: 0.7 }}>{item.data ? new Date(item.data).toLocaleString() : ""}</span>
                             <div style={{ display: "flex", flexDirection: "row", gap: 6, alignItems: "center", justifyContent: "flex-end" }}>
                                 {(item.immagini?.length ?? 0) > 1 && (
                                     <span style={{ background: SECURITY_ACCENT_COLOR, color: SECURITY_ACCENT_TEXT, padding: "3px 8px", borderRadius: 8, fontSize: 12 }}>🖼 {item.immagini!.length}</span>
@@ -199,14 +257,16 @@ export default function SecurityLostAndFoundPage() {
             <FpInput required label={t("furpanel.admin.security_management.lost_found.description_label")} initialValue={fDescrizione} onChange={(e) => setFDescrizione(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.description_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.lost_found.found_by_label")} initialValue={fFoundBy} onChange={(e) => setFFoundBy(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.found_by_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.lost_found.owner_label")} initialValue={fProprietario} onChange={(e) => setFProprietario(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.owner_placeholder")} />
+            <FpInput label={t("furpanel.admin.security_management.lost_found.delivered_by_label")} initialValue={fConsegnatoDa} onChange={(e) => setFConsegnatoDa(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.delivered_by_placeholder")} />
+            <FpInput label={t("furpanel.admin.security_management.lost_found.delivered_to_label")} initialValue={fConsegnatoA} onChange={(e) => setFConsegnatoA(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.lost_found.delivered_to_placeholder")} />
             <div className="vertical-list gap-2mm">
-                <span className="title small">{t("furpanel.admin.security_management.lost_found.photo")}</span>
                 <Upload
                     setBlob={setFFormImage}
                     requireCrop
                     cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.lost_found.photo")}
                     cropTitle={t("furpanel.admin.security_management.lost_found.item")}
+                    maxOutputSizeKB={500}
                 />
             </div>
             <div className="horizontal-list gap-4mm" style={{ flexWrap: "wrap", marginTop: 10, marginBottom: 10 }}>
@@ -238,10 +298,11 @@ export default function SecurityLostAndFoundPage() {
             [t("furpanel.admin.security_management.lost_found.description_label"), item.descrizione],
             [t("furpanel.admin.security_management.lost_found.found_by_label"), item.found_by],
             [t("furpanel.admin.security_management.lost_found.owner_label"), item.proprietario],
-            [t("furpanel.admin.security_management.lost_found.found_date_label"), formatDateTime(item.data_ritrovo)],
-            [t("furpanel.admin.security_management.lost_found.return_date_label"), formatDateTime(item.data_riconsegna)],
-            [t("furpanel.admin.security_management.lost_found.inserted_by_label"), item.ricognizione],
             [t("furpanel.admin.security_management.lost_found.created_at_label"), formatDateTime(item.data_registrazione ?? item.data)],
+            [t("furpanel.admin.security_management.lost_found.inserted_by_label"), item.ricognizione],
+            [t("furpanel.admin.security_management.lost_found.return_date_label"), formatDateTime(item.data_riconsegna)],
+            [t("furpanel.admin.security_management.lost_found.delivered_by_label"), item.consegnato_da],
+            [t("furpanel.admin.security_management.lost_found.delivered_to_label"), item.consegnato_a],
         ];
         return (
             <div className="vertical-list gap-3mm">
@@ -291,6 +352,11 @@ export default function SecurityLostAndFoundPage() {
         );
     };
 
+    const deliveryModalRequiresRecipient = !deliveryModalItem?.proprietario?.trim();
+    const deliveryModalOwnerKnown = !!deliveryModalItem?.proprietario?.trim();
+    const deliveryModalByPlaceholder = currentUserName.trim() || t("furpanel.admin.security_management.lost_found.delivered_by_placeholder");
+    const deliveryModalToPlaceholder = deliveryModalItem?.proprietario?.trim() || t("furpanel.admin.security_management.lost_found.delivered_to_placeholder");
+
     return (
         <div className="stretch-page compact-main">
             <div className="horizontal-list flex-vertical-center gap-4mm flex-wrap" style={{ marginBottom: 8 }}>
@@ -318,6 +384,42 @@ export default function SecurityLostAndFoundPage() {
             {!loading && view === "list" && renderList()}
             {view === "form" && renderForm()}
             {view === "detail" && selected && renderDetail(selected)}
+            <Modal
+                open={!!deliveryModalItem}
+                onClose={closeDeliveryModal}
+                title={t("furpanel.admin.security_management.lost_found.mark_delivered")}
+                icon="CHECK"
+                busy={loading}
+            >
+                {deliveryModalItem && (
+                    <div className="vertical-list gap-2mm" style={{ minWidth: "min(420px, 80vw)" }}>
+                        <FpInput
+                            label={t("furpanel.admin.security_management.lost_found.delivered_by_label")}
+                            initialValue={deliveryModalBy}
+                            onChange={(e) => setDeliveryModalBy(e.target.value ?? "")}
+                            placeholder={deliveryModalByPlaceholder}
+                        />
+                        <FpInput
+                            required={deliveryModalRequiresRecipient}
+                            label={t("furpanel.admin.security_management.lost_found.delivered_to_label")}
+                            initialValue={deliveryModalTo}
+                            onChange={(e) => {
+                                setDeliveryModalTo(e.target.value ?? "");
+                                if (deliveryModalError) setDeliveryModalError("");
+                            }}
+                            placeholder={deliveryModalToPlaceholder}
+                            helpText={deliveryModalOwnerKnown ? t("furpanel.admin.security_management.lost_found.delivered_to_owner_help") : undefined}
+                        />
+                        {deliveryModalError && <span className="title small danger">{deliveryModalError}</span>}
+                        <div className="horizontal-list gap-2mm" style={{ justifyContent: "flex-end", marginTop: 10 }}>
+                            <Button className="danger" onClick={closeDeliveryModal} busy={loading}>{t("furpanel.admin.security_management.lost_found.cancel")}</Button>
+                            <Button icon="CHECK" style={{ background: "#27ae60" }} onClick={submitDeliveryModal} busy={loading}>
+                                {t("furpanel.admin.security_management.lost_found.mark_delivered")}
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 }

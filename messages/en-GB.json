@@ -1044,7 +1044,13 @@
           "add": "New lost item",
           "edit": "Edit",
           "missing_data_title": "Missing data",
-          "missing_data_description": "Enter at least the description or the place"
+          "missing_data_description": "Enter at least the description or the place",
+          "delivered_by_label": "Delivered by",
+          "delivered_by_placeholder": "Name of the person handing over the item",
+          "delivered_to_label": "Delivered to",
+          "delivered_to_placeholder": "Name of the recipient",
+          "delivered_to_required": "The \"Delivered to\" field is required when no owner has been declared.",
+          "delivered_to_owner_help": "Automatically filled with the declared owner's name."
         },
         "incidents": {
           "incident_log": "Incident Log",

@@ -242,13 +242,13 @@ export default function SecurityAssetManagerPage() {
             <FpInput label={t("furpanel.admin.security_management.assets.serial_label")} initialValue={fSerial} onChange={(e) => setFSerial(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.assets.serial_placeholder")} />
             <FpInput label={t("furpanel.admin.security_management.assets.notes_label")} initialValue={fNote} onChange={(e) => setFNote(e.target.value ?? "")} placeholder={t("furpanel.admin.security_management.assets.notes_placeholder")} />
             <div className="vertical-list gap-2mm">
-                <span className="title small">{t("furpanel.admin.security_management.assets.photo")}</span>
                 <Upload
                     setBlob={setFFormImage}
                     requireCrop
                     cropAspectRatio="any"
                     label={t("furpanel.admin.security_management.assets.photo")}
                     cropTitle={t("furpanel.admin.security_management.assets.asset")}
+                    maxOutputSizeKB={500}
                 />
             </div>
             <div style={{ marginTop: 6 }}>
