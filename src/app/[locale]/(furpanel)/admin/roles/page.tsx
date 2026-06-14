@@ -1,11 +1,14 @@
-"use client"
+"use client";
 import FpButton from "@/components/input/fpButton";
 import Icon from "@/components/icon";
 import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import {
-    AddRoleApiResponse, AddRoleFormAction, DeleteRolesApiAction, GetAllRolesApiAction,
-    RoleInfo
+  AddRoleApiResponse,
+  AddRoleFormAction,
+  DeleteRolesApiAction,
+  GetAllRolesApiAction,
+  RoleInfo,
 } from "@/lib/api/admin/role";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -20,175 +23,223 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { getParentDirectory } from "@/lib/utils";
 
 export default function RolesListPage() {
+  const router = useRouter();
+  const path = usePathname();
+  const t = useTranslations();
+  const { showModal } = useModalUpdate();
 
-    const router = useRouter();
-    const path = usePathname();
-    const t = useTranslations();
-    const { showModal } = useModalUpdate();
+  const [loading, setLoading] = useState(false);
+  const [roles, setRoles] = useState<RoleInfo[]>([]);
 
-    const [loading, setLoading] = useState(false);
-    const [roles, setRoles] = useState<RoleInfo[]>([]);
+  useEffect(() => {
+    loadRoles();
+  }, []);
 
-    useEffect(() => {
-        loadRoles();
-    }, []);
+  const loadRoles = () => {
+    if (loading) return;
+    setRoles([]);
+    setLoading(true);
+    runRequest({ action: new GetAllRolesApiAction() })
+      .then((response) => setRoles(response.roles))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .finally(() => setLoading(false));
+  };
 
-    const loadRoles = () => {
-        if (loading) return;
-        setRoles([]);
-        setLoading(true);
-        runRequest({ action: new GetAllRolesApiAction() })
-            .then((response) => setRoles(response.roles))
-            .catch((err) => showModal(
-                t("common.error"),
-                <ErrorMessage error={err} />
-            )).finally(() => setLoading(false));
-    }
+  const editRole = (role: RoleInfo) => {
+    router.push(`/admin/roles/${role.roleId}/data`);
+  };
 
-    const editRole = (role: RoleInfo) => {
-        router.push(`/admin/roles/${role.roleId}/data`);
-    }
+  /* Role creation logic */
+  const [addRoleModalOpen, setAddRoleModalOpen] = useState(false);
 
-    /* Role creation logic */
-    const [addRoleModalOpen, setAddRoleModalOpen] = useState(false);
+  const promptCreateRole = () => {
+    setAddRoleModalOpen(true);
+  };
 
-    const promptCreateRole = () => {
-        setAddRoleModalOpen(true);
-    }
+  const onAddSuccess = (r: AddRoleApiResponse) => {
+    router.push(`/admin/roles/${r.roleId}/data`);
+  };
 
-    const onAddSuccess = (r: AddRoleApiResponse) => {
-        router.push(`/admin/roles/${r.roleId}/data`);
-    }
+  const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+    showModal(t("common.error"), <ErrorMessage error={err} />);
+    setAddRoleModalOpen(false);
+  };
 
-    const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
-        setAddRoleModalOpen(false);
-    }
+  /* Role deletion logic */
+  const [deleteRoleModalOpen, setDeleteRoleModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<RoleInfo>();
 
-    /* Role deletion logic */
-    const [deleteRoleModalOpen, setDeleteRoleModalOpen] = useState(false);
-    const [selectedRole, setSelectedRole] = useState<RoleInfo>();
+  const promptDeleteRole = (e: MouseEvent<Element>, role: RoleInfo) => {
+    setSelectedRole(role);
+    setDeleteRoleModalOpen(true);
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
-    const promptDeleteRole = (e: MouseEvent<Element>, role: RoleInfo) => {
-        setSelectedRole(role);
-        setDeleteRoleModalOpen(true);
-        e.preventDefault();
-        e.stopPropagation();
+  const closeDeleteRoleModal = () => {
+    setDeleteRoleModalOpen(false);
+    setSelectedRole(undefined);
+  };
+
+  const deleteRole = (roleId?: number) => {
+    if (!roleId) return;
+    setLoading(true);
+    runRequest({ action: new DeleteRolesApiAction(), pathParams: { id: roleId } })
+      .then(() => loadRoles())
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .finally(() => {
+        setLoading(false);
+        closeDeleteRoleModal();
+      });
+  };
+
+  const [initialTableConfig] = useState(() => {
+    return {
+      getRowId: (originalRow: RoleInfo) => String(originalRow.roleId),
     };
+  });
 
-    const closeDeleteRoleModal = () => {
-        setDeleteRoleModalOpen(false);
-        setSelectedRole(undefined);
-    }
+  const columnHelper = createColumnHelper<RoleInfo>();
 
-    const deleteRole = (roleId?: number) => {
-        if (!roleId) return;
-        setLoading(true);
-        runRequest({ action: new DeleteRolesApiAction(), pathParams: { "id": roleId } })
-            .then(() => loadRoles())
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
-            .finally(() => {
-                setLoading(false);
-                closeDeleteRoleModal();
-            });
-    }
+  const [columns] = useState(() => {
+    return [
+      columnHelper.accessor("displayName", {
+        header: t("furpanel.admin.users.security.roles.columns.name"),
+      }),
+      columnHelper.accessor("internalName", {
+        header: t("furpanel.admin.users.security.roles.columns.internal_name"),
+      }),
+      columnHelper.accessor("permissionsNumber", {
+        header: t("furpanel.admin.users.security.roles.columns.permission_count"),
+      }),
+      columnHelper.accessor("permanentUsersNumber", {
+        header: t("furpanel.admin.users.security.roles.columns.members_count"),
+      }),
+      columnHelper.accessor("temporaryUsersNumber", {
+        header: t("furpanel.admin.users.security.roles.columns.temporary_members_count"),
+      }),
+      columnHelper.display({
+        id: "actions",
+        enableResizing: false,
+        maxSize: 88,
+        size: 88,
+        cell: (props) => (
+          <div className="horizontal-list gap-2mm">
+            <FpButton onClick={() => editRole(props.row.original)} icon="EDIT" title={t("common.CRUD.edit")} />
+            <FpButton
+              className="danger"
+              onClick={(e) => promptDeleteRole(e, props.row.original)}
+              icon="DELETE"
+              title={t("common.CRUD.delete")}
+            />
+          </div>
+        ),
+      }),
+    ];
+  });
 
-    const [initialTableConfig] = useState(() => {
-        return {
-            getRowId: (originalRow: RoleInfo) => String(originalRow.roleId)
-        }
-    });
+  return (
+    <>
+      <div className="stretch-page">
+        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
+          <a href={getParentDirectory(path)}>
+            <Icon icon="ARROW_BACK" />
+          </a>
+          <div className="horizontal-list gap-2mm">
+            <span className="title medium">{t("furpanel.admin.users.security.roles.title")}</span>
+          </div>
 
-    const columnHelper = createColumnHelper<RoleInfo>();
-
-    const [columns] = useState(() => {
-        return [
-            columnHelper.accessor('displayName', {
-                header: t("furpanel.admin.users.security.roles.columns.name")
-            }),
-            columnHelper.accessor('internalName', {
-                header: t("furpanel.admin.users.security.roles.columns.internal_name")
-            }),
-            columnHelper.accessor('permissionsNumber', {
-                header: t("furpanel.admin.users.security.roles.columns.permission_count")
-            }),
-            columnHelper.accessor('permanentUsersNumber', {
-                header: t("furpanel.admin.users.security.roles.columns.members_count")
-            }),
-            columnHelper.accessor('temporaryUsersNumber', {
-                header: t("furpanel.admin.users.security.roles.columns.temporary_members_count")
-            }),
-            columnHelper.display({
-                id: 'actions',
-                enableResizing: false,
-                maxSize: 88,
-                size: 88,
-                cell: props => <div className="horizontal-list gap-2mm">
-                    <FpButton onClick={() => editRole(props.row.original)}
-                        icon="EDIT"
-                        title={t("common.CRUD.edit")} />
-                    <FpButton className="danger"
-                        onClick={(e) => promptDeleteRole(e, props.row.original)}
-                        icon="DELETE"
-                        title={t("common.CRUD.delete")} />
-                </div>
-            })
-        ];
-    });
-
-    return <>
-        <div className="stretch-page">
-            <div className="horizontal-list align-items-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(path)}><Icon icon="ARROW_BACK" /></a>
-                <div className="horizontal-list gap-2mm">
-                    <span className="title medium">{t("furpanel.admin.users.security.roles.title")}</span>
-                </div>
-
-                <div className="spacer"></div>
-                <FpButton icon="REFRESH" onClick={() => loadRoles()} debounce={3000}>{t("common.reload")}</FpButton>
-                <FpButton icon="ADD" onClick={promptCreateRole} >{t("common.CRUD.add")}</FpButton>
-            </div>
-
-            {loading && <div className="row"><LoadingPanel className="data" /></div>}
-            <FpTable<RoleInfo> rows={roles}
-                columns={columns}
-                tableOptions={initialTableConfig}
-                pinnedColumns={{ left: [], right: ['actions'] }} />
+          <div className="spacer"></div>
+          <FpButton icon="REFRESH" onClick={() => loadRoles()} debounce={3000}>
+            {t("common.reload")}
+          </FpButton>
+          <FpButton icon="ADD" onClick={promptCreateRole}>
+            {t("common.CRUD.add")}
+          </FpButton>
         </div>
-        {/* Role creation modal */}
-        <Modal open={addRoleModalOpen} onClose={() => setAddRoleModalOpen(false)}
-            title={t("furpanel.admin.users.security.roles.actions.add_role")}>
-            <DataForm shouldReset={!addRoleModalOpen} setBusy={setLoading} busy={loading}
-                action={new AddRoleFormAction} onSuccess={(data) => onAddSuccess(data as AddRoleApiResponse)}
-                onFail={onAddFail} resetOnSuccess hideSave className="vertical-list gap-2mm">
-                <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>
-                <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/}></FpInput>
-                <div className="bottom-toolbar">
-                    <FpButton title={t("common.cancel")} className="danger" onClick={() => setAddRoleModalOpen(false)}
-                        icon="CANCEL" busy={loading}>{t("common.cancel")}</FpButton>
-                    <div className="spacer"></div>
-                    <FpButton title={t("common.CRUD.add")} type="submit"
-                        icon="ADD_CIRCLE" busy={loading}>{t("common.CRUD.add")}</FpButton>
-                </div>
-            </DataForm>
-        </Modal>
-        {/* Role deletion modal */}
-        <Modal open={deleteRoleModalOpen} onClose={() => closeDeleteRoleModal()}
-            title={t("furpanel.admin.users.security.roles.actions.delete_role")}>
-            <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.confirm_deletion",
-                {
-                    roleName: selectedRole?.displayName ?? selectedRole?.internalName ?? "",
-                    members: selectedRole?.permanentUsersNumber ?? 0,
-                    tempMembers: selectedRole?.temporaryUsersNumber ?? 0
-                })}
-            </span>
-            <div className="bottom-toolbar">
-                <FpButton title={t("common.cancel")} className="danger" onClick={closeDeleteRoleModal}
-                    icon="CANCEL" busy={loading}>{t("common.cancel")}</FpButton>
-                <div className="spacer"></div>
-                <FpButton title={t("common.CRUD.delete")} onClick={() => deleteRole(selectedRole?.roleId)}
-                    icon="DELETE" busy={loading}>{t("common.CRUD.delete")}</FpButton>
-            </div>
-        </Modal>
+
+        {loading && (
+          <div className="row">
+            <LoadingPanel className="data" />
+          </div>
+        )}
+        <FpTable<RoleInfo>
+          rows={roles}
+          columns={columns}
+          tableOptions={initialTableConfig}
+          pinnedColumns={{ left: [], right: ["actions"] }}
+        />
+      </div>
+      {/* Role creation modal */}
+      <Modal
+        open={addRoleModalOpen}
+        onClose={() => setAddRoleModalOpen(false)}
+        title={t("furpanel.admin.users.security.roles.actions.add_role")}
+      >
+        <DataForm
+          shouldReset={!addRoleModalOpen}
+          setBusy={setLoading}
+          busy={loading}
+          action={new AddRoleFormAction()}
+          onSuccess={(data) => onAddSuccess(data as AddRoleApiResponse)}
+          onFail={onAddFail}
+          resetOnSuccess
+          hideSave
+          className="vertical-list gap-2mm"
+        >
+          <span className="descriptive">{t("furpanel.admin.users.security.roles.messages.add_role")}</span>
+          <FpInput fieldName="internalName" pattern={/^[A-Za-z0-9_\-]{3,64}$/}></FpInput>
+          <div className="bottom-toolbar">
+            <FpButton
+              title={t("common.cancel")}
+              className="danger"
+              onClick={() => setAddRoleModalOpen(false)}
+              icon="CANCEL"
+              busy={loading}
+            >
+              {t("common.cancel")}
+            </FpButton>
+            <div className="spacer"></div>
+            <FpButton title={t("common.CRUD.add")} type="submit" icon="ADD_CIRCLE" busy={loading}>
+              {t("common.CRUD.add")}
+            </FpButton>
+          </div>
+        </DataForm>
+      </Modal>
+      {/* Role deletion modal */}
+      <Modal
+        open={deleteRoleModalOpen}
+        onClose={() => closeDeleteRoleModal()}
+        title={t("furpanel.admin.users.security.roles.actions.delete_role")}
+      >
+        <span className="descriptive">
+          {t("furpanel.admin.users.security.roles.messages.confirm_deletion", {
+            roleName: selectedRole?.displayName ?? selectedRole?.internalName ?? "",
+            members: selectedRole?.permanentUsersNumber ?? 0,
+            tempMembers: selectedRole?.temporaryUsersNumber ?? 0,
+          })}
+        </span>
+        <div className="bottom-toolbar">
+          <FpButton
+            title={t("common.cancel")}
+            className="danger"
+            onClick={closeDeleteRoleModal}
+            icon="CANCEL"
+            busy={loading}
+          >
+            {t("common.cancel")}
+          </FpButton>
+          <div className="spacer"></div>
+          <FpButton
+            title={t("common.CRUD.delete")}
+            onClick={() => deleteRole(selectedRole?.roleId)}
+            icon="DELETE"
+            busy={loading}
+          >
+            {t("common.CRUD.delete")}
+          </FpButton>
+        </div>
+      </Modal>
     </>
+  );
 }

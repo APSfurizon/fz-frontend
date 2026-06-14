@@ -1,39 +1,41 @@
 .gallery-banner {
-    &__event {
-        overflow: hidden;
-        position: relative;
+  &__event {
+    overflow: hidden;
+    position: relative;
 
-        &__image {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            background-color: black;
-            display: block;
-        }
-
-        &__overlay {
-            pointer-events: none;
-            position: absolute;
-            width: calc(100% + 2px);
-            height: calc(100% + 2px);
-            bottom: -1px;
-            left: -1px;
-            background: linear-gradient(rgb(from var(--event-card__text-shadow) r g b / 0) 0%,
-                    rgb(from var(--event-card__text-shadow) r g b / 0.8) 70%);
-            background-repeat: no-repeat;
-            background-position-y: bottom;
-            background-size: 100% 50%;
-        }
-
-        &__name {
-            pointer-events: all;
-            position: absolute;
-            bottom: 2mm;
-            left: 3mm;
-
-            * {
-                color: #ddd;
-            }
-        }
+    &__image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      background-color: black;
+      display: block;
     }
+
+    &__overlay {
+      pointer-events: none;
+      position: absolute;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      bottom: -1px;
+      left: -1px;
+      background: linear-gradient(
+        rgb(from var(--event-card__text-shadow) r g b / 0) 0%,
+        rgb(from var(--event-card__text-shadow) r g b / 0.8) 70%
+      );
+      background-repeat: no-repeat;
+      background-position-y: bottom;
+      background-size: 100% 50%;
+    }
+
+    &__name {
+      pointer-events: all;
+      position: absolute;
+      bottom: 2mm;
+      left: 3mm;
+
+      * {
+        color: #ddd;
+      }
+    }
+  }
 }

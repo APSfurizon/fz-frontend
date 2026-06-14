@@ -5,91 +5,93 @@ import { GetPermissionsApiAction, GetPermissionsResponse } from "../api/admin/ro
 import * as crypto from "crypto";
 
 export function getParamsHash(...p: any[]) {
-    const shasum = crypto.createHash('sha1');
-    shasum.update(JSON.stringify(p));
-    return shasum.digest('hex');
+  const shasum = crypto.createHash("sha1");
+  shasum.update(JSON.stringify(p));
+  return shasum.digest("hex");
 }
 
 export type CacheTuple<T = any> = {
-    /**UTC Fetch time in milliseconds (unix epoch)*/
-    fetchTime: number,
-    /**Actual stored value*/
-    value: T
-}
+  /**UTC Fetch time in milliseconds (unix epoch)*/
+  fetchTime: number;
+  /**Actual stored value*/
+  value: T;
+};
 
 const DEFAULT_CACHE_DURATION = 5 * 60 * 1000; // 2 minutes
 
 export abstract class CachedData<T> {
-    duration: number = DEFAULT_CACHE_DURATION;
-    abstract loadData(...p: any[]): Promise<T>;
-    cachedDataMap: Map<string, CacheTuple<T>> = new Map();
+  duration: number = DEFAULT_CACHE_DURATION;
+  abstract loadData(...p: any[]): Promise<T>;
+  cachedDataMap: Map<string, CacheTuple<T>> = new Map();
 
-    get(...p: any[]): Promise<T> {
-        if (!p) p = [];
-        const paramsHash = getParamsHash(p);
-        return new Promise((resolve, reject) => {
-            const now = Date.now();
-            const data = this.cachedDataMap.get(paramsHash);
-            const diff = now - (data?.fetchTime ?? 0);
-            if (data && diff < this.duration) {
-                resolve(data!.value);
-            } else {
-                this.loadData(p)
-                    .then((result: T) => {
-                        if (this.canStoreInCache(result)) {
-                            const data: CacheTuple<T> = {
-                                fetchTime: now,
-                                value: result
-                            };
-                            this.cachedDataMap.set(paramsHash, data);
-                        }
-                        resolve(result);
-                    }).catch((err) => reject(err));
+  get(...p: any[]): Promise<T> {
+    if (!p) p = [];
+    const paramsHash = getParamsHash(p);
+    return new Promise((resolve, reject) => {
+      const now = Date.now();
+      const data = this.cachedDataMap.get(paramsHash);
+      const diff = now - (data?.fetchTime ?? 0);
+      if (data && diff < this.duration) {
+        resolve(data.value);
+      } else {
+        this.loadData(p)
+          .then((result: T) => {
+            if (this.canStoreInCache(result)) {
+              const data: CacheTuple<T> = {
+                fetchTime: now,
+                value: result,
+              };
+              this.cachedDataMap.set(paramsHash, data);
             }
-        });
-    };
+            resolve(result);
+          })
+          .catch((err) => reject(new Error(err as string)));
+      }
+    });
+  }
 
-    canStoreInCache(data: T): boolean {
-        return true;
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  canStoreInCache(data: T): boolean {
+    return true;
+  }
 
-    evict(...p: any[]): T | undefined {
-        let toReturn = undefined;
-        const paramsHash = getParamsHash(p);
-        if (this.cachedDataMap.has(paramsHash)) {
-            toReturn = this.cachedDataMap.get(paramsHash)!.value;
-            this.cachedDataMap.delete(paramsHash);
-        }
-        return toReturn;
+  evict(...p: any[]): T | undefined {
+    let toReturn = undefined;
+    const paramsHash = getParamsHash(p);
+    if (this.cachedDataMap.has(paramsHash)) {
+      toReturn = this.cachedDataMap.get(paramsHash)!.value;
+      this.cachedDataMap.delete(paramsHash);
     }
+    return toReturn;
+  }
 }
 
 export class CachedCountries extends CachedData<boolean | PlaceApiResponse | ApiErrorResponse> {
-    duration: number = 1 * 24 * 60 * 60; // One day
-    loadData() {
-        return runRequest({ action: new AutoInputCountriesApiAction() });
-    }
+  duration: number = 1 * 24 * 60 * 60; // One day
+  loadData() {
+    return runRequest({ action: new AutoInputCountriesApiAction() });
+  }
 }
 
 export const CACHED_COUNTRIES = new CachedCountries();
 
 export class CachedStates extends CachedData<boolean | PlaceApiResponse | ApiErrorResponse> {
-    duration: number = 1 * 24 * 60 * 60; // One day
-    loadData(...p: string[]) {
-        return runRequest({
-            action: new AutoInputStatesApiAction(),
-            searchParams: buildSearchParams({ "code": p[0] ?? "" })
-        });
-    }
+  duration: number = 1 * 24 * 60 * 60; // One day
+  loadData(...p: string[]) {
+    return runRequest({
+      action: new AutoInputStatesApiAction(),
+      searchParams: buildSearchParams({ code: p[0] ?? "" }),
+    });
+  }
 }
 
 export const CACHED_STATES = new CachedStates();
 
 export class CachedPermissions extends CachedData<boolean | GetPermissionsResponse | ApiErrorResponse> {
-    duration: number = 1 * 24 * 60 * 60; // One day
-    loadData() {
-        return runRequest({ action: new GetPermissionsApiAction() });
-    }
+  duration: number = 1 * 24 * 60 * 60; // One day
+  loadData() {
+    return runRequest({ action: new GetPermissionsApiAction() });
+  }
 }
 
 export const CACHED_PERMISSIONS = new CachedPermissions();

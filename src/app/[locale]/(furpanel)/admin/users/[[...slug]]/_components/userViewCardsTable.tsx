@@ -3,9 +3,9 @@ import ErrorMessage from "@/components/errorMessage";
 import Checkbox from "@/components/input/checkbox";
 import FpTable from "@/components/table/fpTable";
 import {
-    ChangeCardRegisterStatusApiAction,
-    ChangeCardRegisterStatusApiData,
-    MembershipCard
+  ChangeCardRegisterStatusApiAction,
+  ChangeCardRegisterStatusApiData,
+  MembershipCard,
 } from "@/lib/api/admin/membershipManager";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { runRequest } from "@/lib/api/global";
@@ -14,63 +14,72 @@ import { useTranslations } from "next-intl";
 import { MouseEvent, useState } from "react";
 
 export default function UserViewCardsTable({
-    userData
+  userData,
 }: Readonly<{
-    userData: GetUserAdminViewResponse
+  userData: GetUserAdminViewResponse;
 }>) {
-    const t = useTranslations();
-    const { showModal } = useModalUpdate();
+  const t = useTranslations();
+  const { showModal } = useModalUpdate();
 
-    // Mark as registered
-    const markAsRegistered = (event: MouseEvent<HTMLButtonElement>,
-        checked: boolean, setChecked: (value: boolean) => void,
-        setBusy: (value: boolean) => void, cardId: number) => {
-        setBusy(true);
-        const data: ChangeCardRegisterStatusApiData = {
-            membershipCardId: cardId,
-            registered: checked
-        }
-        runRequest({
-            action: new ChangeCardRegisterStatusApiAction(),
-            body: data
-        }).catch((err) => {
-            showModal(t("common.error"), <ErrorMessage error={err} />);
-            setChecked(!checked);
-        }).finally(() => setBusy(false));
+  // Mark as registered
+  const markAsRegistered = (
+    event: MouseEvent<HTMLButtonElement>,
+    checked: boolean,
+    setChecked: (value: boolean) => void,
+    setBusy: (value: boolean) => void,
+    cardId: number
+  ) => {
+    setBusy(true);
+    const data: ChangeCardRegisterStatusApiData = {
+      membershipCardId: cardId,
+      registered: checked,
     };
+    runRequest({
+      action: new ChangeCardRegisterStatusApiAction(),
+      body: data,
+    })
+      .catch((err) => {
+        showModal(t("common.error"), <ErrorMessage error={err} />);
+        setChecked(!checked);
+      })
+      .finally(() => setBusy(false));
+  };
 
-    const cardColHelper = createColumnHelper<MembershipCard>();
-    const [cardColumns] = useState<ColumnDef<MembershipCard, any>[]>([
-        cardColHelper.accessor(itm => `${(itm.cardNo ?? '').padStart(7, '0')}`, {
-            id: 'cardNumber',
-            header: t("furpanel.admin.membership_manager.columns.card_number")
-        }),
-        cardColHelper.accessor('issueYear', {
-            id: 'issuedYear',
-            header: t("furpanel.admin.users.accounts.view.cards_table.issue_year")
-        }),
-        cardColHelper.accessor('createdForOrderId', {
-            id: 'createdForOrderId',
-            header: t("furpanel.admin.users.accounts.view.cards_table.created_for_order_id")
-        }),
-        cardColHelper.accessor(itm => itm.registered, {
-            id: 'registered',
-            header: t("furpanel.admin.membership_manager.columns.registered"),
-            cell: props => <Checkbox initialValue={props.getValue()}
-                onClick={(event, checked, setChecked, setBusy) =>
-                    markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)} />
-        }),
-        cardColHelper.accessor('signedAt', {
-            id: 'signedAt',
-            header: t("furpanel.admin.users.accounts.view.cards_table.aps_form_signed")
-        }),
-        cardColHelper.accessor('sentByEmail', {
-            id: 'sentByEmail',
-            header: t("furpanel.admin.users.accounts.view.cards_table.sent_by_email")
-        }),
-    ]);
+  const cardColHelper = createColumnHelper<MembershipCard>();
+  const [cardColumns] = useState<ColumnDef<MembershipCard, any>[]>([
+    cardColHelper.accessor((itm) => `${(itm.cardNo ?? "").padStart(7, "0")}`, {
+      id: "cardNumber",
+      header: t("furpanel.admin.membership_manager.columns.card_number"),
+    }),
+    cardColHelper.accessor("issueYear", {
+      id: "issuedYear",
+      header: t("furpanel.admin.users.accounts.view.cards_table.issue_year"),
+    }),
+    cardColHelper.accessor("createdForOrderId", {
+      id: "createdForOrderId",
+      header: t("furpanel.admin.users.accounts.view.cards_table.created_for_order_id"),
+    }),
+    cardColHelper.accessor((itm) => itm.registered, {
+      id: "registered",
+      header: t("furpanel.admin.membership_manager.columns.registered"),
+      cell: (props) => (
+        <Checkbox
+          initialValue={props.getValue()}
+          onClick={(event, checked, setChecked, setBusy) =>
+            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)
+          }
+        />
+      ),
+    }),
+    cardColHelper.accessor("signedAt", {
+      id: "signedAt",
+      header: t("furpanel.admin.users.accounts.view.cards_table.aps_form_signed"),
+    }),
+    cardColHelper.accessor("sentByEmail", {
+      id: "sentByEmail",
+      header: t("furpanel.admin.users.accounts.view.cards_table.sent_by_email"),
+    }),
+  ]);
 
-    return <FpTable<MembershipCard> rows={userData?.membershipCards}
-        columns={cardColumns}
-        enableSearch />;
+  return <FpTable<MembershipCard> rows={userData?.membershipCards} columns={cardColumns} enableSearch />;
 }

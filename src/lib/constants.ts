@@ -1,5 +1,5 @@
 export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9090/api/v1/';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:9090/api/v1/";
 export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
 export const MOBILE_ADMIN_TOKEN_STORAGE_NAME = "fz-mobile-token";
@@ -40,15 +40,16 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
 // eslint-disable-next-line max-len
-export const REGEX_UNAUTHENTICATED_URLS = /^(?:\/?(login|logging|logout|recover|register|nosecount|schedule|fonts|gallery|images\/footer|api\/og)([\/?].*)?)$/mi;
-/**Urls that need to be skipped if user is authenticated */// eslint-disable-next-line max-len
-export const REGEX_SKIP_AUTHENTICATED = /^(?:\/?(login|recover|register)([\/?].*)?)$/mi;
+export const REGEX_UNAUTHENTICATED_URLS =
+  /^(?:\/?(login|logging|logout|recover|register|nosecount|schedule|fonts|gallery|images\/footer|api\/og)([\/?].*)?)$/im;
+/**Urls that need to be skipped if user is authenticated */ // eslint-disable-next-line max-len
+export const REGEX_SKIP_AUTHENTICATED = /^(?:\/?(login|recover|register)([\/?].*)?)$/im;
 /**Logout url */
-export const REGEX_LOGOUT = /^(?:\/?logout([\/?].*)?)$/mi;
+export const REGEX_LOGOUT = /^(?:\/?logout([\/?].*)?)$/im;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
-export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? ""
+export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? "";
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO;
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
 export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
@@ -61,8 +62,8 @@ export const SHOW_APP_BANNER = (process.env.NEXT_PUBLIC_SHOW_APP_BANNER ?? false
 /****************/
 
 export const APP_LINKS: Record<string, string> = {
-    android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "",
-    apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? ""
+  android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "",
+  apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? "",
 };
 
 /****************/

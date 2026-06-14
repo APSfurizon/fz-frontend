@@ -1,5 +1,5 @@
 export interface MediaData {
-    mediaId: number,
-    mediaUrl: string
-    mimeType: string
+  mediaId: number;
+  mediaUrl: string;
+  mimeType: string;
 }

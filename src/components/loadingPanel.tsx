@@ -1,15 +1,21 @@
 import { useTranslations } from "next-intl";
 import Icon from "@/components/icon";
 
-export default function LoadingPanel({ showText = true, className, children }: Readonly<{
-    showText?: boolean,
-    className?: string,
-    children?: React.ReactNode
+export default function LoadingPanel({
+  showText = true,
+  className,
+  children,
+}: Readonly<{
+  showText?: boolean;
+  className?: string;
+  children?: React.ReactNode;
 }>) {
-    const tcommon = useTranslations("common");
+  const tcommon = useTranslations("common");
 
-    return <div aria-busy="true" className={`horizontal-list gap-2mm align-items-center ${className ?? ""}`}>
-        <Icon className="loading-animation" icon="PROGRESS_ACTIVITY" />
-        {children ?? <span className="">{showText && tcommon("loading")}</span>}
+  return (
+    <div aria-busy="true" className={`horizontal-list gap-2mm align-items-center ${className ?? ""}`}>
+      <Icon className="loading-animation" icon="PROGRESS_ACTIVITY" />
+      {children ?? <span className="">{showText && tcommon("loading")}</span>}
     </div>
+  );
 }

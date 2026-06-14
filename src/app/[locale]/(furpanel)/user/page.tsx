@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import Icon from "@/components/icon";
 import { useEffect, useState } from "react";
@@ -29,83 +29,91 @@ export default function UserPage() {
     runRequest({ action: new GetPersonalInfoAction() })
       .then((result) => setPersonalInformation(result))
       .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />));
-  }, [personalInformation])
+  }, [personalInformation]);
 
   // Password change logic
   const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
-  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
+  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) =>
+    showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
 
   useTitle(t("furpanel.user.title"));
 
-  return <>
-    <div className="page">
-      {/* User area */}
-      <div className="section vertical-list gap-2mm">
-        <div className="horizontal-list section-title gap-2mm align-items-center">
-          <Icon className="x-large" icon="PERSON" />
-          <span className="title medium">{t("furpanel.user.sections.user")}</span>
-        </div>
-        {/* Personal info manager */}
-        <div className="vertical-list gap-2mm">
+  return (
+    <>
+      <div className="page">
+        {/* User area */}
+        <div className="section vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm align-items-center">
-            <span className="title average">
-              {t("furpanel.user.sections.user_info")}
-            </span>
+            <Icon className="x-large" icon="PERSON" />
+            <span className="title medium">{t("furpanel.user.sections.user")}</span>
           </div>
-          {personalInformation
-            ? <UserViewPersonalInfo personalInformation={personalInformation}
-              reloadData={() => setPersonalInformation(undefined)} />
-            : <LoadingPanel />}
+          {/* Personal info manager */}
+          <div className="vertical-list gap-2mm">
+            <div className="horizontal-list section-title gap-2mm align-items-center">
+              <span className="title average">{t("furpanel.user.sections.user_info")}</span>
+            </div>
+            {personalInformation ? (
+              <UserViewPersonalInfo
+                personalInformation={personalInformation}
+                reloadData={() => setPersonalInformation(undefined)}
+              />
+            ) : (
+              <LoadingPanel />
+            )}
+          </div>
         </div>
-      </div>
-      {/* User area */}
-      <div className="section vertical-list gap-2mm">
-        <div className="horizontal-list section-title gap-2mm align-items-center">
-          <Icon className="x-large" icon="SECURITY" />
-          <span className="title medium">{t("furpanel.user.sections.security")}</span>
-        </div>
-        <div className="vertical-list gap-2mm">
+        {/* User area */}
+        <div className="section vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm align-items-center">
-            <span className="title average">
-              {t("furpanel.user.sections.sessions")}
-            </span>
+            <Icon className="x-large" icon="SECURITY" />
+            <span className="title medium">{t("furpanel.user.sections.security")}</span>
           </div>
-          <UserSessions />
-        </div>
-        {/* New password */}
-        <div className="vertical-list gap-2mm">
-          <div className="horizontal-list section-title gap-2mm align-items-center">
-            <span className="title average">
-              {t("furpanel.user.sections.security_password")}
-            </span>
+          <div className="vertical-list gap-2mm">
+            <div className="horizontal-list section-title gap-2mm align-items-center">
+              <span className="title average">{t("furpanel.user.sections.sessions")}</span>
+            </div>
+            <UserSessions />
           </div>
-          <DataForm className="login-form gap-4mm"
-            busy={passwordChangeLoading}
-            setBusy={setPasswordChangeLoading}
-            action={new ChangePasswordFormAction}
-            onFail={(err) => passwordChangeError(err)}
-            disableSave={!passwordMatch}>
-            <FpInput fieldName="password"
-              required
-              inputType="password"
+          {/* New password */}
+          <div className="vertical-list gap-2mm">
+            <div className="horizontal-list section-title gap-2mm align-items-center">
+              <span className="title average">{t("furpanel.user.sections.security_password")}</span>
+            </div>
+            <DataForm
+              className="login-form gap-4mm"
               busy={passwordChangeLoading}
-              label={t("authentication.recover_confirm.input.new_password.label")}
-              placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
-              helpText={t("authentication.recover_confirm.input.new_password.help")}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-              autocomplete="new-password" />
-            <FpInput inputType="password"
-              required busy={passwordChangeLoading}
-              label={t("authentication.recover_confirm.input.confirm_password.label")}
-              placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
-              onChange={(e) => setConfirmPassword(e.currentTarget.value)}
-              autocomplete="new-password" />
-          </DataForm>
+              setBusy={setPasswordChangeLoading}
+              action={new ChangePasswordFormAction()}
+              onFail={(err) => passwordChangeError(err)}
+              disableSave={!passwordMatch}
+            >
+              <FpInput
+                fieldName="password"
+                required
+                inputType="password"
+                busy={passwordChangeLoading}
+                label={t("authentication.recover_confirm.input.new_password.label")}
+                placeholder={t("authentication.recover_confirm.input.new_password.placeholder")}
+                helpText={t("authentication.recover_confirm.input.new_password.help")}
+                onChange={(e) => setPassword(e.currentTarget.value)}
+                autocomplete="new-password"
+              />
+              <FpInput
+                inputType="password"
+                required
+                busy={passwordChangeLoading}
+                label={t("authentication.recover_confirm.input.confirm_password.label")}
+                placeholder={t("authentication.recover_confirm.input.confirm_password.placeholder")}
+                onChange={(e) => setConfirmPassword(e.currentTarget.value)}
+                autocomplete="new-password"
+              />
+            </DataForm>
+          </div>
         </div>
       </div>
-    </div>
-  </>;
+    </>
+  );
 }

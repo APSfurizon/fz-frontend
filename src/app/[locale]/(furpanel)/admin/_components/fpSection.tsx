@@ -1,26 +1,28 @@
-import Icon, { MaterialIcon } from "@/components/icon"
-import { CSSProperties } from "react"
+import Icon, { MaterialIcon } from "@/components/icon";
+import { CSSProperties } from "react";
 
 export default function FpSection({
-    children,
-    icon,
-    title,
-    titleStyle,
-    style
+  children,
+  icon,
+  title,
+  titleStyle,
+  style,
 }: Readonly<{
-    children?: React.ReactNode,
-    icon?: MaterialIcon,
-    title?: string,
-    titleStyle?: CSSProperties,
-    style?: CSSProperties
+  children?: React.ReactNode;
+  icon?: MaterialIcon;
+  title?: string;
+  titleStyle?: CSSProperties;
+  style?: CSSProperties;
 }>) {
-    return <div style={{ ...style }} className="vertical-list gap-2mm">
-        <div className="horizontal-list section-title gap-2mm align-items-center">
-            {icon && <Icon className="large" icon={icon} />}
-            <span style={{ ...titleStyle }} className="title average">{title}</span>
-        </div>
-        <div className="horizontal-list flex-wrap gap-2mm">
-            {children}
-        </div>
+  return (
+    <div style={{ ...style }} className="vertical-list gap-2mm">
+      <div className="horizontal-list section-title gap-2mm align-items-center">
+        {icon && <Icon className="large" icon={icon} />}
+        <span style={{ ...titleStyle }} className="title average">
+          {title}
+        </span>
+      </div>
+      <div className="horizontal-list flex-wrap gap-2mm">{children}</div>
     </div>
+  );
 }

@@ -1,51 +1,51 @@
-import { FursuitDetails } from "../badge/fursuits"
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global"
-import { MediaData } from "../media"
-import { SponsorType, UserData } from "../user"
+import { FursuitDetails } from "../badge/fursuits";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { MediaData } from "../media";
+import { SponsorType, UserData } from "../user";
 
 export type BadgeSearchData = {
-    orderQuery?: string,
-    serialQuery?: string
-}
+  orderQuery?: string;
+  serialQuery?: string;
+};
 
 export type CommonBadgeData = {
-    orderCode: string,
-    orderSerial: number
-}
+  orderCode: string;
+  orderSerial: number;
+};
 
 export type FursuitBadge = CommonBadgeData & {
-    fursuit: FursuitDetails,
-    ownerUserId: number
-}
+  fursuit: FursuitDetails;
+  ownerUserId: number;
+};
 
 export type RegularBadgeUser = {
-    userId: number,
-    fursonaName: string,
-    locale: string,
-    propic?: MediaData,
-    sponsorship: SponsorType
-}
+  userId: number;
+  fursonaName: string;
+  locale: string;
+  propic?: MediaData;
+  sponsorship: SponsorType;
+};
 
 export type RegularBadge = CommonBadgeData & {
-    user: UserData
-}
+  user: UserData;
+};
 
 export interface SearchRegularBadgesResponse extends ApiResponse {
-    userBadges: RegularBadge[]
+  userBadges: RegularBadge[];
 }
 
 export class SearchRegularBadgesApiAction extends ApiAction<SearchRegularBadgesResponse, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/export/badges/preview/user";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/export/badges/preview/user";
 }
 
 export interface SearchFursuitBadgesResponse extends ApiResponse {
-    fursuitBadges: FursuitBadge[]
+  fursuitBadges: FursuitBadge[];
 }
 
 export class SearchFursuitBadgesApiAction extends ApiAction<SearchFursuitBadgesResponse, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/export/badges/preview/fursuits";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/export/badges/preview/fursuits";
 }

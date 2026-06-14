@@ -1,107 +1,106 @@
 div.fursuit-header,
 div.fursona-change,
 div.fursuit {
-    background-color: var(--room-invite-bg);
+  background-color: var(--room-invite-bg);
 }
 
 div.fursuit-section {
-    background-color: var(--room-action-panel-bg);
-    box-shadow: 0px 0px .5em .05em var(--room-invite-shadow);
+  background-color: var(--room-action-panel-bg);
+  box-shadow: 0px 0px 0.5em 0.05em var(--room-invite-shadow);
 }
 
 div.fursona-change,
 div.fursuit-section {
-    padding: 0.45em;
+  padding: 0.45em;
 }
 
 div.fursuit-header {
-    padding: 0.3125em;
+  padding: 0.3125em;
 }
 
 div.fursona-change {
-    padding: 0.3125em 0.45em;
+  padding: 0.3125em 0.45em;
 }
 
 div.badge-container,
 div.fursuit-container,
 div.fursuit-actions {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 div.fursuit-actions button span:not(.icon-container),
 div.fursuit-actions button div.spacer {
-    display: none;
+  display: none;
 }
 
 div.fursuit {
-    padding: 0.625em;
-    display: flex;
+  padding: 0.625em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  background-color: var(--badge-fursuit-bg);
+  border: 1px solid var(--badge-fursuit-border);
+  max-width: fit-content;
+
+  div.main-data {
+    max-width: 100%;
+    min-width: 0px;
+    display: inline-flex;
     flex-direction: column;
-    gap: 0.2em;
-    background-color: var(--badge-fursuit-bg);
-    border: 1px solid var(--badge-fursuit-border);
-    max-width: fit-content;
+    align-items: stretch;
 
-    div.main-data {
-        max-width: 100%;
-        min-width: 0px;
-        display: inline-flex;
-        flex-direction: column;
-        align-items: stretch;
-
-        img.fursuit-image {
-            object-fit: cover;
-            width: 9em;
-            height: auto;
-            outline: 1px solid var(--badge-fursuit-border);
-        }
-
-        div.details {
-            justify-content: space-between;
-            max-width: 9em;
-        }
+    img.fursuit-image {
+      object-fit: cover;
+      width: 9em;
+      height: auto;
+      outline: 1px solid var(--badge-fursuit-border);
     }
 
-    div.main-data span {
-        overflow-wrap: break-word
+    div.details {
+      justify-content: space-between;
+      max-width: 9em;
     }
+  }
+
+  div.main-data span {
+    overflow-wrap: break-word;
+  }
 }
 
-@media (max-width:400px) {
-    div.badge-container,
-    div.fursuit-container{
-        flex-direction: column;
+@media (max-width: 400px) {
+  div.badge-container,
+  div.fursuit-container {
+    flex-direction: column;
+  }
+
+  div.fursuit {
+    max-width: 100%;
+
+    div.main-data {
+      flex-direction: row;
     }
 
-    div.fursuit {
-        max-width: 100%;
-
-        div.main-data {
-            flex-direction: row;
-        }
-
-        div.details {
-            width: 100%;
-        }
-
-        div.fursuit-actions {
-            button.button span {
-                display: block;
-            }
-
-            button.button:not(:first-child) {
-                flex: 1;
-            }
-            
-            button.button:first-child {
-                min-width: 45%;
-            }
-
-            div.spacer {
-                display: none;
-            }
-
-        }
+    div.details {
+      width: 100%;
     }
+
+    div.fursuit-actions {
+      button.button span {
+        display: block;
+      }
+
+      button.button:not(:first-child) {
+        flex: 1;
+      }
+
+      button.button:first-child {
+        min-width: 45%;
+      }
+
+      div.spacer {
+        display: none;
+      }
+    }
+  }
 }
