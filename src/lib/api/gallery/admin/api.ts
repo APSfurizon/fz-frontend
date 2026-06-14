@@ -1,7 +1,10 @@
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { GalleryUpdateBody } from "../admin/types";
 import { nullifyEmptyString } from "@/lib/utils";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
+import { ApiAction } from "../../networking/types";
+import { ApiErrorResponse } from "../../networking/types";
+import { ApiResponse } from "../../networking/types";
+import { RequestType } from "../../networking/types";
 import { GalleryUploadedFullMedia } from "../types";
 
 class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {

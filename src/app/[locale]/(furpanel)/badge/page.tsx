@@ -15,7 +15,8 @@ import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import Modal from "@/components/modal";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { UploadBadgeAction } from "@/lib/api/badge/badge";
 import ErrorMessage from "@/components/errorMessage";
 import { useUser } from "@/components/context/userProvider";
@@ -157,7 +158,7 @@ export default function BadgePage() {
     setBadgeStatus(undefined);
   };
 
-  const onFursuitAddEditFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const onFursuitAddEditFail = (err: ApiErrorResponse) => {
     closeAddFursuitModal();
     onChangeFail(err);
   };

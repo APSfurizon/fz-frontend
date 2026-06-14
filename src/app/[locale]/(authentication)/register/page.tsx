@@ -1,5 +1,5 @@
 "use client";
-import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { useTranslations } from "next-intl";
 import { redirect, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -32,12 +32,11 @@ export default function Register() {
 
   const params = useSearchParams();
 
-  const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    if (!isDetailedError(err)) {
+  const manageError = (err: ApiErrorResponse) => {
+    if (!err.errors) {
       setError("network_error");
     } else {
-      const errRes = err as ApiDetailedErrorResponse;
-      const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].code : t("login.errors.unknown_error");
+      const errorMessage = err.errors.length > 0 ? err.errors[0].code : t("login.errors.unknown_error");
       setError(errorMessage);
     }
   };

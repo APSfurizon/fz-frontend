@@ -7,7 +7,7 @@ import Upload from "@/components/input/upload";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { AddFursuitFormAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
-import { ApiErrorResponse } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { EVENT_NAME } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import { useState } from "react";

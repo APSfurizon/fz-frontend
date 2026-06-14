@@ -1,6 +1,6 @@
 "use client";
 import Icon from "@/components/icon";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest, ApiErrorResponse } from "@/lib/api/networking";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -70,7 +70,7 @@ export default function ExchangeConfirm() {
   };
 
   // Main logic
-  const [error, setError] = useState<ApiErrorResponse | ApiDetailedErrorResponse | undefined>(undefined);
+  const [error, setError] = useState<ApiErrorResponse | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [exchangeData, setExchangeData] = useState<ExchangeStatusApiResponse>();
 

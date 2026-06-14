@@ -2,7 +2,7 @@ import { useUser } from "@/components/context/userProvider";
 import { ExploreApiAction } from "@/lib/api/gallery/explore/api";
 import { CachedFullMedias } from "@/lib/api/gallery/explore/main";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { Permissions } from "@/lib/api/permission";
 import { buildSearchParams } from "@/lib/utils";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";

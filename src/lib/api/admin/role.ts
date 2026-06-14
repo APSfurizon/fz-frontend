@@ -1,5 +1,8 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import { UserData } from "../user";
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
 import { CACHED_PERMISSIONS } from "@/lib/cache/cache";

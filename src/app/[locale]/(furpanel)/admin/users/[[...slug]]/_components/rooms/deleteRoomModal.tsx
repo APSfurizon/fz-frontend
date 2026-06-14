@@ -4,7 +4,7 @@ import { EMPTY_ROOM_INFO, RoomDeleteAction, RoomEditData, RoomInfoResponse } fro
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useUserViewContext } from "../../page";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 

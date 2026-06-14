@@ -9,7 +9,7 @@ import ImagePreviewModal from "@/components/imagePreviewModal";
 import Upload from "@/components/input/upload";
 import Icon from "@/components/icon";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   AddSecurityIncidentMessageApiAction,
   CreateSecurityIncidentApiAction,

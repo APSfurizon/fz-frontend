@@ -6,7 +6,7 @@ import StatusBox from "@/components/statusBox";
 import FpTable from "@/components/table/fpTable";
 import { FullOrder, GetUserAdminViewResponse, ViewOrderLinkApiAction } from "@/lib/api/admin/userView";
 import { mapOrderStatusToStatusBox, qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { translate } from "@/lib/translations";
 import { buildSearchParams } from "@/lib/utils";
 import { createColumnHelper, Row } from "@tanstack/react-table";

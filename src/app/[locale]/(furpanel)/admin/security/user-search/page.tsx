@@ -9,7 +9,7 @@ import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { GetUserSecurityViewAction, GetUserSecurityViewResponse } from "@/lib/api/admin/userView";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   AutoInputUsersManager,
   GetUserByIdAction,

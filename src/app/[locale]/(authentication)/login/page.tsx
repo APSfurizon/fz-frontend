@@ -2,7 +2,6 @@
 import DataForm from "@/components/input/dataForm";
 import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError, runRequest } from "@/lib/api/global";
 import {
   AdminSecondaryLoginResponse,
   AuthenticationCodes,
@@ -28,6 +27,7 @@ import { setCookie } from "@/lib/utils";
 import FpButton from "@/components/input/fpButton";
 import { UserDisplayAction } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -40,18 +40,13 @@ export default function Login() {
 
   const onLoad = () => setError(undefined);
 
-  const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    if (!isDetailedError(err)) {
-      setError("network_error");
-    } else {
-      const errRes = err as ApiDetailedErrorResponse;
-      const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].code : t("login.errors.unknown_error");
-      if (errorMessage.toLowerCase().trim() === "already_logged_in") {
-        router.replace("/home");
-        return;
-      }
-      setError(errorMessage);
+  const manageError = (err: ApiErrorResponse) => {
+    const errorMessage = err.errors.length > 0 ? err.errors[0].code : t("login.errors.unknown_error");
+    if (errorMessage.toLowerCase().trim() === "already_logged_in") {
+      router.replace("/home");
+      return;
     }
+    setError(errorMessage);
   };
 
   const isSecurityByPermission = (permission?: string) => {

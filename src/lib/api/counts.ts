@@ -1,7 +1,10 @@
 import { createContext, useContext } from "react";
 import { TranslatableString } from "../translations";
 import { FursuitDetails } from "./badge/fursuits";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
+import { ApiAction } from "./networking/types";
+import { ApiErrorResponse } from "./networking/types";
+import { ApiResponse } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { RoomData } from "./room";
 import { ExtraDays, SponsorType, UserData } from "./user";
 

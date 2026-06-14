@@ -6,7 +6,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import Icon from "@/components/icon";
 import type { MaterialIcon } from "@/components/icon";
 import { loadScheduleActivityDetail } from "@/lib/api/schedule_detail";
-import { ApiErrorResponse } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { ScheduleActivityApiItem } from "@/lib/schedule";
 import { API_MOBILE_URL, EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { parseDateForTimeZone, SCHEDULE_DEFAULT_TIME_ZONE } from "@/lib/utils";

@@ -1,6 +1,9 @@
 import { StatusBoxStyle } from "@/components/statusBox";
 import { ConventionEvent } from "./counts";
-import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
+import { ApiAction } from "./networking/types";
+import { ApiErrorResponse } from "./networking/types";
+import { ApiResponse } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { RoomData } from "./room";
 import { Logo, QRCodeOptions } from "next-qrcode/dist/useQRCode";
 

@@ -1,4 +1,8 @@
-import { ApiErrorResponse, ApiResponse, MobileApiAction, RequestType, SimpleApiResponse } from "../global";
+import { MobileApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { SimpleApiResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 // ─── Assets ──────────────────────────────────────────────────────────────────
 

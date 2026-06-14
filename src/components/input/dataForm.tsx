@@ -2,7 +2,6 @@ import { MaterialIcon } from "../icon";
 import {
   useState,
   CSSProperties,
-  FormEvent,
   Dispatch,
   SetStateAction,
   useEffect,
@@ -18,7 +17,9 @@ import {
 import { useTranslations } from "next-intl";
 import FpButton from "./fpButton";
 import { FormApiAction, FormValidationError, InferRequest } from "@/lib/components/dataForm";
-import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
+import { runFormRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { ApiResponse } from "@/lib/api/networking/types";
 import "@/styles/components/dataForm.css";
 import { useModalContext } from "../modal";
 import { useModalUpdate } from "../context/modalProvider";
@@ -72,7 +73,7 @@ type DataFormProps<T extends FormApiAction<any, any, any>> = {
   action?: T;
   onChange?: (different: boolean, newEntity: InferRequest<T> | undefined) => void;
   onSuccess?: (data: boolean | ApiResponse) => any;
-  onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any;
+  onFail?: (data: ApiErrorResponse) => any;
   onBeforeSubmit?: () => void;
   editBodyData?: (data: InferRequest<T>) => InferRequest<T>;
   editFormData?: (data: FormData) => FormData;
@@ -157,7 +158,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
   }, [reset]);
 
   const fail = useMemo(
-    () => (data: ApiErrorResponse | ApiDetailedErrorResponse) => {
+    () => (data: ApiErrorResponse) => {
       if (props.onFail) {
         props.onFail(data);
       } else {

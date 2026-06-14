@@ -1,4 +1,4 @@
-import { ApiRequest } from "../../global";
+import { ApiRequest } from "../../networking/types";
 
 export interface GalleryUpdateBody extends ApiRequest {
   uploadIds: number[];

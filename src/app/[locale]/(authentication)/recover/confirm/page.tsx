@@ -2,7 +2,7 @@
 import DataForm from "@/components/input/dataForm";
 import Icon from "@/components/icon";
 import FpInput from "@/components/input/fpInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -24,13 +24,11 @@ export default function RecoverConfirm() {
     setError(undefined);
   };
 
-  const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    if (!isDetailedError(err)) {
+  const manageError = (err: ApiErrorResponse) => {
+    if (!err.errors) {
       setError("network_error");
     } else {
-      const errRes = err as ApiDetailedErrorResponse;
-      const errorMessage =
-        errRes.errors.length > 0 ? errRes.errors[0].code : t("authentication.login.errors.unknown_error");
+      const errorMessage = err.errors.length > 0 ? err.errors[0].code : t("authentication.login.errors.unknown_error");
       setError(errorMessage);
     }
   };

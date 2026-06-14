@@ -10,7 +10,8 @@ import {
   GetAllRolesApiAction,
   RoleInfo,
 } from "@/lib/api/admin/role";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -60,7 +61,7 @@ export default function RolesListPage() {
     router.push(`/admin/roles/${r.roleId}/data`);
   };
 
-  const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const onAddFail = (err: ApiErrorResponse) => {
     showModal(t("common.error"), <ErrorMessage error={err} />);
     setAddRoleModalOpen(false);
   };

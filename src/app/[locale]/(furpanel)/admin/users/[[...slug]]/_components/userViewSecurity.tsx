@@ -7,7 +7,7 @@ import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
 import { ChangeEmailFormAction, ChangePasswordFormAction } from "@/lib/api/authentication/recover";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from "react";
 import * as formUtil from "@/lib/components/dataForm";

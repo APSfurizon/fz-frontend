@@ -1,5 +1,6 @@
 "use client";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import FpButton from "@/components/input/fpButton";
 import Icon from "@/components/icon";
 import { useEffect, useMemo, useState } from "react";
@@ -330,7 +331,7 @@ export default function RoomPage() {
     setData(undefined);
   };
 
-  const commonFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const commonFail = (err: ApiErrorResponse) => {
     setRenameModalOpen(false);
     setDeleteModalOpen(false);
     setInviteModalOpen(false);

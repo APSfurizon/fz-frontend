@@ -1,4 +1,8 @@
-import { ApiResponse, ApiErrorResponse, ApiRequest, ApiAction, RequestType } from "../api/global";
+import { ApiAction } from "../api/networking/types";
+import { ApiErrorResponse } from "../api/networking/types";
+import { ApiResponse } from "../api/networking/types";
+import { ApiRequest } from "../api/networking/types";
+import { RequestType } from "../api/networking/types";
 import { nullifyEmptyString } from "../utils";
 
 /**

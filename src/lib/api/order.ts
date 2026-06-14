@@ -1,7 +1,9 @@
 import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
 import { buildSearchParams } from "../utils";
-import { ApiErrorResponse, RequestType, runRequest } from "./global";
+import { runRequest } from "./networking/main";
+import { ApiErrorResponse } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { AutoInputUsersManager, toSearchResult, UserSearchAction } from "./user";
 
 export enum OrderStatus {

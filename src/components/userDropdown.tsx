@@ -4,7 +4,7 @@ import { Link, routing, useRouter } from "@/i18n/routing";
 import { MouseEvent, ToggleEvent, useId, useState } from "react";
 import Icon from "@/components/icon";
 import UserPicture from "@/components/userPicture";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { LogoutApiAction } from "@/lib/api/authentication/login";
 import { changeLanguage, UserData } from "@/lib/api/user";
 import LoadingPanel from "./loadingPanel";

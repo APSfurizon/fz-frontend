@@ -1,5 +1,5 @@
 import { ConventionEvent } from "../counts";
-import { ApiResponse } from "../global";
+import { ApiResponse } from "../networking/types";
 import { MediaData } from "../media";
 import { UserData } from "../user";
 

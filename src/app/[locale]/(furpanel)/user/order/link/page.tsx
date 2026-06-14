@@ -1,7 +1,7 @@
 "use client";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { UserOrderLinkingAction, UserOrderLinkingData } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";

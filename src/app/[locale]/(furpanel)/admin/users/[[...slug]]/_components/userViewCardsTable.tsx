@@ -8,7 +8,7 @@ import {
   MembershipCard,
 } from "@/lib/api/admin/membershipManager";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { MouseEvent, useState } from "react";

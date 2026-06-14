@@ -4,7 +4,7 @@ import { UploadProgress } from "@/lib/api/gallery/upload/types";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { useCallback, useMemo, useRef, useState } from "react";
 import UploadPanel, { UploadState } from "./uploadPanel/uploadPanel";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { MyUploadsApiAction } from "@/lib/api/gallery/upload/api";
 import { buildSearchParams } from "@/lib/utils";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
