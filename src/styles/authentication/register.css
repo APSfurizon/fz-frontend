@@ -1,18 +1,18 @@
 form.login-form {
-    gap: 1.25em;
+  gap: 1.25em;
 }
 
 form .toolbar-bottom {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 span.error-container {
-    display: inline-block;
-    color: var(--text-status-error);
-    width: 100%;
+  display: inline-block;
+  color: var(--text-status-error);
+  width: 100%;
 }
 
 a.suggestion {
-    text-align: center;
+  text-align: center;
 }

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Checkbox from "@/components/input/checkbox";
 import FpButton from "@/components/input/fpButton";
 import { useState } from "react";
@@ -13,51 +13,76 @@ import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 
 export default function Home() {
-
   const [isBusy, setBusy] = useState(false);
 
   const [isOpen, setOpen] = useState(false);
 
   const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
 
-  const group1 = new SelectGroup([
-    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
-    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
-  ], "gouppone", { "it": "Gruppo", "en": "Group" })
-  const group2 = new SelectGroup([
-    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
-    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
-  ], "gouppone", { "it": "Gruppo", "en": "Group" })
-  const group3 = new SelectGroup([
-    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
-    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
-  ], "gouppone", { "it": "Gruppo", "en": "Group" })
-  const group4 = new SelectGroup([
-    new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { "it": "ciao", "en": "Hello" }),
-    new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { "it": "razzo", "en": "Rocket" })
-  ], "gouppone", { "it": "Gruppo", "en": "Group" })
-  const item3 = new SelectItem(3, "cc", "cLetter", "BED", undefined, undefined, { "it": "Libro", "en": "Book" });
+  const group1 = new SelectGroup(
+    [
+      new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { it: "ciao", en: "Hello" }),
+      new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { it: "razzo", en: "Rocket" }),
+    ],
+    "gouppone",
+    { it: "Gruppo", en: "Group" }
+  );
+  const group2 = new SelectGroup(
+    [
+      new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { it: "ciao", en: "Hello" }),
+      new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { it: "razzo", en: "Rocket" }),
+    ],
+    "gouppone",
+    { it: "Gruppo", en: "Group" }
+  );
+  const group3 = new SelectGroup(
+    [
+      new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { it: "ciao", en: "Hello" }),
+      new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { it: "razzo", en: "Rocket" }),
+    ],
+    "gouppone",
+    { it: "Gruppo", en: "Group" }
+  );
+  const group4 = new SelectGroup(
+    [
+      new SelectItem(1, "aa", "aLetter", "PERSON", undefined, undefined, { it: "ciao", en: "Hello" }),
+      new SelectItem(2, "bb", "bLetter", "ROTATE_LEFT", undefined, undefined, { it: "razzo", en: "Rocket" }),
+    ],
+    "gouppone",
+    { it: "Gruppo", en: "Group" }
+  );
+  const item3 = new SelectItem(3, "cc", "cLetter", "BED", undefined, undefined, { it: "Libro", en: "Book" });
 
-  const selectItems: (SelectItem | SelectGroup)[] = [
-    group1, item3, group2, group3, group4
-  ]
+  const selectItems: (SelectItem | SelectGroup)[] = [group1, item3, group2, group3, group4];
 
   return (
     <div className="page">
       <div className="container">
         <Upload busy={false} label="Profile picture" requireCrop cropAspectRatio="square"></Upload>
       </div>
-      <FpButton className="danger" onClick={() => setBusy(false)} icon="ADD_CIRCLE">Busy off</FpButton>
-      <FpButton busy={isBusy} onClick={() => { setBusy(true); }} icon="EDIT">Busy on</FpButton>
+      <FpButton className="danger" onClick={() => setBusy(false)} icon="ADD_CIRCLE">
+        Busy off
+      </FpButton>
+      <FpButton
+        busy={isBusy}
+        onClick={() => {
+          setBusy(true);
+        }}
+        icon="EDIT"
+      >
+        Busy on
+      </FpButton>
       <Checkbox>Wofe</Checkbox>
       <Checkbox busy={isBusy}>Wofe</Checkbox>
-      <NoticeBox theme={NoticeTheme.Success} title="Wow">It works</NoticeBox>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flexDirection: 'column', marginRight: 5 }}>
+      <NoticeBox theme={NoticeTheme.Success} title="Wow">
+        It works
+      </NoticeBox>
+      <div style={{ display: "flex" }}>
+        <div style={{ flexDirection: "column", marginRight: 5 }}>
           <FpInput label={titleInput} onChange={(e) => setTitleInput(e.target.value)} />
           <FpInput inputType="number" label={"Number"} />
         </div>
-        <div style={{ flexDirection: 'column', marginRight: 5 }}>
+        <div style={{ flexDirection: "column", marginRight: 5 }}>
           <FpInput inputType="password" label={"Password"} placeholder="Insert password" />
           <FpInput label={"Disabled"} disabled placeholder="Not editable" />
         </div>
@@ -78,14 +103,22 @@ export default function Home() {
       <Modal title="A title" open={isOpen} onClose={() => setOpen(false)}>
         <span>a modal</span>
       </Modal>
-      <FpButton onClick={() => { setOpen(true); }} icon="BED">Modal</FpButton>
-      <FpSelect fieldName="d"
+      <FpButton
+        onClick={() => {
+          setOpen(true);
+        }}
+        icon="BED"
+      >
+        Modal
+      </FpButton>
+      <FpSelect
+        fieldName="d"
         items={selectItems}
         hasError
         label="WoW"
         placeholder="select"
-        itemExtractor={inputEntityCodeExtractor} />
-
+        itemExtractor={inputEntityCodeExtractor}
+      />
     </div>
   );
 }

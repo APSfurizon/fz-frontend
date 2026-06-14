@@ -1,16 +1,18 @@
-"use client"
+"use client";
 import Icon from "@/components/icon";
 import { useTranslations } from "next-intl";
 
 export default function HomePage() {
-  const t = useTranslations('furpanel');
+  const t = useTranslations("furpanel");
   return (
     <div className="page">
       <div className="large title horizontal-list align-items-center justify-content-center">
-        <Icon className="x-large" style={{ marginRight: '.1em' }} icon="CONTEXTUAL_TOKEN" />
-        <span>{t.rich('home.header', {
-          highlighted: (chunks) => <b className="highlight">{chunks}</b>
-        })}</span>
+        <Icon className="x-large" style={{ marginRight: ".1em" }} icon="CONTEXTUAL_TOKEN" />
+        <span>
+          {t.rich("home.header", {
+            highlighted: (chunks) => <b className="highlight">{chunks}</b>,
+          })}
+        </span>
       </div>
       <span className="spacer"></span>
     </div>

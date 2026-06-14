@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import { redirect } from "next/navigation";
 
 export default function AppPage() {
-  redirect('/home');
+  redirect("/home");
 }

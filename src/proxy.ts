@@ -1,21 +1,25 @@
-import createMiddleware from 'next-intl/middleware';
-import { routing } from './i18n/routing';
-import { NextRequest, NextResponse } from 'next/server';
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+import { NextRequest, NextResponse } from "next/server";
 import {
-  API_BASE_URL, REGEX_UNAUTHENTICATED_URLS, REGEX_LOGOUT, REGEX_SKIP_AUTHENTICATED,
-  TOKEN_STORAGE_NAME, MOBILE_ADMIN_TOKEN_STORAGE_NAME
-} from './lib/constants';
+  API_BASE_URL,
+  REGEX_UNAUTHENTICATED_URLS,
+  REGEX_LOGOUT,
+  REGEX_SKIP_AUTHENTICATED,
+  TOKEN_STORAGE_NAME,
+  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
+} from "./lib/constants";
 
 const intlMiddleware = createMiddleware(routing);
 
 type TokenResult = {
   status: TokenVerification;
-  language?: string
-}
+  language?: string;
+};
 enum TokenVerification {
   SUCCESS,
   NOT_VALID,
-  NETWORK_ERROR
+  NETWORK_ERROR,
 }
 
 export async function proxy(req: NextRequest) {
@@ -24,7 +28,7 @@ export async function proxy(req: NextRequest) {
 
   // Check Token
   const loginToken = req.cookies.get(TOKEN_STORAGE_NAME);
-  const tokenPresent = (!!loginToken && !!loginToken.value);
+  const tokenPresent = !!loginToken && !!loginToken.value;
 
   // Check url regex
   const needsAuthentication = !REGEX_UNAUTHENTICATED_URLS.test(path);
@@ -35,9 +39,9 @@ export async function proxy(req: NextRequest) {
   const strippedParams = new URLSearchParams(params);
   strippedParams.delete("continue");
   strippedParams.delete(TOKEN_STORAGE_NAME);
-  const continueParams = new URLSearchParams({ "continue": `${path}?${strippedParams.toString()}` });
+  const continueParams = new URLSearchParams({ continue: `${path}?${strippedParams.toString()}` });
 
-  const intlMiddlewareResult = await intlMiddleware(req);
+  const intlMiddlewareResult = intlMiddleware(req);
 
   if (isLogout) {
     return stripToken(intlMiddlewareResult);
@@ -55,9 +59,11 @@ export async function proxy(req: NextRequest) {
 
   if (tokenResult.status == TokenVerification.SUCCESS) {
     if (tokenResult.language) {
-      intlMiddlewareResult.cookies.set("NEXT_LOCALE",
+      intlMiddlewareResult.cookies.set(
+        "NEXT_LOCALE",
         tokenResult.language,
-        intlMiddlewareResult.cookies.get("NEXT_LOCALE"));
+        intlMiddlewareResult.cookies.get("NEXT_LOCALE")
+      );
     }
     if (shouldSkipIfAuthenticated) {
       return redirectToUrl(params.get("continue") ?? "/home", req);
@@ -68,10 +74,8 @@ export async function proxy(req: NextRequest) {
     if (needsAuthentication) {
       return redirectToLogin(req, continueParams, tokenResult.status == TokenVerification.NOT_VALID);
     } else {
-      if (tokenResult.status == TokenVerification.NOT_VALID)
-        return stripToken(intlMiddlewareResult);
-      else
-        return intlMiddlewareResult;
+      if (tokenResult.status == TokenVerification.NOT_VALID) return stripToken(intlMiddlewareResult);
+      else return intlMiddlewareResult;
     }
   }
 }
@@ -80,24 +84,27 @@ async function verifyToken(clientIp: string | null, token: string): Promise<Toke
   // Try validating the request
   const headers = new Headers({
     "Content-type": "application/json",
-    "Authorization": `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   });
-  clientIp && headers.append("X-Forwarded-For", clientIp);
+  if (clientIp) headers.append("X-Forwarded-For", clientIp);
   let fetchResult: Response | undefined = undefined;
   try {
-    fetchResult = await fetch(`${API_BASE_URL}users/me`, { method: 'GET', headers: headers });
+    fetchResult = await fetch(`${API_BASE_URL}users/me`, { method: "GET", headers: headers });
   } catch {
-    return { status: TokenVerification.NETWORK_ERROR }
+    return { status: TokenVerification.NETWORK_ERROR };
   }
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await fetchResult.json();
     return fetchResult && fetchResult.ok
       ? {
-        status: TokenVerification.SUCCESS,
-        language: String(body["language"])?.replace("_", "-")
-      } : { status: TokenVerification.NOT_VALID };
+          status: TokenVerification.SUCCESS,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          language: String(body["language"])?.replace("_", "-"),
+        }
+      : { status: TokenVerification.NOT_VALID };
   } catch {
-    return { status: TokenVerification.NETWORK_ERROR }
+    return { status: TokenVerification.NETWORK_ERROR };
   }
 }
 
@@ -105,14 +112,14 @@ const stripToken = (res: NextResponse): NextResponse => {
   res.cookies.delete(TOKEN_STORAGE_NAME);
   res.cookies.delete(MOBILE_ADMIN_TOKEN_STORAGE_NAME);
   return res;
-}
+};
 
 const redirectToLogin = (req: NextRequest, continueParams: URLSearchParams, strip: boolean) => {
   const url = new URL(`/login`, req.url);
   continueParams.forEach((v, k) => url.searchParams.append(k, v));
   const response = NextResponse.redirect(url, { status: 303 });
   return strip ? stripToken(response) : response;
-}
+};
 
 const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchParams) => {
   const newUrl = new URL(path, req.url);
@@ -120,8 +127,8 @@ const redirectToUrl = (path: string, req: NextRequest, searchParams?: URLSearchP
     searchParams?.forEach((v, k) => newUrl.searchParams.append(k, v));
   }
   return NextResponse.redirect(newUrl, { status: 303 });
-}
+};
 
 export const config = {
-  matcher: ['/((?!api|\.well-known|_next|favicon.ico|robots.txt|images|.*\\.(?:woff2|png|webp|jpg|svg)$).*)'],
-}
+  matcher: ["/((?!api|\.well-known|_next|favicon.ico|robots.txt|images|.*\\.(?:woff2|png|webp|jpg|svg)$).*)"],
+};

@@ -1,0 +1,5 @@
+// .prettierignore
+.next
+node_modules
+out
+build

@@ -6,7 +6,11 @@ import ErrorMessage from "@/components/errorMessage";
 import FpTable from "@/components/table/fpTable";
 import { runRequest } from "@/lib/api/global";
 import {
-  DestroyAllSessionsAction, DestroySessionAction, DestroySessionData, GetAllSessionsAction, UserSession
+  DestroyAllSessionsAction,
+  DestroySessionAction,
+  DestroySessionData,
+  GetAllSessionsAction,
+  UserSession,
 } from "@/lib/api/user";
 import { uaFriendly } from "@/lib/userAgent";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
@@ -31,12 +35,10 @@ export default function UserSessions() {
     runRequest({ action: new GetAllSessionsAction() })
       .then((result) => setSessions(result.sessions))
       .catch((err) => {
-        showModal(
-          t("common.error"),
-          <ErrorMessage error={err} />
-        );
+        showModal(t("common.error"), <ErrorMessage error={err} />);
         setSessions([]);
-      }).finally(() => setLoading(false));
+      })
+      .finally(() => setLoading(false));
   }, [sessions]);
 
   // Session deletion logic
@@ -52,7 +54,7 @@ export default function UserSessions() {
         setDestroyConfirmModalOpen(false);
         router.replace("/logout");
       });
-  }
+  };
 
   const promptDestroySession = (sessionId: string) => {
     showModal(
@@ -60,19 +62,28 @@ export default function UserSessions() {
       <>
         <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_session")}</span>
         <div className="bottom-toolbar">
-          <FpButton title={t("common.cancel")} className="danger" onClick={() => hideModal()}
-            icon="CANCEL" busy={loading}>{t("common.cancel")}</FpButton>
+          <FpButton
+            title={t("common.cancel")}
+            className="danger"
+            onClick={() => hideModal()}
+            icon="CANCEL"
+            busy={loading}
+          >
+            {t("common.cancel")}
+          </FpButton>
           <div className="spacer"></div>
-          <FpButton title={t("furpanel.user.sessions.actions.terminate_session")}
+          <FpButton
+            title={t("furpanel.user.sessions.actions.terminate_session")}
             onClick={() => destroySession(sessionId)}
             icon="CLOSE"
-            busy={loading}>
+            busy={loading}
+          >
             {t("furpanel.user.sessions.actions.terminate_session")}
           </FpButton>
         </div>
       </>
-    )
-  }
+    );
+  };
 
   const destroySession = (sessionId: string) => {
     if (!sessions) return;
@@ -80,75 +91,96 @@ export default function UserSessions() {
     const sessionData: DestroySessionData = { sessionId: sessionId };
     runRequest({
       action: new DestroySessionAction(),
-      body: sessionData
-    }).then(() => {
-      hideModal();
-      setSessions(undefined);
+      body: sessionData,
     })
+      .then(() => {
+        hideModal();
+        setSessions(undefined);
+      })
       .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
       .finally(() => setLoading(false));
-  }
+  };
 
   // Table logic
   const sessionColHelper = createColumnHelper<UserSession>();
-  const sessionColumns: ColumnDef<UserSession, any>[] = useMemo(() => [
-    sessionColHelper.accessor(itm => convertToDateTime(itm.createdAt), {
-      id: "created",
-      header: t("furpanel.user.sessions.headers.created")
-    }),
-    sessionColHelper.accessor(itm => uaFriendly(itm.userAgent), {
-      id: "userAgent",
-      header: t("furpanel.user.sessions.headers.user_agent")
-    }),
-    sessionColHelper.accessor(itm => convertToDateTime(itm.lastUsageAt), {
-      id: "lastUsed",
-      header: t("furpanel.user.sessions.headers.last_usage")
-    }),
-    sessionColHelper.display({
-      id: "terminate",
-      header: "",
-      cell: (props) => <FpButton onClick={() => promptDestroySession(props.row.original.sessionId)}
-        icon="CLOSE" title={t("furpanel.user.sessions.actions.terminate_session")}
-        busy={loading}
-        style={{ display: 'inline' }} />,
-      enableResizing: false,
-      maxSize: 50
-    })
-  ], [loading]);
+  const sessionColumns: ColumnDef<UserSession, any>[] = useMemo(
+    () => [
+      sessionColHelper.accessor((itm) => convertToDateTime(itm.createdAt), {
+        id: "created",
+        header: t("furpanel.user.sessions.headers.created"),
+      }),
+      sessionColHelper.accessor((itm) => uaFriendly(itm.userAgent), {
+        id: "userAgent",
+        header: t("furpanel.user.sessions.headers.user_agent"),
+      }),
+      sessionColHelper.accessor((itm) => convertToDateTime(itm.lastUsageAt), {
+        id: "lastUsed",
+        header: t("furpanel.user.sessions.headers.last_usage"),
+      }),
+      sessionColHelper.display({
+        id: "terminate",
+        header: "",
+        cell: (props) => (
+          <FpButton
+            onClick={() => promptDestroySession(props.row.original.sessionId)}
+            icon="CLOSE"
+            title={t("furpanel.user.sessions.actions.terminate_session")}
+            busy={loading}
+            style={{ display: "inline" }}
+          />
+        ),
+        enableResizing: false,
+        maxSize: 50,
+      }),
+    ],
+    [loading]
+  );
 
-  return <>
-    {sessions
-      ? <FpTable<UserSession> key={String(loading)}
-        columns={sessionColumns}
-        rows={sessions}
-        pinnedColumns={{ right: ["terminate"] }} />
-      : <LoadingPanel />
-    }
-    <div className="horizontal-list">
-      <div className="spacer"></div>
-      <FpButton className="danger" icon="CLOSE" onClick={() => setDestroyConfirmModalOpen(true)}>
-        {t("furpanel.user.sessions.actions.terminate_all_sessions")}
-      </FpButton>
-    </div>
-    <Modal open={destroyConfirmModalOpen} onClose={() => setDestroyConfirmModalOpen(false)}
-      title={t("furpanel.user.sessions.actions.terminate_all_sessions")}>
-      <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_all_sessions")}</span>
-      <div className="bottom-toolbar">
-        <FpButton title={t("common.cancel")}
-          className="danger"
-          onClick={() => setDestroyConfirmModalOpen(false)}
-          icon="CANCEL"
-          busy={loading}>
-          {t("common.cancel")}
-        </FpButton>
-        <div className="spacer" />
-        <FpButton title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
-          onClick={() => destroyAllSessions()}
-          icon="CLOSE"
-          busy={loading}>
+  return (
+    <>
+      {sessions ? (
+        <FpTable<UserSession>
+          key={String(loading)}
+          columns={sessionColumns}
+          rows={sessions}
+          pinnedColumns={{ right: ["terminate"] }}
+        />
+      ) : (
+        <LoadingPanel />
+      )}
+      <div className="horizontal-list">
+        <div className="spacer"></div>
+        <FpButton className="danger" icon="CLOSE" onClick={() => setDestroyConfirmModalOpen(true)}>
           {t("furpanel.user.sessions.actions.terminate_all_sessions")}
         </FpButton>
       </div>
-    </Modal>
-  </>
+      <Modal
+        open={destroyConfirmModalOpen}
+        onClose={() => setDestroyConfirmModalOpen(false)}
+        title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
+      >
+        <span className="descriptive">{t("furpanel.user.sessions.messages.confirm_terminate_all_sessions")}</span>
+        <div className="bottom-toolbar">
+          <FpButton
+            title={t("common.cancel")}
+            className="danger"
+            onClick={() => setDestroyConfirmModalOpen(false)}
+            icon="CANCEL"
+            busy={loading}
+          >
+            {t("common.cancel")}
+          </FpButton>
+          <div className="spacer" />
+          <FpButton
+            title={t("furpanel.user.sessions.actions.terminate_all_sessions")}
+            onClick={() => destroyAllSessions()}
+            icon="CLOSE"
+            busy={loading}
+          >
+            {t("furpanel.user.sessions.actions.terminate_all_sessions")}
+          </FpButton>
+        </div>
+      </Modal>
+    </>
+  );
 }

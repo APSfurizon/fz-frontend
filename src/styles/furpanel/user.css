@@ -1,10 +1,10 @@
 div.form-pair div.fp-input,
 div.form-pair div.autocomplete-input {
-    flex: 1;
+  flex: 1;
 }
 
-@media (max-width:1300px) {
-    .form-pair {
-        flex-direction: column;
-    }
+@media (max-width: 1300px) {
+  .form-pair {
+    flex-direction: column;
+  }
 }
