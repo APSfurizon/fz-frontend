@@ -1,5 +1,8 @@
 import { AllEventsResponse } from "../../counts";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
+import { ApiAction } from "../../networking/types";
+import { ApiErrorResponse } from "../../networking/types";
+import { ApiResponse } from "../../networking/types";
+import { RequestType } from "../../networking/types";
 import { GalleryMediaApiResponse, UploadRepostPermissions } from "../types";
 import { UploadLimitsResponse } from "./types";
 

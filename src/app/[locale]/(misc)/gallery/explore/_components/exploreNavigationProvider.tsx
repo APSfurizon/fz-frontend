@@ -8,7 +8,7 @@ import {
 import { ExploreUrl, parseExploreSlug } from "@/lib/api/gallery/explore/main";
 import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
 import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { buildSearchParams } from "@/lib/utils";
 import { Leastwise } from "@/lib/utils/types";
 import { useParams, useRouter } from "next/navigation";

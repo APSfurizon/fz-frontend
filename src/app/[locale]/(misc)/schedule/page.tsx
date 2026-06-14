@@ -5,7 +5,7 @@ import useTitle from "@/components/hooks/useTitle";
 import LoadingPanel from "@/components/loadingPanel";
 import ScheduleCalendar from "@/components/schedule/scheduleCalendar";
 import { loadScheduleActivities } from "@/lib/api/schedule_detail";
-import { ApiErrorResponse } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { mapScheduleActivitiesToEvents, SCHEDULE_ROOMS, ScheduleActivityApiItem, ScheduleEvent } from "@/lib/schedule";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";

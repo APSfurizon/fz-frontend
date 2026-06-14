@@ -6,7 +6,8 @@ import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { GROUP_CHAT_URL } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { isMobile } from "@/lib/userAgent";
 import {
   Board,
@@ -60,7 +61,7 @@ export default function BookingPage() {
     setExchangeModalOpen(true);
   };
 
-  const exchangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const exchangeFail = (err: ApiErrorResponse) => {
     setExchangeModalOpen(false);
     showModal(t("common.error"), <ErrorMessage error={err} />);
   };

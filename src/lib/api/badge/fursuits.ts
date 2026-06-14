@@ -1,5 +1,7 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { ApiAction, ApiErrorResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import { MediaData } from "../media";
 import { SponsorType } from "../user";
 

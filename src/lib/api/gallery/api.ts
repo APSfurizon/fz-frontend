@@ -1,4 +1,7 @@
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import { BulkDownloadApiResponse, GalleryUploadedFullMedia } from "./types";
 
 export class GetFullMediaApiAction extends ApiAction<ApiResponse & GalleryUploadedFullMedia, ApiErrorResponse> {

@@ -6,7 +6,7 @@ import Icon, { MaterialIcon } from "@/components/icon";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { DeleteMediaApiAction, GetFullMediaApiAction } from "@/lib/api/gallery/api";
 import "@/styles/misc/gallery/viewMediaModal.scss";
 import { translate } from "@/lib/translations";

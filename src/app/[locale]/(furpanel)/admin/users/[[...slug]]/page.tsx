@@ -3,7 +3,8 @@ import AutoInput from "@/components/input/autoInput";
 import Icon from "@/components/icon";
 import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
-import { ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import {
   AutoInputUsersManager,
   GetUserByIdAction,

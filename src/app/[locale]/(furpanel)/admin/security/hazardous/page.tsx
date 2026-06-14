@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   SecurityHazard,
   GetSecurityHazardsApiAction,

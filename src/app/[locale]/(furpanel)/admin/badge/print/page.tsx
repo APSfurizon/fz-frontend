@@ -11,7 +11,7 @@ import {
   SearchRegularBadgesApiAction,
   SearchRegularBadgesResponse,
 } from "@/lib/api/admin/advancedPrint";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import useTitle from "@/components/hooks/useTitle";
 import { buildSearchParams, getParentDirectory, isEmpty } from "@/lib/utils";
 import { createColumnHelper } from "@tanstack/react-table";

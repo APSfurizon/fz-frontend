@@ -2,7 +2,7 @@ import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/typ
 import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { FilterSetterSearchData, useExploreNavigation } from "./exploreNavigationProvider";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   ExploreEventApiAction,
   ExploreEventsApiAction,

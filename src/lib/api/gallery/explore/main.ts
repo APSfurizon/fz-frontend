@@ -1,6 +1,6 @@
 import { CachedData } from "@/lib/cache/cache";
 import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "../types";
-import { runRequest } from "../../global";
+import { runRequest } from "../../networking/main";
 import { GetFullMediaApiAction } from "../api";
 import { SelectItem } from "@/lib/components/fpSelect";
 

@@ -9,7 +9,10 @@ import {
   SearchType,
 } from "../components/autoInput";
 import { getFlagEmoji } from "../components/userPicture";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
+import { ApiAction } from "./networking/types";
+import { ApiErrorResponse } from "./networking/types";
+import { ApiResponse } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { TranslatableString } from "../translations";
 import { firstOrEmpty } from "../utils";
 

@@ -1,6 +1,10 @@
 import { NoticeTheme } from "@/components/noticeBox";
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { ApiErrorResponse, ApiResponse, ApiAction, MobileApiAction, RequestType } from "../global";
+import { MobileApiAction } from "../networking/types";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 export const AuthenticationCodes: Record<string, NoticeTheme> = {
   CONFIRMATION_SUCCESSFUL: NoticeTheme.Success,

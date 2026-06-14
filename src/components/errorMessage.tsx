@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { ApiDetailedErrorResponse, ApiErrorResponse } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { copyContent, isEmpty } from "@/lib/utils";
 import { useMemo } from "react";
 
@@ -12,19 +12,10 @@ export default function ErrorMessage({ error }: Readonly<{ error?: ApiErrorRespo
   const t = useTranslations();
   const errors = useMemo(() => {
     const toReturn: ErrorData[] = [];
-    if (error && "errors" in error) {
-      const detail: ApiDetailedErrorResponse = error as ApiDetailedErrorResponse;
-      toReturn.push(...detail.errors.map((err) => ({ code: err.code, message: err.message })));
-    } else {
-      if (!error || isEmpty(error?.errorMessage)) {
-        toReturn.push({ message: t("common.unknown_error") });
-      } else {
-        toReturn.push({
-          code: undefined,
-          message: error.errorMessage!,
-        });
-      }
+    if (!error?.errors) {
+      toReturn.push({ message: t("common.unknown_error") });
     }
+    toReturn.push(...(error?.errors ?? []).map((err) => ({ code: err.code, message: err.message })));
 
     return toReturn;
   }, [error]);

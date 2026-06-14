@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from "@/components/context/userProvider";
 import { MyUploadsApiAction } from "@/lib/api/gallery/upload/api";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";

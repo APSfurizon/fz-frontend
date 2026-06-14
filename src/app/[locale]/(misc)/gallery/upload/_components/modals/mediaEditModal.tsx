@@ -12,7 +12,7 @@ import { inputEntityCodeExtractor } from "@/lib/components/input";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
 import { ExploreEvent } from "@/lib/api/gallery/explore/type";
 import { STATUS_FILTER_ITEMS } from "@/lib/api/gallery/explore/main";

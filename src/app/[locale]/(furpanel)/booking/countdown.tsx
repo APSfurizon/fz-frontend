@@ -6,7 +6,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/booking";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { EVENT_BANNER, EVENT_LOGO } from "@/lib/constants";
 import { getCountdown } from "@/lib/utils";
 import { useFormatter, useNow, useTranslations } from "next-intl";

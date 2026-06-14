@@ -1,5 +1,6 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { ApiErrorResponse, RequestType } from "../global";
+import { ApiErrorResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 export interface RecoverApiData {
   email?: string;

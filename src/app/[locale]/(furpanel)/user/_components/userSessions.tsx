@@ -4,7 +4,7 @@ import LoadingPanel from "@/components/loadingPanel";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import FpTable from "@/components/table/fpTable";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   DestroyAllSessionsAction,
   DestroySessionAction,

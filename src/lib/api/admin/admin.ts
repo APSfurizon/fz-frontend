@@ -1,5 +1,8 @@
 import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
   canUpgradeUser?: boolean;

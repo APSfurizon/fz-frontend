@@ -2,7 +2,7 @@
 import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
 import { ConventionEvent, CountViewMode, GetAllEventsApiAction, NosecountContext } from "@/lib/api/counts";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";

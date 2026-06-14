@@ -7,7 +7,7 @@ import {
   RoomStoreItemsApiAction,
   RoomStoreItemsApiResponse,
 } from "@/lib/api/flows/roomOrderFlow";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";

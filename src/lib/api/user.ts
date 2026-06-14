@@ -9,15 +9,13 @@ import {
 } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
 import { buildSearchParams, setCookie } from "../utils";
-import {
-  ApiErrorResponse,
-  ApiResponse,
-  ApiAction,
-  runRequest,
-  SimpleApiResponse,
-  ApiRequest,
-  RequestType,
-} from "./global";
+import { runRequest } from "./networking/main";
+import { ApiAction } from "./networking/types";
+import { ApiErrorResponse } from "./networking/types";
+import { SimpleApiResponse } from "./networking/types";
+import { ApiResponse } from "./networking/types";
+import { ApiRequest } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { MediaData } from "./media";
 import { SelectItem } from "../components/fpSelect";
 import { MouseEvent } from "react";

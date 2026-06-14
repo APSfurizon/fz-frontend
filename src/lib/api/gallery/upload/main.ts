@@ -1,4 +1,5 @@
-import { ApiResponse, runRequest } from "../../global";
+import { runRequest } from "../../networking/main";
+import { ApiResponse } from "../../networking/types";
 import CryptoJS from "crypto-js";
 import {
   GalleryUploadAbortApiAction,

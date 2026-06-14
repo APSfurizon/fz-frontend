@@ -9,7 +9,8 @@ import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewResponse, ShowInNosecountApiAction, ShowInNosecountApiInput } from "@/lib/api/admin/userView";
 import { BadgeDataChangeFormAction, DeleteBadgeAdminAction, UploadBadgeAdminAction } from "@/lib/api/badge/badge";
 import { AutoInputCountriesManager } from "@/lib/api/geo";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { getFlagEmoji } from "@/lib/components/userPicture";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -104,8 +105,7 @@ export default function UserViewBadge({
   // Change data
   const [changeDataModalOpen, setChangeDataModalOpen] = useState(false);
 
-  const onChangeFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) =>
-    showModal(t("common.error"), <ErrorMessage error={err} />);
+  const onChangeFail = (err: ApiErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
   return (
     <>

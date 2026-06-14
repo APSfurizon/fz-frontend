@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import MediaEditModal from "@/app/[locale]/(misc)/gallery/upload/_components/modals/mediaEditModal";
 import { useGallerySelection } from "./context/gallerySelectionProvider";
 import GalleryVirtualizedGrid from "./galleryVirtualizedGrid";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { BulkDownloadApiAction } from "@/lib/api/gallery/api";
 import { useModalUpdate } from "../context/modalProvider";
 import ErrorMessage from "../errorMessage";

@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import "@/styles/misc/nosecount.css";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import {
   CountViewMode,
   FursuitCountApiAction,
@@ -37,7 +38,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
   // Main logic
   const [needsLoading, setNeedsLoading] = useState(false);
   const [setup, setSetup] = useState(false);
-  const [error, setError] = useState<ApiErrorResponse | ApiDetailedErrorResponse>();
+  const [error, setError] = useState<ApiErrorResponse>();
   const [loading, setLoading] = useState(false);
 
   const t = useTranslations();

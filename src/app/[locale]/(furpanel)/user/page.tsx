@@ -6,7 +6,8 @@ import useTitle from "@/components/hooks/useTitle";
 import { useTranslations } from "next-intl";
 import DataForm from "@/components/input/dataForm";
 import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import ErrorMessage from "@/components/errorMessage";
 import FpInput from "@/components/input/fpInput";
 import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
@@ -36,7 +37,7 @@ export default function UserPage() {
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
-  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) =>
+  const passwordChangeError = (err: ApiErrorResponse) =>
     showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
 
   useTitle(t("furpanel.user.title"));

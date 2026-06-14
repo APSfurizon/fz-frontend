@@ -1,7 +1,11 @@
 import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../components/autoInput";
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
 import { buildSearchParams } from "../../utils";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global";
+import { runRequest } from "../networking/main";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import {
   AutoInputRoomInviteManager,
   CompleteUserData,

@@ -10,7 +10,8 @@ import {
   SearchFursuitBadgesResponse,
   SearchRegularBadgesResponse,
 } from "@/lib/api/admin/advancedPrint";
-import { ApiAction, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiAction } from "@/lib/api/networking/types";
 import { isEmpty } from "@/lib/utils";
 import { ColumnDef, Table } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";

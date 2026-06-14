@@ -12,7 +12,7 @@ import {
   RemoveUserFromRoleApiAction,
   UserViewRoles,
 } from "@/lib/api/admin/userView";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { AutoInputFilter } from "@/lib/components/autoInput";
 import { ColumnDef, createColumnHelper, Table } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";

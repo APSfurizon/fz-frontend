@@ -1,6 +1,6 @@
 import { createContext, RefObject, useContext, useEffect, useRef, useState } from "react";
 import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 
 interface UserUpdateType {
   updateUser: boolean;

@@ -11,7 +11,8 @@ import {
   RoomStoreItemsApiResponse,
   RoomTypeInfo,
 } from "@/lib/api/flows/roomOrderFlow";
-import { ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import ErrorMessage from "@/components/errorMessage";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";

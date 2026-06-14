@@ -1,4 +1,4 @@
-import { ApiErrorResponse } from "./api/global";
+import { ApiErrorResponse } from "./api/networking/types";
 import { getFlagEmoji } from "./components/userPicture";
 import {
   API_IMAGE_URL,

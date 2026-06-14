@@ -1,6 +1,9 @@
 import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
 import { Board, ExtraDaysType } from "./booking";
-import { ApiErrorResponse, ApiResponse, ApiAction, RequestType } from "./global";
+import { ApiAction } from "./networking/types";
+import { ApiErrorResponse } from "./networking/types";
+import { ApiResponse } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
 import { SponsorType, UserData } from "./user";
 
