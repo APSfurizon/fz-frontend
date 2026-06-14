@@ -1,97 +1,105 @@
 :root {
-    --gallery-events__container__columns: 4;
-    --w: minmax(250px, 1fr);
-    --event-card__text-shadow: #000;
-    --event-card__text-color: #ddd;
+  --gallery-events__container__columns: 4;
+  --w: minmax(250px, 1fr);
+  --event-card__text-shadow: #000;
+  --event-card__text-color: #ddd;
 }
 
 @media screen and (max-width: 650px) {
-    :root {
-        --gallery-events__container__columns: 3;
-    }
+  :root {
+    --gallery-events__container__columns: 3;
+  }
 }
 
 @media screen and (max-width: 420px) {
-    :root {
-        --gallery-events__container__columns: 2;
-    }
+  :root {
+    --gallery-events__container__columns: 2;
+  }
 }
 
 .gallery-events {
-    &__container {
-        display: grid;
-        gap: 4mm;
-        grid-template-columns: repeat(var(--gallery-events__container__columns), minmax(100px, 1fr));
+  &__container {
+    display: grid;
+    gap: 4mm;
+    grid-template-columns: repeat(var(--gallery-events__container__columns), minmax(100px, 1fr));
+  }
+
+  &__event-card {
+    position: relative;
+    overflow: hidden;
+    width: var(--w);
+    height: var(--w);
+    cursor: pointer;
+    transition: transform 100ms;
+
+    &:hover {
+      outline: 1px solid var(--button-border-normal);
     }
 
-    &__event-card {
-        position: relative;
-        overflow: hidden;
-        width: var(--w);
-        height: var(--w);
-        cursor: pointer;
-        transition: transform 100ms;
-
-        &:hover {
-            outline: 1px solid var(--button-border-normal);
-        }
-
-        &:active {
-            outline-color: var(--button-border-down);
-            transform: scale(.95);
-        }
-
-        &__image {
-            width: 100%;
-            height: 100%;
-            transition: filter 300ms;
-        }
-
-        &:hover &__image {
-            filter: brightness(.8)
-        }
-
-        &__overlay {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            bottom: 0px;
-            left: 0px;
-            display: flex;
-            flex-direction: column;
-            justify-content: end;
-            background: linear-gradient(rgb(from var(--event-card__text-shadow) r g b / 0) 0%, rgb(from var(--event-card__text-shadow) r g b / 0) 30%, rgb(from var(--event-card__text-shadow) r g b / 0.80) 80%);
-            background-repeat: no-repeat;
-            background-position-y: bottom;
-            background-size: 100% 50%;
-            transition: outline-color 300ms, background-size 300ms;
-        }
-
-        &:hover &__overlay {
-            background-size: 100% 100%;
-        }
-
-        &__title,
-        &__count {
-            color: var(--event-card__text-color);
-        }
-
-        &__title {
-            margin: 2mm;
-            text-shadow: 0px 0px 10px var(--event-card__text-shadow);
-        }
-
-        &__count {
-            margin: 2mm;
-            max-height: 0px;
-            overflow: hidden;
-            display: none;
-            transition: max-height 300ms, display 10ms;
-        }
-
-        &:hover &__count {
-            display: block;
-            max-height: 100px;
-        }
+    &:active {
+      outline-color: var(--button-border-down);
+      transform: scale(0.95);
     }
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      transition: filter 300ms;
+    }
+
+    &:hover &__image {
+      filter: brightness(0.8);
+    }
+
+    &__overlay {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      background: linear-gradient(
+        rgb(from var(--event-card__text-shadow) r g b / 0) 0%,
+        rgb(from var(--event-card__text-shadow) r g b / 0) 30%,
+        rgb(from var(--event-card__text-shadow) r g b / 0.8) 80%
+      );
+      background-repeat: no-repeat;
+      background-position-y: bottom;
+      background-size: 100% 50%;
+      transition:
+        outline-color 300ms,
+        background-size 300ms;
+    }
+
+    &:hover &__overlay {
+      background-size: 100% 100%;
+    }
+
+    &__title,
+    &__count {
+      color: var(--event-card__text-color);
+    }
+
+    &__title {
+      margin: 2mm;
+      text-shadow: 0px 0px 10px var(--event-card__text-shadow);
+    }
+
+    &__count {
+      margin: 2mm;
+      max-height: 0px;
+      overflow: hidden;
+      display: none;
+      transition:
+        max-height 300ms,
+        display 10ms;
+    }
+
+    &:hover &__count {
+      display: block;
+      max-height: 100px;
+    }
+  }
 }

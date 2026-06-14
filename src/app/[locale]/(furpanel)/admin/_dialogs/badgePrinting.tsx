@@ -9,72 +9,85 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 enum StepType {
-    CHOOSE_PRINT_MODE,
-    SIMPLE,
-    ADVANCED_SETTINGS,
+  CHOOSE_PRINT_MODE,
+  SIMPLE,
+  ADVANCED_SETTINGS,
 }
 
 export default function BadgePrintingDialog({
-    open,
-    onClose,
-    loading,
-    setLoading
+  open,
+  onClose,
+  loading,
+  setLoading,
 }: Readonly<{
-    open: boolean,
-    onClose: () => void,
-    loading: boolean,
-    setLoading: Dispatch<SetStateAction<boolean>>
+  open: boolean;
+  onClose: () => void;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }>) {
-    const t = useTranslations();
-    const { showModal } = useModalUpdate();
-    const [step, setStep] = useState(StepType.CHOOSE_PRINT_MODE);
-    const router = useRouter();
+  const t = useTranslations();
+  const { showModal } = useModalUpdate();
+  const [step, setStep] = useState(StepType.CHOOSE_PRINT_MODE);
+  const router = useRouter();
 
-    const closeModal = () => {
-        setStep(StepType.CHOOSE_PRINT_MODE);
-        if (onClose) onClose();
+  const closeModal = () => {
+    setStep(StepType.CHOOSE_PRINT_MODE);
+    if (onClose) onClose();
+  };
+
+  useEffect(() => {
+    if (!open) {
+      setStep(StepType.CHOOSE_PRINT_MODE);
     }
+  }, [open]);
 
-    useEffect(() => {
-        if (!open) {
-            setStep(StepType.CHOOSE_PRINT_MODE);
-        }
-    }, [open])
+  const renderFursuit = () => renderBadges(new GetRenderedFursuitBadgesApiAction());
+  const renderCommon = () => renderBadges(new GetRenderedCommonBadgesApiAction());
 
-    const renderFursuit = () => renderBadges(new GetRenderedFursuitBadgesApiAction());
-    const renderCommon = () => renderBadges(new GetRenderedCommonBadgesApiAction());
+  const renderBadges = (action: ApiAction<any, any>) => {
+    setLoading(true);
+    runRequest({ action })
+      .then((response) => {
+        const res = response as Response;
+        res.blob().then((badgesBlob) => {
+          const result = URL.createObjectURL(badgesBlob);
+          window.open(result, "_blank");
+          URL.revokeObjectURL(result);
+        });
+        closeModal();
+      })
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .finally(() => setLoading(false));
+  };
 
-    const renderBadges = (action: ApiAction<any, any>) => {
-        setLoading(true);
-        runRequest({ action })
-            .then((response) => {
-                const res = response as Response;
-                res.blob().then((badgesBlob) => {
-                    const result = URL.createObjectURL(badgesBlob);
-                    window.open(result, "_blank");
-                    URL.revokeObjectURL(result);
-                });
-                closeModal();
-            }).catch((err) => showModal(
-                t("common.error"),
-                <ErrorMessage error={err} />
-            )).finally(() => setLoading(false))
-    }
-
-    return <Modal icon="BADGE" title={t("furpanel.admin.events.badges.print_badges")} open={open} onClose={closeModal}>
-        {step == StepType.CHOOSE_PRINT_MODE && <>
-            <span className="title">{t("furpanel.admin.events.badges.print.select_mode")}</span>
-            <div className="horizontal-list gap-4mm">
-                <FpButton busy={loading} onClick={() => setStep(StepType.SIMPLE)} icon="CHECK_CIRCLE">{t("furpanel.admin.events.badges.print.simple_mode.title")}</FpButton>
-                <FpButton busy={loading} onClick={() => router.push('admin/badge/print')} icon="TUNE">{t("furpanel.admin.events.badges.print.advanced_mode.title")}</FpButton>
-            </div>
-        </>}
-        {step == StepType.SIMPLE && <>
-            <span className="title">{t("furpanel.admin.events.badges.print.simple_mode.choose_badge")}</span>
-            <div className="horizontal-list gap-4mm">
-                <FpButton busy={loading} onClick={() => renderCommon()} icon="PERSON">{t("furpanel.admin.events.badges.print.simple_mode.common")}</FpButton>
-                <FpButton busy={loading} onClick={() => renderFursuit()} icon="PETS">{t("furpanel.admin.events.badges.print.simple_mode.fursuit")}</FpButton>
-            </div>
-        </>}
+  return (
+    <Modal icon="BADGE" title={t("furpanel.admin.events.badges.print_badges")} open={open} onClose={closeModal}>
+      {step == StepType.CHOOSE_PRINT_MODE && (
+        <>
+          <span className="title">{t("furpanel.admin.events.badges.print.select_mode")}</span>
+          <div className="horizontal-list gap-4mm">
+            <FpButton busy={loading} onClick={() => setStep(StepType.SIMPLE)} icon="CHECK_CIRCLE">
+              {t("furpanel.admin.events.badges.print.simple_mode.title")}
+            </FpButton>
+            <FpButton busy={loading} onClick={() => router.push("admin/badge/print")} icon="TUNE">
+              {t("furpanel.admin.events.badges.print.advanced_mode.title")}
+            </FpButton>
+          </div>
+        </>
+      )}
+      {step == StepType.SIMPLE && (
+        <>
+          <span className="title">{t("furpanel.admin.events.badges.print.simple_mode.choose_badge")}</span>
+          <div className="horizontal-list gap-4mm">
+            <FpButton busy={loading} onClick={() => renderCommon()} icon="PERSON">
+              {t("furpanel.admin.events.badges.print.simple_mode.common")}
+            </FpButton>
+            <FpButton busy={loading} onClick={() => renderFursuit()} icon="PETS">
+              {t("furpanel.admin.events.badges.print.simple_mode.fursuit")}
+            </FpButton>
+          </div>
+        </>
+      )}
     </Modal>
+  );
 }

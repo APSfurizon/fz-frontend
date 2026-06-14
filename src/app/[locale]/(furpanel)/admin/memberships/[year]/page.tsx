@@ -1,12 +1,17 @@
-"use client"
+"use client";
 import FpButton from "@/components/input/fpButton";
 import Icon from "@/components/icon";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import {
-    AddCardFormAction, AutoInputUserAddCardManager, ChangeCardRegisterStatusApiAction,
-    ChangeCardRegisterStatusApiData, convertCardlessUser, GetCardsApiAction, GetCardsApiResponse,
-    UserCardData
+  AddCardFormAction,
+  AutoInputUserAddCardManager,
+  ChangeCardRegisterStatusApiAction,
+  ChangeCardRegisterStatusApiData,
+  convertCardlessUser,
+  GetCardsApiAction,
+  GetCardsApiResponse,
+  UserCardData,
 } from "@/lib/api/admin/membershipManager";
 import { runRequest } from "@/lib/api/global";
 import { useModalUpdate } from "@/components/context/modalProvider";
@@ -26,333 +31,412 @@ import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import FpTable from "@/components/table/fpTable";
 
 export default function MembershipView({ params }: { params: Promise<{ year: number }> }) {
+  const [selectedYear, setSelectedYear] = useState<number>();
+  const router = useRouter();
+  const path = usePathname();
+  const t = useTranslations();
+  const { showModal } = useModalUpdate();
 
-    const [selectedYear, setSelectedYear] = useState<number>();
-    const router = useRouter();
-    const path = usePathname();
-    const t = useTranslations();
-    const { showModal } = useModalUpdate();
+  // Logic
+  const [loading, setLoading] = useState(false);
+  const [cardsData, setCardsData] = useState<GetCardsApiResponse | undefined | null>(null);
 
-    // Logic
-    const [loading, setLoading] = useState(false);
-    const [cardsData, setCardsData] = useState<GetCardsApiResponse | undefined | null>(null);
+  // Ui selectors
+  const [hideValid, setHideValid] = useState(false);
+  const [showMissing, setShowMissing] = useState(true);
+  const [showDuplicate, setShowDuplicate] = useState(true);
 
-    // Ui selectors
-    const [hideValid, setHideValid] = useState(false);
-    const [showMissing, setShowMissing] = useState(true);
-    const [showDuplicate, setShowDuplicate] = useState(true);
-
-    // Mark as registered
-    const markAsRegistered = (event: MouseEvent<HTMLButtonElement>,
-        checked: boolean, setChecked: Dispatch<SetStateAction<boolean>>,
-        setBusy: Dispatch<SetStateAction<boolean>>, cardId: number) => {
-        setBusy(true);
-        const data: ChangeCardRegisterStatusApiData = {
-            membershipCardId: cardId,
-            registered: checked
-        }
-        runRequest({
-            action: new ChangeCardRegisterStatusApiAction(),
-            body: data
-        }).catch((err) => {
-            showModal(t("common.error"), <ErrorMessage error={err} />);
-            setChecked(!checked);
-        })
-            .finally(() => setBusy(false));
+  // Mark as registered
+  const markAsRegistered = (
+    event: MouseEvent<HTMLButtonElement>,
+    checked: boolean,
+    setChecked: Dispatch<SetStateAction<boolean>>,
+    setBusy: Dispatch<SetStateAction<boolean>>,
+    cardId: number
+  ) => {
+    setBusy(true);
+    const data: ChangeCardRegisterStatusApiData = {
+      membershipCardId: cardId,
+      registered: checked,
     };
-
-    // Add card
-    const [addModalOpen, setAddModalOpen] = useState(false);
-
-    const addCardSuccess = () => {
-        setAddModalOpen(false);
-        setCardsData(undefined);
-    }
-
-    const addCardFail = (err: any) => {
-        setAddModalOpen(false);
+    runRequest({
+      action: new ChangeCardRegisterStatusApiAction(),
+      body: data,
+    })
+      .catch((err) => {
         showModal(t("common.error"), <ErrorMessage error={err} />);
-    }
+        setChecked(!checked);
+      })
+      .finally(() => setBusy(false));
+  };
 
-    // Select year
-    useEffect(() => {
-        params.then((loadedParams) => {
-            // Validate year
-            if (!loadedParams.year || isNaN(loadedParams.year)) {
-                router.replace("" + new Date().getFullYear());
-            }
-            setSelectedYear(loadedParams.year)
-        })
-    }, []);
+  // Add card
+  const [addModalOpen, setAddModalOpen] = useState(false);
 
-    // Validate year
-    useEffect(() => {
-        if (!selectedYear || isNaN(selectedYear)) return;
-        setCardsData(undefined);
-    }, [selectedYear])
+  const addCardSuccess = () => {
+    setAddModalOpen(false);
+    setCardsData(undefined);
+  };
 
-    // Load cards
-    useEffect(() => {
-        if (!selectedYear || isNaN(selectedYear) || cardsData) return;
-        setLoading(true);
-        runRequest({
-            action: new GetCardsApiAction(),
-            searchParams: new URLSearchParams({ "year": "" + selectedYear })
-        }).then((value) => setCardsData(value))
-            .catch((err) => {
-                showModal(t("common.error"), <ErrorMessage error={err} />);
-                setCardsData(null);
-            }).finally(() => setLoading(false));
-    }, [cardsData])
+  const addCardFail = (err: any) => {
+    setAddModalOpen(false);
+    showModal(t("common.error"), <ErrorMessage error={err} />);
+  };
 
-    // User card table logic
-    const tableRef = useRef<HTMLDivElement>(null);
+  // Select year
+  useEffect(() => {
+    params.then((loadedParams) => {
+      // Validate year
+      if (!loadedParams.year || isNaN(loadedParams.year)) {
+        router.replace("" + new Date().getFullYear());
+      }
+      setSelectedYear(loadedParams.year);
+    });
+  }, []);
 
-    const columnHelper = createColumnHelper<UserCardData>();
+  // Validate year
+  useEffect(() => {
+    if (!selectedYear || isNaN(selectedYear)) return;
+    setCardsData(undefined);
+  }, [selectedYear]);
 
-    const rows = useMemo(() => {
-        return [...cardsData?.cards ?? [],
-        ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map(wc => convertCardlessUser(wc))
-        ].filter(cd => (showDuplicate && cd.duplicate) || (showMissing && !cd.membershipCard) ||
-            (!hideValid && cd.membershipCard && !cd.duplicate));
-    }, [cardsData, showMissing, showDuplicate, hideValid]);
+  // Load cards
+  useEffect(() => {
+    if (!selectedYear || isNaN(selectedYear) || cardsData) return;
+    setLoading(true);
+    runRequest({
+      action: new GetCardsApiAction(),
+      searchParams: new URLSearchParams({ year: "" + selectedYear }),
+    })
+      .then((value) => setCardsData(value))
+      .catch((err) => {
+        showModal(t("common.error"), <ErrorMessage error={err} />);
+        setCardsData(null);
+      })
+      .finally(() => setLoading(false));
+  }, [cardsData]);
 
-    const columns: ColumnDef<UserCardData, any>[] = useMemo(() => [
-        columnHelper.accessor('user.fursonaName', {
-            id: 'user',
-            header: t("furpanel.admin.membership_manager.columns.user"),
-            cell: props => <div className="data horizontal-list align-items-center gap-2mm">
-                <UserPicture key={props.row.original.user.userId} userData={props.row.original.user}></UserPicture>
-                <span className="title small">{props.row.original.user.fursonaName}</span>
-            </div>
-        }),
-        columnHelper.accessor("user.sponsorship", {
-            id: 'sponsorship',
-            header: t("furpanel.admin.membership_manager.columns.sponsorship"),
-        }),
-        columnHelper.accessor(data => `${data.userInfo.lastName} ${data.userInfo.firstName}`, {
-            id: 'name',
-            header: t("furpanel.admin.membership_manager.columns.name"),
-        }),
-        columnHelper.accessor('fromOrderCode', {
-            id: 'orderCode',
-            header: t("furpanel.admin.membership_manager.columns.order_code"),
-        }),
-        columnHelper.accessor(data => `${(data.membershipCard?.cardNo ? (data.membershipCard?.cardNo).padStart(7, '0') : '')}`, {
-            id: 'cardNumber',
-            header: t("furpanel.admin.membership_manager.columns.card_number"),
-        }),
-        columnHelper.display({
-            id: 'anomalies',
-            header: t("furpanel.admin.membership_manager.columns.anomalies"),
-            cell: props => <div className="horizontal-list align-items-center gap-2mm">
-                {props.row.original.duplicate && <>
-                    <Icon icon="FILE_COPY" />
-                    <span className="highlight small">
-                        {t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}
-                    </span>
-                </>}
-                {!props.row.original.membershipCard && <>
-                    <Icon icon="QUESTION_MARK" />
-                    <span className="highlight small">
-                        {t("furpanel.admin.membership_manager.errors.CARD_MISSING")}
-                    </span>
-                </>}
-            </div>
-        }),
-        columnHelper.accessor('membershipCard.registered', {
-            id: 'registered',
-            header: t("furpanel.admin.membership_manager.columns.registered"),
-            cell: props => <>
-                {props.row.original.membershipCard
-                    ? <Checkbox initialValue={props.row.original.membershipCard.registered}
-                        disabled={!props.row.original.membershipCard?.cardNo}
-                        onClick={(event, checked, setChecked, setBusy) =>
-                            markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
-                        {t("furpanel.admin.membership_manager.table.headers.registered")}
-                    </Checkbox>
-                    : undefined
+  // User card table logic
+  const tableRef = useRef<HTMLDivElement>(null);
+
+  const columnHelper = createColumnHelper<UserCardData>();
+
+  const rows = useMemo(() => {
+    return [
+      ...(cardsData?.cards ?? []),
+      ...(cardsData?.usersAtCurrentEventWithoutCard ?? []).map((wc) => convertCardlessUser(wc)),
+    ].filter(
+      (cd) =>
+        (showDuplicate && cd.duplicate) ||
+        (showMissing && !cd.membershipCard) ||
+        (!hideValid && cd.membershipCard && !cd.duplicate)
+    );
+  }, [cardsData, showMissing, showDuplicate, hideValid]);
+
+  const columns: ColumnDef<UserCardData, any>[] = useMemo(
+    () => [
+      columnHelper.accessor("user.fursonaName", {
+        id: "user",
+        header: t("furpanel.admin.membership_manager.columns.user"),
+        cell: (props) => (
+          <div className="data horizontal-list align-items-center gap-2mm">
+            <UserPicture key={props.row.original.user.userId} userData={props.row.original.user}></UserPicture>
+            <span className="title small">{props.row.original.user.fursonaName}</span>
+          </div>
+        ),
+      }),
+      columnHelper.accessor("user.sponsorship", {
+        id: "sponsorship",
+        header: t("furpanel.admin.membership_manager.columns.sponsorship"),
+      }),
+      columnHelper.accessor((data) => `${data.userInfo.lastName} ${data.userInfo.firstName}`, {
+        id: "name",
+        header: t("furpanel.admin.membership_manager.columns.name"),
+      }),
+      columnHelper.accessor("fromOrderCode", {
+        id: "orderCode",
+        header: t("furpanel.admin.membership_manager.columns.order_code"),
+      }),
+      columnHelper.accessor(
+        (data) => `${data.membershipCard?.cardNo ? (data.membershipCard?.cardNo).padStart(7, "0") : ""}`,
+        {
+          id: "cardNumber",
+          header: t("furpanel.admin.membership_manager.columns.card_number"),
+        }
+      ),
+      columnHelper.display({
+        id: "anomalies",
+        header: t("furpanel.admin.membership_manager.columns.anomalies"),
+        cell: (props) => (
+          <div className="horizontal-list align-items-center gap-2mm">
+            {props.row.original.duplicate && (
+              <>
+                <Icon icon="FILE_COPY" />
+                <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_DUPLICATE")}</span>
+              </>
+            )}
+            {!props.row.original.membershipCard && (
+              <>
+                <Icon icon="QUESTION_MARK" />
+                <span className="highlight small">{t("furpanel.admin.membership_manager.errors.CARD_MISSING")}</span>
+              </>
+            )}
+          </div>
+        ),
+      }),
+      columnHelper.accessor("membershipCard.registered", {
+        id: "registered",
+        header: t("furpanel.admin.membership_manager.columns.registered"),
+        cell: (props) => (
+          <>
+            {props.row.original.membershipCard ? (
+              <Checkbox
+                initialValue={props.row.original.membershipCard.registered}
+                disabled={!props.row.original.membershipCard?.cardNo}
+                onClick={(event, checked, setChecked, setBusy) =>
+                  markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)
                 }
-            </>
-        })
-    ], []);
+              >
+                {t("furpanel.admin.membership_manager.table.headers.registered")}
+              </Checkbox>
+            ) : undefined}
+          </>
+        ),
+      }),
+    ],
+    []
+  );
 
-    const hasDetails = () => true;
+  const hasDetails = () => true;
 
-    const showDetails = (row: Row<UserCardData>) => <>
-        <div className="vertical-list flex-wrap"
-            style={{ gap: ".4em", padding: "0.625em", maxWidth: tableRef.current?.clientWidth }}>
-            <div className="horizontal-list flex-wrap gap-4mm">
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.first_name.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.firstName}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.last_name.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.lastName}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.sex.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.sex}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.email.label")}
-                    readOnly
-                    initialValue={row.original.email}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                {row.original.userInfo.fiscalCode &&
-                    <FpInput className="hoverable" label={t("authentication.register.form.fiscal_code.label")}
-                        readOnly
-                        initialValue={row.original.userInfo.fiscalCode}
-                        onClick={(e) => copyContent(e.currentTarget)} />}
-            </div>
-            <hr></hr>
-            <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
-            <div className="horizontal-list flex-wrap gap-4mm">
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.birth_country.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.birthCountry}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                {row.original.userInfo.birthRegion &&
-                    <FpInput className="hoverable"
-                        label={t("authentication.register.form.birth_region.label")}
-                        readOnly
-                        initialValue={row.original.userInfo.birthRegion}
-                        onClick={(e) => copyContent(e.currentTarget)} />}
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.birth_city.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.birthCity}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.birthday.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.birthday}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-            </div>
-            <hr></hr>
-            <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
-            <div className="horizontal-list flex-wrap gap-4mm">
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.residence_country.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.residenceCountry}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                {row.original.userInfo.residenceRegion &&
-                    <FpInput className="hoverable"
-                        label={t("authentication.register.form.residence_region.label")}
-                        readOnly
-                        initialValue={row.original.userInfo.residenceRegion}
-                        onClick={(e) => copyContent(e.currentTarget)} />}
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.residence_city.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.residenceCity}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.residence_zip_code.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.residenceZipCode}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.residence_address.label")}
-                    readOnly
-                    initialValue={row.original.userInfo.residenceAddress}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-                <FpInput className="hoverable"
-                    label={t("authentication.register.form.phone_number.label")}
-                    readOnly
-                    initialValue={(row.original.userInfo.prefixPhoneNumber ?? "") + (row.original.userInfo.phoneNumber ?? "")}
-                    onClick={(e) => copyContent(e.currentTarget)} />
-            </div>
+  const showDetails = (row: Row<UserCardData>) => (
+    <>
+      <div
+        className="vertical-list flex-wrap"
+        style={{ gap: ".4em", padding: "0.625em", maxWidth: tableRef.current?.clientWidth }}
+      >
+        <div className="horizontal-list flex-wrap gap-4mm">
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.first_name.label")}
+            readOnly
+            initialValue={row.original.userInfo.firstName}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.last_name.label")}
+            readOnly
+            initialValue={row.original.userInfo.lastName}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.sex.label")}
+            readOnly
+            initialValue={row.original.userInfo.sex}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.email.label")}
+            readOnly
+            initialValue={row.original.email}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          {row.original.userInfo.fiscalCode && (
+            <FpInput
+              className="hoverable"
+              label={t("authentication.register.form.fiscal_code.label")}
+              readOnly
+              initialValue={row.original.userInfo.fiscalCode}
+              onClick={(e) => copyContent(e.currentTarget)}
+            />
+          )}
         </div>
+        <hr></hr>
+        <span className="title small bold">{t("authentication.register.form.section.birth_data")}</span>
+        <div className="horizontal-list flex-wrap gap-4mm">
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.birth_country.label")}
+            readOnly
+            initialValue={row.original.userInfo.birthCountry}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          {row.original.userInfo.birthRegion && (
+            <FpInput
+              className="hoverable"
+              label={t("authentication.register.form.birth_region.label")}
+              readOnly
+              initialValue={row.original.userInfo.birthRegion}
+              onClick={(e) => copyContent(e.currentTarget)}
+            />
+          )}
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.birth_city.label")}
+            readOnly
+            initialValue={row.original.userInfo.birthCity}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.birthday.label")}
+            readOnly
+            initialValue={row.original.userInfo.birthday}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+        </div>
+        <hr></hr>
+        <span className="title small bold">{t("authentication.register.form.section.residence_data")}</span>
+        <div className="horizontal-list flex-wrap gap-4mm">
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.residence_country.label")}
+            readOnly
+            initialValue={row.original.userInfo.residenceCountry}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          {row.original.userInfo.residenceRegion && (
+            <FpInput
+              className="hoverable"
+              label={t("authentication.register.form.residence_region.label")}
+              readOnly
+              initialValue={row.original.userInfo.residenceRegion}
+              onClick={(e) => copyContent(e.currentTarget)}
+            />
+          )}
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.residence_city.label")}
+            readOnly
+            initialValue={row.original.userInfo.residenceCity}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.residence_zip_code.label")}
+            readOnly
+            initialValue={row.original.userInfo.residenceZipCode}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.residence_address.label")}
+            readOnly
+            initialValue={row.original.userInfo.residenceAddress}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.phone_number.label")}
+            readOnly
+            initialValue={(row.original.userInfo.prefixPhoneNumber ?? "") + (row.original.userInfo.phoneNumber ?? "")}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+        </div>
+      </div>
     </>
+  );
 
-    return <>
-        <div className="stretch-page">
-            <div className="horizontal-list align-items-center gap-4mm flex-wrap">
-                <a href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></a>
-                <div className="horizontal-list gap-2mm">
-                    <span className="title medium">
-                        {t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}
-                    </span>
-                    <select className="title average"
-                        value={selectedYear ?? ""}
-                        onChange={(e) => router.push(e.target.value)}>
-                        {years.map((o, k) => <option key={k}>{o}</option>)}
-                    </select>
-                </div>
+  return (
+    <>
+      <div className="stretch-page">
+        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
+          <a href={getParentDirectory(getParentDirectory(path))}>
+            <Icon icon="ARROW_BACK" />
+          </a>
+          <div className="horizontal-list gap-2mm">
+            <span className="title medium">
+              {t("furpanel.admin.membership_manager.header", { yearStart: Number(selectedYear) })}
+            </span>
+            <select className="title average" value={selectedYear ?? ""} onChange={(e) => router.push(e.target.value)}>
+              {years.map((o, k) => (
+                <option key={k}>{o}</option>
+              ))}
+            </select>
+          </div>
 
-                <div className="spacer"></div>
-                <FpButton icon="REFRESH"
-                    onClick={() => setCardsData(undefined)}
-                    debounce={3000}>
-                    {t("common.reload")}
-                </FpButton>
-                <FpButton onClick={() => setAddModalOpen(true)}
-                    busy={loading}
-                    disabled={!cardsData?.canAddCards}
-                    icon="ADD">
-                    {t("furpanel.admin.membership_manager.actions.add")}
-                </FpButton>
-            </div>
-            <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
-                <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>
-                    {t("furpanel.admin.membership_manager.actions.hide_valid")}
-                </Checkbox>
-                <Checkbox initialValue={showMissing} onClick={(e, c) => setShowMissing(c)}>
-                    {t("furpanel.admin.membership_manager.actions.show_missing_cards")}
-                </Checkbox>
-                <Checkbox initialValue={showDuplicate} onClick={(e, c) => setShowDuplicate(c)}>
-                    {t("furpanel.admin.membership_manager.actions.show_extra_cards")}
-                </Checkbox>
-            </div>
-
-            {loading && <div className="row"><LoadingPanel className="data" /></div>}
-            {cardsData && cardsData?.cards &&
-                <FpTable<UserCardData> columns={columns}
-                    rows={rows}
-                    enableSearch
-                    hasDetails={hasDetails}
-                    getDetails={showDetails}
-                    enablePagination
-                    pageSize={20}
-                    pinnedColumns={{ left: [], right: ['registered'] }}
-                    tableElementRef={tableRef} />}
+          <div className="spacer"></div>
+          <FpButton icon="REFRESH" onClick={() => setCardsData(undefined)} debounce={3000}>
+            {t("common.reload")}
+          </FpButton>
+          <FpButton onClick={() => setAddModalOpen(true)} busy={loading} disabled={!cardsData?.canAddCards} icon="ADD">
+            {t("furpanel.admin.membership_manager.actions.add")}
+          </FpButton>
         </div>
-        {/* Add card */}
-        <Modal icon="ADD"
-            title={t("furpanel.admin.membership_manager.actions.add")}
-            open={addModalOpen && (cardsData?.canAddCards ?? false)}
-            onClose={() => setAddModalOpen(false)}
-            busy={loading}>
-            <DataForm action={new AddCardFormAction}
-                busy={loading}
-                setBusy={setLoading}
-                hideSave
-                className="vertical-list gap-2mm"
-                onSuccess={addCardSuccess}
-                onFail={addCardFail}>
-                <AutoInput fieldName="userId"
-                    manager={new AutoInputUserAddCardManager}
-                    label={t("furpanel.admin.membership_manager.input.user.label")}
-                    param={[selectedYear]} />
-                <div className="horizontal-list gap-4mm">
-                    <FpButton type="button"
-                        className="danger"
-                        icon="CANCEL"
-                        busy={loading}
-                        onClick={() => setAddModalOpen(false)}>
-                        {t("common.cancel")}
-                    </FpButton>
-                    <div className="spacer"></div>
-                    <FpButton type="submit" className="success" icon="CHECK" busy={loading}>{t("common.confirm")}</FpButton>
-                </div>
-            </DataForm>
-        </Modal>
-    </>;
+        <div className="filter-params rounded-m horizontal-list gap-4mm flex-wrap">
+          <Checkbox initialValue={hideValid} onClick={(e, c) => setHideValid(c)}>
+            {t("furpanel.admin.membership_manager.actions.hide_valid")}
+          </Checkbox>
+          <Checkbox initialValue={showMissing} onClick={(e, c) => setShowMissing(c)}>
+            {t("furpanel.admin.membership_manager.actions.show_missing_cards")}
+          </Checkbox>
+          <Checkbox initialValue={showDuplicate} onClick={(e, c) => setShowDuplicate(c)}>
+            {t("furpanel.admin.membership_manager.actions.show_extra_cards")}
+          </Checkbox>
+        </div>
+
+        {loading && (
+          <div className="row">
+            <LoadingPanel className="data" />
+          </div>
+        )}
+        {cardsData && cardsData?.cards && (
+          <FpTable<UserCardData>
+            columns={columns}
+            rows={rows}
+            enableSearch
+            hasDetails={hasDetails}
+            getDetails={showDetails}
+            enablePagination
+            pageSize={20}
+            pinnedColumns={{ left: [], right: ["registered"] }}
+            tableElementRef={tableRef}
+          />
+        )}
+      </div>
+      {/* Add card */}
+      <Modal
+        icon="ADD"
+        title={t("furpanel.admin.membership_manager.actions.add")}
+        open={addModalOpen && (cardsData?.canAddCards ?? false)}
+        onClose={() => setAddModalOpen(false)}
+        busy={loading}
+      >
+        <DataForm
+          action={new AddCardFormAction()}
+          busy={loading}
+          setBusy={setLoading}
+          hideSave
+          className="vertical-list gap-2mm"
+          onSuccess={addCardSuccess}
+          onFail={addCardFail}
+        >
+          <AutoInput
+            fieldName="userId"
+            manager={new AutoInputUserAddCardManager()}
+            label={t("furpanel.admin.membership_manager.input.user.label")}
+            param={[selectedYear]}
+          />
+          <div className="horizontal-list gap-4mm">
+            <FpButton
+              type="button"
+              className="danger"
+              icon="CANCEL"
+              busy={loading}
+              onClick={() => setAddModalOpen(false)}
+            >
+              {t("common.cancel")}
+            </FpButton>
+            <div className="spacer"></div>
+            <FpButton type="submit" className="success" icon="CHECK" busy={loading}>
+              {t("common.confirm")}
+            </FpButton>
+          </div>
+        </DataForm>
+      </Modal>
+    </>
+  );
 }

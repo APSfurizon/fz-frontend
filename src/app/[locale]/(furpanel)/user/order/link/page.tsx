@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { runRequest } from "@/lib/api/global";
@@ -10,36 +10,43 @@ import { useEffect, useState } from "react";
 import LoadingPanel from "@/components/loadingPanel";
 
 export default function OrderLinkPage() {
-    const params = useSearchParams();
-    const t = useTranslations();
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const { showModal } = useModalUpdate();
+  const params = useSearchParams();
+  const t = useTranslations();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { showModal } = useModalUpdate();
 
-    const code = params.get("c");
-    const secret = params.get("s");
-    const message = params.get("m");
+  const code = params.get("c");
+  const secret = params.get("s");
+  const message = params.get("m");
 
-    useEffect(() => {
-        if (!code || !secret) router.replace("/home");
-        setLoading(true);
-        const userOrderLinkData: UserOrderLinkingData = {
-            orderCode: code!,
-            orderSecret: secret!
-        }
-        runRequest({
-            action: new UserOrderLinkingAction(),
-            body: userOrderLinkData
-        }).then(() => router.replace("/booking"))
-            .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
-            .finally(() => setLoading(false));
-    }, [])
+  useEffect(() => {
+    if (!code || !secret) router.replace("/home");
+    setLoading(true);
+    const userOrderLinkData: UserOrderLinkingData = {
+      orderCode: code!,
+      orderSecret: secret!,
+    };
+    runRequest({
+      action: new UserOrderLinkingAction(),
+      body: userOrderLinkData,
+    })
+      .then(() => router.replace("/booking"))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .finally(() => setLoading(false));
+  }, []);
 
-    return <Modal open
-        busy={loading}
-        onClose={() => { router.replace("/home") }}
-        title={t("furpanel.user.linking.title")}
-        icon="LOCAL_ACTIVITY">
-        {loading && <LoadingPanel>{t("furpanel.user.linking.description")}</LoadingPanel>}
+  return (
+    <Modal
+      open
+      busy={loading}
+      onClose={() => {
+        router.replace("/home");
+      }}
+      title={t("furpanel.user.linking.title")}
+      icon="LOCAL_ACTIVITY"
+    >
+      {loading && <LoadingPanel>{t("furpanel.user.linking.description")}</LoadingPanel>}
     </Modal>
+  );
 }
