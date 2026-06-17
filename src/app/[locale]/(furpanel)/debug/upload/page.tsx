@@ -7,7 +7,7 @@ import { UploadProgress } from "@/lib/api/gallery/upload/types";
 import { ChangeEvent, useState } from "react";
 
 export default function DebugUpload() {
-  const [progress, setProgress] = useState<UploadProgress>();
+  const [progress] = useState<UploadProgress>();
   const [upload, setUpload] = useState<GalleryUpload>();
 
   const { userDisplay } = useUser();
@@ -23,12 +23,12 @@ export default function DebugUpload() {
         false
       );
       setUpload(upload);
-      upload.addEventHandler("PROGRESS", (e) => {
+      upload.addEventHandler("PROGRESS", () => {
         //setProgress(e.data.progress);
       });
       upload.addEventHandler("DONE", (e) => console.log(e.upload));
       //upload.addEventHandler("ERROR", e => setProgress(e.data.progress));
-      upload.start();
+      upload.start().catch(() => void 0);
     }
   };
 
@@ -54,7 +54,12 @@ export default function DebugUpload() {
           </FpButton>
         </>
       )}
-      <FpButton onClick={() => upload?.confirmUpload()} disabled={progress?.status !== "UPLOAD_COMPLETE"}>
+      <FpButton
+        onClick={() => {
+          upload?.confirmUpload().catch(() => void 0);
+        }}
+        disabled={progress?.status !== "UPLOAD_COMPLETE"}
+      >
         Confirm
       </FpButton>
     </div>

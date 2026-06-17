@@ -9,7 +9,7 @@ type GallerySelectionProviderType = {
   clearSelection(): void;
 };
 
-const GallerySelectionContext = createContext<GallerySelectionProviderType>(undefined as any);
+const GallerySelectionContext = createContext<GallerySelectionProviderType>({} as GallerySelectionProviderType);
 
 type GallerySelectionProviderProps = {
   children?: React.ReactNode;

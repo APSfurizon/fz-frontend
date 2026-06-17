@@ -5,10 +5,10 @@ export function getShareUrl() {
 export function shareMediaUrl() {
   const toShare = getShareUrl();
   if (navigator.canShare && navigator.canShare({ text: toShare })) {
-    navigator.share({ text: toShare });
+    navigator.share({ text: toShare }).catch(() => void 0);
     return true;
   } else {
-    navigator.clipboard?.writeText(toShare);
+    navigator.clipboard?.writeText(toShare).catch(() => void 0);
     return false;
   }
 }

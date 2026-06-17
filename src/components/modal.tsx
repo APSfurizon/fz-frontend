@@ -1,14 +1,5 @@
 "use client";
-import React, {
-  createContext,
-  CSSProperties,
-  MouseEvent,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, CSSProperties, MouseEvent, useContext, useEffect, useMemo, useState } from "react";
 import Icon, { MaterialIcon } from "./icon";
 import "@/styles/components/modal.css";
 import { useTranslations } from "next-intl";

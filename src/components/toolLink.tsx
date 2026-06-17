@@ -24,6 +24,7 @@ export default function ToolLink({
   onClick?: MouseEventHandler;
 }>) {
   const currentPath = `https://localhost${usePathname()}`;
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   const resolved = new URL(href.toString(), currentPath).href;
   const activeClass = currentPath.includes(resolved) ? "active" : "";
   return (

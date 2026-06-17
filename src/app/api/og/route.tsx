@@ -1,7 +1,7 @@
-import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
+import { ImageResponse } from "next/og";
 
-export async function GET(request: Request) {
+export async function GET() {
   const tcommon = await getTranslations("common");
   try {
     return new ImageResponse(
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
         <p>{tcommon("coming_soon")}</p>
       </div>
     );
-  } catch (e) {
+  } catch {
     return new Response("Could not return OG image", { status: 500 });
   }
 }

@@ -32,19 +32,19 @@ export default function RolesListPage() {
   const [loading, setLoading] = useState(false);
   const [roles, setRoles] = useState<RoleInfo[]>([]);
 
-  useEffect(() => {
-    loadRoles();
-  }, []);
-
   const loadRoles = () => {
     if (loading) return;
     setRoles([]);
     setLoading(true);
     runRequest({ action: new GetAllRolesApiAction() })
       .then((response) => setRoles(response.roles))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    loadRoles();
+  }, []);
 
   const editRole = (role: RoleInfo) => {
     router.push(`/admin/roles/${role.roleId}/data`);
@@ -87,7 +87,7 @@ export default function RolesListPage() {
     setLoading(true);
     runRequest({ action: new DeleteRolesApiAction(), pathParams: { id: roleId } })
       .then(() => loadRoles())
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLoading(false);
         closeDeleteRoleModal();

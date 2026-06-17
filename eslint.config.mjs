@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    ".storybook/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
@@ -36,6 +37,7 @@ const eslintConfig = defineConfig([
       "import/no-deprecated": "warn",
       "max-len": ["warn", { code: 120 }],
       "@typescript-eslint/no-explicit-any": "off",
+      "react-hooks/set-state-in-effect": "off",
       "react-hooks/exhaustive-deps": "off",
       "no-warning-comments": "warn",
       "prettier/prettier": [

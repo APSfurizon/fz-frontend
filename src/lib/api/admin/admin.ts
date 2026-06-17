@@ -1,4 +1,4 @@
-import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 import { ApiAction } from "../networking/types";
 import { ApiErrorResponse } from "../networking/types";
 import { ApiResponse } from "../networking/types";
@@ -49,8 +49,8 @@ export interface ManualLinkOrderData {
 class ManuallyLinkOrderDTOBuilder implements FormDTOBuilder<ManualLinkOrderData> {
   mapToDTO = (data: FormData) => {
     const toReturn: ManualLinkOrderData = {
-      orderCode: data.get("orderCode")!.toString(),
-      userId: parseInt(data.get("userId")!.toString()),
+      orderCode: getData(data, "orderCode")!.toString(),
+      userId: parseInt(getData(data, "userId")!.toString()),
     };
     return toReturn;
   };

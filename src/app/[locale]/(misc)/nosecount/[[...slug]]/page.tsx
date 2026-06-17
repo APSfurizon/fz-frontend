@@ -1,8 +1,10 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import "@/styles/misc/nosecount.css";
-import { runRequest } from "@/lib/api/networking/main";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
+import useTitle from "@/components/hooks/useTitle";
+import Icon from "@/components/icon";
+import LoadingPanel from "@/components/loadingPanel";
+import StatusBox from "@/components/statusBox";
 import {
   CountViewMode,
   FursuitCountApiAction,
@@ -13,15 +15,14 @@ import {
   SponsorCountResponse,
   useNosecountContext,
 } from "@/lib/api/counts";
-import { buildSearchParams } from "@/lib/utils";
-import { translate } from "@/lib/translations";
-import Icon from "@/components/icon";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
-import useTitle from "@/components/hooks/useTitle";
-import ErrorMessage from "@/components/errorMessage";
-import LoadingPanel from "@/components/loadingPanel";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { ExtraDays } from "@/lib/api/user";
-import StatusBox from "@/components/statusBox";
+import { translate } from "@/lib/translations";
+import { buildSearchParams } from "@/lib/utils";
+import "@/styles/misc/nosecount.css";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
 import NosecountAttendee from "../_components/attendee";
 import NosecountFursuit from "../_components/fursuit";
 
@@ -29,6 +30,8 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
   const { event, mode, selectEvent, selectMode } = useNosecountContext();
 
   const [totalCount, setTotalCount] = useState<number>();
+
+  const { showModal } = useModalUpdate();
 
   // Modes
   const [roomsData, setRoomsData] = useState<NoseCountResponse>();
@@ -46,14 +49,16 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
   const locale = useLocale();
 
   useEffect(() => {
-    params.then((data) => {
-      const [organizer, eventName, viewMode] = data.slug ?? [null, null, null];
-      setSetup(true);
-      if (organizer && eventName) {
-        selectEvent(`${organizer}/${eventName}`);
-      }
-      selectMode(viewMode ?? CountViewMode.NORMAL);
-    });
+    params
+      .then((data) => {
+        const [organizer, eventName, viewMode] = data.slug ?? [null, null, null];
+        setSetup(true);
+        if (organizer && eventName) {
+          selectEvent(`${organizer}/${eventName}`);
+        }
+        selectMode(viewMode ?? CountViewMode.NORMAL);
+      })
+      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />));
   }, []);
 
   useEffect(() => {
@@ -76,7 +81,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         searchParams,
       })
         .then((result) => setFursuitData(result))
-        .catch((err) => setError(err))
+        .catch((err) => setError(err as ApiErrorResponse))
         .finally(() => {
           setLoading(false);
           setNeedsLoading(false);
@@ -87,7 +92,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         searchParams,
       })
         .then((result) => setSponsorData(result))
-        .catch((err) => setError(err))
+        .catch((err) => setError(err as ApiErrorResponse))
         .finally(() => {
           setLoading(false);
           setNeedsLoading(false);
@@ -98,7 +103,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
         searchParams,
       })
         .then((result) => setRoomsData(result))
-        .catch((err) => setError(err))
+        .catch((err) => setError(err as ApiErrorResponse))
         .finally(() => {
           setLoading(false);
           setNeedsLoading(false);

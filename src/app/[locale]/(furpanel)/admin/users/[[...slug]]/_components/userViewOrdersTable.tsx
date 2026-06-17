@@ -1,19 +1,19 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import FpButton from "@/components/input/fpButton";
-import Checkbox from "@/components/input/checkbox";
 import ErrorMessage from "@/components/errorMessage";
+import Checkbox from "@/components/input/checkbox";
+import FpButton from "@/components/input/fpButton";
 import StatusBox from "@/components/statusBox";
 import FpTable from "@/components/table/fpTable";
 import { FullOrder, GetUserAdminViewResponse, ViewOrderLinkApiAction } from "@/lib/api/admin/userView";
 import { mapOrderStatusToStatusBox, qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
-import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
 import { translate } from "@/lib/translations";
 import { buildSearchParams } from "@/lib/utils";
 import { createColumnHelper, Row } from "@tanstack/react-table";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useQRCode } from "next-qrcode";
 import { useMemo, useState } from "react";
 import LinkOrderModal from "./orders/linkOrderModal";
-import { useQRCode } from "next-qrcode";
 
 export default function UserViewOrdersTable({
   userData,
@@ -34,7 +34,7 @@ export default function UserViewOrdersTable({
       searchParams: buildSearchParams({ "event-id": String(eventId), "order-code": orderCode }),
     })
       .then((result) => window.open(result.link, "_blank"))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />, "ERROR"))
       .finally(() => setViewOrderLoading(false));
   };
 

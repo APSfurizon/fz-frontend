@@ -1,16 +1,15 @@
 "use client";
 import Gallery from "@/components/gallery";
-import { useExplore } from "../_components/exploreProvider";
-import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
-import EventCard from "../_components/eventCard";
 import FpButton from "@/components/input/fpButton";
 import "@/styles/misc/gallery/explore/explore.scss";
+import { useTranslations } from "next-intl";
+import { useRef } from "react";
 import { useExploreNavigation } from "../_components/exploreNavigationProvider";
-import ExploreFilter from "../exploreFilter";
-import GalleryEvents from "../_components/galleryEvents";
+import { useExplore } from "../_components/exploreProvider";
 import GalleryBanner from "../_components/galleryBanner";
+import GalleryEvents from "../_components/galleryEvents";
+import ExploreFilter from "../exploreFilter";
 
 export default function GalleryExploreEventPage() {
   const { cache, nextData } = useExplore();

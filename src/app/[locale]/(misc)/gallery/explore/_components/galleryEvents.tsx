@@ -6,11 +6,12 @@ import "@/styles/misc/gallery/explore/galleryEvents.scss";
 
 export default function GalleryEvents() {
   const { events } = useExploreFilterData();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { currentFilter, setFilter } = useExploreNavigation();
 
   const sortedEvents = useMemo(
     () =>
-      Array.from(events.entries()).sort(([_1, a], [_2, b]) => {
+      Array.from(events.entries()).sort(([, a], [, b]) => {
         return new Date(b.event.correctDateFrom).getTime() - new Date(a.event.correctDateFrom).getTime();
       }),
     [events]

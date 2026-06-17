@@ -21,10 +21,11 @@ import {
   getAutoInputGenders,
 } from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult, createSearchResult } from "@/lib/components/autoInput";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations, useLocale, useFormatter } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, HTMLInputTypeAttribute, useEffect, useMemo, useState } from "react";
 import "@/styles/furpanel/admin/security-pages.css";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 enum SearchCriteria {
   COMMON = "searchTypeCommon",
@@ -65,6 +66,7 @@ function SectionCard({ title, children }: { title: string; children: React.React
 
 export default function SecurityUserSearchPage() {
   const t = useTranslations();
+  const formatter = useFormatter();
   const locale = useLocale();
   useTitle(t("furpanel.admin.users.security.user_search.title"));
   const router = useRouter();
@@ -73,25 +75,29 @@ export default function SecurityUserSearchPage() {
   const [loading, setLoading] = useState(false);
   const [currentCriteria, setCurrentCriteria] = useState(SearchCriteria.COMMON);
   const [userData, setUserData] = useState<GetUserSecurityViewResponse>();
-  const [searchInputValue, setSearchInputValue] = useState("");
+  const [, setSearchInputValue] = useState("");
   const [sexOptions, setSexOptions] = useState<Record<string, string>>({});
   const [genderOptions, setGenderOptions] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    getAutoInputSexes().then((results) => {
-      const map: Record<string, string> = {};
-      results.forEach((r) => {
-        if (r.code) map[r.code] = r.getDescription(locale);
-      });
-      setSexOptions(map);
-    });
-    getAutoInputGenders().then((results) => {
-      const map: Record<string, string> = {};
-      results.forEach((r) => {
-        if (r.code) map[r.code] = r.getDescription(locale);
-      });
-      setGenderOptions(map);
-    });
+    getAutoInputSexes()
+      .then((results) => {
+        const map: Record<string, string> = {};
+        results.forEach((r) => {
+          if (r.code) map[r.code] = r.getDescription(locale);
+        });
+        setSexOptions(map);
+      })
+      .catch(() => void 0);
+    getAutoInputGenders()
+      .then((results) => {
+        const map: Record<string, string> = {};
+        results.forEach((r) => {
+          if (r.code) map[r.code] = r.getDescription(locale);
+        });
+        setGenderOptions(map);
+      })
+      .catch(() => void 0);
   }, [locale]);
 
   const searchCriteria = [
@@ -185,7 +191,7 @@ export default function SecurityUserSearchPage() {
         setUserData(res);
       })
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
       })
       .finally(() => setLoading(false));
   };
@@ -547,7 +553,11 @@ export default function SecurityUserSearchPage() {
                     label={t("furpanel.admin.users.security.user_search.fields.check_in_out")}
                     initialValue={
                       userData.currentRoomdata?.currentRoomInfo
-                        ? `${userData.currentRoomdata.currentRoomInfo.checkinDate} → ${userData.currentRoomdata.currentRoomInfo.checkoutDate}`
+                        ? `${formatter.dateTimeRange(
+                            userData.currentRoomdata.currentRoomInfo.checkinDate,
+                            userData.currentRoomdata.currentRoomInfo.checkoutDate,
+                            { dateStyle: "medium" }
+                          )}`
                         : ""
                     }
                     readOnly
@@ -563,7 +573,7 @@ export default function SecurityUserSearchPage() {
                   </span>
                   <div className="vertical-list gap-2mm" style={{ marginTop: "0.4em" }}>
                     {userData
-                      .currentRoomdata!.currentRoomInfo!.guests.filter(
+                      .currentRoomdata!.currentRoomInfo.guests.filter(
                         (g) => g.user?.userId !== userData.badgeData?.mainBadge?.userId
                       )
                       .map((g, idx) => {

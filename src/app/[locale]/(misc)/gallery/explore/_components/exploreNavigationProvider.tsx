@@ -1,18 +1,8 @@
-import { useUser } from "@/components/context/userProvider";
-import {
-  ExploreEventApiAction,
-  ExploreEventsApiAction,
-  ExplorePhotographerApiAction,
-  ExplorePhotographersApiAction,
-} from "@/lib/api/gallery/explore/api";
 import { ExploreUrl, parseExploreSlug } from "@/lib/api/gallery/explore/main";
-import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
 import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
-import { runRequest } from "@/lib/api/networking/main";
-import { buildSearchParams } from "@/lib/utils";
 import { Leastwise } from "@/lib/utils/types";
 import { useParams, useRouter } from "next/navigation";
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 type ExploreFilter = {
   eventId: number | null;
@@ -35,7 +25,7 @@ interface ExploreNavigationProviderType {
   setFilter(data: FilterSetterData): void;
 }
 
-const ExploreNavigationContext = createContext<ExploreNavigationProviderType>(undefined as any);
+const ExploreNavigationContext = createContext<ExploreNavigationProviderType>({} as ExploreNavigationProviderType);
 
 export function ExploreNavigationProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [currentFilter, setCurrentFilter] = useState<ExploreFilter>();
@@ -47,6 +37,10 @@ export function ExploreNavigationProvider({ children }: Readonly<{ children: Rea
   const slug = params.data as string[] | undefined;
   const { event, photographer, status } = parseExploreSlug(slug);
 
+  const onPopState = () => {
+    setCurrentFilter(undefined);
+  };
+
   useEffect(() => {
     setCurrentFilter({
       eventId: event,
@@ -57,10 +51,6 @@ export function ExploreNavigationProvider({ children }: Readonly<{ children: Rea
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, [event, photographer, status]);
-
-  const onPopState = () => {
-    setCurrentFilter(undefined);
-  };
 
   const setFilter = (data: FilterSetterData) => {
     setCurrentFilter(undefined);

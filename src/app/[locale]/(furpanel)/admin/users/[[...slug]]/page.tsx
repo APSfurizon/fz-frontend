@@ -4,7 +4,7 @@ import Icon from "@/components/icon";
 import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { runRequest } from "@/lib/api/networking/main";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { ApiErrorResponse, createApiErrorResponse } from "@/lib/api/networking/types";
 import {
   AutoInputUsersManager,
   GetUserByIdAction,
@@ -15,7 +15,7 @@ import {
 } from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { errorCodeToApiError, getParentDirectory } from "@/lib/utils";
+import { getParentDirectory } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, createContext, HTMLInputTypeAttribute, useContext, useEffect, useMemo, useState } from "react";
@@ -38,7 +38,7 @@ interface UserView {
   reloadAll: () => void;
 }
 
-const UserViewContext = createContext<UserView>(undefined as any);
+const UserViewContext = createContext<UserView>({} as UserView);
 
 export const useUserViewContext: () => UserView = () => {
   return useContext(UserViewContext);
@@ -170,17 +170,30 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
   // Main Logic
 
   useEffect(() => {
-    params.then((data) => {
-      if (!data || "slug" in data == false) return;
-      const [selectedUserId] = data?.slug;
-      if (!selectedUserId) return;
-      const parsedId = parseInt(selectedUserId);
-      if (parsedId && !Number.isNaN(parsedId)) {
-        setUserId(parsedId);
-      } else if (Number.isNaN(parsedId)) {
-        setError(errorCodeToApiError("unknown_user"));
-      }
-    });
+    params
+      .then((data) => {
+        if (!data || "slug" in data == false) return;
+        const [selectedUserId] = data?.slug;
+        if (!selectedUserId) return;
+        const parsedId = parseInt(selectedUserId);
+        if (parsedId && !Number.isNaN(parsedId)) {
+          setUserId(parsedId);
+        } else if (Number.isNaN(parsedId)) {
+          setError(
+            createApiErrorResponse({
+              status: 0,
+              requestId: "",
+              errors: [
+                {
+                  code: "unknown_user",
+                  message: t("furpanel.admin.users.errors.unknown_user"),
+                },
+              ],
+            })
+          );
+        }
+      })
+      .catch(() => void 0);
   }, []);
 
   useEffect(() => {
@@ -198,8 +211,8 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
       action: new GetUserAdminViewAction(),
       pathParams: { id: userId },
     })
-      .then((data) => setUserData(data as GetUserAdminViewResponse))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .then((data) => setUserData(data))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   }, [userId, userData]);
 
@@ -234,7 +247,7 @@ export default function AdminUsersPage({ params }: { params: Promise<{ slug: str
                     type="radio"
                     name={criteria.name}
                     value={criteria.value}
-                    checked={currentCriteria == criteria.value}
+                    checked={currentCriteria.toString() == criteria.value}
                     onChange={onSearchCriteriaChange}
                   />
                   &nbsp;

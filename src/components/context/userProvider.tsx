@@ -1,6 +1,6 @@
-import { createContext, RefObject, useContext, useEffect, useRef, useState } from "react";
-import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
 import { runRequest } from "@/lib/api/networking/main";
+import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
+import { createContext, RefObject, useContext, useEffect, useRef, useState } from "react";
 
 interface UserUpdateType {
   updateUser: boolean;
@@ -11,7 +11,7 @@ interface UserUpdateType {
   userDisplayRef: RefObject<UserDisplayResponse | undefined>;
 }
 
-const UserContext = createContext<UserUpdateType>(undefined as any);
+const UserContext = createContext<UserUpdateType>({} as UserUpdateType);
 
 export function HeaderProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [updateUser, setUpdateUser] = useState(false);

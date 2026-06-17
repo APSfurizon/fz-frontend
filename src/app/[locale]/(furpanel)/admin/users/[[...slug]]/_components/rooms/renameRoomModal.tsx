@@ -1,11 +1,8 @@
-import AutoInput from "@/components/input/autoInput";
 import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
 import Modal from "@/components/modal";
-import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomInviteFormAction, RoomRenameFormAction } from "@/lib/api/room";
-import { AutoInputRoomInviteManager } from "@/lib/api/user";
+import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomRenameFormAction } from "@/lib/api/room";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { useUserViewContext } from "../../page";
 import FpInput from "@/components/input/fpInput";
 

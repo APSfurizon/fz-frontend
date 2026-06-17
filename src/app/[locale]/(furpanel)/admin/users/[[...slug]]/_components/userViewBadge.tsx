@@ -1,15 +1,15 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import AutoInput from "@/components/input/autoInput";
-import FpButton from "@/components/input/fpButton";
 import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import Modal from "@/components/modal";
-import ErrorMessage from "@/components/errorMessage";
 import { GetUserAdminViewResponse, ShowInNosecountApiAction, ShowInNosecountApiInput } from "@/lib/api/admin/userView";
 import { BadgeDataChangeFormAction, DeleteBadgeAdminAction, UploadBadgeAdminAction } from "@/lib/api/badge/badge";
 import { AutoInputCountriesManager } from "@/lib/api/geo";
-import { runRequest } from "@/lib/api/networking/main";
+import { runRequest } from "@/lib/api/networking";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { getFlagEmoji } from "@/lib/components/userPicture";
 import { useTranslations } from "next-intl";
@@ -40,7 +40,7 @@ export default function UserViewBadge({
       .then(() => {
         reloadData();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setNosecountSetLoading(false));
   };
 
@@ -79,7 +79,7 @@ export default function UserViewBadge({
       pathParams: { id: userId },
     })
       .then(() => reloadData())
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setBadgeLoading(false);
         hideModal();
@@ -98,7 +98,7 @@ export default function UserViewBadge({
       body: dataToUpload,
     })
       .then(() => reloadData())
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setBadgeLoading(false));
   };
 

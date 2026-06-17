@@ -1,4 +1,4 @@
-import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
 import { ApiErrorResponse } from "../networking/types";
 import { RequestType } from "../networking/types";
 
@@ -9,7 +9,7 @@ export interface RecoverApiData {
 export class RecoverDTOBuilder implements FormDTOBuilder<RecoverApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: RecoverApiData = {
-      email: data.get("email")?.toString(),
+      email: getData(data, "email")?.toString(),
     };
     return toReturn;
   };
@@ -31,9 +31,9 @@ export interface ChangePasswordApiData {
 export class ChangePasswordDTOBuilder implements FormDTOBuilder<ChangePasswordApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: ChangePasswordApiData = {
-      targetUserId: data.has("userId") ? parseInt(data.get("userId")!.toString()) : undefined,
-      password: data.get("password")?.toString(),
-      resetPwId: data.get("resetPwId")?.toString(),
+      targetUserId: data.has("userId") ? parseInt(getData(data, "userId")!.toString()) : undefined,
+      password: getData(data, "password")?.toString(),
+      resetPwId: getData(data, "resetPwId")?.toString(),
     };
     return toReturn;
   };
@@ -54,8 +54,8 @@ export interface ChangeEmailApiData {
 export class ChangeEmailDTOBuilder implements FormDTOBuilder<ChangeEmailApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: ChangeEmailApiData = {
-      targetUserId: data.has("userId") ? parseInt(data.get("userId")!.toString()) : undefined,
-      email: data.get("email")!.toString(),
+      targetUserId: data.has("userId") ? parseInt(getData(data, "userId")!.toString()) : undefined,
+      email: getData(data, "email")!.toString(),
     };
     return toReturn;
   };

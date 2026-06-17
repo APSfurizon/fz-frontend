@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { UserDisplayAction } from "@/lib/api/user";
 import "@/styles/furpanel/admin/security-pages.css";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
 const LIVELLO_COLOR: Record<string, string> = {
@@ -73,7 +74,12 @@ export default function SecurityHazardousRegisterPage() {
     setLoading(true);
     runRequest({ action: new GetSecurityHazardsApiAction() })
       .then((res) => setHazards(res.hazards ?? []))
-      .catch((err) => showModal(t("furpanel.admin.security_management.hazard.error"), <ErrorMessage error={err} />))
+      .catch((err) =>
+        showModal(
+          t("furpanel.admin.security_management.hazard.error"),
+          <ErrorMessage error={err as ApiErrorResponse} />
+        )
+      )
       .finally(() => setLoading(false));
   };
 
@@ -149,7 +155,7 @@ export default function SecurityHazardousRegisterPage() {
         setView("list");
         loadHazards();
       })
-      .catch((err) => showModal("Errore", <ErrorMessage error={err} />))
+      .catch((err) => showModal("Errore", <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 

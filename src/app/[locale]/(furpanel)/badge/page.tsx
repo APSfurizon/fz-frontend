@@ -1,35 +1,35 @@
 "use client";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import FpButton from "@/components/input/fpButton";
-import { useEffect, useMemo, useState } from "react";
+import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
-import { useFormatter, useTranslations } from "next-intl";
+import Icon from "@/components/icon";
+import AutoInput from "@/components/input/autoInput";
+import Checkbox from "@/components/input/checkbox";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
+import FpInput from "@/components/input/fpInput";
+import Upload from "@/components/input/upload";
+import Modal from "@/components/modal";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import {
+  BadgeDataChangeFormAction,
   BadgeStatusApiResponse,
   DeleteBadgeAction,
-  BadgeDataChangeFormAction,
   GetBadgeStatusAction,
+  UploadBadgeAction,
 } from "@/lib/api/badge/badge";
-import Upload from "@/components/input/upload";
-import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import Modal from "@/components/modal";
-import DataForm from "@/components/input/dataForm";
-import FpInput from "@/components/input/fpInput";
+import { AddFursuitFormAction, DeleteFursuitApiAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
+import { AutoInputCountriesManager } from "@/lib/api/geo";
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { UploadBadgeAction } from "@/lib/api/badge/badge";
-import ErrorMessage from "@/components/errorMessage";
-import { useUser } from "@/components/context/userProvider";
 import { getFlagEmoji } from "@/lib/components/userPicture";
-import AutoInput from "@/components/input/autoInput";
-import { AutoInputCountriesManager } from "@/lib/api/geo";
-import "@/styles/furpanel/badge.css";
-import { AddFursuitFormAction, DeleteFursuitApiAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
-import Checkbox from "@/components/input/checkbox";
 import { EMPTY_PROFILE_PICTURE_SRC, EVENT_NAME } from "@/lib/constants";
-import Image from "next/image";
 import { getImageUrl } from "@/lib/utils";
-import Icon from "@/components/icon";
+import "@/styles/furpanel/badge.css";
+import { useFormatter, useTranslations } from "next-intl";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 
 export default function BadgePage() {
   const t = useTranslations();
@@ -38,8 +38,9 @@ export default function BadgePage() {
   const { setUpdateUser } = useUser();
   const [loading, setLoading] = useState(false);
   const [badgeStatus, setBadgeStatus] = useState<BadgeStatusApiResponse | null | undefined>();
+  const [now] = useState(() => Date.now());
   const isEditExpired = useMemo(
-    () => badgeStatus && new Date(badgeStatus.badgeEditingDeadline).getTime() - Date.now() < 0,
+    () => badgeStatus && new Date(badgeStatus.badgeEditingDeadline).getTime() - now < 0,
     [badgeStatus]
   );
   const shouldShowBanner = useMemo(
@@ -66,7 +67,7 @@ export default function BadgePage() {
         setUpdateUser(true);
         setBadgeStatus(undefined);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
     setLoading(true);
   };
@@ -99,7 +100,7 @@ export default function BadgePage() {
         setUpdateUser(true);
         setBadgeStatus(undefined);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -184,7 +185,7 @@ export default function BadgePage() {
       .then(() => {
         setBadgeStatus(undefined);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         closeDeleteFursuit();
         setLoading(false);
@@ -205,7 +206,7 @@ export default function BadgePage() {
     runRequest({ action: new GetBadgeStatusAction() })
       .then((data) => setBadgeStatus(data))
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
         setBadgeStatus(null);
       })
       .finally(() => setLoading(false));

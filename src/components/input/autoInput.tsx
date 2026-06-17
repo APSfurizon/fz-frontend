@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import Icon, { MaterialIcon } from "../icon";
+import Icon from "../icon";
 import Image from "next/image";
 import {
   AutoInputFilter,
@@ -339,7 +339,7 @@ export default function AutoInput({
             alt={t("autoinput.alt_result_image", { description: element?.getDescription(locale) })}
           />
         )}
-        {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon as MaterialIcon} />}
+        {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon} />}
         <div style={{ flex: 1 }}>
           <span className="title">{element?.getDescription(locale)}</span>
         </div>
@@ -366,7 +366,7 @@ export default function AutoInput({
             alt={t("autoinput.alt_result_image", { description: element?.getDescription(locale) })}
           />
         )}
-        {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon as MaterialIcon} />}
+        {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon} />}
         <span className="title small" style={{ flex: 1 }}>
           {element?.getDescription(locale)}
         </span>

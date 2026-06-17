@@ -12,12 +12,6 @@ export interface PictureProps {
 }
 
 const Picture: React.FC<PictureProps> = ({ imageUrl, role, size = "medium" }) => {
-  const sizes = {
-    small: 80,
-    medium: 100,
-    large: 150,
-  };
-
   const sizeClass = `bdg-front--size-${size}`;
 
   return (

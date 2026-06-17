@@ -5,7 +5,8 @@
   "i18n-ally.extract.keyMaxLength": 120,
   "i18n-ally.keystyle": "nested",
   "editor.codeActionsOnSave": {
-    "source.fixAll.prettier": "always"
+    "source.fixAll.prettier": "always",
+    "source.organizeImports": "always"
   },
   "editor.formatOnSave": true,
   "i18n-ally.sourceLanguage": "en-GB"
