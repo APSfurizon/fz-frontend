@@ -34,11 +34,13 @@ export interface ApiErrorResponse extends ApiResponse, Error {
 }
 
 export function createApiErrorResponse(params: {
-  status: number;
-  requestId: string;
+  status?: number;
+  requestId?: string;
   errors: ApiError[];
 }): ApiErrorResponse {
   return {
+    status: params.status,
+    requestId: params.requestId,
     name: "ApiError",
     message: params.errors?.length == 1 ? params.errors[0].message : "Multiple errors occurred",
     errors: params.errors,
