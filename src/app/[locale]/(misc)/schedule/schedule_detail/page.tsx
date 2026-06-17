@@ -2,19 +2,19 @@
 
 import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
-import LoadingPanel from "@/components/loadingPanel";
-import Icon from "@/components/icon";
 import type { MaterialIcon } from "@/components/icon";
+import Icon from "@/components/icon";
+import LoadingPanel from "@/components/loadingPanel";
+import { ApiErrorResponse, createApiErrorResponse } from "@/lib/api/networking/types";
 import { loadScheduleActivityDetail } from "@/lib/api/schedule_detail";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { ScheduleActivityApiItem } from "@/lib/schedule";
 import { API_MOBILE_URL, EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { ScheduleActivityApiItem } from "@/lib/schedule";
 import { parseDateForTimeZone, SCHEDULE_DEFAULT_TIME_ZONE } from "@/lib/utils";
+import "@/styles/misc/schedule_detail.css";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import "@/styles/misc/schedule_detail.css";
 
 const getScheduleActivityImageUrl = (imageId?: string): string => {
   if (!imageId) {
@@ -62,9 +62,16 @@ export default function ScheduleDetailPage() {
   useEffect(() => {
     if (activityId === null || activityId <= 0) {
       setActivity(undefined);
-      setError({
-        errorMessage: t("schedule_detail.errors.invalid_activity_id"),
-      });
+      setError(
+        createApiErrorResponse({
+          errors: [
+            {
+              code: "INVALID_ACTIVITY_ID",
+              message: t("schedule_detail.errors.invalid_activity_id"),
+            },
+          ],
+        })
+      );
       return;
     }
 
@@ -77,7 +84,7 @@ export default function ScheduleDetailPage() {
       })
       .catch((reason: ApiErrorResponse | Error) => {
         if (reason instanceof Error) {
-          setError({ errorMessage: reason.message });
+          setError(reason as ApiErrorResponse);
           return;
         }
 
