@@ -1,4 +1,6 @@
 "use client";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import Icon, { MaterialIcon } from "@/components/icon";
 import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
@@ -10,7 +12,8 @@ import {
   SearchFursuitBadgesResponse,
   SearchRegularBadgesResponse,
 } from "@/lib/api/admin/advancedPrint";
-import { ApiAction, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiAction, ApiErrorResponse } from "@/lib/api/networking/types";
 import { isEmpty } from "@/lib/utils";
 import { ColumnDef, Table } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
@@ -42,6 +45,7 @@ export default function BadgeTable<
   const [badgeSearchQuery, setBadgeSearchQuery] = useState<BadgeSearchData>();
   const [badgeLoading, setBadgeLoading] = useState(false);
   const table = useRef<Table<T>>(null);
+  const { showModal } = useModalUpdate();
 
   const searchBadges = () => {
     if (!badgeSearchQuery || (isEmpty(badgeSearchQuery.orderQuery) && isEmpty(badgeSearchQuery.serialQuery))) return;
@@ -59,6 +63,7 @@ export default function BadgeTable<
           return [...existing, ...toAdd];
         });
       })
+      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />))
       .finally(() => {
         setBadgeLoading(false);
         setBadgeSearchQuery(undefined);

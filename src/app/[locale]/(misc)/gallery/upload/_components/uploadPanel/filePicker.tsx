@@ -1,9 +1,9 @@
-import { useFormContext } from "@/components/input/dataForm";
-import { useTranslations } from "next-intl";
-import { ChangeEvent, DragEvent, useCallback, useEffect, useRef, useState } from "react";
 import Icon from "@/components/icon";
+import { useFormContext } from "@/components/input/dataForm";
 import FpButton from "@/components/input/fpButton";
 import "@/styles/misc/gallery/upload/filePicker.css";
+import { useTranslations } from "next-intl";
+import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
 
 type GalleryFilePickerProps = {
   onFilesSelected: (files: File[]) => void;
@@ -68,19 +68,14 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
     [props.disabled]
   );
 
-  const filePickerHandler = useCallback(
-    (e: ChangeEvent) => {
-      if (props.disabled) {
-        return;
-      }
-      if (!fileRef.current?.files?.length) return;
-      props.onFilesSelected([...fileRef.current.files]);
-      fileRef.current.value = "";
-    },
-    [props.disabled]
-  );
-
-  const s = undefined;
+  const filePickerHandler = useCallback(() => {
+    if (props.disabled) {
+      return;
+    }
+    if (!fileRef.current?.files?.length) return;
+    props.onFilesSelected([...fileRef.current.files]);
+    fileRef.current.value = "";
+  }, [props.disabled]);
 
   return (
     <div

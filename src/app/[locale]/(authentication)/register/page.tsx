@@ -1,5 +1,5 @@
 "use client";
-import { ApiErrorResponse, ApiDetailedErrorResponse, isDetailedError } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { useTranslations } from "next-intl";
 import { redirect, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -20,7 +20,7 @@ import { AutoInputGenderManager, AutoInputSexManager, idTypeAnswers, shirtSizeAn
 import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
-import { FormValidationError } from "@/lib/components/dataForm";
+import { FormValidationError, getData } from "@/lib/components/dataForm";
 
 export default function Register() {
   const t = useTranslations("authentication");
@@ -32,12 +32,11 @@ export default function Register() {
 
   const params = useSearchParams();
 
-  const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    if (!isDetailedError(err)) {
+  const manageError = (err: ApiErrorResponse) => {
+    if (!err.errors) {
       setError("network_error");
     } else {
-      const errRes = err as ApiDetailedErrorResponse;
-      const errorMessage = errRes.errors.length > 0 ? errRes.errors[0].code : t("login.errors.unknown_error");
+      const errorMessage = err.errors.length > 0 ? err.errors[0].code : t("login.errors.unknown_error");
       setError(errorMessage);
     }
   };
@@ -45,10 +44,10 @@ export default function Register() {
   const checkForm = useCallback((e: FormData) => {
     const toReturn: FormValidationError[] = [];
     // Evaluate fields
-    const tosAccepted = e.get("tosAccepted")?.valueOf() === "true";
-    const privacyAccepted = e.get("privacyAccepted")?.valueOf() === "true";
-    const emailMatch = e.get("email")?.toString() == e.get("confirmEmail")?.toString();
-    const passwordMatch = e.get("password")?.toString() == e.get("confirmPassword")?.toString();
+    const tosAccepted = getData(e, "tosAccepted") === "true";
+    const privacyAccepted = getData(e, "privacyAccepted") === "true";
+    const emailMatch = getData(e, "email") == getData(e, "confirmEmail");
+    const passwordMatch = getData(e, "password") == getData(e, "confirmPassword");
     // Add fails
     if (!tosAccepted) {
       toReturn.push({
@@ -353,7 +352,7 @@ export default function Register() {
             manager={new AutoInputCountriesManager(true)}
             label={t("register.form.phone_prefix.label")}
             placeholder={t("register.form.phone_prefix.placeholder")}
-            idExtractor={(r) => extractPhonePrefix(r as CountrySearchResult)}
+            idExtractor={(r) => extractPhonePrefix(r)}
             onChange={(p) => setPhonePrefix(extractPhonePrefix(firstOrUndefined(p.newValues) as CountrySearchResult))}
             emptyIfUnselected
           />

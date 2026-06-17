@@ -1,17 +1,18 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useUser } from "@/components/context/userProvider";
-import FpButton from "@/components/input/fpButton";
+import ErrorMessage from "@/components/errorMessage";
 import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Modal from "@/components/modal";
-import ErrorMessage from "@/components/errorMessage";
 import { BanUserAction, GetUserAdminViewResponse, UnbanUserAction, UserIdRequestData } from "@/lib/api/admin/userView";
 import { ChangeEmailFormAction, ChangePasswordFormAction } from "@/lib/api/authentication/recover";
-import { runRequest } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
+import * as formUtil from "@/lib/components/dataForm";
+import { FormValidationError } from "@/lib/components/dataForm";
 import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from "react";
-import * as formUtil from "@/lib/components/dataForm";
-import { ValidationError } from "next/dist/compiled/amphtml-validator";
 export default function UserViewSecurity({
   userData,
   reloadData,
@@ -43,7 +44,7 @@ export default function UserViewSecurity({
       action: new BanUserAction(),
       body,
     })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLoading(false);
         reloadData();
@@ -68,7 +69,7 @@ export default function UserViewSecurity({
       action: new UnbanUserAction(),
       body,
     })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLoading(false);
         reloadData();
@@ -81,7 +82,7 @@ export default function UserViewSecurity({
   // Change password logic
   const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const passwordMatch = useCallback((e: FormData) => {
-    const toReturn: ValidationError[] = [];
+    const toReturn: FormValidationError[] = [];
     const password = formUtil.getData(e, "password");
     const confirmPassowrd = formUtil.getData(e, "confirmPassword");
     if (password !== confirmPassowrd) {

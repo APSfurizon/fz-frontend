@@ -1,20 +1,14 @@
 import { useGallery } from "@/components/gallery/context/galleryProvider";
-import { GalleryUpload } from "@/lib/api/gallery/upload/main";
-import { UploadProgress } from "@/lib/api/gallery/upload/types";
-import { SelectItem } from "@/lib/components/fpSelect";
+import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
+import { MyUploadsApiAction } from "@/lib/api/gallery/upload/api";
+import { runRequest } from "@/lib/api/networking/main";
+import { buildSearchParams } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useRef, useState } from "react";
 import UploadPanel, { UploadState } from "./uploadPanel/uploadPanel";
-import { runRequest } from "@/lib/api/global";
-import { MyUploadsApiAction } from "@/lib/api/gallery/upload/api";
-import { buildSearchParams } from "@/lib/utils";
-import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import UploadStatusBox from "./uploadStatusBox";
-import { useTranslations } from "next-intl";
 
-type UploadContainerProps = {
-  children?: React.ReactNode;
-};
-export default function UploadContainer(props: Readonly<UploadContainerProps>) {
+export default function UploadContainer() {
   const t = useTranslations("");
 
   const { medias, setGalleryMedias } = useGallery();
@@ -26,7 +20,7 @@ export default function UploadContainer(props: Readonly<UploadContainerProps>) {
   const maxKey = useMemo(() => medias.keys().reduce((prev, next) => Math.max(prev, next), 0), [medias]);
 
   // Append the latest uploaded medias
-  const timeoutHandle = useRef<any>(null!);
+  const timeoutHandle = useRef<number>(null!);
   const isPrependRunning = useRef(false);
   const shouldRePrepend = useRef(false);
 

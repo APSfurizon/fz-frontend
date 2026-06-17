@@ -1,14 +1,27 @@
 "use client";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
-import FpButton from "@/components/input/fpButton";
-import Icon from "@/components/icon";
-import { useEffect, useMemo, useState } from "react";
-import useTitle from "@/components/hooks/useTitle";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
-import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { useModalUpdate } from "@/components/context/modalProvider";
+import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
+import useTitle from "@/components/hooks/useTitle";
+import Icon from "@/components/icon";
+import AutoInput from "@/components/input/autoInput";
+import Checkbox from "@/components/input/checkbox";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
+import FpInput from "@/components/input/fpInput";
+import LoadingPanel from "@/components/loadingPanel";
 import Modal from "@/components/modal";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import RoomInvite from "@/components/room/roomInvite";
+import RoomOrderFlow from "@/components/room/roomOrderFlow";
+import StatusBox from "@/components/statusBox";
+import ToolLink from "@/components/toolLink";
+import UserPicture from "@/components/userPicture";
+import { Board } from "@/lib/api/booking";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { OrderStatus } from "@/lib/api/order";
+import { Permissions } from "@/lib/api/permission";
 import {
   EMPTY_ROOM_INFO,
   GuestIdApiData,
@@ -33,25 +46,13 @@ import {
   RoomSetShowInNosecountData,
   RoomUnconfirmAction,
 } from "@/lib/api/room";
-import UserPicture from "@/components/userPicture";
-import StatusBox from "@/components/statusBox";
-import DataForm from "@/components/input/dataForm";
-import FpInput from "@/components/input/fpInput";
-import AutoInput from "@/components/input/autoInput";
-import "@/styles/furpanel/room.css";
-import { useUser } from "@/components/context/userProvider";
-import { OrderStatus } from "@/lib/api/order";
-import ErrorMessage from "@/components/errorMessage";
-import { translate } from "@/lib/translations";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
-import Checkbox from "@/components/input/checkbox";
-import RoomOrderFlow from "@/components/room/roomOrderFlow";
-import { Permissions } from "@/lib/api/permission";
-import ToolLink from "@/components/toolLink";
-import LoadingPanel from "@/components/loadingPanel";
+import { translate } from "@/lib/translations";
 import { cssClass } from "@/lib/utils";
+import "@/styles/furpanel/room.css";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
 import QuotaViewer from "./_components/quotaViewer";
-import { Board } from "@/lib/api/booking";
 
 export default function RoomPage() {
   const t = useTranslations();
@@ -67,10 +68,8 @@ export default function RoomPage() {
   // Room related states
   /* Room data */
   const [data, setData] = useState<RoomInfoResponse>();
-  const isEditExpired = useMemo(
-    () => data && new Date(data.editingRoomEndTime ?? "0").getTime() - Date.now() < 0,
-    [data]
-  );
+  const [now] = useState(() => Date.now());
+  const isEditExpired = useMemo(() => data && new Date(data.editingRoomEndTime ?? "0").getTime() - now < 0, [data]);
 
   /************************/
   /** Room editing logic **/
@@ -95,7 +94,7 @@ export default function RoomPage() {
       .then((data) => {
         if (data.roomId) setData(undefined);
       })
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setActionLoading(false));
   };
 
@@ -125,7 +124,7 @@ export default function RoomPage() {
       body: roomData,
     })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -157,7 +156,7 @@ export default function RoomPage() {
       body: guestData,
     })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -176,7 +175,7 @@ export default function RoomPage() {
       body: guestData,
     })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -205,7 +204,7 @@ export default function RoomPage() {
       body: guestData,
     })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -219,7 +218,7 @@ export default function RoomPage() {
       body: guestData,
     })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -235,7 +234,7 @@ export default function RoomPage() {
     setModalLoading(true);
     runRequest({ action: new RoomLeaveAction() })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -268,7 +267,7 @@ export default function RoomPage() {
     setModalLoading(true);
     runRequest({ action: new RoomConfirmAction() })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -284,7 +283,7 @@ export default function RoomPage() {
     setModalLoading(true);
     runRequest({ action: new RoomUnconfirmAction() })
       .then(() => commonSuccess())
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setModalLoading(false));
   };
 
@@ -305,7 +304,7 @@ export default function RoomPage() {
       body: reqData,
     })
       .then(() => setShowInNosecount(newValue))
-      .catch((err) => commonFail(err))
+      .catch((err) => commonFail(err as ApiErrorResponse))
       .finally(() => setLoading(false));
   };
 
@@ -330,7 +329,7 @@ export default function RoomPage() {
     setData(undefined);
   };
 
-  const commonFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const commonFail = (err: ApiErrorResponse) => {
     setRenameModalOpen(false);
     setDeleteModalOpen(false);
     setInviteModalOpen(false);
@@ -355,7 +354,7 @@ export default function RoomPage() {
         setData(result);
       })
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
         setData(EMPTY_ROOM_INFO);
       })
       .finally(() => setLoading(false));

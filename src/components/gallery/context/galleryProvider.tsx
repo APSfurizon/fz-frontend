@@ -1,8 +1,6 @@
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 
-type GalleryMediaCallback = (current: GalleryUploadedMedia) => GalleryUploadedMedia | undefined;
-
 type GalleryContextType = {
   medias: Map<number, GalleryUploadedMedia>;
   setGalleryMedias: React.Dispatch<React.SetStateAction<Map<number, GalleryUploadedMedia>>>;
@@ -13,7 +11,7 @@ type GalleryContextType = {
   ended: boolean;
 };
 
-const GalleryContext = createContext<GalleryContextType>(undefined as any);
+const GalleryContext = createContext<GalleryContextType>({} as GalleryContextType);
 
 type GalleryProviderProps = {
   children?: React.ReactNode;

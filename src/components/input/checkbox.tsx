@@ -36,7 +36,7 @@ export default function Checkbox({
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Handle field registration
-  useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
+  useEffect(() => registerField(fieldName, inputRef), []);
 
   const clickEvent = (event: MouseEvent<HTMLButtonElement>) => {
     if (isDisabled || busyState) return;

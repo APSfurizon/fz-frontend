@@ -1,4 +1,4 @@
-import { runRequest } from "../../global";
+import { runRequest } from "../../networking/main";
 import { GalleryUploadedMediaStatus } from "../types";
 import { GalleryUpdateFormApiAction } from "./api";
 

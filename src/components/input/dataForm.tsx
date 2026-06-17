@@ -2,7 +2,6 @@ import { MaterialIcon } from "../icon";
 import {
   useState,
   CSSProperties,
-  FormEvent,
   Dispatch,
   SetStateAction,
   useEffect,
@@ -18,7 +17,9 @@ import {
 import { useTranslations } from "next-intl";
 import FpButton from "./fpButton";
 import { FormApiAction, FormValidationError, InferRequest } from "@/lib/components/dataForm";
-import { ApiDetailedErrorResponse, ApiErrorResponse, ApiResponse, runFormRequest } from "@/lib/api/global";
+import { runFormRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { ApiResponse } from "@/lib/api/networking/types";
 import "@/styles/components/dataForm.css";
 import { useModalContext } from "../modal";
 import { useModalUpdate } from "../context/modalProvider";
@@ -72,7 +73,7 @@ type DataFormProps<T extends FormApiAction<any, any, any>> = {
   action?: T;
   onChange?: (different: boolean, newEntity: InferRequest<T> | undefined) => void;
   onSuccess?: (data: boolean | ApiResponse) => any;
-  onFail?: (data: ApiErrorResponse | ApiDetailedErrorResponse) => any;
+  onFail?: (data: ApiErrorResponse) => any;
   onBeforeSubmit?: () => void;
   editBodyData?: (data: InferRequest<T>) => InferRequest<T>;
   editFormData?: (data: FormData) => FormData;
@@ -157,7 +158,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
   }, [reset]);
 
   const fail = useMemo(
-    () => (data: ApiErrorResponse | ApiDetailedErrorResponse) => {
+    () => (data: ApiErrorResponse) => {
       if (props.onFail) {
         props.onFail(data);
       } else {
@@ -205,9 +206,10 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
         bodyModification: props.editBodyData,
         body: formData,
       })
-        .then((responseData) => props.onSuccess && props.onSuccess(responseData))
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .then((responseData) => props.onSuccess?.(responseData as boolean | ApiResponse))
         .catch((errorData) => {
-          fail(errorData);
+          fail(errorData as ApiErrorResponse);
           if (props.resetOnFail) setReset(true);
         })
         .finally(() => {
@@ -219,7 +221,7 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
     } catch (e) {
       console.error(e);
       setLoading(false);
-      fail(e ?? { errorMessage: "unknown" });
+      fail(e as ApiErrorResponse);
     }
 
     e.preventDefault();
@@ -229,8 +231,10 @@ export default function DataForm<T extends FormApiAction<any, any, any>>(props: 
   const onFormChange = useCallback(
     (fieldName?: string, value?: any) => {
       if (!fieldName || !formRef?.current) return;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const entity: InferRequest<T> = props.action?.dtoBuilder.mapToDTO(new FormData(formRef.current));
       if (entity && value) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         entity[fieldName] = value;
       }
       setCurrentEntity(entity);

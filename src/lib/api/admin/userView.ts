@@ -10,13 +10,18 @@ import { BadgeStatusApiResponse } from "../badge/badge";
 import { Board, SponsorshipType } from "../booking";
 import { ConventionEvent } from "../counts";
 import { ExchangeStatusApiResponse } from "../exchange";
-import { ApiAction, ApiErrorResponse, ApiRequest, ApiResponse, RequestType, runRequest } from "../global";
+import { runRequest } from "../networking/main";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { ApiRequest } from "../networking/types";
+import { RequestType } from "../networking/types";
 import { OrderStatus } from "../order";
 import { Permissions } from "../permission";
 import { RoomInfoResponse } from "../room";
 import { ExtraDays, UserData, UserPersonalInfo } from "../user";
 import { MembershipCard } from "./membershipManager";
-import { buildSearchParams } from "@/lib/utils";
+import { buildSearchParams, toError } from "@/lib/utils";
 import { GetRoleByIdApiAction, GetAllRolesApiAction, SearchRoleApiAction, RoleBaseData } from "./role";
 import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 
@@ -215,14 +220,16 @@ export class AutoInputRolesManager implements AutoInputManager {
   codeOnly: boolean = false;
 
   loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       runRequest({
         action: new GetRoleByIdApiAction(),
         pathParams: { id: filter.filteredIds.at(0) },
-      }).then((result) => {
-        const roles = [result].map((role) => this.toSearchResult(role));
-        resolve(filterLoaded(roles, filter));
-      });
+      })
+        .then((result) => {
+          const roles = [result].map((role) => this.toSearchResult(role));
+          resolve(filterLoaded(roles, filter));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 
@@ -232,14 +239,16 @@ export class AutoInputRolesManager implements AutoInputManager {
     filter?: AutoInputFilter,
     filterOut?: AutoInputFilter
   ): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       runRequest({
         action: new SearchRoleApiAction(),
         searchParams: buildSearchParams({ query: value }),
-      }).then((results) => {
-        const roles = results.roles?.map((usr) => this.toSearchResult(usr));
-        resolve(filterLoaded(roles, filter, filterOut));
-      });
+      })
+        .then((results) => {
+          const roles = results.roles?.map((usr) => this.toSearchResult(usr));
+          resolve(filterLoaded(roles, filter, filterOut));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 

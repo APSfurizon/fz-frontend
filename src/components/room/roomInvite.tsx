@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import StatusBox from "@/components/statusBox";
 import { translate } from "@/lib/translations";
 import { RoomInvitation } from "@/lib/api/room";
+import { Board } from "@/lib/api/booking";
 
 export default function RoomInvite({
   busy,
@@ -50,7 +51,7 @@ export default function RoomInvite({
           {inviteData.room.extraDays && inviteData.room.extraDays !== "NONE" && (
             <StatusBox>{t(`booking.items.extra_days_${inviteData.room.extraDays}`)}</StatusBox>
           )}
-          {inviteData.room.board && inviteData.room.board !== "NONE" && (
+          {inviteData.room.board && inviteData.room.board !== Board.NONE && (
             <StatusBox>{t(`booking.items.board_${inviteData.room.board}`)}</StatusBox>
           )}
           <div className="spacer"></div>

@@ -1,5 +1,8 @@
-import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import { MediaData } from "../media";
 import { UserData } from "../user";
 import { Fursuit } from "./fursuits";
@@ -58,9 +61,9 @@ export interface BadgeDataChangeData {
 export class BadgeDataChangeDTOBuilder implements FormDTOBuilder<BadgeDataChangeData> {
   mapToDTO = (data: FormData) => {
     return {
-      userId: parseInt(data.get("userId")?.toString() ?? ""),
-      fursonaName: data.get("fursonaName")?.toString() ?? "",
-      locale: data.get("locale")?.toString() ?? "",
+      userId: parseInt(getData(data, "userId")?.toString() ?? ""),
+      fursonaName: getData(data, "fursonaName")?.toString() ?? "",
+      locale: getData(data, "locale")?.toString() ?? "",
     };
   };
 }

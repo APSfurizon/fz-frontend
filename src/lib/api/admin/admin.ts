@@ -1,5 +1,8 @@
-import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 export interface AdminCapabilitesResponse extends ApiResponse {
   canUpgradeUser?: boolean;
@@ -46,8 +49,8 @@ export interface ManualLinkOrderData {
 class ManuallyLinkOrderDTOBuilder implements FormDTOBuilder<ManualLinkOrderData> {
   mapToDTO = (data: FormData) => {
     const toReturn: ManualLinkOrderData = {
-      orderCode: data.get("orderCode")!.toString(),
-      userId: parseInt(data.get("userId")!.toString()),
+      orderCode: getData(data, "orderCode")!.toString(),
+      userId: parseInt(getData(data, "userId")!.toString()),
     };
     return toReturn;
   };

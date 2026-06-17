@@ -40,10 +40,12 @@ export default function UserPicture({
     if (userData) {
       if (userData instanceof Promise) {
         setLoading(true);
-        userData.then((ud) => {
-          setLoading(false);
-          setPictureData(ud);
-        });
+        userData
+          .then((ud) => {
+            setLoading(false);
+            setPictureData(ud);
+          })
+          .catch(() => void 0);
       } else {
         setLoading(false);
         setPictureData(userData);
@@ -51,10 +53,12 @@ export default function UserPicture({
     } else if (fursuitData) {
       if (fursuitData instanceof Promise) {
         setLoading(true);
-        fursuitData.then((fd) => {
-          setLoading(false);
-          setFursuitPictureData(fd);
-        });
+        fursuitData
+          .then((fd) => {
+            setLoading(false);
+            setFursuitPictureData(fd);
+          })
+          .catch(() => void 0);
       } else {
         setLoading(false);
         setFursuitPictureData(fursuitData);
@@ -67,8 +71,11 @@ export default function UserPicture({
   }, [userData]);
 
   const borderClassName = useMemo(
-    () =>
-      `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
+    () => `
+        image-container rounded-l
+        sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"}
+        ${hideEffect ? "no-effect" : ""}
+      `,
     [pictureData, fursuitData, isLoading]
   );
 

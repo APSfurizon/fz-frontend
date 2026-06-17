@@ -2,12 +2,9 @@
 import { useUser } from "@/components/context/userProvider";
 import Icon from "@/components/icon";
 import ToolLink from "@/components/toolLink";
-import { hasPermission, Permissions } from "@/lib/api/permission";
+import "@/styles/misc/gallery/layout.css";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import "@/styles/misc/gallery/layout.css";
-import { GalleryProvider } from "../../../../components/gallery/context/galleryProvider";
-import ViewMediaModal from "./_components/viewMediaModal";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   const [toolListExpanded, setToolListExpanded] = useState(false);

@@ -1,4 +1,7 @@
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../api/global";
+import { ApiAction } from "../api/networking/types";
+import { ApiErrorResponse } from "../api/networking/types";
+import { ApiResponse } from "../api/networking/types";
+import { RequestType } from "../api/networking/types";
 import { MediaData } from "../api/media";
 import { UPLOAD_SELECTOR_MAX_SIZE, UPLOAD_SELECTOR_MIN_SIZE } from "../constants";
 import * as mediaUtil from "@/lib/utils/media";

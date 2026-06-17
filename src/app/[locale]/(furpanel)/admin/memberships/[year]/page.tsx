@@ -13,7 +13,7 @@ import {
   GetCardsApiResponse,
   UserCardData,
 } from "@/lib/api/admin/membershipManager";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -29,6 +29,7 @@ import AutoInput from "@/components/input/autoInput";
 import LoadingPanel from "@/components/loadingPanel";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import FpTable from "@/components/table/fpTable";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function MembershipView({ params }: { params: Promise<{ year: number }> }) {
   const [selectedYear, setSelectedYear] = useState<number>();
@@ -64,7 +65,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
       body: data,
     })
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
         setChecked(!checked);
       })
       .finally(() => setBusy(false));
@@ -80,18 +81,20 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
 
   const addCardFail = (err: any) => {
     setAddModalOpen(false);
-    showModal(t("common.error"), <ErrorMessage error={err} />);
+    showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
   };
 
   // Select year
   useEffect(() => {
-    params.then((loadedParams) => {
-      // Validate year
-      if (!loadedParams.year || isNaN(loadedParams.year)) {
-        router.replace("" + new Date().getFullYear());
-      }
-      setSelectedYear(loadedParams.year);
-    });
+    params
+      .then((loadedParams) => {
+        // Validate year
+        if (!loadedParams.year || isNaN(loadedParams.year)) {
+          router.replace("" + new Date().getFullYear());
+        }
+        setSelectedYear(loadedParams.year);
+      })
+      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />));
   }, []);
 
   // Validate year
@@ -110,7 +113,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
     })
       .then((value) => setCardsData(value))
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
         setCardsData(null);
       })
       .finally(() => setLoading(false));

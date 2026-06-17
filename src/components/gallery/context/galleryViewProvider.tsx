@@ -4,11 +4,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useGallery } from "./galleryProvider";
 
 type GalleryViewContextType = {
-  openMedia(id: number): void;
-  closeMedia(): void;
+  openMedia: (id: number) => void;
+  closeMedia: () => void;
   currentMediaId?: number;
-  goNext(): void;
-  goBack(): void;
+  goNext: () => void;
+  goBack: () => void;
 };
 
 const GalleryViewContext = createContext<GalleryViewContextType>({} as GalleryViewContextType);

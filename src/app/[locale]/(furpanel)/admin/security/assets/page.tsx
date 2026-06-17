@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   SecurityAsset,
   SecurityAssetLog,
@@ -24,6 +24,7 @@ import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 import { UserDisplayAction } from "@/lib/api/user";
 import "@/styles/furpanel/admin/security-pages.css";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 const STATI = ["disponibile", "in_uso", "non_disponibile"] as const;
 const STATO_COLOR: Record<string, string> = { disponibile: "#27ae60", in_uso: "#f39c12", non_disponibile: "#c0392b" };
@@ -80,7 +81,7 @@ export default function SecurityAssetManagerPage() {
     setLoading(true);
     runRequest({ action: new GetSecurityAssetsApiAction() })
       .then((res) => setAssets(res.assets ?? []))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -145,7 +146,7 @@ export default function SecurityAssetManagerPage() {
         setView("list");
         loadAssets();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -170,7 +171,7 @@ export default function SecurityAssetManagerPage() {
         setTransferOpen(false);
         loadAssets();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -183,7 +184,7 @@ export default function SecurityAssetManagerPage() {
     if (a.fileName) params.set("fileName", a.fileName);
     runRequest({ action: new GetSecurityAssetLogsApiAction(), searchParams: params })
       .then((res) => setLogs(res.logs ?? []))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLogsLoading(false);
         setView("logs");

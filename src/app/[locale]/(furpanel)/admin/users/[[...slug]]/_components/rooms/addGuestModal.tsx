@@ -5,7 +5,6 @@ import Modal from "@/components/modal";
 import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomInviteFormAction } from "@/lib/api/room";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 export default function AddGuestModal({
   open,
@@ -19,7 +18,6 @@ export default function AddGuestModal({
   reloadData: () => void;
 }>) {
   const t = useTranslations();
-  const [loading, setLoading] = useState(false);
 
   const onSuccess = () => {
     onClose();
@@ -39,7 +37,6 @@ export default function AddGuestModal({
           fieldName="invitedUsers"
           manager={new AutoInputRoomInviteManager()}
           multiple
-          disabled={loading}
           max={roomInfo.currentRoomInfo.roomData.roomCapacity - roomInfo.currentRoomInfo.guests.length}
           label={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.select_guest.label")}
         />

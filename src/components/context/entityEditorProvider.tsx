@@ -11,12 +11,13 @@ interface EntityEditorType<T, U> {
   saveEntity: (entity: U) => void;
 }
 
-const EntityEditorContext = createContext<EntityEditorType<any, any>>(undefined as any);
+const EntityEditorContext = createContext<EntityEditorType<any, any>>({} as EntityEditorType<any, any>);
 
 /**
  * EntityEditorProvider<T, U, V>
  * @type T - the view object, the one we receive in input to get the first props.
- * @type U - the store object, which model is in between holding temporary info to transform in the output type before submission.
+ * @type U - the store object, which model is in between holding temporary info to
+ * transform in the output type before submission.
  * @returns
  */
 export function EntityEditorProvider<T, U>({
@@ -36,7 +37,7 @@ export function EntityEditorProvider<T, U>({
 }>) {
   const [entity, setEntityValue] = useState<U>(initialStoreEntity as U);
   const [viewEntity, setViewEntity] = useState<T>(initialViewEntity as T);
-  const setEntity = (newEntity: any) => {
+  const setEntity = (newEntity: U) => {
     setEntityValue(newEntity);
     setEntityChanged(true);
   };
@@ -69,9 +70,9 @@ export function EntityEditorProvider<T, U>({
 }
 
 export function useEntityEditor<T, U>() {
-  const context = useContext<EntityEditorType<T, U>>(EntityEditorContext);
+  const context = useContext<EntityEditorType<T, U>>(EntityEditorContext as React.Context<EntityEditorType<T, U>>);
   if (!context) {
-    throw "EntityEditor context missing";
+    throw new Error("EntityEditor context missing");
   }
   return context;
 }

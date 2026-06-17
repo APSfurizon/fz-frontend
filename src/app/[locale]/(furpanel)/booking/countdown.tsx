@@ -1,12 +1,13 @@
 "use client";
-import FpButton from "@/components/input/fpButton";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Icon from "@/components/icon";
-import LoadingPanel from "@/components/loadingPanel";
 import ErrorMessage from "@/components/errorMessage";
+import Icon from "@/components/icon";
+import FpButton from "@/components/input/fpButton";
+import LoadingPanel from "@/components/loadingPanel";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/booking";
-import { runRequest } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
 import { EVENT_BANNER, EVENT_LOGO } from "@/lib/constants";
 import { getCountdown } from "@/lib/utils";
 import { useFormatter, useNow, useTranslations } from "next-intl";
@@ -32,7 +33,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
     setActionLoading(true);
     runRequest({ action: new ShopLinkApiAction() })
       .then((result) => router.push(result.link))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setActionLoading(false));
   };
 

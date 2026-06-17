@@ -1,17 +1,18 @@
 "use client";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import Icon from "@/components/icon";
-import { useEffect, useState } from "react";
-import useTitle from "@/components/hooks/useTitle";
-import { useTranslations } from "next-intl";
-import DataForm from "@/components/input/dataForm";
-import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import ErrorMessage from "@/components/errorMessage";
+import useTitle from "@/components/hooks/useTitle";
+import Icon from "@/components/icon";
+import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
-import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
 import LoadingPanel from "@/components/loadingPanel";
+import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
 import "@/styles/furpanel/user.css";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import UserViewPersonalInfo from "../admin/users/[[...slug]]/_components/userViewPersonalInfo";
 import UserSessions from "./_components/userSessions";
 
@@ -28,7 +29,7 @@ export default function UserPage() {
     if (personalInformation) return;
     runRequest({ action: new GetPersonalInfoAction() })
       .then((result) => setPersonalInformation(result))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />));
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />));
   }, [personalInformation]);
 
   // Password change logic
@@ -36,7 +37,7 @@ export default function UserPage() {
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const passwordMatch = confirmPassword === password;
-  const passwordChangeError = (err: ApiErrorResponse | ApiDetailedErrorResponse) =>
+  const passwordChangeError = (err: ApiErrorResponse) =>
     showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
 
   useTitle(t("furpanel.user.title"));

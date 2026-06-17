@@ -1,4 +1,5 @@
-import { ApiErrorResponse, runRequest } from "../api/global";
+import { runRequest } from "../api/networking/main";
+import { ApiErrorResponse } from "../api/networking/types";
 import { AutoInputCountriesApiAction, AutoInputStatesApiAction, PlaceApiResponse } from "../api/geo";
 import { buildSearchParams } from "../utils";
 import { GetPermissionsApiAction, GetPermissionsResponse } from "../api/admin/role";

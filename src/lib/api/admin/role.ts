@@ -1,8 +1,12 @@
 import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import { UserData } from "../user";
-import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 import { CACHED_PERMISSIONS } from "@/lib/cache/cache";
+import { toError } from "@/lib/utils";
 
 export interface RoleInfo extends Omit<RoleBaseData, "roleAdmincountPriority"> {
   permanentUsersNumber: number;
@@ -74,7 +78,7 @@ export interface AddRoleApiResponse extends ApiResponse {
 export class AddRoleDTOBuilder implements FormDTOBuilder<AddRoleApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: AddRoleApiData = {
-      internalName: data.get("internalName")!.toString(),
+      internalName: getData(data, "internalName")!,
     };
     return toReturn;
   };
@@ -143,7 +147,7 @@ export function getAutoInputPermissions(): Promise<AutoInputSearchResult[]> {
         );
       })
       .catch((err) => {
-        reject(err);
+        reject(toError(err));
       });
   });
 }
@@ -155,10 +159,12 @@ export class AutoInputPermissionsManager implements AutoInputManager {
   codeOnly: boolean = true;
 
   loadByIds(filter: AutoInputFilter): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
-      getAutoInputPermissions().then((results) => {
-        resolve(filterLoaded(results, filter));
-      });
+    return new Promise((resolve, reject) => {
+      getAutoInputPermissions()
+        .then((results) => {
+          resolve(filterLoaded(results, filter));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 
@@ -168,10 +174,12 @@ export class AutoInputPermissionsManager implements AutoInputManager {
     filter?: AutoInputFilter,
     filterOut?: AutoInputFilter
   ): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
-      getAutoInputPermissions().then((results) => {
-        resolve(filterLoaded(results, filter, filterOut));
-      });
+    return new Promise((resolve, reject) => {
+      getAutoInputPermissions()
+        .then((results) => {
+          resolve(filterLoaded(results, filter, filterOut));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 

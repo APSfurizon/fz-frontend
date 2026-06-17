@@ -4,13 +4,13 @@ import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
 import LoadingPanel from "@/components/loadingPanel";
 import ScheduleCalendar from "@/components/schedule/scheduleCalendar";
+import ScheduleLegend from "@/components/schedule/scheduleLegenda";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { loadScheduleActivities } from "@/lib/api/schedule_detail";
-import { ApiErrorResponse } from "@/lib/api/global";
 import { mapScheduleActivitiesToEvents, SCHEDULE_ROOMS, ScheduleActivityApiItem, ScheduleEvent } from "@/lib/schedule";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import ScheduleLegend from "@/components/schedule/scheduleLegenda";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function formatDayKey(date: Date): string {
   const year = date.getFullYear();
@@ -69,7 +69,7 @@ export default function SchedulePage() {
       })
       .catch((reason: ApiErrorResponse | Error) => {
         if (reason instanceof Error) {
-          setError({ errorMessage: reason.message });
+          setError(reason as ApiErrorResponse);
           return;
         }
 

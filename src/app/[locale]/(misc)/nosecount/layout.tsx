@@ -2,7 +2,7 @@
 import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
 import { ConventionEvent, CountViewMode, GetAllEventsApiAction, NosecountContext } from "@/lib/api/counts";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
@@ -46,10 +46,10 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
   function selectMode(mode: string) {
     let toSet: CountViewMode = CountViewMode.NORMAL;
     switch (mode) {
-      case CountViewMode.FURSUIT:
+      case CountViewMode.FURSUIT.toString():
         toSet = CountViewMode.FURSUIT;
         break;
-      case CountViewMode.SPONSOR:
+      case CountViewMode.SPONSOR.toString():
         toSet = CountViewMode.SPONSOR;
         break;
       default:

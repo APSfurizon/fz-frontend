@@ -1,6 +1,6 @@
 import { ConventionEvent } from "../../counts";
-import { ApiRequest, ApiResponse } from "../../global";
-import { GalleryUploadedMedia, UploadRepostPermissions } from "../types";
+import { ApiResponse } from "../../networking/types";
+import { UploadRepostPermissions } from "../types";
 import { GalleryUpload } from "./main";
 
 /**

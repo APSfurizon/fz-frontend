@@ -1,13 +1,14 @@
 "use client";
-import Modal from "@/components/modal";
-import ErrorMessage from "@/components/errorMessage";
-import { runRequest } from "@/lib/api/global";
-import { UserOrderLinkingAction, UserOrderLinkingData } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { useTranslations } from "next-intl";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import ErrorMessage from "@/components/errorMessage";
 import LoadingPanel from "@/components/loadingPanel";
+import Modal from "@/components/modal";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
+import { UserOrderLinkingAction, UserOrderLinkingData } from "@/lib/api/user";
+import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function OrderLinkPage() {
   const params = useSearchParams();
@@ -18,7 +19,7 @@ export default function OrderLinkPage() {
 
   const code = params.get("c");
   const secret = params.get("s");
-  const message = params.get("m");
+  // TODO: const message = params.get("m");
 
   useEffect(() => {
     if (!code || !secret) router.replace("/home");
@@ -32,7 +33,7 @@ export default function OrderLinkPage() {
       body: userOrderLinkData,
     })
       .then(() => router.replace("/booking"))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   }, []);
 

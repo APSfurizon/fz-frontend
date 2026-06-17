@@ -1,16 +1,17 @@
-import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 import { GalleryUpdateBody } from "../admin/types";
-import { nullifyEmptyString } from "@/lib/utils";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../global";
+import { ApiAction } from "../../networking/types";
+import { ApiErrorResponse } from "../../networking/types";
+import { ApiResponse } from "../../networking/types";
+import { RequestType } from "../../networking/types";
 import { GalleryUploadedFullMedia } from "../types";
 
 class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
   mapToDTO(data: FormData) {
-    const newEventIdStr = data.get("newEventId")?.toString();
-    const newPhotographerUserIdStr = data.get("newPhotographerUserId")?.toString();
-    const newRepostPermissions = data.get("newRepostPermissions")?.toString();
-    const newStatus = data.get("newStatus")?.toString();
-    nullifyEmptyString;
+    const newEventIdStr = getData(data, "newEventId");
+    const newPhotographerUserIdStr = getData(data, "newPhotographerUserId");
+    const newRepostPermissions = getData(data, "newRepostPermissions");
+    const newStatus = getData(data, "newStatus");
     return {
       newEventUid: Number(newEventIdStr),
       newPhotographerUserId: Number(newPhotographerUserIdStr),

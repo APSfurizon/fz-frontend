@@ -916,6 +916,9 @@
         },
         "roles": {
           "title": "Ruoli"
+        },
+        "errors": {
+          "unknown_user": "Utente sconosciuto"
         }
       },
       "security_management": {
@@ -1168,7 +1171,9 @@
         "invalid_input": "Dati non validi",
         "already_logged_in": "Hai già effettuato l'accesso",
         "confirmation_still_pending": "Conferma l'email prima di accedere",
-        "authentication_is_disabled": "Account disabilitato."
+        "authentication_is_disabled": "Account disabilitato.",
+        "secondary_login_failed": "Login secondario fallito",
+        "secondary_login_failed_description": "Login attraverso il server mobile fallito"
       },
       "messages": {
         "register_success": {

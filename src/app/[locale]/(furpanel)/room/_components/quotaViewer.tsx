@@ -1,13 +1,14 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import FpButton from "@/components/input/fpButton";
 import ErrorMessage from "@/components/errorMessage";
+import FpButton from "@/components/input/fpButton";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import {
   getRemainingRoomType,
   RoomStoreItemsApiAction,
   RoomStoreItemsApiResponse,
 } from "@/lib/api/flows/roomOrderFlow";
-import { runRequest } from "@/lib/api/global";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
 import { translate } from "@/lib/translations";
 import { useLocale, useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -36,7 +37,7 @@ export default function QuotaViewer({
     runRequest({ action: new RoomStoreItemsApiAction() })
       .then((data) => setRoomsData(data))
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />, "ERROR");
         setRoomsData(undefined);
       })
       .finally(() => setModalLoading(false));

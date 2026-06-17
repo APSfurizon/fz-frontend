@@ -5,7 +5,8 @@ import Modal from "@/components/modal";
 import { AutoInputCustomUserManager } from "@/lib/api/admin/userView";
 import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomKickFormAction } from "@/lib/api/room";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { getData } from "@/lib/components/dataForm";
 
 export default function RemoveGuestModal({
   open,
@@ -19,7 +20,6 @@ export default function RemoveGuestModal({
   reloadData: () => void;
 }>) {
   const t = useTranslations();
-  const [loading, setLoading] = useState(false);
 
   const manager = useMemo(
     () =>
@@ -32,7 +32,7 @@ export default function RemoveGuestModal({
   );
 
   const editFormData = (data: FormData): FormData => {
-    const userId = parseInt(data.get("userId")?.toString() ?? "0");
+    const userId = parseInt(getData(data, "userId") ?? "0");
     const guestId = roomInfo.currentRoomInfo.guests.find((guest) => guest.user.userId === userId)?.roomGuest.guestId;
     const toReturn = new FormData();
     toReturn.set("guestId", String(guestId));

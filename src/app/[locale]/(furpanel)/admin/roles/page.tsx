@@ -10,7 +10,8 @@ import {
   GetAllRolesApiAction,
   RoleInfo,
 } from "@/lib/api/admin/role";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -31,19 +32,19 @@ export default function RolesListPage() {
   const [loading, setLoading] = useState(false);
   const [roles, setRoles] = useState<RoleInfo[]>([]);
 
-  useEffect(() => {
-    loadRoles();
-  }, []);
-
   const loadRoles = () => {
     if (loading) return;
     setRoles([]);
     setLoading(true);
     runRequest({ action: new GetAllRolesApiAction() })
       .then((response) => setRoles(response.roles))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    loadRoles();
+  }, []);
 
   const editRole = (role: RoleInfo) => {
     router.push(`/admin/roles/${role.roleId}/data`);
@@ -60,7 +61,7 @@ export default function RolesListPage() {
     router.push(`/admin/roles/${r.roleId}/data`);
   };
 
-  const onAddFail = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
+  const onAddFail = (err: ApiErrorResponse) => {
     showModal(t("common.error"), <ErrorMessage error={err} />);
     setAddRoleModalOpen(false);
   };
@@ -86,7 +87,7 @@ export default function RolesListPage() {
     setLoading(true);
     runRequest({ action: new DeleteRolesApiAction(), pathParams: { id: roleId } })
       .then(() => loadRoles())
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLoading(false);
         closeDeleteRoleModal();

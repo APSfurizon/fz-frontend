@@ -1,4 +1,6 @@
-import { ApiAction, ApiErrorResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 export class GetRenderedCommonBadgesApiAction extends ApiAction<Response, ApiErrorResponse> {
   authenticated = true;

@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   SecurityLostItem,
   GetSecurityLostItemsApiAction,
@@ -19,6 +19,7 @@ import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import "@/styles/furpanel/admin/security-pages.css";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 const SECURITY_IMAGE_THUMB_SIZE = 108;
 const SECURITY_LIST_PREVIEW_SIZE = 56;
@@ -59,7 +60,7 @@ export default function SecurityLostAndFoundPage() {
     setLoading(true);
     runRequest({ action: new GetSecurityLostItemsApiAction() })
       .then((res) => setItems(res.items ?? [...(res.smarriti ?? []), ...(res.consegnati ?? [])]))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -134,7 +135,7 @@ export default function SecurityLostAndFoundPage() {
         setView("list");
         loadItems();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -150,7 +151,7 @@ export default function SecurityLostAndFoundPage() {
         loadItems();
         setView("list");
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 

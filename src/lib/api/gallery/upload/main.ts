@@ -1,10 +1,9 @@
-import { ApiResponse, runRequest } from "../../global";
+import { runRequest } from "../../networking/main";
+import { ApiResponse } from "../../networking/types";
 import CryptoJS from "crypto-js";
 import {
   GalleryUploadAbortApiAction,
-  GalleryUploadAbortApiBody,
   GalleryUploadApiAction,
-  GalleryUploadApiBody,
   GalleryUploadCompleteApiAction,
   GalleryUploadCompleteApiBody,
 } from "./api";
@@ -21,8 +20,8 @@ import {
   UploadProgressStatus,
 } from "./types";
 import { SelectItem } from "@/lib/components/fpSelect";
-import * as uploadComponentLib from "@/lib/components/upload";
 import * as mediaUtil from "@/lib/utils/media";
+import { toError } from "@/lib/utils";
 
 const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> = {
   INITIALIZING: 1,
@@ -81,7 +80,7 @@ export class GalleryUpload {
     };
 
     if (begin) {
-      this.start();
+      this.start().catch(console.error);
     }
   }
 
@@ -136,7 +135,7 @@ export class GalleryUpload {
       const oldStatus = ProgressStatusHierarchy[this.progress.status];
       const newStatus = ProgressStatusHierarchy[progress.status];
       if (!!oldStatus && !!newStatus && oldStatus > newStatus) {
-        throw `Cannot go from ${this.progress.status} (${oldStatus}) to ${progress.status} (${newStatus})`;
+        throw new Error(`Cannot go from ${this.progress.status} (${oldStatus}) to ${progress.status} (${newStatus})`);
       }
     }
     this.progress = { ...this.progress, ...progress };
@@ -150,7 +149,7 @@ export class GalleryUpload {
   private error(reason: any) {
     if (!this.abortController.signal.aborted) {
       this.progress = { ...this.progress, status: "ERROR" };
-      this.dispatchEvent("ERROR", { error: reason });
+      this.dispatchEvent("ERROR", { error: toError(reason) });
     }
     // Run abort request if an upload request was made
     if (this.uploadRequestId) {
@@ -159,7 +158,7 @@ export class GalleryUpload {
         body: {
           uploadReqId: this.uploadRequestId,
           userId: this.userId,
-        } as GalleryUploadAbortApiBody,
+        },
       }).catch((e) => console.error("Could not abort upload", e));
     }
   }
@@ -191,7 +190,7 @@ export class GalleryUpload {
           toReturn.push(...executed);
         }
       } catch (e) {
-        reject(e);
+        reject(toError(e));
       }
       resolve(toReturn);
     });
@@ -201,12 +200,12 @@ export class GalleryUpload {
     const MAX_TRIES = 3;
     return new Promise(async (resolve, reject) => {
       this.abortController.signal.throwIfAborted();
-      const data = { ...chunkData } as ChunkUpload;
+      const data = { ...chunkData };
       const slicedFile = this.file.slice(data.offsetStart, data.offsetStart + this.chunkSize);
       // Create md5 checksum of chunk
       const wordArray = CryptoJS.lib.WordArray.create(await slicedFile.arrayBuffer());
       data.md5Checksum = CryptoJS.MD5(wordArray);
-      console.debug(`Uploading chunk ${data.link} - Md5 = ${data.md5Checksum}`);
+      console.debug(`Uploading chunk ${data.link} - Md5 = ${data.md5Checksum.toString()}`);
       let lastError: any = null;
       while (!data.success && data.tries <= MAX_TRIES) {
         this.abortController.signal.throwIfAborted();
@@ -222,7 +221,7 @@ export class GalleryUpload {
         }
       }
       if (data.tries > MAX_TRIES) {
-        reject({ chunkData: data, error: lastError });
+        reject(new Error(`Could no upload chunk ${data.md5Checksum.toString()} - ${lastError}`));
       }
     });
   }
@@ -251,11 +250,11 @@ export class GalleryUpload {
           console.debug(`Chunk ${chunkData.link} SUCCESS. Etag: ${chunkData.etag}`);
           resolve(chunkData);
         } else {
-          reject(ChunkUploadFailTypes.REQUEST_FAILED);
+          reject(new Error(ChunkUploadFailTypes.REQUEST_FAILED));
         }
       };
       const errorFn = () => {
-        reject(reject(ChunkUploadFailTypes.NETWORK_ERROR));
+        reject(new Error(ChunkUploadFailTypes.NETWORK_ERROR));
       };
       request.upload.onerror = () => errorFn;
       request.upload.ontimeout = () => errorFn;
@@ -276,7 +275,7 @@ export class GalleryUpload {
    */
   public start() {
     if (this.progress.status !== "IDLE") {
-      return Promise.reject("Upload already started");
+      return Promise.reject(new Error("Upload already started"));
     }
     this.abortController.signal.throwIfAborted();
     this.updateProgress({ status: "INITIALIZING" });
@@ -287,7 +286,7 @@ export class GalleryUpload {
         fileName: this.file.name,
         fileSize: this.file.size,
         userId: this.userId,
-      } as GalleryUploadApiBody,
+      },
     })
       .then((requestData) => {
         this.uploadRequestId = requestData.uploadReqId;
@@ -312,7 +311,7 @@ export class GalleryUpload {
         const concatHashes = uploadedChunks
           .map((c) => c.md5Checksum)
           .filter((v) => !!v)
-          .reduce((last, newValue) => last!.concat(newValue), CryptoJS.lib.WordArray.create());
+          .reduce((last, newValue) => last.concat(newValue), CryptoJS.lib.WordArray.create());
 
         // Set confirmation data
         this.confirmationData = {
@@ -342,18 +341,16 @@ export class GalleryUpload {
     this.updateProgress({ status: "CONFIRMING" });
     return runRequest({
       action: new GalleryUploadCompleteApiAction(),
-      body:
-        data ??
-        ({
-          etags: this.confirmationData!.entityTags,
-          md5Hash: this.confirmationData!.allChunksChecksum,
-          eventId: this.eventId,
-          fileName: this.file.name,
-          fileSize: this.file.size,
-          uploadRepostPermissions: this.uploadRepostPermissions,
-          uploadReqId: this.uploadRequestId,
-          userId: this.userId,
-        } as GalleryUploadCompleteApiBody),
+      body: data ?? {
+        etags: this.confirmationData!.entityTags,
+        md5Hash: this.confirmationData!.allChunksChecksum,
+        eventId: this.eventId,
+        fileName: this.file.name,
+        fileSize: this.file.size,
+        uploadRepostPermissions: this.uploadRepostPermissions,
+        uploadReqId: this.uploadRequestId,
+        userId: this.userId,
+      },
     }).then((response) => {
       this.uploadedMedia = response;
       this.updateProgress({ status: "DONE" });
@@ -364,7 +361,7 @@ export class GalleryUpload {
 
   public abort() {
     if (this.progress.status === "DONE") {
-      throw "Upload already completed";
+      throw new Error("Upload already completed");
     }
     this.abortController.signal.throwIfAborted();
     this.abortController.abort("Aborted by user");
@@ -398,7 +395,7 @@ export class GalleryUpload {
           // Finally return new thumbnail
           resolve(this.thumbnail);
         })
-        .catch((e) => reject(e));
+        .catch((e) => reject(toError(e)));
     });
   }
 

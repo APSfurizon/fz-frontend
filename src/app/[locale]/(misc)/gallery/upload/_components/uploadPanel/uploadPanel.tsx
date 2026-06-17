@@ -1,3 +1,12 @@
+import { useModalUpdate } from "@/components/context/modalProvider";
+import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
+import Icon from "@/components/icon";
+import DataForm from "@/components/input/dataForm";
+import FpSelect from "@/components/input/fpSelect";
+import Modal from "@/components/modal";
+import { UploadRepostPermissions } from "@/lib/api/gallery/types";
+import { UploadLimitsApiAction } from "@/lib/api/gallery/upload/api";
 import { copyrightValues, GalleryUpload } from "@/lib/api/gallery/upload/main";
 import {
   ConventionEventUploadData,
@@ -6,25 +15,17 @@ import {
   UploadProgress,
   UploadProgressStatus,
 } from "@/lib/api/gallery/upload/types";
-import { useUser } from "@/components/context/userProvider";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse, RequestType } from "@/lib/api/networking/types";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 import { OptionRendererParams, SelectItem } from "@/lib/components/fpSelect";
-import { TranslatableInputEntityInit } from "@/lib/translations";
-import { RequestType, runRequest } from "@/lib/api/global";
-import { UploadLimitsApiAction } from "@/lib/api/gallery/upload/api";
-import ErrorMessage from "@/components/errorMessage";
-import { UploadRepostPermissions } from "@/lib/api/gallery/types";
-import DataForm from "@/components/input/dataForm";
-import FpSelect from "@/components/input/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
-import GalleryFilePicker from "./filePicker";
-import Modal from "@/components/modal";
-import { debounce } from "lodash";
-import Icon from "@/components/icon";
-import { FormApiAction, FormDTOBuilder } from "@/lib/components/dataForm";
+import { TranslatableInputEntityInit } from "@/lib/translations";
 import { humanFileSize } from "@/lib/utils";
+import { debounce } from "lodash";
+import { useLocale, useTranslations } from "next-intl";
+import { Key, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import GalleryFilePicker from "./filePicker";
 
 const MAXIMUM_RUNNING_UPLOADS = 1;
 
@@ -63,8 +64,8 @@ type UploadFormData = {
 class UploadDataFormDtoBuilder implements FormDTOBuilder<UploadFormData> {
   mapToDTO = (data: FormData) => {
     return {
-      eventId: parseInt(data.get("eventId")?.toString() ?? "") ?? undefined,
-      copyright: data.get("copyright")?.toString(),
+      eventId: parseInt(getData(data, "eventId") ?? "0") ?? undefined,
+      copyright: getData(data, "copyright")?.toString(),
     } as UploadFormData;
   };
 }
@@ -105,7 +106,7 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
       const option = params.item as EventSelectItem;
       return (
         <button
-          key={params.id}
+          key={params.id as Key}
           type="button"
           tabIndex={0}
           onClick={params.onClick}
@@ -117,7 +118,6 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
             "gap-2mm",
             params.selected ? "fp-select__option--selected" : "",
           ].join(" ")}
-          aria-selected={params.selected}
         >
           <span className="title small">{params.item.getDescription(locale)}</span>
           <div className="spacer"></div>
@@ -150,7 +150,7 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
         setEvents(r.uploadableEvents);
         setLimits(r);
       })
-      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e} />))
+      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />))
       .finally(() => setEventsLoading(false));
   }, 1000);
 
@@ -164,6 +164,49 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
   const [uploads, setUploads] = useState<Map<string, UploadState>>(new Map());
   const uploadFormDataRef = useRef<UploadFormData | undefined>({});
   const [uploadFormData, setUploadFormData] = useState<UploadFormData>();
+
+  const handleUploadQueue = useCallback((prev: typeof uploads) => {
+    const next = new Map(prev);
+    const running = [...next.values()].filter((state) => state.started && !state.ended);
+    const startable = MAXIMUM_RUNNING_UPLOADS - running.length;
+    if (startable <= 0) return prev;
+
+    const toRun = [...next.entries()]
+      .filter(([, v]) => !v.started)
+      .sort((a, b) => a[1].createdAt - b[1].createdAt)
+      .splice(0, startable);
+
+    for (const [id, entry] of toRun) {
+      next.set(id, {
+        ...entry,
+        started: true,
+      });
+    }
+
+    return next;
+  }, []);
+
+  const onUploadStatusUpdate = useCallback(
+    (e: GalleryUploadEventParams) => {
+      const id = e.data.id;
+      setUploads((prev) => {
+        const next = new Map(prev);
+
+        const entry = next.get(id);
+        if (!entry) return prev;
+
+        const patched: UploadState = {
+          ...entry,
+          progress: e.data.getProgress(),
+          ended: CLEARING_STATUSES.includes(e.data.getProgress().status),
+        };
+
+        next.set(id, patched);
+        return handleUploadQueue(next);
+      });
+    },
+    [events]
+  );
 
   const onFilesSelected = useCallback(
     (files: File[]) => {
@@ -200,49 +243,6 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
     [events]
   );
 
-  const onUploadStatusUpdate = useCallback(
-    (e: GalleryUploadEventParams) => {
-      const id = e.data.id;
-      setUploads((prev) => {
-        const next = new Map(prev);
-
-        const entry = next.get(id);
-        if (!entry) return prev;
-
-        const patched: UploadState = {
-          ...entry,
-          progress: e.data.getProgress(),
-          ended: CLEARING_STATUSES.includes(e.data.getProgress().status),
-        };
-
-        next.set(id, patched);
-        return handleUploadQueue(next);
-      });
-    },
-    [events]
-  );
-
-  const handleUploadQueue = useCallback((prev: typeof uploads) => {
-    const next = new Map(prev);
-    const running = [...next.values()].filter((state) => state.started && !state.ended);
-    const startable = MAXIMUM_RUNNING_UPLOADS - running.length;
-    if (startable <= 0) return prev;
-
-    const toRun = [...next.entries()]
-      .filter(([_, v]) => !v.started)
-      .sort((a, b) => a[1].createdAt - b[1].createdAt)
-      .splice(0, startable);
-
-    for (const [id, entry] of toRun) {
-      next.set(id, {
-        ...entry,
-        started: true,
-      });
-    }
-
-    return next;
-  }, []);
-
   const timers = useRef(new Map<string, number>());
 
   useEffect(() => {
@@ -272,7 +272,7 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
     for (const entry of uploads.values()) {
       if (entry.started && !entry._launched) {
         entry._launched = true;
-        entry.upload.start();
+        entry.upload.start().catch(() => void 0);
       }
     }
   }, [uploads]);

@@ -9,9 +9,13 @@ import {
   SearchType,
 } from "../components/autoInput";
 import { getFlagEmoji } from "../components/userPicture";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./global";
+import { ApiAction } from "./networking/types";
+import { ApiErrorResponse } from "./networking/types";
+import { ApiResponse } from "./networking/types";
+import { RequestType } from "./networking/types";
 import { TranslatableString } from "../translations";
-import { firstOrEmpty } from "../utils";
+import { firstOrEmpty, toError } from "../utils";
+import { MaterialIcon } from "@/components/icon";
 
 /**Either a country or a region */
 export interface Place {
@@ -49,7 +53,7 @@ export function getAutoInputCountries(showNumber?: boolean): Promise<CountrySear
             toReturn.id = index;
             toReturn.code = place.code;
             toReturn.description = `${place.name}${showNumber ? ` (${place.phonePrefix})` : ""}`;
-            toReturn.icon = getFlagEmoji(place.code);
+            toReturn.icon = getFlagEmoji(place.code) as MaterialIcon;
             toReturn.phonePrefix = place.phonePrefix;
             toReturn.translatedDescription = place.translatedDescription;
             return toReturn;
@@ -57,7 +61,7 @@ export function getAutoInputCountries(showNumber?: boolean): Promise<CountrySear
         );
       })
       .catch((err) => {
-        reject(err);
+        reject(toError(err));
       });
   });
 }
@@ -78,7 +82,7 @@ export function getAutoInputStates(countryCode?: string): Promise<AutoInputSearc
         );
       })
       .catch((err) => {
-        reject(err);
+        reject(toError(err));
       });
   });
 }
@@ -104,21 +108,23 @@ export class AutoInputCountriesManager implements AutoInputManager {
     filter: AutoInputFilter,
     customIdExtractor?: (r: AutoInputSearchResult) => string | number
   ): Promise<CountrySearchResult[]> {
-    return new Promise((resolve) => {
-      getAutoInputCountries(this.showNumber).then((results) => {
-        const countries = results.map((data) => {
-          if (customIdExtractor) {
-            if (this.codeOnly) {
-              data.code = (customIdExtractor(data) as string) ?? data.code;
-            } else {
-              data.id = (customIdExtractor(data) as number) ?? data.id;
+    return new Promise((resolve, reject) => {
+      getAutoInputCountries(this.showNumber)
+        .then((results) => {
+          const countries = results.map((data) => {
+            if (customIdExtractor) {
+              if (this.codeOnly) {
+                data.code = (customIdExtractor(data) as string) ?? data.code;
+              } else {
+                data.id = (customIdExtractor(data) as number) ?? data.id;
+              }
             }
-          }
-          return data;
-        });
-        const toReturn = countries.filter((result) => filter.applyFilter(result));
-        resolve(this.showNumber ? firstOrEmpty(toReturn) : toReturn);
-      });
+            return data;
+          });
+          const toReturn = countries.filter((result) => filter.applyFilter(result));
+          resolve(this.showNumber ? firstOrEmpty(toReturn) : toReturn);
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 
@@ -128,18 +134,22 @@ export class AutoInputCountriesManager implements AutoInputManager {
     filter?: AutoInputFilter,
     filterOut?: AutoInputFilter
   ): Promise<CountrySearchResult[]> {
-    return new Promise((resolve) => {
-      getAutoInputCountries(this.showNumber).then((results) => {
-        resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
-      });
+    return new Promise((resolve, reject) => {
+      getAutoInputCountries(this.showNumber)
+        .then((results) => {
+          resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 
   isPresent(): Promise<boolean> {
-    return new Promise((resolve) => {
-      getAutoInputCountries(this.showNumber).then((results) => {
-        resolve(results.length > 0);
-      });
+    return new Promise((resolve, reject) => {
+      getAutoInputCountries(this.showNumber)
+        .then((results) => {
+          resolve(results.length > 0);
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 }
@@ -152,11 +162,13 @@ export class AutoInputStatesManager implements AutoInputManager {
     customIdExtractor?: (r: AutoInputSearchResult) => string | number,
     additionalValues?: any[]
   ): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
-      getAutoInputStates(additionalValues ? additionalValues[0] : undefined).then((results) => {
-        const filtered = filterLoaded(results, filter, undefined);
-        resolve(filtered);
-      });
+    return new Promise((resolve, reject) => {
+      getAutoInputStates(additionalValues ? (additionalValues[0] as string | undefined) : undefined)
+        .then((results) => {
+          const filtered = filterLoaded(results, filter, undefined);
+          resolve(filtered);
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 
@@ -167,20 +179,24 @@ export class AutoInputStatesManager implements AutoInputManager {
     filterOut?: AutoInputFilter,
     countryCode?: string
   ): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (!countryCode) resolve([]);
-      getAutoInputStates(countryCode!).then((results) => {
-        resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
-      });
+      getAutoInputStates(countryCode)
+        .then((results) => {
+          resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 
   isPresent(countryCode?: any): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (!countryCode) resolve(false);
-      getAutoInputStates(countryCode!).then((results) => {
-        resolve(results.length > 0);
-      });
+      getAutoInputStates(countryCode as string | undefined)
+        .then((results) => {
+          resolve(results.length > 0);
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 }

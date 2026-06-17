@@ -1,4 +1,3 @@
-import { ApiErrorResponse } from "./api/global";
 import { getFlagEmoji } from "./components/userPicture";
 import {
   API_IMAGE_URL,
@@ -21,15 +20,11 @@ export function nullifyEmptyString(value?: string) {
   return value && value.trim().length > 0 ? value.trim() : undefined;
 }
 
-export function stripProperties(toChange: any, fields: string[]) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+export function stripProperties<T = any>(toChange: T, fields: (keyof T)[]): Partial<T> {
   const toReturn = { ...toChange };
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  for (const fieldName of Object.keys(toChange)) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (toReturn[fieldName] === null || fields.includes(fieldName)) toReturn[fieldName] = undefined;
+  for (const fieldName of fields) {
+    delete toReturn[fieldName];
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return toReturn;
 }
 
@@ -152,12 +147,6 @@ export function shouldShowChangelog(): boolean {
   const readVersion = localStorage.getItem(READ_CHANGELOG_STORAGE_NAME);
   const lastVersion = nullifyEmptyString(readVersion ?? "");
   return CHANGELOGS_ENABLED && (!lastVersion || lastVersion !== APP_VERSION);
-}
-
-export function errorCodeToApiError(err: string): ApiErrorResponse {
-  return {
-    errorMessage: err,
-  };
 }
 
 export function resultSelf<A, R>(arg1: A): R {
@@ -327,4 +316,8 @@ export function humanFileSize(bytes: number, si = false, dp = 2) {
   } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
   return bytes.toFixed(dp) + " " + units[u];
+}
+
+export function toError(e: any) {
+  return e instanceof Error ? e : new Error(e as string);
 }

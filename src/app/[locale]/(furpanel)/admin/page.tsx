@@ -7,7 +7,7 @@ import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import { ReloadEventApiAction, ReloadOrdersApiAction } from "@/lib/api/admin/pretix";
-import { runRequest } from "@/lib/api/global";
+import { runRequest } from "@/lib/api/networking/main";
 import {
   AdminCapabilitesResponse,
   ExportHotelRoomsApiAction,
@@ -27,11 +27,7 @@ import FpMacroSection from "./_components/fpMacroSection";
 import FpSection from "./_components/fpSection";
 import LoadingPanel from "@/components/loadingPanel";
 import { PingApiAction } from "@/lib/api/admin/system";
-import { useUser } from "@/components/context/userProvider";
-
-function normalizeRole(internalName?: string) {
-  return (internalName ?? "").toLowerCase().trim();
-}
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function AdminPage() {
   const t = useTranslations();
@@ -71,7 +67,7 @@ export default function AdminPage() {
         }
         setCapabilities(result);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   }, []);
 
@@ -83,7 +79,7 @@ export default function AdminPage() {
     setPingLoading(true);
     runRequest({ action: new PingApiAction() })
       .then((e) => showModal(t("common.success"), <span>{e.message}</span>))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setPingLoading(false));
   };
 
@@ -95,7 +91,7 @@ export default function AdminPage() {
     setReloadEventLoading(true);
     runRequest({ action: new ReloadEventApiAction() })
       .then(() => {})
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setReloadEventLoading(false));
   };
 
@@ -104,7 +100,7 @@ export default function AdminPage() {
     setReloadOrdersLoading(true);
     runRequest({ action: new ReloadOrdersApiAction() })
       .then(() => {})
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setReloadOrdersLoading(false));
   };
   // Event area logic
@@ -114,7 +110,7 @@ export default function AdminPage() {
   const remindOrderLink = () => {
     setRemindOrderLinkLoading(true);
     runRequest({ action: new RemindOrderLinkApiAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setRemindOrderLinkLoading(false));
   };
 
@@ -122,29 +118,29 @@ export default function AdminPage() {
   const exportRooms = () => {
     setExportRoomsLoading(true);
     runRequest({ action: new ExportHotelRoomsApiAction() })
-      .then((response) => {
-        response.blob().then((exportBlob) => {
-          const result = URL.createObjectURL(exportBlob);
-          window.open(result, "_blank");
-          URL.revokeObjectURL(result);
-        });
+      .then((response) => response.blob())
+      .then((exportBlob) => {
+        const result = URL.createObjectURL(exportBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setExportRoomsLoading(false));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [exportShirtsLoading, setExportShirtsLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const exportShirts = () => {
     setExportShirtsLoading(true);
     runRequest({ action: new ExportTShirtsApiAction() })
-      .then((response) => {
-        response.blob().then((exportBlob) => {
-          const result = URL.createObjectURL(exportBlob);
-          window.open(result, "_blank");
-          URL.revokeObjectURL(result);
-        });
+      .then((response) => response.blob())
+      .then((exportBlob) => {
+        const result = URL.createObjectURL(exportBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setExportShirtsLoading(false));
   };
 
@@ -153,15 +149,17 @@ export default function AdminPage() {
   const remindRoomsNotFull = () => {
     setRemindRoomsNotFullLoading(true);
     runRequest({ action: new RemindRoomsNotFullApiAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setRemindRoomsNotFullLoading(false));
   };
   // - membership cards
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [sendMembershipCardByMailLoading, setSendMembershipCardByMailLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sendMembershipCardByMail = () => {
     setSendMembershipCardByMailLoading(true);
     runRequest({ action: new SendMembershipCardByMailApiAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setSendMembershipCardByMailLoading(false));
   };
   // - badge
@@ -172,7 +170,7 @@ export default function AdminPage() {
   const remindBadges = () => {
     setRemindBadgesLoading(true);
     runRequest({ action: new RemindBadgesApiAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setRemindBadgesLoading(false));
   };
 
@@ -180,15 +178,17 @@ export default function AdminPage() {
   const remindFursuitBadges = () => {
     setRemindFursuitBadgesLoading(true);
     runRequest({ action: new RemindFursuitBadgesApiAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setRemindFursuitBadgesLoading(false));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [remindFursuitBringToEventLoading, setRemindFursuitBringToEventLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const remindFursuitBringToEvent = () => {
     setRemindFursuitBringToEventLoading(true);
     runRequest({ action: new RemindFursuitBringToEventApiAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setRemindFursuitBringToEventLoading(false));
   };
 

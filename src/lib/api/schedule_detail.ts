@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // TODO: fix
 import { ScheduleActivityApiItem } from "@/lib/schedule";
-import { ApiErrorResponse } from "./global";
+import { ApiErrorResponse } from "./networking/types";
 
 const SCHEDULE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 let cachedScheduleActivities: ScheduleActivityApiItem[] | null = null;
@@ -38,7 +38,7 @@ export async function loadScheduleActivities(): Promise<ScheduleActivityApiItem[
       errorMessage = (await response.text()) || errorMessage;
     }
 
-    throw { errorMessage } as ApiErrorResponse;
+    throw { errors: [{ message: errorMessage }] } as ApiErrorResponse;
   }
 
   const result = await response.json();
@@ -70,7 +70,7 @@ export async function loadScheduleActivityDetail(activityId: number): Promise<Sc
   });
 
   if (!activity) {
-    throw { errorMessage: "Activity not found." } as ApiErrorResponse;
+    throw { errors: [{ message: "Activity not found." }] } as ApiErrorResponse;
   }
 
   return activity;

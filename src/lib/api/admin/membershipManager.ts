@@ -1,7 +1,11 @@
 import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../components/autoInput";
-import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { buildSearchParams } from "../../utils";
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType, runRequest } from "../global";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
+import { buildSearchParams, toError } from "../../utils";
+import { runRequest } from "../networking/main";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { ApiResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 import {
   AutoInputRoomInviteManager,
   CompleteUserData,
@@ -63,17 +67,20 @@ export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
     filterOut?: AutoInputFilter,
     additionalValues?: any
   ): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       runRequest({
         action: new UserSearchAction(),
         searchParams: buildSearchParams({
           name: value,
-          "filter-no-membership-card-for-year": additionalValues[0],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          "filter-no-membership-card-for-year": additionalValues[0] as string,
         }),
-      }).then((results) => {
-        const users = results.users.map((usr) => toSearchResult(usr));
-        resolve(filterLoaded(users, filter, filterOut));
-      });
+      })
+        .then((results) => {
+          const users = results.users.map((usr) => toSearchResult(usr));
+          resolve(filterLoaded(users, filter, filterOut));
+        })
+        .catch((e) => reject(toError(e)));
     });
   }
 }
@@ -85,7 +92,7 @@ export interface AddCardApiData {
 export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: AddCardApiData = {
-      userId: parseInt(data.get("userId")!.toString()),
+      userId: parseInt(getData(data, "userId") ?? "0"),
     };
     return toReturn;
   };

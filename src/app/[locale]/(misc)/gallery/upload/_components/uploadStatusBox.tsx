@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
-import CircularProgressBar from "./uploadPanel/circularProgressBar";
 import Icon from "@/components/icon";
 import "@/styles/misc/gallery/upload/uploadedMedia.css";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import CircularProgressBar from "./uploadPanel/circularProgressBar";
 import { UploadState } from "./uploadPanel/uploadPanel";
 
 type UploadStatusBoxProps = {
@@ -16,7 +16,10 @@ export default function UploadStatusBox(props: Readonly<UploadStatusBoxProps>) {
   const [mediaUrl, setMediaUrl] = useState<string>();
 
   useEffect(() => {
-    props.state.upload.getThumbnail().then((t) => setMediaUrl(t.url));
+    props.state.upload
+      .getThumbnail()
+      .then((t) => setMediaUrl(t.url))
+      .catch(() => void 0);
   }, []);
 
   const isError = useMemo(() => props.state.progress.status === "ERROR", [props.state]);

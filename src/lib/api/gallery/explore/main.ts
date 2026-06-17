@@ -1,6 +1,6 @@
 import { CachedData } from "@/lib/cache/cache";
 import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "../types";
-import { runRequest } from "../../global";
+import { runRequest } from "../../networking/main";
 import { GetFullMediaApiAction } from "../api";
 import { SelectItem } from "@/lib/components/fpSelect";
 
@@ -9,6 +9,7 @@ export class CachedFullMedias extends CachedData<GalleryUploadedFullMedia> {
   loadData(...p: any[]): Promise<GalleryUploadedFullMedia> {
     return runRequest({
       action: new GetFullMediaApiAction(),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       pathParams: { id: p[0] },
     });
   }
@@ -21,7 +22,7 @@ export class CachedFullMedias extends CachedData<GalleryUploadedFullMedia> {
 
 export const STATUS_FILTER_ITEMS = [
   SelectItem.of({
-    code: "PENDING" as GalleryUploadedMediaStatus,
+    code: "PENDING",
     icon: "HISTORY_TOGGLE_OFF",
     description: "pending",
     translatedDescription: {
@@ -30,7 +31,7 @@ export const STATUS_FILTER_ITEMS = [
     },
   }),
   SelectItem.of({
-    code: "APPROVED" as GalleryUploadedMediaStatus,
+    code: "APPROVED",
     icon: "THUMB_UP",
     description: "approved",
     translatedDescription: {
@@ -39,7 +40,7 @@ export const STATUS_FILTER_ITEMS = [
     },
   }),
   SelectItem.of({
-    code: "REJECTED" as GalleryUploadedMediaStatus,
+    code: "REJECTED",
     icon: "THUMB_DOWN",
     description: "rejected",
     translatedDescription: {
