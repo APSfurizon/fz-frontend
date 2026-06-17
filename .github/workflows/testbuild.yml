@@ -7,10 +7,10 @@ name: Test build Next.js website
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
+    branches: ["master", "feature/refactor"]
   pull_request:
     types: [opened, synchronize]
-    branches: ["master"]
+    branches: ["master", "feature/refactor"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
