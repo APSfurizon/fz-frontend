@@ -1,3 +1,4 @@
+// TODO: Check window.history.state
 "use client";
 import { SyntheticEvent, useEffect, useState } from "react";
 import Modal from "@/components/modal";
@@ -38,7 +39,9 @@ export default function ImagePreviewModal({
   };
 
   const closeModal = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const currentState = window.history.state;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (currentState && currentState[HISTORY_MODAL_KEY]) {
       window.history.back();
       return;
@@ -50,6 +53,7 @@ export default function ImagePreviewModal({
     if (!open) return;
 
     const handlePopState = () => setOpen(false);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const baseState = window.history.state && typeof window.history.state === "object" ? window.history.state : {};
 
     window.history.pushState({ ...baseState, [HISTORY_MODAL_KEY]: true }, "");

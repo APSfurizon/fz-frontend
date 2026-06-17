@@ -5,7 +5,15 @@ import {
   API_MOBILE_URL,
 } from "@/lib/constants";
 import { getCookie, templateReplace } from "@/lib/utils";
-import { ApiResponse, ApiErrorResponse, RequestData, Endpoint, ApiRequest, FormRequestData } from "./types";
+import {
+  ApiResponse,
+  ApiErrorResponse,
+  RequestData,
+  Endpoint,
+  ApiRequest,
+  FormRequestData,
+  createApiErrorResponse,
+} from "./types";
 import { getToken } from "./utils";
 
 export function runRequest<U extends ApiResponse | boolean | Response, V extends ApiErrorResponse>(
@@ -57,83 +65,102 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
     fetch(endpointUrl, fetchOptions)
       .then((fulfilledData) => {
         const contentType = fulfilledData.headers.get("content-type");
-        const correlationId = fulfilledData.headers.get("X-Correlation-Id") ?? undefined;
+        const correlationId = fulfilledData.headers.get("X-Correlation-Id") ?? "";
         // In case of controlled fail
         if (!fulfilledData.ok) {
-          try {
-            if (!contentType || contentType.indexOf("application/json") < 0) {
-              const errorData: ApiErrorResponse = {
-                name: "ApiErrorResponse",
-                message: "",
-                status: fulfilledData.status,
-                requestId: correlationId,
-              };
-              if (data.action.onFail) data.action.onFail(fulfilledData.status, errorData as V);
-              reject(errorData);
-              return;
-            }
-            // Try decode the error
-            fulfilledData
-              .json()
-              .then((rawData) => {
-                rawData.status = fulfilledData.status;
-                if (data.action.onFail) data.action.onFail(fulfilledData.status, rawData as V);
-                reject(new Error(rawData as string));
-              })
-              .catch(() => {
-                throw new Error("Unexpected error");
-              });
-          } catch (err) {
-            const errorBody = "" + (err as any);
-            // Return a simple error response
-            const errorData: ApiErrorResponse = {
+          // Return unknown error if no json error
+          if (!contentType || contentType.indexOf("application/json") < 0) {
+            const errorData = createApiErrorResponse({
               status: fulfilledData.status,
-              errorMessage: errorBody.length > 0 ? errorBody : undefined,
+              errors: [
+                {
+                  code: "UNKNOWN",
+                  message: "Unknown error",
+                },
+              ],
               requestId: correlationId,
-            };
-            if (data.action.onFail) data.action.onFail(fulfilledData.status, errorData as V);
+            });
             reject(errorData);
+            return;
           }
+          // Try decode the error
+          fulfilledData
+            .json()
+            .then((rawData) => {
+              const errorData = rawData as V;
+              errorData.status = fulfilledData.status;
+              reject(errorData);
+            })
+            .catch(() => {
+              // If error decoding fails
+              reject(
+                createApiErrorResponse({
+                  requestId: correlationId,
+                  status: fulfilledData.status,
+                  errors: [
+                    {
+                      code: "PARSE_ERROR",
+                      message: "Could not interpret error data",
+                    },
+                  ],
+                })
+              );
+            });
         } else {
           if (data.action.rawResponse) {
             resolve(fulfilledData as U);
             return;
           }
-          try {
-            if (!contentType || contentType.indexOf("application/json") < 0) {
-              const responseData: ApiResponse = {
-                status: fulfilledData.status,
-                requestId: correlationId,
-              };
-              if (data.action.onSuccess) data.action.onSuccess(fulfilledData.status, responseData as U);
-              resolve(responseData as U);
-              return;
-            }
-            fulfilledData
-              .json()
-              .then((jsonData) => {
-                if (data.action.onSuccess) data.action.onSuccess(fulfilledData.status, jsonData);
-                resolve(jsonData);
-              })
-              .catch((reason) => {
-                if (data.action.onFail) data.action.onFail(-1, reason);
-                reject(reason);
-              });
-          } catch (e) {
-            if (data.action.onFail) data.action.onFail(-1, e as V);
-            reject(e);
+          if (!contentType || contentType.indexOf("application/json") < 0) {
+            const responseData: ApiResponse = {
+              status: fulfilledData.status,
+              requestId: correlationId,
+            };
+            resolve(responseData as U);
+            return;
           }
+          fulfilledData
+            .json()
+            .then((jsonData) => {
+              resolve(jsonData as U);
+            })
+            .catch((reason) => {
+              // If error decoding fails
+              reject(
+                createApiErrorResponse({
+                  requestId: correlationId,
+                  status: fulfilledData.status,
+                  errors: [
+                    {
+                      code: "PARSE_ERROR",
+                      message: (reason as string) ?? "Could not interpret data",
+                    },
+                  ],
+                })
+              );
+            });
         }
       })
       .catch((rejectedData) => {
         // If any network error occurs
-        const errorData: ApiErrorResponse = {
-          status: -1,
-          errorMessage: "" + rejectedData,
-          requestId: rejectedData?.response?.headers?.get("X-Correlation-Id"),
-        };
-        if (data.action.onFail) data.action.onFail(-1, errorData as V);
-        reject(errorData);
+        let errorName = (rejectedData as object).constructor?.name ?? "UNKNOWN_ERROR";
+        let errorMessage = "Unknown error has occurred";
+        if (rejectedData instanceof Error) {
+          errorName = rejectedData.name;
+          errorMessage = rejectedData.message;
+        }
+        reject(
+          createApiErrorResponse({
+            status: 0,
+            requestId: "",
+            errors: [
+              {
+                code: errorName,
+                message: errorMessage,
+              },
+            ],
+          })
+        );
       });
   });
 }
@@ -141,7 +168,7 @@ export function runFormRequest<T extends ApiRequest, U extends ApiResponse | boo
   data: FormRequestData<T, U, V>
 ): Promise<U> {
   // Build the DTO if present
-  let body: any = undefined;
+  let body: T | undefined = undefined;
   if (data) {
     const parsedBody = data.action.dtoBuilder.mapToDTO(data.body);
     body = data.bodyModification ? data.bodyModification(parsedBody) : parsedBody;

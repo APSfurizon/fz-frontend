@@ -1,11 +1,8 @@
 import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../../components/autoInput";
-import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { buildSearchParams } from "../../utils";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
+import { buildSearchParams, toError } from "../../utils";
 import { runRequest } from "../networking/main";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
 import {
   AutoInputRoomInviteManager,
   CompleteUserData,
@@ -67,8 +64,8 @@ export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
     filterOut?: AutoInputFilter,
     additionalValues?: any
   ): Promise<AutoInputSearchResult[]> {
-    return new Promise((resolve) => {
-      void runRequest({
+    return new Promise((resolve, reject) => {
+      runRequest({
         action: new UserSearchAction(),
         searchParams: buildSearchParams({
           name: value,
@@ -80,7 +77,7 @@ export class AutoInputUserAddCardManager extends AutoInputRoomInviteManager {
           const users = results.users.map((usr) => toSearchResult(usr));
           resolve(filterLoaded(users, filter, filterOut));
         })
-        .catch(void 0);
+        .catch((e) => reject(toError(e)));
     });
   }
 }
@@ -92,8 +89,7 @@ export interface AddCardApiData {
 export class AddCardDTOBuilder implements FormDTOBuilder<AddCardApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: AddCardApiData = {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      userId: parseInt(data.get("userId")!.toString()),
+      userId: parseInt(getData(data, "userId") ?? "0"),
     };
     return toReturn;
   };

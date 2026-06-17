@@ -7,6 +7,7 @@ import { useUserViewContext } from "../../page";
 import { runRequest } from "@/lib/api/networking/main";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function DeleteRoomModal({
   open,
@@ -38,7 +39,7 @@ export default function DeleteRoomModal({
       body: roomData,
     })
       .then(() => onSuccess())
-      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLoading(false);
       });

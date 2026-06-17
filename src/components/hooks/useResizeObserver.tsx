@@ -20,6 +20,7 @@ export default function useResizeObserver<T extends HTMLElement>(ref: React.RefO
 
     observer.observe(ref.current);
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/refs
   }, [ref.current]);
 
   return size;

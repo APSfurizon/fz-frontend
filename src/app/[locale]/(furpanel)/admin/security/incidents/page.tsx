@@ -22,6 +22,7 @@ import { UserDisplayAction } from "@/lib/api/user";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 const INCIDENT_BADGE_STYLE = {
   display: "inline-flex",
@@ -122,13 +123,15 @@ export default function SecurityIncidentsPage() {
           setDisabledReports(mappedDisabled);
         }
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
   const refreshList = () => {
     setRefreshing(true);
-    loadReports().finally(() => setRefreshing(false));
+    loadReports()
+      .catch(() => void 0)
+      .finally(() => setRefreshing(false));
   };
 
   const openDetail = (item: SecurityIncident) => {
@@ -151,7 +154,7 @@ export default function SecurityIncidentsPage() {
         setReplyMessage("");
         setReplyImage(undefined);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -178,9 +181,9 @@ export default function SecurityIncidentsPage() {
       .then(() => {
         resetCreateForm();
         setView("list");
-        loadReports(false);
+        loadReports(false).catch(() => void 0);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -211,7 +214,7 @@ export default function SecurityIncidentsPage() {
         setReplyImage(undefined);
         refreshList();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -244,7 +247,7 @@ export default function SecurityIncidentsPage() {
         if (detailHistory) {
           setSelected(null);
           setView("list");
-          loadReports(showHistory);
+          loadReports(showHistory).catch(() => void 0);
           return;
         }
         setSelected((prev) =>
@@ -260,7 +263,7 @@ export default function SecurityIncidentsPage() {
         );
         refreshList();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 
@@ -272,7 +275,7 @@ export default function SecurityIncidentsPage() {
     // In React StrictMode (dev), first mount is intentionally replayed.
     // Defer and cancel here so only the committed mount performs the fetch.
     const deferredLoad = setTimeout(() => {
-      loadReports(showHistory);
+      loadReports(showHistory).catch(() => void 0);
     }, 0);
 
     return () => clearTimeout(deferredLoad);

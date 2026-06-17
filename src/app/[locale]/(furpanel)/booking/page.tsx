@@ -1,14 +1,16 @@
 "use client";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import FpButton from "@/components/input/fpButton";
-import { useEffect, useState } from "react";
+import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
-import { useTranslations, useFormatter, useLocale } from "next-intl";
-import { GROUP_CHAT_URL, EVENT_MAIN_LOCATION_NAME } from "@/lib/constants";
+import Icon from "@/components/icon";
+import AutoInput from "@/components/input/autoInput";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
+import LoadingPanel from "@/components/loadingPanel";
+import Modal from "@/components/modal";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { runRequest } from "@/lib/api/networking/main";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { isMobile } from "@/lib/userAgent";
+import StatusBox from "@/components/statusBox";
 import {
   Board,
   BookingOrderApiAction,
@@ -21,22 +23,20 @@ import {
   OrderEditLinkApiAction,
   OrderRetryLinkApiAction,
 } from "@/lib/api/booking";
-import { translate } from "@/lib/translations";
-import ErrorMessage from "@/components/errorMessage";
-import { useRouter } from "next/navigation";
-import Modal from "@/components/modal";
-import StatusBox from "@/components/statusBox";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/api/order";
-import DataForm from "@/components/input/dataForm";
-import { useUser } from "@/components/context/userProvider";
-import AutoInput from "@/components/input/autoInput";
-import LoadingPanel from "@/components/loadingPanel";
+import { EVENT_MAIN_LOCATION_NAME, GROUP_CHAT_URL } from "@/lib/constants";
+import { translate } from "@/lib/translations";
+import { isMobile } from "@/lib/userAgent";
 import "@/styles/furpanel/booking.css";
-import Countdown from "./countdown";
-import OrderItem from "./_components/orderItem";
-import Icon from "@/components/icon";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import OrderItem from "./_components/orderItem";
 import QrCodeModal from "./_components/qrCodeModal";
+import Countdown from "./countdown";
 
 export default function BookingPage() {
   const t = useTranslations();
@@ -86,7 +86,7 @@ export default function BookingPage() {
       setLoading(true);
       runRequest({ action: new BookingOrderApiAction() })
         .then((result) => setBookingData(result))
-        .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
+        .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />, "ERROR"))
         .finally(() => setLoading(false));
       return;
     }
@@ -119,7 +119,7 @@ export default function BookingPage() {
     setActionLoading(true);
     runRequest({ action: new OrderEditLinkApiAction() })
       .then((result) => router.push(result.link))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setActionLoading(false));
   };
 
@@ -128,7 +128,7 @@ export default function BookingPage() {
     setActionLoading(true);
     runRequest({ action: new OrderRetryLinkApiAction() })
       .then((result) => router.push(result.link))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setActionLoading(false));
   };
 
@@ -137,7 +137,7 @@ export default function BookingPage() {
     setActionLoading(true);
     runRequest({ action: new ConfirmMembershipDataApiAction() })
       .then(() => setBookingData(undefined))
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setActionLoading(false));
   };
 
@@ -219,7 +219,7 @@ export default function BookingPage() {
                       <span>
                         {t.rich("furpanel.booking.information.check_in_date", {
                           b: (chunks) => <b>{chunks}</b>,
-                          checkinDate: formatter.dateTime(new Date(bookingData!.order.checkinDate), {
+                          checkinDate: formatter.dateTime(new Date(bookingData.order.checkinDate), {
                             dateStyle: "medium",
                           }),
                         })}
@@ -232,7 +232,7 @@ export default function BookingPage() {
                       <span>
                         {t.rich("furpanel.booking.information.check_out_date", {
                           b: (chunks) => <b>{chunks}</b>,
-                          checkoutDate: formatter.dateTime(new Date(bookingData!.order.checkoutDate), {
+                          checkoutDate: formatter.dateTime(new Date(bookingData.order.checkoutDate), {
                             dateStyle: "medium",
                           }),
                         })}

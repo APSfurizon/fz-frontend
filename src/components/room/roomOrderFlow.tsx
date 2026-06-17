@@ -68,7 +68,7 @@ export default function RoomOrderFlow({
     runRequest({ action: new RoomStoreItemsApiAction() })
       .then((data) => setRoomsData(data))
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />, "ERROR");
         setRoomsData(undefined);
       })
       .finally(() => setModalLoading(false));
@@ -104,7 +104,7 @@ export default function RoomOrderFlow({
         router.push(result.link);
         close();
       })
-      .catch((err) => setLatestError(err))
+      .catch((err) => setLatestError(err as ApiErrorResponse))
       .finally(() => {
         setModalLoading(false);
       });
@@ -130,7 +130,11 @@ export default function RoomOrderFlow({
             {/* Room type selection */}
             {roomsData?.rooms?.map((roomInfo, index) => (
               <a
-                className={`room-type-container horizontal-list gap-2mm align-items-center rounded-m ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}`}
+                className={`
+                  room-type-container horizontal-list gap-2mm
+                  align-items-center rounded-m
+                  ${selectedType?.data.roomPretixItemId === roomInfo.data.roomPretixItemId ? "selected" : ""}
+                `}
                 key={index}
                 onClick={() => selectRoomType(roomInfo)}
               >

@@ -1,29 +1,29 @@
 "use client";
-import Modal from "@/components/modal";
-import { useGallery } from "../../../../../components/gallery/context/galleryProvider";
-import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
+import { useGalleryView } from "@/components/gallery/context/galleryViewProvider";
 import Icon, { MaterialIcon } from "@/components/icon";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
-import { runRequest } from "@/lib/api/networking/main";
+import FpButton from "@/components/input/fpButton";
+import Modal from "@/components/modal";
+import UserPicture from "@/components/userPicture";
+import { GallerySelectMediaFormApiAction } from "@/lib/api/gallery/admin/api";
+import { setStatus } from "@/lib/api/gallery/admin/main";
 import { DeleteMediaApiAction, GetFullMediaApiAction } from "@/lib/api/gallery/api";
-import "@/styles/misc/gallery/viewMediaModal.scss";
-import { translate } from "@/lib/translations";
-import { getCountdown, humanFileSize } from "@/lib/utils";
+import { GalleryUploadedFullMedia, GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { shareMediaUrl } from "@/lib/api/gallery/util";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import UserPicture from "@/components/userPicture";
-import FpButton from "@/components/input/fpButton";
-import { useUser } from "@/components/context/userProvider";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
 import { Permissions } from "@/lib/api/permission";
+import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { translate } from "@/lib/translations";
+import { getCountdown, humanFileSize } from "@/lib/utils";
+import "@/styles/misc/gallery/viewMediaModal.scss";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useGalleryView } from "@/components/gallery/context/galleryViewProvider";
-import { setStatus } from "@/lib/api/gallery/admin/main";
-import { useExplore } from "../explore/_components/exploreProvider";
-import ErrorMessage from "@/components/errorMessage";
-import { GallerySelectMediaFormApiAction } from "@/lib/api/gallery/admin/api";
+import { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useGallery } from "../../../../../components/gallery/context/galleryProvider";
 
 function ModalPanelData(
   props: Readonly<{
@@ -51,11 +51,13 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
   const { medias } = useGallery();
   const { currentMediaId, closeMedia, goNext, goBack } = useGalleryView();
   const t = useTranslations();
+  const { showModal } = useModalUpdate();
   const formatter = useFormatter();
   const locale = useLocale();
   const { userDisplayRef } = useUser();
   /** Whether the user has the `UPLOADS_CAN_MANAGE_UPLOADS` permission */
   const isAdmin = useMemo(
+    // eslint-disable-next-line react-hooks/refs
     () => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS),
     [userDisplayRef.current]
   );
@@ -99,6 +101,21 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     startPoint.current = undefined;
   };
 
+  const loadFullMedia = () => {
+    if (!currentMediaId) return;
+    setLoading(true);
+    (props.getFullMedia
+      ? props.getFullMedia(currentMediaId)
+      : runRequest({
+          action: new GetFullMediaApiAction(),
+          pathParams: { id: currentMediaId },
+        })
+    )
+      .then(setFullMedia)
+      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />))
+      .finally(() => setLoading(false));
+  };
+
   // Edit
 
   const updateStatus = useCallback(
@@ -109,10 +126,11 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
       const status: GalleryUploadedMediaStatus = fullMedia.status === newStatus ? "PENDING" : newStatus;
       setLoading(true);
       setStatus([fullMedia.id], status)
-        .then((f) => {
+        .then(() => {
           props.onUpdatedFullMedia?.(fullMedia.id);
-          loadFullMedia();
+          return loadFullMedia();
         })
+        .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />))
         .finally(() => setLoading(false));
     },
     [fullMedia]
@@ -130,22 +148,29 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         selected: !fullMedia.selected,
       },
     })
-      .then((f) => {
+      .then(() => {
         props.onUpdatedFullMedia?.(fullMedia.id);
         loadFullMedia();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />));
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />));
   }, [fullMedia]);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const ownsMedia = useMemo(
     () =>
+      // eslint-disable-next-line react-hooks/refs
       userDisplayRef.current && fullMedia && fullMedia?.photographer.userId === userDisplayRef.current.display.userId,
     [fullMedia, userDisplayRef.current]
   );
 
+  const togglePanel = () => {
+    setDataPanelOpen((prev) => !prev);
+    setTimeout(() => bottomFocus.current.scrollIntoView({ behavior: "smooth" }), 100);
+  };
+
   const canDeleteMedia = useMemo(
+    // eslint-disable-next-line react-hooks/refs
     () => ownsMedia || userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_FULLY_DELETE_UPLOADS),
     [ownsMedia, userDisplayRef.current]
   );
@@ -170,12 +195,17 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         props.onUpdatedFullMedia?.(fullMedia!.id, true);
         closeMedia();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR"))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />, "ERROR"))
       .finally(() => {
         setLoading(false);
         setDeleteModalOpen(false);
       });
   }, [canDeleteMedia, fullMedia]);
+
+  const closeModal = () => {
+    setDataPanelOpen(true);
+    closeMedia();
+  };
 
   // Keyboard listener
   const keyEventHandler = useCallback(
@@ -240,11 +270,6 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     };
   }, [currentMediaId, fullMedia, deleteModalOpen]);
 
-  const closeModal = () => {
-    setDataPanelOpen(true);
-    closeMedia();
-  };
-
   useEffect(() => {
     if (fullMedia && fullMedia.id == currentMediaId) {
       return;
@@ -255,20 +280,6 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
     }
     loadFullMedia();
   }, [currentMediaId]);
-
-  const loadFullMedia = () => {
-    if (!currentMediaId) return;
-    setLoading(true);
-    (props.getFullMedia
-      ? props.getFullMedia(currentMediaId)
-      : runRequest({
-          action: new GetFullMediaApiAction(),
-          pathParams: { id: currentMediaId },
-        })
-    )
-      .then(setFullMedia)
-      .finally(() => setLoading(false));
-  };
 
   const downloadFile = useCallback(
     (e: MouseEvent<HTMLAnchorElement>) => {
@@ -285,7 +296,8 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
           anchor.download = fullMedia.fileName;
           anchor.click();
           URL.revokeObjectURL(url);
-        });
+        })
+        .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />));
     },
     [fullMedia]
   );
@@ -300,8 +312,6 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
         return t("components.gallery.media.status.rejected");
     }
   };
-
-  const { showModal } = useModalUpdate();
 
   const onShare = () => {
     if (!currentMediaId) return;
@@ -324,11 +334,6 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
 
   const bottomFocus = useRef<HTMLDivElement>(null!);
 
-  const togglePanel = () => {
-    setDataPanelOpen((prev) => !prev);
-    setTimeout(() => bottomFocus.current.scrollIntoView({ behavior: "smooth" }), 100);
-  };
-
   const [error, setError] = useState(false);
   useEffect(() => setError(false), [currentMediaId]);
 
@@ -337,7 +342,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
       error
         ? EMPTY_PROFILE_PICTURE_SRC
         : (fullMedia?.displayMedia?.mediaUrl ??
-          (currentMediaId ? medias.get(currentMediaId!)?.thumbnailMedia?.mediaUrl : undefined) ??
+          (currentMediaId ? medias.get(currentMediaId)?.thumbnailMedia?.mediaUrl : undefined) ??
           EMPTY_PROFILE_PICTURE_SRC),
     [fullMedia, currentMediaId, error]
   );
@@ -386,6 +391,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 <FpButton
                   disabled={!fullMedia}
                   success={fullMedia?.status === ("APPROVED" as never)}
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                   off={(fullMedia?.status !== "APPROVED") as never}
                   icon="THUMB_UP"
                   onClick={() => updateStatus("APPROVED")}
@@ -396,6 +402,7 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
                 <FpButton
                   disabled={!fullMedia}
                   danger={fullMedia?.status === ("REJECTED" as never)}
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                   off={(fullMedia?.status !== "REJECTED") as never}
                   icon="THUMB_DOWN"
                   onClick={() => updateStatus("REJECTED")}
@@ -439,7 +446,9 @@ export default function ViewMediaModal(props: Readonly<ViewMediaModalProps>) {
               <div className="view-media-modal__panel-data">
                 <ModalPanelData
                   icon="COPYRIGHT"
-                  text={copyrightValues.find((v) => v.code === fullMedia?.repostPermissions)?.getDescription(locale)!}
+                  text={
+                    copyrightValues.find((v) => v.code === fullMedia?.repostPermissions)?.getDescription(locale) ?? ""
+                  }
                 />
                 <ModalPanelData icon="LOCAL_ACTIVITY" text={translate(fullMedia.event.eventNames, locale)}>
                   {isAdmin && (

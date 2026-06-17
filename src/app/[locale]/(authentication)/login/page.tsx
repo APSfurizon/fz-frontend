@@ -25,9 +25,9 @@ import {
 } from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
 import FpButton from "@/components/input/fpButton";
-import { UserDisplayAction } from "@/lib/api/user";
+import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { ApiErrorResponse } from "@/lib/api/networking";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
 
 export default function Login() {
   const t = useTranslations("authentication");
@@ -80,6 +80,7 @@ export default function Login() {
       throw new Error(`Secondary login failed with status ${secondaryResponse.status}`);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const response: AdminSecondaryLoginResponse = await secondaryResponse.json();
 
     if (!response.accessToken) return;
@@ -94,7 +95,7 @@ export default function Login() {
 
     // Role check must happen after primary token is cached.
     try {
-      const profile = await runRequest({ action: new UserDisplayAction() });
+      const profile: UserDisplayResponse = await runRequest({ action: new UserDisplayAction() });
       const isSecurityUser = (profile.permissions ?? []).some((r) => isSecurityByPermission(r));
       if (isSecurityUser) {
         try {
@@ -165,6 +166,7 @@ export default function Login() {
           inputType="email"
           label={t("login.label_email")}
           placeholder={t("login.placeholder_email")}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <FpInput
           fieldName="password"
@@ -173,6 +175,7 @@ export default function Login() {
           inputType="password"
           label={t("login.label_password")}
           placeholder={t("login.placeholder_password")}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <div className="toolbar-bottom">
           <FpButton type="submit" icon="KEY">

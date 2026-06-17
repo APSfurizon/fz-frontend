@@ -1,9 +1,7 @@
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
-import Image from "next/image";
 import "@/styles/misc/gallery/upload/uploadedMedia.css";
-import { ChangeEvent, CSSProperties, MouseEvent } from "react";
-import { useTranslations } from "next-intl";
+import { CSSProperties, MouseEvent } from "react";
 
 type GalleryMediaProps = {
   source: GalleryUploadedMedia;
@@ -17,9 +15,8 @@ type GalleryMediaProps = {
 };
 
 export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
-  const t = useTranslations();
   const imageSource = props.source.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC;
-  const checkEvent = (e?: MouseEvent<HTMLDivElement> | ChangeEvent<HTMLInputElement>) => {
+  const checkEvent = () => {
     if (!props.checkbox) return;
     props.onSelect(props.source.id, !props.selected);
   };

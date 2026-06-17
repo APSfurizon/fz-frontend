@@ -39,7 +39,6 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 /**Session duration in days */
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
-// eslint-disable-next-line max-len
 export const REGEX_UNAUTHENTICATED_URLS =
   /^(?:\/?(login|logging|logout|recover|register|nosecount|schedule|fonts|gallery|images\/footer|api\/og)([\/?].*)?)$/im;
 /**Urls that need to be skipped if user is authenticated */ // eslint-disable-next-line max-len

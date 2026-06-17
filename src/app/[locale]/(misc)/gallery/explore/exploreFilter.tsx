@@ -1,6 +1,6 @@
 import { useUser } from "@/components/context/userProvider";
 import { OptionRendererParams, SelectItem } from "@/lib/components/fpSelect";
-import { useMemo } from "react";
+import { Key, useMemo } from "react";
 import { useExploreFilterData } from "./_components/exploreFilterDataProvider";
 import { Permissions } from "@/lib/api/permission";
 import { useExploreNavigation } from "./_components/exploreNavigationProvider";
@@ -31,12 +31,13 @@ class SelectPhotographerItem extends SelectItem {
 }
 
 export default function ExploreFilter() {
-  const { userDisplayRef } = useUser();
+  const { userDisplay, userLoading } = useUser();
   const isAdmin = useMemo(
-    () => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS),
-    [userDisplayRef.current]
+    () => userDisplay?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS),
+    [userLoading]
   );
-  const { events, photographers, loading } = useExploreFilterData();
+  const { events, photographers } = useExploreFilterData();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { currentFilter, showFilters, setFilter } = useExploreNavigation();
   const t = useTranslations();
   const locale = useLocale();
@@ -72,7 +73,7 @@ export default function ExploreFilter() {
     const option = params.item as SelectPhotographerItem;
     return (
       <button
-        key={params.id}
+        key={params.id as Key}
         type="button"
         tabIndex={0}
         onClick={params.onClick}
@@ -84,7 +85,6 @@ export default function ExploreFilter() {
           "gap-2mm",
           params.selected ? "fp-select__option--selected" : "",
         ].join(" ")}
-        aria-selected={params.selected}
       >
         {params.item.imageUrl ? (
           option.imageUrl && (

@@ -548,17 +548,16 @@ export class ChangeLanguageAction extends ApiAction<boolean, ApiErrorResponse> {
 
 export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: string, userDisplay?: UserData) {
   e.preventDefault();
-  return new Promise((resolve) =>
-    resolve(
-      !!userDisplay
-        ? runRequest({
-            action: new ChangeLanguageAction(),
-            body: { languageCode: language },
-          })
-        : Promise.resolve(null)
-    )
-  ).then(() => {
-    setCookie("NEXT_LOCALE", language, new Date(Date.now() + 1000 * 3600 * 24 * 365));
-    location.reload();
-  });
+  const promise = !!userDisplay
+    ? runRequest({
+        action: new ChangeLanguageAction(),
+        body: { languageCode: language },
+      })
+    : Promise.resolve(null);
+  promise
+    .then(() => {
+      setCookie("NEXT_LOCALE", language, new Date(Date.now() + 1000 * 3600 * 24 * 365));
+      location.reload();
+    })
+    .catch(() => void 0);
 }

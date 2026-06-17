@@ -917,6 +917,9 @@
         },
         "roles": {
           "title": "Roles"
+        },
+        "errors": {
+          "unknown_user": "Unknown user"
         }
       },
       "security_management": {
@@ -1134,7 +1137,8 @@
         "new_password": {
           "label": "New password",
           "placeholder": "Enter a new password",
-          "help": "Password must be at least 6 characters long"
+          "help": "Password must be at least 6 characters long",
+          "mismatch": "New password and confirmation don't match"
         },
         "confirm_password": {
           "label": "Confirm new password",
@@ -1160,7 +1164,9 @@
         "invalid_input": "Invalid data",
         "already_logged_in": "You're already logged in",
         "confirmation_still_pending": "Confirm your email before logging in",
-        "authentication_is_disabled": "Your account has been disabled."
+        "authentication_is_disabled": "Your account has been disabled.",
+        "secondary_login_failed": "Secondary login failed",
+        "secondary_login_failed_description": "Login via the mobile back-end failed"
       },
       "label_email": "Email",
       "label_password": "Password",

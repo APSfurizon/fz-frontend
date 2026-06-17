@@ -8,7 +8,7 @@ import {
   MembershipCard,
 } from "@/lib/api/admin/membershipManager";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
-import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { MouseEvent, useState } from "react";
@@ -39,7 +39,7 @@ export default function UserViewCardsTable({
       body: data,
     })
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
         setChecked(!checked);
       })
       .finally(() => setBusy(false));
@@ -64,7 +64,7 @@ export default function UserViewCardsTable({
       header: t("furpanel.admin.membership_manager.columns.registered"),
       cell: (props) => (
         <Checkbox
-          initialValue={props.getValue()}
+          initialValue={props.getValue() as boolean}
           disabled={!props.row.original.cardNo}
           onClick={(event, checked, setChecked, setBusy) =>
             markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)

@@ -88,7 +88,6 @@ export default function ExchangeConfirm() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadExchangeData();
   }, []);
 

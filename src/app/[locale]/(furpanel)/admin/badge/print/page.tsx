@@ -23,6 +23,7 @@ import BadgeTable from "./badgeTable";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function AdvancedBadgePrint() {
   const t = useTranslations();
@@ -93,7 +94,7 @@ export default function AdvancedBadgePrint() {
     setPrintLoading(true);
     const regularBadgeCodes = regularBadgeRows.map((row) => row.user.userId).join(",");
     const fursuitBadgeCodes = fursuitBadgeRows.map((row) => row.fursuit.id).join(",");
-    const promises: Promise<any>[] = [];
+    const promises: Promise<Response>[] = [];
     if (!isEmpty(regularBadgeCodes)) {
       promises.push(
         runRequest({
@@ -111,17 +112,15 @@ export default function AdvancedBadgePrint() {
       );
     }
     Promise.all(promises)
-      .then((responses) =>
-        responses.forEach((response) => {
-          const res = response as Response;
-          res.blob().then((badgesBlob) => {
-            const result = URL.createObjectURL(badgesBlob);
-            window.open(result, "_blank");
-            URL.revokeObjectURL(result);
-          });
-        })
-      )
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .then((responses) => Promise.all(responses.map((r) => r.blob())))
+      .then((blobs) => {
+        for (const blob of blobs) {
+          const result = URL.createObjectURL(blob);
+          window.open(result, "_blank");
+          URL.revokeObjectURL(result);
+        }
+      })
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setPrintLoading(false));
   };
 

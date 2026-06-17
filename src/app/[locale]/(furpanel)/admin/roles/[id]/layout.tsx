@@ -3,7 +3,9 @@ import { EntityEditorProvider } from "@/components/context/entityEditorProvider"
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import { GetRoleByIdApiAction, RoleData, roleToOutput, UpdateRoleByIdApiAction } from "@/lib/api/admin/role";
+import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
+import { toError } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,14 +24,22 @@ export default function ViewRoleLayout({
 
   // Parse params
   useEffect(() => {
-    params.then((loadedParams) => {
-      const newId = parseInt(loadedParams.id);
-      if (newId === undefined || isNaN(newId)) {
-        notFound();
-      }
-      setRoleId(newId);
-    });
+    params
+      .then((loadedParams) => {
+        const newId = parseInt(loadedParams.id);
+        if (newId === undefined || isNaN(newId)) {
+          notFound();
+        }
+        setRoleId(newId);
+      })
+      .catch(() => void 0);
   }, []);
+
+  // Get the entity
+  const getEntity = () => {
+    if (roleId === undefined) return Promise.reject(new Error("No role specified"));
+    return runRequest({ action: new GetRoleByIdApiAction(), pathParams: { id: roleId } });
+  };
 
   // Load entity
   useEffect(() => {
@@ -37,15 +47,9 @@ export default function ViewRoleLayout({
     setLoading(true);
     getEntity()
       .then((response) => setEntity(response as RoleData))
-      .catch((err) => showModal(t("error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   }, [roleId]);
-
-  // Get the entity
-  const getEntity = () => {
-    if (roleId === undefined) return Promise.reject(null);
-    return runRequest({ action: new GetRoleByIdApiAction(), pathParams: { id: roleId } });
-  };
 
   // Save entity
   const saveRole = (toSave: RoleData) => {
@@ -63,11 +67,11 @@ export default function ViewRoleLayout({
         .then(() => {
           getEntity()
             .then((data) => resolve(data))
-            .catch((err) => reject(err));
+            .catch((err) => reject(toError(err)));
         })
         .catch((err) => {
-          showModal(t("error"), <ErrorMessage error={err} />);
-          reject(err);
+          showModal(t("error"), <ErrorMessage error={err as ApiErrorResponse} />);
+          reject(toError(err));
         })
         .finally(() => setLoading(false));
     });

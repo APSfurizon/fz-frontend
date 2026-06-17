@@ -109,7 +109,8 @@ export default function FpTable<T>({
   const tableRef = useRef<HTMLDivElement>(null);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [sorting, setSorting] = useState<SortingState>(sort || []);
-  const [globalFilter, setGlobalFilter] = useState<any>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const [globalFilter, setGlobalFilter] = useState<any>("");
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize, //default page size
@@ -137,6 +138,7 @@ export default function FpTable<T>({
     },
     state: {
       sorting,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       globalFilter,
       pagination: pagination,
       rowSelection,
@@ -246,7 +248,7 @@ export default function FpTable<T>({
     const headers = tableWrapper.getFlatHeaders();
     const colSizes: { [key: string]: string } = {};
     for (let i = 0; i < headers.length; i++) {
-      const header = headers[i]!;
+      const header = headers[i];
       const headerSize = header.getSize();
       const columnSize = header.column.getSize();
       colSizes[`--header-${header.id}-size`] = headerSize == 25 ? "auto" : `${headerSize}px`;

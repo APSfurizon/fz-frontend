@@ -13,7 +13,7 @@ export default function ErrorMessage({ error }: Readonly<{ error?: ApiErrorRespo
   const errors = useMemo(() => {
     const toReturn: ErrorData[] = [];
     if (!error?.errors) {
-      toReturn.push({ message: t("common.unknown_error") });
+      toReturn.push({ message: error?.message ?? t("common.unknown_error") });
     }
     toReturn.push(...(error?.errors ?? []).map((err) => ({ code: err.code, message: err.message })));
 

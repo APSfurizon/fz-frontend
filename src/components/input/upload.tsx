@@ -68,7 +68,7 @@ export default function Upload({
   const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
 
   // Handle field registration
-  useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
+  useEffect(() => registerField(fieldName, inputRef), []);
 
   // Loads the initial value media
   useEffect(() => {
@@ -121,7 +121,9 @@ export default function Upload({
   const onCrop = (): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const cropper = cropperRef.current?.cropper;
-      cropper?.getCroppedCanvas().toBlob((blob) => (blob ? resolve(blob) : reject()), "image/png", 1);
+      cropper
+        ?.getCroppedCanvas()
+        .toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Could not get image blob"))), "image/png", 1);
     });
   };
 

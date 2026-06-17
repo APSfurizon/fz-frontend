@@ -5,7 +5,7 @@ import { useGalleryView } from "./context/galleryViewProvider";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import useResizeObserver from "../hooks/useResizeObserver";
-import { useVirtualizer, useWindowVirtualizer } from "@tanstack/react-virtual";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import GalleryMedia from "./galleryMedia";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -19,9 +19,11 @@ const BREAKPOINT = {
 const ITEM_RATIO = 1;
 
 export default function GalleryVirtualizedGrid() {
-  const { medias, ended, getNextData, onRefresh, galleryLoading } = useGallery();
+  const { medias, ended, getNextData, galleryLoading } = useGallery();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { openMedia } = useGalleryView();
-  const { selectedIds, selectionEnabled, setSelectionEnabled, select, clearSelection } = useGallerySelection();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { selectedIds, selectionEnabled, select } = useGallerySelection();
   const t = useTranslations();
 
   // Grid rendering logic
@@ -61,7 +63,8 @@ export default function GalleryVirtualizedGrid() {
       const last = items[items.length - 1];
 
       if (last.index >= rowCount - 3 && !galleryLoading && !ended) {
-        getNextData();
+        // TODO must handle error?
+        getNextData().catch(() => void 0);
       }
     },
   });

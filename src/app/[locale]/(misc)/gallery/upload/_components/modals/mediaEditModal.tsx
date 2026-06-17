@@ -1,21 +1,22 @@
-import FpButton from "@/components/input/fpButton";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
 import Modal from "@/components/modal";
-import { ConventionEvent } from "@/lib/api/counts";
 import { GalleryUpdateFormApiAction } from "@/lib/api/gallery/admin/api";
-import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { GalleryUpdateBody } from "@/lib/api/gallery/admin/types";
+import { ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
+import { STATUS_FILTER_ITEMS } from "@/lib/api/gallery/explore/main";
+import { ExploreEvent } from "@/lib/api/gallery/explore/type";
 import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
+import { copyrightValues } from "@/lib/api/gallery/upload/main";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
-import { translate } from "@/lib/translations";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-import { runRequest } from "@/lib/api/networking/main";
-import { ExploreEventsApiAction } from "@/lib/api/gallery/explore/api";
-import { ExploreEvent } from "@/lib/api/gallery/explore/type";
-import { STATUS_FILTER_ITEMS } from "@/lib/api/gallery/explore/main";
 
 type MediaEditModalProps = {
   medias: GalleryUploadedMedia[];
@@ -28,6 +29,7 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
 
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<ExploreEvent[]>([]);
+  const { showModal } = useModalUpdate();
   const eventItems = useMemo(
     () =>
       events.map((e) =>
@@ -54,6 +56,7 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
     setLoading(true);
     runRequest({ action: new ExploreEventsApiAction() })
       .then((r) => setEvents(r.events))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   }, [props.open]);
 

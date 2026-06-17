@@ -1,13 +1,13 @@
 import { OptionRendererParams, SelectGroup, SelectItem } from "@/lib/components/fpSelect";
-import { inputEntityIdExtractor, InputEntity } from "@/lib/components/input";
+import { inputEntityIdExtractor } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import { ChangeEvent, CSSProperties, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { useFormContext } from "./dataForm";
-import Icon, { MaterialIcon } from "../icon";
 import Image from "next/image";
 import "@/styles/components/fpSelect.scss";
+import Icon from "../icon";
 
 type FpSelectProps = {
   fieldName?: string;
@@ -23,7 +23,6 @@ type FpSelectProps = {
   required?: boolean;
   disabled?: boolean;
   initialValue?: string;
-  inputStyle?: CSSProperties;
   itemExtractor?: (entity: TranslatableInputEntity) => string | number | undefined;
   hasError?: boolean;
   helpText?: string | React.ReactNode;
@@ -36,7 +35,6 @@ export default function FpSelect({
   style,
   labelStyle,
   label,
-  hasError = false,
   onChange,
   placeholder,
   readOnly = false,
@@ -44,7 +42,6 @@ export default function FpSelect({
   disabled = false,
   initialValue,
   fieldName,
-  inputStyle,
   itemExtractor = inputEntityIdExtractor,
   helpText,
   optionRenderer,
@@ -64,7 +61,7 @@ export default function FpSelect({
     return item ? (itemExtractor(item) ?? "") : "";
   }, [selectedItem, defaultItem]);
 
-  const isDisabled = formDisabled || disabled || formLoading;
+  const isDisabled = formDisabled || disabled || formLoading || readOnly;
 
   function getMappedItems(items: (SelectGroup | SelectItem)[]): Record<string, TranslatableInputEntity> {
     let mappedItems: Record<string, TranslatableInputEntity> = {};
@@ -100,6 +97,18 @@ export default function FpSelect({
     [items]
   );
 
+  const onSelect = useCallback(
+    (id?: string | number | null) => {
+      if (!mappedItems || id === undefined) return;
+      const valueToSet = id ? mappedItems[id] : undefined;
+      setSelectedItem(valueToSet);
+      if (onChange) onChange(valueToSet);
+      if (onFormChange) onFormChange(fieldName, valueToSet ? itemExtractor(valueToSet) : null);
+      popoverRef.current?.hidePopover();
+    },
+    [mappedItems, items]
+  );
+
   useEffect(() => {
     if (
       mappedItems &&
@@ -117,18 +126,6 @@ export default function FpSelect({
     }
   }, [initialValue, mappedItems, formReset]);
 
-  const onSelect = useCallback(
-    (id?: string | number | null) => {
-      if (!mappedItems || id === undefined) return;
-      const valueToSet = id ? mappedItems[id] : undefined;
-      setSelectedItem(valueToSet);
-      if (onChange) onChange(valueToSet);
-      if (onFormChange) onFormChange(fieldName, valueToSet ? itemExtractor(valueToSet) : null);
-      popoverRef.current?.hidePopover();
-    },
-    [mappedItems, items]
-  );
-
   /**Select component label */
   const selectLabel = `fpSelect-${fieldName}-${useId()}`;
   const selectPopoverId = `fpSelect-popover-${fieldName}-${useId()}`;
@@ -143,7 +140,48 @@ export default function FpSelect({
     [selectedItem]
   );
 
-  const renderItems = useCallback(
+  const renderSelectItem = useCallback(
+    (item: SelectItem) =>
+      optionRenderer ? (
+        optionRenderer({
+          id: itemExtractor(item),
+          item,
+          selected: isSelected(item),
+          onClick: () => onSelect(itemExtractor(item)),
+        })
+      ) : (
+        <button
+          key={itemExtractor(item)}
+          type="button"
+          tabIndex={0}
+          onClick={() => onSelect(itemExtractor(item))}
+          className={[
+            "fp-select__option",
+            "rounded-s",
+            "horizontal-list",
+            "align-items-center",
+            "gap-2mm",
+            isSelected(item) ? "fp-select__option--selected" : "",
+          ].join(" ")}
+        >
+          {shouldReserveMediaSpace &&
+            (item.icon || item.imageUrl ? (
+              <>
+                {item.icon && <Icon style={item.iconCSS} icon={item.icon} />}
+                {item.imageUrl && (
+                  <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />
+                )}
+              </>
+            ) : (
+              <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
+            ))}
+          <span className="title small">{item.getDescription(locale)}</span>
+        </button>
+      ),
+    [shouldReserveMediaSpace, selectedItem, optionRenderer]
+  );
+
+  const renderSelectList = useCallback(
     (toRender: (SelectGroup | SelectItem)[]) => {
       return toRender.map((item, index) => {
         if (item instanceof SelectGroup) {
@@ -152,47 +190,11 @@ export default function FpSelect({
               <span className="fp-select__group__header title bold average color-subtitle reset">
                 {item.getDescription(locale)}
               </span>
-              <div className="fp-select__group__items">{renderItems(item.items)}</div>
+              <div className="fp-select__group__items">{item.items.map((item) => renderSelectItem(item))}</div>
             </div>
           );
         } else {
-          return optionRenderer ? (
-            optionRenderer({
-              id: itemExtractor(item),
-              item,
-              selected: isSelected(item),
-              onClick: () => onSelect(itemExtractor(item)),
-            })
-          ) : (
-            <button
-              key={index}
-              type="button"
-              tabIndex={0}
-              onClick={() => onSelect(itemExtractor(item))}
-              className={[
-                "fp-select__option",
-                "rounded-s",
-                "horizontal-list",
-                "align-items-center",
-                "gap-2mm",
-                isSelected(item) ? "fp-select__option--selected" : "",
-              ].join(" ")}
-              aria-selected={isSelected(item)}
-            >
-              {shouldReserveMediaSpace &&
-                (item.icon || item.imageUrl ? (
-                  <>
-                    {item.icon && <Icon style={item.iconCSS} icon={item.icon as MaterialIcon} />}
-                    {item.imageUrl && (
-                      <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />
-                    )}
-                  </>
-                ) : (
-                  <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
-                ))}
-              <span className="title small">{item.getDescription(locale)}</span>
-            </button>
-          );
+          return renderSelectItem(item);
         }
       });
     },
@@ -248,7 +250,7 @@ export default function FpSelect({
           {shouldReserveMediaSpace &&
             (selectedItem && (selectedItem.icon || selectedItem.imageUrl) ? (
               <>
-                {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon as MaterialIcon} />}
+                {selectedItem.icon && <Icon style={selectedItem.iconCSS} icon={selectedItem.icon} />}
                 {selectedItem.imageUrl && (
                   <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={selectedItem.imageUrl} />
                 )}
@@ -275,7 +277,8 @@ export default function FpSelect({
         {!required && (
           <div className="rounded-s fp-select__option fp-select__option--empty" onClick={() => onSelect(null)}></div>
         )}
-        {renderItems(items)}
+        {/* eslint-disable-next-line react-hooks/refs */}
+        {renderSelectList(items)}
       </div>
     </>
   );

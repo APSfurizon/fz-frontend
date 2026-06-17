@@ -8,7 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { ScheduleEvent, ScheduleRoom } from "@/lib/schedule";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "@/styles/misc/schedule.css";
-import Icon, { MaterialIcon } from "../icon";
+import Icon from "../icon";
 
 interface ScheduleCalendarProps {
   events: ScheduleEvent[];
@@ -247,8 +247,6 @@ export default function ScheduleCalendar({
 
             const startLabel = format(event.start, "HH:mm", { locale: dateFnsLocale });
             const endLabel = format(event.end, "HH:mm", { locale: dateFnsLocale });
-
-            const durationMinutes = Math.max(0, (event.end.getTime() - event.start.getTime()) / 60000);
 
             const room = rooms.find((r) => r.resourceId === event.resourceId);
 

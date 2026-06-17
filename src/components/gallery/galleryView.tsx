@@ -13,6 +13,7 @@ import { runRequest } from "@/lib/api/networking/main";
 import { BulkDownloadApiAction } from "@/lib/api/gallery/api";
 import { useModalUpdate } from "../context/modalProvider";
 import ErrorMessage from "../errorMessage";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 type GalleryGridViewProps = {
   refresh?: RefObject<() => void>;
@@ -23,12 +24,13 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
   const t = useTranslations();
   const { medias, setGalleryMedias, ended, getNextData, onRefresh, galleryLoading } = useGallery();
   const { showModal } = useModalUpdate();
-  const { selectedIds, setSelectedIds, selectionEnabled, setSelectionEnabled, clearSelection } = useGallerySelection();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { selectedIds, selectionEnabled, setSelectionEnabled, clearSelection } = useGallerySelection();
   const [refreshKey, setRefreshKey] = useState(0);
-  const { userDisplayRef, userLoading } = useUser();
+  const { userDisplayRef, userDisplay, userLoading } = useUser();
   const canManageMedias = useMemo(
-    () => userDisplayRef.current?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS),
-    [userDisplayRef.current]
+    () => userDisplay?.permissions?.includes(Permissions.UPLOADS_CAN_MANAGE_UPLOADS),
+    [userLoading]
   );
 
   // Selection logic
@@ -65,7 +67,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
 
   useEffect(() => {
     if (medias.size === 0 && !galleryLoading && !ended) {
-      getNextData();
+      getNextData().catch(() => void 0);
     }
   }, [refreshKey]);
 
@@ -88,7 +90,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
         window.open(url);
         URL.revokeObjectURL(url);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setDownloadLoading(false));
   }, [selectedIds, downloadLoading]);
 
@@ -96,6 +98,7 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
     <>
       <div className="gallery__grid">
         <div className="gallery__grid__toolbar horizontal-list gap-2mm align-items-center">
+          {/* eslint-disable-next-line react-hooks/refs */}
           {userDisplayRef.current &&
             (selectionEnabled ? (
               <>
@@ -118,12 +121,14 @@ export function GalleryGridView(props: Readonly<GalleryGridViewProps>) {
           <FpButton
             className="margin-left-auto"
             icon="REFRESH"
+            // eslint-disable-next-line react-hooks/refs
             onClick={refreshRef.current}
             busy={galleryLoading}
             title={t("common.reload")}
           >
             {t("common.reload")}
           </FpButton>
+          {/* eslint-disable-next-line react-hooks/refs */}
           {selectionEnabled && userDisplayRef.current?.display.userId && (
             <>
               <FpButton

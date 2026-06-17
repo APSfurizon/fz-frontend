@@ -11,6 +11,7 @@ import { runRequest } from "@/lib/api/networking/main";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import Modal from "@/components/modal";
+import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function UserViewFursuitsTable({
   userData,
@@ -60,7 +61,7 @@ export default function UserViewFursuitsTable({
       action: new DeleteFursuitApiAction(),
       pathParams: { id: fursuit?.fursuit.id },
     })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         closeDeleteFursuit();
         setDeleteLoading(false);

@@ -12,6 +12,7 @@ import {
   RemoveUserFromRoleApiAction,
   UserViewRoles,
 } from "@/lib/api/admin/userView";
+import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
 import { AutoInputFilter } from "@/lib/components/autoInput";
 import { ColumnDef, createColumnHelper, Table } from "@tanstack/react-table";
@@ -59,7 +60,7 @@ export default function UserViewRolesTable({
         .then(() => {
           reloadData();
         })
-        .catch((error) => showModal(t("common.error"), <ErrorMessage error={error} />));
+        .catch((error) => showModal(t("common.error"), <ErrorMessage error={error as ApiErrorResponse} />));
     }
   }, []);
 

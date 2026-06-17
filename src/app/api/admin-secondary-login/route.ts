@@ -1,3 +1,7 @@
+// TODO: login refactor
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { API_MOBILE_URL, MOBILE_FURIZON_AUTH_HEADER } from "@/lib/constants";
 import { NextResponse } from "next/server";
 

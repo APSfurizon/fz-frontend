@@ -1,9 +1,10 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import FpButton from "@/components/input/fpButton";
 import LoadingPanel from "@/components/loadingPanel";
 import Modal from "@/components/modal";
-import ErrorMessage from "@/components/errorMessage";
 import FpTable from "@/components/table/fpTable";
+import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
 import {
   DestroyAllSessionsAction,
@@ -35,7 +36,7 @@ export default function UserSessions() {
     runRequest({ action: new GetAllSessionsAction() })
       .then((result) => setSessions(result.sessions))
       .catch((err) => {
-        showModal(t("common.error"), <ErrorMessage error={err} />);
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
         setSessions([]);
       })
       .finally(() => setLoading(false));
@@ -48,7 +49,7 @@ export default function UserSessions() {
     if (!sessions) return;
     setLoading(true);
     runRequest({ action: new DestroyAllSessionsAction() })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => {
         setLoading(false);
         setDestroyConfirmModalOpen(false);
@@ -97,7 +98,7 @@ export default function UserSessions() {
         hideModal();
         setSessions(undefined);
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 

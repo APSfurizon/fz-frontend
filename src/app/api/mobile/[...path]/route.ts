@@ -1,6 +1,6 @@
-import { MOBILE_ADMIN_TOKEN_STORAGE_NAME, API_MOBILE_URL, MOBILE_FURIZON_AUTH_HEADER } from "@/lib/constants";
-import { NextResponse } from "next/server";
+import { API_MOBILE_URL, MOBILE_ADMIN_TOKEN_STORAGE_NAME, MOBILE_FURIZON_AUTH_HEADER } from "@/lib/constants";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 async function proxy(req: Request, params: { path: string[] }) {
   if (!API_MOBILE_URL) {
@@ -39,6 +39,7 @@ async function proxy(req: Request, params: { path: string[] }) {
   // Mobile backend can return JSON with text/plain content-type.
   // Normalize to JSON when possible so client-side runRequest decodes payload fields.
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const json = JSON.parse(responseText);
     return NextResponse.json(json, { status: response.status });
   } catch {

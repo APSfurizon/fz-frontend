@@ -63,9 +63,9 @@ export default function UserDropDown({ userData, loading }: Readonly<{ userData?
       >
         {/* Logout */}
         {userData && (
-          <a href="/logout" onClick={logout} className="title small rounded-s vertical-align-middle">
+          <Link href="/logout" onClick={logout} className="title small rounded-s vertical-align-middle">
             {t("header.dropdown.logout")}
-          </a>
+          </Link>
         )}
         {/* Language selector */}
         <hr />

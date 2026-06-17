@@ -2,10 +2,9 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useExploreFilterData } from "./exploreFilterDataProvider";
 import "@/styles/misc/gallery/explore/galleryBanner.scss";
 import { translate } from "@/lib/translations";
-import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 
 export default function GalleryBanner() {
-  const { currentFilterData, loading } = useExploreFilterData();
+  const { currentFilterData } = useExploreFilterData();
   const locale = useLocale();
   const t = useTranslations();
   const formatter = useFormatter();

@@ -33,6 +33,18 @@ export interface ApiErrorResponse extends ApiResponse, Error {
   errors: ApiError[];
 }
 
+export function createApiErrorResponse(params: {
+  status: number;
+  requestId: string;
+  errors: ApiError[];
+}): ApiErrorResponse {
+  return {
+    name: "ApiError",
+    message: params.errors?.length == 1 ? params.errors[0].message : "Multiple errors occurred",
+    errors: params.errors,
+  };
+}
+
 export enum Endpoint {
   API,
   MOBILE,

@@ -46,10 +46,10 @@ export default function NosecountLayout({ children }: Readonly<{ children: React
   function selectMode(mode: string) {
     let toSet: CountViewMode = CountViewMode.NORMAL;
     switch (mode) {
-      case CountViewMode.FURSUIT:
+      case CountViewMode.FURSUIT.toString():
         toSet = CountViewMode.FURSUIT;
         break;
-      case CountViewMode.SPONSOR:
+      case CountViewMode.SPONSOR.toString():
         toSet = CountViewMode.SPONSOR;
         break;
       default:

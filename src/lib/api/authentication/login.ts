@@ -1,5 +1,5 @@
 import { NoticeTheme } from "@/components/noticeBox";
-import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
 import { MobileApiAction } from "../networking/types";
 import { ApiAction } from "../networking/types";
 import { ApiErrorResponse } from "../networking/types";
@@ -24,11 +24,10 @@ export interface LoginResponse extends ApiResponse {
 
 export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
   mapToDTO = (data: FormData) => {
-    let toReturn: LoginData = {
-      email: data.get("email")?.toString(),
-      password: data.get("password")?.toString(),
+    return {
+      email: getData(data, "email")?.toString(),
+      password: getData(data, "password")?.toString(),
     };
-    return toReturn;
   };
 }
 

@@ -4,7 +4,7 @@ import Modal from "@/components/modal";
 import ErrorMessage from "@/components/errorMessage";
 import { GetRenderedCommonBadgesApiAction, GetRenderedFursuitBadgesApiAction } from "@/lib/api/admin/badge";
 import { runRequest } from "@/lib/api/networking/main";
-import { ApiAction } from "@/lib/api/networking/types";
+import { ApiAction, ApiErrorResponse } from "@/lib/api/networking/types";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -45,19 +45,17 @@ export default function BadgePrintingDialog({
   const renderFursuit = () => renderBadges(new GetRenderedFursuitBadgesApiAction());
   const renderCommon = () => renderBadges(new GetRenderedCommonBadgesApiAction());
 
-  const renderBadges = (action: ApiAction<any, any>) => {
+  const renderBadges = (action: ApiAction<Response, any>) => {
     setLoading(true);
     runRequest({ action })
-      .then((response) => {
-        const res = response as Response;
-        res.blob().then((badgesBlob) => {
-          const result = URL.createObjectURL(badgesBlob);
-          window.open(result, "_blank");
-          URL.revokeObjectURL(result);
-        });
+      .then((response) => response.blob())
+      .then((badgesBlob) => {
+        const result = URL.createObjectURL(badgesBlob);
+        window.open(result, "_blank");
+        URL.revokeObjectURL(result);
         closeModal();
       })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err} />))
+      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
       .finally(() => setLoading(false));
   };
 

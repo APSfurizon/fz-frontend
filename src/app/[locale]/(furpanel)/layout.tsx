@@ -1,29 +1,25 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import { useUser } from "@/components/context/userProvider";
 import Icon from "@/components/icon";
+import Modal from "@/components/modal";
 import ToolLink from "@/components/toolLink";
+import { hasPermission, Permissions } from "@/lib/api/permission";
 import {
   APP_GIT_PROJECT_RELEASE,
   APP_VERSION,
   BADGE_ENABLED,
   BOOKING_ENABLED,
   DEBUG_ENABLED,
+  READ_CHANGELOG_STORAGE_NAME,
   ROOM_ENABLED,
   TOKEN_STORAGE_NAME,
-  READ_CHANGELOG_STORAGE_NAME,
 } from "@/lib/constants";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import Modal from "@/components/modal";
-import { useEffect, useState } from "react";
-import { useUser } from "@/components/context/userProvider";
-import { hasPermission, Permissions } from "@/lib/api/permission";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { shouldShowChangelog } from "@/lib/utils";
 import "@/styles/furpanel/layout.css";
-
-function normalizeRole(internalName?: string) {
-  return (internalName ?? "").toLowerCase().trim();
-}
+import { useTranslations } from "next-intl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   const t = useTranslations();
@@ -65,7 +61,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     setToolListExpanded(false);
   };
 
-  const roles = userDisplay?.roles ?? [];
   const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
 
   return (
