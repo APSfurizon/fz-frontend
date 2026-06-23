@@ -4,6 +4,6 @@ export interface GalleryUpdateBody extends ApiRequest {
   uploadIds: number[];
   newStatus?: string;
   newPhotographerUserId?: number;
-  newEventUid?: number;
+  newEventId?: number;
   newRepostPermissions?: string;
 }

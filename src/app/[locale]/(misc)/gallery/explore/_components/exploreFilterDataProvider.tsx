@@ -1,15 +1,15 @@
-import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
-import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { FilterSetterSearchData, useExploreNavigation } from "./exploreNavigationProvider";
-import { runRequest } from "@/lib/api/networking/main";
 import {
   ExploreEventApiAction,
   ExploreEventsApiAction,
   ExplorePhotographerApiAction,
   ExplorePhotographersApiAction,
 } from "@/lib/api/gallery/explore/api";
+import { ExploreEvent, ExplorePhotographer } from "@/lib/api/gallery/explore/type";
+import { GalleryUploadedMediaStatus } from "@/lib/api/gallery/types";
+import { runRequest } from "@/lib/api/networking/main";
 import { buildSearchParams } from "@/lib/utils";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { FilterSetterSearchData, useExploreNavigation } from "./exploreNavigationProvider";
 
 interface ExploreFilterDataProviderType {
   currentFilterData?: ExploreFilterData;
@@ -80,7 +80,11 @@ export function ExploreFilterDataProvider({ children }: Readonly<{ children: Rea
         );
         setEvents(() => {
           const next = new Map();
-          for (const evt of allEventsRes.events) {
+          const list = allEventsRes.events;
+          list.sort(
+            (b, a) => new Date(a.event.correctDateFrom).getTime() - new Date(b.event.correctDateFrom).getTime()
+          );
+          for (const evt of list) {
             next.set(evt.event.id, evt);
           }
           return next;

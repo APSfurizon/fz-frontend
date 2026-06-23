@@ -1436,7 +1436,12 @@
         }
       },
       "admin": {
-        "title": "Amministrazione"
+        "title": "Amministrazione",
+        "edit": {
+          "photographer": {
+            "label": "Fotografo"
+          }
+        }
       },
       "media": {
         "status": {}

@@ -1,5 +1,6 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
+import AutoInput from "@/components/input/autoInput";
 import DataForm from "@/components/input/dataForm";
 import FpButton from "@/components/input/fpButton";
 import FpSelect from "@/components/input/fpSelect";
@@ -13,6 +14,7 @@ import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
 import { copyrightValues } from "@/lib/api/gallery/upload/main";
 import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
+import { AutoInputUsersManager } from "@/lib/api/user";
 import { SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
 import { useTranslations } from "next-intl";
@@ -27,22 +29,29 @@ type MediaEditModalProps = {
 export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
   const t = useTranslations("");
 
+  const mixedEvents = useMemo(() => new Set(props.medias.map((m) => m.eventId)).size > 1, [props.medias]);
+  const mixedStatuses = useMemo(() => new Set(props.medias.map((m) => m.status)).size > 1, [props.medias]);
+  const mixedPhotographers = useMemo(
+    () => new Set(props.medias.map((m) => m.photographerUserId)).size > 1,
+    [props.medias]
+  );
+
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<ExploreEvent[]>([]);
   const { showModal } = useModalUpdate();
   const eventItems = useMemo(
     () =>
-      events.map((e) =>
-        SelectItem.of({
-          id: e.event.id,
-          code: e.event.slug,
-          translatedDescription: e.event.eventNames,
-        })
-      ),
+      events
+        .toSorted((b, a) => new Date(a.event.correctDateFrom).getTime() - new Date(b.event.correctDateFrom).getTime())
+        .map((e) =>
+          SelectItem.of({
+            id: e.event.id,
+            code: e.event.slug,
+            translatedDescription: e.event.eventNames,
+          })
+        ),
     [events]
   );
-
-  const eventEditingLocked = useMemo(() => new Set(props.medias.map((m) => m.eventId)).size > 1, []);
 
   const editRequestData = (data: GalleryUpdateBody) => {
     return {
@@ -67,6 +76,7 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
         hideSave
         action={new GalleryUpdateFormApiAction()}
         editBodyData={editRequestData}
+        shouldReset={!props.open}
         onSuccess={() => {
           props.onClose();
           props.onUpdatedMedia([...props.medias.keys()]);
@@ -75,31 +85,47 @@ export default function MediaEditModal(props: Readonly<MediaEditModalProps>) {
         <div className="upload-input-data gap-4mm">
           {/* Event selector */}
           <FpSelect
-            required
+            key={"events" + String(mixedEvents)}
+            required={!mixedEvents}
+            initialValue={mixedEvents ? undefined : String(props.medias[0]?.eventId)}
             className="spacer"
-            fieldName={!eventEditingLocked ? "newEventId" : undefined}
-            disabled={eventEditingLocked}
+            fieldName="newEventId"
             items={eventItems}
             label={t("misc.gallery.upload.form.event.label")}
-            initialValue={!eventEditingLocked ? String(props.medias[0]?.eventId) : undefined}
             placeholder={t("misc.gallery.upload.form.event.placeholder")}
           />
           {/* Copyright selector */}
           <FpSelect
-            required
             fieldName="newRepostPermissions"
             itemExtractor={inputEntityCodeExtractor}
             items={copyrightValues}
             label={t("misc.gallery.upload.form.copyright.label")}
             placeholder={t("misc.gallery.upload.form.copyright.placeholder")}
           />
-          {/* Copyright selector */}
+          {/* Status selector */}
           <FpSelect
-            required
+            key={"statuses" + String(mixedStatuses)}
+            required={!mixedStatuses}
+            initialValue={mixedStatuses ? undefined : props.medias[0]?.status}
             fieldName="newStatus"
             itemExtractor={inputEntityCodeExtractor}
             items={STATUS_FILTER_ITEMS}
             label={t("misc.gallery.explore.advanced.status.label")}
+          />
+          {/* Photographer selector */}
+          <AutoInput
+            key={"photographers" + String(mixedPhotographers)}
+            required={!mixedPhotographers}
+            initialData={
+              mixedPhotographers
+                ? undefined
+                : props.medias[0]?.photographerUserId
+                  ? [props.medias[0]?.photographerUserId]
+                  : undefined
+            }
+            manager={new AutoInputUsersManager()}
+            fieldName="newPhotographerUserId"
+            label={t("misc.gallery.admin.edit.photographer.label")}
           />
           <div className="bottom-toolbar">
             <FpButton
