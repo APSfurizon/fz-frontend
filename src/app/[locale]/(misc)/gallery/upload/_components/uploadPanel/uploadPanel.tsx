@@ -90,14 +90,16 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
   const [events, setEvents] = useState<ConventionEventUploadData[]>([]);
   const eventsItems = useMemo(
     () =>
-      events?.map((data) =>
-        EventSelectItem.of({
-          id: data.event.id,
-          code: data.event.slug,
-          translatedDescription: data.event.eventNames,
-          uploadedCount: data.uploadedCount,
-        })
-      ) ?? [],
+      events
+        ?.toSorted((b, a) => new Date(a.event.correctDateFrom).getTime() - new Date(b.event.correctDateFrom).getTime())
+        .map((data) =>
+          EventSelectItem.of({
+            id: data.event.id,
+            code: data.event.slug,
+            translatedDescription: data.event.eventNames,
+            uploadedCount: data.uploadedCount,
+          })
+        ) ?? [],
     [events]
   );
 

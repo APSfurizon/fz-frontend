@@ -37,7 +37,6 @@ export function GalleryViewProvider(props: Readonly<GalleryViewProviderProps>) {
   // Only on load for shareability
   useEffect(() => {
     if (params.has(MEDIA_SEARCH_PARAM)) {
-      console.log("shit");
       const value = params.get(MEDIA_SEARCH_PARAM);
       if (!value || !isNumeric(value)) return;
       const id = parseInt(value);

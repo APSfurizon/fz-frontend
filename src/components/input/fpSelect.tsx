@@ -2,12 +2,12 @@ import { OptionRendererParams, SelectGroup, SelectItem } from "@/lib/components/
 import { inputEntityIdExtractor } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import { CSSProperties, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { useLocale } from "next-intl";
-import { useFormContext } from "./dataForm";
-import Image from "next/image";
 import "@/styles/components/fpSelect.scss";
+import { useLocale } from "next-intl";
+import Image from "next/image";
+import { CSSProperties, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Icon from "../icon";
+import { useFormContext } from "./dataForm";
 
 type FpSelectProps = {
   fieldName?: string;
@@ -53,7 +53,7 @@ export default function FpSelect({
   const { formReset = false, formDisabled = false, onFormChange, formLoading } = useFormContext();
 
   const defaultItem = useMemo(
-    () => (required && mappedItems ? mappedItems[Object.keys(mappedItems)[0]] : undefined),
+    () => (required && mappedItems ? [...mappedItems.values()][0] : undefined),
     [mappedItems]
   );
   const defaultItemValue = useMemo(() => {
@@ -63,18 +63,18 @@ export default function FpSelect({
 
   const isDisabled = formDisabled || disabled || formLoading || readOnly;
 
-  function getMappedItems(items: (SelectGroup | SelectItem)[]): Record<string, TranslatableInputEntity> {
-    let mappedItems: Record<string, TranslatableInputEntity> = {};
+  function getMappedItems(items: (SelectGroup | SelectItem)[]): Map<string, TranslatableInputEntity> {
+    let toReturn: Map<string, TranslatableInputEntity> = new Map();
     for (const item of items) {
       if (item instanceof SelectGroup) {
-        mappedItems = { ...mappedItems, ...getMappedItems(item.items) };
+        toReturn = new Map([...toReturn.entries(), ...getMappedItems(item.items).entries()]);
       } else if (item instanceof SelectItem) {
         const extractedId = itemExtractor(item);
         if (!extractedId) continue;
-        mappedItems[extractedId] = item;
+        toReturn.set(String(extractedId), item);
       }
     }
-    return mappedItems;
+    return toReturn;
   }
 
   // Re-map items when they change
@@ -100,29 +100,27 @@ export default function FpSelect({
   const onSelect = useCallback(
     (id?: string | number | null) => {
       if (!mappedItems || id === undefined) return;
-      const valueToSet = id ? mappedItems[id] : undefined;
+      const valueToSet = id ? mappedItems.get(String(id)) : undefined;
       setSelectedItem(valueToSet);
       if (onChange) onChange(valueToSet);
       if (onFormChange) onFormChange(fieldName, valueToSet ? itemExtractor(valueToSet) : null);
       popoverRef.current?.hidePopover();
     },
-    [mappedItems, items]
+    [mappedItems]
   );
 
   useEffect(() => {
     if (
       mappedItems &&
-      Object.keys(mappedItems ?? {}).length > 0 &&
+      [...mappedItems.keys()].length > 0 &&
       initialValue !== undefined &&
       (!areEquals(initialValue, lastInitialValue) || formReset)
     ) {
-      setSelectedItem(mappedItems[initialValue]);
+      setSelectedItem(mappedItems.get(initialValue));
       setLastInitialValue(initialValue);
     } else if (formReset) {
-      setSelectedItem(mappedItems && initialValue ? mappedItems[initialValue] : undefined);
+      setSelectedItem(mappedItems && initialValue ? mappedItems.get(initialValue) : undefined);
       if (onFormChange) onFormChange(fieldName);
-    } else if (!initialValue) {
-      onSelect(defaultItemValue);
     }
   }, [initialValue, mappedItems, formReset]);
 
@@ -140,66 +138,60 @@ export default function FpSelect({
     [selectedItem]
   );
 
-  const renderSelectItem = useCallback(
-    (item: SelectItem) =>
-      optionRenderer ? (
-        optionRenderer({
-          id: itemExtractor(item),
-          item,
-          selected: isSelected(item),
-          onClick: () => onSelect(itemExtractor(item)),
-        })
-      ) : (
-        <button
-          key={itemExtractor(item)}
-          type="button"
-          tabIndex={0}
-          onClick={() => onSelect(itemExtractor(item))}
-          className={[
-            "fp-select__option",
-            "rounded-s",
-            "horizontal-list",
-            "align-items-center",
-            "gap-2mm",
-            isSelected(item) ? "fp-select__option--selected" : "",
-          ].join(" ")}
-        >
-          {shouldReserveMediaSpace &&
-            (item.icon || item.imageUrl ? (
-              <>
-                {item.icon && <Icon style={item.iconCSS} icon={item.icon} />}
-                {item.imageUrl && (
-                  <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />
-                )}
-              </>
-            ) : (
-              <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
-            ))}
-          <span className="title small">{item.getDescription(locale)}</span>
-        </button>
-      ),
-    [shouldReserveMediaSpace, selectedItem, optionRenderer]
-  );
+  const renderSelectItem = (item: SelectItem) =>
+    optionRenderer ? (
+      optionRenderer({
+        id: itemExtractor(item),
+        item,
+        selected: isSelected(item),
+        onClick: () => onSelect(itemExtractor(item)),
+      })
+    ) : (
+      <button
+        key={itemExtractor(item)}
+        type="button"
+        tabIndex={0}
+        onClick={() => onSelect(itemExtractor(item))}
+        className={[
+          "fp-select__option",
+          "rounded-s",
+          "horizontal-list",
+          "align-items-center",
+          "gap-2mm",
+          isSelected(item) ? "fp-select__option--selected" : "",
+        ].join(" ")}
+      >
+        {shouldReserveMediaSpace &&
+          (item.icon || item.imageUrl ? (
+            <>
+              {item.icon && <Icon style={item.iconCSS} icon={item.icon} />}
+              {item.imageUrl && (
+                <Image alt="" className="rounded-l" unoptimized width={32} height={32} src={item.imageUrl} />
+              )}
+            </>
+          ) : (
+            <div className="fp-select__filler" style={{ width: 32, height: 32 }}></div>
+          ))}
+        <span className="title small">{item.getDescription(locale)}</span>
+      </button>
+    );
 
-  const renderSelectList = useCallback(
-    (toRender: (SelectGroup | SelectItem)[]) => {
-      return toRender.map((item, index) => {
-        if (item instanceof SelectGroup) {
-          return (
-            <div key={index} tabIndex={-1} className="fp-select__group" role="group">
-              <span className="fp-select__group__header title bold average color-subtitle reset">
-                {item.getDescription(locale)}
-              </span>
-              <div className="fp-select__group__items">{item.items.map((item) => renderSelectItem(item))}</div>
-            </div>
-          );
-        } else {
-          return renderSelectItem(item);
-        }
-      });
-    },
-    [shouldReserveMediaSpace, selectedItem, optionRenderer]
-  );
+  const renderSelectList = (toRender: (SelectGroup | SelectItem)[]) => {
+    return toRender.map((item, index) => {
+      if (item instanceof SelectGroup) {
+        return (
+          <div key={index} tabIndex={-1} className="fp-select__group" role="group">
+            <span className="fp-select__group__header title bold average color-subtitle reset">
+              {item.getDescription(locale)}
+            </span>
+            <div className="fp-select__group__items">{item.items.map((item) => renderSelectItem(item))}</div>
+          </div>
+        );
+      } else {
+        return renderSelectItem(item);
+      }
+    });
+  };
 
   const popoverRef = useRef<HTMLDivElement>(null);
   const [listOpen, setListOpen] = useState(false);

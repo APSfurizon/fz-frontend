@@ -1,9 +1,6 @@
 import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../../networking/types";
 import { GalleryUpdateBody } from "../admin/types";
-import { ApiAction } from "../../networking/types";
-import { ApiErrorResponse } from "../../networking/types";
-import { ApiResponse } from "../../networking/types";
-import { RequestType } from "../../networking/types";
 import { GalleryUploadedFullMedia } from "../types";
 
 class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
@@ -13,7 +10,7 @@ class GalleryUpdateDtoBuilder implements FormDTOBuilder<GalleryUpdateBody> {
     const newRepostPermissions = getData(data, "newRepostPermissions");
     const newStatus = getData(data, "newStatus");
     return {
-      newEventUid: Number(newEventIdStr),
+      newEventId: Number(newEventIdStr),
       newPhotographerUserId: Number(newPhotographerUserIdStr),
       newRepostPermissions,
       newStatus: newStatus,

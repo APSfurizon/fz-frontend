@@ -1437,7 +1437,12 @@
         }
       },
       "admin": {
-        "title": "Administration"
+        "title": "Administration",
+        "edit": {
+          "photographer": {
+            "label": "Photographer"
+          }
+        }
       },
       "media": {
         "status": {}
