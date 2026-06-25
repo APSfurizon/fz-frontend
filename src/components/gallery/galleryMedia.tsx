@@ -6,7 +6,7 @@ import { CSSProperties, MouseEvent } from "react";
 type GalleryMediaProps = {
   source: GalleryUploadedMedia;
   selected: boolean;
-  onSelect: (id: number, selected: boolean) => void;
+  onSelect: (id: number, selected: boolean, shift: boolean) => void;
   checkbox?: boolean;
   onClick(image: GalleryUploadedMedia): void;
   width: number;
@@ -16,12 +16,13 @@ type GalleryMediaProps = {
 
 export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
   const imageSource = props.source.thumbnailMedia?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC;
+  const onSelectClick = (e?: MouseEvent<HTMLElement>) => {
+    e?.stopPropagation();
+    props.onSelect(props.source.id, !props.selected, e?.shiftKey ?? false);
+  };
   const checkEvent = () => {
     if (!props.checkbox) return;
-    props.onSelect(props.source.id, !props.selected);
-  };
-  const onSelectClick = (e: MouseEvent<HTMLInputElement>) => {
-    e.stopPropagation();
+    onSelectClick(undefined);
   };
 
   return (
@@ -30,7 +31,7 @@ export default function GalleryMedia(props: Readonly<GalleryMediaProps>) {
       style={props.style}
       aria-roledescription="image"
       tabIndex={0}
-      onClick={() => (props.checkbox ? checkEvent() : props.onClick(props.source))}
+      onClick={(e) => (props.checkbox ? onSelectClick(e) : props.onClick(props.source))}
       onContextMenu={() => props.onClick(props.source)}
     >
       {props.checkbox && (
