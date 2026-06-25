@@ -1,14 +1,15 @@
+import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
+import { lastItem } from "@/lib/utils/collections";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { throttle } from "lodash";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import useResizeObserver from "../hooks/useResizeObserver";
 import { useGallery } from "./context/galleryProvider";
 import { useGallerySelection } from "./context/gallerySelectionProvider";
 import { useGalleryView } from "./context/galleryViewProvider";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { GalleryUploadedMedia } from "@/lib/api/gallery/types";
-import useResizeObserver from "../hooks/useResizeObserver";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import GalleryMedia from "./galleryMedia";
-import Image from "next/image";
-import { useTranslations } from "next-intl";
 
 const BREAKPOINT = {
   xs: 400,
@@ -140,6 +141,51 @@ export default function GalleryVirtualizedGrid() {
     handleResize();
   }, [containerWidth]);
 
+  const handleSelect = (id: number, selected: boolean, shift: boolean) => {
+    const mediaIdsToSelect: number[] = [];
+    const startId = lastItem(selectedIds.keys());
+    if (shift && startId) {
+      const startIndex = sortedMedias.findIndex((tuple) => tuple[0] === startId);
+      const endIndex = sortedMedias.findIndex((tuple) => tuple[0] === id);
+      if (startIndex >= 0 && endIndex >= 0) {
+        const minIndex = Math.min(startIndex, endIndex);
+        const maxIndex = Math.max(startIndex, endIndex) + 1;
+        const toSelect = sortedMedias.slice(minIndex, maxIndex).map((tuple) => tuple[0]);
+        if (startIndex > endIndex) {
+          toSelect.reverse();
+        }
+        mediaIdsToSelect.push(...toSelect);
+      }
+    } else {
+      mediaIdsToSelect.push(id);
+    }
+    //const allMediasSelected
+    select(mediaIdsToSelect, selected);
+  };
+
+  const keyEffect = (e: KeyboardEvent) => {
+    if (selectionEnabled && e.ctrlKey) {
+      if (e.key === "a") {
+        select(
+          sortedMedias.slice(0, sortedMedias.length).map((tuple) => tuple[0]),
+          true
+        );
+        e.preventDefault();
+      } else if (e.key === "d") {
+        select(
+          sortedMedias.slice(0, sortedMedias.length).map((tuple) => tuple[0]),
+          false
+        );
+        e.preventDefault();
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", keyEffect);
+    return () => window.removeEventListener("keydown", keyEffect);
+  }, [sortedMedias]);
+
   return (
     <div className="gallery__grid__container" ref={gridContainerRef}>
       <div
@@ -171,7 +217,7 @@ export default function GalleryVirtualizedGrid() {
                   key={id}
                   source={media}
                   checkbox={selectionEnabled}
-                  onSelect={select}
+                  onSelect={handleSelect}
                   onClick={(m) => openMedia(m.id)}
                   selected={selectedIds.has(id)}
                   width={itemSize.width}
@@ -180,6 +226,7 @@ export default function GalleryVirtualizedGrid() {
                     width: itemSize.width,
                     height: itemSize.height,
                     left: index * (itemSize.width + gap.x),
+                    outline: lastItem(selectedIds.keys()) == id ? "5px solid rebeccapurple" : "none",
                   }}
                 />
               ))}

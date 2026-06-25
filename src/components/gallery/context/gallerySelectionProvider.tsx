@@ -5,7 +5,7 @@ type GallerySelectionProviderType = {
   setSelectedIds: Dispatch<SetStateAction<Set<number>>>;
   selectionEnabled: boolean;
   setSelectionEnabled: Dispatch<SetStateAction<boolean>>;
-  select(id: number, selected: boolean): void;
+  select(toAdd: number[], selected: boolean): void;
   clearSelection(): void;
 };
 
@@ -19,13 +19,17 @@ export function GallerySelectionProvider(props: Readonly<GallerySelectionProvide
   const [selectionEnabled, setSelectionEnabled] = useState(false);
   const [selection, setSelection] = useState<Set<number>>(new Set());
 
-  const select = useCallback((id: number, selected: boolean = true) => {
+  const select = useCallback((toAdd: number[], selected: boolean = true) => {
     setSelection((prev) => {
       const next = new Set(prev);
       if (selected) {
-        next.add(id);
+        for (const id of toAdd) {
+          next.add(id);
+        }
       } else {
-        next.delete(id);
+        for (const id of toAdd) {
+          next.delete(id);
+        }
       }
       return next;
     });
