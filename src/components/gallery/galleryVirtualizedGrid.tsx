@@ -226,7 +226,7 @@ export default function GalleryVirtualizedGrid() {
                     width: itemSize.width,
                     height: itemSize.height,
                     left: index * (itemSize.width + gap.x),
-                    outline: lastItem(selectedIds.keys()) == id ? "5px solid rebeccapurple" : "none",
+                    outline: lastItem(selectedIds.keys()) == id ? "3px dashed var(--highlight)" : "none",
                   }}
                 />
               ))}

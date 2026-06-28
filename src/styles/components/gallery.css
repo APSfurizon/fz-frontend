@@ -18,6 +18,12 @@
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --icon-shadow: black;
+  }
+}
+
 .gallery__grid__toolbar {
   margin-bottom: 2mm;
 }

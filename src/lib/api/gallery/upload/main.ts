@@ -1,13 +1,16 @@
+import { SelectItem } from "@/lib/components/fpSelect";
+import { toError } from "@/lib/utils";
+import * as mediaUtil from "@/lib/utils/media";
+import CryptoJS from "crypto-js";
 import { runRequest } from "../../networking/main";
 import { ApiResponse } from "../../networking/types";
-import CryptoJS from "crypto-js";
+import { UploadRepostPermissions } from "../types";
 import {
   GalleryUploadAbortApiAction,
   GalleryUploadApiAction,
   GalleryUploadCompleteApiAction,
   GalleryUploadCompleteApiBody,
 } from "./api";
-import { UploadRepostPermissions } from "../types";
 import {
   ChunkUpload,
   ChunkUploadFailTypes,
@@ -19,9 +22,6 @@ import {
   UploadProgress,
   UploadProgressStatus,
 } from "./types";
-import { SelectItem } from "@/lib/components/fpSelect";
-import * as mediaUtil from "@/lib/utils/media";
-import { toError } from "@/lib/utils";
 
 const ProgressStatusHierarchy: Record<UploadProgressStatus, number | undefined> = {
   INITIALIZING: 1,
@@ -366,7 +366,7 @@ export class GalleryUpload {
     this.abortController.signal.throwIfAborted();
     this.abortController.abort("Aborted by user");
     this.updateProgress({ status: "ABORTED" });
-    this.dispatchEvent("ABORTED", { error: "Aborted", upload: this.uploadedMedia });
+    this.dispatchEvent("ABORTED", { error: toError("Aborted"), upload: this.uploadedMedia });
   }
 
   public dispose() {

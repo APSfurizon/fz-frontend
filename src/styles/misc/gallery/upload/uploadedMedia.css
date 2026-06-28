@@ -14,7 +14,7 @@
   gap: 4mm;
 
   &.ended {
-    animation: ended 250ms ease-in 2750ms forwards;
+    animation: ended 250ms ease-in 4500ms forwards;
   }
 
   .picture-container {
