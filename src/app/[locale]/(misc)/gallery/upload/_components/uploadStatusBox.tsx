@@ -49,7 +49,15 @@ export default function UploadStatusBox(props: Readonly<UploadStatusBoxProps>) {
           />
         )}
       </div>
-      <p className="title small file-name spacer">{props.state.upload.getFileName()}</p>
+      <p className="title small file-name spacer">
+        {props.state.upload.getFileName()}
+        {isError && (
+          <>
+            <br />
+            <span className="descriptive tiny">&nbsp;{props.state.error?.message}</span>
+          </>
+        )}
+      </p>
       {!isAborted && (
         <a role="button" className="stop-button rounded-m" onClick={() => props.state.upload.abort()}>
           <Icon className="abort-icon x-large" icon="STOP" title={t("common.cancel")} />

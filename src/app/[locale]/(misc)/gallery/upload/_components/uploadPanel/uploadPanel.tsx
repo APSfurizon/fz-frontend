@@ -36,6 +36,7 @@ export type UploadState = {
   started: boolean;
   _launched: boolean;
   ended: boolean;
+  error?: Error;
 };
 
 const CLEARING_STATUSES: UploadProgressStatus[] = ["ABORTED", "ERROR", "DONE"];
@@ -201,6 +202,7 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
           ...entry,
           progress: e.data.getProgress(),
           ended: CLEARING_STATUSES.includes(e.data.getProgress().status),
+          error: e.error,
         };
 
         next.set(id, patched);
@@ -263,7 +265,7 @@ export default function UploadPanel(props: Readonly<UploadPanelProps>) {
         refreshEvents();
         entry.upload.dispose();
         timers.current.delete(id);
-      }, 3100);
+      }, 5000);
 
       timers.current.set(id, t);
     }

@@ -58,7 +58,7 @@ export type GalleryUploadThumbnail = {
 };
 
 export type GalleryUploadEvent = "PROGRESS" | "ERROR" | "DONE" | "ABORTED";
-export type GalleryUploadEventParams = { data: GalleryUpload; error?: any; upload?: ApiResponse };
+export type GalleryUploadEventParams = { data: GalleryUpload; error?: Error; upload?: ApiResponse };
 export type GalleryUploadEventCallback = (e: GalleryUploadEventParams) => any;
 
 export type ConventionEventUploadData = {
