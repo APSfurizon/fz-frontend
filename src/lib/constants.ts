@@ -51,6 +51,7 @@ export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
 export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? ""
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO;
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
+export const EVENT_MAIN_LOCATION_NAME = process.env.NEXT_PUBLIC_EVENT_MAIN_LOCATION_NAME ?? "Main hotel";
 export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
 export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");
 
