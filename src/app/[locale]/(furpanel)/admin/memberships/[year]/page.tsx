@@ -138,7 +138,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             id: 'orderCode',
             header: t("furpanel.admin.membership_manager.columns.order_code"),
         }),
-        columnHelper.accessor(data => `${(data.membershipCard?.cardNo ?? '').padStart(7, '0')}`, {
+        columnHelper.accessor(data => `${(data.membershipCard?.cardNo ? (data.membershipCard?.cardNo).padStart(7, '0') : '')}`, {
             id: 'cardNumber',
             header: t("furpanel.admin.membership_manager.columns.card_number"),
         }),
@@ -166,6 +166,7 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             cell: props => <>
                 {props.row.original.membershipCard
                     ? <Checkbox initialValue={props.row.original.membershipCard.registered}
+                        disabled={!props.row.original.membershipCard?.cardNo}
                         onClick={(event, checked, setChecked, setBusy) =>
                             markAsRegistered(event, checked, setChecked, setBusy, props.row.original.membershipCard!.cardId)}>
                         {t("furpanel.admin.membership_manager.table.headers.registered")}
