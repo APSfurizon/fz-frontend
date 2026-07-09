@@ -4,7 +4,7 @@ import FpButton from "@/components/input/fpButton";
 import { useEffect, useState } from "react";
 import useTitle from "@/components/hooks/useTitle";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
-import { GROUP_CHAT_URL } from "@/lib/constants";
+import { GROUP_CHAT_URL, EVENT_MAIN_LOCATION_NAME } from "@/lib/constants";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
 import { isMobile } from '@/lib/userAgent';
@@ -143,7 +143,7 @@ export default function BookingPage() {
         : undefined;
 
     const desktopGeoLink = `https://www.google.com/maps/search/?api=1&query=${bookingData?.geoLatitude},${bookingData?.geoLongitude}`;
-    const mobileGeoLink = `geo:${bookingData?.geoLatitude},${bookingData?.geoLongitude}?q=Devero%20Hotel`;
+    const mobileGeoLink = `geo:${bookingData?.geoLatitude},${bookingData?.geoLongitude}?q=${encodeURI(EVENT_MAIN_LOCATION_NAME)}`;
     const geoLink = bookingData ? (isMobile() ? mobileGeoLink : desktopGeoLink) : "";
     const showGeoData = bookingData?.geoLatitude && bookingData?.geoLongitude;
 
@@ -215,7 +215,7 @@ export default function BookingPage() {
                                     a: (chunks) => <Link className="highlight hoverable" target={isMobile() ? "_self" : "_blank"} href={geoLink}>
                                         {chunks}<Icon className="medium" icon="OPEN_IN_NEW" />
                                     </Link>,
-                                    link: "Devero hotel"
+                                    link: EVENT_MAIN_LOCATION_NAME
                                 })}
                             </span>
                         </p>}
