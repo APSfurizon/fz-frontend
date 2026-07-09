@@ -41,7 +41,7 @@ export default function UserViewCardsTable({
 
     const cardColHelper = createColumnHelper<MembershipCard>();
     const [cardColumns] = useState<ColumnDef<MembershipCard, any>[]>([
-        cardColHelper.accessor(itm => `${(itm.cardNo ?? '').padStart(7, '0')}`, {
+        cardColHelper.accessor(itm => `${(itm.cardNo ? (itm.cardNo).padStart(7, '0') : '')}`, {
             id: 'cardNumber',
             header: t("furpanel.admin.membership_manager.columns.card_number")
         }),
@@ -57,6 +57,7 @@ export default function UserViewCardsTable({
             id: 'registered',
             header: t("furpanel.admin.membership_manager.columns.registered"),
             cell: props => <Checkbox initialValue={props.getValue()}
+                disabled={!props.row.original.cardNo}
                 onClick={(event, checked, setChecked, setBusy) =>
                     markAsRegistered(event, checked, setChecked, setBusy, props.row.original.cardId)} />
         }),
