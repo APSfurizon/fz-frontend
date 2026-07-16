@@ -1,13 +1,13 @@
 "use client";
 
-import { Calendar, dateFnsLocalizer, Formats, Messages, ToolbarProps } from "react-big-calendar";
-import { addHours, format, parse, startOfWeek, getDay, isSameDay, type Locale } from "date-fns";
+import type { ScheduleEvent, ScheduleRoom } from "@/lib/schedule";
+import "@/styles/misc/schedule/schedule.css";
+import { addHours, format, getDay, isSameDay, parse, startOfWeek, type Locale } from "date-fns";
 import { enGB, it } from "date-fns/locale";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { ScheduleEvent, ScheduleRoom } from "@/lib/schedule";
+import { Calendar, dateFnsLocalizer, Formats, Messages, ToolbarProps } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "@/styles/misc/schedule.css";
 import Icon from "../icon";
 
 interface ScheduleCalendarProps {

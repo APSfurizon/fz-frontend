@@ -188,7 +188,7 @@
 .rbc-time-view-resources .rbc-time-gutter,
 .rbc-time-view-resources .rbc-time-header-gutter,
 .rbc-time-content > .rbc-time-gutter {
-  background-color: var(--background);
+  background-color: var(--background) !important;
 }
 
 .rbc-time-content {
@@ -197,7 +197,7 @@
 }
 
 .rbc-day-slot .rbc-events-container {
-  margin-right: 0;
+  margin-right: 0 !important;
 }
 
 .rbc-time-slot {

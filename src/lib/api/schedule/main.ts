@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // TODO: fix
 import { ScheduleActivityApiItem } from "@/lib/schedule";
-import { ApiErrorResponse } from "./networking/types";
+import { ApiErrorResponse } from "../networking/types";
 
 const SCHEDULE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 let cachedScheduleActivities: ScheduleActivityApiItem[] | null = null;

@@ -6,8 +6,9 @@ import LoadingPanel from "@/components/loadingPanel";
 import ScheduleCalendar from "@/components/schedule/scheduleCalendar";
 import ScheduleLegend from "@/components/schedule/scheduleLegenda";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { loadScheduleActivities } from "@/lib/api/schedule_detail";
+import { loadScheduleActivities } from "@/lib/api/schedule/main";
 import { mapScheduleActivitiesToEvents, SCHEDULE_ROOMS, ScheduleActivityApiItem, ScheduleEvent } from "@/lib/schedule";
+import "@/styles/misc/schedule/schedule.css";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -92,7 +93,7 @@ export default function SchedulePage() {
       params.set("day", dayKey);
     }
 
-    router.push(`/schedule/schedule_detail?${params.toString()}`);
+    router.push(`/schedule/detail?${params.toString()}`);
   };
 
   const handleDateChange = (date: Date) => {
