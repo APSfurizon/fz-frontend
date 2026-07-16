@@ -55,7 +55,7 @@ export function HeaderProvider({ children }: Readonly<{ children: React.ReactNod
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useHeaderUpdate must be used within a HeaderProvider");
+    throw new Error("useUser must be used within a HeaderProvider");
   }
   return context;
 };
