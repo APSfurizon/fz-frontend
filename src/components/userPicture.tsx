@@ -1,13 +1,13 @@
 "use client";
-import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
-import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
-import { getFlagEmoji } from "@/lib/components/userPicture";
-import Image from "next/image";
-import "@/styles/components/userPicture.css";
+import { FursuitDetails } from "@/lib/api/badge/types";
 import { ExtraDays, UserData } from "@/lib/api/user";
+import { getFlagEmoji } from "@/lib/components/userPicture";
+import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { getImageUrl } from "@/lib/utils";
-import { FursuitDetails } from "@/lib/api/badge/fursuits";
+import "@/styles/components/userPicture.css";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import LoadingPanel from "./loadingPanel";
 import StatusBox from "./statusBox";
 

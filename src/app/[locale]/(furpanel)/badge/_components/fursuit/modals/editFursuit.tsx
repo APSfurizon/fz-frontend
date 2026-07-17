@@ -3,32 +3,56 @@ import DataForm from "@/components/input/dataForm";
 import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
-import { AddFursuitFormAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
+import { AddFursuitFormAction, EditFursuitFormAction } from "@/lib/api/badge/fursuits";
+import { FursuitEventData } from "@/lib/api/badge/types";
+import { ApiErrorResponse } from "@/lib/api/networking";
 import { EVENT_NAME } from "@/lib/constants";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { useBadge } from "../../badgeProvider";
 
 type EditFursuitProps = {
   editMode: boolean;
-  currentFursuit?: Fursuit;
+  currentFursuit?: FursuitEventData;
+  onError(e: ApiErrorResponse): void;
+  onSuccess(): void;
+  onAbort(): void;
 };
 
 export default function EditFursuit(props: Readonly<EditFursuitProps>) {
   const t = useTranslations();
   const { badgeData } = useBadge();
+
+  const [loading, setLoading] = useState(false);
+
+  const [fursuitBlob, setFursuitBlob] = useState<Blob>();
+  const [deleteFursuitImage, setDeleteFursuitImage] = useState(false);
+
+  const removeCurrentImage = () => {
+    setDeleteFursuitImage(props.editMode);
+    setFursuitBlob(undefined);
+  };
+
+  const editFursuitFormData = (e: FormData): FormData => {
+    e.append("image", fursuitBlob ?? "");
+    if (props.editMode) {
+      e.append("delete-image", "" + (deleteFursuitImage && !fursuitBlob));
+    }
+    return e;
+  };
+
   return (
     <DataForm
       action={props.editMode ? new EditFursuitFormAction() : new AddFursuitFormAction()}
       pathParams={props.editMode ? { id: props.currentFursuit?.fursuit.id } : undefined}
-      busy={loading}
-      setBusy={setLoading}
       editFormData={editFursuitFormData}
       hideSave
       className="gap-2mm"
-      onFail={onFursuitAddEditFail}
-      onSuccess={onFursuitAddEditSuccess}
-      shouldReset={!addFursuitModalOpen}
+      onFail={props.onError}
+      onSuccess={props.onSuccess}
       resetOnSuccess
+      setBusy={setLoading}
+      busy={loading}
     >
       <Upload
         initialMedia={
@@ -75,7 +99,7 @@ export default function EditFursuit(props: Readonly<EditFursuitProps>) {
         {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
       </Checkbox>
       <div className="horizontal-list gap-4mm margin-top-2mm">
-        <FpButton type="button" className="danger" icon="CANCEL" busy={loading} onClick={closeAddFursuitModal}>
+        <FpButton type="button" className="danger" icon="CANCEL" busy={loading} onClick={props.onAbort}>
           {t("common.cancel")}
         </FpButton>
         <div className="spacer"></div>

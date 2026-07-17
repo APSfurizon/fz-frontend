@@ -1,5 +1,5 @@
-import { CSSProperties } from "react";
 import "@/styles/components/icon.css";
+import { CSSProperties } from "react";
 
 export const ICONS = {
   "24FPS_SELECT": "24fps_select",
@@ -9,6 +9,7 @@ export const ICONS = {
   ADD_CIRCLE: "add_circle",
   ALIGN_HORIZONTAL_LEFT: "align_horizontal_left",
   ALIGN_HORIZONTAL_RIGHT: "align_horizontal_right",
+  APPS: "apps",
   ARROW_DROP_DOWN: "arrow_drop_down",
   ARROW_DROP_UP: "arrow_drop_up",
   ARROW_BACK: "arrow_back",
@@ -123,6 +124,7 @@ export const ICONS = {
   SAVE: "save",
   SEARCH: "search",
   SECURITY: "security",
+  SELECT_CHECK_BOX: "select_check_box",
   SEND: "send",
   SETTINGS: "settings",
   SHARE: "share",

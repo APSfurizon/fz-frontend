@@ -1,25 +1,5 @@
 import { FormApiAction, FormDTOBuilder } from "../../components/dataForm";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
-import { MediaData } from "../media";
-import { SponsorType } from "../user";
-
-export interface FursuitDetails {
-  id: number;
-  name: string;
-  species: string;
-  propic?: MediaData;
-  sponsorship: SponsorType;
-}
-
-export interface Fursuit {
-  bringingToEvent: boolean;
-  ownerId: number;
-  showInFursuitCount: boolean;
-  showOwner: boolean;
-  fursuit: FursuitDetails;
-}
+import { ApiAction, ApiErrorResponse, RequestType } from "../networking/types";
 
 export class AddFursuitDTOBuilder implements FormDTOBuilder<FormData> {
   mapToDTO = (data: FormData) => data;
@@ -45,4 +25,11 @@ export class DeleteFursuitApiAction extends ApiAction<boolean, ApiErrorResponse>
   authenticated = true;
   hasPathParams = true;
   urlAction = "fursuits/{id}";
+}
+
+export class BringFursuitToEventApiAction extends ApiAction<boolean, ApiErrorResponse> {
+  method = RequestType.POST;
+  authenticated = true;
+  hasPathParams = true;
+  urlAction = "fursuits/{id}/bringToEvent";
 }

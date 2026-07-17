@@ -1,4 +1,4 @@
-import { FursuitDetails } from "@/lib/api/badge/fursuits";
+import { FursuitDetails } from "@/lib/api/badge/types";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { getImageUrl } from "@/lib/utils";
 import { useTranslations } from "next-intl";

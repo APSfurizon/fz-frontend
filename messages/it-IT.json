@@ -61,7 +61,8 @@
       "discard_changes": {
         "description": "Le modifiche verranno scartate"
       },
-      "reset": "Ripristina"
+      "reset": "Ripristina",
+      "select": "Seleziona"
     },
     "sponsorships": {
       "sponsor": "Sponsor",
@@ -361,7 +362,9 @@
           "description": "In modo che Furizon possa organizzare la fursuit lounge, ricordati di spuntare <b>Porta a {eventName}</b> nella schermata di modifica della fursuit."
         }
       },
-      "errors": {}
+      "errors": {},
+      "your_fursuits_for_event": "{amount, plural, =1 {La tua} other {Le tue}} fursuit per {eventName}",
+      "all_your_fursuits": "Tutte le tue fursuit"
     },
     "debug": {
       "title": "Debug"
@@ -504,7 +507,8 @@
         "user_info": "Informazioni personali",
         "security": "Sicurezza",
         "security_password": "Password",
-        "sessions": "Sessioni attive"
+        "sessions": "Sessioni attive",
+        "user_fursuits": "Fursuit"
       },
       "linking": {
         "title": "Recupero ordine",

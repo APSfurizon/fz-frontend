@@ -1,17 +1,18 @@
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import FpButton from "@/components/input/fpButton";
+import Modal from "@/components/modal";
 import FpTable from "@/components/table/fpTable";
 import UserPicture from "@/components/userPicture";
 import { GetUserAdminViewResponse } from "@/lib/api/admin/userView";
-import { DeleteFursuitApiAction, Fursuit } from "@/lib/api/badge/fursuits";
+import { DeleteFursuitApiAction } from "@/lib/api/badge/fursuits";
+import { FursuitEventData } from "@/lib/api/badge/types";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import AddFursuitModal from "./addFursuitModal";
-import { runRequest } from "@/lib/api/networking/main";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import ErrorMessage from "@/components/errorMessage";
-import Modal from "@/components/modal";
-import { ApiErrorResponse } from "@/lib/api/networking";
 
 export default function UserViewFursuitsTable({
   userData,
@@ -25,9 +26,9 @@ export default function UserViewFursuitsTable({
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [delModalOpen, setDelModalOpen] = useState(false);
-  const [fursuit, setFursuit] = useState<Fursuit>();
+  const [fursuit, setFursuit] = useState<FursuitEventData>();
 
-  const promptEditFursuit = (f: Fursuit) => {
+  const promptEditFursuit = (f: FursuitEventData) => {
     setDelModalOpen(false);
     setFursuit(f);
     setAddModalOpen(true);
@@ -44,7 +45,7 @@ export default function UserViewFursuitsTable({
     setAddModalOpen(true);
   };
 
-  const promptDeleteFursuit = (f: Fursuit) => {
+  const promptDeleteFursuit = (f: FursuitEventData) => {
     setAddModalOpen(false);
     setFursuit(f);
     setDelModalOpen(true);
@@ -69,8 +70,8 @@ export default function UserViewFursuitsTable({
       });
   };
 
-  const fursuitColHelper = createColumnHelper<Fursuit>();
-  const fursuitColumns: ColumnDef<Fursuit, any>[] = useMemo(
+  const fursuitColHelper = createColumnHelper<FursuitEventData>();
+  const fursuitColumns: ColumnDef<FursuitEventData, any>[] = useMemo(
     () => [
       fursuitColHelper.display({
         id: "propic",
@@ -109,7 +110,7 @@ export default function UserViewFursuitsTable({
 
   return (
     <>
-      <FpTable<Fursuit>
+      <FpTable<FursuitEventData>
         rows={userData?.badgeData.fursuits}
         columns={fursuitColumns}
         enableSearch

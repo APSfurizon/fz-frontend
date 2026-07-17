@@ -2,6 +2,24 @@ div.fursuit-header,
 div.fursona-change,
 div.fursuit {
   background-color: var(--room-invite-bg);
+  &--selected {
+    outline: 3px dashed var(--highlight);
+  }
+  &--selectable {
+    transition:
+      outline 200ms,
+      transform 60ms;
+    cursor: pointer;
+  }
+  &--selectable:hover {
+    transform: scale(1.02);
+  }
+  &--selectable:active {
+    transform: scale(1);
+  }
+  &--selectable > * {
+    user-select: none;
+  }
 }
 
 div.fursuit-section {

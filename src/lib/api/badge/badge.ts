@@ -1,17 +1,14 @@
 import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
 import { MediaData } from "../media";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
 import { UserData } from "../user";
-import { Fursuit } from "./fursuits";
+import { FursuitEventData } from "./types";
 
 export interface BadgeStatusApiResponse extends ApiResponse {
   badgeEditingDeadline: string;
   fursonaName: string;
   mainBadge?: UserData;
-  fursuits: Fursuit[];
+  fursuits: FursuitEventData[];
   maxFursuits: number;
   canBringFursuitsToEvent: boolean;
   allowedModifications: boolean;

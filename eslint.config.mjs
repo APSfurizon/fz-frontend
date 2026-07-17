@@ -1,9 +1,9 @@
-import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
-import spellcheck from "eslint-plugin-spellcheck";
-import tseslint from "typescript-eslint";
 import prettier from "eslint-plugin-prettier/recommended";
+import spellcheck from "eslint-plugin-spellcheck";
+import { defineConfig, globalIgnores } from "eslint/config";
+import tseslint from "typescript-eslint";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -25,6 +25,7 @@ const eslintConfig = defineConfig([
     },
     ignores: ["eslint.config.mjs"],
     rules: {
+      "@typescript-eslint/unbound-method": "off",
       "@typescript-eslint/no-deprecated": "error",
       "@typescript-eslint/no-misused-promises": [
         "error",

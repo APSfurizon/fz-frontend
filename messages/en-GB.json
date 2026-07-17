@@ -61,7 +61,8 @@
       "discard_changes": {
         "description": "Any unsaved change will be discarded"
       },
-      "reset": "Reset"
+      "reset": "Reset",
+      "select": "Select"
     },
     "sponsorships": {
       "sponsor": "Sponsor",
@@ -361,7 +362,9 @@
           "description": "In order for Furizon to organize the fursuit lounge, be sure to edit your fursuit and check <b>Bring to {eventName}</b>."
         }
       },
-      "errors": {}
+      "errors": {},
+      "your_fursuits_for_event": "Your {amount, plural, =1 {fursuit} other {fursuits}} for {eventName}",
+      "all_your_fursuits": "All your fursuits"
     },
     "debug": {
       "title": "Debug"
@@ -504,7 +507,8 @@
         "user_info": "Personal information",
         "security": "Security",
         "security_password": "Password",
-        "sessions": "Active sessions"
+        "sessions": "Active sessions",
+        "user_fursuits": "Fursuits"
       },
       "linking": {
         "title": "Order linking",

@@ -9,5 +9,6 @@
     "source.organizeImports": "always"
   },
   "editor.formatOnSave": true,
-  "i18n-ally.sourceLanguage": "en-GB"
+  "i18n-ally.sourceLanguage": "en-GB",
+  "editor.tabSize": 2
 }

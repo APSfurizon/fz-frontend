@@ -1,9 +1,6 @@
-import { FursuitDetails } from "../badge/fursuits";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
+import { FursuitDetails } from "../badge/types";
 import { MediaData } from "../media";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
 import { SponsorType, UserData } from "../user";
 
 export type BadgeSearchData = {

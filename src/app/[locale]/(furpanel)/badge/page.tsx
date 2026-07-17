@@ -18,17 +18,15 @@ import {
   GetBadgeStatusAction,
   UploadBadgeAction,
 } from "@/lib/api/badge/badge";
-import { DeleteFursuitApiAction, Fursuit } from "@/lib/api/badge/fursuits";
 import { AutoInputCountriesManager } from "@/lib/api/geo";
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { getFlagEmoji } from "@/lib/components/userPicture";
-import "@/styles/furpanel/badge.css";
+import "@/styles/furpanel/badge.scss";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { BadgeProvider } from "./_components/badgeProvider";
 import FursuitBringList from "./_components/fursuit/fursuitBringList";
-import EditFursuit from "./_components/fursuit/modals/editFursuit";
 
 export default function BadgePage() {
   const t = useTranslations();
@@ -44,6 +42,10 @@ export default function BadgePage() {
   );
 
   // Main logic
+
+  const refresh = () => {
+    setBadgeStatus(undefined);
+  };
 
   // Badge upload
   const uploadBadge = (blob?: Blob) => {
@@ -107,94 +109,10 @@ export default function BadgePage() {
 
   const onChangeFail = (err: ApiErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
-  // Fursuits
-  // Add fursuit
-  const [addFursuitModalOpen, setAddFursuitModalOpen] = useState(false);
-  const [fursuitBlob, setFursuitBlob] = useState<Blob>();
-  const promptAddFursuit = () => {
-    setAddFursuitModalOpen(true);
-  };
-
-  // Edit fursuit
-  const [editMode, setEditMode] = useState(false);
-  const [currentFursuit, setCurrentFursuit] = useState<Fursuit>();
-  const [deleteFursuitImage, setDeleteFursuitImage] = useState(false);
-  const promptEditFursuit = (f: Fursuit) => {
-    setEditMode(true);
-    setCurrentFursuit(f);
-    setAddFursuitModalOpen(true);
-  };
-
-  const editFursuitFormData = (e: FormData): FormData => {
-    e.append("image", fursuitBlob ?? "");
-    if (editMode) {
-      e.append("delete-image", "" + (deleteFursuitImage && !fursuitBlob));
-    }
-    return e;
-  };
-
-  const removeCurrentImage = () => {
-    setDeleteFursuitImage(editMode);
-    setFursuitBlob(undefined);
-  };
-
-  const closeAddFursuitModal = () => {
-    setFursuitBlob(undefined);
-    setAddFursuitModalOpen(false);
-    setEditMode(false);
-    setDeleteFursuitImage(false);
-    setCurrentFursuit(undefined);
-  };
-
-  const onFursuitAddEditSuccess = () => {
-    closeAddFursuitModal();
-    setBadgeStatus(undefined);
-  };
-
-  const onFursuitAddEditFail = (err: ApiErrorResponse) => {
-    closeAddFursuitModal();
-    onChangeFail(err);
-  };
-
-  // Delete fursuit
-  const [deleteFursuitModalOpen, setDeleteFursuitModalOpen] = useState(false);
-
-  const promptDeleteFursuit = (f: Fursuit) => {
-    setCurrentFursuit(f);
-    setDeleteFursuitModalOpen(true);
-  };
-
-  const deleteFursuit = () => {
-    if (!currentFursuit) {
-      closeDeleteFursuit();
-      return;
-    }
-    setLoading(true);
-    runRequest({
-      action: new DeleteFursuitApiAction(),
-      pathParams: { id: currentFursuit.fursuit.id },
-    })
-      .then(() => {
-        setBadgeStatus(undefined);
-      })
-      .catch((err) => showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />))
-      .finally(() => {
-        closeDeleteFursuit();
-        setLoading(false);
-      });
-  };
-
-  const closeDeleteFursuit = () => {
-    setCurrentFursuit(undefined);
-    setDeleteFursuitModalOpen(false);
-  };
-
   // First load
   useEffect(() => {
     if (badgeStatus) return;
     setLoading(true);
-    closeAddFursuitModal();
-    closeDeleteFursuit();
     runRequest({ action: new GetBadgeStatusAction() })
       .then((data) => setBadgeStatus(data))
       .catch((err) => {
@@ -277,7 +195,7 @@ export default function BadgePage() {
           </div>
         </div>
         {/* Fursuits */}
-        <BadgeProvider badgeData={badgeStatus} isEditExpired={isEditExpired}>
+        <BadgeProvider badgeData={badgeStatus} isEditExpired={isEditExpired} refresh={refresh}>
           <FursuitBringList />
         </BadgeProvider>
       </div>
@@ -331,43 +249,6 @@ export default function BadgePage() {
             </FpButton>
           </div>
         </DataForm>
-      </Modal>
-
-      {/* Add / Edit fursuit modal */}
-      <Modal
-        title={
-          editMode
-            ? t("furpanel.badge.actions.edit_fursuit", { name: currentFursuit?.fursuit.name ?? "" })
-            : t("furpanel.badge.actions.add_fursuit")
-        }
-        open={addFursuitModalOpen}
-        onClose={closeAddFursuitModal}
-        busy={loading}
-      >
-        <EditFursuit editMode={editMode} currentFursuit={currentFursuit} />
-      </Modal>
-      <Modal
-        open={deleteFursuitModalOpen}
-        onClose={closeDeleteFursuit}
-        title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", {
-          name: currentFursuit?.fursuit.name ?? "",
-        })}
-        busy={loading}
-      >
-        <span>
-          {t("furpanel.badge.messages.confirm_fursuit_deletion.description", {
-            name: currentFursuit?.fursuit.name ?? "",
-          })}
-        </span>
-        <div className="horizontal-list gap-4mm">
-          <FpButton className="danger" icon="CANCEL" busy={loading} onClick={closeDeleteFursuit}>
-            {t("common.cancel")}
-          </FpButton>
-          <div className="spacer"></div>
-          <FpButton className="success" icon="CHECK" busy={loading} onClick={deleteFursuit}>
-            {t("common.confirm")}
-          </FpButton>
-        </div>
       </Modal>
     </>
   );

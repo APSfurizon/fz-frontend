@@ -7,13 +7,16 @@ import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
 import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
+import { BadgeStatusApiResponse, GetBadgeStatusAction } from "@/lib/api/badge/badge";
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
 import "@/styles/furpanel/user.css";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import UserViewPersonalInfo from "../admin/users/[[...slug]]/_components/userViewPersonalInfo";
+import { BadgeProvider } from "../badge/_components/badgeProvider";
+import FursuitList from "../badge/_components/fursuit/fursuitList";
 import UserSessions from "./_components/userSessions";
 
 export default function UserPage() {
@@ -40,6 +43,32 @@ export default function UserPage() {
   const passwordChangeError = (err: ApiErrorResponse) =>
     showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
 
+  // Fursuits logic
+  const [badgeLoading, setBadgeLoading] = useState(false);
+  const [badgeData, setBadgeData] = useState<BadgeStatusApiResponse | null | undefined>();
+  const [now] = useState(() => Date.now());
+  const isEditExpired = useMemo(
+    () => badgeData && new Date(badgeData.badgeEditingDeadline).getTime() - now < 0,
+    [badgeData]
+  );
+
+  const refresh = () => {
+    setBadgeData(undefined);
+  };
+
+  // First load
+  useEffect(() => {
+    if (badgeData) return;
+    setBadgeLoading(true);
+    runRequest({ action: new GetBadgeStatusAction() })
+      .then((data) => setBadgeData(data))
+      .catch((err) => {
+        showModal(t("common.error"), <ErrorMessage error={err as ApiErrorResponse} />);
+        setBadgeData(null);
+      })
+      .finally(() => setBadgeLoading(false));
+  }, [badgeData]);
+
   useTitle(t("furpanel.user.title"));
 
   return (
@@ -50,6 +79,16 @@ export default function UserPage() {
           <div className="horizontal-list section-title gap-2mm align-items-center">
             <Icon className="x-large" icon="PERSON" />
             <span className="title medium">{t("furpanel.user.sections.user")}</span>
+          </div>
+          {/* fursuits */}
+          <div className="vertical-list gap-2mm">
+            <div className="horizontal-list section-title gap-2mm align-items-center">
+              <span className="title average">{t("furpanel.user.sections.user_fursuits")}</span>
+              {badgeLoading && <LoadingPanel />}
+            </div>
+            <BadgeProvider badgeData={badgeData} isEditExpired={isEditExpired} refresh={refresh}>
+              <FursuitList />
+            </BadgeProvider>
           </div>
           {/* Personal info manager */}
           <div className="vertical-list gap-2mm">
@@ -66,7 +105,7 @@ export default function UserPage() {
             )}
           </div>
         </div>
-        {/* User area */}
+        {/* Security area */}
         <div className="section vertical-list gap-2mm">
           <div className="horizontal-list section-title gap-2mm align-items-center">
             <Icon className="x-large" icon="SECURITY" />

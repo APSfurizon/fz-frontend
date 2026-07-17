@@ -1,12 +1,13 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import FpButton from "@/components/input/fpButton";
+import ErrorMessage from "@/components/errorMessage";
 import Checkbox from "@/components/input/checkbox";
 import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
 import Modal from "@/components/modal";
-import ErrorMessage from "@/components/errorMessage";
-import { AddFursuitFormAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits";
+import { AddFursuitFormAction, EditFursuitFormAction } from "@/lib/api/badge/fursuits";
+import { FursuitEventData } from "@/lib/api/badge/types";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { EVENT_NAME } from "@/lib/constants";
 import { useTranslations } from "next-intl";
@@ -20,7 +21,7 @@ export default function AddFursuitModal({
   reloadData,
 }: Readonly<{
   userId: number;
-  fursuit?: Fursuit;
+  fursuit?: FursuitEventData;
   open: boolean;
   onClose: () => void;
   reloadData: () => void;

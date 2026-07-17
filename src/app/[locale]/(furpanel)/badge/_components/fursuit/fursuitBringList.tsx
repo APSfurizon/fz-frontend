@@ -1,18 +1,25 @@
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import FpButton from "@/components/input/fpButton";
+import Modal from "@/components/modal";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { Fursuit } from "@/lib/api/badge/fursuits";
-import { EMPTY_PROFILE_PICTURE_SRC, EVENT_NAME } from "@/lib/constants";
-import { getImageUrl } from "@/lib/utils";
+import { BringFursuitToEventApiAction } from "@/lib/api/badge/fursuits";
+import { FursuitEventData } from "@/lib/api/badge/types";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
+import { EVENT_NAME } from "@/lib/constants";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useBadge } from "../badgeProvider";
+import FursuitCard from "./fursuitCard";
+import FursuitList from "./fursuitList";
+import SelectFursuitModal from "./modals/selectFursuit";
 
 export default function FursuitBringList() {
   const t = useTranslations();
-  const [loading] = useState(false);
-  const { badgeData, isEditExpired } = useBadge();
+  const { badgeData, isEditExpired, refresh } = useBadge();
+  const { showModal } = useModalUpdate();
+  const [selectLoading, setSelectLoading] = useState(false);
 
   const shouldShowBanner = useMemo(
     () =>
@@ -22,6 +29,60 @@ export default function FursuitBringList() {
       badgeData.fursuits.filter((f) => f.bringingToEvent).length == 0,
     [badgeData, isEditExpired]
   );
+
+  const filteredFursuits = useMemo(
+    () => (badgeData?.fursuits || []).filter((f) => f.bringingToEvent),
+    [badgeData?.fursuits]
+  );
+
+  // All fursuits
+  const [allFursuitsModalOpen, setAllFursuitsModalOpen] = useState(false);
+
+  const openAllFursuitsModal = () => {
+    setAllFursuitsModalOpen(true);
+  };
+
+  const closeAllFursuitsModal = () => {
+    setAllFursuitsModalOpen(false);
+  };
+
+  // Select fursuits
+  const [selectFursuitsModalOpen, setSelectFursuitsModalOpen] = useState(false);
+
+  const openSelectFursuitsModal = () => {
+    setSelectFursuitsModalOpen(true);
+  };
+
+  const closeSelectFursuitsModal = () => {
+    setSelectFursuitsModalOpen(false);
+  };
+
+  const confirmSelectFursuitsModal = (fursuitIds: Set<number>) => {
+    const currentSelectedFursuits = new Set(
+      badgeData?.fursuits.filter((f) => f.bringingToEvent).map((f) => f.fursuit.id)
+    );
+    const fursuitsToDeSelect = currentSelectedFursuits.difference(fursuitIds);
+    const fursuitsToSelect = fursuitIds.difference(currentSelectedFursuits);
+    const createRequest = (id: number, bring: boolean) =>
+      runRequest({
+        action: new BringFursuitToEventApiAction(),
+        pathParams: { id: id },
+        body: {
+          bringFursuitToCurrentEvent: bring,
+        },
+      });
+    const endpointsToRun = [...fursuitsToDeSelect].map((id) => createRequest(id, false));
+    endpointsToRun.push(...[...fursuitsToSelect].map((id) => createRequest(id, true)));
+    setSelectLoading(true);
+
+    Promise.all(endpointsToRun)
+      .then(() => {
+        closeAllFursuitsModal();
+        refresh();
+      })
+      .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />))
+      .finally(() => setSelectLoading(false));
+  };
 
   return (
     <>
@@ -38,82 +99,25 @@ export default function FursuitBringList() {
         <div className="fursuit-header rounded-s horizontal-list align-items-center gap-2mm flex-wrap">
           <Icon icon="PETS" />
           <span className="title average">
-            {t("furpanel.badge.your_fursuits", { amount: badgeData?.fursuits.length ?? 0 })}
+            {t("furpanel.badge.your_fursuits_for_event", { amount: filteredFursuits.length, eventName: EVENT_NAME })}
           </span>
-          {loading && <Icon icon="PROGRESS_ACTIVITY" className="loading-animation" />}
           <div className="spacer"></div>
-          <FpButton icon="ADD_CIRCLE" title={t("common.CRUD.add")} onClick={promptAddFursuit}>
-            {t("common.CRUD.add")}
+          <FpButton
+            icon="SELECT_CHECK_BOX"
+            title={t("common.CRUD.select")}
+            busy={selectLoading}
+            onClick={openSelectFursuitsModal}
+          >
+            {t("common.CRUD.select")}
+          </FpButton>
+          <FpButton icon="APPS" title={t("furpanel.badge.all_your_fursuits")} onClick={openAllFursuitsModal}>
+            {t("furpanel.badge.all_your_fursuits")}
           </FpButton>
         </div>
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
-          {badgeData?.fursuits.map((fursuitData: Fursuit, index: number) => (
-            <div key={index} className="fursuit gap-2mm rounded-l">
-              <div className="main-data gap-2mm">
-                <Image
-                  unoptimized
-                  className="fursuit-image rounded-s"
-                  width={500}
-                  height={500}
-                  alt=""
-                  quality={100}
-                  src={getImageUrl(fursuitData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
-                ></Image>
-                <div className="details vertical-list gap-2mm">
-                  <div className="vertical-list">
-                    <span className="title average bold">{fursuitData.fursuit.name}</span>
-                    <span className="title small color-subtitle">{fursuitData.fursuit.species}</span>
-                    <hr></hr>
-                  </div>
-                  <div className="vertical-list gap-2mm">
-                    {fursuitData.bringingToEvent && (
-                      <span className="title tiny">
-                        <Icon className="average" icon="CHECK_CIRCLE" />
-                        {t("furpanel.badge.input.bring_to_event.label", { eventName: EVENT_NAME })}
-                      </span>
-                    )}
-                    {fursuitData.showInFursuitCount && (
-                      <span className="title tiny">
-                        <Icon className="average" icon="CHECK_CIRCLE" />
-                        {t("furpanel.badge.input.show_in_fursuit_count.label", { eventName: EVENT_NAME })}
-                      </span>
-                    )}
-                    {fursuitData.showOwner && (
-                      <span className="title tiny">
-                        <Icon className="average" icon="CHECK_CIRCLE" />
-                        {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="spacer"></div>
-              <div className="fursuit-actions gap-2mm">
-                <FpButton
-                  className="danger"
-                  icon="DELETE"
-                  busy={loading}
-                  onClick={() => promptDeleteFursuit(fursuitData)}
-                  title={t("furpanel.badge.messages.confirm_fursuit_deletion.title", {
-                    name: fursuitData.fursuit.name,
-                  })}
-                  disabled={!badgeData.allowedModifications}
-                >
-                  {t("common.CRUD.delete")}
-                </FpButton>
-                <div className="spacer"></div>
-                <FpButton
-                  icon="EDIT_SQUARE"
-                  onClick={() => promptEditFursuit(fursuitData)}
-                  busy={loading}
-                  title={t("furpanel.badge.actions.edit_fursuit", { name: fursuitData.fursuit.name })}
-                  disabled={!badgeData.allowedModifications}
-                >
-                  {t("common.CRUD.edit")}
-                </FpButton>
-              </div>
-            </div>
+          {filteredFursuits.map((fursuitData: FursuitEventData, index: number) => (
+            <FursuitCard key={index} fursuitEventData={fursuitData} />
           ))}
         </div>
         <NoticeBox theme={NoticeTheme.FAQ} title={t("furpanel.badge.messages.fursuit_badge.title")}>
@@ -124,6 +128,16 @@ export default function FursuitBringList() {
           })}
         </NoticeBox>
       </div>
+      {/* All fursuit management */}
+      <Modal open={allFursuitsModalOpen} onClose={closeAllFursuitsModal}>
+        <FursuitList />
+      </Modal>
+      <SelectFursuitModal
+        open={selectFursuitsModalOpen}
+        loading={selectLoading}
+        onClose={closeSelectFursuitsModal}
+        onConfirm={confirmSelectFursuitsModal}
+      />
     </>
   );
 }
