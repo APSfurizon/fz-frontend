@@ -1,3 +1,6 @@
+import { areEquals } from "@/lib/utils";
+import "@/styles/components/fpInput.css";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ChangeEvent,
   CSSProperties,
@@ -11,12 +14,9 @@ import {
   useRef,
   useState,
 } from "react";
-import Icon, { MaterialIcon } from "../icon";
-import "@/styles/components/fpInput.css";
-import { useLocale, useTranslations } from "next-intl";
-import { areEquals } from "@/lib/utils";
-import { useFormContext } from "./dataForm";
 import { UAParser } from "ua-parser-js";
+import Icon, { MaterialIcon } from "../icon";
+import { useFormContext } from "./dataForm";
 
 function scrollToFocus(e: FocusEvent<HTMLInputElement>) {
   const isMobile = navigator.userAgent ? new UAParser(navigator.userAgent).getResult().device.type === "mobile" : false;
@@ -107,22 +107,26 @@ export default function FpInput({
   }, [initialValue]);
 
   /* Pattern validity */
-  const patternValidity = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!pattern?.test(e.target.value)) {
-      e.target.setCustomValidity(t("input.validation_fail"));
+  const patternValidity = () => {
+    if (!inputRef.current) return;
+    if (!pattern?.test(inputRef.current.value)) {
+      inputRef.current?.setCustomValidity(t("input.validation_fail"));
     } else {
-      e.target.setCustomValidity("");
+      inputRef.current?.setCustomValidity("");
     }
   };
 
   /* Change handling */
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    e.target.setCustomValidity("");
     if (onChange) onChange(e);
-    if (pattern) patternValidity(e);
     onFormChange(fieldName);
   };
+
+  useEffect(() => {
+    inputRef.current?.setCustomValidity("");
+    if (pattern) patternValidity();
+  }, [inputValue]);
 
   /* Calc input type */
   let finalType = inputType;

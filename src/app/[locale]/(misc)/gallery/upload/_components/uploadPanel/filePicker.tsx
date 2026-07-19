@@ -89,6 +89,7 @@ export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps
         <input
           type="file"
           className="suppressed-input"
+          aria-hidden
           multiple
           ref={fileRef}
           accept="image/*, video/*"

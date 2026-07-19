@@ -15,6 +15,14 @@
   flex-grow: 1;
 }
 
+.padding-1mm {
+  padding: 1mm;
+}
+
+.padding-2mm {
+  padding: 2mm;
+}
+
 .gap-2mm {
   gap: 2mm;
 }

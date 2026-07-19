@@ -1,6 +1,18 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* TODO: State in effect fixes */
 import {
+  AutoInputChangedParams,
+  AutoInputFilter,
+  AutoInputManager,
+  AutoInputSearchResult,
+} from "@/lib/components/autoInput";
+import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
+import "@/styles/components/autoInput.css";
+import { debounce } from "lodash";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import {
   ChangeEvent,
   CSSProperties,
   FocusEvent,
@@ -11,19 +23,7 @@ import {
   useState,
 } from "react";
 import Icon from "../icon";
-import Image from "next/image";
-import {
-  AutoInputFilter,
-  AutoInputSearchResult,
-  AutoInputManager,
-  AutoInputChangedParams,
-} from "@/lib/components/autoInput";
-import { useLocale, useTranslations } from "next-intl";
-import "@/styles/components/autoInput.css";
-import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
-import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import { useFormContext } from "./dataForm";
-import { debounce } from "lodash";
 
 export type AutoInputProps = {
   busy?: boolean;
@@ -371,7 +371,11 @@ export default function AutoInput({
           {element?.getDescription(locale)}
         </span>
         {!readOnly && (
-          <button className="action-delete" onClick={() => removeItem(element)}>
+          <button
+            className="action-delete"
+            title={t("autoinput.action.remove_item")}
+            onClick={() => removeItem(element)}
+          >
             <Icon className="medium delete-selection" icon="CANCEL" />
           </button>
         )}
@@ -461,6 +465,7 @@ export default function AutoInput({
         <input
           tabIndex={-1}
           className="suppressed-input"
+          aria-hidden
           type="text"
           name={fieldName}
           value={renderedValue.join(",") ?? ""}

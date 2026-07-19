@@ -1,7 +1,7 @@
-import Icon from "../icon";
-import { useState, MouseEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef } from "react";
-import "@/styles/components/checkbox.css";
 import { areEquals } from "@/lib/utils";
+import "@/styles/components/checkbox.css";
+import { CSSProperties, Dispatch, MouseEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import Icon from "../icon";
 import { useFormContext } from "./dataForm";
 
 export default function Checkbox({
@@ -84,6 +84,7 @@ export default function Checkbox({
       <input
         tabIndex={-1}
         className="suppressed-input"
+        aria-hidden
         type="text"
         name={fieldName}
         value={String(checked)}

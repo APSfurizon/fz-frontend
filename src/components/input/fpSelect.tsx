@@ -218,6 +218,7 @@ export default function FpSelect({
         <input
           tabIndex={-1}
           className="suppressed-input"
+          aria-hidden
           type="text"
           name={fieldName}
           value={defaultItemValue ?? ""}

@@ -1,22 +1,22 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
-import Icon from "./icon";
-import UserDropDown from "./userDropdown";
 import { useUser } from "@/components/context/userProvider";
-import { useEffect, useRef, useState } from "react";
-import "@/styles/components/header.css";
 import {
   APP_LINKS,
-  SHOW_APP_BANNER,
-  NOSECOUNT_ENABLED,
-  SCHEDULE_ENABLED,
   DEALER_ENABLED,
   GALLERY_ENABLED,
+  NOSECOUNT_ENABLED,
+  SCHEDULE_ENABLED,
+  SHOW_APP_BANNER,
 } from "@/lib/constants";
-import Link from "next/link";
 import { isMobile, UA } from "@/lib/userAgent";
+import "@/styles/components/header.css";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { OSName } from "ua-parser-js/enums";
+import Icon from "./icon";
+import UserDropDown from "./userDropdown";
 
 enum DEVICE_TYPE {
   APPLE = "apple",
@@ -110,7 +110,12 @@ export default function Header() {
         </picture>
       </div>
       <span>
-        <div role="button" className="hamburger rounded-l" onClick={() => setHamburgerOpen(!hamburgerOpen)}>
+        <div
+          role="button"
+          title={t("header.menu")}
+          className="hamburger rounded-l"
+          onClick={() => setHamburgerOpen(!hamburgerOpen)}
+        >
           <Icon icon={hamburgerOpen ? "CLOSE" : "MENU"} />
         </div>
       </span>

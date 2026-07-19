@@ -1,24 +1,24 @@
 "use client";
-import { useTranslations } from "next-intl";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import {
-  EMPTY_PROFILE_PICTURE_SRC,
-  PROFILE_UPLOAD_MAX_SIZE,
-  FULL_UPLOAD_MAX_WIDTH,
-  FULL_UPLOAD_MAX_HEIGHT,
-} from "@/lib/constants";
-import Image from "next/image";
-import { VALID_FILE_TYPES, validateImage, scaleBlob } from "@/lib/components/upload";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import { useFormContext } from "@/components/input/dataForm";
 import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import "@/styles/components/userUpload.css";
 import { MediaData } from "@/lib/api/media";
+import { scaleBlob, VALID_FILE_TYPES, validateImage } from "@/lib/components/upload";
+import {
+  EMPTY_PROFILE_PICTURE_SRC,
+  FULL_UPLOAD_MAX_HEIGHT,
+  FULL_UPLOAD_MAX_WIDTH,
+  PROFILE_UPLOAD_MAX_SIZE,
+} from "@/lib/constants";
 import { areEquals, getImageUrl } from "@/lib/utils";
-import { useFormContext } from "@/components/input/dataForm";
-import Cropper, { ReactCropperElement } from "react-cropper";
-import "cropperjs/dist/cropper.css";
 import { imageToBlob } from "@/lib/utils/media";
+import "@/styles/components/userUpload.css";
+import "cropperjs/dist/cropper.css";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import Cropper, { ReactCropperElement } from "react-cropper";
 
 export default function Upload({
   children,
@@ -199,6 +199,7 @@ export default function Upload({
         <input
           tabIndex={-1}
           className="suppressed-input"
+          aria-hidden
           type="text"
           name={fieldName}
           defaultValue={previewUrl ?? ""}
@@ -294,10 +295,22 @@ export default function Upload({
           ></Cropper>
         )}
         <div className="horizontal-list gap-2mm">
-          <FpButton icon="ROTATE_LEFT" onClick={() => cropperRef.current?.cropper.rotate(-45)}></FpButton>
-          <FpButton icon="ROTATE_RIGHT" onClick={() => cropperRef.current?.cropper.rotate(45)}></FpButton>
+          <FpButton
+            icon="ROTATE_LEFT"
+            onClick={() => cropperRef.current?.cropper.rotate(-45)}
+            title={t("components.upload.cropper.rotate_left")}
+          />
+          <FpButton
+            icon="ROTATE_RIGHT"
+            onClick={() => cropperRef.current?.cropper.rotate(45)}
+            title={t("components.upload.cropper.rotate_right")}
+          />
           <div className="spacer"></div>
-          <FpButton icon="RESET_SETTINGS" onClick={() => cropperRef.current?.cropper.reset()}></FpButton>
+          <FpButton
+            icon="RESET_SETTINGS"
+            onClick={() => cropperRef.current?.cropper.reset()}
+            title={t("components.upload.cropper.reset")}
+          />
         </div>
         <div className="bottom-toolbar">
           <FpButton

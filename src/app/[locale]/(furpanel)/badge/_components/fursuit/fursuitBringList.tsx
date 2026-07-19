@@ -76,9 +76,11 @@ export default function FursuitBringList() {
     setSelectLoading(true);
 
     Promise.all(endpointsToRun)
-      .then(() => {
-        closeAllFursuitsModal();
-        refresh();
+      .then((results) => {
+        if ((results || []).length) {
+          refresh();
+        }
+        closeSelectFursuitsModal();
       })
       .catch((e) => showModal(t("common.error"), <ErrorMessage error={e as ApiErrorResponse} />))
       .finally(() => setSelectLoading(false));
@@ -87,6 +89,41 @@ export default function FursuitBringList() {
   return (
     <>
       <div className="fursuit-section rounded-m vertical-list gap-2mm">
+        <div className="fursuit-header rounded-s horizontal-list align-items-center gap-2mm flex-wrap">
+          <Icon icon="PETS" />
+          <span className="title average">
+            {t("furpanel.badge.your_fursuits_for_event", { amount: filteredFursuits.length, eventName: EVENT_NAME })}
+          </span>
+          <div className="spacer"></div>
+          {filteredFursuits.length > 0 && (
+            <FpButton
+              icon="SELECT_CHECK_BOX"
+              title={t("common.CRUD.select")}
+              busy={selectLoading}
+              onClick={openSelectFursuitsModal}
+            >
+              {t("common.CRUD.select")}
+            </FpButton>
+          )}
+          <FpButton icon="APPS" title={t("furpanel.badge.all_your_fursuits")} onClick={openAllFursuitsModal}>
+            {t("furpanel.badge.all_your_fursuits")}
+          </FpButton>
+        </div>
+        {filteredFursuits.length == 0 && (
+          <div className="horizontal-list spacer">
+            <div className="spacer"></div>
+            <FpButton
+              title={t("common.CRUD.select")}
+              icon="SELECT_CHECK_BOX"
+              iconClass="x-large margin-left-2mm"
+              busy={selectLoading}
+              onClick={openSelectFursuitsModal}
+            >
+              <div className="padding-2mm title x-large">{t("common.CRUD.select")}</div>
+            </FpButton>
+            <div className="spacer"></div>
+          </div>
+        )}
         {/* Banner */}
         {shouldShowBanner && (
           <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.badge.messages.fursuit_banner.title")}>
@@ -96,24 +133,6 @@ export default function FursuitBringList() {
             })}
           </NoticeBox>
         )}
-        <div className="fursuit-header rounded-s horizontal-list align-items-center gap-2mm flex-wrap">
-          <Icon icon="PETS" />
-          <span className="title average">
-            {t("furpanel.badge.your_fursuits_for_event", { amount: filteredFursuits.length, eventName: EVENT_NAME })}
-          </span>
-          <div className="spacer"></div>
-          <FpButton
-            icon="SELECT_CHECK_BOX"
-            title={t("common.CRUD.select")}
-            busy={selectLoading}
-            onClick={openSelectFursuitsModal}
-          >
-            {t("common.CRUD.select")}
-          </FpButton>
-          <FpButton icon="APPS" title={t("furpanel.badge.all_your_fursuits")} onClick={openAllFursuitsModal}>
-            {t("furpanel.badge.all_your_fursuits")}
-          </FpButton>
-        </div>
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
           {filteredFursuits.map((fursuitData: FursuitEventData, index: number) => (
@@ -125,6 +144,7 @@ export default function FursuitBringList() {
             eventName: EVENT_NAME,
             maxFursuits: badgeData?.maxFursuits ?? 0,
             b: (chunks) => <b className="highlight">{chunks}</b>,
+            br: () => <br />,
           })}
         </NoticeBox>
       </div>

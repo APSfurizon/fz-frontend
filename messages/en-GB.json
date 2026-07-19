@@ -27,7 +27,8 @@
       },
       "app_badge": "Download now the official app!",
       "alt_app_badge": "Mobile application download button",
-      "gallery": "Gallery"
+      "gallery": "Gallery",
+      "menu": "Main menu"
     },
     "reload": "Reload",
     "loading": "Loading...",
@@ -108,14 +109,18 @@
     "success": "Success",
     "help": "Help",
     "open": "Open",
-    "close": "Close"
+    "close": "Close",
+    "menu": "Menu"
   },
   "components": {
     "autoinput": {
       "alt_result_image": "Image of {description}",
       "guide": "Enter at least {minSize, plural, =1 {a character} other {# characters}}",
       "loading_data": "Loading data...",
-      "no_results": "No results."
+      "no_results": "No results.",
+      "action": {
+        "remove_item": "Remove"
+      }
     },
     "dataForm": {
       "save": "Save"
@@ -136,6 +141,11 @@
       "crop": "Crop",
       "errors": {
         "UNKNOWN": "Unknown error"
+      },
+      "cropper": {
+        "rotate_left": "Rotate left",
+        "rotate_right": "Rotate right",
+        "reset": "Reset"
       }
     },
     "input": {
@@ -152,11 +162,6 @@
         "title": "Delete"
       },
       "no_data": "No data found"
-    },
-    "common": {
-      "CRUD": {
-        "reset": "Reset"
-      }
     },
     "gallery": {
       "grid": {
@@ -346,8 +351,8 @@
           "description": "Do you want to delete {name}'s fursuit?"
         },
         "fursuit_badge": {
-          "title": "Wanna bring your suit to Furizon?",
-          "description": "Be sure to check <b>Bring to {eventName}</b>, so that Furizon can organize the fursuit lounge. As of now, you are capable of bringing a total of {maxFursuits, plural, =1 {1 fursuit} other {# fursuits}}. To bring more than that amount, you can buy extra badges by clicking <b>Edit reservation</b> in the Booking tab."
+          "title": "Wanna bring your fursuit to Furizon?",
+          "description": "Remember to <b>select</b> the fursuits you're bringing, so we can organize the fursuit lounge.<br></br>\nAs of now, you can bring up to {maxFursuits, plural, =1 {1 fursuit} other {# fursuits}}.<br></br>\nBuy extra badges to bring more by clicking <b>Edit reservation</b> in the Reservation tab."
         },
         "badge_edit_deadline_end": {
           "title": "Badge editing locked",
@@ -358,8 +363,8 @@
           "description": "Badge editing will be locked in the following date: {lockDate}."
         },
         "fursuit_banner": {
-          "title": "You haven't selected any fursuit, yet",
-          "description": "In order for Furizon to organize the fursuit lounge, be sure to edit your fursuit and check <b>Bring to {eventName}</b>."
+          "title": "Not bringing a fursuit?",
+          "description": "To organize the fursuit lounge, be sure to <b>select</b> any fursuit you want to bring to {eventName}."
         }
       },
       "errors": {},
@@ -1161,14 +1166,7 @@
     "login": {
       "create_account": "Create an account",
       "errors": {
-        "email_not_registered": "User not found",
-        "invalid_credentials": "Invalid credentials",
-        "network_error": "Network error",
-        "unknown_error": "Unknown error",
         "invalid_input": "Invalid data",
-        "already_logged_in": "You're already logged in",
-        "confirmation_still_pending": "Confirm your email before logging in",
-        "authentication_is_disabled": "Your account has been disabled.",
         "secondary_login_failed": "Secondary login failed",
         "secondary_login_failed_description": "Login via the mobile back-end failed"
       },
@@ -1316,7 +1314,8 @@
         "telegram_username": {
           "label": "Telegram username",
           "placeholder": "Enter your telegram username",
-          "help": "We need the @username in order to contact you when needed"
+          "help": "To contact you when needed",
+          "not_valid": "Telegram username not valid"
         },
         "id_type": {
           "label": "Document type",

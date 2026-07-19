@@ -67,13 +67,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
         <FpButton danger icon="CANCEL" onClick={props.onClose} busy={props.loading}>
           {t("common.cancel")}
         </FpButton>
-        <FpButton
-          success
-          icon="CHECK"
-          onClick={() => props.onConfirm(selectedFursuits)}
-          disabled={!selectedFursuits?.size}
-          busy={props.loading}
-        >
+        <FpButton success icon="CHECK" onClick={() => props.onConfirm(selectedFursuits)} busy={props.loading}>
           {t("common.confirm")} ({selectedFursuits.size}/{badgeData?.maxFursuits ?? 0})
         </FpButton>
       </div>

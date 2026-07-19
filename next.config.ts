@@ -1,10 +1,10 @@
+import { ALLOWED_DEV_ORIGINS } from "@/lib/constants";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-import "./src/envConfig";
-import { version } from "./package.json";
 import { Header } from "next/dist/lib/load-custom-routes.js";
 import { RemotePattern } from "next/dist/shared/lib/image-config.js";
-import { ALLOWED_DEV_ORIGINS } from "@/lib/constants";
+import { version } from "./package.json";
+import "./src/envConfig";
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -56,6 +56,10 @@ const nextConfig: NextConfig = {
           {
             key: "Cache-Control",
             value: "public, max-age=32536000, immutable",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
           },
         ],
       },
