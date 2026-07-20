@@ -1,38 +1,33 @@
 "use client";
-import DataForm from "@/components/input/dataForm";
-import Icon from "@/components/icon";
-import FpInput from "@/components/input/fpInput";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
-import "@/styles/authentication/login.css";
+import Icon from "@/components/icon";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
+import FpInput from "@/components/input/fpInput";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { RecoverFormAction } from "@/lib/api/authentication/recover";
-import FpButton from "@/components/input/fpButton";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import "@/styles/authentication/login.css";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export default function Login() {
   const t = useTranslations();
-  const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { showModal } = useModalUpdate();
   const params = useSearchParams();
 
   const onLoading = () => {
-    setError(undefined);
     setSuccess(false);
   };
 
   const manageError = (err: ApiErrorResponse) => {
-    if (!err.errors) {
-      setError("network_error");
-    } else {
-      const errorMessage =
-        err.errors.length > 0 ? err.errors[0].message : t("authentication.login.errors.unknown_error");
-      setError(errorMessage);
-    }
+    showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
   };
 
   const manageSuccess = () => {
@@ -52,11 +47,6 @@ export default function Login() {
         </span>
       </div>
       <p className="color-subtitle title small">{t("authentication.recover.instruction")}</p>
-      {error && (
-        <span className="error-container title small center">
-          {t(`login.errors.${(error ?? "unknown_error").toLowerCase()}`)}
-        </span>
-      )}
       {success && (
         <NoticeBox theme={NoticeTheme.Success} title={t("authentication.recover.messages.email_success.title")}>
           {t("authentication.recover.messages.email_success.description")}

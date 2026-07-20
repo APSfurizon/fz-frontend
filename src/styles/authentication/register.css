@@ -7,12 +7,6 @@ form .toolbar-bottom {
   justify-content: center;
 }
 
-span.error-container {
-  display: inline-block;
-  color: var(--text-status-error);
-  width: 100%;
-}
-
 a.suggestion {
   text-align: center;
 }

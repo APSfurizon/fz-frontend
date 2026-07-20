@@ -1,36 +1,29 @@
 "use client";
-import DataForm from "@/components/input/dataForm";
-import Icon from "@/components/icon";
-import FpInput from "@/components/input/fpInput";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
-import "@/styles/authentication/login.css";
-import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
+import Icon from "@/components/icon";
+import DataForm from "@/components/input/dataForm";
 import FpButton from "@/components/input/fpButton";
+import FpInput from "@/components/input/fpInput";
+import { ChangePasswordFormAction } from "@/lib/api/authentication/recover";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import "@/styles/authentication/login.css";
+import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export default function RecoverConfirm() {
   const t = useTranslations();
-  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState<string>("s");
   const [confirmPassword, setConfirmPassword] = useState<string>();
+  const { showModal } = useModalUpdate();
   const router = useRouter();
   const params = useSearchParams();
 
-  const onLoading = () => {
-    setError(undefined);
-  };
-
   const manageError = (err: ApiErrorResponse) => {
-    if (!err.errors) {
-      setError("network_error");
-    } else {
-      const errorMessage = err.errors.length > 0 ? err.errors[0].code : t("authentication.login.errors.unknown_error");
-      setError(errorMessage);
-    }
+    showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
   };
 
   const manageSuccess = () => {
@@ -51,11 +44,6 @@ export default function RecoverConfirm() {
           <span className="titular bold">{t("authentication.recover_confirm.title").toLowerCase()}</span>
         </span>
       </div>
-      {error && (
-        <span className="error-container title small center">
-          {t(`authentication.recover_confirm.errors.${(error ?? "unknown_error").toLowerCase()}`)}
-        </span>
-      )}
 
       <DataForm
         className="vertical-list login-form"
@@ -63,7 +51,6 @@ export default function RecoverConfirm() {
         setBusy={setLoading}
         action={new ChangePasswordFormAction()}
         onFail={(err) => manageError(err)}
-        onBeforeSubmit={onLoading}
         onSuccess={manageSuccess}
         hideSave
       >
