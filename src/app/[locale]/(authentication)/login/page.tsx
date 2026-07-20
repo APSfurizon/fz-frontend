@@ -1,52 +1,45 @@
 "use client";
-import DataForm from "@/components/input/dataForm";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
+import useTitle from "@/components/hooks/useTitle";
 import Icon from "@/components/icon";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import {
   AdminSecondaryLoginResponse,
   AuthenticationCodes,
   LoginFormAction,
   LoginResponse,
 } from "@/lib/api/authentication/login";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import useTitle from "@/components/hooks/useTitle";
-import "@/styles/authentication/login.css";
-import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
+import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
 import {
-  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
   API_MOBILE_URL,
   APP_VERSION,
+  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
   MOBILE_FURIZON_AUTH_HEADER,
   SESSION_DURATION,
   TOKEN_STORAGE_NAME,
 } from "@/lib/constants";
 import { setCookie } from "@/lib/utils";
-import FpButton from "@/components/input/fpButton";
-import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
+import "@/styles/authentication/login.css";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export default function Login() {
-  const t = useTranslations("authentication");
-  const [error, setError] = useState<string | undefined>(undefined);
+  const t = useTranslations();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { showModal } = useModalUpdate();
   const router = useRouter();
   const params = useSearchParams();
 
-  const onLoad = () => setError(undefined);
-
   const manageError = (err: ApiErrorResponse) => {
-    const errorMessage = err.errors.length > 0 ? err.errors[0].code : t("login.errors.unknown_error");
-    if (errorMessage.toLowerCase().trim() === "already_logged_in") {
-      router.replace("/home");
-      return;
-    }
-    setError(errorMessage);
+    showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
   };
 
   const isSecurityByPermission = (permission?: string) => {
@@ -101,10 +94,10 @@ export default function Login() {
         try {
           await doSecondaryAdminLogin();
         } catch (secondaryLoginError) {
-          console.warn(t("login.errors.secondary_login_failed"), secondaryLoginError);
+          console.warn(t("authentication.login.errors.secondary_login_failed"), secondaryLoginError);
           showModal(
-            t("login.errors.secondary_login_failed"),
-            <span>{t("login.errors.secondary_login_failed_description")}</span>
+            t("authentication.login.errors.secondary_login_failed"),
+            <span>{t("authentication.login.errors.secondary_login_failed_description")}</span>
           );
           // Keep primary login valid even if secondary auth endpoint is temporarily unavailable.
         }
@@ -117,7 +110,7 @@ export default function Login() {
     router.replace(`/logging?${params.toString()}`);
   };
 
-  useTitle(t("login.title"));
+  useTitle(t("authentication.login.title"));
 
   return (
     <>
@@ -126,34 +119,28 @@ export default function Login() {
           <Icon icon="DESIGN_SERVICES" />
           <span className="titular bold highlight">furpanel</span>
           <span> - </span>
-          <span className="titular bold">{t("login.title").toLowerCase()}</span>
+          <span className="titular bold">{t("authentication.login.title").toLowerCase()}</span>
         </span>
       </div>
       <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">
-        {t("login.create_an_account")}
+        {t("authentication.login.create_an_account")}
       </Link>
-      {error && (
-        <span className="error-container title small center">
-          {t(`login.errors.${(error ?? "unknown_error").toLowerCase()}`)}
-        </span>
-      )}
       {params.get("register") && (
-        <NoticeBox theme={NoticeTheme.Success} title={t("login.messages.register_success.title")}>
-          {t("login.messages.register_success.description")}
+        <NoticeBox theme={NoticeTheme.Success} title={t("authentication.login.messages.register_success.title")}>
+          {t("authentication.login.messages.register_success.description")}
         </NoticeBox>
       )}
       {Object.keys(AuthenticationCodes).includes(params.get("status") ?? "") && (
         <NoticeBox
           theme={AuthenticationCodes[params.get("status") ?? "UNKNOWN"]}
-          title={t(`login.messages.${params.get("status")}.title`)}
+          title={t(`authentication.login.messages.${params.get("status")}.title`)}
         >
-          {t(`login.messages.${params.get("status")}.description`)}
+          {t(`authentication.login.messages.${params.get("status")}.description`)}
         </NoticeBox>
       )}
       <DataForm
         className="vertical-list login-form"
         action={new LoginFormAction()}
-        onBeforeSubmit={() => onLoad()}
         onSuccess={(data) => manageSuccess(data as LoginResponse)}
         onFail={(err) => manageError(err)}
         hideSave
@@ -164,8 +151,8 @@ export default function Login() {
           fieldName="email"
           required
           inputType="email"
-          label={t("login.label_email")}
-          placeholder={t("login.placeholder_email")}
+          label={t("authentication.login.label_email")}
+          placeholder={t("authentication.login.placeholder_email")}
           onChange={(e) => setEmail(e.target.value)}
         />
         <FpInput
@@ -173,13 +160,13 @@ export default function Login() {
           minLength={6}
           required
           inputType="password"
-          label={t("login.label_password")}
-          placeholder={t("login.placeholder_password")}
+          label={t("authentication.login.label_password")}
+          placeholder={t("authentication.login.placeholder_password")}
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="toolbar-bottom">
           <FpButton type="submit" icon="KEY">
-            {t("login.login")}
+            {t("authentication.login.login")}
           </FpButton>
         </div>
       </DataForm>
@@ -189,7 +176,7 @@ export default function Login() {
           href={`/recover?${params.toString()}`}
           className="suggestion title small center color-subtitle underlined"
         >
-          {t("login.recover")}
+          {t("authentication.login.recover")}
         </Link>
       </div>
     </>
