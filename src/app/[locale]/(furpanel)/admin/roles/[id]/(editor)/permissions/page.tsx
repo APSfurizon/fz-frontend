@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import { AutoInputPermissionsManager, RoleData } from "@/lib/api/admin/role";
 import { useTranslations } from "next-intl";
@@ -12,70 +12,93 @@ import DataForm from "@/components/input/dataForm";
 import { DummyFormAction } from "@/lib/components/dataForm";
 
 export default function RolePermissionsEditor() {
-    const t = useTranslations();
-    const { entity, setEntity } = useEntityEditor<RoleData, RoleData>();
-    const [addPermissionOpen, setAddPermissionOpen] = useState(false);
+  const t = useTranslations();
+  const { entity, setEntity } = useEntityEditor<RoleData, RoleData>();
+  const [addPermissionOpen, setAddPermissionOpen] = useState(false);
 
-    const [selectedPermissionTemp, setSelectedPermissionTemp] = useState<string>();
+  const [selectedPermissionTemp, setSelectedPermissionTemp] = useState<string>();
 
-    const removePermission = (code: string) => {
-        const newEntity = { ...entity, enabledPermissions: [...entity.enabledPermissions].filter(v => v !== code) };
-        setEntity(newEntity);
-    }
+  const removePermission = (code: string) => {
+    const newEntity = { ...entity, enabledPermissions: [...entity.enabledPermissions].filter((v) => v !== code) };
+    setEntity(newEntity);
+  };
 
-    const addPermission = () => {
-        if (!selectedPermissionTemp) return;
-        const newEntity = { ...entity, enabledPermissions: [...entity.enabledPermissions, selectedPermissionTemp] };
-        setEntity(newEntity);
-        closeAddPermissionModal();
-    }
+  const addPermission = () => {
+    if (!selectedPermissionTemp) return;
+    const newEntity = { ...entity, enabledPermissions: [...entity.enabledPermissions, selectedPermissionTemp] };
+    setEntity(newEntity);
+    closeAddPermissionModal();
+  };
 
-    const selectPermission = (params: AutoInputChangedParams) => {
-        const permission = params.newValues && params.newValues.length > 0 ? params.newValues[0] : undefined;
-        setSelectedPermissionTemp(permission?.code);
-    }
+  const selectPermission = (params: AutoInputChangedParams) => {
+    const permission = params.newValues && params.newValues.length > 0 ? params.newValues[0] : undefined;
+    setSelectedPermissionTemp(permission?.code);
+  };
 
-    const closeAddPermissionModal = () => {
-        setAddPermissionOpen(false);
-        setSelectedPermissionTemp(undefined);
-    }
+  const closeAddPermissionModal = () => {
+    setAddPermissionOpen(false);
+    setSelectedPermissionTemp(undefined);
+  };
 
-    return <>
-        <div className="horizontal-list gap-2mm">
-            <div className="spacer"></div>
-            <FpButton icon="ADD" onClick={() => { setAddPermissionOpen(true) }}>{t("common.CRUD.add")}</FpButton>
-        </div>
-        {/* Permissions table */}
-        <div className="table-container rounded-m">
-            <div className="table rounded-m">
-                {entity?.enabledPermissions?.map((permission, pi) => <div key={pi} className="row horizontal-list align-items-center gap-2mm flex-wrap">
-                    <div className="data">
-                        <span className="title average">{permission}</span>
-                    </div>
-                    <div className="spacer"></div>
-                    <div className="data">
-                        <FpButton icon="DELETE" onClick={() => removePermission(permission)}></FpButton>
-                    </div>
-                </div>)}
+  return (
+    <>
+      <div className="horizontal-list gap-2mm">
+        <div className="spacer"></div>
+        <FpButton
+          icon="ADD"
+          onClick={() => {
+            setAddPermissionOpen(true);
+          }}
+        >
+          {t("common.CRUD.add")}
+        </FpButton>
+      </div>
+      {/* Permissions table */}
+      <div className="table-container rounded-m">
+        <div className="table rounded-m">
+          {entity?.enabledPermissions?.map((permission, pi) => (
+            <div key={pi} className="row horizontal-list align-items-center gap-2mm flex-wrap">
+              <div className="data">
+                <span className="title average">{permission}</span>
+              </div>
+              <div className="spacer"></div>
+              <div className="data">
+                <FpButton icon="DELETE" onClick={() => removePermission(permission)}></FpButton>
+              </div>
             </div>
+          ))}
         </div>
-        <Modal open={addPermissionOpen} onClose={() => closeAddPermissionModal()}
-            title={t("furpanel.admin.users.security.roles.input.add_permission.label")} style={{ minWidth: '400px' }}>
-            <DataForm action={new DummyFormAction} shouldReset={!addPermissionOpen} hideSave>
-                <AutoInput manager={new AutoInputPermissionsManager} minDecodeSize={0}
-                    filterOut={new AutoInputFilter([], entity?.enabledPermissions)}
-                    onChange={selectPermission}>
-                </AutoInput>
-            </DataForm>
-            <div className="horizontal-list gap-4mm">
-                <FpButton type="button" className="danger" icon="CANCEL"
-                    onClick={() => setAddPermissionOpen(false)}>{t("common.cancel")}</FpButton>
-                <div className="spacer"></div>
-                <FpButton type="submit" className="success" icon="CHECK"
-                    onClick={() => addPermission()} disabled={!!!selectedPermissionTemp}>
-                    {t("common.confirm")}
-                </FpButton>
-            </div>
-        </Modal>
+      </div>
+      <Modal
+        open={addPermissionOpen}
+        onClose={() => closeAddPermissionModal()}
+        title={t("furpanel.admin.users.security.roles.input.add_permission.label")}
+        style={{ minWidth: "400px" }}
+      >
+        <DataForm action={new DummyFormAction()} shouldReset={!addPermissionOpen} hideSave>
+          <AutoInput
+            manager={new AutoInputPermissionsManager()}
+            minDecodeSize={0}
+            filterOut={new AutoInputFilter([], entity?.enabledPermissions)}
+            onChange={selectPermission}
+          ></AutoInput>
+        </DataForm>
+        <div className="horizontal-list gap-4mm">
+          <FpButton type="button" className="danger" icon="CANCEL" onClick={() => setAddPermissionOpen(false)}>
+            {t("common.cancel")}
+          </FpButton>
+          <div className="spacer"></div>
+          <FpButton
+            type="submit"
+            className="success"
+            icon="CHECK"
+            onClick={() => addPermission()}
+            disabled={!!!selectedPermissionTemp}
+          >
+            {t("common.confirm")}
+          </FpButton>
+        </div>
+      </Modal>
     </>
+  );
 }

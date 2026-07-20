@@ -27,7 +27,8 @@
       },
       "app_badge": "Scarica ora l'app ufficiale!",
       "alt_app_badge": "Bottone per scaricare l'applicazione mobile",
-      "gallery": "Galleria"
+      "gallery": "Galleria",
+      "menu": "Menù"
     },
     "reload": "Ricarica",
     "loading": "Caricamento...",
@@ -61,7 +62,8 @@
       "discard_changes": {
         "description": "Le modifiche verranno scartate"
       },
-      "reset": "Ripristina"
+      "reset": "Ripristina",
+      "select": "Seleziona"
     },
     "sponsorships": {
       "sponsor": "Sponsor",
@@ -107,14 +109,18 @@
     "success": "Successo",
     "help": "Aiuto",
     "open": "Apri",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "menu": "Menù"
   },
   "components": {
     "autoinput": {
       "no_results": "Nessun risultato.",
       "alt_result_image": "Immagine di {description}",
       "guide": "Inserisci almeno {minSize, plural, =1 {un carattere} other {# caratteri}}",
-      "loading_data": "Caricamento dati..."
+      "loading_data": "Caricamento dati...",
+      "action": {
+        "remove_item": "Rimuovi"
+      }
     },
     "dataForm": {
       "save": "Salva"
@@ -135,6 +141,11 @@
       "crop": "Ritaglia",
       "errors": {
         "UNKNOWN": "Errore sconosciuto"
+      },
+      "cropper": {
+        "rotate_left": "Ruota a sinistra",
+        "rotate_right": "Ruota a destra",
+        "reset": "Reset"
       }
     },
     "input": {
@@ -151,11 +162,6 @@
         "title": "Elimina"
       },
       "no_data": "Nessun dato presente"
-    },
-    "common": {
-      "CRUD": {
-        "reset": "Ripristina"
-      }
     },
     "gallery": {
       "grid": {
@@ -345,8 +351,8 @@
           "description": "Vuoi eliminare la fursuit di {name}?"
         },
         "fursuit_badge": {
-          "title": "Vuoi portare la tua suit a furizon?",
-          "description": "Ricordati di spuntare <b>Porta a {eventName}</b>, in modo che Furizon possa organizzare la fursuit lounge. Al momento puoi portare fino a {maxFursuits} fursuit. Per portarne di più, puoi comprare badge extra cliccando su <b>Modifica prenotazione</b> nella sezione Prenotazione."
+          "title": "Vuoi portare la tua fursuit a furizon?",
+          "description": "Ricordati di <b>selezionare</b> le fursuit che porterai, per aiutarci ad organizzare la fursuit lounge.<br></br>\nAl momento puoi portare fino a {maxFursuits} fursuit.<br></br>\nPer portarne di più, acquista badge extra, cliccando <b>Modifica prenotazione</b> nella sezione Prenotazione."
         },
         "badge_edit_deadline_end": {
           "title": "Modifiche badge bloccate",
@@ -358,10 +364,12 @@
         },
         "fursuit_banner": {
           "title": "Non hai selezionato alcuna fursuit",
-          "description": "In modo che Furizon possa organizzare la fursuit lounge, ricordati di spuntare <b>Porta a {eventName}</b> nella schermata di modifica della fursuit."
+          "description": "Per organizzare la fursuit lounge, ricordati di spuntare <b>Porta a {eventName}</b> nella schermata di modifica della fursuit."
         }
       },
-      "errors": {}
+      "errors": {},
+      "your_fursuits_for_event": "{amount, plural, =1 {La tua} other {Le tue}} fursuit per {eventName}",
+      "all_your_fursuits": "Tutte le tue fursuit"
     },
     "debug": {
       "title": "Debug"
@@ -504,7 +512,8 @@
         "user_info": "Informazioni personali",
         "security": "Sicurezza",
         "security_password": "Password",
-        "sessions": "Sessioni attive"
+        "sessions": "Sessioni attive",
+        "user_fursuits": "Fursuit"
       },
       "linking": {
         "title": "Recupero ordine",
@@ -916,6 +925,9 @@
         },
         "roles": {
           "title": "Ruoli"
+        },
+        "errors": {
+          "unknown_user": "Utente sconosciuto"
         }
       },
       "security_management": {
@@ -1161,14 +1173,9 @@
       "create_an_account": "Crea un account",
       "recover": "Ho dimenticato la password",
       "errors": {
-        "unknown_error": "Errore sconosciuto",
-        "network_error": "Errore di rete",
-        "email_not_registered": "Utente non trovato",
-        "invalid_credentials": "Credenziali errate",
         "invalid_input": "Dati non validi",
-        "already_logged_in": "Hai già effettuato l'accesso",
-        "confirmation_still_pending": "Conferma l'email prima di accedere",
-        "authentication_is_disabled": "Account disabilitato."
+        "secondary_login_failed": "Login secondario fallito",
+        "secondary_login_failed_description": "Login attraverso il server mobile fallito"
       },
       "messages": {
         "register_success": {
@@ -1306,7 +1313,8 @@
         "telegram_username": {
           "label": "Nome utente Telegram",
           "placeholder": "Inserisci il tuo nome utente di telegram",
-          "help": "Abbiamo bisogno del tuo @nomeutente per contattarti, se necessario"
+          "help": "Abbiamo bisogno del tuo @nomeutente per contattarti, se necessario",
+          "not_valid": "Il nome utente telegram non è valido"
         },
         "id_type": {
           "label": "Tipo documento",
@@ -1431,7 +1439,12 @@
         }
       },
       "admin": {
-        "title": "Amministrazione"
+        "title": "Amministrazione",
+        "edit": {
+          "photographer": {
+            "label": "Fotografo"
+          }
+        }
       },
       "media": {
         "status": {}

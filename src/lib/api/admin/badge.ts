@@ -1,51 +1,53 @@
-import { ApiAction, ApiErrorResponse, RequestType } from "../global";
+import { ApiAction } from "../networking/types";
+import { ApiErrorResponse } from "../networking/types";
+import { RequestType } from "../networking/types";
 
 export class GetRenderedCommonBadgesApiAction extends ApiAction<Response, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/export/badges/user";
-    rawResponse?: boolean = true;
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/export/badges/user";
+  rawResponse?: boolean = true;
 }
 
 export class GetRenderedFursuitBadgesApiAction extends ApiAction<Response, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/export/badges/fursuits";
-    rawResponse?: boolean = true;
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/export/badges/fursuits";
+  rawResponse?: boolean = true;
 }
 
 export class RemindBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/mail-reminders/user-badge-upload";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/mail-reminders/user-badge-upload";
 }
 
 export class RemindFursuitBadgesApiAction extends ApiAction<any, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/mail-reminders/fursuit-badge-upload";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/mail-reminders/fursuit-badge-upload";
 }
 
 export class RemindFursuitBringToEventApiAction extends ApiAction<any, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/mail-reminders/fursuit-bring-to-event";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/mail-reminders/fursuit-bring-to-event";
 }
 
 export class RemindOrderLinkApiAction extends ApiAction<any, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/mail-reminders/order-linking";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/mail-reminders/order-linking";
 }
 
 export class RemindRoomsNotFullApiAction extends ApiAction<any, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/mail-reminders/room-not-full";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/mail-reminders/room-not-full";
 }
 
 export class SendMembershipCardByMailApiAction extends ApiAction<any, ApiErrorResponse> {
-    authenticated = true;
-    method = RequestType.GET;
-    urlAction = "admin/mail-reminders/send-membership-card";
+  authenticated = true;
+  method = RequestType.GET;
+  urlAction = "admin/mail-reminders/send-membership-card";
 }

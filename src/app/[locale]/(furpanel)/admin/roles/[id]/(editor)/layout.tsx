@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import FpButton from "@/components/input/fpButton";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
 import Icon from "@/components/icon";
@@ -10,36 +10,49 @@ import { usePathname } from "next/navigation";
 import { getParentDirectory } from "@/lib/utils";
 
 export default function RoleEditorLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-    const path = usePathname();
-    const t = useTranslations();
+  const path = usePathname();
+  const t = useTranslations();
 
-    // Get context
-    const { entity, entityChanged, saveEntity, loading } = useEntityEditor<RoleData, RoleData>();
+  // Get context
+  const { entity, entityChanged, saveEntity, loading } = useEntityEditor<RoleData, RoleData>();
 
-    return <>
-        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
-            <Link href={getParentDirectory(getParentDirectory(path))}><Icon icon="ARROW_BACK" /></Link>
-            <div className="horizontal-list gap-2mm">
-                <span className="title medium">
-                    {entity?.displayName ?? entity?.internalName ?? ""}
-                    {entityChanged && "*"}
-                </span>
-            </div>
-            <div className="spacer"></div>
-            <ToolLink icon="ID_CARD" href="data">
-                {t("furpanel.admin.users.security.roles.sections.data")}
-            </ToolLink>
-            <ToolLink icon="SECURITY" href="permissions">
-                {t("furpanel.admin.users.security.roles.sections.permissions")}
-            </ToolLink>
-            <ToolLink icon="GROUPS" href="members">
-                {t("furpanel.admin.users.security.roles.sections.members")}
-            </ToolLink>
+  return (
+    <>
+      <div className="horizontal-list align-items-center gap-4mm flex-wrap">
+        <Link href={getParentDirectory(getParentDirectory(path))}>
+          <Icon icon="ARROW_BACK" />
+        </Link>
+        <div className="horizontal-list gap-2mm">
+          <span className="title medium">
+            {entity?.displayName ?? entity?.internalName ?? ""}
+            {entityChanged && "*"}
+          </span>
         </div>
-        {children}
-        <div className="horizontal-list align-items-center gap-4mm flex-wrap">
-            <div className="spacer"></div>
-            <FpButton disabled={!entity || !entityChanged} icon="SAVE" onClick={() => { saveEntity(entity) }} busy={loading}>{t("common.CRUD.save")}</FpButton>
-        </div>
+        <div className="spacer"></div>
+        <ToolLink icon="ID_CARD" href="data">
+          {t("furpanel.admin.users.security.roles.sections.data")}
+        </ToolLink>
+        <ToolLink icon="SECURITY" href="permissions">
+          {t("furpanel.admin.users.security.roles.sections.permissions")}
+        </ToolLink>
+        <ToolLink icon="GROUPS" href="members">
+          {t("furpanel.admin.users.security.roles.sections.members")}
+        </ToolLink>
+      </div>
+      {children}
+      <div className="horizontal-list align-items-center gap-4mm flex-wrap">
+        <div className="spacer"></div>
+        <FpButton
+          disabled={!entity || !entityChanged}
+          icon="SAVE"
+          onClick={() => {
+            saveEntity(entity);
+          }}
+          busy={loading}
+        >
+          {t("common.CRUD.save")}
+        </FpButton>
+      </div>
     </>
+  );
 }

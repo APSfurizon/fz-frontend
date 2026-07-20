@@ -5,63 +5,76 @@ import Modal from "@/components/modal";
 import { AutoInputCustomUserManager } from "@/lib/api/admin/userView";
 import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomKickFormAction } from "@/lib/api/room";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { getData } from "@/lib/components/dataForm";
 
 export default function RemoveGuestModal({
-    open,
-    onClose,
-    roomInfo = EMPTY_ROOM_INFO,
-    reloadData
+  open,
+  onClose,
+  roomInfo = EMPTY_ROOM_INFO,
+  reloadData,
 }: Readonly<{
-    open: boolean
-    onClose: () => void,
-    roomInfo?: RoomInfoResponse,
-    reloadData: () => void
+  open: boolean;
+  onClose: () => void;
+  roomInfo?: RoomInfoResponse;
+  reloadData: () => void;
 }>) {
-    const t = useTranslations();
-    const [loading, setLoading] = useState(false);
+  const t = useTranslations();
 
-    const manager = useMemo(() => new AutoInputCustomUserManager(
+  const manager = useMemo(
+    () =>
+      new AutoInputCustomUserManager(
         roomInfo.currentRoomInfo.guests
-            .filter(guest => guest.user.userId !== roomInfo.currentRoomInfo.roomOwner.userId)
-            .map(guest => guest.user)), [roomInfo]);
+          .filter((guest) => guest.user.userId !== roomInfo.currentRoomInfo.roomOwner.userId)
+          .map((guest) => guest.user)
+      ),
+    [roomInfo]
+  );
 
-    const editFormData = (data: FormData): FormData => {
-        const userId = parseInt(data.get("userId")?.toString() ?? "0");
-        const guestId = roomInfo.currentRoomInfo.guests.find(guest => guest.user.userId === userId)?.roomGuest.guestId;
-        const toReturn = new FormData();
-        toReturn.set("guestId", String(guestId));
-        return toReturn;
-    }
+  const editFormData = (data: FormData): FormData => {
+    const userId = parseInt(getData(data, "userId") ?? "0");
+    const guestId = roomInfo.currentRoomInfo.guests.find((guest) => guest.user.userId === userId)?.roomGuest.guestId;
+    const toReturn = new FormData();
+    toReturn.set("guestId", String(guestId));
+    return toReturn;
+  };
 
-    const onSuccess = () => {
-        onClose();
-        reloadData();
-    }
+  const onSuccess = () => {
+    onClose();
+    reloadData();
+  };
 
-    return <Modal open={open}
-        onClose={onClose}
-        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
-        icon="PERSON_REMOVE">
-        <DataForm action={new RoomKickFormAction}
-            resetOnSuccess
-            resetOnFail
-            editFormData={editFormData}
-            onSuccess={onSuccess}
-            hideSave>
-            <AutoInput fieldName="userId"
-                manager={manager}
-                label={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.select_guest.label")}
-                minDecodeSize={0} />
-            <div className="horizontal-list gap-4mm">
-                <FpButton icon="CANCEL" onClick={onClose}>
-                    {t("common.cancel")}
-                </FpButton>
-                <div className="spacer"></div>
-                <FpButton className="danger" type="submit" icon="PERSON_REMOVE">
-                    {t("furpanel.room.actions.kick")}
-                </FpButton>
-            </div>
-        </DataForm>
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.title")}
+      icon="PERSON_REMOVE"
+    >
+      <DataForm
+        action={new RoomKickFormAction()}
+        resetOnSuccess
+        resetOnFail
+        editFormData={editFormData}
+        onSuccess={onSuccess}
+        hideSave
+      >
+        <AutoInput
+          fieldName="userId"
+          manager={manager}
+          label={t("furpanel.admin.users.accounts.view.rooms_table.actions.remove_guest.select_guest.label")}
+          minDecodeSize={0}
+        />
+        <div className="horizontal-list gap-4mm">
+          <FpButton icon="CANCEL" onClick={onClose}>
+            {t("common.cancel")}
+          </FpButton>
+          <div className="spacer"></div>
+          <FpButton className="danger" type="submit" icon="PERSON_REMOVE">
+            {t("furpanel.room.actions.kick")}
+          </FpButton>
+        </div>
+      </DataForm>
     </Modal>
+  );
 }

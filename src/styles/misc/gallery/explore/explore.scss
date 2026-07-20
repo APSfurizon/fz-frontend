@@ -1,10 +1,9 @@
 .gallery-explore__advanced {
-    padding: 1mm;
+  padding: 1mm;
 }
 
 @media screen and (max-width: 650px) {
-    .gallery-explore__advanced {
-        flex-direction: column;
-    }
-
+  .gallery-explore__advanced {
+    flex-direction: column;
+  }
 }

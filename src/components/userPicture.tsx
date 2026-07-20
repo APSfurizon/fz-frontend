@@ -1,99 +1,115 @@
-"use client"
-import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
-import { EMPTY_PROFILE_PICTURE_SRC } from '@/lib/constants';
-import { getFlagEmoji } from '@/lib/components/userPicture';
-import Image from 'next/image';
+"use client";
+import { FursuitDetails } from "@/lib/api/badge/types";
+import { ExtraDays, UserData } from "@/lib/api/user";
+import { getFlagEmoji } from "@/lib/components/userPicture";
+import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { getImageUrl } from "@/lib/utils";
 import "@/styles/components/userPicture.css";
-import { ExtraDays, UserData } from '@/lib/api/user';
-import { getImageUrl } from '@/lib/utils';
-import { FursuitDetails } from '@/lib/api/badge/fursuits';
-import LoadingPanel from './loadingPanel';
-import StatusBox from './statusBox';
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import LoadingPanel from "./loadingPanel";
+import StatusBox from "./statusBox";
 
 export default function UserPicture({
-    size,
-    className,
-    userData,
-    fursuitData,
-    extraDays = ExtraDays.NONE,
-    showNickname,
-    showFlag,
-    hideEffect = false
+  size,
+  className,
+  userData,
+  fursuitData,
+  extraDays = ExtraDays.NONE,
+  showNickname,
+  showFlag,
+  hideEffect = false,
 }: Readonly<{
-    size?: number,
-    className?: string,
-    userData?: UserData | Promise<UserData>,
-    fursuitData?: FursuitDetails | Promise<FursuitDetails>,
-    extraDays?: ExtraDays,
-    showNickname?: boolean,
-    showFlag?: boolean,
-    hideEffect?: boolean
+  size?: number;
+  className?: string;
+  userData?: UserData | Promise<UserData>;
+  fursuitData?: FursuitDetails | Promise<FursuitDetails>;
+  extraDays?: ExtraDays;
+  showNickname?: boolean;
+  showFlag?: boolean;
+  hideEffect?: boolean;
 }>) {
-    const t = useTranslations();
-    const [isLoading, setLoading] = useState(true);
-    const [pictureData, setPictureData] = useState<UserData>();
-    const [fursuitPictureData, setFursuitPictureData] = useState<FursuitDetails>();
+  const t = useTranslations();
+  const [isLoading, setLoading] = useState(true);
+  const [pictureData, setPictureData] = useState<UserData>();
+  const [fursuitPictureData, setFursuitPictureData] = useState<FursuitDetails>();
 
-    useEffect(() => {
+  useEffect(() => {
+    setLoading(false);
+    if (userData) {
+      if (userData instanceof Promise) {
+        setLoading(true);
+        userData
+          .then((ud) => {
+            setLoading(false);
+            setPictureData(ud);
+          })
+          .catch(() => void 0);
+      } else {
         setLoading(false);
-        if (userData) {
-            if (userData instanceof Promise) {
-                setLoading(true);
-                userData.then(ud => {
-                    setLoading(false);
-                    setPictureData(ud);
-                });
-            } else {
-                setLoading(false);
-                setPictureData(userData);
-            }
-        } else if (fursuitData) {
-            if (fursuitData instanceof Promise) {
-                setLoading(true);
-                fursuitData.then(fd => {
-                    setLoading(false);
-                    setFursuitPictureData(fd);
-                });
-            } else {
-                setLoading(false);
-                setFursuitPictureData(fursuitData);
-            }
-        } else {
-            setPictureData(undefined);
-            setFursuitPictureData(undefined);
-            setLoading(true);
-        }
-    }, [userData]);
+        setPictureData(userData);
+      }
+    } else if (fursuitData) {
+      if (fursuitData instanceof Promise) {
+        setLoading(true);
+        fursuitData
+          .then((fd) => {
+            setLoading(false);
+            setFursuitPictureData(fd);
+          })
+          .catch(() => void 0);
+      } else {
+        setLoading(false);
+        setFursuitPictureData(fursuitData);
+      }
+    } else {
+      setPictureData(undefined);
+      setFursuitPictureData(undefined);
+      setLoading(true);
+    }
+  }, [userData]);
 
-    const borderClassName = useMemo(() =>
-        `image-container rounded-l sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"} ${hideEffect ? "no-effect" : ""}`,
-        [pictureData, fursuitData, isLoading]);
+  const borderClassName = useMemo(
+    () => `
+        image-container rounded-l
+        sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"}
+        ${hideEffect ? "no-effect" : ""}
+      `,
+    [pictureData, fursuitData, isLoading]
+  );
 
-    const isFursuit = !userData && fursuitData;
+  const isFursuit = !userData && fursuitData;
 
-    return (
-        <div className={["user-picture-container", "vertical-list", "align-items-center", className ?? ""].join(" ")}>
-            <div className={borderClassName}>
-                <Image unoptimized className="rounded-m profile-picture"
-                    src={getImageUrl(pictureData?.propic?.mediaUrl)
-                        ?? getImageUrl(fursuitPictureData?.propic?.mediaUrl)
-                        ?? EMPTY_PROFILE_PICTURE_SRC}
-                    alt={t('common.header.alt_profile_picture')} quality={100} width={size ?? 32} height={size ?? 32}>
-                </Image>
-                {pictureData?.locale && showFlag && <span className="flag medium">
-                    {getFlagEmoji(pictureData?.locale.toLowerCase())}
-                </span>}
-            </div>
-            {showNickname && (
-                <span className="title semibold nickname small" style={{ maxWidth: size }}>
-                    {isLoading && <LoadingPanel />}
-                    {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ''}
-                </span>
-            )}
-            {!isFursuit && extraDays != ExtraDays.NONE && <StatusBox>
-                {t(`furpanel.booking.items.extra_days_${extraDays}`)}
-            </StatusBox>}
-        </div>
-    )
+  return (
+    <div className={["user-picture-container", "vertical-list", "align-items-center", className ?? ""].join(" ")}>
+      <div className={borderClassName}>
+        <Image
+          unoptimized
+          className="rounded-m profile-picture"
+          src={
+            getImageUrl(pictureData?.propic?.mediaUrl) ??
+            getImageUrl(fursuitPictureData?.propic?.mediaUrl) ??
+            EMPTY_PROFILE_PICTURE_SRC
+          }
+          alt={t("common.header.alt_profile_picture")}
+          quality={100}
+          width={size ?? 32}
+          height={size ?? 32}
+        ></Image>
+        {pictureData?.locale && showFlag && (
+          <span className="flag medium">{getFlagEmoji(pictureData?.locale.toLowerCase())}</span>
+        )}
+      </div>
+      {showNickname && (
+        <span className="title semibold nickname small" style={{ maxWidth: size }}>
+          {isLoading && <LoadingPanel />}
+          {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ""}
+        </span>
+      )}
+      {!isFursuit && extraDays != ExtraDays.NONE && (
+        <StatusBox>{t(`furpanel.booking.items.extra_days_${extraDays}`)}</StatusBox>
+      )}
+    </div>
+  );
 }

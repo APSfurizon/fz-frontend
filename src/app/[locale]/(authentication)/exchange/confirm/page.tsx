@@ -1,13 +1,15 @@
-"use client"
+"use client";
 import Icon from "@/components/icon";
-import { ApiDetailedErrorResponse, ApiErrorResponse, runRequest } from "@/lib/api/global";
+import { runRequest, ApiErrorResponse } from "@/lib/api/networking";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useTitle from "@/components/hooks/useTitle";
 import {
-  ExchangeStatusApiAction, ExchangeStatusApiResponse, ExchangeUpdateApiAction,
-  ExchangeUpdateApiData
+  ExchangeStatusApiAction,
+  ExchangeStatusApiResponse,
+  ExchangeUpdateApiAction,
+  ExchangeUpdateApiData,
 } from "@/lib/api/exchange";
 import { buildSearchParams } from "@/lib/utils";
 import { translate } from "@/lib/translations";
@@ -31,177 +33,234 @@ export default function ExchangeConfirm() {
   const { userDisplay } = useUser();
 
   const renderRoom = (userData: UserData, data: RoomData, extraDays?: ExtraDays, board?: Board) => {
-    return <>
-      <span className="title item-title horizontal-list align-items-center gap-2mm">
-        <Icon className="large" icon="PACKAGE_2"></Icon>
-        {t.rich("authentication.transfer_confirm.room.room_title", {
-          user: () => <><UserPicture userData={userData} />{userData.fursonaName}</>,
-        })}
-      </span>
-      <div className="horizontal-list item-content align-items-center gap-2mm rounded-m">
-        <Icon className="xx-large" icon="BEDROOM_PARENT" />
-        <div className="vertical-list">
-          <span className="title horizontal-list align-items-center">
-            {translate(data.roomTypeNames, locale)}
-          </span>
-          <span className="small descriptive color-subtitle">
-            {t("furpanel.booking.items.room_capacity", { capacity: data.roomCapacity })}
-          </span>
-          {extraDays && extraDays !== ExtraDays.NONE && <span className="small descriptive color-subtitle">
-            {t(`furpanel.booking.items.extra_days_${extraDays}`)}
-          </span>}
-          {board && board !== Board.NONE && <span className="small descriptive color-subtitle">
-            {t(`furpanel.booking.items.board_${board}`)}
-          </span>}
+    return (
+      <>
+        <span className="title item-title horizontal-list align-items-center gap-2mm">
+          <Icon className="large" icon="PACKAGE_2"></Icon>
+          {t.rich("authentication.transfer_confirm.room.room_title", {
+            user: () => (
+              <>
+                <UserPicture userData={userData} />
+                {userData.fursonaName}
+              </>
+            ),
+          })}
+        </span>
+        <div className="horizontal-list item-content align-items-center gap-2mm rounded-m">
+          <Icon className="xx-large" icon="BEDROOM_PARENT" />
+          <div className="vertical-list">
+            <span className="title horizontal-list align-items-center">{translate(data.roomTypeNames, locale)}</span>
+            <span className="small descriptive color-subtitle">
+              {t("furpanel.booking.items.room_capacity", {
+                capacity: data.roomCapacity,
+              })}
+            </span>
+            {extraDays && extraDays !== ExtraDays.NONE && (
+              <span className="small descriptive color-subtitle">
+                {t(`furpanel.booking.items.extra_days_${extraDays}`)}
+              </span>
+            )}
+            {board && board !== Board.NONE && (
+              <span className="small descriptive color-subtitle">{t(`furpanel.booking.items.board_${board}`)}</span>
+            )}
+          </div>
         </div>
-      </div>
-    </>;
-  }
+      </>
+    );
+  };
 
   // Main logic
-  const [error, setError] = useState<ApiErrorResponse | ApiDetailedErrorResponse | undefined>(undefined);
+  const [error, setError] = useState<ApiErrorResponse | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [exchangeData, setExchangeData] = useState<ExchangeStatusApiResponse>();
 
   // Exchange data
-  useEffect(() => {
+
+  const loadExchangeData = () => {
     setLoading(true);
     runRequest({
       action: new ExchangeStatusApiAction(),
-      searchParams: buildSearchParams({ "id": params.get("id") ?? "" })
-    }).then((result) => setExchangeData(result))
-      .catch((err) => setError(err))
+      searchParams: buildSearchParams({ id: params.get("id") ?? "" }),
+    })
+      .then((result) => setExchangeData(result))
+      .catch((err) => setError(err as ApiErrorResponse))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadExchangeData();
   }, []);
 
   // Exchange confirm
   const updateExchangeStatus = (confirm: boolean) => {
     const data: ExchangeUpdateApiData = {
       exchangeId: parseInt(params.get("id") ?? "0"),
-      confirm: confirm
-    }
+      confirm: confirm,
+    };
     setError(undefined);
     setLoading(true);
     runRequest({
       action: new ExchangeUpdateApiAction(),
-      body: data
-    }).then(() => manageSuccess())
-      .catch((err) => setError(err))
+      body: data,
+    })
+      .then(() => manageSuccess())
+      .catch((err) => setError(err as ApiErrorResponse))
       .finally(() => setLoading(false));
-  }
+  };
 
   const manageSuccess = () => {
     router.replace(exchangeData?.action == "order" ? "/booking" : "/room");
-  }
+  };
 
   useTitle(t("authentication.transfer_confirm.title"));
 
   const isOwner = exchangeData && userDisplay && exchangeData.sourceUser.userId === userDisplay.display.userId;
 
-  const ticketData = exchangeData && exchangeData.fullOrderExchange
-    ? calcTicketData(exchangeData.fullOrderExchange)
-    : null;
-  if (exchangeData && exchangeData.fullOrderExchange) {
-    exchangeData.fullOrderExchange.extraDays = "BOTH";
-  }
+  const ticketData = useMemo(
+    () => (exchangeData && exchangeData.fullOrderExchange ? calcTicketData(exchangeData.fullOrderExchange) : null),
+    [exchangeData]
+  );
 
-  const board = exchangeData?.fullOrderExchange?.board ?? exchangeData?.sourceRoomExchange
-  return <>
-    <div className="horizontal-list gap-4mm justify-content-center">
-      <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES" />
-        <span className="titular bold highlight">furpanel</span>
-        <span> - </span>
-        <span className="titular bold">{t('authentication.transfer_confirm.title').toLowerCase()}</span>
-      </span>
-    </div>
-    {error && <ErrorMessage error={error} />}
-    {loading && <LoadingPanel />}
-    {exchangeData && userDisplay && <>
-      <div className="exchange-info rounded-l vertical-list gap-2mm">
-        <span className="title bold exchange-title rounded-m horizontal-list gap-2mm align-items-center flex-wrap">
-          {t.rich(`authentication.transfer_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
-            source: () => <><UserPicture userData={exchangeData.sourceUser} />{exchangeData.sourceUser.fursonaName}</>,
-            target: () => <><UserPicture userData={exchangeData.targetUser} />{exchangeData.targetUser.fursonaName}</>,
-          })}
+  // TODO: const board = exchangeData?.fullOrderExchange?.board ?? exchangeData?.sourceRoomExchange;
+  return (
+    <>
+      <div className="horizontal-list gap-4mm justify-content-center">
+        <span className="title-pair">
+          <Icon icon="DESIGN_SERVICES" />
+          <span className="titular bold highlight">furpanel</span>
+          <span> - </span>
+          <span className="titular bold">{t("authentication.transfer_confirm.title").toLowerCase()}</span>
         </span>
-        <div className="exchange-items vertical-list gap-4mm">
-          {/* Source room data */}
-          {exchangeData.sourceRoomExchange && <>
-            <div className="item-info vertical-list rounded-m">
-              {renderRoom(exchangeData.sourceUser, exchangeData.sourceRoomExchange,
-                exchangeData.sourceExtraDays, exchangeData.sourceBoard)}
-            </div>
-          </>}
-          {/* Target room data */}
-          {!exchangeData.targetRoomInfoHidden && exchangeData.targetRoomExchange && <>
-            <hr />
-            <div className="item-info vertical-list rounded-m">
-              {renderRoom(exchangeData.targetUser, exchangeData.targetRoomExchange,
-                exchangeData.targetExtraDays, exchangeData.targetBoard
-              )}
-            </div>
-          </>}
-          {/* Order data */}
-          {exchangeData.fullOrderExchange && ticketData && <>
-            <div className="item-info vertical-list rounded-m">
-              <span className="title item-title horizontal-list align-items-center gap-2mm">
-                <Icon className="large" icon="LOCAL_ACTIVITY" />
-                {t.rich("authentication.transfer_confirm.order.order_title", {
-                  user: () => <>
+      </div>
+      {error && <ErrorMessage error={error} />}
+      {loading && <LoadingPanel />}
+      {exchangeData && userDisplay && (
+        <>
+          <div className="exchange-info rounded-l vertical-list gap-2mm">
+            <span className="title bold exchange-title rounded-m horizontal-list gap-2mm align-items-center flex-wrap">
+              {t.rich(`authentication.transfer_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
+                source: () => (
+                  <>
                     <UserPicture userData={exchangeData.sourceUser} />
                     {exchangeData.sourceUser.fursonaName}
                   </>
-                })}
-              </span>
-              <div className="descriptive vertical-list item-content gap-2mm rounded-m">
-                {/* Ticket name */}
-                <span className="horizontal-list gap-2mm">
-                  <Icon icon="LOCAL_ACTIVITY" />
-                  {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
-                    sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
-                    supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
-                    ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>
-                  })}
-                </span>
-                {/* Daily days */}
-                {ticketData?.isDaily && <span className="horizontal-list gap-2mm">
-                  {t("furpanel.booking.items.daily_days",
-                    { days: ticketData.dailyDays?.map(dt => formatter.dateTime(dt, { day: "2-digit" })).join(", ") ?? "" })}
-                </span>}
-                {/* Extra days */}
-                {exchangeData.fullOrderExchange.extraDays && exchangeData.fullOrderExchange.extraDays !== "NONE" &&
-                  <span className="horizontal-list gap-2mm">
-                    <Icon icon="CALENDAR_ADD_ON" />
-                    {t(`furpanel.booking.items.extra_days_${exchangeData.fullOrderExchange.extraDays}`)}
-                  </span>}
-                {/* Room */}
-                {exchangeData.fullOrderExchange.room && <span className="horizontal-list gap-2mm">
-                  <Icon icon="BED" />
-                  {translate(exchangeData.fullOrderExchange.room.roomTypeNames, locale)}
-                  &nbsp;
-                  ({t("furpanel.booking.items.room_capacity",
-                    { capacity: exchangeData.fullOrderExchange.room.roomCapacity })})
-                </span>}
-                {/* Board */}
-                {exchangeData.fullOrderExchange.board != Board.NONE && <span className="horizontal-list gap-2mm">
-                  <Icon icon="DINING" />
-                  {t(`furpanel.booking.items.board_${exchangeData.fullOrderExchange.board}`)}
-                </span>}
-              </div>
+                ),
+                target: () => (
+                  <>
+                    <UserPicture userData={exchangeData.targetUser} />
+                    {exchangeData.targetUser.fursonaName}
+                  </>
+                ),
+              })}
+            </span>
+            <div className="exchange-items vertical-list gap-4mm">
+              {/* Source room data */}
+              {exchangeData.sourceRoomExchange && (
+                <>
+                  <div className="item-info vertical-list rounded-m">
+                    {renderRoom(
+                      exchangeData.sourceUser,
+                      exchangeData.sourceRoomExchange,
+                      exchangeData.sourceExtraDays,
+                      exchangeData.sourceBoard
+                    )}
+                  </div>
+                </>
+              )}
+              {/* Target room data */}
+              {!exchangeData.targetRoomInfoHidden && exchangeData.targetRoomExchange && (
+                <>
+                  <hr />
+                  <div className="item-info vertical-list rounded-m">
+                    {renderRoom(
+                      exchangeData.targetUser,
+                      exchangeData.targetRoomExchange,
+                      exchangeData.targetExtraDays,
+                      exchangeData.targetBoard
+                    )}
+                  </div>
+                </>
+              )}
+              {/* Order data */}
+              {exchangeData.fullOrderExchange && ticketData && (
+                <>
+                  <div className="item-info vertical-list rounded-m">
+                    <span className="title item-title horizontal-list align-items-center gap-2mm">
+                      <Icon className="large" icon="LOCAL_ACTIVITY" />
+                      {t.rich("authentication.transfer_confirm.order.order_title", {
+                        user: () => (
+                          <>
+                            <UserPicture userData={exchangeData.sourceUser} />
+                            {exchangeData.sourceUser.fursonaName}
+                          </>
+                        ),
+                      })}
+                    </span>
+                    <div className="descriptive vertical-list item-content gap-2mm rounded-m">
+                      {/* Ticket name */}
+                      <span className="horizontal-list gap-2mm">
+                        <Icon icon="LOCAL_ACTIVITY" />
+                        {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
+                          sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
+                          supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
+                          ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>,
+                        })}
+                      </span>
+                      {/* Daily days */}
+                      {ticketData?.isDaily && (
+                        <span className="horizontal-list gap-2mm">
+                          {t("furpanel.booking.items.daily_days", {
+                            days:
+                              ticketData.dailyDays
+                                ?.map((dt) => formatter.dateTime(dt, { day: "2-digit" }))
+                                .join(", ") ?? "",
+                          })}
+                        </span>
+                      )}
+                      {/* Extra days */}
+                      {exchangeData.fullOrderExchange.extraDays &&
+                        exchangeData.fullOrderExchange.extraDays !== "NONE" && (
+                          <span className="horizontal-list gap-2mm">
+                            <Icon icon="CALENDAR_ADD_ON" />
+                            {t(`furpanel.booking.items.extra_days_${exchangeData.fullOrderExchange.extraDays}`)}
+                          </span>
+                        )}
+                      {/* Room */}
+                      {exchangeData.fullOrderExchange.room && (
+                        <span className="horizontal-list gap-2mm">
+                          <Icon icon="BED" />
+                          {translate(exchangeData.fullOrderExchange.room.roomTypeNames, locale)}
+                          &nbsp; (
+                          {t("furpanel.booking.items.room_capacity", {
+                            capacity: exchangeData.fullOrderExchange.room.roomCapacity,
+                          })}
+                          )
+                        </span>
+                      )}
+                      {/* Board */}
+                      {exchangeData.fullOrderExchange.board != Board.NONE && (
+                        <span className="horizontal-list gap-2mm">
+                          <Icon icon="DINING" />
+                          {t(`furpanel.booking.items.board_${exchangeData.fullOrderExchange.board}`)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-          </>}
-        </div>
-      </div>
-      <div className="horizontal-list gap-4mm">
-        <FpButton className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
-          {t("common.accept")}
-        </FpButton>
-        <div className="spacer"></div>
-        <FpButton className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
-          {t("common.refuse")}
-        </FpButton>
-      </div>
-    </>}
-  </>;
+          </div>
+          <div className="horizontal-list gap-4mm">
+            <FpButton className="success" icon="CHECK" busy={loading} onClick={() => updateExchangeStatus(true)}>
+              {t("common.accept")}
+            </FpButton>
+            <div className="spacer"></div>
+            <FpButton className="danger" icon="CANCEL" busy={loading} onClick={() => updateExchangeStatus(false)}>
+              {t("common.refuse")}
+            </FpButton>
+          </div>
+        </>
+      )}
+    </>
+  );
 }

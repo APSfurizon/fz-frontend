@@ -1,426 +1,481 @@
-import { ChangeEvent, CSSProperties, FocusEvent, HTMLInputTypeAttribute, useEffect, useId, useRef, useState } from "react";
-import Icon, { MaterialIcon } from "../icon";
+/* eslint-disable react-hooks/set-state-in-effect */
+/* TODO: State in effect fixes */
+import {
+  AutoInputChangedParams,
+  AutoInputFilter,
+  AutoInputManager,
+  AutoInputSearchResult,
+} from "@/lib/components/autoInput";
+import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
+import "@/styles/components/autoInput.css";
+import { debounce } from "lodash";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import {
-    AutoInputFilter, AutoInputSearchResult, AutoInputManager,
-    AutoInputChangedParams
-} from "@/lib/components/autoInput";
-import { useLocale, useTranslations } from "next-intl";
-import "@/styles/components/autoInput.css";
-import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
-import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
+  ChangeEvent,
+  CSSProperties,
+  FocusEvent,
+  HTMLInputTypeAttribute,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
+import Icon from "../icon";
 import { useFormContext } from "./dataForm";
 
 export type AutoInputProps = {
-    busy?: boolean,
-    className?: string,
-    disabled?: boolean;
-    hasError?: boolean;
-    /**Field name to be used in a form*/
-    fieldName?: string;
-    filterIn?: AutoInputFilter,
-    filterOut?: AutoInputFilter,
-    helpText?: string,
-    idExtractor?: (r: AutoInputSearchResult) => string | number,
-    initialData?: (number | string)[],
-    inputStyle?: CSSProperties,
-    label?: string,
-    /**Defines which auto input manager to use, who handles the search request, passes and filters search results */
-    manager: AutoInputManager,
-    labelStyle?: CSSProperties,
-    /**Max items a user can select, it is overridden to 1 if multiple is set to false */
-    max?: number,
-    /**Minimum number of chars before running a search query */
-    minDecodeSize?: number,
-    multiple?: boolean,
-    /**Do not throttle input events before launching a search request */
-    noDelay?: boolean,
-    onChange?: (params: AutoInputChangedParams) => void,
-    onSelect?: (item: AutoInputSearchResult) => void,
-    param?: any,
-    /**Param is required for the component to be enabled */
-    paramRequired?: boolean,
-    placeholder?: string,
-    readOnly?: boolean,
-    required?: boolean,
-    /**Sets itself to required, whether there's anything in the remote datasource */
-    requiredIfPresent?: boolean,
-    style?: CSSProperties,
-    emptyIfUnselected?: boolean,
-    type?: HTMLInputTypeAttribute
-}
+  busy?: boolean;
+  className?: string;
+  disabled?: boolean;
+  hasError?: boolean;
+  /**Field name to be used in a form*/
+  fieldName?: string;
+  filterIn?: AutoInputFilter;
+  filterOut?: AutoInputFilter;
+  helpText?: string;
+  idExtractor?: (r: AutoInputSearchResult) => string | number;
+  initialData?: (number | string)[];
+  inputStyle?: CSSProperties;
+  label?: string;
+  /**Defines which auto input manager to use, who handles the search request, passes and filters search results */
+  manager: AutoInputManager;
+  labelStyle?: CSSProperties;
+  /**Max items a user can select, it is overridden to 1 if multiple is set to false */
+  max?: number;
+  /**Minimum number of chars before running a search query */
+  minDecodeSize?: number;
+  multiple?: boolean;
+  /**Do not throttle input events before launching a search request */
+  noDelay?: boolean;
+  onChange?: (params: AutoInputChangedParams) => void;
+  onSelect?: (item: AutoInputSearchResult) => void;
+  param?: any;
+  /**Param is required for the component to be enabled */
+  paramRequired?: boolean;
+  placeholder?: string;
+  readOnly?: boolean;
+  required?: boolean;
+  /**Sets itself to required, whether there's anything in the remote datasource */
+  requiredIfPresent?: boolean;
+  style?: CSSProperties;
+  emptyIfUnselected?: boolean;
+  type?: HTMLInputTypeAttribute;
+};
 
 export default function AutoInput({
-    busy = false,
-    className,
-    disabled = false,
-    fieldName,
-    filterIn,
-    filterOut,
-    helpText,
-    idExtractor,
-    initialData,
-    inputStyle,
-    label,
-    labelStyle,
-    manager,
-    max = 5,
-    minDecodeSize = 3,
-    multiple = false,
-    noDelay = false,
-    onChange,
-    onSelect,
-    param,
-    paramRequired = false,
-    placeholder,
-    readOnly = false,
-    required = false,
-    requiredIfPresent = false,
-    style,
-    emptyIfUnselected = false,
-    type
+  busy = false,
+  className,
+  disabled = false,
+  fieldName,
+  filterIn,
+  filterOut,
+  helpText,
+  idExtractor,
+  initialData,
+  inputStyle,
+  label,
+  labelStyle,
+  manager,
+  max = 5,
+  minDecodeSize = 3,
+  multiple = false,
+  noDelay = false,
+  onChange,
+  onSelect,
+  param,
+  paramRequired = false,
+  placeholder,
+  readOnly = false,
+  required = false,
+  requiredIfPresent = false,
+  style,
+  emptyIfUnselected = false,
+  type,
 }: AutoInputProps) {
-    const t = useTranslations('components');
+  const t = useTranslations("components");
 
-    /* States */
-    /**Selected ids */
-    const [selectedIds, setSelectedIds] = useState(initialData ?? []);
-    /**Rendered selected values */
-    const [selectedValues, setSelectedValues] = useState<AutoInputSearchResult[]>([]);
-    /**Read search input text */
-    const [searchInput, setSearchInput] = useState("");
-    /**If the values are loading */
-    const [isLoading, setIsLoading] = useState(false);
-    /**If there was a search error */
-    const [searchError, setSearchError] = useState(false);
-    /**If component is focused */
-    const [isFocused, setIsFocused] = useState(false);
-    /**Search results */
-    const [searchResults, setSearchResults] = useState<AutoInputSearchResult[]>([]);
-    /**Validity */
-    const [isValid, setIsValid] = useState(false);
-    /**Required */
-    const [forceRequired, setForceRequired] = useState(required);
+  /* States */
+  /**Selected ids */
+  const [selectedIds, setSelectedIds] = useState(initialData ?? []);
+  /**Rendered selected values */
+  const [selectedValues, setSelectedValues] = useState<AutoInputSearchResult[]>([]);
+  /**Read search input text */
+  const [searchInput, setSearchInput] = useState("");
+  /**If the values are loading */
+  const [isLoading, setIsLoading] = useState(false);
+  /**If there was a search error */
+  const [searchError, setSearchError] = useState(false);
+  /**If component is focused */
+  const [isFocused, setIsFocused] = useState(false);
+  /**Search results */
+  const [searchResults, setSearchResults] = useState<AutoInputSearchResult[]>([]);
+  /**Validity */
+  const [isValid, setIsValid] = useState(false);
+  /**Required */
+  const [forceRequired, setForceRequired] = useState(required);
 
-    /* latest initialData */
-    const [latestInitialData, setLatestInitialData] = useState<(number | string)[]>();
-    /* waitForParam */
-    const [waitForParam, setWaitForParam] = useState(false);
-    /* reset */
-    const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
+  /* latest initialData */
+  const [latestInitialData, setLatestInitialData] = useState<(number | string)[]>();
+  /* waitForParam */
+  const [waitForParam, setWaitForParam] = useState(false);
+  /* reset */
+  const { formReset = false, formDisabled = false, onFormChange, formLoading, registerField } = useFormContext();
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    const locale = useLocale();
-    const id = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const locale = useLocale();
+  const id = useId();
 
-    // Handle field registration
-    useEffect(() => registerField(fieldName, inputRef), [inputRef.current]);
+  // Handle field registration
+  useEffect(() => registerField(fieldName, inputRef), []);
 
-    const searchResultRef = useRef<HTMLDivElement>(null);
-    const firstSearchResultRef = useRef<HTMLButtonElement>(null);
+  const searchResultRef = useRef<HTMLDivElement>(null);
+  const firstSearchResultRef = useRef<HTMLButtonElement>(null);
 
-    /* Props check */
-    const maxSelections = multiple == false ? 1 : max;
-    if ((selectedIds).length > maxSelections) throw 'Input values exceed maximum allowed';
+  /* Props check */
+  const maxSelections = multiple == false ? 1 : max;
+  if (selectedIds.length > maxSelections) throw new Error("Input values exceed maximum allowed");
 
-    /**Adds a new item to the selection */
-    const addItem = (toAdd: AutoInputSearchResult) => {
-        if (readOnly) return;
-        if (onSelect) onSelect(toAdd);
-        const cloneSelectedIds = [...selectedIds];
-        if (manager.codeOnly) {
-            cloneSelectedIds.push(toAdd.code!);
-        } else {
-            cloneSelectedIds.push(toAdd.id!);
-        }
-        setSelectedIds(cloneSelectedIds);
-        const newSelectedValues = [...selectedValues ?? [], toAdd];
-        setSelectedValues(newSelectedValues);
-        setSearchInput("");
-        setSearchResults([]);
-        if (onChange) {
-            onChange({ values: newSelectedValues, newValues: [toAdd], removedValue: undefined });
-        }
-        onFormChange(fieldName);
-        setTimeout(() => inputRef.current?.focus(), 100);
+  /**Adds a new item to the selection */
+  const addItem = (toAdd: AutoInputSearchResult) => {
+    if (readOnly) return;
+    if (onSelect) onSelect(toAdd);
+    const cloneSelectedIds = [...selectedIds];
+    if (manager.codeOnly) {
+      cloneSelectedIds.push(toAdd.code!);
+    } else {
+      cloneSelectedIds.push(toAdd.id!);
     }
-
-    /**Remove a item from the selection */
-    const removeItem = (toRemove: AutoInputSearchResult) => {
-        if (readOnly || isBusy) return;
-        const identifier = manager.codeOnly ? toRemove.code! : toRemove.id!;
-        if (selectedIds.includes(identifier)) {
-            const newSelectedIds = [...selectedIds ?? []];
-            newSelectedIds.splice(selectedIds.indexOf(identifier), 1);
-            const newSelectedValues = [...selectedValues ?? []];
-            newSelectedValues.splice(selectedValues.indexOf(toRemove), 1);
-            setSelectedIds(newSelectedIds);
-            setSelectedValues(newSelectedValues);
-            setSearchResults([]);
-            if (onChange) {
-                onChange({ values: newSelectedValues, newValues: undefined, removedValue: toRemove });
-            }
-            onFormChange(fieldName);
-        }
+    setSelectedIds(cloneSelectedIds);
+    const newSelectedValues = [...(selectedValues ?? []), toAdd];
+    setSelectedValues(newSelectedValues);
+    setSearchInput("");
+    setSearchResults([]);
+    if (onChange) {
+      onChange({ values: newSelectedValues, newValues: [toAdd], removedValue: undefined });
     }
+    onFormChange(fieldName);
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
 
-    /**
-     * Loads the search result
-     * @param searchString 
-     */
-    const searchItem = (searchString: string) => {
-        setIsLoading(true);
-        setSearchResults([]);
-        let excludeFilter = AutoInputFilter.getForSelected(manager, selectedIds);
-        if (filterOut) excludeFilter = excludeFilter.merge(filterOut);
-        manager.searchByValues(searchString.trim(),
-            locale,
-            filterIn,
-            excludeFilter,
-            param
-        ).then(results => {
-            setSearchResults(results);
-            setSearchError(results.length == 0);
-        }).catch(() => {
-            setSearchError(true);
-        }).finally(() => {
-            setIsLoading(false);
+  /**Remove a item from the selection */
+  const removeItem = (toRemove: AutoInputSearchResult) => {
+    if (readOnly || isBusy) return;
+    const identifier = manager.codeOnly ? toRemove.code! : toRemove.id!;
+    if (selectedIds.includes(identifier)) {
+      const newSelectedIds = [...(selectedIds ?? [])];
+      newSelectedIds.splice(selectedIds.indexOf(identifier), 1);
+      const newSelectedValues = [...(selectedValues ?? [])];
+      newSelectedValues.splice(selectedValues.indexOf(toRemove), 1);
+      setSelectedIds(newSelectedIds);
+      setSelectedValues(newSelectedValues);
+      setSearchResults([]);
+      if (onChange) {
+        onChange({ values: newSelectedValues, newValues: undefined, removedValue: toRemove });
+      }
+      onFormChange(fieldName);
+    }
+  };
+
+  /**
+   * Loads the search result
+   * @param searchString
+   */
+  const searchItem = debounce(
+    (searchString: string) => {
+      setIsLoading(true);
+      setSearchResults([]);
+      let excludeFilter = AutoInputFilter.getForSelected(manager, selectedIds);
+      if (filterOut) excludeFilter = excludeFilter.merge(filterOut);
+      manager
+        .searchByValues(searchString.trim(), locale, filterIn, excludeFilter, param)
+        .then((results) => {
+          setSearchResults(results);
+          setSearchError(results.length == 0);
+        })
+        .catch(() => {
+          setSearchError(true);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
+    },
+    noDelay ? 0 : 500
+  );
+
+  /**Queue a new search request */
+  useEffect(() => {
+    if (searchInput.trim().length >= minDecodeSize && isFocused) {
+      searchItem(searchInput);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+    } else setSearchResults([]);
+  }, [searchInput, isFocused]);
+
+  /**Parameter changed, selections must be cleared */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsFocused(false);
+    setSearchError(false);
+    setSearchResults([]);
+    setIsLoading(false);
+    searchItem.cancel();
+    setForceRequired(required);
+    if (requiredIfPresent && param) {
+      manager
+        .isPresent(param)
+        .then((isPresent) => {
+          setForceRequired(isPresent);
+        })
+        .catch(() => {});
+    } else if (param == null || param == undefined) {
+      setIsFocused(false);
+      setSearchError(false);
+      setSearchResults([]);
+      setIsLoading(false);
+      searchItem.cancel();
+      setSelectedIds([]);
+      setSelectedValues([]);
     }
+  }, [param]);
 
-    let searchTimeoutHandle: any;
+  /**Cancel any pending search event */
+  const onSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.currentTarget.value);
+    searchItem.cancel();
+  };
 
-    /**Queue a new search request */
-    useEffect(() => {
-        clearTimeout(searchTimeoutHandle);
-        if (searchInput.trim().length >= minDecodeSize && isFocused) {
-            searchTimeoutHandle = setTimeout(() => {
-                searchItem(searchInput);
-            }, noDelay ? 0 : 500);
-        } else setSearchResults([]);
-    }, [searchInput, isFocused]);
+  const onFocus = () => {
+    setIsFocused(true);
+  };
 
-    /**Parameter changed, selections must be cleared */
-    useEffect(() => {
-        setIsFocused(false);
-        setSearchError(false);
-        setSearchResults([]);
-        setIsLoading(false);
-        clearTimeout(searchTimeoutHandle);
-        setForceRequired(required);
-        if (requiredIfPresent && param) {
-            manager.isPresent(param).then((isPresent) => {
-                setForceRequired(isPresent);
-            });
-        } else if (param == null || param == undefined) {
-            setIsFocused(false);
-            setSearchError(false);
-            setSearchResults([]);
-            setIsLoading(false);
-            clearTimeout(searchTimeoutHandle);
-            setSelectedIds([]);
-            setSelectedValues([]);
-        }
-    }, [param]);
-
-    /**Cancel any pending search event */
-    const onSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchInput(e.currentTarget.value);
-        clearTimeout(searchTimeoutHandle);
-    };
-
-    const onFocus = () => {
-        setIsFocused(true);
+  const onBlur = (e: FocusEvent<HTMLInputElement | HTMLButtonElement>) => {
+    if (inputRef.current == e.relatedTarget || searchResultRef.current?.contains(e.relatedTarget)) {
+      return;
     }
+    setIsFocused(false);
+  };
 
-    const onBlur = (e: FocusEvent<HTMLInputElement | HTMLButtonElement>) => {
-        if (inputRef.current == e.relatedTarget || searchResultRef.current?.contains(e.relatedTarget)) {
-            return;
-        }
-        setIsFocused(false);
+  useEffect(() => {
+    if (!isFocused) {
+      setSearchError(false);
+      setSearchResults([]);
+      setIsLoading(false);
+      searchItem.cancel();
+      if (emptyIfUnselected) {
+        setTimeout(() => setSearchInput(""), 100);
+      }
     }
+  }, [isFocused]);
 
-    useEffect(() => {
-        if (!isFocused) {
-            setSearchError(false);
-            setSearchResults([]);
-            setIsLoading(false);
-            clearTimeout(searchTimeoutHandle);
-            if (emptyIfUnselected) {
-                setTimeout(() => setSearchInput(""), 100);
-            }
-        }
-    }, [isFocused])
-
-    useEffect(() => {
-        if ((initialData !== undefined && (!areEquals(initialData, latestInitialData) || formReset)) ||
-            (waitForParam && param)) {
-            if (!param && paramRequired) {
-                setWaitForParam(true);
-                return;
-            }
-            manager.loadByIds(
-                new AutoInputFilter(manager.codeOnly ? [] : initialData as number[],
-                    manager.codeOnly ? initialData as string[] : []),
-                idExtractor,
-                [param]).then((values) => {
-                    setSelectedValues(values);
-                    if (manager.codeOnly) {
-                        setSelectedIds(values.map(val => val.code!));
-                    } else {
-                        setSelectedIds(values.map(val => val.id!));
-                    }
-                    if (onChange) onChange({ values: values ?? [], newValues: values, removedValue: undefined });
-                });
-        } else if (formReset) {
-            setSelectedValues([]);
-            setSelectedIds([]);
-            setSearchInput("");
-            setSearchResults([]);
-            if (onChange) onChange({ values: [], newValues: [], removedValue: undefined });
-            onFormChange(fieldName);
-        }
-        setWaitForParam(false);
-        setLatestInitialData(initialData);
-    }, [initialData, param, formReset]);
-
-    /**
-     * Renders each search result
-     * @param element search result element
-     * @param index search result index
-     * @returns the rendered node
-     */
-    const renderResult = (element: AutoInputSearchResult, index: number) => {
-        return <button key={index}
-            tabIndex={0}
-            className="search-result horizontal-list align-items-center rounded-s"
-            onClick={() => { addItem(element) }}
-            onBlur={onBlur}
-            ref={index == 0 ? firstSearchResultRef : undefined}>
-            {element.imageUrl !== undefined &&
-                <Image unoptimized
-                    src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
-                    width={32}
-                    height={32}
-                    alt={t('autoinput.alt_result_image', { description: element?.getDescription(locale) })} />
-            }
-            {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon! as MaterialIcon} />}
-            <div style={{ flex: 1 }}>
-                <span className="title">
-                    {element?.getDescription(locale)}
-                </span>
-            </div>
-            <Icon className="medium" icon="ADD_CIRCLE" />
-        </button>;
+  useEffect(() => {
+    if (
+      (initialData !== undefined && (!areEquals(initialData, latestInitialData) || formReset)) ||
+      (waitForParam && param)
+    ) {
+      if (!param && paramRequired) {
+        setWaitForParam(true);
+        return;
+      }
+      manager
+        .loadByIds(
+          new AutoInputFilter(
+            manager.codeOnly ? [] : (initialData as number[]),
+            manager.codeOnly ? (initialData as string[]) : []
+          ),
+          idExtractor,
+          [param]
+        )
+        .then((values) => {
+          setSelectedValues(values);
+          if (manager.codeOnly) {
+            setSelectedIds(values.map((val) => val.code!));
+          } else {
+            setSelectedIds(values.map((val) => val.id!));
+          }
+          if (onChange) onChange({ values: values ?? [], newValues: values, removedValue: undefined });
+        })
+        .catch(() => {
+          setSelectedIds([]);
+          setSelectedValues([]);
+          setSearchError(true);
+        });
+    } else if (formReset) {
+      setSelectedValues([]);
+      setSelectedIds([]);
+      setSearchInput("");
+      setSearchResults([]);
+      if (onChange) onChange({ values: [], newValues: [], removedValue: undefined });
+      onFormChange(fieldName);
     }
+    setWaitForParam(false);
+    setLatestInitialData(initialData);
+  }, [initialData, param, formReset]);
 
-    const valueToSet: (string | number | undefined)[] = selectedValues.map(
-        value => manager.codeOnly ? value.code! : value.id!
-    );
-
-    const renderSelected = (element: AutoInputSearchResult, index: number) => {
-        const selectedClass = "selected-value horizontal-list align-items-center" +
-            ((selectedIds.length == 1 && !multiple) ? " single" : "");
-        return <div key={index}
-            className={selectedClass}>
-            {element.imageUrl !== undefined &&
-                <Image unoptimized
-                    src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!}
-                    width={32}
-                    height={32}
-                    alt={t('autoinput.alt_result_image', { description: element?.getDescription(locale) })} />
-            }
-            {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon as MaterialIcon} />}
-            <span className="title small" style={{ flex: 1 }}>
-                {element?.getDescription(locale)}
-            </span>
-            {!readOnly && <button className="action-delete" onClick={() => removeItem(element)}>
-                <Icon className="medium delete-selection" icon="CANCEL" />
-            </button>}
-        </div>;
-    }
-
-    const renderedValue = idExtractor ? selectedValues.map(val => idExtractor(val)) : valueToSet ?? [];
-    const isDisabled = disabled || formDisabled;
-    const isRequired = (required || forceRequired) && !isDisabled && !readOnly;
-    const isBusy = busy || formLoading || isLoading;
-
-    const checkChange = () => {
-        setIsValid((valueToSet.length <= maxSelections && ((valueToSet.length > 0 && isRequired))) || !isRequired);
-    }
-
-    const anchorNameStyle: CSSProperties = { anchorName: `--${id}` };
-    const anchorPositionStyle: CSSProperties = { positionAnchor: `--${id}` };
-
-    return <>
-        <div className={`autocomplete-input ${className ?? ""} ${isDisabled ? "disabled" : ""}`}
-            style={style}>
-            <label htmlFor={fieldName}
-                className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}
-                style={labelStyle}>
-                {label}
-            </label>
-            <div style={{ position: 'relative' }}>
-                <div className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm"
-                    style={anchorNameStyle}>
-                    {selectedValues?.map((element, index) => renderSelected(element, index))}
-                    {
-                        selectedIds.length < maxSelections && (
-                            <input ref={inputRef}
-                                className={`input-field title ${!isValid && forceRequired ? "danger" : ""}`}
-                                style={inputStyle}
-                                placeholder={placeholder ?? ""}
-                                type={type}
-                                disabled={
-                                    isDisabled ||
-                                    (paramRequired && !param) ||
-                                    (!isRequired && requiredIfPresent)
-                                    || readOnly}
-                                onChange={onSearchTextChange}
-                                onFocus={onFocus}
-                                onBlur={onBlur}
-                                value={searchInput ?? ""}
-                                readOnly={readOnly} />
-                        ) || <div className="spacer"></div>
-                    }
-                    {(isBusy || valueToSet.length < maxSelections) && <span className="icon-container">
-                        {isBusy
-                            ? <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY" />
-                            : <Icon className="medium" icon="SEARCH" />
-                        }
-                    </span>}
-                    {/* Search result */}
-                    {isFocused && valueToSet.length < maxSelections && <div
-                        className="search-result-container rounded-m"
-                        id={id}
-                        style={anchorPositionStyle}
-                        ref={searchResultRef}>
-                        <div className="vertical-list gap-2mm">
-                            {searchInput.length < minDecodeSize
-                                ? <span className="title tiny color-subtitle">
-                                    {t('autoinput.guide', { minSize: minDecodeSize })}
-                                </span>
-                                : !searchError
-                                    ? searchResults.length > 0
-                                        ? searchResults.map((element, index) => renderResult(element, index))
-                                        : <span className="title tiny color-subtitle">
-                                            {t('autoinput.loading_data')}
-                                        </span>
-                                    : <span className="title tiny color-subtitle">{t('autoinput.no_results')}</span>
-                            }
-                        </div>
-                    </div>}
-                </div>
-            </div>
-            <input tabIndex={-1}
-                className="suppressed-input"
-                type="text"
-                name={fieldName}
-                value={renderedValue.join(",") ?? ""}
-                required={forceRequired} onChange={checkChange} />
-            {helpText && helpText.length > 0 && <span className="help-text tiny descriptive color-subtitle">
-                {helpText}
-            </span>}
+  /**
+   * Renders each search result
+   * @param element search result element
+   * @param index search result index
+   * @returns the rendered node
+   */
+  const renderResult = (element: AutoInputSearchResult, index: number) => {
+    return (
+      <button
+        key={index}
+        tabIndex={0}
+        className="search-result horizontal-list align-items-center rounded-s"
+        onClick={() => {
+          addItem(element);
+        }}
+        onBlur={onBlur}
+        ref={index == 0 ? firstSearchResultRef : undefined}
+      >
+        {element.imageUrl !== undefined && (
+          <Image
+            unoptimized
+            src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+            width={32}
+            height={32}
+            alt={t("autoinput.alt_result_image", { description: element?.getDescription(locale) })}
+          />
+        )}
+        {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon} />}
+        <div style={{ flex: 1 }}>
+          <span className="title">{element?.getDescription(locale)}</span>
         </div>
+        <Icon className="medium" icon="ADD_CIRCLE" />
+      </button>
+    );
+  };
+
+  const valueToSet: (string | number | undefined)[] = selectedValues.map((value) =>
+    manager.codeOnly ? value.code! : value.id!
+  );
+
+  const renderSelected = (element: AutoInputSearchResult, index: number) => {
+    const selectedClass =
+      "selected-value horizontal-list align-items-center" + (selectedIds.length == 1 && !multiple ? " single" : "");
+    return (
+      <div key={index} className={selectedClass}>
+        {element.imageUrl !== undefined && (
+          <Image
+            unoptimized
+            src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!}
+            width={32}
+            height={32}
+            alt={t("autoinput.alt_result_image", { description: element?.getDescription(locale) })}
+          />
+        )}
+        {element.icon !== undefined && <Icon style={element.iconCSS} icon={element.icon} />}
+        <span className="title small" style={{ flex: 1 }}>
+          {element?.getDescription(locale)}
+        </span>
+        {!readOnly && (
+          <button
+            className="action-delete"
+            title={t("autoinput.action.remove_item")}
+            onClick={() => removeItem(element)}
+          >
+            <Icon className="medium delete-selection" icon="CANCEL" />
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  const renderedValue = idExtractor ? selectedValues.map((val) => idExtractor(val)) : (valueToSet ?? []);
+  const isDisabled = disabled || formDisabled;
+  const isRequired = (required || forceRequired) && !isDisabled && !readOnly;
+  const isBusy = busy || formLoading || isLoading;
+
+  const checkChange = () => {
+    setIsValid((valueToSet.length <= maxSelections && valueToSet.length > 0 && isRequired) || !isRequired);
+  };
+
+  const anchorNameStyle: CSSProperties = { anchorName: `--${id}` };
+  const anchorPositionStyle: CSSProperties = { positionAnchor: `--${id}` };
+
+  return (
+    <>
+      <div className={`autocomplete-input ${className ?? ""} ${isDisabled ? "disabled" : ""}`} style={style}>
+        <label
+          htmlFor={fieldName}
+          className={`title semibold small margin-bottom-1mm ${isRequired ? "required" : ""}`}
+          style={labelStyle}
+        >
+          {label}
+        </label>
+        <div style={{ position: "relative" }}>
+          <div
+            className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm"
+            style={anchorNameStyle}
+          >
+            {selectedValues?.map((element, index) => renderSelected(element, index))}
+            {(selectedIds.length < maxSelections && (
+              <input
+                ref={inputRef}
+                className={`input-field title ${!isValid && forceRequired ? "danger" : ""}`}
+                style={inputStyle}
+                placeholder={placeholder ?? ""}
+                type={type}
+                disabled={isDisabled || (paramRequired && !param) || (!isRequired && requiredIfPresent) || readOnly}
+                onChange={onSearchTextChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                value={searchInput ?? ""}
+                readOnly={readOnly}
+              />
+            )) || <div className="spacer"></div>}
+            {(isBusy || valueToSet.length < maxSelections) && (
+              <span className="icon-container">
+                {isBusy ? (
+                  <Icon className="medium loading-animation" icon="PROGRESS_ACTIVITY" />
+                ) : (
+                  <Icon className="medium" icon="SEARCH" />
+                )}
+              </span>
+            )}
+            {/* Search result */}
+            {isFocused && valueToSet.length < maxSelections && (
+              <div
+                className="search-result-container rounded-m"
+                id={id}
+                style={anchorPositionStyle}
+                ref={searchResultRef}
+              >
+                <div className="vertical-list gap-2mm">
+                  {searchInput.length < minDecodeSize ? (
+                    <span className="title tiny color-subtitle">
+                      {t("autoinput.guide", { minSize: minDecodeSize })}
+                    </span>
+                  ) : !searchError ? (
+                    searchResults.length > 0 ? (
+                      searchResults.map((element, index) => renderResult(element, index))
+                    ) : (
+                      <span className="title tiny color-subtitle">{t("autoinput.loading_data")}</span>
+                    )
+                  ) : (
+                    <span className="title tiny color-subtitle">{t("autoinput.no_results")}</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <input
+          tabIndex={-1}
+          className="suppressed-input"
+          aria-hidden
+          type="text"
+          name={fieldName}
+          value={renderedValue.join(",") ?? ""}
+          required={forceRequired}
+          onChange={checkChange}
+        />
+        {helpText && helpText.length > 0 && (
+          <span className="help-text tiny descriptive color-subtitle">{helpText}</span>
+        )}
+      </div>
     </>
+  );
 }

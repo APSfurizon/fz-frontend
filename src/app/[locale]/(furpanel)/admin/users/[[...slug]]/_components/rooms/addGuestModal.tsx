@@ -5,52 +5,53 @@ import Modal from "@/components/modal";
 import { EMPTY_ROOM_INFO, RoomInfoResponse, RoomInviteFormAction } from "@/lib/api/room";
 import { AutoInputRoomInviteManager } from "@/lib/api/user";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 export default function AddGuestModal({
-    open,
-    onClose,
-    roomInfo = EMPTY_ROOM_INFO,
-    reloadData
+  open,
+  onClose,
+  roomInfo = EMPTY_ROOM_INFO,
+  reloadData,
 }: Readonly<{
-    open: boolean
-    onClose: () => void,
-    roomInfo?: RoomInfoResponse,
-    reloadData: () => void
+  open: boolean;
+  onClose: () => void;
+  roomInfo?: RoomInfoResponse;
+  reloadData: () => void;
 }>) {
-    const t = useTranslations();
-    const [loading, setLoading] = useState(false);
+  const t = useTranslations();
 
-    const onSuccess = () => {
-        onClose();
-        reloadData();
-    }
+  const onSuccess = () => {
+    onClose();
+    reloadData();
+  };
 
-    return <Modal open={open}
-        onClose={onClose}
-        title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
-        icon="PERSON_ADD" >
-        <DataForm action={new RoomInviteFormAction}
-            resetOnSuccess
-            resetOnFail
-            onSuccess={onSuccess}
-            hideSave>
-            <input type="hidden" name="roomId" value={String(roomInfo.currentRoomInfo.roomId)} />
-            <AutoInput fieldName="invitedUsers"
-                manager={new AutoInputRoomInviteManager}
-                multiple
-                disabled={loading}
-                max={roomInfo.currentRoomInfo.roomData.roomCapacity - roomInfo.currentRoomInfo.guests.length}
-                label={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.select_guest.label")} />
-            <input type="hidden" name="force" value="true" />
-            <input type="hidden" name="forceExit" value="true" />
-            <div className="horizontal-list gap-4mm">
-                <FpButton icon="CANCEL" onClick={onClose}>{t("common.cancel")}</FpButton>
-                <div className="spacer"></div>
-                <FpButton type="submit" icon="PERSON_ADD">
-                    {t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
-                </FpButton>
-            </div>
-        </DataForm>
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
+      icon="PERSON_ADD"
+    >
+      <DataForm action={new RoomInviteFormAction()} resetOnSuccess resetOnFail onSuccess={onSuccess} hideSave>
+        <input type="hidden" name="roomId" value={String(roomInfo.currentRoomInfo.roomId)} />
+        <AutoInput
+          fieldName="invitedUsers"
+          manager={new AutoInputRoomInviteManager()}
+          multiple
+          max={roomInfo.currentRoomInfo.roomData.roomCapacity - roomInfo.currentRoomInfo.guests.length}
+          label={t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.select_guest.label")}
+        />
+        <input type="hidden" name="force" value="true" />
+        <input type="hidden" name="forceExit" value="true" />
+        <div className="horizontal-list gap-4mm">
+          <FpButton icon="CANCEL" onClick={onClose}>
+            {t("common.cancel")}
+          </FpButton>
+          <div className="spacer"></div>
+          <FpButton type="submit" icon="PERSON_ADD">
+            {t("furpanel.admin.users.accounts.view.rooms_table.actions.add_guest.title")}
+          </FpButton>
+        </div>
+      </DataForm>
     </Modal>
+  );
 }

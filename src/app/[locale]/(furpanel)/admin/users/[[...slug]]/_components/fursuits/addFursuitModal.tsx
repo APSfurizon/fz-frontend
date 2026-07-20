@@ -1,123 +1,127 @@
 import { useModalUpdate } from "@/components/context/modalProvider";
-import FpButton from "@/components/input/fpButton";
+import ErrorMessage from "@/components/errorMessage";
 import Checkbox from "@/components/input/checkbox";
 import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
-import Modal from "@/components/modal"
-import ErrorMessage from "@/components/errorMessage";
-import { AddFursuitFormAction, EditFursuitFormAction, Fursuit } from "@/lib/api/badge/fursuits"
-import { ApiErrorResponse } from "@/lib/api/global";
+import Modal from "@/components/modal";
+import { AddFursuitFormAction, EditFursuitFormAction } from "@/lib/api/badge/fursuits";
+import { FursuitEventData } from "@/lib/api/badge/types";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { EVENT_NAME } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export default function AddFursuitModal({
-    userId,
-    fursuit,
-    open,
-    onClose,
-    reloadData
+  userId,
+  fursuit,
+  open,
+  onClose,
+  reloadData,
 }: Readonly<{
-    userId: number,
-    fursuit?: Fursuit,
-    open: boolean,
-    onClose: () => void,
-    reloadData: () => void,
+  userId: number;
+  fursuit?: FursuitEventData;
+  open: boolean;
+  onClose: () => void;
+  reloadData: () => void;
 }>) {
-    const t = useTranslations();
-    const { showModal } = useModalUpdate();
-    const editMode = !!fursuit;
-    const [deleteImage, setDeleteImage] = useState(false);
-    const [image, setImage] = useState<Blob>();
+  const t = useTranslations();
+  const { showModal } = useModalUpdate();
+  const editMode = !!fursuit;
+  const [deleteImage, setDeleteImage] = useState(false);
+  const [image, setImage] = useState<Blob>();
 
-    const editFursuitFormData = (e: FormData): FormData => {
-        e.append("image", image ?? '')
-        if (editMode) {
-            e.append("delete-image", "" + (deleteImage && !image))
-        }
-        return e;
+  const editFursuitFormData = (e: FormData): FormData => {
+    e.append("image", image ?? "");
+    if (editMode) {
+      e.append("delete-image", "" + (deleteImage && !image));
     }
+    return e;
+  };
 
-    const deleteCurrentImage = () => {
-        setDeleteImage(editMode);
-        setImage(undefined)
-    }
+  const deleteCurrentImage = () => {
+    setDeleteImage(editMode);
+    setImage(undefined);
+  };
 
-    const beforeClose = () => {
-        setImage(undefined);
-        setDeleteImage(false);
-        onClose();
-    }
+  const beforeClose = () => {
+    setImage(undefined);
+    setDeleteImage(false);
+    onClose();
+  };
 
-    const onSuccess = () => {
-        beforeClose();
-        reloadData();
-    }
+  const onSuccess = () => {
+    beforeClose();
+    reloadData();
+  };
 
-    const onFail = (err: ApiErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
+  const onFail = (err: ApiErrorResponse) => showModal(t("common.error"), <ErrorMessage error={err} />);
 
-    return <Modal open={open} onClose={beforeClose}
-        title={editMode
-            ? t("furpanel.badge.actions.edit_fursuit", { name: fursuit.fursuit.name })
-            : t("furpanel.badge.actions.add_fursuit")}
-        icon={editMode ? "EDIT" : "ADD_CIRCLE"}>
-        <DataForm action={editMode ? new EditFursuitFormAction : new AddFursuitFormAction}
-            pathParams={editMode ? { "id": fursuit?.fursuit.id } : undefined}
-            editFormData={editFursuitFormData}
-            hideSave
-            className="gap-2mm"
-            onFail={onFail}
-            onSuccess={onSuccess}
-            shouldReset={!open}
-            resetOnSuccess>
-            <input type="hidden" name="user-id" value={String(userId)} />
-            <Upload initialMedia={editMode
-                ? deleteImage
-                    ? undefined
-                    : fursuit.fursuit.propic
-                : undefined}
-                requireCrop
-                setBlob={setImage}
-                onDelete={deleteCurrentImage}
-                label={t("furpanel.badge.input.fursuit_image.label")} />
-            <FpInput inputType="text"
-                required
-                fieldName="name"
-                initialValue={editMode ? fursuit?.fursuit.name : ""}
-                label={t("furpanel.badge.input.fursuit_name.label")}
-                placeholder={t("furpanel.badge.input.fursuit_name.placeholder")} />
-            <FpInput inputType="text"
-                fieldName="species"
-                initialValue={editMode ? fursuit?.fursuit.species : ""}
-                label={t("furpanel.badge.input.fursuit_species.label")}
-                placeholder={t("furpanel.badge.input.fursuit_species.placeholder")} />
-            <Checkbox fieldName="bring-to-current-event"
-                initialValue={editMode ? fursuit?.bringingToEvent : false}>
-                {t("furpanel.badge.input.bring_to_event.label", { eventName: EVENT_NAME })}
-            </Checkbox>
-            <Checkbox fieldName="show-in-fursuit-count"
-                initialValue={editMode ? fursuit?.showInFursuitCount : true}>
-                {t("furpanel.badge.input.show_in_fursuit_count.label", { eventName: EVENT_NAME })}
-            </Checkbox>
-            <Checkbox fieldName="show-owner"
-                initialValue={editMode ? fursuit?.showOwner : true}>
-                {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
-            </Checkbox>
-            <div className="horizontal-list gap-4mm margin-top-2mm">
-                <FpButton type="button"
-                    className="danger"
-                    icon="CANCEL"
-                    onClick={beforeClose}>
-                    {t("common.cancel")}
-                </FpButton>
-                <div className="spacer"></div>
-                <FpButton type="submit"
-                    className="success"
-                    icon="CHECK">
-                    {t("common.confirm")}
-                </FpButton>
-            </div>
-        </DataForm>
+  return (
+    <Modal
+      open={open}
+      onClose={beforeClose}
+      title={
+        editMode
+          ? t("furpanel.badge.actions.edit_fursuit", { name: fursuit.fursuit.name })
+          : t("furpanel.badge.actions.add_fursuit")
+      }
+      icon={editMode ? "EDIT" : "ADD_CIRCLE"}
+    >
+      <DataForm
+        action={editMode ? new EditFursuitFormAction() : new AddFursuitFormAction()}
+        pathParams={editMode ? { id: fursuit?.fursuit.id } : undefined}
+        editFormData={editFursuitFormData}
+        hideSave
+        className="gap-2mm"
+        onFail={onFail}
+        onSuccess={onSuccess}
+        shouldReset={!open}
+        resetOnSuccess
+      >
+        <input type="hidden" name="user-id" value={String(userId)} />
+        <Upload
+          initialMedia={editMode ? (deleteImage ? undefined : fursuit.fursuit.propic) : undefined}
+          requireCrop
+          setBlob={setImage}
+          onDelete={deleteCurrentImage}
+          label={t("furpanel.badge.input.fursuit_image.label")}
+        />
+        <FpInput
+          inputType="text"
+          required
+          fieldName="name"
+          initialValue={editMode ? fursuit?.fursuit.name : ""}
+          label={t("furpanel.badge.input.fursuit_name.label")}
+          placeholder={t("furpanel.badge.input.fursuit_name.placeholder")}
+        />
+        <FpInput
+          inputType="text"
+          fieldName="species"
+          initialValue={editMode ? fursuit?.fursuit.species : ""}
+          label={t("furpanel.badge.input.fursuit_species.label")}
+          placeholder={t("furpanel.badge.input.fursuit_species.placeholder")}
+        />
+        <Checkbox fieldName="bring-to-current-event" initialValue={editMode ? fursuit?.bringingToEvent : false}>
+          {t("furpanel.badge.input.bring_to_event.label", { eventName: EVENT_NAME })}
+        </Checkbox>
+        <Checkbox fieldName="show-in-fursuit-count" initialValue={editMode ? fursuit?.showInFursuitCount : true}>
+          {t("furpanel.badge.input.show_in_fursuit_count.label", { eventName: EVENT_NAME })}
+        </Checkbox>
+        <Checkbox fieldName="show-owner" initialValue={editMode ? fursuit?.showOwner : true}>
+          {t("furpanel.badge.input.show_owner.label", { eventName: EVENT_NAME })}
+        </Checkbox>
+        <div className="horizontal-list gap-4mm margin-top-2mm">
+          <FpButton type="button" className="danger" icon="CANCEL" onClick={beforeClose}>
+            {t("common.cancel")}
+          </FpButton>
+          <div className="spacer"></div>
+          <FpButton type="submit" className="success" icon="CHECK">
+            {t("common.confirm")}
+          </FpButton>
+        </div>
+      </DataForm>
     </Modal>
+  );
 }

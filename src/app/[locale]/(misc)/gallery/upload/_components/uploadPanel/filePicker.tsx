@@ -1,94 +1,111 @@
-import { useFormContext } from "@/components/input/dataForm";
-import { useTranslations } from "next-intl";
-import { ChangeEvent, DragEvent, useCallback, useEffect, useRef, useState } from "react";
 import Icon from "@/components/icon";
+import { useFormContext } from "@/components/input/dataForm";
 import FpButton from "@/components/input/fpButton";
 import "@/styles/misc/gallery/upload/filePicker.css";
+import { useTranslations } from "next-intl";
+import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
 
 type GalleryFilePickerProps = {
-    onFilesSelected: (files: File[]) => void;
-    disabled?: boolean;
+  onFilesSelected: (files: File[]) => void;
+  disabled?: boolean;
 };
 
 function isSupportedMedia(data: DataTransferItem) {
-    return ["image", "video"].includes(data.type.split("/")[0]);
+  return ["image", "video"].includes(data.type.split("/")[0]);
 }
 
 export default function GalleryFilePicker(props: Readonly<GalleryFilePickerProps>) {
-    const { formLoading } = useFormContext();
-    const t = useTranslations();
-    const fileRef = useRef<HTMLInputElement>(null!);
-    const [hover, setHover] = useState(false);
+  const { formLoading } = useFormContext();
+  const t = useTranslations();
+  const fileRef = useRef<HTMLInputElement>(null!);
+  const [hover, setHover] = useState(false);
 
-    useEffect(() => {
-        const handler = function (e: globalThis.DragEvent) {
-            if ([...e.dataTransfer?.items ?? []].some((item) => item.kind === "file")) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }
-        if (props.disabled) {
-            window.addEventListener("drop", handler);
-        }
-        return () => window.removeEventListener("drop", handler);
-    }, [props.disabled]);
-
-    const dragOverHandler = useCallback((e: DragEvent<HTMLDivElement>) => {
-        if (props.disabled) { return; }
+  useEffect(() => {
+    const handler = function (e: globalThis.DragEvent) {
+      if ([...(e.dataTransfer?.items ?? [])].some((item) => item.kind === "file")) {
         e.preventDefault();
-        if (formLoading) {
-            e.dataTransfer.dropEffect = "none";
-            return;
-        }
-        const fileItems = [...e.dataTransfer.items].filter(
-            (item) => item.kind === "file",
-        );
-        if (fileItems.length > 0 && fileItems.some(isSupportedMedia)) {
-            e.dataTransfer.dropEffect = "copy";
-            setHover(true);
-        }
-    }, [props.disabled]);
+        e.stopPropagation();
+      }
+    };
+    if (props.disabled) {
+      window.addEventListener("drop", handler);
+    }
+    return () => window.removeEventListener("drop", handler);
+  }, [props.disabled]);
 
-    const dropHandler = useCallback((e: DragEvent<HTMLDivElement>) => {
-        if (props.disabled) { return; }
-        setHover(false);
-        e.preventDefault();
-        const fileItems = [...e.dataTransfer.items].filter(item => item.kind === "file");
-        if (fileItems.some(d => !isSupportedMedia(d))) { return; }
-        props.onFilesSelected(fileItems.map(v => v.getAsFile()).filter(v => !!v));
-    }, [props.disabled]);
+  const dragOverHandler = useCallback(
+    (e: DragEvent<HTMLDivElement>) => {
+      if (props.disabled) {
+        return;
+      }
+      e.preventDefault();
+      if (formLoading) {
+        e.dataTransfer.dropEffect = "none";
+        return;
+      }
+      const fileItems = [...e.dataTransfer.items].filter((item) => item.kind === "file");
+      if (fileItems.length > 0 && fileItems.some(isSupportedMedia)) {
+        e.dataTransfer.dropEffect = "copy";
+        setHover(true);
+      }
+    },
+    [props.disabled]
+  );
 
-    const filePickerHandler = useCallback((e: ChangeEvent) => {
-        if (props.disabled) { return; }
-        if (!fileRef.current?.files?.length) return;
-        props.onFilesSelected([...fileRef.current.files]);
-        fileRef.current.value = "";
-    }, [props.disabled]);
+  const dropHandler = useCallback(
+    (e: DragEvent<HTMLDivElement>) => {
+      if (props.disabled) {
+        return;
+      }
+      setHover(false);
+      e.preventDefault();
+      const fileItems = [...e.dataTransfer.items].filter((item) => item.kind === "file");
+      if (fileItems.some((d) => !isSupportedMedia(d))) {
+        return;
+      }
+      props.onFilesSelected(fileItems.map((v) => v.getAsFile()).filter((v) => !!v));
+    },
+    [props.disabled]
+  );
 
-    const s = undefined;
+  const filePickerHandler = useCallback(() => {
+    if (props.disabled) {
+      return;
+    }
+    if (!fileRef.current?.files?.length) return;
+    props.onFilesSelected([...fileRef.current.files]);
+    fileRef.current.value = "";
+  }, [props.disabled]);
 
-    return <div className={`gallery-file-picker rounded-m ${hover ? "hover" : ""}`}
-        role="region"
-        onDragOver={dragOverHandler}
-        onDrop={dropHandler}
-        onDragLeave={() => setHover(false)}>
-        <div className="prompt vertical-list flex-horizontal-center justify-content-center">
-            <input type="file"
-                className="suppressed-input"
-                multiple
-                ref={fileRef}
-                accept="image/*, video/*"
-                onChange={filePickerHandler} />
-            <span className="title horizontal-list align-items-center flex-horizontal-center gap-2mm flex-wrap">
-                <Icon icon="CLOUD_UPLOAD"></Icon>
-                {t.rich("misc.gallery.upload.form.picker.hint", {
-                    f: chunks => <FpButton type="button"
-                        onClick={() => fileRef.current?.showPicker()}
-                        disabled={props.disabled}>
-                        {chunks}
-                    </FpButton>
-                })}
-            </span>
-        </div>
+  return (
+    <div
+      className={`gallery-file-picker rounded-m ${hover ? "hover" : ""}`}
+      role="region"
+      onDragOver={dragOverHandler}
+      onDrop={dropHandler}
+      onDragLeave={() => setHover(false)}
+    >
+      <div className="prompt vertical-list flex-horizontal-center justify-content-center">
+        <input
+          type="file"
+          className="suppressed-input"
+          aria-hidden
+          multiple
+          ref={fileRef}
+          accept="image/*, video/*"
+          onChange={filePickerHandler}
+        />
+        <span className="title horizontal-list align-items-center flex-horizontal-center gap-2mm flex-wrap">
+          <Icon icon="CLOUD_UPLOAD"></Icon>
+          {t.rich("misc.gallery.upload.form.picker.hint", {
+            f: (chunks) => (
+              <FpButton type="button" onClick={() => fileRef.current?.showPicker()} disabled={props.disabled}>
+                {chunks}
+              </FpButton>
+            ),
+          })}
+        </span>
+      </div>
     </div>
+  );
 }

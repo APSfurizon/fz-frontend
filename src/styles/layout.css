@@ -1,180 +1,188 @@
 .vertical-list,
 .horizontal-list {
-    display: flex;
+  display: flex;
 }
 
 .vertical-list {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .horizontal-list {
-    flex-direction: row;
+  flex-direction: row;
 }
 
 .spacer {
-    flex-grow: 1;
+  flex-grow: 1;
+}
+
+.padding-1mm {
+  padding: 1mm;
+}
+
+.padding-2mm {
+  padding: 2mm;
 }
 
 .gap-2mm {
-    gap: 2mm;
+  gap: 2mm;
 }
 
 .gap-4mm {
-    gap: 4mm;
+  gap: 4mm;
 }
 
 .margin-2mm {
-    margin: 2mm;
+  margin: 2mm;
 }
 
 .margin-4mm {
-    margin: 4mm;
+  margin: 4mm;
 }
 
 .margin-bottom-1mm {
-    margin-bottom: 1mm;
+  margin-bottom: 1mm;
 }
 
 .margin-bottom-2mm {
-    margin-bottom: 2mm;
+  margin-bottom: 2mm;
 }
 
 .margin-top-1mm {
-    margin-top: 1mm;
+  margin-top: 1mm;
 }
 
 .margin-top-2mm {
-    margin-top: 2mm;
+  margin-top: 2mm;
 }
 
 .margin-auto {
-    margin: auto;
+  margin: auto;
 }
 
 .margin-left-auto {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .margin-left-1mm {
-    margin-left: 1mm;
+  margin-left: 1mm;
 }
 
 .margin-left-2mm {
-    margin-left: 2mm;
+  margin-left: 2mm;
 }
 
 .margin-right-auto {
-    margin-right: auto;
+  margin-right: auto;
 }
 
 .justify-content-center {
-    justify-content: center;
+  justify-content: center;
 }
 
 .align-items-center {
-    align-items: center;
+  align-items: center;
 }
 
 .align-items-bottom {
-    align-items: end;
+  align-items: end;
 }
 
 .flex-same-base * {
-    flex-basis: 1 1 0;
+  flex-basis: 1 1 0;
 }
 
 .flex-space-around {
-    justify-content: space-around;
+  justify-content: space-around;
 }
 
 .flex-space-between {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .flex-space-evenly {
-    justify-content: space-evenly;
+  justify-content: space-evenly;
 }
 
 .flex-wrap {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .vertical-align-middle * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .vertical-align-bottom * {
-    vertical-align: bottom;
+  vertical-align: bottom;
 }
 
 .center {
-    text-align: center;
+  text-align: center;
 }
 
 .left {
-    text-align: left;
+  text-align: left;
 }
 
 .right {
-    text-align: right;
+  text-align: right;
 }
 
 .rounded-xs {
-    border-radius: 0.15625em;
+  border-radius: 0.15625em;
 }
 
 .rounded-s {
-    border-radius: 0.3125em;
+  border-radius: 0.3125em;
 }
 
 .rounded-m {
-    border-radius: 2mm;
+  border-radius: 2mm;
 }
 
 .rounded-l {
-    border-radius: 3mm;
+  border-radius: 3mm;
 }
 
-.section>*:not(.section-title) {
-    margin-left: 0.6em;
+.section > *:not(.section-title) {
+  margin-left: 0.6em;
 }
 
-.section>.section-title {
-    margin-bottom: 0.5em;
+.section > .section-title {
+  margin-bottom: 0.5em;
 }
 
 .main-dialog {
-    padding: 1.25em;
-    margin: 0 auto 8mm auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25em;
-    width: fit-content;
-    box-shadow: 0px 3px 20px 1px #0000003F;
+  padding: 1.25em;
+  margin: 0 auto 8mm auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  width: fit-content;
+  box-shadow: 0px 3px 20px 1px #0000003f;
 }
 
 .main-dialog .page,
 .main-dialog .stretch-page {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625em;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625em;
+  width: 100%;
 }
 
 .title-pair {
-    display: flex;
-    align-items: center;
-    gap: 0.3125em;
-    padding: 0.3125em;
+  display: flex;
+  align-items: center;
+  gap: 0.3125em;
+  padding: 0.3125em;
 }
 
 div.form-pair div.fp-input,
 div.form-pair div.autocomplete-input {
-    flex: 1;
+  flex: 1;
 }
 
-@media (max-width:800px) {
-    .form-pair {
-        flex-direction: column;
-    }
+@media (max-width: 800px) {
+  .form-pair {
+    flex-direction: column;
+  }
 }

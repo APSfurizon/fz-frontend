@@ -1,9 +1,9 @@
-import { ApiRequest } from "../../global";
+import { ApiRequest } from "../../networking/types";
 
 export interface GalleryUpdateBody extends ApiRequest {
-    uploadIds: number[],
-    newStatus?: string,
-    newPhotographerUserId?: number,
-    newEventUid?: number,
-    newRepostPermissions?: string
+  uploadIds: number[];
+  newStatus?: string;
+  newPhotographerUserId?: number;
+  newEventId?: number;
+  newRepostPermissions?: string;
 }
