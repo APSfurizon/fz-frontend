@@ -1,9 +1,6 @@
 import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
 import { Board, ExtraDaysType } from "./booking";
-import { ApiAction } from "./networking/types";
-import { ApiErrorResponse } from "./networking/types";
-import { ApiResponse } from "./networking/types";
-import { RequestType } from "./networking/types";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./networking/types";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
 import { SponsorType, UserData } from "./user";
 
@@ -134,9 +131,7 @@ export class RoomInviteDTOBuilder implements FormDTOBuilder<RoomInviteApiData> {
   mapToDTO = (data: FormData) => {
     const toReturn: RoomInviteApiData = {
       roomId: parseInt(getData(data, "roomId") ?? "0"),
-      userIds: getData(data, "invitedUsers")!
-        .split(",")
-        .map((val) => parseInt(val)),
+      userIds: (getData(data, "invitedUsers")?.toString() ?? "").split(",").map((val) => parseInt(val)),
       force: (getData(data, "force") ?? "false").toLowerCase() === "true",
       forceExit: (getData(data, "forceExit") ?? "false").toLowerCase() === "true",
     };
