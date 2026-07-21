@@ -255,7 +255,7 @@ export default function BookingPage() {
                               <Icon className="medium" icon="OPEN_IN_NEW" />
                             </Link>
                           ),
-                          link: "Devero hotel",
+                          link: EVENT_MAIN_LOCATION_NAME,
                         })}
                       </span>
                     </p>
