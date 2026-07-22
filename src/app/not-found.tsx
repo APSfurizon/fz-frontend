@@ -19,7 +19,7 @@ export default function NotFound() {
         <p>
           <span className="title bold medium">Not found</span>
           <br></br>
-          <span className="descriptive">The requested resouce cannot be found</span>
+          <span className="descriptive">The requested resource cannot be found</span>
         </p>
       </div>
     </div>

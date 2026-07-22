@@ -1,8 +1,8 @@
+import "@/styles/globals.css";
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import type { Metadata } from "next";
 import { Inter, Roboto_Slab } from "next/font/google";
-import "@/styles/globals.css";
 
 const inter = Inter({ weight: ["200", "400", "500", "600"] });
 const robotoSlab = Roboto_Slab({ weight: ["200", "400", "500", "600"] });
@@ -23,7 +23,6 @@ export default async function LocalizedLayout({ children }: Readonly<{ children:
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
         </NextIntlClientProvider>
-        <div id="portal-root"></div>
       </body>
     </html>
   );
