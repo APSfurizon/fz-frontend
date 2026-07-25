@@ -1,8 +1,6 @@
 import { useRouter } from "next/navigation";
 
-export function useWrappedRouter(
-  confirmMessage: string,
-  shouldBlock: boolean) {
+export function useWrappedRouter(confirmMessage: string, shouldBlock: boolean) {
   const router = useRouter();
 
   const confirmNavigation = (): boolean => {
@@ -26,9 +24,9 @@ export function useWrappedRouter(
   };
 
   return {
-  push,
-  replace,
-  back,
-  forward,
+    push,
+    replace,
+    back,
+    forward,
   };
 }

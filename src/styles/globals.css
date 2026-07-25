@@ -1,6 +1,6 @@
-@import url('./fonts.css');
-@import url('./layout.css');
-@import url('./colors.css');
+@import url("./fonts.css");
+@import url("./layout.css");
+@import url("./colors.css");
 
 /* Main body / html */
 
@@ -15,7 +15,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Twemoji Country Flags', Arial, Helvetica, sans-serif;
+  font-family: "Twemoji Country Flags", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -31,7 +31,7 @@ i {
   color: var(--foreground);
 }
 
-html>body>div.page-wrapper {
+html > body > div.page-wrapper {
   position: relative;
   min-height: 100vh;
 }
@@ -65,7 +65,7 @@ a.hoverable:hover {
 /* Scrollbar styles */
 
 ::-webkit-scrollbar {
-  width: .625em;
+  width: 0.625em;
 }
 
 ::-webkit-scrollbar-track {
@@ -89,4 +89,5 @@ a.hoverable:hover {
   }
 }
 
-@media screen and (max-width: 480px) {}
+@media screen and (max-width: 480px) {
+}

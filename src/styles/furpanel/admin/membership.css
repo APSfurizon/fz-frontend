@@ -1,19 +1,19 @@
 div.filter-params {
-    background-color: var(--room-invite-bg);
-    padding: 0.625em;
-    justify-content: space-between;
+  background-color: var(--room-invite-bg);
+  padding: 0.625em;
+  justify-content: space-between;
 }
 
 details:not([open]) i.close {
-    display: none;
+  display: none;
 }
 
 details[open] i.open {
-    display: none;
+  display: none;
 }
 
-@media (max-width:600px) {
-    div.filter-params {
-        flex-direction: column;
-    }
+@media (max-width: 600px) {
+  div.filter-params {
+    flex-direction: column;
+  }
 }

@@ -1,5 +1,5 @@
 export const EMPTY_PROFILE_PICTURE_SRC = "/images/profile.png";
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9090/api/v1/';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:9090/api/v1/";
 export const API_IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export const TOKEN_STORAGE_NAME = "fz-token";
 export const MOBILE_ADMIN_TOKEN_STORAGE_NAME = "fz-mobile-token";
@@ -7,6 +7,7 @@ export const API_MOBILE_URL = process.env.NEXT_PUBLIC_API_MOBILE_BASE_URL;
 export const MOBILE_FURIZON_AUTH_HEADER = process.env.NEXT_PUBLIC_MOBILE_FURIZON_AUTH_HEADER ?? "";
 
 export const APP_HOSTNAME = process.env.NEXT_PUBLIC_APP_HOSTNAME ?? "";
+export const ALLOWED_DEV_ORIGINS = (process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS ?? "").split(",");
 export const APP_VERSION = process.env.version;
 export const APP_GIT = "https://github.com/APSfurizon/";
 export const APP_GIT_PROJECT = "https://github.com/APSfurizon/fz-frontend";
@@ -38,18 +39,19 @@ export const FULL_UPLOAD_MAX_HEIGHT = parseInt(process.env.NEXT_PUBLIC_FULL_UPLO
 /**Session duration in days */
 export const SESSION_DURATION = parseInt(process.env.NEXT_PUBLIC_SESSION_DURATION ?? "7");
 /**Urls that need authentication */
-// eslint-disable-next-line max-len
-export const REGEX_UNAUTHENTICATED_URLS = /^(?:\/?(login|logging|logout|recover|register|nosecount|schedule|fonts|images\/footer|api\/og)([\/?].*)?)$/mi;
-/**Urls that need to be skipped if user is authenticated */// eslint-disable-next-line max-len
-export const REGEX_SKIP_AUTHENTICATED = /^(?:\/?(login|recover|register)([\/?].*)?)$/mi;
+export const REGEX_UNAUTHENTICATED_URLS =
+  /^(?:\/?(login|logging|logout|recover|register|nosecount|schedule|fonts|gallery|images\/footer|api\/og)([\/?].*)?)$/im;
+/**Urls that need to be skipped if user is authenticated */ // eslint-disable-next-line max-len
+export const REGEX_SKIP_AUTHENTICATED = /^(?:\/?(login|recover|register)([\/?].*)?)$/im;
 /**Logout url */
-export const REGEX_LOGOUT = /^(?:\/?logout([\/?].*)?)$/mi;
+export const REGEX_LOGOUT = /^(?:\/?logout([\/?].*)?)$/im;
 
 // Event related data
 export const EVENT_NAME = process.env.NEXT_PUBLIC_EVENT_NAME ?? "Furizon";
-export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? ""
+export const EVENT_BANNER = process.env.NEXT_PUBLIC_EVENT_BANNER_URL ?? "";
 export const EVENT_LOGO = process.env.NEXT_PUBLIC_EVENT_LOGO;
 export const EVENT_CURRENCY = process.env.NEXT_PUBLIC_EVENT_CURRENCY ?? "EUR";
+export const EVENT_MAIN_LOCATION_NAME = process.env.NEXT_PUBLIC_EVENT_MAIN_LOCATION_NAME ?? "Main hotel";
 export const GROUP_CHAT_URL = process.env.NEXT_PUBLIC_GROUP_CHAT_URL;
 export const MEMBERSHIP_STARTING_YEAR = parseInt(process.env.NEXT_PUBLIC_MEMBERSHIP_START_YEAR ?? "2024");
 
@@ -60,8 +62,8 @@ export const SHOW_APP_BANNER = (process.env.NEXT_PUBLIC_SHOW_APP_BANNER ?? false
 /****************/
 
 export const APP_LINKS: Record<string, string> = {
-    android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "",
-    apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? ""
+  android: process.env.NEXT_PUBLIC_PLAY_STORE_LINK ?? "",
+  apple: process.env.NEXT_PUBLIC_APP_STORE_LINK ?? "",
 };
 
 /****************/
@@ -74,5 +76,5 @@ export const ROOM_ENABLED = (process.env.NEXT_PUBLIC_ROOM_ENABLED ?? false) === 
 export const NOSECOUNT_ENABLED = (process.env.NEXT_PUBLIC_NOSECOUNT_ENABLED ?? false) === "true";
 export const SCHEDULE_ENABLED = (process.env.NEXT_PUBLIC_SCHEDULE_ENABLED ?? false) === "true";
 export const DEALER_ENABLED = (process.env.NEXT_PUBLIC_DEALER_ENABLED ?? false) === "true";
-export const UPLOAD_ENABLED = (process.env.NEXT_PUBLIC_UPLOAD_ENABLED ?? false) === "true";
 export const DEBUG_ENABLED = (process.env.NEXT_PUBLIC_DEBUG_ENABLED ?? false) === "true";
+export const GALLERY_ENABLED = (process.env.NEXT_PUBLIC_GALLERY_ENABLED ?? false) === "true";

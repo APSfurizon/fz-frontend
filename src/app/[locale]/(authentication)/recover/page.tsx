@@ -1,90 +1,83 @@
-"use client"
-import DataForm from "@/components/input/dataForm";
-import Icon from "@/components/icon";
-import FpInput from "@/components/input/fpInput";
-import { ApiDetailedErrorResponse, ApiErrorResponse, isDetailedError } from "@/lib/api/global";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+"use client";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
-import "@/styles/authentication/login.css";
+import Icon from "@/components/icon";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
+import FpInput from "@/components/input/fpInput";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { RecoverFormAction } from "@/lib/api/authentication/recover";
-import Button from "@/components/input/button";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import "@/styles/authentication/login.css";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export default function Login() {
   const t = useTranslations();
-  const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { showModal } = useModalUpdate();
   const params = useSearchParams();
 
   const onLoading = () => {
-    setError(undefined);
     setSuccess(false);
-  }
+  };
 
-  const manageError = (err: ApiErrorResponse | ApiDetailedErrorResponse) => {
-    if (!isDetailedError(err)) {
-      setError("network_error");
-    } else {
-      const errRes = err as ApiDetailedErrorResponse;
-      const errorMessage = errRes.errors.length > 0
-        ? errRes.errors[0].code
-        : t('authentication.login.errors.unknown_error');
-      setError(errorMessage);
-    }
-  }
+  const manageError = (err: ApiErrorResponse) => {
+    showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
+  };
 
   const manageSuccess = () => {
     setSuccess(true);
-  }
+  };
 
   useTitle(t("authentication.recover.title"));
 
-  return <>
-    <div className="horizontal-list gap-4mm flex-center">
-      <span className="title-pair">
-        <Icon icon="DESIGN_SERVICES"/>
-        <span className="titular bold highlight">furpanel</span>
-        <span> - </span>
-        <span className="titular bold">{t('authentication.recover.title').toLowerCase()}</span>
-      </span>
-    </div>
-    <p className="color-subtitle title small">
-      {t('authentication.recover.instruction')}
-    </p>
-    {error &&
-      <span className="error-container title small center">
-        {t(`login.errors.${(error ?? 'unknown_error').toLowerCase()}`)}
-    </span>}
-    {success && <NoticeBox theme={NoticeTheme.Success} title={t("authentication.recover.messages.email_success.title")}>
-      {t("authentication.recover.messages.email_success.description")}
-    </NoticeBox>}
-    <DataForm className="vertical-list login-form"
-      busy={loading}
-      setBusy={setLoading}
-      onSuccess={manageSuccess}
-      action={new RecoverFormAction}
-      onFail={(err) => manageError(err)}
-      onBeforeSubmit={onLoading}
-      hideSave>
-        <FpInput fieldName="email"
+  return (
+    <>
+      <div className="horizontal-list gap-4mm justify-content-center">
+        <span className="title-pair">
+          <Icon icon="DESIGN_SERVICES" />
+          <span className="titular bold highlight">furpanel</span>
+          <span> - </span>
+          <span className="titular bold">{t("authentication.recover.title").toLowerCase()}</span>
+        </span>
+      </div>
+      <p className="color-subtitle title small">{t("authentication.recover.instruction")}</p>
+      {success && (
+        <NoticeBox theme={NoticeTheme.Success} title={t("authentication.recover.messages.email_success.title")}>
+          {t("authentication.recover.messages.email_success.description")}
+        </NoticeBox>
+      )}
+      <DataForm
+        className="vertical-list login-form"
+        busy={loading}
+        setBusy={setLoading}
+        onSuccess={manageSuccess}
+        action={new RecoverFormAction()}
+        onFail={(err) => manageError(err)}
+        onBeforeSubmit={onLoading}
+        hideSave
+      >
+        <FpInput
+          fieldName="email"
           required
           inputType="email"
           label={t("authentication.recover.input.email.label")}
-          placeholder={t("authentication.login.placeholder_email")}/>
-        <div className="horizontal-list flex-center">
-          <Button type="submit"
-            icon="MAIL">
-              {t("authentication.recover.actions.send_verification")}
-          </Button>
+          placeholder={t("authentication.login.placeholder_email")}
+        />
+        <div className="horizontal-list justify-content-center">
+          <FpButton type="submit" icon="MAIL">
+            {t("authentication.recover.actions.send_verification")}
+          </FpButton>
         </div>
-    </DataForm>
-    <Link href={`/login?${params.toString()}`}
-      className="suggestion title small center color-subtitle underlined">
-        {t('common.back')}
-    </Link>
-  </>;
+      </DataForm>
+      <Link href={`/login?${params.toString()}`} className="suggestion title small center color-subtitle underlined">
+        {t("common.back")}
+      </Link>
+    </>
+  );
 }

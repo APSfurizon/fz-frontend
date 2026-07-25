@@ -1,132 +1,133 @@
 /* Importing google font icons */
 @font-face {
-    font-family: 'Material Symbols Rounded';
-    font-style: normal;
-    font-weight: 100 700;
-    src: url('/fonts/MaterialSymbolsRoundedFilled.woff2') format('woff2');
-    font-display: block;
+  font-family: "Material Symbols Rounded";
+  font-style: normal;
+  font-weight: 100 700;
+  src: url("/fonts/MaterialSymbolsRoundedFilled.woff2") format("woff2");
+  font-display: block;
 }
 
 /* Importing Flag emoji fallback font */
 @font-face {
-    font-family: 'Twemoji Country Flags';
-    dominant-baseline: text-top;
-    unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
-    src: url('/fonts/TwemojiCountryFlags.woff2') format('woff2');
-    font-display: swap;
+  font-family: "Twemoji Country Flags";
+  dominant-baseline: text-top;
+  unicode-range:
+    U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+  src: url("/fonts/TwemojiCountryFlags.woff2") format("woff2");
+  font-display: swap;
 }
 
 .mdi {
-    font-family: 'Material Symbols Rounded', 'Twemoji Country Flags';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    display: inline-block;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-    font-variation-settings: 'FILL' 1;
+  font-family: "Material Symbols Rounded", "Twemoji Country Flags";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  display: inline-block;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings: "FILL" 1;
 
-    font-feature-settings: "liga";
+  font-feature-settings: "liga";
 
-    vertical-align: text-top;
+  vertical-align: text-top;
 
-    /* Support for all WebKit browsers. */
-    -webkit-font-smoothing: antialiased;
-    /* Support for Safari and Chrome. */
-    text-rendering: optimizeLegibility;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
 
-    /* Support for Firefox. */
-    -moz-font-feature-settings: 'liga';
-    -moz-osx-font-smoothing: grayscale;
+  /* Support for Firefox. */
+  -moz-font-feature-settings: "liga";
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .outline {
-    font-variation-settings: 'FILL' 0;
+  font-variation-settings: "FILL" 0;
 }
 
 .title {
-    font-family: 'Twemoji Country Flags', 'Inter', sans-serif;
+  font-family: "Twemoji Country Flags", "Inter", sans-serif;
 }
 
 .monospace {
-    font-family: 'Twemoji Country Flags', monospace;
+  font-family: "Twemoji Country Flags", monospace;
 }
 
 .italic {
-    font-style: italic;
+  font-style: italic;
 }
 
 .thin {
-    font-weight: 200;
+  font-weight: 200;
 }
 
 .normal {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .semi-bold,
 .semibold {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .bold {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .xx-large {
-    font-size: 30pt;
+  font-size: 30pt;
 }
 
 .x-large {
-    font-size: 25pt;
+  font-size: 25pt;
 }
 
 .large {
-    font-size: 18pt;
+  font-size: 18pt;
 }
 
 .medium {
-    font-size: 15pt;
+  font-size: 15pt;
 }
 
 .average {
-    font-size: 12pt;
+  font-size: 12pt;
 }
 
 .small {
-    font-size: 11pt;
+  font-size: 11pt;
 }
 
 .tiny {
-    font-size: 9pt;
+  font-size: 9pt;
 }
 
 .descriptive {
-    font-family: 'Twemoji Country Flags', 'Roboto Slab', serif;
+  font-family: "Twemoji Country Flags", "Roboto Slab", serif;
 }
 
 .underlined {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .align-left {
-    text-align: left;
+  text-align: left;
 }
 
 .align-right {
-    text-align: right;
+  text-align: right;
 }
 
 .align-center {
-    text-align: center;
+  text-align: center;
 }
 
 .reset {
-    text-decoration: none;
-    font-style: normal;
+  text-decoration: none;
+  font-style: normal;
 }

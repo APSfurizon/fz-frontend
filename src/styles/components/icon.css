@@ -1,8 +1,12 @@
 i.icon.loading-animation {
-animation: loading-animation 500ms linear infinite;
+  animation: loading-animation 500ms linear infinite;
 }
 
 @keyframes loading-animation {
-    0% { rotate: 0deg; }       
-    100% { rotate: 360deg; }
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
 }
