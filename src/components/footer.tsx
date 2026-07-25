@@ -79,7 +79,7 @@ export default function Footer() {
           </a>
         </div>
         <div className="vertical-list gap-2mm">
-          <div className="footer-info horizontal-list gap-4mm tiny normal title flex-center">
+          <div className="footer-info horizontal-list gap-4mm tiny normal title justify-content-center">
             <span>{t('footer.society_name')}</span>
             <span>{t('footer.address')}</span>
           </div>
