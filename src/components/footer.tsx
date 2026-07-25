@@ -80,8 +80,8 @@ export default function Footer() {
         </div>
         <div className="vertical-list gap-2mm">
           <div className="footer-info horizontal-list gap-4mm tiny normal title justify-content-center">
-            <span>{t('footer.society_name')}</span>
-            <span>{t('footer.address')}</span>
+            <span>{t("footer.society_name")}</span>
+            <span>{t("footer.address"x)}</span>
           </div>
           <p className="tiny color-subtitle center">
             <span>Furpanel {APP_VERSION} by </span>
