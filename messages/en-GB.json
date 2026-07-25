@@ -302,7 +302,8 @@
         "upload_badge": "Upload your badge",
         "edit_badge": "Edit badge data",
         "add_fursuit": "Add fursuit",
-        "edit_fursuit": "Edit {name}'s badge"
+        "edit_fursuit": "Edit {name}'s badge",
+        "select_fursuit": "Select fursuit"
       },
       "input": {
         "new_name": {

@@ -98,11 +98,11 @@ export default function FursuitBringList() {
           {filteredFursuits.length > 0 && (
             <FpButton
               icon="SELECT_CHECK_BOX"
-              title={t("common.CRUD.select")}
+              title={t("furpanel.badge.actions.select_fursuit")}
               busy={selectLoading}
               onClick={openSelectFursuitsModal}
             >
-              {t("common.CRUD.select")}
+              {t("furpanel.badge.actions.select_fursuit")}
             </FpButton>
           )}
           <FpButton icon="APPS" title={t("furpanel.badge.all_your_fursuits")} onClick={openAllFursuitsModal}>
@@ -113,13 +113,13 @@ export default function FursuitBringList() {
           <div className="horizontal-list spacer">
             <div className="spacer"></div>
             <FpButton
-              title={t("common.CRUD.select")}
+              title={t("furpanel.badge.actions.select_fursuit")}
               icon="SELECT_CHECK_BOX"
               iconClass="x-large margin-left-2mm"
               busy={selectLoading}
               onClick={openSelectFursuitsModal}
             >
-              <div className="padding-2mm title x-large">{t("common.CRUD.select")}</div>
+              <div className="padding-2mm title x-large">{t("furpanel.badge.actions.select_fursuit")}</div>
             </FpButton>
             <div className="spacer"></div>
           </div>
