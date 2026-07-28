@@ -111,7 +111,7 @@ export default function UserViewFursuitsTable({
   return (
     <>
       <FpTable<FursuitEventData>
-        rows={userData?.badgeData.fursuits}
+        rows={userData?.badgeData.fursuits.fursuits}
         columns={fursuitColumns}
         enableSearch
         pinnedColumns={{ right: ["actions"] }}

@@ -82,8 +82,8 @@ export default function EditFursuit(props: Readonly<EditFursuitProps>) {
       <Checkbox
         fieldName="bring-to-current-event"
         disabled={
-          (!(props.editMode && props.currentFursuit?.bringingToEvent) && !badgeData?.canBringFursuitsToEvent) ||
-          !badgeData?.allowEditBringFursuitToEvent
+          (!(props.editMode && props.currentFursuit?.bringingToEvent) && !badgeData?.fursuits.canBringFursuitsToEvent) ||
+          !badgeData?.fursuits.allowEditBringFursuitToEvent
         }
         initialValue={props.editMode ? props.currentFursuit?.bringingToEvent : false}
       >

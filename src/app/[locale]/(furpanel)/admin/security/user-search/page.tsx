@@ -1,14 +1,15 @@
 ﻿"use client";
-import AutoInput from "@/components/input/autoInput";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
 import Icon from "@/components/icon";
 import ImagePreviewModal from "@/components/imagePreviewModal";
+import AutoInput from "@/components/input/autoInput";
 import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
-import { useModalUpdate } from "@/components/context/modalProvider";
 import { GetUserSecurityViewAction, GetUserSecurityViewResponse } from "@/lib/api/admin/userView";
+import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
 import {
   AutoInputUsersManager,
@@ -17,15 +18,14 @@ import {
   UserSearchByMembershipNumberAction,
   UserSearchByOrderCodeAction,
   UserSearchByOrderSerialAction,
-  getAutoInputSexes,
   getAutoInputGenders,
+  getAutoInputSexes,
 } from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult, createSearchResult } from "@/lib/components/autoInput";
-import { useTranslations, useLocale, useFormatter } from "next-intl";
+import "@/styles/furpanel/admin/security-pages.css";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, HTMLInputTypeAttribute, useEffect, useMemo, useState } from "react";
-import "@/styles/furpanel/admin/security-pages.css";
-import { ApiErrorResponse } from "@/lib/api/networking";
 
 enum SearchCriteria {
   COMMON = "searchTypeCommon",
@@ -309,7 +309,7 @@ export default function SecurityUserSearchPage() {
                   />
                   <FpInput
                     label={t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")}
-                    initialValue={String(userData.badgeData?.fursuits?.length ?? 0)}
+                    initialValue={String(userData.badgeData?.fursuits?.fursuits?.length ?? 0)}
                     readOnly
                   />
                 </div>
@@ -641,17 +641,17 @@ export default function SecurityUserSearchPage() {
 
             {/* Fursuits */}
             <div className="vertical-list gap-2mm">
-              {(userData.badgeData?.fursuits ?? []).length === 0 && (
+              {(userData.badgeData?.fursuits.fursuits ?? []).length === 0 && (
                 <SectionCard title={t("furpanel.admin.users.accounts.view.fursuits")}>
                   <span className="title small color-subtitle">
                     {t("furpanel.admin.users.security.user_search.values.none")}
                   </span>
                 </SectionCard>
               )}
-              {(userData.badgeData?.fursuits ?? []).length > 0 && (
+              {(userData.badgeData?.fursuits.fursuits ?? []).length > 0 && (
                 <SectionCard title={t("furpanel.admin.users.accounts.view.fursuits")}>
                   <div className="vertical-list gap-2mm">
-                    {(userData.badgeData?.fursuits ?? []).map((item, index) => (
+                    {(userData.badgeData?.fursuits.fursuits ?? []).map((item, index) => (
                       <div
                         key={`${item.fursuit?.id || index}`}
                         className="rounded-m"

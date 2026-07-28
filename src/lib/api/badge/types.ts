@@ -15,3 +15,10 @@ export interface FursuitEventData {
   showOwner: boolean;
   fursuit: FursuitDetails;
 }
+export interface FursuitListResponse {
+  fursuits: FursuitEventData[];
+  bringingToEvent: number;
+  maxFursuits: number;
+  canBringFursuitsToEvent: boolean;
+  allowEditBringFursuitToEvent: boolean;
+}
