@@ -142,7 +142,7 @@ export default function FursuitBringList() {
         <NoticeBox theme={NoticeTheme.FAQ} title={t("furpanel.badge.messages.fursuit_badge.title")}>
           {t.rich("furpanel.badge.messages.fursuit_badge.description", {
             eventName: EVENT_NAME,
-            maxFursuits: badgeData?.fursuits.maxFursuits ?? 0,
+            maxFursuitsBroughtToEvent: badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0,
             b: (chunks) => <b className="highlight">{chunks}</b>,
             br: () => <br />,
           })}

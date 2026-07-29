@@ -18,7 +18,7 @@ export interface FursuitEventData {
 export interface FursuitListResponse {
   fursuits: FursuitEventData[];
   bringingToEvent: number;
-  maxFursuits: number;
+  maxFursuitsBroughtToEvent: number;
   canBringFursuitsToEvent: boolean;
   allowEditBringFursuitToEvent: boolean;
 }

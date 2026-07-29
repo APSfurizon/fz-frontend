@@ -26,7 +26,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
       const id = fursuitData.fursuit.id;
       if (newSet.has(id)) {
         newSet.delete(id);
-      } else if (newSet.size < (badgeData?.fursuits.maxFursuits ?? 0)) {
+      } else if (newSet.size < (badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0)) {
         newSet.add(id);
       }
       return newSet;
@@ -68,7 +68,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
           {t("common.cancel")}
         </FpButton>
         <FpButton success icon="CHECK" onClick={() => props.onConfirm(selectedFursuits)} busy={props.loading}>
-          {t("common.confirm")} ({selectedFursuits.size}/{badgeData?.fursuits.maxFursuits ?? 0})
+          {t("common.confirm")} ({selectedFursuits.size}/{badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0})
         </FpButton>
       </div>
     </Modal>
