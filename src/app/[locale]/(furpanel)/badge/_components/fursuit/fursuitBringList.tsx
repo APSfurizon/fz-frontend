@@ -30,6 +30,13 @@ export default function FursuitBringList() {
     [badgeData, isEditExpired]
   );
 
+  const canChangeBringingStatus = useMemo(
+    () =>
+      badgeData &&
+      badgeData.fursuits.allowEditBringFursuitToEvent,
+    [badgeData]
+  )
+
   const filteredFursuits = useMemo(
     () => (badgeData?.fursuits.fursuits || []).filter((f) => f.bringingToEvent),
     [badgeData?.fursuits.fursuits]
@@ -89,7 +96,7 @@ export default function FursuitBringList() {
             {t("furpanel.badge.your_fursuits_for_event", { amount: filteredFursuits.length, eventName: EVENT_NAME })}
           </span>
           <div className="spacer"></div>
-          {filteredFursuits.length > 0 && (
+          {filteredFursuits.length > 0 && canChangeBringingStatus && (
             <FpButton
               icon="SELECT_CHECK_BOX"
               title={t("furpanel.badge.actions.select_fursuit")}
@@ -103,7 +110,7 @@ export default function FursuitBringList() {
             {t("furpanel.badge.all_your_fursuits")}
           </FpButton>
         </div>
-        {filteredFursuits.length == 0 && (
+        {filteredFursuits.length == 0 && canChangeBringingStatus && (
           <div className="horizontal-list spacer">
             <div className="spacer"></div>
             <FpButton
