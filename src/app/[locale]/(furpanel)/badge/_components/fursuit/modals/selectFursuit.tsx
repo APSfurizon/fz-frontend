@@ -26,7 +26,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
       const id = fursuitData.fursuit.id;
       if (newSet.has(id)) {
         newSet.delete(id);
-      } else if (newSet.size < (badgeData?.maxFursuits ?? 0)) {
+      } else if (newSet.size < (badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0)) {
         newSet.add(id);
       }
       return newSet;
@@ -39,7 +39,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
       setSelectedFursuits(new Set<number>());
     } else if (badgeData) {
       setSelectedFursuits(
-        new Set<number>((badgeData.fursuits || []).filter((f) => f.bringingToEvent).map((f) => f.fursuit.id))
+        new Set<number>((badgeData.fursuits.fursuits || []).filter((f) => f.bringingToEvent).map((f) => f.fursuit.id))
       );
     }
   }, [props.open, badgeData]);
@@ -53,7 +53,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
       busy={props.loading}
     >
       <div className="horizontal-list flex-wrap gap-4mm">
-        {badgeData?.fursuits.map((fursuitData: FursuitEventData, index: number) => (
+        {badgeData?.fursuits.fursuits.map((fursuitData: FursuitEventData, index: number) => (
           <FursuitCard
             key={index}
             fursuitEventData={fursuitData}
@@ -68,7 +68,7 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
           {t("common.cancel")}
         </FpButton>
         <FpButton success icon="CHECK" onClick={() => props.onConfirm(selectedFursuits)} busy={props.loading}>
-          {t("common.confirm")} ({selectedFursuits.size}/{badgeData?.maxFursuits ?? 0})
+          {t("common.confirm")} ({selectedFursuits.size}/{badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0})
         </FpButton>
       </div>
     </Modal>

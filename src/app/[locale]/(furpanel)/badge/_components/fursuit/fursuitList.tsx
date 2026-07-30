@@ -80,7 +80,7 @@ export default function FursuitList() {
         <div className="fursuit-header rounded-s horizontal-list align-items-center gap-2mm flex-wrap">
           <Icon icon="PETS" />
           <span className="title average">
-            {t("furpanel.badge.your_fursuits", { amount: badgeData?.fursuits.length ?? 0 })}
+            {t("furpanel.badge.your_fursuits", { amount: badgeData?.fursuits.fursuits.length ?? 0 })}
           </span>
           <div className="spacer"></div>
           <FpButton icon="ADD_CIRCLE" title={t("common.CRUD.add")} onClick={promptAddFursuit}>
@@ -90,7 +90,7 @@ export default function FursuitList() {
       </div>
       <div className="fursuit-container flex-wrap gap-2mm ">
         {/* Fursuit badge rendering */}
-        {badgeData?.fursuits.map((fursuitData: FursuitEventData, index: number) => (
+        {badgeData?.fursuits.fursuits.map((fursuitData: FursuitEventData, index: number) => (
           <FursuitCard
             key={index}
             fursuitEventData={fursuitData}

@@ -25,14 +25,14 @@ export default function FursuitBringList() {
     () =>
       badgeData &&
       !isEditExpired &&
-      badgeData.canBringFursuitsToEvent &&
-      badgeData.fursuits.filter((f) => f.bringingToEvent).length == 0,
+      badgeData.fursuits.canBringFursuitsToEvent &&
+      badgeData.fursuits.fursuits.filter((f) => f.bringingToEvent).length == 0,
     [badgeData, isEditExpired]
   );
 
   const filteredFursuits = useMemo(
-    () => (badgeData?.fursuits || []).filter((f) => f.bringingToEvent),
-    [badgeData?.fursuits]
+    () => (badgeData?.fursuits.fursuits || []).filter((f) => f.bringingToEvent),
+    [badgeData?.fursuits.fursuits]
   );
 
   // All fursuits
@@ -59,7 +59,7 @@ export default function FursuitBringList() {
 
   const confirmSelectFursuitsModal = (fursuitIds: Set<number>) => {
     const currentSelectedFursuits = new Set(
-      badgeData?.fursuits.filter((f) => f.bringingToEvent).map((f) => f.fursuit.id)
+      badgeData?.fursuits.fursuits.filter((f) => f.bringingToEvent).map((f) => f.fursuit.id)
     );
     const fursuitsToDeSelect = currentSelectedFursuits.difference(fursuitIds);
     const fursuitsToSelect = fursuitIds.difference(currentSelectedFursuits);
@@ -142,7 +142,7 @@ export default function FursuitBringList() {
         <NoticeBox theme={NoticeTheme.FAQ} title={t("furpanel.badge.messages.fursuit_badge.title")}>
           {t.rich("furpanel.badge.messages.fursuit_badge.description", {
             eventName: EVENT_NAME,
-            maxFursuits: badgeData?.maxFursuits ?? 0,
+            maxFursuitsBroughtToEvent: badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0,
             b: (chunks) => <b className="highlight">{chunks}</b>,
             br: () => <br />,
           })}

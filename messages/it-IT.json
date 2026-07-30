@@ -353,7 +353,7 @@
         },
         "fursuit_badge": {
           "title": "Vuoi portare la tua fursuit a furizon?",
-          "description": "Ricordati di <b>selezionare</b> le fursuit che porterai, per aiutarci ad organizzare la fursuit lounge.<br></br>\nAl momento puoi portare fino a {maxFursuits} fursuit.<br></br>\nPer portarne di più, acquista badge extra, cliccando <b>Modifica prenotazione</b> nella sezione Prenotazione."
+          "description": "Ricordati di <b>selezionare</b> le fursuit che porterai, per aiutarci ad organizzare la fursuit lounge.<br></br>\nAl momento puoi portare fino a {maxFursuitsBroughtToEvent} fursuit.<br></br>\nPer portarne di più, acquista badge extra, cliccando <b>Modifica prenotazione</b> nella sezione Prenotazione."
         },
         "badge_edit_deadline_end": {
           "title": "Modifiche badge bloccate",

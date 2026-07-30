@@ -353,7 +353,7 @@
         },
         "fursuit_badge": {
           "title": "Wanna bring your fursuit to Furizon?",
-          "description": "Remember to <b>select</b> the fursuits you're bringing, so we can organize the fursuit lounge.<br></br>\nAs of now, you can bring up to {maxFursuits, plural, =1 {1 fursuit} other {# fursuits}}.<br></br>\nBuy extra badges to bring more by clicking <b>Edit reservation</b> in the Reservation tab."
+          "description": "Remember to <b>select</b> the fursuits you're bringing, so we can organize the fursuit lounge.<br></br>\nAs of now, you can bring up to {maxFursuitsBroughtToEvent, plural, =1 {1 fursuit} other {# fursuits}}.<br></br>\nBuy extra badges to bring more by clicking <b>Edit reservation</b> in the Reservation tab."
         },
         "badge_edit_deadline_end": {
           "title": "Badge editing locked",

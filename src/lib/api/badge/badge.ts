@@ -2,17 +2,14 @@ import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataFor
 import { MediaData } from "../media";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
 import { UserData } from "../user";
-import { FursuitEventData } from "./types";
+import { FursuitListResponse } from "./types";
 
 export interface BadgeStatusApiResponse extends ApiResponse {
   badgeEditingDeadline: string;
   fursonaName: string;
   mainBadge?: UserData;
-  fursuits: FursuitEventData[];
-  maxFursuits: number;
-  canBringFursuitsToEvent: boolean;
   allowedModifications: boolean;
-  allowEditBringFursuitToEvent: boolean;
+  fursuits: FursuitListResponse;
 }
 
 export class GetBadgeStatusAction extends ApiAction<BadgeStatusApiResponse, ApiErrorResponse> {
@@ -21,7 +18,7 @@ export class GetBadgeStatusAction extends ApiAction<BadgeStatusApiResponse, ApiE
   urlAction = "badge/";
 }
 
-export interface BadgeUploadResponse extends MediaData, ApiResponse {}
+export interface BadgeUploadResponse extends MediaData, ApiResponse { }
 
 export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
   authenticated = true;

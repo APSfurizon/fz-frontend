@@ -139,7 +139,7 @@ export default function UserViewBadge({
           <p className="average">
             <span className="bold">{t("furpanel.admin.users.accounts.view.badges.fursuit_badges_available")}:</span>
             &nbsp;
-            {userData.badgeData.maxFursuits}
+            {userData.badgeData.fursuits.maxFursuitsBroughtToEvent}
           </p>
           <div className="spacer" />
           <div className="horizontal-list gap-2mm flex-wrap">
