@@ -21,12 +21,7 @@ export default function FursuitBringList() {
   const { showModal } = useModalUpdate();
   const [selectLoading, setSelectLoading] = useState(false);
 
-  const canChangeBringingStatus = useMemo(
-    () =>
-      badgeData &&
-      badgeData.fursuits.allowEditBringFursuitToEvent,
-    [badgeData]
-  )
+  const canChangeBringingStatus = badgeData && badgeData.fursuits.allowEditBringFursuitToEvent;
 
   const filteredFursuits = useMemo(
     () => (badgeData?.fursuits.fursuits || []).filter((f) => f.bringingToEvent),
