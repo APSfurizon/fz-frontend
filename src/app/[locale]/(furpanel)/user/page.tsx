@@ -11,6 +11,7 @@ import { BadgeStatusApiResponse, GetBadgeStatusAction } from "@/lib/api/badge/ba
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { GetPersonalInfoAction, UserPersonalInfo } from "@/lib/api/user";
+import "@/styles/furpanel/badge.scss";
 import "@/styles/furpanel/user.css";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
