@@ -21,15 +21,6 @@ export default function FursuitBringList() {
   const { showModal } = useModalUpdate();
   const [selectLoading, setSelectLoading] = useState(false);
 
-  const shouldShowBanner = useMemo(
-    () =>
-      badgeData &&
-      !isEditExpired &&
-      badgeData.fursuits.canBringFursuitsToEvent &&
-      badgeData.fursuits.fursuits.filter((f) => f.bringingToEvent).length == 0,
-    [badgeData, isEditExpired]
-  );
-
   const canChangeBringingStatus = useMemo(
     () =>
       badgeData &&
@@ -124,15 +115,6 @@ export default function FursuitBringList() {
             </FpButton>
             <div className="spacer"></div>
           </div>
-        )}
-        {/* Banner */}
-        {shouldShowBanner && (
-          <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.badge.messages.fursuit_banner.title")}>
-            {t.rich("furpanel.badge.messages.fursuit_banner.description", {
-              eventName: EVENT_NAME,
-              b: (chunks) => <b className="highlight">{chunks}</b>,
-            })}
-          </NoticeBox>
         )}
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}

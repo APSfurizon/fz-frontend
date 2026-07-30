@@ -22,6 +22,7 @@ import { AutoInputCountriesManager } from "@/lib/api/geo";
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { getFlagEmoji } from "@/lib/components/userPicture";
+import { EVENT_NAME } from "@/lib/constants";
 import "@/styles/furpanel/badge.scss";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
@@ -46,6 +47,15 @@ export default function BadgePage() {
   const refresh = () => {
     setBadgeStatus(undefined);
   };
+
+  const shouldShowFursuitBanner = useMemo(
+    () =>
+      badgeStatus &&
+      !isEditExpired &&
+      badgeStatus.fursuits.canBringFursuitsToEvent &&
+      badgeStatus.fursuits.fursuits.filter((f) => f.bringingToEvent).length == 0,
+    [badgeStatus, isEditExpired]
+  );
 
   // Badge upload
   const uploadBadge = (blob?: Blob) => {
@@ -140,13 +150,22 @@ export default function BadgePage() {
             >
               {isEditExpired
                 ? t(`furpanel.badge.messages.badge_edit_deadline_end.description`, {
-                    lockDate: formatter.dateTime(new Date(badgeStatus?.badgeEditingDeadline), { dateStyle: "medium" }),
-                  })
+                  lockDate: formatter.dateTime(new Date(badgeStatus?.badgeEditingDeadline), { dateStyle: "medium" }),
+                })
                 : t(`furpanel.badge.messages.badge_edit_deadline.description`, {
-                    lockDate: formatter.dateTime(new Date(badgeStatus?.badgeEditingDeadline), { dateStyle: "medium" }),
-                  })}
+                  lockDate: formatter.dateTime(new Date(badgeStatus?.badgeEditingDeadline), { dateStyle: "medium" }),
+                })}
             </NoticeBox>
           </>
+        )}
+        {/* Fursuit Banner */}
+        {shouldShowFursuitBanner && (
+          <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.badge.messages.fursuit_banner.title")}>
+            {t.rich("furpanel.badge.messages.fursuit_banner.description", {
+              eventName: EVENT_NAME,
+              b: (chunks) => <b className="highlight">{chunks}</b>,
+            })}
+          </NoticeBox>
         )}
         <span className="title medium horizontal-list gap-2mm">
           {t("furpanel.badge.your_badges")}
