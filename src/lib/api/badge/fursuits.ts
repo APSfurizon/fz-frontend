@@ -33,3 +33,9 @@ export class BringFursuitToEventApiAction extends ApiAction<boolean, ApiErrorRes
   hasPathParams = true;
   urlAction = "fursuits/{id}/bringToEvent";
 }
+
+export class MultipleBringFursuitToEventApiAction extends ApiAction<boolean, ApiErrorResponse> {
+  method = RequestType.POST;
+  authenticated = true;
+  urlAction = "fursuits/bringToEvent";
+}

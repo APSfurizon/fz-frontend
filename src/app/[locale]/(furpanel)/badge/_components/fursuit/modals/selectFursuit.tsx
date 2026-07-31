@@ -24,10 +24,16 @@ export default function SelectFursuitModal(props: Readonly<SelectFursuitProps>) 
     setSelectedFursuits((prev) => {
       const newSet = new Set<number>(prev);
       const id = fursuitData.fursuit.id;
+      const max = badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0;
       if (newSet.has(id)) {
         newSet.delete(id);
-      } else if (newSet.size < (badgeData?.fursuits.maxFursuitsBroughtToEvent ?? 0)) {
-        newSet.add(id);
+      } else {
+        if (max == 1) {
+          newSet.clear();
+          newSet.add(id);
+        } else if (newSet.size < max) {
+          newSet.add(id);
+        }
       }
       return newSet;
     });

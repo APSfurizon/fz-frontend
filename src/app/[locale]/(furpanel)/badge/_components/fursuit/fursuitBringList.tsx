@@ -4,7 +4,7 @@ import Icon from "@/components/icon";
 import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { BringFursuitToEventApiAction } from "@/lib/api/badge/fursuits";
+import { MultipleBringFursuitToEventApiAction } from "@/lib/api/badge/fursuits";
 import { FursuitEventData } from "@/lib/api/badge/types";
 import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
 import { EVENT_NAME } from "@/lib/constants";
@@ -21,14 +21,7 @@ export default function FursuitBringList() {
   const { showModal } = useModalUpdate();
   const [selectLoading, setSelectLoading] = useState(false);
 
-  const shouldShowBanner = useMemo(
-    () =>
-      badgeData &&
-      !isEditExpired &&
-      badgeData.fursuits.canBringFursuitsToEvent &&
-      badgeData.fursuits.fursuits.filter((f) => f.bringingToEvent).length == 0,
-    [badgeData, isEditExpired]
-  );
+  const canChangeBringingStatus = badgeData && badgeData.fursuits.allowEditBringFursuitToEvent;
 
   const filteredFursuits = useMemo(
     () => (badgeData?.fursuits.fursuits || []).filter((f) => f.bringingToEvent),
@@ -58,26 +51,20 @@ export default function FursuitBringList() {
   };
 
   const confirmSelectFursuitsModal = (fursuitIds: Set<number>) => {
-    const currentSelectedFursuits = new Set(
-      badgeData?.fursuits.fursuits.filter((f) => f.bringingToEvent).map((f) => f.fursuit.id)
+    const fursuitBringingObject: Record<number, boolean> = Object.fromEntries(
+      badgeData?.fursuits.fursuits.map((f) => [f.fursuit.id, fursuitIds.has(f.fursuit.id)]) || []
     );
-    const fursuitsToDeSelect = currentSelectedFursuits.difference(fursuitIds);
-    const fursuitsToSelect = fursuitIds.difference(currentSelectedFursuits);
-    const createRequest = (id: number, bring: boolean) =>
-      runRequest({
-        action: new BringFursuitToEventApiAction(),
-        pathParams: { id: id },
-        body: {
-          bringFursuitToCurrentEvent: bring,
-        },
-      });
-    const endpointsToRun = [...fursuitsToDeSelect].map((id) => createRequest(id, false));
-    endpointsToRun.push(...[...fursuitsToSelect].map((id) => createRequest(id, true)));
+
     setSelectLoading(true);
 
-    Promise.all(endpointsToRun)
+    runRequest({
+      action: new MultipleBringFursuitToEventApiAction(),
+      body: {
+        fursuitBroughtToEventMap: fursuitBringingObject,
+      },
+    })
       .then((results) => {
-        if ((results || []).length) {
+        if (results) {
           refresh();
         }
         closeSelectFursuitsModal();
@@ -95,7 +82,7 @@ export default function FursuitBringList() {
             {t("furpanel.badge.your_fursuits_for_event", { amount: filteredFursuits.length, eventName: EVENT_NAME })}
           </span>
           <div className="spacer"></div>
-          {filteredFursuits.length > 0 && (
+          {filteredFursuits.length > 0 && canChangeBringingStatus && (
             <FpButton
               icon="SELECT_CHECK_BOX"
               title={t("furpanel.badge.actions.select_fursuit")}
@@ -109,7 +96,7 @@ export default function FursuitBringList() {
             {t("furpanel.badge.all_your_fursuits")}
           </FpButton>
         </div>
-        {filteredFursuits.length == 0 && (
+        {filteredFursuits.length == 0 && canChangeBringingStatus && (
           <div className="horizontal-list spacer">
             <div className="spacer"></div>
             <FpButton
@@ -123,15 +110,6 @@ export default function FursuitBringList() {
             </FpButton>
             <div className="spacer"></div>
           </div>
-        )}
-        {/* Banner */}
-        {shouldShowBanner && (
-          <NoticeBox theme={NoticeTheme.Warning} title={t("furpanel.badge.messages.fursuit_banner.title")}>
-            {t.rich("furpanel.badge.messages.fursuit_banner.description", {
-              eventName: EVENT_NAME,
-              b: (chunks) => <b className="highlight">{chunks}</b>,
-            })}
-          </NoticeBox>
         )}
         <div className="fursuit-container flex-wrap gap-2mm ">
           {/* Fursuit badge rendering */}
