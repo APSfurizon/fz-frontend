@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import {
   AutoInputFilter,
   AutoInputManager,
@@ -8,17 +9,11 @@ import {
   SearchType,
 } from "../components/autoInput";
 import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
-import { buildSearchParams, setCookie } from "../utils";
-import { runRequest } from "./networking/main";
-import { ApiAction } from "./networking/types";
-import { ApiErrorResponse } from "./networking/types";
-import { SimpleApiResponse } from "./networking/types";
-import { ApiResponse } from "./networking/types";
-import { ApiRequest } from "./networking/types";
-import { RequestType } from "./networking/types";
-import { MediaData } from "./media";
 import { SelectItem } from "../components/fpSelect";
-import { MouseEvent } from "react";
+import { buildSearchParams, setCookie } from "../utils";
+import { MediaData } from "./media";
+import { runRequest } from "./networking/main";
+import { ApiAction, ApiErrorResponse, ApiRequest, ApiResponse, RequestType, SimpleApiResponse } from "./networking/types";
 
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
   propic?: MediaData;
@@ -73,6 +68,7 @@ export interface UserPersonalInfo {
   birthRegion?: string;
   birthCountry?: string;
   birthday?: string;
+  citizenship?: string;
   residenceAddress?: string;
   residenceZipCode?: string;
   residenceCity?: string;
@@ -278,6 +274,7 @@ export class UpdatePersonalInfoDTOBuilder implements FormDTOBuilder<UserPersonal
       birthRegion: getData(data, "birthRegion"),
       birthCountry: getData(data, "birthCountry"),
       birthday: getData(data, "birthday"),
+      citizenship: getData(data, "citizenship"),
       residenceAddress: getData(data, "residenceAddress"),
       residenceZipCode: getData(data, "residenceZipCode"),
       residenceCity: getData(data, "residenceCity"),
@@ -319,7 +316,7 @@ export class UpdatePersonalInfoFormAction extends FormApiAction<UserPersonalInfo
   urlAction = "membership/update-personal-user-information";
 }
 
-export interface GetPersonalInfoResponse extends UserPersonalInfo, ApiResponse {}
+export interface GetPersonalInfoResponse extends UserPersonalInfo, ApiResponse { }
 
 export class GetPersonalInfoAction extends ApiAction<GetPersonalInfoResponse, ApiErrorResponse> {
   authenticated = true;
@@ -450,7 +447,7 @@ export class AutoInputSexManager implements AutoInputManager {
         .then((results) => {
           resolve(filterLoaded(results, filter));
         })
-        .catch(() => {});
+        .catch(() => { });
     });
   }
 
@@ -465,7 +462,7 @@ export class AutoInputSexManager implements AutoInputManager {
         .then((results) => {
           resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
         })
-        .catch(() => {});
+        .catch(() => { });
     });
   }
 
@@ -483,7 +480,7 @@ export class AutoInputGenderManager implements AutoInputManager {
         .then((results) => {
           resolve(filterLoaded(results, filter));
         })
-        .catch(() => {});
+        .catch(() => { });
     });
   }
 
@@ -498,7 +495,7 @@ export class AutoInputGenderManager implements AutoInputManager {
         .then((results) => {
           resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
         })
-        .catch(() => {});
+        .catch(() => { });
     });
   }
 
@@ -550,9 +547,9 @@ export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: strin
   e.preventDefault();
   const promise = !!userDisplay
     ? runRequest({
-        action: new ChangeLanguageAction(),
-        body: { languageCode: language },
-      })
+      action: new ChangeLanguageAction(),
+      body: { languageCode: language },
+    })
     : Promise.resolve(null);
   promise
     .then(() => {

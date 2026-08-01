@@ -30,6 +30,7 @@ export default function Register() {
   const t = useTranslations();
   const [loading, setLoading] = useState(false);
   const [birthCountry, setBirthCountry] = useState<string | undefined>();
+  const [citizenship, setCitizenship] = useState<string | undefined>();
   const [residenceCountry, setResidenceCountry] = useState<string>();
   const [phonePrefix, setPhonePrefix] = useState<string>();
   const { showModal } = useModalUpdate();
@@ -89,7 +90,7 @@ export default function Register() {
       redirect(`/login?${newParams.toString()}`);
     }, 200);
 
-  const fiscalCodeRequired = [birthCountry, residenceCountry].includes("IT");
+  const fiscalCodeRequired = [birthCountry, residenceCountry, citizenship].includes("IT");
 
   useTitle(t("authentication.register.title"));
 
@@ -221,6 +222,16 @@ export default function Register() {
             onChange={(p) => setBirthCountry((firstOrUndefined(p.newValues) as AutoInputSearchResult)?.code)}
             label={t("authentication.register.form.birth_country.label")}
             placeholder={t("authentication.register.form.birth_country.placeholder")}
+            emptyIfUnselected
+          />
+          <AutoInput
+            fieldName="citizenship"
+            required
+            minDecodeSize={2}
+            manager={new AutoInputCountriesManager()}
+            onChange={(p) => setCitizenship((firstOrUndefined(p.newValues) as AutoInputSearchResult)?.code)}
+            label={t("authentication.register.form.citizenship.label")}
+            placeholder={t("authentication.register.form.citizenship.placeholder")}
             emptyIfUnselected
           />
         </div>

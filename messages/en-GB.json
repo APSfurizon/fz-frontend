@@ -1222,6 +1222,10 @@
         "birthday": {
           "label": "Birthday"
         },
+        "citizenship": {
+          "label": "Citizenship",
+          "placeholder": "Select your main citizenship"
+        },
         "confirm_password": {
           "help": "Must be the same as the password",
           "label": "Confirm password",
