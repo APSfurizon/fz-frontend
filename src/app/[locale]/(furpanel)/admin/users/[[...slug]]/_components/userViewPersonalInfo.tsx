@@ -1,8 +1,10 @@
+import { useModalUpdate } from "@/components/context/modalProvider";
 import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
 import AutoInput from "@/components/input/autoInput";
-import FpSelect from "@/components/input/fpSelect";
 import DataForm from "@/components/input/dataForm";
 import FpInput from "@/components/input/fpInput";
+import FpSelect from "@/components/input/fpSelect";
 import { extractPhonePrefix } from "@/lib/api/authentication/register";
 import { AutoInputCountriesManager, AutoInputStatesManager, CountrySearchResult } from "@/lib/api/geo";
 import { Permissions } from "@/lib/api/permission";
@@ -15,12 +17,10 @@ import {
   UpdatePersonalInfoFormAction,
   UserPersonalInfo,
 } from "@/lib/api/user";
+import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
 import { firstOrUndefined, stripProperties, today } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
-import { inputEntityCodeExtractor, MAX_DATE, MIN_DATE } from "@/lib/components/input";
-import { useModalUpdate } from "@/components/context/modalProvider";
-import ErrorMessage from "@/components/errorMessage";
 
 export default function UserViewPersonalInfo({
   personalInformation,
@@ -35,11 +35,12 @@ export default function UserViewPersonalInfo({
   const formRef = useRef<HTMLFormElement>(null);
   const [personalInfoLoading, setPersonalInfoLoading] = useState(false);
   const [birthCountry, setBirthCountry] = useState<string | undefined>();
+  const [citizenship, setCitizenship] = useState<string | undefined>();
   const [residenceCountry, setResidenceCountry] = useState<string>();
   const [phonePrefix, setPhonePrefix] = useState<string>();
   const fiscalCodeRequired = useMemo(
-    () => [birthCountry, residenceCountry].includes("IT"),
-    [birthCountry, residenceCountry]
+    () => [birthCountry, residenceCountry, citizenship].includes("IT"),
+    [birthCountry, residenceCountry, citizenship]
   );
   const { showModal } = useModalUpdate();
 
@@ -126,6 +127,17 @@ export default function UserViewPersonalInfo({
             label={t("authentication.register.form.birth_country.label")}
             placeholder={t("authentication.register.form.birth_country.placeholder")}
             initialData={personalInformation?.birthCountry ? [personalInformation?.birthCountry] : undefined}
+          />
+          <AutoInput
+            fieldName="citizenship"
+            required
+            minDecodeSize={2}
+            multiple={false}
+            manager={new AutoInputCountriesManager()}
+            onChange={(p) => setCitizenship((firstOrUndefined(p.newValues) as CountrySearchResult)?.code)}
+            label={t("authentication.register.form.citizenship.label")}
+            placeholder={t("authentication.register.form.citizenship.placeholder")}
+            initialData={personalInformation?.citizenship ? [personalInformation?.citizenship] : undefined}
           />
           <FpInput
             fieldName="birthday"

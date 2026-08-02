@@ -1,8 +1,6 @@
 import { CountrySearchResult } from "@/lib/api/geo";
 import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
+import { ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
 import { UserPersonalInfo } from "../user";
 
 export const extractPhonePrefix = (r?: CountrySearchResult) => {
@@ -37,6 +35,7 @@ export class RegisterDTOBuilder implements FormDTOBuilder<RegisterData> {
       birthRegion: getData(data, "birthRegion"),
       birthCountry: getData(data, "birthCountry"),
       birthday: getData(data, "birthday"),
+      citizenship: getData(data, "citizenship"),
       residenceAddress: getData(data, "residenceAddress"),
       residenceZipCode: getData(data, "residenceZipCode"),
       residenceCity: getData(data, "residenceCity"),

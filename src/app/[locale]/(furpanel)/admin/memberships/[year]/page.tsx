@@ -1,8 +1,11 @@
 "use client";
-import FpButton from "@/components/input/fpButton";
-import Icon from "@/components/icon";
-import Modal from "@/components/modal";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
+import Icon from "@/components/icon";
+import Checkbox from "@/components/input/checkbox";
+import FpButton from "@/components/input/fpButton";
+import Modal from "@/components/modal";
+import UserPicture from "@/components/userPicture";
 import {
   AddCardFormAction,
   AutoInputUserAddCardManager,
@@ -14,22 +17,19 @@ import {
   UserCardData,
 } from "@/lib/api/admin/membershipManager";
 import { runRequest } from "@/lib/api/networking/main";
-import { useModalUpdate } from "@/components/context/modalProvider";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
-import Checkbox from "@/components/input/checkbox";
-import UserPicture from "@/components/userPicture";
 //import "@/styles/table.css";
-import "@/styles/furpanel/admin/membership.css";
-import { copyContent, getParentDirectory, years } from "@/lib/utils";
-import FpInput from "@/components/input/fpInput";
-import DataForm from "@/components/input/dataForm";
 import AutoInput from "@/components/input/autoInput";
+import DataForm from "@/components/input/dataForm";
+import FpInput from "@/components/input/fpInput";
 import LoadingPanel from "@/components/loadingPanel";
-import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import FpTable from "@/components/table/fpTable";
 import { ApiErrorResponse } from "@/lib/api/networking";
+import { copyContent, getParentDirectory, years } from "@/lib/utils";
+import "@/styles/furpanel/admin/membership.css";
+import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 
 export default function MembershipView({ params }: { params: Promise<{ year: number }> }) {
   const [selectedYear, setSelectedYear] = useState<number>();
@@ -288,6 +288,13 @@ export default function MembershipView({ params }: { params: Promise<{ year: num
             label={t("authentication.register.form.birthday.label")}
             readOnly
             initialValue={row.original.userInfo.birthday}
+            onClick={(e) => copyContent(e.currentTarget)}
+          />
+          <FpInput
+            className="hoverable"
+            label={t("authentication.register.form.citizenship.label")}
+            readOnly
+            initialValue={row.original.userInfo.citizenship}
             onClick={(e) => copyContent(e.currentTarget)}
           />
         </div>

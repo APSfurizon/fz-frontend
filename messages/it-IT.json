@@ -1211,15 +1211,19 @@
           "placeholder": "Es: Bari"
         },
         "birth_country": {
-          "label": "Paese",
+          "label": "Paese di nascita",
           "placeholder": "Es: Italia"
         },
         "birth_region": {
-          "label": "Provincia",
+          "label": "Provincia di nascita",
           "placeholder": "Es: Bari"
         },
         "birthday": {
           "label": "Data di nascita"
+        },
+        "citizenship": {
+          "label": "Cittadinanza",
+          "placeholder": "Seleziona la tua prima cittadinanza"
         },
         "confirm_password": {
           "help": "Deve combaciare con la password",
