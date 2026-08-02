@@ -1,3 +1,5 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 import { ApiErrorResponse } from "./api/networking";
 import { getFlagEmoji } from "./components/userPicture";
 import {
@@ -7,6 +9,10 @@ import {
   MEMBERSHIP_STARTING_YEAR,
   READ_CHANGELOG_STORAGE_NAME,
 } from "./constants";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const DAY_TS = 1000 * 60 * 60 * 24,
   HOUR_TS = 1000 * 60 * 60,

@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "postcss.config.mjs",
   ]),
   {
     extends: [tseslint.configs.recommendedTypeChecked],

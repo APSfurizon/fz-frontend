@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/common";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
@@ -170,6 +171,10 @@ export default function Login() {
           </FpButton>
         </div>
       </DataForm>
+      <Button>
+        <Icon icon="KEY" />
+        {t("authentication.login.login")}
+      </Button>
       <div className="horizontal-list">
         <Link
           style={{ width: "100%" }}

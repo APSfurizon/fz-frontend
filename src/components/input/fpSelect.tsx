@@ -2,7 +2,7 @@ import { OptionRendererParams, SelectGroup, SelectItem } from "@/lib/components/
 import { inputEntityIdExtractor } from "@/lib/components/input";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { areEquals } from "@/lib/utils";
-import "@/styles/components/fpSelect.scss";
+//import "@/styles/components/fpSelect.scss";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { CSSProperties, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
