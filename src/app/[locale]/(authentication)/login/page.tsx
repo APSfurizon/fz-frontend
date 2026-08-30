@@ -1,20 +1,12 @@
 "use client";
-import { Button } from "@/components/common";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import ErrorMessage from "@/components/errorMessage";
+import { useAppForm } from "@/components/form";
 import useTitle from "@/components/hooks/useTitle";
 import Icon from "@/components/icon";
-import DataForm from "@/components/input/dataForm";
-import FpButton from "@/components/input/fpButton";
-import FpInput from "@/components/input/fpInput";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import {
-  AdminSecondaryLoginResponse,
-  AuthenticationCodes,
-  LoginFormAction,
-  LoginResponse,
-} from "@/lib/api/authentication/login";
-import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
+import { FieldGroup } from "@/components/ui/field";
+import { AdminSecondaryLoginResponse, AuthenticationCodes, LoginResponse } from "@/lib/api/authentication/login";
+import { runRequest } from "@/lib/api/networking";
 import { UserDisplayAction, UserDisplayResponse } from "@/lib/api/user";
 import {
   API_MOBILE_URL,
@@ -29,19 +21,13 @@ import "@/styles/authentication/login.css";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import z from "zod";
 
 export default function Login() {
   const t = useTranslations();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { showModal } = useModalUpdate();
   const router = useRouter();
   const params = useSearchParams();
-
-  const manageError = (err: ApiErrorResponse) => {
-    showModal(t("common.error"), <ErrorMessage error={err} />, "ERROR");
-  };
 
   const isSecurityByPermission = (permission?: string) => {
     if (!permission) return false;
@@ -113,6 +99,24 @@ export default function Login() {
 
   useTitle(t("authentication.login.title"));
 
+  const loginForm = useAppForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    validators: {
+      onChange: z.object({
+        email: z.email(),
+        password: z.string().min(6),
+      }),
+    },
+    onSubmit: ({ value }) => {
+      console.log("basu");
+      alert(value);
+      console.log(value);
+    },
+  });
+
   return (
     <>
       <div className="horizontal-list gap-4mm justify-content-center">
@@ -123,9 +127,6 @@ export default function Login() {
           <span className="titular bold">{t("authentication.login.title").toLowerCase()}</span>
         </span>
       </div>
-      <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">
-        {t("authentication.login.create_an_account")}
-      </Link>
       {params.get("register") && (
         <NoticeBox theme={NoticeTheme.Success} title={t("authentication.login.messages.register_success.title")}>
           {t("authentication.login.messages.register_success.description")}
@@ -139,51 +140,54 @@ export default function Login() {
           {t(`authentication.login.messages.${params.get("status")}.description`)}
         </NoticeBox>
       )}
-      <DataForm
-        className="vertical-list login-form"
-        action={new LoginFormAction()}
-        onSuccess={(data) => manageSuccess(data as LoginResponse)}
-        onFail={(err) => manageError(err)}
-        hideSave
-        resetOnFail={false}
-        resetOnSuccess={false}
+      <form
+        id="login-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          loginForm.handleSubmit();
+        }}
       >
-        <FpInput
-          fieldName="email"
-          required
-          inputType="email"
-          label={t("authentication.login.label_email")}
-          placeholder={t("authentication.login.placeholder_email")}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <FpInput
-          fieldName="password"
-          minLength={6}
-          required
-          inputType="password"
-          label={t("authentication.login.label_password")}
-          placeholder={t("authentication.login.placeholder_password")}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <div className="toolbar-bottom">
-          <FpButton type="submit" icon="KEY">
-            {t("authentication.login.login")}
-          </FpButton>
-        </div>
-      </DataForm>
-      <Button>
-        <Icon icon="KEY" />
-        {t("authentication.login.login")}
-      </Button>
-      <div className="horizontal-list">
-        <Link
-          style={{ width: "100%" }}
-          href={`/recover?${params.toString()}`}
-          className="suggestion title small center color-subtitle underlined"
-        >
-          {t("authentication.login.recover")}
-        </Link>
-      </div>
+        <FieldGroup>
+          <loginForm.AppField
+            name="email"
+            children={(field) => (
+              <field.TextField
+                label={t("authentication.login.label_email")}
+                placeholder={t("authentication.login.placeholder_email")}
+              />
+            )}
+          />
+          <loginForm.AppField
+            name="password"
+            children={(field) => (
+              <field.TextField
+                type="password"
+                label={t("authentication.login.label_password")}
+                placeholder={t("authentication.login.placeholder_password")}
+              />
+            )}
+          />
+        </FieldGroup>
+        <loginForm.AppForm>
+          <loginForm.Button type="submit" form="login-form">
+            <Icon icon="KEY" data-icon="inline-end" />
+            Login
+          </loginForm.Button>
+        </loginForm.AppForm>
+      </form>
+
+      <Link
+        style={{ width: "100%" }}
+        href={`/recover?${params.toString()}`}
+        className="suggestion title small center color-subtitle underlined"
+      >
+        {t("authentication.login.recover")}
+      </Link>
+      <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">
+        {t("authentication.login.create_an_account")}
+      </Link>
     </>
   );
 }

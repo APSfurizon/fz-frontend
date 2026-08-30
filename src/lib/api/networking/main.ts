@@ -1,17 +1,17 @@
 import {
-  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
-  MOBILE_FURIZON_AUTH_HEADER,
   API_BASE_URL,
   API_MOBILE_URL,
+  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
+  MOBILE_FURIZON_AUTH_HEADER,
 } from "@/lib/constants";
 import { getCookie, templateReplace } from "@/lib/utils";
 import {
-  ApiResponse,
   ApiErrorResponse,
-  RequestData,
-  Endpoint,
   ApiRequest,
+  ApiResponse,
+  Endpoint,
   FormRequestData,
+  RequestData,
   createApiErrorResponse,
 } from "./types";
 import { getToken } from "./utils";
@@ -30,7 +30,9 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
 
     headers.append("Accept-Language", getCookie("NEXT_LOCALE"));
 
-    if (data.action.authenticated && token && token.length > 0) headers.append("Authorization", token);
+    if (data.action.authenticated && token && token.length > 0) {
+      headers.append("Authorization", token);
+    }
 
     // Mobile backend headers:
     // - furizonauth: shared secret from env
@@ -59,6 +61,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
       method: data.action.method,
       body: data.body ? (data.body instanceof FormData ? data.body : JSON.stringify(data.body)) : null,
       headers: headers,
+      credentials: data.action.authenticated ? "include" : "same-origin",
     };
 
     // Execute fetch
