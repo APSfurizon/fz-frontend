@@ -13,7 +13,14 @@ import { SelectItem } from "../components/fpSelect";
 import { buildSearchParams, setCookie } from "../utils";
 import { MediaData } from "./media";
 import { runRequest } from "./networking/main";
-import { ApiAction, ApiErrorResponse, ApiRequest, ApiResponse, RequestType, SimpleApiResponse } from "./networking/types";
+import {
+  ApiAction,
+  ApiErrorResponse,
+  ApiRequest,
+  ApiResponse,
+  RequestType,
+  SimpleApiResponse,
+} from "./networking/types";
 
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
   propic?: MediaData;
@@ -316,7 +323,7 @@ export class UpdatePersonalInfoFormAction extends FormApiAction<UserPersonalInfo
   urlAction = "membership/update-personal-user-information";
 }
 
-export interface GetPersonalInfoResponse extends UserPersonalInfo, ApiResponse { }
+export interface GetPersonalInfoResponse extends UserPersonalInfo, ApiResponse {}
 
 export class GetPersonalInfoAction extends ApiAction<GetPersonalInfoResponse, ApiErrorResponse> {
   authenticated = true;
@@ -447,7 +454,7 @@ export class AutoInputSexManager implements AutoInputManager {
         .then((results) => {
           resolve(filterLoaded(results, filter));
         })
-        .catch(() => { });
+        .catch(() => {});
     });
   }
 
@@ -462,7 +469,7 @@ export class AutoInputSexManager implements AutoInputManager {
         .then((results) => {
           resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
         })
-        .catch(() => { });
+        .catch(() => {});
     });
   }
 
@@ -480,7 +487,7 @@ export class AutoInputGenderManager implements AutoInputManager {
         .then((results) => {
           resolve(filterLoaded(results, filter));
         })
-        .catch(() => { });
+        .catch(() => {});
     });
   }
 
@@ -495,7 +502,7 @@ export class AutoInputGenderManager implements AutoInputManager {
         .then((results) => {
           resolve(filterSearchResult(value, SearchType.RANKED, results, locale, filter, filterOut));
         })
-        .catch(() => { });
+        .catch(() => {});
     });
   }
 
@@ -547,9 +554,9 @@ export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: strin
   e.preventDefault();
   const promise = !!userDisplay
     ? runRequest({
-      action: new ChangeLanguageAction(),
-      body: { languageCode: language },
-    })
+        action: new ChangeLanguageAction(),
+        body: { languageCode: language },
+      })
     : Promise.resolve(null);
   promise
     .then(() => {

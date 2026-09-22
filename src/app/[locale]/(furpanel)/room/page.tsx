@@ -17,11 +17,11 @@ import RoomOrderFlow from "@/components/room/roomOrderFlow";
 import StatusBox from "@/components/statusBox";
 import ToolLink from "@/components/toolLink";
 import UserPicture from "@/components/userPicture";
-import { Board } from "@/lib/api/booking";
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { OrderStatus } from "@/lib/api/order";
 import { Permissions } from "@/lib/api/permission";
+import { Board } from "@/lib/api/reservation";
 import {
   EMPTY_ROOM_INFO,
   GuestIdApiData,
@@ -502,7 +502,7 @@ export default function RoomPage() {
                   {data.currentRoomInfo.userIsOwner && (
                     <>
                       <div
-                        className="actions-container horizontal-list flex-wrap gap-4mm flex-space-between"
+                        className="actions-container horizontal-list gap-4mm flex-space-between flex-wrap"
                         style={{ flexGrow: "1" }}
                       >
                         <FpButton

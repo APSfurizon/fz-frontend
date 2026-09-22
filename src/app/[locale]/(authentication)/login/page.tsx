@@ -13,6 +13,7 @@ import {
   APP_VERSION,
   MOBILE_ADMIN_TOKEN_STORAGE_NAME,
   MOBILE_FURIZON_AUTH_HEADER,
+  PASSWORD_MINIMUM_SIZE,
   SESSION_DURATION,
   TOKEN_STORAGE_NAME,
 } from "@/lib/constants";
@@ -107,13 +108,19 @@ export default function Login() {
     validators: {
       onChange: z.object({
         email: z.email(),
-        password: z.string().min(6),
+        password: z.string().min(PASSWORD_MINIMUM_SIZE, {
+          error: t("authentication.login.errors.validation.password_too_small", { number: PASSWORD_MINIMUM_SIZE }),
+        }),
       }),
     },
-    onSubmit: ({ value }) => {
-      console.log("basu");
-      alert(value);
-      console.log(value);
+    onSubmit: async ({ value }) => {
+      const sessionResponse = await fetch("/api/sessions", {
+        method: "POST",
+        body: JSON.stringify(value),
+      });
+      if (!sessionResponse.ok) {
+      }
+      router.push("/home");
     },
   });
 
@@ -141,6 +148,7 @@ export default function Login() {
         </NoticeBox>
       )}
       <form
+        className="md:w-64 lg:w-96"
         id="login-form"
         onSubmit={(e) => {
           e.preventDefault();

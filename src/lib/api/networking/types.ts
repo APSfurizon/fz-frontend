@@ -1,4 +1,5 @@
 import { FormApiAction } from "@/lib/components/dataForm";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 export enum RequestType {
   GET = "GET",
@@ -48,7 +49,11 @@ export function createApiErrorResponse(params: {
 }
 
 export enum Endpoint {
+  /** Default, uses the local endpoint to handle the backend api calls */
   API,
+  /** When referring to the backend endpoint directly, rather than referring to the local api */
+  BACKEND,
+  /** To reference the mobile endpoint */
   MOBILE,
 } /**
  * Describes which endpoint the be called, the type of body, type of response and type of error response
@@ -81,6 +86,8 @@ export type RequestData<U extends ApiResponse | boolean | Response, V extends Ap
   body?: ApiRequest | FormData;
   searchParams?: URLSearchParams;
   pathParams?: Record<string, any>;
+  /** Provide this whenever using it from server side requests */
+  cookieStore?: ReadonlyRequestCookies;
 };
 
 export type FormRequestData<T extends ApiRequest, U extends ApiResponse | boolean, V extends ApiErrorResponse> = {

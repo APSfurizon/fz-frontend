@@ -7,7 +7,6 @@ header.header {
   margin-bottom: 3.125em;
   position: sticky;
   top: 0px;
-  z-index: 300;
   box-shadow: 0px 0px 0.5em 0.2em var(--header-shadow);
   transition-property: top;
   transition-duration: 120ms;
@@ -30,6 +29,13 @@ header {
       max-height: calc(100% - 2em);
       width: auto;
     }
+  }
+
+  .hamburger-menu {
+    max-width: fit-content;
+    padding: 1em 0.3125em;
+    margin: 0.3125em;
+    cursor: pointer;
   }
 
   /* Header links */
@@ -63,41 +69,8 @@ header {
     text-decoration: underline;
   }
 
-  span div.hamburger {
-    display: none;
-  }
-
   img.app-badge {
     max-width: 7em;
     height: auto;
-  }
-}
-
-@media (max-width: 1300px) {
-  header span div.hamburger {
-    display: block;
-    max-width: fit-content;
-    padding: 1em 0.3125em;
-    margin: 0.3125em;
-    cursor: pointer;
-  }
-
-  .header-link-container {
-    flex-direction: column;
-    align-items: start;
-    transition-duration: 120ms;
-  }
-
-  .header-link-container > div.spacer {
-    display: none;
-  }
-
-  .header-link-container:not(.expanded) {
-    gap: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin: 0px;
-    max-height: 0px;
-    overflow: hidden;
   }
 }

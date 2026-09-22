@@ -5,9 +5,9 @@ import Icon from "@/components/icon";
 import FpButton from "@/components/input/fpButton";
 import LoadingPanel from "@/components/loadingPanel";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
-import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/booking";
 import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
+import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/reservation";
 import { EVENT_BANNER, EVENT_LOGO } from "@/lib/constants";
 import { getCountdown } from "@/lib/utils";
 import { useFormatter, useNow, useTranslations } from "next-intl";
@@ -53,7 +53,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
         <img className="event-logo" alt={t("furpanel.booking.event_logo")} src={EVENT_LOGO} />
         {/* Countdown view */}
         {!isOpen && data?.showCountdown && !data.hasOrder && countdown ? (
-          <p className="countdown title bold title large rounded-s center">
+          <p className="countdown title bold title large center rounded-s">
             {countdown[0] > 0
               ? t.rich("furpanel.booking.countdown_days", { days: countdown[0] })
               : t.rich("furpanel.booking.countdown_clock", {

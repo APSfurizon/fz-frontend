@@ -1,10 +1,6 @@
 import { NoticeTheme } from "@/components/noticeBox";
-import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
-import { MobileApiAction } from "../networking/types";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
+import { FormDTOBuilder, getData } from "../../components/dataForm";
+import { ApiAction, ApiErrorResponse, ApiResponse, Endpoint, MobileApiAction, RequestType } from "../networking/types";
 
 export const AuthenticationCodes: Record<string, NoticeTheme> = {
   CONFIRMATION_SUCCESSFUL: NoticeTheme.Success,
@@ -31,10 +27,10 @@ export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
   };
 }
 
-export class LoginFormAction extends FormApiAction<LoginData, LoginResponse, ApiErrorResponse> {
+export class LoginFormAction extends ApiAction<LoginResponse, ApiErrorResponse> {
+  endpoint = Endpoint.BACKEND;
   method = RequestType.POST;
   authenticated = true;
-  dtoBuilder = new LoginDTOBuilder();
   urlAction = "authentication/login";
 }
 

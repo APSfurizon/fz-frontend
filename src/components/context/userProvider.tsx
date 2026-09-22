@@ -15,7 +15,7 @@ const UserContext = createContext<UserUpdateType>({} as UserUpdateType);
 
 export function HeaderProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [updateUser, setUpdateUser] = useState(false);
-  const [userLoading, setUserLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(false);
   const [userDisplay, setUserDisplay] = useState<UserDisplayResponse>();
   const userDisplayRef = useRef<typeof userDisplay>(userDisplay);
 
@@ -38,10 +38,6 @@ export function HeaderProvider({ children }: Readonly<{ children: React.ReactNod
   useEffect(() => {
     handleUserUpdate(updateUser);
   }, [updateUser]);
-
-  useEffect(() => {
-    handleUserUpdate(true);
-  }, []);
 
   return (
     <UserContext.Provider

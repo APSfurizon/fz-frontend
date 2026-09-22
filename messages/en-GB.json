@@ -28,7 +28,40 @@
       "app_badge": "Download now the official app!",
       "alt_app_badge": "Mobile application download button",
       "gallery": "Gallery",
-      "menu": "Main menu"
+      "menu": "Main menu",
+      "links": {
+        "reservation": {
+          "title": "Reservation",
+          "links": {
+            "my_booking": {
+              "title": "My booking"
+            },
+            "badge": {
+              "title": "Badge"
+            },
+            "room": {
+              "title": "Accommodation"
+            }
+          }
+        },
+        "convention": {
+          "title": "Convention",
+          "links": {
+            "schedule": {
+              "title": "Schedule"
+            },
+            "gallery": {
+              "title": "Gallery"
+            },
+            "nosecount": {
+              "title": "Nose count"
+            }
+          }
+        },
+        "admin": {
+          "title": "Administration"
+        }
+      }
     },
     "reload": "Reload",
     "loading": "Loading...",
@@ -1169,7 +1202,10 @@
       "errors": {
         "invalid_input": "Invalid data",
         "secondary_login_failed": "Secondary login failed",
-        "secondary_login_failed_description": "Login via the mobile back-end failed"
+        "secondary_login_failed_description": "Login via the mobile back-end failed",
+        "validation": {
+          "password_too_small": "must be of at least {number} characters"
+        }
       },
       "label_email": "Email",
       "label_password": "Password",

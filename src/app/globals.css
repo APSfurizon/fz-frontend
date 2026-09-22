@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+body {
+  /* Required for drawer */
+  position: relative;
+}

@@ -97,6 +97,9 @@ export function setCookie(
 }
 
 export function getCookie(cookieName: string) {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return null;
+  }
   const name = cookieName + "=";
   const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {

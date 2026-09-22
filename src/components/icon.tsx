@@ -24,6 +24,7 @@ export const ICONS = {
   BOOKMARK_STAR: "bookmark_star",
   CAMERA: "camera",
   CALENDAR_ADD_ON: "calendar_add_on",
+  CALENDAR_MONTH: "calendar_month",
   CANCEL: "cancel",
   CHECK: "check",
   CHECK_CIRCLE: "check_circle",

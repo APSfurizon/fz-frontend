@@ -1,8 +1,5 @@
-import { ShopLinkResponse } from "../booking";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
+import { ShopLinkResponse } from "../reservation";
 import { RoomData } from "../room";
 
 export interface PretixItemQuota {

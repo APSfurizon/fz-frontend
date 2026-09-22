@@ -13,32 +13,19 @@ import {
   DEBUG_ENABLED,
   READ_CHANGELOG_STORAGE_NAME,
   ROOM_ENABLED,
-  TOKEN_STORAGE_NAME,
 } from "@/lib/constants";
 import { shouldShowChangelog } from "@/lib/utils";
 import "@/styles/furpanel/layout.css";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   const t = useTranslations();
   const { isOpen, icon, title, modalChildren, hideModal, showModal } = useModalUpdate();
   const [toolListExpanded, setToolListExpanded] = useState(false);
-  const params = useSearchParams();
-  const path = usePathname();
-  const router = useRouter();
-  const { userDisplay, setUpdateUser } = useUser();
+  const { userDisplay } = useUser();
 
   useEffect(() => {
-    const token = params.get(TOKEN_STORAGE_NAME);
-    if (token && token.length > 0) {
-      const newParams = new URLSearchParams(params);
-      newParams.delete(TOKEN_STORAGE_NAME);
-      router.replace(`${path}?${newParams.toString()}`);
-      setUpdateUser(true);
-      return;
-    }
     if (shouldShowChangelog()) {
       localStorage.setItem(READ_CHANGELOG_STORAGE_NAME, APP_VERSION ?? "");
       showModal(
@@ -75,7 +62,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
           </span>
           <div className="spacer"></div>
           <div
-            className={`tools-list horizontal-list flex-wrap gap-4mm ${toolListExpanded ? "expanded" : ""}`}
+            className={`tools-list horizontal-list gap-4mm flex-wrap ${toolListExpanded ? "expanded" : ""}`}
             style={{ justifyContent: "flex-end" }}
           >
             {BOOKING_ENABLED && (

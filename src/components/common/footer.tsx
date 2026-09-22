@@ -1,7 +1,7 @@
+import { APP_GIT, APP_VERSION } from "@/lib/constants";
+import "@/styles/components/footer.css";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import "@/styles/components/footer.css";
-import { APP_GIT, APP_VERSION } from "@/lib/constants";
 
 export default function Footer() {
   const t = useTranslations("common");
@@ -17,6 +17,7 @@ export default function Footer() {
               alt={t("header.alt_logo")}
               width={256}
               height={60}
+              loading="eager"
             />
           </picture>
         </div>
@@ -85,20 +86,37 @@ export default function Footer() {
           </div>
           <p className="tiny color-subtitle center">
             <span>Furpanel {APP_VERSION} by </span>
-            <a className="color-link" href="https://redwinglu.carrd.co/">Stranck</a>
+            <a className="color-link" href="https://redwinglu.carrd.co/">
+              Stranck
+            </a>
             <span>, </span>
-            <a className="color-link" href="https://about.woffo.ovh">Drew</a>
+            <a className="color-link" href="https://about.woffo.ovh">
+              Drew
+            </a>
             <span>, </span>
-            <a className="color-link" href="https://x.com/starkthedragon">Stark</a>
+            <a className="color-link" href="https://x.com/starkthedragon">
+              Stark
+            </a>
             <span>, </span>
-            <a className="color-link" href="https://shinxekin.com/">Jan</a>
+            <a className="color-link" href="https://shinxekin.com/">
+              Jan
+            </a>
             <span>, </span>
-            <a className="color-link" href="https://www.instagram.com/reixwolfo">Reix</a>
+            <a className="color-link" href="https://www.instagram.com/reixwolfo">
+              Reix
+            </a>
             <span>, Cactua. Servers provided by </span>
-            <a className="color-link" href="https://zerven.net">Shado</a>
+            <a className="color-link" href="https://zerven.net">
+              Shado
+            </a>
           </p>
           <div className="tiny color-subtitle center">
-            <span>{t("source_code")} <a className="color-link" href={APP_GIT}>{APP_GIT}</a></span>
+            <span>
+              {t("source_code")}{" "}
+              <a className="color-link" href={APP_GIT}>
+                {APP_GIT}
+              </a>
+            </span>
           </div>
         </div>
       </div>

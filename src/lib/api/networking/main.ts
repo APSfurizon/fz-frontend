@@ -1,8 +1,10 @@
 import {
   API_BASE_URL,
   API_MOBILE_URL,
+  DEFAULT_TRANSLATION_KEY,
   MOBILE_ADMIN_TOKEN_STORAGE_NAME,
   MOBILE_FURIZON_AUTH_HEADER,
+  PUBLIC_URL,
 } from "@/lib/constants";
 import { getCookie, templateReplace } from "@/lib/utils";
 import {
@@ -14,7 +16,6 @@ import {
   RequestData,
   createApiErrorResponse,
 } from "./types";
-import { getToken } from "./utils";
 
 export function runRequest<U extends ApiResponse | boolean | Response, V extends ApiErrorResponse>(
   data: RequestData<U, V>
@@ -23,16 +24,23 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
     // Calc headers
     const headers = new Headers();
 
-    if (data.body instanceof FormData == false) headers.append("Content-type", "application/json");
+    // Pass cookies when called from server side
+    if (data.cookieStore) {
+      const cookieHeader = data.cookieStore.toString();
+      if (cookieHeader) {
+        headers.set("cookie", cookieHeader);
+      }
+    }
 
-    const token = getToken();
+    if (data.body instanceof FormData) {
+      headers.append("Content-type", "multipart/form-data");
+    } else {
+      headers.append("Content-type", "application/json");
+    }
+
     const adminToken = getCookie(MOBILE_ADMIN_TOKEN_STORAGE_NAME);
 
-    headers.append("Accept-Language", getCookie("NEXT_LOCALE"));
-
-    if (data.action.authenticated && token && token.length > 0) {
-      headers.append("Authorization", token);
-    }
+    headers.append("Accept-Language", getCookie("NEXT_LOCALE") ?? DEFAULT_TRANSLATION_KEY);
 
     // Mobile backend headers:
     // - furizonauth: shared secret from env
@@ -48,8 +56,10 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
 
     // Calc url
     const useSearchParams = !!data.searchParams;
+
     let endpointUrl = {
-      [Endpoint.API]: API_BASE_URL,
+      [Endpoint.API]: new URL("/api/backend/", PUBLIC_URL).toString(),
+      [Endpoint.BACKEND]: API_BASE_URL,
       [Endpoint.MOBILE]: API_MOBILE_URL ?? "",
     }[data.action.endpoint];
     endpointUrl += [data.action.urlAction, ...(data.additionalPath ?? [])].join("/");
@@ -59,9 +69,9 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
     }
     const fetchOptions: RequestInit = {
       method: data.action.method,
-      body: data.body ? (data.body instanceof FormData ? data.body : JSON.stringify(data.body)) : null,
+      body: data.body ? (data.body instanceof FormData ? data.body : JSON.stringify(data.body)) : undefined,
       headers: headers,
-      credentials: data.action.authenticated ? "include" : "same-origin",
+      credentials: "include",
     };
 
     // Execute fetch

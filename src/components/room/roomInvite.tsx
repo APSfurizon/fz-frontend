@@ -1,11 +1,11 @@
-import { CSSProperties } from "react";
 import FpButton from "@/components/input/fpButton";
-import UserPicture from "@/components/userPicture";
-import { useLocale, useTranslations } from "next-intl";
 import StatusBox from "@/components/statusBox";
-import { translate } from "@/lib/translations";
+import UserPicture from "@/components/userPicture";
+import { Board } from "@/lib/api/reservation";
 import { RoomInvitation } from "@/lib/api/room";
-import { Board } from "@/lib/api/booking";
+import { translate } from "@/lib/translations";
+import { useLocale, useTranslations } from "next-intl";
+import { CSSProperties } from "react";
 
 export default function RoomInvite({
   busy,

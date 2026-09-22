@@ -28,7 +28,40 @@
       "app_badge": "Scarica ora l'app ufficiale!",
       "alt_app_badge": "Bottone per scaricare l'applicazione mobile",
       "gallery": "Galleria",
-      "menu": "Menù"
+      "menu": "Menù",
+      "links": {
+        "reservation": {
+          "title": "Prenotazione",
+          "links": {
+            "my_booking": {
+              "title": "La mia prenotazione"
+            },
+            "badge": {
+              "title": "Badge"
+            },
+            "room": {
+              "title": "Alloggio"
+            }
+          }
+        },
+        "convention": {
+          "title": "Convention",
+          "links": {
+            "schedule": {
+              "title": "Programma"
+            },
+            "gallery": {
+              "title": "Galleria"
+            },
+            "nosecount": {
+              "title": "Nosecount"
+            }
+          }
+        },
+        "admin": {
+          "title": "Amministrazione"
+        }
+      }
     },
     "reload": "Ricarica",
     "loading": "Caricamento...",
@@ -1176,7 +1209,10 @@
       "errors": {
         "invalid_input": "Dati non validi",
         "secondary_login_failed": "Login secondario fallito",
-        "secondary_login_failed_description": "Login attraverso il server mobile fallito"
+        "secondary_login_failed_description": "Login attraverso il server mobile fallito",
+        "validation": {
+          "password_too_small": "deve essere di almeno {number} caratteri"
+        }
       },
       "messages": {
         "register_success": {

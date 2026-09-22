@@ -1,6 +1,6 @@
 import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
-import { qrCodeLogo, qrCodeOptions } from "@/lib/api/booking";
+import { qrCodeLogo, qrCodeOptions } from "@/lib/api/reservation";
 import { useTranslations } from "next-intl";
 import { useQRCode } from "next-qrcode";
 import { useState } from "react";

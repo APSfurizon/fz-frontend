@@ -11,6 +11,9 @@ import LoadingPanel from "@/components/loadingPanel";
 import Modal from "@/components/modal";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import StatusBox from "@/components/statusBox";
+import { runRequest } from "@/lib/api/networking/main";
+import { ApiErrorResponse } from "@/lib/api/networking/types";
+import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/api/order";
 import {
   Board,
   BookingOrderApiAction,
@@ -22,10 +25,7 @@ import {
   mapOrderStatusToStatusBox,
   OrderEditLinkApiAction,
   OrderRetryLinkApiAction,
-} from "@/lib/api/booking";
-import { runRequest } from "@/lib/api/networking/main";
-import { ApiErrorResponse } from "@/lib/api/networking/types";
-import { AutoInputOrderExchangeManager, OrderExchangeFormAction } from "@/lib/api/order";
+} from "@/lib/api/reservation";
 import { EVENT_MAIN_LOCATION_NAME, GROUP_CHAT_URL } from "@/lib/constants";
 import { translate } from "@/lib/translations";
 import { isMobile } from "@/lib/userAgent";
@@ -212,7 +212,7 @@ export default function BookingPage() {
                 </div>
 
                 {/* Reservation info */}
-                <div className="booking-information flex-wrap gap-4mm">
+                <div className="booking-information gap-4mm flex-wrap">
                   {bookingData?.order.checkinDate && (
                     <p>
                       <Icon className="x-large" icon="CONCIERGE" />
@@ -311,7 +311,7 @@ export default function BookingPage() {
                   </div>
 
                   {/* Order actions */}
-                  <div className="horizontal-list gap-4mm flex-wrap flex-space-between">
+                  <div className="horizontal-list gap-4mm flex-space-between flex-wrap">
                     {pageData?.shouldRetry && (
                       <FpButton
                         className="action-button"
@@ -324,7 +324,7 @@ export default function BookingPage() {
                     )}
                     {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret} />}
                     <div className="spacer" style={{ flexGrow: "300" }}></div>
-                    <div className="horizontal-list gap-4mm flex-wrap flex-space-between" style={{ flexGrow: "1" }}>
+                    <div className="horizontal-list gap-4mm flex-space-between flex-wrap" style={{ flexGrow: "1" }}>
                       <FpButton
                         className="action-button"
                         disabled={isEditLocked}

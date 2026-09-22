@@ -1,28 +1,28 @@
 "use client";
-import Icon from "@/components/icon";
-import { runRequest, ApiErrorResponse } from "@/lib/api/networking";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@/components/context/userProvider";
+import ErrorMessage from "@/components/errorMessage";
 import useTitle from "@/components/hooks/useTitle";
+import Icon from "@/components/icon";
+import FpButton from "@/components/input/fpButton";
+import LoadingPanel from "@/components/loadingPanel";
+import UserPicture from "@/components/userPicture";
 import {
   ExchangeStatusApiAction,
   ExchangeStatusApiResponse,
   ExchangeUpdateApiAction,
   ExchangeUpdateApiData,
 } from "@/lib/api/exchange";
-import { buildSearchParams } from "@/lib/utils";
-import { translate } from "@/lib/translations";
-import FpButton from "@/components/input/fpButton";
-import ErrorMessage from "@/components/errorMessage";
-import { useUser } from "@/components/context/userProvider";
-import UserPicture from "@/components/userPicture";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
+import { Board, calcTicketData } from "@/lib/api/reservation";
 import { RoomData } from "@/lib/api/room";
 import { ExtraDays, UserData } from "@/lib/api/user";
-import { Board, calcTicketData } from "@/lib/api/booking";
-import "@/styles/authentication/login.css";
+import { translate } from "@/lib/translations";
+import { buildSearchParams } from "@/lib/utils";
 import "@/styles/authentication/exchangeConfirm.css";
-import LoadingPanel from "@/components/loadingPanel";
+import "@/styles/authentication/login.css";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 export default function ExchangeConfirm() {
   const t = useTranslations();
@@ -136,7 +136,7 @@ export default function ExchangeConfirm() {
       {loading && <LoadingPanel />}
       {exchangeData && userDisplay && (
         <>
-          <div className="exchange-info rounded-l vertical-list gap-2mm">
+          <div className="exchange-info vertical-list gap-2mm rounded-l">
             <span className="title bold exchange-title rounded-m horizontal-list gap-2mm align-items-center flex-wrap">
               {t.rich(`authentication.transfer_confirm.${exchangeData.action}.${isOwner ? "sent" : "received"}`, {
                 source: () => (
