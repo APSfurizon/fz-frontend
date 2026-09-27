@@ -5,10 +5,10 @@ import { createContext, RefObject, useContext, useEffect, useRef, useState } fro
 interface UserUpdateType {
   updateUser: boolean;
   setUpdateUser: (value: boolean) => void;
-  userDisplay?: UserDisplayResponse;
-  setUserDisplay: (value?: UserDisplayResponse) => void;
+  userDisplay?: UserDisplayResponse | null;
+  setUserDisplay: (value: UserDisplayResponse | null) => void;
   userLoading: boolean;
-  userDisplayRef: RefObject<UserDisplayResponse | undefined>;
+  userDisplayRef: RefObject<UserDisplayResponse | null>;
 }
 
 const UserContext = createContext<UserUpdateType>({} as UserUpdateType);
@@ -16,7 +16,7 @@ const UserContext = createContext<UserUpdateType>({} as UserUpdateType);
 export function HeaderProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [updateUser, setUpdateUser] = useState(false);
   const [userLoading, setUserLoading] = useState(false);
-  const [userDisplay, setUserDisplay] = useState<UserDisplayResponse>();
+  const [userDisplay, setUserDisplay] = useState<UserDisplayResponse | null>(null);
   const userDisplayRef = useRef<typeof userDisplay>(userDisplay);
 
   const handleUserUpdate = (doUpdate: boolean) => {

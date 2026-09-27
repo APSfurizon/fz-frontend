@@ -1,4 +1,3 @@
-import { MouseEvent } from "react";
 import {
   AutoInputFilter,
   AutoInputManager,
@@ -550,7 +549,7 @@ export class ChangeLanguageAction extends ApiAction<boolean, ApiErrorResponse> {
   urlAction = "users/changeLanguage";
 }
 
-export function changeLanguage(e: MouseEvent<HTMLAnchorElement>, language: string, userDisplay?: UserData) {
+export function changeLanguage(e: { preventDefault(): void }, language: string, userDisplay?: UserData) {
   e.preventDefault();
   const promise = !!userDisplay
     ? runRequest({

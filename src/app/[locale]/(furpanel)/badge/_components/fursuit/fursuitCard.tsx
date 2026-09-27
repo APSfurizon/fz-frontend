@@ -2,7 +2,7 @@ import Icon from "@/components/icon";
 import FpButton from "@/components/input/fpButton";
 import { FursuitEventData } from "@/lib/api/badge/types";
 import { EMPTY_PROFILE_PICTURE_SRC, EVENT_NAME } from "@/lib/constants";
-import { cssClass, getImageUrl } from "@/lib/utils";
+import { cssClass } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { MouseEvent } from "react";
@@ -37,7 +37,7 @@ export default function FursuitCard(props: Readonly<FursuitCardProps>) {
           height={500}
           alt=""
           quality={100}
-          src={getImageUrl(props.fursuitEventData.fursuit.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+          src={props.fursuitEventData.fursuit.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC}
         ></Image>
         <div className="details vertical-list gap-2mm">
           <div className="vertical-list">

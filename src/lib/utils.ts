@@ -2,13 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ApiErrorResponse } from "./api/networking";
 import { getFlagEmoji } from "./components/userPicture";
-import {
-  API_IMAGE_URL,
-  APP_VERSION,
-  CHANGELOGS_ENABLED,
-  MEMBERSHIP_STARTING_YEAR,
-  READ_CHANGELOG_STORAGE_NAME,
-} from "./constants";
+import { APP_VERSION, CHANGELOGS_ENABLED, MEMBERSHIP_STARTING_YEAR, READ_CHANGELOG_STORAGE_NAME } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -149,10 +143,6 @@ export const years = Array(new Date().getUTCFullYear() - MEMBERSHIP_STARTING_YEA
   .map((i, index) => index)
   .map((i) => MEMBERSHIP_STARTING_YEAR + i);
 
-export function getImageUrl(src?: string): string | undefined {
-  return src && src.length > 0 ? new URL(src, API_IMAGE_URL).href : undefined;
-}
-
 export function shouldShowChangelog(): boolean {
   const readVersion = localStorage.getItem(READ_CHANGELOG_STORAGE_NAME);
   const lastVersion = nullifyEmptyString(readVersion ?? "");
@@ -163,13 +153,17 @@ export function resultSelf<A, R>(arg1: A): R {
   return arg1 as any as R;
 }
 
-export function mapLanguageToFlag(lang: string) {
-  const value = lang.split("-")[1]?.toLowerCase() ?? lang.toLowerCase();
+export function mapLanguageToFlag(language: string) {
+  return getFlagEmoji(languageToCountryCode(language));
+}
+
+export function languageToCountryCode(language: string): string {
+  const value = language.split("-")[1]?.toLowerCase() ?? language.toLowerCase();
   switch (value) {
     case "en":
-      return getFlagEmoji("gb");
+      return "gb";
     default:
-      return getFlagEmoji(value);
+      return value;
   }
 }
 

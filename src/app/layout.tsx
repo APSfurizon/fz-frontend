@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import "@/styles/globals.css";
+import "@/styles/global.css";
+import "flag-icons/css/flag-icons.min.css";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";

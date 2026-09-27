@@ -1,6 +1,5 @@
 import { FursuitDetails } from "@/lib/api/badge/types";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
-import { getImageUrl } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 
@@ -18,7 +17,7 @@ export default function NosecountFursuit(props: NosecountFursuitProps) {
           unoptimized
           width={80}
           height={80}
-          src={getImageUrl(props.data.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+          src={props.data.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC}
           alt={t("common.header.alt_profile_picture")}
         />
         <div className="attendee-data">

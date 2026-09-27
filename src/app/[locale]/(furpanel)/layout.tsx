@@ -1,29 +1,15 @@
 "use client";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { useUser } from "@/components/context/userProvider";
-import Icon from "@/components/icon";
 import Modal from "@/components/modal";
-import ToolLink from "@/components/toolLink";
-import { hasPermission, Permissions } from "@/lib/api/permission";
-import {
-  APP_GIT_PROJECT_RELEASE,
-  APP_VERSION,
-  BADGE_ENABLED,
-  BOOKING_ENABLED,
-  DEBUG_ENABLED,
-  READ_CHANGELOG_STORAGE_NAME,
-  ROOM_ENABLED,
-} from "@/lib/constants";
+import { APP_GIT_PROJECT_RELEASE, APP_VERSION, READ_CHANGELOG_STORAGE_NAME } from "@/lib/constants";
 import { shouldShowChangelog } from "@/lib/utils";
 import "@/styles/furpanel/layout.css";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   const t = useTranslations();
   const { isOpen, icon, title, modalChildren, hideModal, showModal } = useModalUpdate();
-  const [toolListExpanded, setToolListExpanded] = useState(false);
-  const { userDisplay } = useUser();
 
   useEffect(() => {
     if (shouldShowChangelog()) {
@@ -44,69 +30,9 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     }
   }, []);
 
-  const toolClick = () => {
-    setToolListExpanded(false);
-  };
-
-  const canSeeAdminPages = hasPermission(Permissions.CAN_SEE_ADMIN_PAGES, userDisplay);
-
   return (
     <>
-      <div className="main-dialog rounded-s">
-        <div className="horizontal-list gap-4mm">
-          <span>
-            <span className="title-pair">
-              <Icon icon="DESIGN_SERVICES" />
-              <span className="titular bold highlight">furpanel</span>
-            </span>
-          </span>
-          <div className="spacer"></div>
-          <div
-            className={`tools-list horizontal-list gap-4mm flex-wrap ${toolListExpanded ? "expanded" : ""}`}
-            style={{ justifyContent: "flex-end" }}
-          >
-            {BOOKING_ENABLED && (
-              <ToolLink onClick={toolClick} href="/booking" icon="LOCAL_ACTIVITY">
-                {t("furpanel.booking.title")}
-              </ToolLink>
-            )}
-            {BADGE_ENABLED && (
-              <ToolLink onClick={toolClick} href="/badge" icon="PERSON_BOOK">
-                {t("furpanel.badge.title")}
-              </ToolLink>
-            )}
-            {ROOM_ENABLED && (
-              <ToolLink onClick={toolClick} href="/room" icon="BED">
-                {t("furpanel.room.title")}
-              </ToolLink>
-            )}
-            <ToolLink onClick={toolClick} href="/user" icon="PERSON">
-              {t("furpanel.user.title")}
-            </ToolLink>
-            {canSeeAdminPages && (
-              <ToolLink onClick={toolClick} href="/admin" icon="SECURITY">
-                {t("furpanel.admin.title")}
-              </ToolLink>
-            )}
-            {DEBUG_ENABLED && (
-              <ToolLink href="/debug" icon="BUG_REPORT">
-                {t("furpanel.debug.title")}
-              </ToolLink>
-            )}
-          </div>
-          <span>
-            <div
-              role="button"
-              title={t("common.menu")}
-              className="hamburger rounded-l"
-              onClick={() => setToolListExpanded(!toolListExpanded)}
-            >
-              <Icon icon={toolListExpanded ? "CLOSE" : "MENU"} />
-            </div>
-          </span>
-        </div>
-        {children}
-      </div>
+      <div className="main-dialog rounded-s">{children}</div>
       <Modal icon={icon} title={title} open={isOpen} onClose={hideModal} zIndex={600}>
         {modalChildren}
       </Modal>

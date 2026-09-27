@@ -11,7 +11,7 @@ import {
   FULL_UPLOAD_MAX_WIDTH,
   PROFILE_UPLOAD_MAX_SIZE,
 } from "@/lib/constants";
-import { areEquals, getImageUrl } from "@/lib/utils";
+import { areEquals } from "@/lib/utils";
 import { imageToBlob } from "@/lib/utils/media";
 import "@/styles/components/userUpload.css";
 import "cropperjs/dist/cropper.css";
@@ -215,12 +215,12 @@ export default function Upload({
             {label}
           </label>
         )}
-        <div className="upload-container vertical-list align-items-center rounded-l gap-2mm">
+        <div className="upload-container vertical-list align-items-center gap-2mm rounded-l">
           <div className={`image-container rounded-s ${error ? "danger" : ""}`}>
             <Image
               unoptimized
               className="upload-picture"
-              src={previewUrl ? previewUrl : (getImageUrl(media?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC)}
+              src={previewUrl ? previewUrl : (media?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC)}
               alt={t("components.upload.alt_preview_image")}
               width={viewSize}
               height={viewSize}

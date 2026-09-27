@@ -7,7 +7,7 @@ import {
   AutoInputSearchResult,
 } from "@/lib/components/autoInput";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
-import { areEquals, getImageUrl, isEmpty } from "@/lib/utils";
+import { areEquals, isEmpty } from "@/lib/utils";
 import "@/styles/components/autoInput.css";
 import { debounce } from "lodash";
 import { useLocale, useTranslations } from "next-intl";
@@ -333,7 +333,7 @@ export default function AutoInput({
         {element.imageUrl !== undefined && (
           <Image
             unoptimized
-            src={getImageUrl(element.imageUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+            src={element.imageUrl ?? EMPTY_PROFILE_PICTURE_SRC}
             width={32}
             height={32}
             alt={t("autoinput.alt_result_image", { description: element?.getDescription(locale) })}
@@ -360,7 +360,7 @@ export default function AutoInput({
         {element.imageUrl !== undefined && (
           <Image
             unoptimized
-            src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : getImageUrl(element.imageUrl)!}
+            src={isEmpty(element.imageUrl) ? EMPTY_PROFILE_PICTURE_SRC : element.imageUrl}
             width={32}
             height={32}
             alt={t("autoinput.alt_result_image", { description: element?.getDescription(locale) })}
@@ -407,7 +407,7 @@ export default function AutoInput({
         </label>
         <div style={{ position: "relative" }}>
           <div
-            className="input-container horizontal-list align-items-center rounded-s margin-bottom-1mm"
+            className="input-container horizontal-list align-items-center margin-bottom-1mm rounded-s"
             style={anchorNameStyle}
           >
             {selectedValues?.map((element, index) => renderSelected(element, index))}

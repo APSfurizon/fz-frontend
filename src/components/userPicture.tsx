@@ -3,12 +3,10 @@ import { FursuitDetails } from "@/lib/api/badge/types";
 import { ExtraDays, UserData } from "@/lib/api/user";
 import { getFlagEmoji } from "@/lib/components/userPicture";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
-import { getImageUrl } from "@/lib/utils";
 import "@/styles/components/userPicture.css";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import LoadingPanel from "./loadingPanel";
+import { useMemo } from "react";
 import StatusBox from "./statusBox";
 
 export default function UserPicture({
@@ -23,52 +21,16 @@ export default function UserPicture({
 }: Readonly<{
   size?: number;
   className?: string;
-  userData?: UserData | Promise<UserData>;
-  fursuitData?: FursuitDetails | Promise<FursuitDetails>;
+  userData?: UserData;
+  fursuitData?: FursuitDetails;
   extraDays?: ExtraDays;
   showNickname?: boolean;
   showFlag?: boolean;
   hideEffect?: boolean;
 }>) {
   const t = useTranslations();
-  const [isLoading, setLoading] = useState(true);
-  const [pictureData, setPictureData] = useState<UserData>();
-  const [fursuitPictureData, setFursuitPictureData] = useState<FursuitDetails>();
-
-  useEffect(() => {
-    setLoading(false);
-    if (userData) {
-      if (userData instanceof Promise) {
-        setLoading(true);
-        userData
-          .then((ud) => {
-            setLoading(false);
-            setPictureData(ud);
-          })
-          .catch(() => void 0);
-      } else {
-        setLoading(false);
-        setPictureData(userData);
-      }
-    } else if (fursuitData) {
-      if (fursuitData instanceof Promise) {
-        setLoading(true);
-        fursuitData
-          .then((fd) => {
-            setLoading(false);
-            setFursuitPictureData(fd);
-          })
-          .catch(() => void 0);
-      } else {
-        setLoading(false);
-        setFursuitPictureData(fursuitData);
-      }
-    } else {
-      setPictureData(undefined);
-      setFursuitPictureData(undefined);
-      setLoading(true);
-    }
-  }, [userData]);
+  const pictureData = userData;
+  const fursuitPictureData = fursuitData;
 
   const borderClassName = useMemo(
     () => `
@@ -76,7 +38,7 @@ export default function UserPicture({
         sponsor-${pictureData?.sponsorship ?? fursuitPictureData?.sponsorship ?? "NONE"}
         ${hideEffect ? "no-effect" : ""}
       `,
-    [pictureData, fursuitData, isLoading]
+    [pictureData, fursuitData]
   );
 
   const isFursuit = !userData && fursuitData;
@@ -87,23 +49,19 @@ export default function UserPicture({
         <Image
           unoptimized
           className="rounded-m profile-picture"
-          src={
-            getImageUrl(pictureData?.propic?.mediaUrl) ??
-            getImageUrl(fursuitPictureData?.propic?.mediaUrl) ??
-            EMPTY_PROFILE_PICTURE_SRC
-          }
+          src={pictureData?.propic?.mediaUrl ?? fursuitPictureData?.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC}
           alt={t("common.header.alt_profile_picture")}
           quality={100}
           width={size ?? 32}
           height={size ?? 32}
         ></Image>
+        <span style={{ display: "none" }}>{pictureData?.propic?.mediaUrl}</span>
         {pictureData?.locale && showFlag && (
           <span className="flag medium">{getFlagEmoji(pictureData?.locale.toLowerCase())}</span>
         )}
       </div>
       {showNickname && (
         <span className="title semibold nickname small" style={{ maxWidth: size }}>
-          {isLoading && <LoadingPanel />}
           {pictureData?.fursonaName ?? fursuitPictureData?.name ?? ""}
         </span>
       )}

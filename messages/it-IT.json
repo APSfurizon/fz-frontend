@@ -25,7 +25,7 @@
           "en-GB": "English"
         }
       },
-      "app_badge": "Scarica ora l'app ufficiale!",
+      "app_badge": "Scarica l'app!",
       "alt_app_badge": "Bottone per scaricare l'applicazione mobile",
       "gallery": "Galleria",
       "menu": "Menù",
@@ -60,7 +60,19 @@
         },
         "admin": {
           "title": "Amministrazione"
+        },
+        "user": {
+          "title": "Utente"
+        },
+        "logout": {
+          "title": "Esci"
+        },
+        "login": {
+          "title": "Accedi"
         }
+      },
+      "language": {
+        "title": "Cambia lingua"
       }
     },
     "reload": "Ricarica",

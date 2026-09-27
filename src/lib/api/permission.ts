@@ -9,6 +9,6 @@ export enum Permissions {
   UPLOADS_CAN_FULLY_DELETE_UPLOADS = "UPLOADS_CAN_FULLY_DELETE_UPLOADS",
 }
 
-export function hasPermission(permission: Permissions, user?: UserDisplayResponse) {
+export function hasPermission(permission: Permissions, user?: UserDisplayResponse | null) {
   return user?.permissions?.includes(permission);
 }

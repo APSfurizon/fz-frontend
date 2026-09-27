@@ -25,7 +25,7 @@
           "en-GB": "English"
         }
       },
-      "app_badge": "Download now the official app!",
+      "app_badge": "Download the app!",
       "alt_app_badge": "Mobile application download button",
       "gallery": "Gallery",
       "menu": "Main menu",
@@ -60,7 +60,19 @@
         },
         "admin": {
           "title": "Administration"
+        },
+        "user": {
+          "title": "User"
+        },
+        "logout": {
+          "title": "Logout"
+        },
+        "login": {
+          "title": "Log in"
         }
+      },
+      "language": {
+        "title": "Change language"
       }
     },
     "reload": "Reload",

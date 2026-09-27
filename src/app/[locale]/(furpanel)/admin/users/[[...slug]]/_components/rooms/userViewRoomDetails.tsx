@@ -11,7 +11,7 @@ export default function UserViewRoomDetails({
 }>) {
   const t = useTranslations();
   return (
-    <div className="horizontal-list gap-4mm  justify-content-center flex-space-evenly" style={{ flex: "1" }}>
+    <div className="horizontal-list gap-4mm justify-content-center flex-space-evenly" style={{ flex: "1" }}>
       {data.currentRoomInfo.guests.map((guest, gi) => (
         <div key={gi} className="vertical-list">
           <UserPicture size={64} userData={guest.user} showNickname showFlag />

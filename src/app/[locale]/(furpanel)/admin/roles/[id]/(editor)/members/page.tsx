@@ -1,22 +1,21 @@
 "use client";
-import AutoInput from "@/components/input/autoInput";
-import FpButton from "@/components/input/fpButton";
 import { useEntityEditor } from "@/components/context/entityEditorProvider";
+import { useModalUpdate } from "@/components/context/modalProvider";
+import AutoInput from "@/components/input/autoInput";
+import Checkbox from "@/components/input/checkbox";
+import DataForm from "@/components/input/dataForm";
+import FpButton from "@/components/input/fpButton";
 import Modal from "@/components/modal";
 import { RoleData, RoleMember } from "@/lib/api/admin/role";
+import { MediaData } from "@/lib/api/media";
 import { AutoInputUsersManager, SponsorType } from "@/lib/api/user";
 import { AutoInputChangedParams, AutoInputFilter, AutoInputSearchResult } from "@/lib/components/autoInput";
-import { useTranslations } from "next-intl";
-import { MouseEvent, useState } from "react";
+import { DummyFormAction } from "@/lib/components/dataForm";
 import { EMPTY_PROFILE_PICTURE_SRC } from "@/lib/constants";
 import "@/styles/table.css";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { getImageUrl } from "@/lib/utils";
-import DataForm from "@/components/input/dataForm";
-import { DummyFormAction } from "@/lib/components/dataForm";
-import Checkbox from "@/components/input/checkbox";
-import { MediaData } from "@/lib/api/media";
-import { useModalUpdate } from "@/components/context/modalProvider";
+import { MouseEvent, useState } from "react";
 
 function flattenSearchResult(searchResult: AutoInputSearchResult): RoleMember {
   const flattenedMedia: MediaData = {
@@ -134,13 +133,13 @@ export default function RoleMembersEditor() {
       </div>
       {/* Permissions table */}
       <div className="table-container rounded-m">
-        <div className="table rounded-m">
+        <div className="rounded-m table">
           {entity?.users?.map((roleMember, mi) => (
             <div key={mi} className="row horizontal-list align-items-center gap-2mm flex-wrap">
               <div className="data">
                 <Image
                   unoptimized
-                  src={getImageUrl(roleMember.displayData.propic?.mediaUrl) ?? EMPTY_PROFILE_PICTURE_SRC}
+                  src={roleMember.displayData.propic?.mediaUrl ?? EMPTY_PROFILE_PICTURE_SRC}
                   width={32}
                   height={32}
                   alt="image"

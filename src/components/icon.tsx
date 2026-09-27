@@ -143,6 +143,7 @@ export const ICONS = {
   THUMB_DOWN: "thumb_down",
   THUMB_UP: "thumb_up",
   TRANSGENDER: "transgender",
+  TRANSLATE: "translate",
   TRIP: "trip",
   TUNE: "tune",
   VISIBILITY: "visibility",
