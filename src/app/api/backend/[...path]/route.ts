@@ -46,7 +46,9 @@ async function handler(
 
   const allowBody = ["POST", "PUT"].includes(method);
   const body: BodyInit | null = allowBody ? request.body : null;
-  const url = new URL(paths.join("/") + request.nextUrl.search, API_BASE_URL);
+  // TODO: remove
+  const addSlash = request.nextUrl.searchParams.has("finalSlash", "true");
+  const url = new URL(paths.join("/") + (addSlash ? "/" : "") + request.nextUrl.search, API_BASE_URL);
 
   try {
     const response = await fetch(url, {

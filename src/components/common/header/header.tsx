@@ -1,27 +1,23 @@
 "use client";
-import { Button } from "@/components/common";
 import { useUser } from "@/components/context/userProvider";
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTrigger } from "@/components/dialogs";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { UserDisplayResponse } from "@/lib/api/user";
-import { APP_LINKS, SHOW_APP_BANNER } from "@/lib/constants";
 import { isMobile, UA } from "@/lib/userAgent";
 import "@/styles/components/header.css";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { OSName } from "ua-parser-js/enums";
-import Icon from "../../icon";
-import DrawerLinks from "./drawerLinks";
+import HeaderDrawer from "../drawer/headerDrawer";
 import HeaderLinks from "./headerLinks";
 
-enum DEVICE_TYPE {
+export enum DEVICE_TYPE {
   APPLE = "apple",
   ANDROID = "android",
   GENERIC = "generic",
 }
 
-const type = isMobile()
+export const currentDeviceType = isMobile()
   ? UA.os.is(OSName.ANDROID)
     ? DEVICE_TYPE.ANDROID
     : UA.os.is(OSName.IOS)
@@ -35,15 +31,11 @@ type HeaderProps = {
 
 export default function Header(props: Readonly<HeaderProps>) {
   const t = useTranslations("common");
-  const locale = useLocale();
-  const { setUserDisplay } = useUser();
+  const { userDisplay, setUserDisplay } = useUser();
   const [collapsed, setCollapsed] = useState(false);
   const [latestScroll, setLatestScroll] = useState<number>();
   const [newScroll, setNewScroll] = useState<number>();
   const headerRef = useRef<HTMLElement>(null);
-  const language = locale.split("-")[0];
-  const deviceTypeLower = type.toString().toLowerCase();
-  const appBadgeSrc = `/images/app-badge/${deviceTypeLower}/${deviceTypeLower}_${language}.png`;
 
   const updateScroll = () => setNewScroll(document.body.scrollTop);
   useEffect(() => {
@@ -117,56 +109,10 @@ export default function Header(props: Readonly<HeaderProps>) {
         <NavigationMenuList className="flex sm:hidden">
           <div className="flex-1" />
           <NavigationMenuItem>
-            <Drawer swipeDirection="right">
-              <DrawerTrigger className="hamburger-menu" render={<Button variant={"ghost"} title={t("menu")} />}>
-                <Icon icon="MENU" />
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <picture className="header-logo">
-                    <source srcSet="/images/logo_dark.svg" media="(prefers-color-scheme: dark)" />
-                    <Image
-                      className="header-logo"
-                      src="/images/logo_light.svg"
-                      alt={t("header.alt_logo")}
-                      width={175}
-                      height={40}
-                      loading="eager"
-                    />
-                  </picture>
-                </DrawerHeader>
-                <div className="p-4">
-                  <DrawerLinks userData={props.userData} />
-                </div>
-                <DrawerFooter>
-                  {/* Phone app */}
-                  {[DEVICE_TYPE.ANDROID, DEVICE_TYPE.APPLE].includes(type) && SHOW_APP_BANNER && (
-                    <>
-                      <div className="horizontal-list gap-2mm align-items-center">
-                        <span className="color-subtitle font-sans text-sm text-nowrap">{t("header.app_badge")}</span>
-                        <div className="spacer"></div>
-                        <a target="_blank" href={APP_LINKS[deviceTypeLower] ?? ""}>
-                          <Image
-                            className="app-badge"
-                            src={appBadgeSrc}
-                            width={160}
-                            height={40}
-                            alt={t("header.alt_app_badge")}
-                          ></Image>
-                        </a>
-                      </div>
-                    </>
-                  )}
-                  <DrawerClose render={<Button variant="outline" />}>
-                    <Icon icon="CLOSE" />
-                    {t("close")}
-                  </DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
+            <HeaderDrawer userData={userDisplay} />
           </NavigationMenuItem>
         </NavigationMenuList>
-        <HeaderLinks userData={props.userData} />
+        <HeaderLinks userData={userDisplay} />
       </NavigationMenu>
     </header>
   );

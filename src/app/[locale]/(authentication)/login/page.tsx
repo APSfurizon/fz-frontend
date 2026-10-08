@@ -1,5 +1,6 @@
 "use client";
 import { useModalUpdate } from "@/components/context/modalProvider";
+import { useUser } from "@/components/context/userProvider";
 import { useAppForm } from "@/components/form";
 import useTitle from "@/components/hooks/useTitle";
 import Icon from "@/components/icon";
@@ -29,6 +30,7 @@ export default function Login() {
   const { showModal } = useModalUpdate();
   const router = useRouter();
   const params = useSearchParams();
+  const { setUpdateUser } = useUser();
 
   const isSecurityByPermission = (permission?: string) => {
     if (!permission) return false;
@@ -120,6 +122,7 @@ export default function Login() {
       });
       if (!sessionResponse.ok) {
       }
+      setUpdateUser(true);
       router.push("/home");
     },
   });

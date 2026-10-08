@@ -63,7 +63,13 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
       [Endpoint.MOBILE]: API_MOBILE_URL ?? "",
     }[data.action.endpoint];
     endpointUrl += [data.action.urlAction, ...(data.additionalPath ?? [])].join("/");
-    if (useSearchParams) endpointUrl += "?" + data.searchParams!.toString();
+
+    const searchParams = useSearchParams ? new URLSearchParams(data.searchParams) : new URLSearchParams();
+    // TODO: remove
+    if (data.action.urlAction.endsWith("/")) {
+      searchParams.append("finalSlash", "true");
+    }
+    endpointUrl += "?" + searchParams.toString();
     if (data.action.hasPathParams && data.pathParams) {
       endpointUrl = templateReplace(endpointUrl, data.pathParams);
     }

@@ -9,7 +9,7 @@ import {
 import { UserData } from "@/lib/api/user";
 import { useTranslations } from "next-intl";
 
-function getUsernameFallback(name: string) {
+export function getUsernameFallback(name: string) {
   if (name.trim().length == 0) return "?";
   if (name.trim().length == 1) return name;
   return name.includes(" ")

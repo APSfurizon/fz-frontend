@@ -5,7 +5,7 @@ import { createContext, RefObject, useContext, useEffect, useRef, useState } fro
 interface UserUpdateType {
   updateUser: boolean;
   setUpdateUser: (value: boolean) => void;
-  userDisplay?: UserDisplayResponse | null;
+  userDisplay: UserDisplayResponse | null;
   setUserDisplay: (value: UserDisplayResponse | null) => void;
   userLoading: boolean;
   userDisplayRef: RefObject<UserDisplayResponse | null>;
