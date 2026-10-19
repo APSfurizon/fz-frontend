@@ -1,34 +1,45 @@
-import FpButton from "@/components/input/fpButton";
-import Modal from "@/components/modal";
+"use client";
+import { Button } from "@/components/common";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/dialogs";
+import Icon from "@/components/icon";
 import { qrCodeLogo, qrCodeOptions } from "@/lib/api/reservation";
 import { useTranslations } from "next-intl";
 import { useQRCode } from "next-qrcode";
-import { useState } from "react";
 
 export default function QrCodeModal({ secret }: Readonly<{ secret: string }>) {
   // order QR logic
-  const [qrModalOpen, setQrModalOpen] = useState(false);
   const { Canvas } = useQRCode();
   const t = useTranslations();
 
   return (
-    <>
-      <FpButton icon="QR_CODE" onClick={() => setQrModalOpen(true)} title={t("furpanel.booking.actions.show_qr")}>
-        {t("furpanel.booking.actions.show_qr")}
-      </FpButton>
-      <Modal
-        open={qrModalOpen}
-        icon="QR_CODE"
-        title={t("furpanel.booking.reservation_qr")}
-        onClose={() => setQrModalOpen(false)}
-      >
+    <Dialog>
+      <DialogTrigger
+        render={
+          <Button title={t("furpanel.booking.actions.show_qr")}>
+            <Icon icon="QR_CODE" />
+            {t("furpanel.booking.actions.show_qr")}
+          </Button>
+        }
+      />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t("furpanel.booking.reservation_qr")}</DialogTitle>
+
+          <DialogDescription>{t("furpanel.booking.messages.reservation_qr")}</DialogDescription>
+        </DialogHeader>
         <div className="horizontal-list" style={{ justifyContent: "center" }}>
           <div className="rounded-l" style={{ overflow: "hidden" }}>
             <Canvas text={secret} options={qrCodeOptions} logo={qrCodeLogo} />
           </div>
         </div>
-        <span className="descriptive small">{t("furpanel.booking.messages.reservation_qr")}</span>
-      </Modal>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 }

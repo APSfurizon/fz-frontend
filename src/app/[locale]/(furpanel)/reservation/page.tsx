@@ -16,9 +16,10 @@ import "@/styles/furpanel/booking.css";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import OrderItem from "./_components/orderItem";
+import QrCodeModal from "./_components/qrCodeModal";
 import Countdown from "./countdown";
 
-export default async function BookingPage() {
+export default async function ReservationPage() {
   const t = await getTranslations();
   const formatter = await getFormatter();
   //const router = useRouter();
@@ -259,7 +260,7 @@ export default async function BookingPage() {
                     {t("furpanel.booking.retry_payment")}
                   </Button>
                 )}
-                {/* TODO: bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret} />*/}
+                {bookingData?.order?.checkinSecret && <QrCodeModal secret={bookingData?.order?.checkinSecret} />}
                 <div className="spacer" style={{ flexGrow: "300" }}></div>
                 <div className="horizontal-list gap-4mm flex-space-between flex-wrap" style={{ flexGrow: "1" }}>
                   <Button className="action-button" disabled={isEditLocked} /*onClick={requestOrderEditLink}*/>

@@ -11,6 +11,7 @@ import { Permissions } from "@/lib/api/permission";
 import { UserDisplayResponse } from "@/lib/api/user";
 import { GALLERY_ENABLED, NOSECOUNT_ENABLED, SCHEDULE_ENABLED } from "@/lib/constants";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import LanguageSelector from "./languageSelector";
 import UserDropDown from "./userDropdown";
 
@@ -26,15 +27,15 @@ export default function HeaderLinks(props: Readonly<{ userData: UserDisplayRespo
         <NavigationMenuTrigger>{t("header.links.reservation.title")}</NavigationMenuTrigger>
         <NavigationMenuContent>
           {/* TODO: Check if no ticket <NavigationMenuLink>{t("header.links.reservation.links.manage.title")}</NavigationMenuLink> */}
-          <NavigationMenuLink href="/reservation">
+          <NavigationMenuLink render={<Link href="/reservation" />}>
             <Icon icon="LOCAL_ACTIVITY" />
             {t("header.links.reservation.links.my_booking.title")}
           </NavigationMenuLink>
-          <NavigationMenuLink href="/badge">
+          <NavigationMenuLink render={<Link href="/badge" />}>
             <Icon icon="PERSON_BOOK" />
             {t("header.links.reservation.links.badge.title")}
           </NavigationMenuLink>
-          <NavigationMenuLink href="/room">
+          <NavigationMenuLink render={<Link href="/room" />}>
             <Icon icon="BED" />
             {t("header.links.reservation.links.room.title")}
           </NavigationMenuLink>
@@ -45,19 +46,19 @@ export default function HeaderLinks(props: Readonly<{ userData: UserDisplayRespo
         <NavigationMenuTrigger>{t("header.links.convention.title")}</NavigationMenuTrigger>
         <NavigationMenuContent>
           {SCHEDULE_ENABLED && (
-            <NavigationMenuLink href="/schedule">
+            <NavigationMenuLink render={<Link href="/schedule" />}>
               <Icon icon="CALENDAR_MONTH" />
               {t("header.links.convention.links.schedule.title")}
             </NavigationMenuLink>
           )}
           {GALLERY_ENABLED && (
-            <NavigationMenuLink href="/gallery/explore">
+            <NavigationMenuLink render={<Link href="/gallery/explore" />}>
               <Icon icon="IMAGE" />
               {t("header.links.convention.links.gallery.title")}
             </NavigationMenuLink>
           )}
           {NOSECOUNT_ENABLED && (
-            <NavigationMenuLink href="/nosecount">
+            <NavigationMenuLink render={<Link href="/nosecount" />}>
               <Icon icon="GROUPS" />
               {t("header.links.convention.links.nosecount.title")}
             </NavigationMenuLink>
@@ -66,7 +67,7 @@ export default function HeaderLinks(props: Readonly<{ userData: UserDisplayRespo
       </NavigationMenuItem>
       {canViewAdminPages && (
         <NavigationMenuItem>
-          <NavigationMenuLink href="/admin">
+          <NavigationMenuLink render={<Link href="/admin" />}>
             <Icon icon="SECURITY" />
             {t("header.links.admin.title")}
           </NavigationMenuLink>
@@ -79,7 +80,7 @@ export default function HeaderLinks(props: Readonly<{ userData: UserDisplayRespo
       {userDisplay?.display && <UserDropDown userData={userDisplay?.display} />}
       {!userDisplay && (
         <NavigationMenuItem>
-          <NavigationMenuLink href="/login">
+          <NavigationMenuLink render={<Link href="/login" />}>
             <Icon icon="KEY" />
             {t("header.links.login.title")}
           </NavigationMenuLink>
