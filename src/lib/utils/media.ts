@@ -15,8 +15,8 @@ export function getVideoThumbnail(file: File): Promise<Blob> {
     // Event listener
     video.addEventListener("loadeddata", () => {
       const { width, height } = getThumbnailCappedSize(video.videoWidth, video.videoHeight);
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = width ?? 100;
+      canvas.height = height ?? 100;
       video.requestVideoFrameCallback(() => {
         // Draw image
         canvas.getContext("2d")?.drawImage(video, 0, 0, width, height);

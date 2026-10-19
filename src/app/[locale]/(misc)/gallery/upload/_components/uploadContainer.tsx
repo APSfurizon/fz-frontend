@@ -78,7 +78,7 @@ export default function UploadContainer() {
       <UploadPanel onUploadUpdate={(u) => setUploads(u)} onCompletedUpload={prependUploadedMedias} />
       <div className="upload-queue">
         <h3 className="title medium margin-bottom-1mm">{t("misc.gallery.upload.queue.title")}</h3>
-        <div className="container rounded-l vertical-list">
+        <div className="vertical-list container rounded-l">
           {[...uploads.entries()].map(([id, u]) => (
             <UploadStatusBox key={id} state={u} />
           ))}

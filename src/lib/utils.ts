@@ -322,11 +322,13 @@ export function humanFileSize(bytes: number, si = false, dp = 2) {
 export function toError(e: any): Error {
   if (e instanceof Error) {
     return e;
+  } else if (typeof e == "string") {
+    return new Error(e);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   } else if ("errors" in e && Array.isArray(e.errors) && e.errors) {
     const response = e as ApiErrorResponse;
     return new Error(`${response.errors[0].message} (${response.errors[0].code} #${response.requestId})`);
   } else {
-    return new Error(e as string);
+    return new Error(String(e));
   }
 }

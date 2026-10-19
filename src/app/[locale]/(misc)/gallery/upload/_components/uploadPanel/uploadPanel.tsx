@@ -39,7 +39,7 @@ export type UploadState = {
   error?: Error;
 };
 
-const CLEARING_STATUSES: UploadProgressStatus[] = ["ABORTED", "ERROR", "DONE"];
+const CLEARING_STATUSES: UploadProgressStatus[] = ["ABORTED", "DONE"];
 
 type UploadPanelProps = {
   onUploadUpdate: (updates: Map<string, UploadState>) => void;
