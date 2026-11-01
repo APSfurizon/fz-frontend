@@ -2,7 +2,17 @@
  * Defines all the base form components
  */
 import Checkbox from "../input/checkbox";
-import { Combobox } from "../ui/combobox";
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "../ui/combobox";
 import {
   Field,
   FieldContent,
@@ -23,10 +33,20 @@ import { Select } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { Toggle } from "../ui/toggle";
 import { ToggleGroup } from "../ui/toggle-group";
+import { AutoCombobox } from "./custom/autoCombobox";
 
 export {
+  AutoCombobox,
   Checkbox,
   Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
   Field,
   FieldContent,
   FieldDescription,

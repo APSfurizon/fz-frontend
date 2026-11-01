@@ -1,7 +1,14 @@
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import { Button } from "../common";
 import Checkbox from "../input/checkbox";
-import { Combobox } from "../ui/combobox";
 import {
   Field,
   FieldContent,
@@ -23,6 +30,7 @@ import { Switch } from "../ui/switch";
 import { Toggle } from "../ui/toggle";
 import { ToggleGroup } from "../ui/toggle-group";
 import TextField from "./wrapped/TextField";
+import WebComboboxField from "./wrapped/WebComboboxField";
 
 export const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
 
@@ -37,6 +45,11 @@ export const { useAppForm } = createFormHook({
   fieldComponents: {
     Checkbox,
     Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
     Field,
     FieldContent,
     FieldDescription,
@@ -56,8 +69,8 @@ export const { useAppForm } = createFormHook({
     Switch,
     Toggle,
     ToggleGroup,
-
     TextField,
+    WebComboboxField,
   },
   formComponents: {
     Button,

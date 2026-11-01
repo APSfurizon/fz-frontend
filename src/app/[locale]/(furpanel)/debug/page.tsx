@@ -1,20 +1,55 @@
 "use client";
-import Checkbox from "@/components/input/checkbox";
 import FpButton from "@/components/input/fpButton";
-import { useState } from "react";
-import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import FpInput from "@/components/input/fpInput";
-import StatusBox from "@/components/statusBox";
 import Modal from "@/components/modal";
+import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import StatusBox from "@/components/statusBox";
+import { useState } from "react";
 //import { AutoInputDebugUserManager } from "@/app/_lib/components/autoInput";
-import Upload from "@/components/input/upload";
+import { useAppForm } from "@/components/form";
+import { WebComboboxConfig } from "@/components/form/custom/webCombobox";
+import Icon from "@/components/icon";
 import FpSelect from "@/components/input/fpSelect";
+import { FieldGroup } from "@/components/ui/field";
+import { CountrySearchResult, getAutoInputCountries } from "@/lib/api/geo";
+import { filterSearchResult, SearchType } from "@/lib/components/autoInput";
 import { SelectGroup, SelectItem } from "@/lib/components/fpSelect";
 import { inputEntityCodeExtractor } from "@/lib/components/input";
+import z from "zod";
+
+class CountriesWebCombobox extends WebComboboxConfig<CountrySearchResult, string[]> {
+  public itemToValue(option: CountrySearchResult): string {
+    return option.code!;
+  }
+  public searchFn(): (query: string, signal: AbortSignal, locale: string) => Promise<CountrySearchResult[]> {
+    return (query: string, _signal: AbortSignal, locale: string) =>
+      getAutoInputCountries().then((result) => filterSearchResult(query, SearchType.RANKED, result, locale));
+  }
+  public inquiringFn(): (values: string[], signal: AbortSignal) => Promise<CountrySearchResult[]> {
+    return (values: string[]) =>
+      getAutoInputCountries().then((result) => values.map((v) => result.find((r) => r.code === v)).filter((u) => !!u));
+  }
+  public optionsRenderer(option: CountrySearchResult, locale: string): React.ReactNode {
+    return (
+      <p>
+        <span className={"fi fis fi-" + option?.code?.toLowerCase() + " rounded-xs"}></span>
+        &nbsp;
+        {option?.getDescription(locale)}
+      </p>
+    );
+  }
+  public selectionsRenderer(selection: CountrySearchResult, locale: string): React.ReactNode {
+    return (
+      <p>
+        <span className={"fi fis fi-" + selection?.code?.toLowerCase() + " rounded-xs"}></span>
+        &nbsp;
+        {selection?.getDescription(locale)}
+      </p>
+    );
+  }
+}
 
 export default function Home() {
-  const [isBusy, setBusy] = useState(false);
-
   const [isOpen, setOpen] = useState(false);
 
   const [titleInput, setTitleInput] = useState("Esempio di un Titolo");
@@ -55,25 +90,52 @@ export default function Home() {
 
   const selectItems: (SelectItem | SelectGroup)[] = [group1, item3, group2, group3, group4];
 
+  const formDebug = useAppForm({
+    defaultValues: {
+      countries: "",
+    },
+    validators: {
+      onChange: z.object({
+        countries: z
+          .string()
+          .transform((v) => v.split(","))
+          .refine((v) => !v.includes("FR"), {
+            error: "France is not allowed",
+          }),
+      }),
+    },
+    onSubmit: ({ value }) => {
+      console.log(value);
+    },
+  });
+
   return (
     <div className="page">
-      <div className="container">
-        <Upload busy={false} label="Profile picture" requireCrop cropAspectRatio="square"></Upload>
-      </div>
-      <FpButton className="danger" onClick={() => setBusy(false)} icon="ADD_CIRCLE">
-        Busy off
-      </FpButton>
-      <FpButton
-        busy={isBusy}
-        onClick={() => {
-          setBusy(true);
+      <form
+        id="owo-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          formDebug.handleSubmit();
         }}
-        icon="EDIT"
       >
-        Busy on
-      </FpButton>
-      <Checkbox>Wofe</Checkbox>
-      <Checkbox busy={isBusy}>Wofe</Checkbox>
+        <FieldGroup>
+          <formDebug.AppField
+            name="countries"
+            key="countries"
+            children={(field) => (
+              <field.WebComboboxField multiple={true} label="CIao" max={5} config={new CountriesWebCombobox()} />
+            )}
+          ></formDebug.AppField>
+        </FieldGroup>
+        <formDebug.AppForm>
+          <formDebug.Button type="submit" form="owo-form">
+            <Icon icon="KEY" data-icon="inline-end" />
+            Login
+          </formDebug.Button>
+        </formDebug.AppForm>
+      </form>
       <NoticeBox theme={NoticeTheme.Success} title="Wow">
         It works
       </NoticeBox>

@@ -2,10 +2,11 @@ import { HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute } from "react";
 import { FormComponentBaseProps, useFieldContext } from "..";
 import { Field, FieldDescription, FieldError, FieldLabel, Input } from "../base";
 
-type TextFieldProps = FormComponentBaseProps & {
-  type?: HTMLInputTypeAttribute;
-  autocomplete?: HTMLInputAutoCompleteAttribute;
-};
+type TextFieldProps = FormComponentBaseProps &
+  React.ComponentProps<"input"> & {
+    type?: HTMLInputTypeAttribute;
+    autocomplete?: HTMLInputAutoCompleteAttribute;
+  };
 
 export default function TextField(props: Readonly<TextFieldProps>) {
   const field = useFieldContext<string>();
@@ -24,6 +25,7 @@ export default function TextField(props: Readonly<TextFieldProps>) {
         autoComplete={props.autocomplete}
         placeholder={props.placeholder}
         required={props.required}
+        readOnly={props.readOnly}
       />
       {isInvalid && <FieldError errors={field.state.meta.errors} />}
       {props.helpText && <FieldDescription>{props.helpText}</FieldDescription>}
