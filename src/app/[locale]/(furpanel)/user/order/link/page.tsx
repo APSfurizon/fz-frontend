@@ -22,7 +22,7 @@ export default function OrderLinkPage() {
   // TODO: const message = params.get("m");
 
   useEffect(() => {
-    if (!code || !secret) router.replace("/home");
+    if (!code || !secret) router.replace("/reservation");
     setLoading(true);
     const userOrderLinkData: UserOrderLinkingData = {
       orderCode: code!,
@@ -42,7 +42,7 @@ export default function OrderLinkPage() {
       open
       busy={loading}
       onClose={() => {
-        router.replace("/home");
+        router.replace("/reservation");
       }}
       title={t("furpanel.user.linking.title")}
       icon="LOCAL_ACTIVITY"

@@ -38,10 +38,6 @@ html > body > div.page-wrapper {
   min-height: 100vh;
 }
 
-a {
-  color: inherit;
-}
-
 a.hoverable {
   cursor: pointer;
   vertical-align: middle;

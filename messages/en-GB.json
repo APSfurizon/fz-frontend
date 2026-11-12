@@ -2,11 +2,29 @@
   "common": {
     "footer": {
       "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italy",
-      "code_of_conduct": "Code of Conduct",
-      "contact_us": "Contact us",
       "society_name": "Social promotion association Furizon",
-      "volunteers": "Volunteers",
-      "link_code_of_conduct": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-EN_rev25-04-2023.pdf"
+      "organizer": {
+        "code_of_conduct": {
+          "title": "Code of conduct",
+          "link": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-EN_rev25-04-2023.pdf"
+        },
+        "volunteers": {
+          "title": "Volunteers"
+        },
+        "contact_us": {
+          "title": "Contact us"
+        },
+        "terms_of_service": {
+          "title": "Terms of service",
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_EN.pdf"
+        }
+      },
+      "social": {
+        "title": "Follow us"
+      },
+      "developers": {
+        "title": "Developers"
+      }
     },
     "header": {
       "alt_logo": "Furizon logo",
@@ -73,6 +91,9 @@
       },
       "language": {
         "title": "Change language"
+      },
+      "organizer": {
+        "title": "Organization"
       }
     },
     "reload": "Reload",
@@ -97,7 +118,6 @@
       "hoverable": "Click to copy"
     },
     "coming_soon": "Coming soon...",
-    "source_code": "Source code: ",
     "CRUD": {
       "add": "Add",
       "update": "Update",
@@ -155,7 +175,16 @@
     "help": "Help",
     "open": "Open",
     "close": "Close",
-    "menu": "Menu"
+    "menu": "Menu",
+    "common": {
+      "footer": {
+        "organizer": {
+          "code_of_conduct": {
+            "link": "Code of Conduct"
+          }
+        }
+      }
+    }
   },
   "components": {
     "autoinput": {

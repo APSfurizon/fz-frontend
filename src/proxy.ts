@@ -1,13 +1,13 @@
 import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
+import { routing } from "./i18n/routing";
 import {
   API_BASE_URL,
-  REGEX_UNAUTHENTICATED_URLS,
+  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
   REGEX_LOGOUT,
   REGEX_SKIP_AUTHENTICATED,
+  REGEX_UNAUTHENTICATED_URLS,
   TOKEN_STORAGE_NAME,
-  MOBILE_ADMIN_TOKEN_STORAGE_NAME,
 } from "./lib/constants";
 
 const intlMiddleware = createMiddleware(routing);
@@ -66,7 +66,7 @@ export async function proxy(req: NextRequest) {
       );
     }
     if (shouldSkipIfAuthenticated) {
-      return redirectToUrl(params.get("continue") ?? "/home", req);
+      return redirectToUrl(params.get("continue") ?? "/reservation", req);
     } else {
       return intlMiddlewareResult;
     }

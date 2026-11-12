@@ -2,11 +2,29 @@
   "common": {
     "footer": {
       "address": "Via G. Turri, 12, 42121, Reggio Emilia (RE), Italia",
-      "code_of_conduct": "Codice di Condotta",
-      "contact_us": "Contattaci",
       "society_name": "Associazione di Promozione Sociale Furizon",
-      "volunteers": "Volontari",
-      "link_code_of_conduct": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-IT_rev25-04-2023.pdf"
+      "organizer": {
+        "code_of_conduct": {
+          "title": "Codice di condotta",
+          "link": "https://furizon.net/wp-content/uploads/2024/05/Appendice-pubblica-decenza-IT_rev25-04-2023.pdf"
+        },
+        "volunteers": {
+          "title": "Volontari"
+        },
+        "contact_us": {
+          "title": "Contattaci"
+        },
+        "terms_of_service": {
+          "title": "Termini di servizio",
+          "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
+        }
+      },
+      "social": {
+        "title": "Seguici"
+      },
+      "developers": {
+        "title": "Sviluppatori"
+      }
     },
     "header": {
       "home": "Home",
@@ -73,6 +91,9 @@
       },
       "language": {
         "title": "Cambia lingua"
+      },
+      "organizer": {
+        "title": "Organizzazione"
       }
     },
     "reload": "Ricarica",
@@ -97,7 +118,6 @@
       "hoverable": "Clicca per copiare"
     },
     "coming_soon": "Presto in arrivo...",
-    "source_code": "Codice sorgente: ",
     "CRUD": {
       "add": "Aggiungi",
       "update": "Aggiorna",
@@ -155,7 +175,16 @@
     "help": "Aiuto",
     "open": "Apri",
     "close": "Chiudi",
-    "menu": "Menù"
+    "menu": "Menù",
+    "common": {
+      "footer": {
+        "organizer": {
+          "code_of_conduct": {
+            "link": "Codice di Condotta"
+          }
+        }
+      }
+    }
   },
   "components": {
     "autoinput": {

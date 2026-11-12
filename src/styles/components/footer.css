@@ -3,8 +3,6 @@
 .footer {
   width: 100vw;
   background-color: var(--footer-bg);
-  display: flex;
-  padding: 10mm 2mm 5mm 2mm;
 }
 
 @media (max-width: 1000px) {
@@ -14,9 +12,8 @@
   }
 }
 
-@media (prefers-color-scheme: light) {
-  img.footer-logo-instagram,
-  img.footer-logo-twitter {
+@media (prefers-color-scheme: dark) {
+  img.footer__social-logo {
     filter: invert(1);
   }
 }

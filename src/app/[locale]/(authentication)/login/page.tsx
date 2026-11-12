@@ -123,7 +123,7 @@ export default function Login() {
       if (!sessionResponse.ok) {
       }
       setUpdateUser(true);
-      router.push("/home");
+      router.push("/reservation");
     },
   });
 

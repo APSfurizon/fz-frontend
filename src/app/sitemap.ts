@@ -1,5 +1,5 @@
-import type { MetadataRoute } from "next";
 import { APP_HOSTNAME } from "@/lib/constants";
+import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `https://${APP_HOSTNAME}/home`,
+      url: `https://${APP_HOSTNAME}/reservation`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.1,
@@ -41,12 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `https://${APP_HOSTNAME}/room`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.1,
-    },
-    {
-      url: `https://${APP_HOSTNAME}/upload-area`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.1,
