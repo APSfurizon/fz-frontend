@@ -105,7 +105,7 @@ export default function Header(props: Readonly<HeaderProps>) {
           loading="eager"
         />
       </div>
-      <NavigationMenu className="mx-auto w-full max-w-7xl">
+      <NavigationMenu className="mx-auto w-full max-w-7xl pl-5">
         <NavigationMenuList className="flex sm:hidden">
           <div className="flex-1" />
           <NavigationMenuItem>

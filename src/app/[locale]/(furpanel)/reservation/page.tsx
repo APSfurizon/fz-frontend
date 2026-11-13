@@ -1,6 +1,7 @@
 import { Badge, Button } from "@/components/common";
 import Icon from "@/components/icon";
 import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
+import { GetBadgeStatusAction } from "@/lib/api/badge/badge";
 import { runRequest } from "@/lib/api/networking/main";
 import {
   Board,
@@ -15,8 +16,8 @@ import { isMobile } from "@/lib/userAgent";
 import "@/styles/furpanel/booking.css";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
-import OrderItem from "./_components/orderItem";
-import QrCodeModal from "./_components/qrCodeModal";
+import OrderItem from "./components/orderItem";
+import QrCodeModal from "./components/qrCodeModal";
 import Countdown from "./countdown";
 
 export default async function ReservationPage() {
@@ -27,8 +28,10 @@ export default async function ReservationPage() {
   const cookieStore = await cookies();
   // TODO: const { userDisplay } = useUser();
 
-  // Main data
+  // Reservation data
   const bookingData = await runRequest({ action: new BookingOrderApiAction(), cookieStore });
+  // Badge data
+  const badgeData = await runRequest({ action: new GetBadgeStatusAction(), cookieStore });
   /**If user has a valid and paid order */
   const hasOrder =
     !!bookingData && bookingData?.order && ["PENDING", "PAID", "CANCELED"].includes(bookingData?.order?.orderStatus);

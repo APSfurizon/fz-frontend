@@ -20,7 +20,7 @@ export default function Footer() {
           />
         </picture>
         {/* Main content */}
-        <div className="mt-10 flex gap-4">
+        <div className="mt-10 ml-9 flex flex-col gap-4 md:flex-row">
           <div className="title flex flex-col gap-2">
             <p className="bold text-xl">{t("common.header.organizer.title")}</p>
             <a
@@ -134,7 +134,7 @@ export default function Footer() {
           </div>
         </div>
         {/* Lower content */}
-        <div className="mt-10 flex">
+        <div className="mt-10 ml-9 flex">
           <p className="text-sm">Furpanel {APP_VERSION ?? ""}</p>
           <div className="flex-1"></div>
           <p className="text-sm">{t("common.footer.society_name")}</p>

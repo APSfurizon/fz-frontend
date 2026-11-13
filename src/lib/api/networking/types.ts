@@ -88,6 +88,7 @@ export type RequestData<U extends ApiResponse | boolean | Response, V extends Ap
   pathParams?: Record<string, any>;
   /** Provide this whenever using it from server side requests */
   cookieStore?: ReadonlyRequestCookies;
+  signal?: AbortSignal;
 };
 
 export type FormRequestData<T extends ApiRequest, U extends ApiResponse | boolean, V extends ApiErrorResponse> = {

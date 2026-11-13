@@ -78,6 +78,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
       body: data.body ? (data.body instanceof FormData ? data.body : JSON.stringify(data.body)) : undefined,
       headers: headers,
       credentials: "include",
+      signal: data.signal,
     };
 
     // Execute fetch

@@ -14,6 +14,7 @@ import { useFormatter, useNow, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+// TODO: Fullscreen button on the countdown
 export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData }>) {
   const t = useTranslations();
   const formatter = useFormatter();

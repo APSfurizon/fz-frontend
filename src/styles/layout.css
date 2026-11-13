@@ -127,22 +127,6 @@
   text-align: right;
 }
 
-.rounded-xs {
-  border-radius: 0.15625em;
-}
-
-.rounded-s {
-  border-radius: 0.3125em;
-}
-
-.rounded-m {
-  border-radius: 2mm;
-}
-
-.rounded-l {
-  border-radius: 3mm;
-}
-
 .section > *:not(.section-title) {
   margin-left: 0.6em;
 }
