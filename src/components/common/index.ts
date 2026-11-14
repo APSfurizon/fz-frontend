@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants } from "@/components/ui/button-group";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion } from "../ui/accordion";
 import { Badge } from "../ui/badge";
@@ -18,6 +26,12 @@ export {
   ButtonGroupText,
   buttonGroupVariants,
   Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   ContextMenu,
   Kbd,
   Separator,

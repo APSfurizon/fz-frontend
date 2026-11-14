@@ -200,7 +200,7 @@ export default function ExchangeConfirm() {
                       {/* Ticket name */}
                       <span className="horizontal-list gap-2mm">
                         <Icon icon="LOCAL_ACTIVITY" />
-                        {t.rich(`furpanel.booking.items.${ticketData.ticketName}`, {
+                        {t.rich(`furpanel.booking.items.${ticketData.ticketType}`, {
                           sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
                           supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
                           ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>,

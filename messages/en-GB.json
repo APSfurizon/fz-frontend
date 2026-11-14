@@ -290,7 +290,7 @@
           "title": "Official group",
           "description": "Enter the con's official group! <link></link> (furizon attendees, only)"
         },
-        "reservation_qr": "Show this QR code to a Furizon staffer when checking in.",
+        "reservation_qr": "Show this QR code to a staff member when checking in.",
         "transfer_invite_sent": {
           "title": "Invite sent",
           "description": "You will both be contacted via email to confirm the transfer."

@@ -8,8 +8,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/dialogs";
-import Icon from "@/components/icon";
 import { qrCodeLogo, qrCodeOptions } from "@/lib/api/reservation";
+import { QrCode } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQRCode } from "next-qrcode";
 
@@ -23,8 +23,7 @@ export default function QrCodeModal({ secret }: Readonly<{ secret: string }>) {
       <DialogTrigger
         render={
           <Button title={t("furpanel.booking.actions.show_qr")}>
-            <Icon icon="QR_CODE" />
-            {t("furpanel.booking.actions.show_qr")}
+            <QrCode />
           </Button>
         }
       />
