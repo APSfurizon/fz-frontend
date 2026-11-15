@@ -1,19 +1,38 @@
 "use client";
 
-import { Card, CardAction, CardDescription, CardHeader, CardTitle, Skeleton } from "@/components/common";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+  Skeleton,
+} from "@/components/common";
 import { runRequest } from "@/lib/api/networking";
 import {
+  Board,
   BookingOrderApiAction,
   calculateReservationData,
+  ExtraDaysType,
   OrderEditLinkApiAction,
   OrderRetryLinkApiAction,
   OrderStatusType,
+  SponsorshipType,
   TicketType,
 } from "@/lib/api/reservation";
 import { EVENT_BANNER, EVENT_LOGO, EVENT_NAME } from "@/lib/constants";
+import { translateNullable } from "@/lib/translations";
 import "@/styles/furpanel/reservation/widgets/reservationWidget.scss";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useFormatter, useTranslations } from "next-intl";
+import { BedDouble, CalendarPlus, Gift, IdCard, TicketSlash, Utensils } from "lucide-react";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { CSSProperties, useState } from "react";
 import { WidgetBaseProps } from "../types";
@@ -24,6 +43,7 @@ type ReservationWidgetProps = WidgetBaseProps;
 export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) {
   // Translation functions
   const t = useTranslations();
+  const locale = useLocale();
   const formatter = useFormatter();
 
   const query = useQuery({
@@ -70,7 +90,18 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
   const orderEditingLocked = !pageData || pageData.editBookEndDate.getTime() - now.getTime() < 0;
 
   /**The formatted list of daily days the ticket includes */
-  const formattedDailyDays = pageData?.dailyDays?.map((dt) => formatter.dateTime(dt, { day: "2-digit" })).join(", ");
+  const formattedDailyDays = pageData?.dailyDays
+    ?.map((dt) => formatter.dateTime(dt, { day: "2-digit", month: "short" }))
+    .join(", ");
+
+  const allDaysRange =
+    pageData?.hasOrder && query.data?.order?.noRoomTicketFromDate && query.data?.order?.noRoomTicketToDate
+      ? formatter.dateTimeRange(
+          new Date(query.data.order.noRoomTicketFromDate),
+          new Date(query.data.order.noRoomTicketToDate),
+          { dateStyle: "medium" }
+        )
+      : undefined;
 
   /** Mapping ticket type names */
   const translateTicket = (type: TicketType) => {
@@ -129,21 +160,77 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
     }
   };
 
+  const translateSponsorship = (type: SponsorshipType) => {
+    switch (type) {
+      case "NONE":
+        return <></>;
+      case "SPONSOR":
+        return <b className="sponsor-highlight">{t("common.sponsorships.sponsor")}</b>;
+      case "SUPER_SPONSOR":
+        return <b className="super-sponsor-highlight">{t("common.sponsorships.super_sponsor")}</b>;
+      case "ULTRA_SPONSOR":
+        return <b className="ultra-sponsor-highlight">{t("common.sponsorships.ultra_sponsor")}</b>;
+      default:
+        console.warn("No translation for sponsorship type", type);
+        return type;
+    }
+  };
+
+  const translateExtraDays = (type: ExtraDaysType) => {
+    switch (type) {
+      case "NONE":
+        return "";
+      case "EARLY":
+        return t("furpanel.booking.items.extra_days_EARLY");
+      case "LATE":
+        return t("furpanel.booking.items.extra_days_LATE");
+      case "BOTH":
+        return t("furpanel.booking.items.extra_days_BOTH");
+      default:
+        console.warn("No translation for extra days type", type);
+        return type;
+    }
+  };
+
+  const translateBoard = (type: Board) => {
+    switch (type) {
+      case Board.NONE:
+        return "";
+      case Board.HALF:
+        return t("furpanel.booking.items.board_HALF");
+      case Board.FULL:
+        return t("furpanel.booking.items.board_FULL");
+      default:
+        console.warn("No translation for board type", type);
+        return type;
+    }
+  };
+
   /** The venue's location on google maps */
   const geoLink = `https://www.google.com/maps/search/?api=1&query=${query.data?.geoLatitude},${query.data?.geoLongitude}`;
-  const showGeoData = query.data?.geoLatitude && query.data?.geoLongitude;
+  const hasGeoData = query.data?.geoLatitude && query.data?.geoLongitude;
 
-  const loading = !query?.data || query.isFetching || query.isError;
+  const hasExtraDays = query.data && query.data.order.extraDays !== "NONE";
+
+  const hasRoom = query.data && query.data.order.room;
+
+  const hasBoard = query.data && query.data.order.board && query.data.order.board !== Board.NONE;
+
+  const hasSponsor = query.data && query.data.order.sponsorship !== "NONE";
+
+  const loading = !query?.data || query.isPending || query.isError;
+
+  console.log(query.data);
 
   return (
     <>
       <div className="reservation-widget">
-        <h1>{t("furpanel.booking.your_booking")}</h1>
+        <h1 className="font-heading mb-3 text-xl font-bold">{t("furpanel.booking.your_booking")}</h1>
         <Card
           className="reservation-card"
           style={{ "--reservation-card-background-url": `url('${EVENT_BANNER}')` } as CSSProperties}
         >
-          <CardHeader>
+          <CardHeader className="reservation-card__header">
             <CardTitle>
               {EVENT_LOGO && (
                 <Image
@@ -153,6 +240,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                   src={EVENT_LOGO}
                   width={80}
                   height={80}
+                  style={{ height: "auto" }}
                 />
               )}
               {!EVENT_LOGO && <h2>{EVENT_NAME}</h2>}
@@ -176,6 +264,91 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
               {loading ? <Skeleton className="h-9 w-9.5" /> : <QrCodeModal secret={query.data.order.checkinSecret} />}
             </CardAction>
           </CardHeader>
+          <CardContent className="mt-6">
+            <h2 className="font-heading text-l mb-3 font-bold">
+              {t("furpanel.booking.items.included_with_your_ticket")}
+            </h2>
+            {/** Daily days */}
+            {pageData?.isDaily && (
+              <Item variant="outline">
+                <ItemMedia>
+                  <TicketSlash />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{t("furpanel.booking.items.daily_ticket")}</ItemTitle>
+                  <ItemDescription>
+                    {t("furpanel.booking.items.daily_days", { days: formattedDailyDays ?? "" })}
+                  </ItemDescription>
+                </ItemContent>
+              </Item>
+            )}
+            {hasSponsor && (
+              <Item variant="outline">
+                <ItemMedia>
+                  <Gift />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>
+                    <span>
+                      {t.rich("furpanel.booking.items.sponsorship_gadgets.title", {
+                        sponsortype: () => translateSponsorship(query.data.order.sponsorship),
+                      })}
+                    </span>
+                  </ItemTitle>
+                  <ItemDescription>{t("furpanel.booking.items.sponsorship_gadgets.description")}</ItemDescription>
+                </ItemContent>
+              </Item>
+            )}
+            {query.data?.hasActiveMembershipForEvent && (
+              <Item variant="outline">
+                <ItemMedia>
+                  <IdCard />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{t("furpanel.booking.items.membership_card")}</ItemTitle>
+                </ItemContent>
+              </Item>
+            )}
+            {hasExtraDays && (
+              <Item variant="outline">
+                <ItemMedia>
+                  <CalendarPlus />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{t("furpanel.booking.items.extra_days")}</ItemTitle>
+                  <ItemDescription>{translateExtraDays(query.data.order.extraDays)}</ItemDescription>
+                </ItemContent>
+              </Item>
+            )}
+            {hasRoom && (
+              <Item variant="outline">
+                <ItemMedia>
+                  <BedDouble />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>
+                    {translateNullable(query.data.order.room.roomTypeNames, locale) ?? t("furpanel.booking.items.room")}
+                  </ItemTitle>
+                  <ItemDescription>
+                    {t("furpanel.booking.items.room_capacity", {
+                      capacity: query.data.order.room.roomCapacity,
+                    })}
+                  </ItemDescription>
+                </ItemContent>
+              </Item>
+            )}
+            {hasBoard && (
+              <Item variant="outline">
+                <ItemMedia>
+                  <Utensils />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{translateBoard(query.data.order.board)}</ItemTitle>
+                </ItemContent>
+              </Item>
+            )}
+          </CardContent>
+          <CardFooter></CardFooter>
         </Card>
       </div>
     </>

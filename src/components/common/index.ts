@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion } from "../ui/accordion";
 import { Badge } from "../ui/badge";
@@ -33,6 +34,12 @@ export {
   CardHeader,
   CardTitle,
   ContextMenu,
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
   Kbd,
   Separator,
   Skeleton,

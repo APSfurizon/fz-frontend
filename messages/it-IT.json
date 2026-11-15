@@ -313,7 +313,12 @@
         "extra_days_EARLY": "Early",
         "extra_days_LATE": "Late",
         "board_HALF": "Mezza pensione",
-        "board_FULL": "Pensione completa"
+        "board_FULL": "Pensione completa",
+        "included_with_your_ticket": "Inclusi col tuo biglietto",
+        "sponsorship_gadgets": {
+          "title": "Gadget <sponsortype></sponsortype>",
+          "description": "Inclusi con il livello di sponsor. Ritirali durante il check-in."
+        }
       },
       "input": {
         "transfer_user": {

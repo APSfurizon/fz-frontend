@@ -313,7 +313,12 @@
         "extra_days_EARLY": "Early",
         "extra_days_LATE": "Late",
         "board_HALF": "Half board",
-        "board_FULL": "Full board"
+        "board_FULL": "Full board",
+        "included_with_your_ticket": "Included with your ticket",
+        "sponsorship_gadgets": {
+          "title": "<sponsortype></sponsortype>'s gadgets",
+          "description": "Included with your sponsorship. Retrieve them during check in."
+        }
       },
       "input": {
         "transfer_user": {
