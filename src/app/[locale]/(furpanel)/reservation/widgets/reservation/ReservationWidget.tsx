@@ -1,6 +1,9 @@
 "use client";
 
 import {
+  Badge,
+  Button,
+  ButtonGroup,
   Card,
   CardAction,
   CardContent,
@@ -31,12 +34,13 @@ import { EVENT_BANNER, EVENT_LOGO, EVENT_NAME } from "@/lib/constants";
 import { translateNullable } from "@/lib/translations";
 import "@/styles/furpanel/reservation/widgets/reservationWidget.scss";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { BedDouble, CalendarPlus, Gift, IdCard, TicketSlash, Utensils } from "lucide-react";
+import { BedDouble, CalendarPlus, Edit, Gift, IdCard, RefreshCcw, TicketSlash, Utensils } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { CSSProperties, useState } from "react";
 import { WidgetBaseProps } from "../types";
 import QrCodeModal from "./components/qrCodeModal";
+import TransferOrderModal from "./components/transferOrderModal";
 
 type ReservationWidgetProps = WidgetBaseProps;
 
@@ -220,8 +224,6 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
 
   const loading = !query?.data || query.isPending || query.isError;
 
-  console.log(query.data);
-
   return (
     <>
       <div className="reservation-widget">
@@ -248,20 +250,53 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
             <CardDescription>
               {loading ? (
                 <>
-                  <Skeleton className="h-5 w-30" />
+                  <Skeleton className="h-6.5 w-30" />
                   <Skeleton className="h-5 w-20" />
                 </>
               ) : (
                 <>
-                  <p className="text-secondary drop-shadow-l text-2xl font-medium">
-                    {translateTicket(pageData!.ticketType)}
-                  </p>
+                  <div className="flex items-center gap-4">
+                    <p className="text-secondary drop-shadow-l text-2xl font-medium">
+                      {translateTicket(pageData!.ticketType)}
+                    </p>
+                    <Badge variant={mapOrderStatusToBadgeVariant(query.data.order.orderStatus)}>
+                      {translateOrderStatus(query.data.order.orderStatus)}
+                    </Badge>
+                  </div>
                   <p className="text-secondary drop-shadow-l font-mono">#{query.data.order.code}</p>
                 </>
               )}
             </CardDescription>
             <CardAction>
-              {loading ? <Skeleton className="h-9 w-9.5" /> : <QrCodeModal secret={query.data.order.checkinSecret} />}
+              {loading ? (
+                <Skeleton className="h-9 w-9.5" />
+              ) : (
+                <ButtonGroup>
+                  {/** Retry payment button */}
+                  {pageData?.shouldRetry && (
+                    <Button
+                      title={t("furpanel.booking.retry_payment")}
+                      disabled={getRetryPaymentLinkMutation.isPending}
+                      className="text-foreground bg-yellow-400"
+                      variant="secondary"
+                      onClick={() => getRetryPaymentLinkMutation.mutate()}
+                    >
+                      <RefreshCcw />
+                      {t("furpanel.booking.retry_payment")}
+                    </Button>
+                  )}
+                  {!orderEditingLocked && (
+                    <Button
+                      title={t("furpanel.booking.edit_booking")}
+                      disabled={getEditLinkMutation.isPending}
+                      onClick={() => getEditLinkMutation.mutate()}
+                    >
+                      <Edit />
+                    </Button>
+                  )}
+                  <QrCodeModal secret={query.data.order.checkinSecret} />
+                </ButtonGroup>
+              )}
             </CardAction>
           </CardHeader>
           <CardContent className="mt-6">
@@ -348,7 +383,12 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
               </Item>
             )}
           </CardContent>
-          <CardFooter></CardFooter>
+          <CardFooter>
+            {/** Transfer order */}
+            <ButtonGroup>
+              {query.data?.exchangeSupported && query.data.canExchange && <TransferOrderModal />}
+            </ButtonGroup>
+          </CardFooter>
         </Card>
       </div>
     </>
