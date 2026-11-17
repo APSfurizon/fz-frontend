@@ -323,7 +323,11 @@
       "input": {
         "transfer_user": {
           "label": "Destinatario",
-          "placeholder": "Cerca un destinatario"
+          "placeholder": "Cerca un destinatario",
+          "validation": {
+            "empty": "Seleziona un destinatario per il trasferimento dell'ordine",
+            "numeric": "L'id del destinatario deve essere un numero"
+          }
         }
       },
       "errors": {
@@ -364,10 +368,10 @@
       "reservation_qr": "Codice QR per il check-in",
       "event_logo": "Logo evento",
       "information": {
-        "check_in_date": "<b>Data di checkin</b>: {checkinDate}",
-        "check_out_date": "<b>Data di checkout</b>: {checkoutDate}",
-        "title": "Informazioni",
-        "location": "<b>Luogo</b>: <a>{link}</a>"
+        "title": "Dettagli",
+        "check_in_date": "Data di checkin",
+        "check_out_date": "Data di checkout",
+        "convention_venue": "Sede"
       }
     },
     "badge": {

@@ -7,6 +7,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --breakpoint-xs: 30rem;
+}
+
 /* Main body / html */
 
 html,

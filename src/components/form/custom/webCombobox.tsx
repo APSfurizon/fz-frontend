@@ -1,4 +1,5 @@
 "use client";
+import { ComboboxValue, useComboboxAnchor } from "@/components/ui/combobox";
 import { TranslatableInputEntity } from "@/lib/translations";
 import { ComboboxRoot, ComboboxRootProps } from "@base-ui/react";
 import { useThrottledValue } from "@tanstack/react-pacer";
@@ -50,6 +51,7 @@ export abstract class WebComboboxConfig<T extends WebComboboxOption, U = WebComb
 export type WebComboboxBaseProps<T = WebComboboxKey> = {
   config: WebComboboxConfig<any, T>;
   value?: T;
+  placeholder?: string;
 };
 
 export type WebComboboxProps<T = WebComboboxKey> = Omit<ComboboxRootProps<T, boolean>, "value"> &
@@ -89,8 +91,12 @@ export default function WebCombobox<T = WebComboboxKey>(props: Readonly<WebCombo
   const selectedQuery = useQuery({
     queryKey: [queryBaseKey, "inquire", values, locale],
     queryFn: ({ signal }) => {
-      if (values?.values) {
-        return props.config.inquiringFn()(values.values, signal, locale);
+      const present =
+        values?.values &&
+        ((typeof values?.values === "string" && values.values.length > 0) ||
+          (Array.isArray(values.values) && values.values.filter((v) => v).length > 0));
+      if (present) {
+        return props.config.inquiringFn()(values.values!, signal, locale);
       }
       return Promise.resolve([]);
     },
@@ -146,6 +152,8 @@ export default function WebCombobox<T = WebComboboxKey>(props: Readonly<WebCombo
 
   const getValue = () => {
     const valueToUse = useExternalValue ? props.value : values?.values;
+    if (typeof valueToUse == "string" && valueToUse == "") return null;
+    if (Array.isArray(valueToUse) && valueToUse.length == 0) return null;
     const wrappedValue = Array.isArray(valueToUse) ? valueToUse : [valueToUse];
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (props.multiple ? wrappedValue : wrappedValue?.[0]) ?? null;
@@ -156,6 +164,8 @@ export default function WebCombobox<T = WebComboboxKey>(props: Readonly<WebCombo
     getValue() &&
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     (!props.multiple || (props.multiple && Array.isArray(getValue()) && Array.from(getValue()).length >= props.max));
+
+  const anchor = useComboboxAnchor();
 
   return (
     <Combobox
@@ -175,22 +185,27 @@ export default function WebCombobox<T = WebComboboxKey>(props: Readonly<WebCombo
     >
       {props.multiple && (
         <>
-          <ComboboxChips>
-            {selectedQuery.data?.map((item) => (
-              <ComboboxChip key={props.config.itemToValue(item)}>
-                {props.config.selectionsRenderer(item, locale)}
-              </ComboboxChip>
-            ))}
-            <ComboboxChipsInput value={query} className={cn(shouldHideInput ? "hidden" : "")} />
+          <ComboboxChips ref={anchor}>
+            <ComboboxValue>
+              {selectedQuery.data?.map((item) => (
+                <ComboboxChip
+                  key={props.config.itemToValue(item)}
+                  className={cn(props.max == 1 ? "w-full justify-between" : "")}
+                >
+                  {props.config.selectionsRenderer(item, locale)}
+                </ComboboxChip>
+              ))}
+              <ComboboxChipsInput className={cn(shouldHideInput ? "hidden" : "")} placeholder={props.placeholder} />
+            </ComboboxValue>
           </ComboboxChips>
         </>
       )}
       {!props.multiple && (
         <>
-          <ComboboxInput value={query} />
+          <ComboboxInput placeholder={props.placeholder} />
         </>
       )}
-      <ComboboxContent className={cn(shouldHideInput ? "hidden" : "")}>
+      <ComboboxContent className={cn(shouldHideInput ? "hidden" : "")} anchor={anchor}>
         <ComboboxEmpty>No items found</ComboboxEmpty>
         <ComboboxList>
           {searchQuery.data?.map((item) => (

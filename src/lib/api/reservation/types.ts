@@ -72,3 +72,9 @@ export interface BookingOrderUiData extends BookingTicketData {
   shouldUpdateInfo: boolean;
   shouldRetry: boolean;
 }
+
+export interface OrderExchangeInitApiData {
+  sourceUserId: number;
+  destUserId: number;
+  action: "room" | "order";
+}

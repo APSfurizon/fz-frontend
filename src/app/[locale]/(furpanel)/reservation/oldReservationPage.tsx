@@ -39,7 +39,7 @@ export default async function ReservationPage() {
     ? calcTicketData(bookingData.order)
     : {
         isDaily: false,
-        ticketType: "",
+        ticketType: "NONE",
         dailyDays: undefined,
       };
 
@@ -161,7 +161,7 @@ export default async function ReservationPage() {
                 <p>
                   <Icon className="x-large" icon="CONCIERGE" />
                   <span>
-                    {t.rich("furpanel.booking.information.check_in_date", {
+                    {t("furpanel.booking.information.check_in_date", {
                       b: (chunks) => <b>{chunks}</b>,
                       checkinDate: formatter.dateTime(new Date(bookingData.order.checkinDate), {
                         dateStyle: "medium",
@@ -174,7 +174,7 @@ export default async function ReservationPage() {
                 <p>
                   <Icon className="x-large" icon="TRIP" />
                   <span>
-                    {t.rich("furpanel.booking.information.check_out_date", {
+                    {t("furpanel.booking.information.check_out_date", {
                       b: (chunks) => <b>{chunks}</b>,
                       checkoutDate: formatter.dateTime(new Date(bookingData.order.checkoutDate), {
                         dateStyle: "medium",
@@ -187,7 +187,7 @@ export default async function ReservationPage() {
                 <p>
                   <Icon className="x-large" icon="LOCATION_ON" />
                   <span>
-                    {t.rich("furpanel.booking.information.location", {
+                    {t.rich("furpanel.booking.information.convention_venue", {
                       b: (chunks) => <b>{chunks}</b>,
                       a: (chunks) => (
                         <a className="highlight hoverable" target={isMobile() ? "_self" : "_blank"} href={geoLink}>
@@ -263,7 +263,6 @@ export default async function ReservationPage() {
                 <div className="horizontal-list gap-4mm flex-space-between flex-wrap" style={{ flexGrow: "1" }}>
                   <Button className="action-button" disabled={isEditLocked} /*onClick={requestOrderEditLink}*/>
                     <Icon icon="OPEN_IN_NEW" />
-                    {t("furpanel.booking.edit_booking")}
                   </Button>
                   {bookingData?.exchangeSupported && (
                     <Button

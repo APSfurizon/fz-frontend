@@ -30,3 +30,9 @@ export class ConfirmMembershipDataApiAction extends ApiAction<boolean, ApiErrorR
   method = RequestType.POST;
   urlAction = "membership/mark-personal-user-information-as-updated";
 }
+
+export class InitOrderExchangeApiAction extends ApiAction<boolean, ApiErrorResponse> {
+  method = RequestType.POST;
+  authenticated = true;
+  urlAction = "room/exchange/init";
+}

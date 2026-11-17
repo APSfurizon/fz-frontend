@@ -44,6 +44,8 @@ async function handler(
   // Set language
   headers.append("Accept-Language", request.cookies.get("NEXT_LOCALE")?.value ?? DEFAULT_TRANSLATION_KEY);
 
+  headers.append("Content-Type", request.headers.get("Content-Type") ?? "application/json");
+
   const allowBody = ["POST", "PUT"].includes(method);
   const body: BodyInit | null = allowBody ? request.body : null;
   // TODO: remove
@@ -57,7 +59,8 @@ async function handler(
       body,
       signal: request.signal,
       cache: "no-store",
-    });
+      duplex: "half",
+    } as RequestInit & { duplex: string });
     const responseHeaders = new Headers(response.headers);
     responseHeaders.delete("content-encoding");
     responseHeaders.delete("content-length");
@@ -69,6 +72,7 @@ async function handler(
       headers: responseHeaders,
     });
   } catch (e) {
-    return NextResponse.json(e);
+    console.error(e);
+    return NextResponse.error();
   }
 }
