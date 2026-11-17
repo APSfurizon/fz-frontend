@@ -107,15 +107,6 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
     ?.map((dt) => formatter.dateTime(dt, { day: "2-digit", month: "short" }))
     .join(", ");
 
-  const allDaysRange =
-    pageData?.hasOrder && query.data?.order?.noRoomTicketFromDate && query.data?.order?.noRoomTicketToDate
-      ? formatter.dateTimeRange(
-          new Date(query.data.order.noRoomTicketFromDate),
-          new Date(query.data.order.noRoomTicketToDate),
-          { dateStyle: "medium" }
-        )
-      : undefined;
-
   /** Mapping ticket type names */
   const translateTicket = (type: TicketType) => {
     switch (type) {
