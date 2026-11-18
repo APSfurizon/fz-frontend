@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/common";
+import { Alert, AlertDescription, AlertTitle, Button } from "@/components/common";
 import { getUsernameFallback } from "@/components/common/header/userDropdown";
 import { useUser } from "@/components/context/userProvider";
 import {
@@ -12,16 +12,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/dialogs";
+import ErrorMessage from "@/components/errorMessage";
 import { useAppForm } from "@/components/form";
 import { WebComboboxConfig } from "@/components/form/custom/webCombobox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FieldGroup } from "@/components/ui/field";
-import { runRequest } from "@/lib/api/networking";
+import { ApiErrorResponse, runRequest } from "@/lib/api/networking";
 import { InitOrderExchangeApiAction, OrderExchangeInitApiData } from "@/lib/api/reservation";
 import { GetUserByIdAction, UserSearchAction, UserSearchResult } from "@/lib/api/user";
 import { buildSearchParams } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
-import { Send } from "lucide-react";
+import { AlertCircleIcon, CheckCircle2, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import z from "zod";
@@ -116,6 +117,7 @@ export default function TransferOrderModal() {
   const onClose = (open: boolean) => {
     if (!open) {
       initiateTransferForm.reset();
+      initTransferRequestMutation.reset();
     }
   };
 
@@ -134,6 +136,22 @@ export default function TransferOrderModal() {
           <DialogTitle>{t("furpanel.booking.actions.transfer_order")}</DialogTitle>
           <DialogDescription>{t("furpanel.booking.messages.transfer_explanation")}</DialogDescription>
         </DialogHeader>
+        {initTransferRequestMutation.isSuccess && (
+          <Alert className="text-green-700 dark:text-green-200">
+            <CheckCircle2 />
+            <AlertTitle>{t("furpanel.booking.messages.transfer_invite_sent.title")}</AlertTitle>
+            <AlertDescription>{t("furpanel.booking.messages.transfer_invite_sent.description")}</AlertDescription>
+          </Alert>
+        )}
+        {initTransferRequestMutation.isError && (
+          <Alert variant="destructive">
+            <AlertCircleIcon />
+            <AlertTitle>{t("common.error")}</AlertTitle>
+            <AlertDescription>
+              <ErrorMessage error={initTransferRequestMutation.error as ApiErrorResponse} />
+            </AlertDescription>
+          </Alert>
+        )}
         <form
           ref={formRef}
           id="init-transfer-form"

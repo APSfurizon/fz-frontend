@@ -1,6 +1,6 @@
-import { useTranslations } from "next-intl";
 import { ApiErrorResponse } from "@/lib/api/networking/types";
 import { copyContent, isEmpty } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 type ErrorData = {
@@ -23,24 +23,21 @@ export default function ErrorMessage({ error }: Readonly<{ error?: ApiErrorRespo
   const requestId = error?.requestId;
 
   return (
-    <div className="error vertical-list gap-2mm" aria-live="assertive">
-      <span className="title medium">{t("common.error_header", { count: errors.length })}</span>
-      <ul style={{ marginLeft: "1em" }} aria-relevant="additions text">
+    <div className="flex flex-col gap-2" aria-live="assertive">
+      <ul aria-relevant="additions text">
         {errors.map((err, index) => (
-          <li key={index} className="descriptive small">
+          <li key={index} className="text-sm">
             {err.message} <kbd>{err.code ? `(${err.code})` : ""}</kbd>
           </li>
         ))}
       </ul>
       {!isEmpty(requestId) && (
         <>
-          <hr></hr>
-          <span className="descriptive small">
+          <span className="text-xs">
             {t("common.request_id")}&nbsp;
             <a
               title={t("common.util.hoverable")}
-              style={{ padding: "0em 0.2em" }}
-              className="hoverable rounded-s"
+              className="active:bg-accent rounded-sm p-1 hover:text-black dark:hover:text-white"
               onClick={(e) => copyContent(e.currentTarget)}
             >
               {requestId}

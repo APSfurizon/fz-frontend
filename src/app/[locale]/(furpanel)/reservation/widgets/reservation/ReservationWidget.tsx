@@ -1,6 +1,9 @@
 "use client";
 
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Badge,
   Button,
   ButtonGroup,
@@ -30,11 +33,12 @@ import {
   SponsorshipType,
   TicketType,
 } from "@/lib/api/reservation";
-import { EVENT_BANNER, EVENT_LOGO, EVENT_MAIN_LOCATION_NAME, EVENT_NAME } from "@/lib/constants";
+import { EVENT_BANNER, EVENT_LOGO, EVENT_MAIN_LOCATION_NAME, EVENT_NAME, GROUP_CHAT_URL } from "@/lib/constants";
 import { translateNullable } from "@/lib/translations";
 import "@/styles/furpanel/reservation/widgets/reservationWidget.scss";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  AlertCircleIcon,
   BedDouble,
   CalendarPlus,
   ConciergeBell,
@@ -45,6 +49,7 @@ import {
   IdCard,
   MapPinned,
   RefreshCcw,
+  Send,
   TicketSlash,
   Utensils,
 } from "lucide-react";
@@ -237,7 +242,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
               {EVENT_LOGO && (
                 <Image
                   unoptimized
-                  className="event-logo"
+                  className="event-logo drop-shadow-lg drop-shadow-black"
                   alt={t("furpanel.booking.event_logo")}
                   src={EVENT_LOGO}
                   width={80}
@@ -300,6 +305,43 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
             </CardAction>
           </CardHeader>
           <CardContent className="mt-6">
+            {/** Edit lock notice */}
+            {pageData?.editBookEndDate && (
+              <Alert>
+                <AlertCircleIcon />
+                <AlertTitle>
+                  {orderEditingLocked
+                    ? t("furpanel.booking.messages.editing_locked.title")
+                    : t("furpanel.booking.messages.editing_locked_warning.title")}
+                </AlertTitle>
+                <AlertDescription>
+                  {orderEditingLocked
+                    ? t("furpanel.booking.messages.editing_locked.description", {
+                        lockDate: formatter.dateTime(pageData.editBookEndDate),
+                      })
+                    : t("furpanel.booking.messages.editing_locked_warning.description", {
+                        lockDate: formatter.dateTime(pageData.editBookEndDate),
+                      })}
+                </AlertDescription>
+              </Alert>
+            )}
+            {/** Join chat notice */}
+            {GROUP_CHAT_URL && query.data?.order && (
+              <Alert>
+                <Send />
+                <AlertTitle>{t("furpanel.booking.messages.invite_group.title")}</AlertTitle>
+                <AlertDescription>
+                  {t.rich("furpanel.booking.messages.invite_group.description", {
+                    link: () => (
+                      <a className="highlight" target="_blank" href={new URL(GROUP_CHAT_URL!).toString()}>
+                        {GROUP_CHAT_URL}
+                      </a>
+                    ),
+                  })}
+                </AlertDescription>
+              </Alert>
+            )}
+
             {/** Reservation overview information */}
             <div className="reservation-card__overview flex flex-col gap-3">
               <h2 className="font-heading text-l mb-3 font-bold">{t("furpanel.booking.information.title")}</h2>
@@ -443,6 +485,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
           </CardContent>
           <CardFooter>
             {/** Transfer order */}
+            <div className="grow"></div>
             <ButtonGroup>
               {query.data?.exchangeSupported && query.data.canExchange && <TransferOrderModal />}
             </ButtonGroup>

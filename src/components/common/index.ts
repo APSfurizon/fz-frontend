@@ -1,3 +1,4 @@
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants } from "@/components/ui/button-group";
 import {
@@ -20,6 +21,10 @@ import { Tooltip } from "../ui/tooltip";
 
 export {
   Accordion,
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
   Badge,
   Button,
   ButtonGroup,

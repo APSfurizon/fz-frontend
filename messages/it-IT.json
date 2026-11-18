@@ -112,7 +112,6 @@
       "PAID": "Ordine pagato",
       "EXPIRED": "Ordine scaduto"
     },
-    "error_header": "Si {count, plural, =1 {è verificato un errore} other {sono verificati # errori}}:",
     "request_id": "ID richiesta:",
     "util": {
       "hoverable": "Clicca per copiare"
