@@ -1,17 +1,22 @@
+import { getUser } from "@/lib/api/user/server";
+import { getCredits } from "@/lib/components/footer";
 import { APP_GIT, APP_VERSION } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import "@/styles/components/footer.css";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-export default function Footer() {
-  const t = useTranslations();
+export default async function Footer() {
+  const t = await getTranslations();
+  const { user } = await getUser();
+  const allCredits = await getCredits();
   return (
     <footer className={"footer px-15 py-12"}>
       <div className="footer__container mx-auto max-w-7xl">
         <picture>
           <source srcSet="/images/logo_dark.svg" media="(prefers-color-scheme: dark)" />
           <Image
-            className="footer__logo"
+            className="footer__logo -translate-x-9"
             src="/images/logo_light.svg"
             alt={t("common.header.alt_logo")}
             width={256}
@@ -20,7 +25,7 @@ export default function Footer() {
           />
         </picture>
         {/* Main content */}
-        <div className="mt-10 ml-9 flex flex-col gap-4 md:flex-row">
+        <div className="mt-10 flex flex-col gap-4 md:flex-row">
           <div className="title flex flex-col gap-2">
             <p className="bold text-xl">{t("common.header.organizer.title")}</p>
             <a
@@ -43,6 +48,7 @@ export default function Footer() {
             <a href="https://furizon.net/contact/" target="_blank" rel="noopener noreferrer external">
               {t("common.footer.organizer.contact_us.title")}
             </a>
+            {user && <a href="mailto:helpdesk@furizon.net">{t("common.footer.organizer.email_us.title")}</a>}
           </div>
           <div className="flex-1"></div>
           <div>
@@ -107,34 +113,22 @@ export default function Footer() {
               </div>
             </div>
             {/* Credits */}
-            <div className="title mt-4">
-              <p className="bold text-xl">{t("common.footer.developers.title")}</p>
-              <p className="flex gap-2 text-base wrap-normal">
-                <a className="color-link" href="https://redwinglu.carrd.co/">
-                  Stranck
-                </a>
-                <a className="color-link" href="https://about.woffo.ovh">
-                  Drew
-                </a>
-                <a className="color-link" href="https://x.com/starkthedragon">
-                  Stark
-                </a>
-                <a className="color-link" href="https://shinxekin.com/">
-                  Jan
-                </a>
-                <a className="color-link" href="https://www.instagram.com/reixwolfo">
-                  Reix
-                </a>
-                <a>Cactua</a>
-                <a className="color-link" href="https://zerven.net">
-                  Shado
-                </a>
-              </p>
-            </div>
+            {allCredits && (
+              <div className="title mt-4">
+                <p className="bold text-xl">{t("common.footer.developers.title")}</p>
+                <p className="flex gap-2 text-base wrap-normal">
+                  {allCredits.credits.map((credit, index) => (
+                    <a key={index} className={cn(credit.link ? "color-link" : "")} href={credit.link ?? undefined}>
+                      {credit.name}
+                    </a>
+                  ))}
+                </p>
+              </div>
+            )}
           </div>
         </div>
         {/* Lower content */}
-        <div className="mt-10 ml-9 flex">
+        <div className="mt-10 flex">
           <p className="text-sm">Furpanel {APP_VERSION ?? ""}</p>
           <div className="flex-1"></div>
           <p className="text-sm">{t("common.footer.society_name")}</p>

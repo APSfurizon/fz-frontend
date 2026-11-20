@@ -32,6 +32,22 @@ export interface OrderData {
   orderEvent: ConventionEvent;
 }
 
+export type ReservationError =
+  | "SERVER_ERROR"
+  | "MEMBERSHIP_MULTIPLE_DONE"
+  | "MEMBERSHIP_MISSING"
+  | "ORDER_NOT_FOUND"
+  | "ORDER_MULTIPLE_DONE"
+  | "ORDER_SECRET_NOT_MATCH"
+  | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE"
+  | "SHOP_NOT_OPENED_YET"
+  | "ORDER_EDITS_CLOSED"
+  | "PERSONAL_USER_INFO_NOT_UPDATED"
+  | "BELOW_MINIMUM_AGE"
+  | "PAYMENT_INVALID_STATE"
+  | "REFUND_INVALID_STATE"
+  | "POSITION_CANCELED";
+
 export interface BookingOrderResponse extends ApiResponse {
   shouldDisplayCountdown: boolean;
   bookingStartTime: string;
@@ -44,14 +60,7 @@ export interface BookingOrderResponse extends ApiResponse {
   canExchange: boolean;
   exchangeSupported: boolean;
   order: OrderData;
-  errors: (
-    | "SERVER_ERROR"
-    | "MEMBERSHIP_MULTIPLE_DONE"
-    | "MEMBERSHIP_MISSING"
-    | "ORDER_MULTIPLE_DONE"
-    | "ORDER_SECRET_NOT_MATCH"
-    | "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE"
-  )[];
+  errors: ReservationError[];
 }
 
 export interface ShopLinkResponse extends ApiResponse {

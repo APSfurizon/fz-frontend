@@ -1,4 +1,4 @@
-import { UserDisplayResponse } from "./user";
+import { UserDisplayResponse } from "./user/main";
 
 export enum Permissions {
   CAN_SEE_ADMIN_PAGES = "CAN_SEE_ADMIN_PAGES",

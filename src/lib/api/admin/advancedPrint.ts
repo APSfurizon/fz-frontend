@@ -1,7 +1,7 @@
 import { FursuitDetails } from "../badge/types";
 import { MediaData } from "../media";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
-import { SponsorType, UserData } from "../user";
+import { SponsorType, UserData } from "../user/main";
 
 export type BadgeSearchData = {
   orderQuery?: string;

@@ -1,7 +1,7 @@
 import { CountrySearchResult } from "@/lib/api/geo";
 import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
 import { ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
-import { UserPersonalInfo } from "../user";
+import { UserPersonalInfo } from "../user/main";
 
 export const extractPhonePrefix = (r?: CountrySearchResult) => {
   return r?.phonePrefix ?? "";

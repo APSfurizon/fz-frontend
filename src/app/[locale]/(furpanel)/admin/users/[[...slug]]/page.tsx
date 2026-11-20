@@ -1,36 +1,36 @@
 "use client";
-import AutoInput from "@/components/input/autoInput";
-import Icon from "@/components/icon";
+import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
+import Icon from "@/components/icon";
+import AutoInput from "@/components/input/autoInput";
+import LoadingPanel from "@/components/loadingPanel";
 import { GetUserAdminViewAction, GetUserAdminViewResponse } from "@/lib/api/admin/userView";
 import { runRequest } from "@/lib/api/networking/main";
 import { ApiErrorResponse, createApiErrorResponse } from "@/lib/api/networking/types";
 import {
   AutoInputUsersManager,
   GetUserByIdAction,
+  UserSearchByFursuitIdAction,
   UserSearchByMembershipNumberAction,
   UserSearchByOrderCodeAction,
   UserSearchByOrderSerialAction,
-  UserSearchByFursuitIdAction,
 } from "@/lib/api/user";
 import { AutoInputManager, AutoInputSearchResult } from "@/lib/components/autoInput";
-import { useModalUpdate } from "@/components/context/modalProvider";
 import { getParentDirectory } from "@/lib/utils";
+import "@/styles/furpanel/admin/userView.css";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, createContext, HTMLInputTypeAttribute, useContext, useEffect, useMemo, useState } from "react";
-import LoadingPanel from "@/components/loadingPanel";
-import UserViewOrdersTable from "./_components/userViewOrdersTable";
-import UserViewCardsTable from "./_components/userViewCardsTable";
-import UserViewBadge from "./_components/userViewBadge";
 import UserViewFursuitsTable from "./_components/fursuits/userViewFursuitsTable";
-import Link from "next/link";
-import UserViewSecurity from "./_components/userViewSecurity";
-import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRooms from "./_components/rooms/userViewRooms";
+import UserViewBadge from "./_components/userViewBadge";
+import UserViewCardsTable from "./_components/userViewCardsTable";
+import UserViewOrdersTable from "./_components/userViewOrdersTable";
 import UserViewPermissionsTable from "./_components/userViewPermissionsTable";
-import "@/styles/furpanel/admin/userView.css";
+import UserViewPersonalInfo from "./_components/userViewPersonalInfo";
 import UserViewRolesTable from "./_components/userViewRolesTable";
+import UserViewSecurity from "./_components/userViewSecurity";
 
 // Context management
 interface UserView {

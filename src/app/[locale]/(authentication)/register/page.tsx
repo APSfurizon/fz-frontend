@@ -95,7 +95,7 @@ export default function Register() {
   useTitle(t("authentication.register.title"));
 
   return (
-    <>
+    <div className="mx-auto w-full max-w-7xl">
       <div className="horizontal-list gap-4mm justify-content-center">
         <span className="title-pair">
           <Icon icon="DESIGN_SERVICES" />
@@ -433,6 +433,6 @@ export default function Register() {
           {t("authentication.register.login_here")}
         </Link>
       </div>
-    </>
+    </div>
   );
 }

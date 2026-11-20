@@ -10,7 +10,7 @@ import {
   UserData,
   UserPersonalInfo,
   UserSearchAction,
-} from "../user";
+} from "../user/main";
 
 export interface MembershipCard {
   cardId: number;

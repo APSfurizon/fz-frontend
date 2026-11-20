@@ -1,7 +1,7 @@
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./networking/types";
 import { Board, OrderData } from "./reservation";
 import { RoomData } from "./room";
-import { ExtraDays, UserData } from "./user";
+import { ExtraDays, UserData } from "./user/main";
 
 export interface ExchangeStatusApiResponse extends ApiResponse {
   sourceUser: UserData;

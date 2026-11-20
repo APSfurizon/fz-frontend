@@ -2,7 +2,7 @@ import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./networking/types";
 import { OrderExchangeInitApiData, OrderStatus } from "./order";
 import { Board, ExtraDaysType } from "./reservation";
-import { SponsorType, UserData } from "./user";
+import { SponsorType, UserData } from "./user/main";
 
 export interface RoomGuestHeader {
   roomGuest: RoomGuest;

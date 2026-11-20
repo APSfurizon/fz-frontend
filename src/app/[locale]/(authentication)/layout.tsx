@@ -7,7 +7,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
   const { isOpen, icon, title, modalChildren, hideModal } = useModalUpdate();
   return (
     <>
-      <div className="main-dialog rounded-s">{children}</div>
+      {children}
       <Modal icon={icon} title={title} open={isOpen} onClose={hideModal} zIndex={600}>
         {modalChildren}
       </Modal>

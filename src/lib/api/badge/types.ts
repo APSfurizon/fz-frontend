@@ -1,5 +1,5 @@
 import { MediaData } from "../media";
-import { SponsorType } from "../user";
+import { SponsorType } from "../user/main";
 
 export interface FursuitDetails {
   id: number;

@@ -6,12 +6,12 @@ import {
   filterLoaded,
   filterSearchResult,
   SearchType,
-} from "../components/autoInput";
-import { FormApiAction, FormDTOBuilder, getData } from "../components/dataForm";
-import { SelectItem } from "../components/fpSelect";
-import { buildSearchParams, setCookie } from "../utils";
-import { MediaData } from "./media";
-import { runRequest } from "./networking/main";
+} from "../../components/autoInput";
+import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
+import { SelectItem } from "../../components/fpSelect";
+import { buildSearchParams, setCookie } from "../../utils";
+import { MediaData } from "../media";
+import { runRequest } from "../networking/main";
 import {
   ApiAction,
   ApiErrorResponse,
@@ -19,7 +19,7 @@ import {
   ApiResponse,
   RequestType,
   SimpleApiResponse,
-} from "./networking/types";
+} from "../networking/types";
 
 export interface UserSearchResult extends Partial<AutoInputSearchResult> {
   propic?: MediaData;

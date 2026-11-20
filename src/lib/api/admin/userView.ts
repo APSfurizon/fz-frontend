@@ -17,7 +17,7 @@ import { OrderStatus } from "../order";
 import { Permissions } from "../permission";
 import { Board, SponsorshipType } from "../reservation";
 import { RoomInfoResponse } from "../room";
-import { ExtraDays, UserData, UserPersonalInfo } from "../user";
+import { ExtraDays, UserData, UserPersonalInfo } from "../user/main";
 import { MembershipCard } from "./membershipManager";
 import { GetAllRolesApiAction, GetRoleByIdApiAction, RoleBaseData, SearchRoleApiAction } from "./role";
 

@@ -3,7 +3,7 @@ import { TranslatableString } from "../translations";
 import { FursuitDetails } from "./badge/types";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "./networking/types";
 import { RoomData } from "./room";
-import { ExtraDays, SponsorType, UserData } from "./user";
+import { ExtraDays, SponsorType, UserData } from "./user/main";
 
 export enum CountViewMode {
   NORMAL = "all",

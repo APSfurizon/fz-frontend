@@ -1,12 +1,9 @@
-import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
-import { ApiAction } from "../networking/types";
-import { ApiErrorResponse } from "../networking/types";
-import { ApiResponse } from "../networking/types";
-import { RequestType } from "../networking/types";
-import { UserData } from "../user";
-import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 import { CACHED_PERMISSIONS } from "@/lib/cache/cache";
+import { AutoInputFilter, AutoInputManager, AutoInputSearchResult, filterLoaded } from "@/lib/components/autoInput";
+import { FormApiAction, FormDTOBuilder, getData } from "@/lib/components/dataForm";
 import { toError } from "@/lib/utils";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
+import { UserData } from "../user/main";
 
 export interface RoleInfo extends Omit<RoleBaseData, "roleAdmincountPriority"> {
   permanentUsersNumber: number;

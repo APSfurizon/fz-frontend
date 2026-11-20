@@ -14,6 +14,9 @@
         "contact_us": {
           "title": "Contact us"
         },
+        "email_us": {
+          "title": "Email us"
+        },
         "terms_of_service": {
           "title": "Terms of service",
           "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_EN.pdf"
@@ -330,7 +333,10 @@
         }
       },
       "errors": {
-        "SHOP_NOT_OPENED_YET": "Ticket sale hasn't opened yet!",
+        "SHOP_NOT_OPENED_YET": {
+          "title": "Registrations aren't open yet",
+          "description": "Be sure to come back on the opening date in order to book a ticket."
+        },
         "SERVER_ERROR": {
           "title": "Server error",
           "description": "An unknown error occurred! Try again and, if this persists, contact us"
@@ -356,7 +362,36 @@
           "description": "The order you're trying to access is already owned by another user. Please, contact support to arrange the situation."
         },
         "TELEGRAM_USERNAME_EMPTY": "No telegram username provided",
-        "ID_ISSUER_EMPTY": "No ID Card issuer provided"
+        "ID_ISSUER_EMPTY": "No ID Card issuer provided",
+        "ORDER_NOT_FOUND": {
+          "description": "We couldn't locate your order. To participate the next Furizon, you need a valid reservation for it. If you think this is a mistake, please contact our support team.",
+          "title": "Order not found"
+        },
+        "ORDER_EDITS_CLOSED": {
+          "description": "From now on, you cannot edit your order, anymore",
+          "title": "Order editing closed"
+        },
+        "PERSONAL_USER_INFO_NOT_UPDATED": {
+          "title": "Outdated user information",
+          "description": "Each year before registering, update your user data or confirm that it's up to date."
+        },
+        "BELOW_MINIMUM_AGE": {
+          "title": "Underage user",
+          "description": "Currently, underage attendees are not allowed in our events."
+        },
+        "PAYMENT_INVALID_STATE": {
+          "title": "Payment error",
+          "description": "There was a problem with your payment. A valid reservation requires a likewise valid payment. Please contact our support in order to fix this."
+        },
+        "REFUND_INVALID_STATE": {
+          "title": "Refund error",
+          "description": "An error occurred with your refund. Please contact support"
+        },
+        "POSITION_CANCELED": {
+          "title": "Order partially deleted",
+          "description": "There was a problem with your reservation. We urge you to contact support."
+        },
+        "title": "Important notices ({number})"
       },
       "actions": {
         "review_info": "Review information",

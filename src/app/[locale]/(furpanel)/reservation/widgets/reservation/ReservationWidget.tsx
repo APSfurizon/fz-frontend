@@ -59,6 +59,7 @@ import Link from "next/link";
 import { CSSProperties, useState } from "react";
 import { WidgetBaseProps } from "../types";
 import QrCodeModal from "./components/qrCodeModal";
+import ReservationErrors from "./components/reservationErrors";
 import TransferOrderModal from "./components/transferOrderModal";
 
 type ReservationWidgetProps = WidgetBaseProps;
@@ -305,6 +306,8 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
             </CardAction>
           </CardHeader>
           <CardContent className="mt-6">
+            {/** Reservation errors */}
+            {query.data?.errors && <ReservationErrors errors={query.data?.errors} />}
             {/** Edit lock notice */}
             {pageData?.editBookEndDate && (
               <Alert>

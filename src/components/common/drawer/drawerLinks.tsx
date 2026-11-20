@@ -1,15 +1,17 @@
 import { DrawerClose } from "@/components/dialogs";
-import Icon, { MaterialIcon } from "@/components/icon";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/api/permission";
 import { UserDisplayResponse } from "@/lib/api/user";
 import { GALLERY_ENABLED, NOSECOUNT_ENABLED, SCHEDULE_ENABLED } from "@/lib/constants";
+import { BedDouble, Calendar, IdCardLanyard, ImageIcon, Shield, Ticket, UserGroup } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { JSX } from "react/jsx-runtime";
 import { UrlObject } from "url";
 
 type DrawerLinkProps = {
-  icon?: MaterialIcon;
+  icon?: JSX.Element;
   href: string | UrlObject;
   text: string;
 };
@@ -17,15 +19,19 @@ function DrawerLink(props: Readonly<DrawerLinkProps>) {
   return (
     <DrawerClose
       nativeButton={false}
-      render={<Link className="text-base no-underline" title={props.text} href={props.href} />}
+      render={
+        <Link
+          className="text-base no-underline"
+          style={{ textDecoration: "none" }}
+          title={props.text}
+          href={props.href}
+        />
+      }
     >
-      {props.icon && (
-        <>
-          <Icon className="align-middle" icon={props.icon} />
-          &nbsp;
-        </>
-      )}
-      <span className="align-bottom text-base">{props.text}</span>
+      <Button variant="ghost">
+        {props.icon && <>{props.icon}</>}
+        <span className="align-bottom text-base">{props.text}</span>
+      </Button>
     </DrawerClose>
   );
 }
@@ -42,11 +48,11 @@ export default function DrawerLinks(props: Readonly<{ userData?: UserDisplayResp
           <AccordionContent className="flex flex-col gap-4">
             <DrawerLink
               href="/reservation"
-              icon="LOCAL_ACTIVITY"
+              icon={<Ticket />}
               text={t("header.links.reservation.links.my_booking.title")}
             />
-            <DrawerLink href="/badge" icon="PERSON_BOOK" text={t("header.links.reservation.links.badge.title")} />
-            <DrawerLink href="/room" icon="BED" text={t("header.links.reservation.links.room.title")} />
+            <DrawerLink href="/badge" icon={<IdCardLanyard />} text={t("header.links.reservation.links.badge.title")} />
+            <DrawerLink href="/room" icon={<BedDouble />} text={t("header.links.reservation.links.room.title")} />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="convention">
@@ -55,19 +61,23 @@ export default function DrawerLinks(props: Readonly<{ userData?: UserDisplayResp
             {SCHEDULE_ENABLED && (
               <DrawerLink
                 href="/schedule"
-                icon="CALENDAR_MONTH"
+                icon={<Calendar />}
                 text={t("header.links.convention.links.schedule.title")}
               />
             )}
             {GALLERY_ENABLED && (
               <DrawerLink
                 href="/gallery/explore"
-                icon="IMAGE"
+                icon={<ImageIcon />}
                 text={t("header.links.convention.links.gallery.title")}
               />
             )}
             {NOSECOUNT_ENABLED && (
-              <DrawerLink href="/nosecount" icon="GROUPS" text={t("header.links.convention.links.nosecount.title")} />
+              <DrawerLink
+                href="/nosecount"
+                icon={<UserGroup />}
+                text={t("header.links.convention.links.nosecount.title")}
+              />
             )}
           </AccordionContent>
         </AccordionItem>
@@ -75,7 +85,7 @@ export default function DrawerLinks(props: Readonly<{ userData?: UserDisplayResp
           <AccordionItem value="administration">
             <AccordionTrigger className="text-lg">{t("header.links.admin.title")}</AccordionTrigger>
             <AccordionContent>
-              <DrawerLink href="/admin" icon="SECURITY" text={t("header.links.admin.title")} />
+              <DrawerLink href="/admin" icon={<Shield />} text={t("header.links.admin.title")} />
             </AccordionContent>
           </AccordionItem>
         )}

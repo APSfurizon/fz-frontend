@@ -151,19 +151,19 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
       {mode == CountViewMode.SPONSOR && (
         <>
           {sponsorData?.users.ULTRA_SPONSOR && <p className="title large">{t("common.sponsorships.ultra_sponsor")}</p>}
-          <div className="user-list horizontal-list flex-wrap gap-4mm">
+          <div className="user-list horizontal-list gap-4mm flex-wrap">
             {sponsorData?.users.ULTRA_SPONSOR?.map((user, index) => (
               <NosecountAttendee key={`ss-${index}`} data={user} />
             ))}
           </div>
           {sponsorData?.users.SUPER_SPONSOR && <p className="title large">{t("common.sponsorships.super_sponsor")}</p>}
-          <div className="user-list horizontal-list flex-wrap gap-4mm">
+          <div className="user-list horizontal-list gap-4mm flex-wrap">
             {sponsorData?.users.SUPER_SPONSOR?.map((user, index) => (
               <NosecountAttendee key={`ss-${index}`} data={user} />
             ))}
           </div>
           {sponsorData?.users.SPONSOR && <p className="title large">{t("common.sponsorships.sponsor")}</p>}
-          <div className="user-list horizontal-list flex-wrap gap-4mm">
+          <div className="user-list horizontal-list gap-4mm flex-wrap">
             {sponsorData?.users.SPONSOR?.map((user, index) => (
               <NosecountAttendee key={`ss-${index}`} data={user} />
             ))}
@@ -174,7 +174,7 @@ export default function NosecountPage({ params }: { params: Promise<{ slug: stri
       {/* Rendering fursuits */}
       {mode == CountViewMode.FURSUIT && (
         <>
-          <div className="user-list horizontal-list flex-wrap gap-4mm">
+          <div className="user-list horizontal-list gap-4mm flex-wrap">
             {fursuitData?.fursuits.map((fursuit, index) => (
               <NosecountFursuit key={index} data={fursuit} />
             ))}

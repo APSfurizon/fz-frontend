@@ -1,7 +1,7 @@
 import { ConventionEvent } from "../counts";
-import { ApiResponse } from "../networking/types";
 import { MediaData } from "../media";
-import { UserData } from "../user";
+import { ApiResponse } from "../networking/types";
+import { UserData } from "../user/main";
 
 export type UploadRepostPermissions =
   | "PHOTOGRAPHER_DISCRETION"

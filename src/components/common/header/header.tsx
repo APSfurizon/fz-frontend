@@ -3,6 +3,7 @@ import { useUser } from "@/components/context/userProvider";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { UserDisplayResponse } from "@/lib/api/user";
 import { isMobile, UA } from "@/lib/userAgent";
+import { cn } from "@/lib/utils";
 import "@/styles/components/header.css";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -94,7 +95,7 @@ export default function Header(props: Readonly<HeaderProps>) {
   }, [newScroll, collapsed]);
 
   return (
-    <header ref={headerRef} className={`header ${collapsed ? "collapsed" : ""}`}>
+    <header ref={headerRef} className={cn("header", collapsed ? "collapsed" : "")}>
       <div className="logo-container center sm:hidden lg:block">
         <Image
           className="header-logo"
@@ -105,7 +106,7 @@ export default function Header(props: Readonly<HeaderProps>) {
           loading="eager"
         />
       </div>
-      <NavigationMenu className="mx-auto w-full max-w-7xl pl-5">
+      <NavigationMenu className="mx-auto w-full max-w-7xl">
         <NavigationMenuList className="flex sm:hidden">
           <div className="flex-1" />
           <NavigationMenuItem>

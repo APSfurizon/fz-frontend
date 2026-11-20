@@ -14,6 +14,9 @@
         "contact_us": {
           "title": "Contattaci"
         },
+        "email_us": {
+          "title": "Mandaci un'email"
+        },
         "terms_of_service": {
           "title": "Termini di servizio",
           "link": "https://furizon.net/wp-content/uploads/2023/12/TERMINI-E-CONDIZIONI-GENERALI_IT.pdf"
@@ -330,7 +333,10 @@
         }
       },
       "errors": {
-        "SHOP_NOT_OPENED_YET": "La vendita dei biglietti non è ancora disponibile.",
+        "SHOP_NOT_OPENED_YET": {
+          "title": "Le registrazioni non sono ancora aperte",
+          "description": "Attendi la data di apertura per prenotare un biglietto."
+        },
         "SERVER_ERROR": {
           "title": "Errore server",
           "description": "Si è verificato un errore! Riprova più tardi, o contatta il supporto se il problema persiste."
@@ -349,14 +355,43 @@
         },
         "ORDER_SECRET_NOT_MATCH": {
           "title": "Ordine non valido",
-          "description": "Non è stato possibile autenticare la veridicità del tuo ordine. Contatta il supporto per ulteriori informazioni."
+          "description": "Non è stato possibile verificare il tuo ordine. Contatta il supporto per ulteriori informazioni."
         },
         "ORDER_ALREADY_OWNED_BY_SOMEBODY_ELSE": {
           "title": "Ordine condiviso",
           "description": "L'ordine a cui stai provando ad accedere appartiene già ad un altro utente. Contatta il supporto per risolvere la situazione."
         },
         "TELEGRAM_USERNAME_EMPTY": "Non è stato inserito alcun nome utente Telegram",
-        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'identità"
+        "ID_ISSUER_EMPTY": "Non è stato inserito alcun ente emittente per il documento d'identità",
+        "ORDER_NOT_FOUND": {
+          "description": "Non abbiamo potuto trovare il tuo ordine. Per partecipare a Furizon, devi avere una prenotazione valida. Se pensi che si tratta di un errore, contatta il nostro supporto.",
+          "title": "Ordine non trovato"
+        },
+        "ORDER_EDITS_CLOSED": {
+          "description": "D'ora in poi, non è più possibile modificare il proprio ordine",
+          "title": "Fine alle modifiche ordini"
+        },
+        "PERSONAL_USER_INFO_NOT_UPDATED": {
+          "title": "Dati personali non aggiornati",
+          "description": "Prima di registrarti, ricordati ogni anno di aggiornare o confermare i propri dati personali."
+        },
+        "BELOW_MINIMUM_AGE": {
+          "title": "Utente minorenne",
+          "description": "Al momento, gli utenti minorenni non sono ammessi ai nostri eventi."
+        },
+        "PAYMENT_INVALID_STATE": {
+          "title": "Errore di pagamento",
+          "description": "C'è stato un problema col tuo pagamento. Una prenotazione valida richiede un pagamento altrettanto valido. Contatta il supporto per risolvere il problema."
+        },
+        "REFUND_INVALID_STATE": {
+          "title": "Errore rimborso",
+          "description": "C'è stato un errore col tuo rimborso. Contatta il supporto per ulteriori informazioni."
+        },
+        "POSITION_CANCELED": {
+          "title": "Ordine parzialmente cancellato",
+          "description": "C'è stato un problema con la tua prenotazione. Contatta urgentemente il supporto."
+        },
+        "title": "Avvisi importanti ({number})"
       },
       "actions": {
         "review_info": "Rivedi informazioni",

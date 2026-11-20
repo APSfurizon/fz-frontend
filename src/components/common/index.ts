@@ -14,6 +14,7 @@ import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle }
 import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion } from "../ui/accordion";
 import { Badge } from "../ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { ContextMenu } from "../ui/context-menu";
 import { Kbd } from "../ui/kbd";
 import { Separator } from "../ui/separator";
@@ -38,6 +39,9 @@ export {
   CardFooter,
   CardHeader,
   CardTitle,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   ContextMenu,
   Item,
   ItemActions,

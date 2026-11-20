@@ -1,26 +1,26 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import useTitle from "@/components/hooks/useTitle";
 import { useModalUpdate } from "@/components/context/modalProvider";
-import { runRequest } from "@/lib/api/networking/main";
-import {
-  SecurityHazard,
-  GetSecurityHazardsApiAction,
-  CreateSecurityHazardApiAction,
-  UpdateSecurityHazardApiAction,
-} from "@/lib/api/admin/security";
+import ErrorMessage from "@/components/errorMessage";
+import useTitle from "@/components/hooks/useTitle";
+import Icon from "@/components/icon";
+import ImagePreviewModal from "@/components/imagePreviewModal";
 import FpButton from "@/components/input/fpButton";
 import FpInput from "@/components/input/fpInput";
 import Upload from "@/components/input/upload";
-import ImagePreviewModal from "@/components/imagePreviewModal";
 import LoadingPanel from "@/components/loadingPanel";
-import ErrorMessage from "@/components/errorMessage";
-import Icon from "@/components/icon";
-import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import {
+  CreateSecurityHazardApiAction,
+  GetSecurityHazardsApiAction,
+  SecurityHazard,
+  UpdateSecurityHazardApiAction,
+} from "@/lib/api/admin/security";
+import { ApiErrorResponse } from "@/lib/api/networking";
+import { runRequest } from "@/lib/api/networking/main";
 import { UserDisplayAction } from "@/lib/api/user";
 import "@/styles/furpanel/admin/security-pages.css";
-import { ApiErrorResponse } from "@/lib/api/networking";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const LIVELLI = ["basso", "medio", "alto", "critico"] as const;
 const LIVELLO_COLOR: Record<string, string> = {

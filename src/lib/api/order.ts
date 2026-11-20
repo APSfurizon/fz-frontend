@@ -1,7 +1,7 @@
 import { AutoInputFilter, AutoInputSearchResult, filterLoaded } from "../components/autoInput";
 import { buildSearchParams } from "../utils";
 import { runRequest } from "./networking/main";
-import { AutoInputUsersManager, toSearchResult, UserSearchAction } from "./user";
+import { AutoInputUsersManager, toSearchResult, UserSearchAction } from "./user/main";
 
 export enum OrderStatus {
   CANCELED = "CANCELED",

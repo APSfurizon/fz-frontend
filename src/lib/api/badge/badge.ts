@@ -1,7 +1,7 @@
 import { FormApiAction, FormDTOBuilder, getData } from "../../components/dataForm";
 import { MediaData } from "../media";
 import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
-import { UserData } from "../user";
+import { UserData } from "../user/main";
 import { FursuitListResponse } from "./types";
 
 export interface BadgeStatusApiResponse extends ApiResponse {
@@ -18,7 +18,7 @@ export class GetBadgeStatusAction extends ApiAction<BadgeStatusApiResponse, ApiE
   urlAction = "badge/";
 }
 
-export interface BadgeUploadResponse extends MediaData, ApiResponse { }
+export interface BadgeUploadResponse extends MediaData, ApiResponse {}
 
 export class UploadBadgeAction extends ApiAction<BadgeUploadResponse, ApiErrorResponse> {
   authenticated = true;
