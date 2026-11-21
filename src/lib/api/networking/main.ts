@@ -61,6 +61,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
       [Endpoint.API]: new URL("/api/backend/", PUBLIC_URL).toString(),
       [Endpoint.BACKEND]: API_BASE_URL,
       [Endpoint.MOBILE]: API_MOBILE_URL ?? "",
+      [Endpoint.CUSTOM]: new URL("/api/", PUBLIC_URL).toString(),
     }[data.action.endpoint];
     endpointUrl += [data.action.urlAction, ...(data.additionalPath ?? [])].join("/");
 
@@ -76,6 +77,7 @@ export function runRequest<U extends ApiResponse | boolean | Response, V extends
     const fetchOptions: RequestInit = {
       method: data.action.method,
       body: data.body ? (data.body instanceof FormData ? data.body : JSON.stringify(data.body)) : undefined,
+      cache: "no-store",
       headers: headers,
       credentials: "include",
       signal: data.signal,

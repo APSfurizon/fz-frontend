@@ -1,5 +1,4 @@
 import { NoticeTheme } from "@/components/noticeBox";
-import { FormDTOBuilder, getData } from "../../components/dataForm";
 import { ApiAction, ApiErrorResponse, ApiResponse, Endpoint, MobileApiAction, RequestType } from "../networking/types";
 
 export const AuthenticationCodes: Record<string, NoticeTheme> = {
@@ -18,20 +17,18 @@ export interface LoginResponse extends ApiResponse {
   accessToken: string;
 }
 
-export class LoginDTOBuilder implements FormDTOBuilder<LoginData> {
-  mapToDTO = (data: FormData) => {
-    return {
-      email: getData(data, "email")?.toString(),
-      password: getData(data, "password")?.toString(),
-    };
-  };
-}
-
-export class LoginFormAction extends ApiAction<LoginResponse, ApiErrorResponse> {
+export class InternalLoginAction extends ApiAction<LoginResponse, ApiErrorResponse> {
   endpoint = Endpoint.BACKEND;
   method = RequestType.POST;
   authenticated = true;
   urlAction = "authentication/login";
+}
+
+export class LoginAction extends ApiAction<LoginResponse, ApiErrorResponse> {
+  endpoint = Endpoint.CUSTOM;
+  method = RequestType.POST;
+  authenticated = true;
+  urlAction = "sessions";
 }
 
 export interface LogoutResponse extends ApiResponse {

@@ -1,6 +1,13 @@
-import { LoginFormAction, LoginResponse, LogoutApiAction } from "@/lib/api/authentication/login";
-import { ApiRequest, runRequest } from "@/lib/api/networking";
-import { SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
+import {
+  AdminSecondaryLoginApiAction,
+  AdminSecondaryLoginResponse,
+  InternalLoginAction,
+  LoginData,
+  LoginResponse,
+  LogoutApiAction,
+} from "@/lib/api/authentication/login";
+import { runRequest } from "@/lib/api/networking";
+import { APP_VERSION, MOBILE_ADMIN_TOKEN_STORAGE_NAME, SESSION_DURATION, TOKEN_STORAGE_NAME } from "@/lib/constants";
 import { NextResponse } from "next/server";
 
 /**
@@ -8,12 +15,28 @@ import { NextResponse } from "next/server";
  * @param req The request data
  */
 export async function POST(req: Request) {
+  const loginData = (await req.json()) as LoginData;
   try {
     const result = await runRequest({
-      action: new LoginFormAction(),
-      body: (await req.json()) as ApiRequest,
+      action: new InternalLoginAction(),
+      body: loginData,
     });
-    return getSuccessResponse(result);
+    let secondaryResult: AdminSecondaryLoginResponse | null = null;
+    try {
+      secondaryResult = await runRequest({
+        action: new AdminSecondaryLoginApiAction(),
+        body: {
+          username: loginData.email?.trim().toLowerCase(),
+          password: encodeURIComponent(loginData.password!),
+          platform: "web",
+          versione: APP_VERSION,
+        },
+      });
+    } catch (e) {
+      console.debug("Mobile login failed", e);
+    }
+
+    return getSuccessResponse(result, secondaryResult);
   } catch (e) {
     return NextResponse.json(e, { status: 400 });
   }
@@ -38,7 +61,7 @@ export async function DELETE(req: Request) {
  * @param result The login api response data
  * @returns The response with the new session cookie
  */
-function getSuccessResponse(result: LoginResponse) {
+function getSuccessResponse(result: LoginResponse, secondaryResult: AdminSecondaryLoginResponse | null) {
   const toReturn = NextResponse.json({});
   const sessionExpiry = new Date(new Date().getTime() + SESSION_DURATION * 24 * 60 * 60 * 1000);
   toReturn.cookies.set(TOKEN_STORAGE_NAME, result.accessToken, {
@@ -47,6 +70,15 @@ function getSuccessResponse(result: LoginResponse) {
     path: "/",
     expires: sessionExpiry,
   });
+
+  if (!!secondaryResult?.accessToken) {
+    toReturn.cookies.set(MOBILE_ADMIN_TOKEN_STORAGE_NAME, secondaryResult.accessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      expires: sessionExpiry,
+    });
+  }
 
   return toReturn;
 }

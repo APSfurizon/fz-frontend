@@ -31,7 +31,12 @@ export default async function ReservationPage() {
     staleTime: 10_000,
   });
   // Badge data
-  const badgeData = await runRequest({ action: new GetBadgeStatusAction(), cookieStore });
+  // eslint-disable-next-line @tanstack/query/exhaustive-deps
+  await queryClient.query({
+    queryKey: ["badge-widget"],
+    queryFn: ({ signal }) => runRequest({ action: new GetBadgeStatusAction(), cookieStore, signal }),
+    staleTime: 10_000,
+  });
 
   return (
     <>
