@@ -6,6 +6,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  Separator,
 } from "@/components/common";
 import { ReservationError } from "@/lib/api/reservation";
 import { cn } from "@/lib/utils";
@@ -171,6 +172,7 @@ export default function ReservationErrors({ errors }: Readonly<{ errors: Reserva
             <AlertDescription>{translateErrorTitleDescription(error)}</AlertDescription>
           </Alert>
         ))}
+        <Separator className="mt-3" />
       </CollapsibleContent>
     </Collapsible>
   );

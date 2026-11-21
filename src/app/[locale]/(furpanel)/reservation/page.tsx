@@ -37,7 +37,7 @@ export default async function ReservationPage() {
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <div className="widget-container mx-auto w-full max-w-7xl p-1 xl:p-0">
-          {reservationData.order ? <ReservationWidget /> : <Countdown data={reservationData} />}
+          {reservationData.hasOrder ? <ReservationWidget /> : <Countdown data={reservationData} />}
         </div>
       </HydrationBoundary>
     </>

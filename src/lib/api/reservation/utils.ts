@@ -42,8 +42,7 @@ export function calcTicketData(order: OrderData | null): BookingTicketData | nul
   };
 }
 
-export function calculateReservationData(rawData?: BookingOrderResponse): BookingOrderUiData | null {
-  if (!rawData) return null;
+export function calculateReservationData(rawData: BookingOrderResponse): BookingOrderUiData {
   const hasOrder = !!rawData.order && ["PENDING", "PAID", "CANCELED"].includes(rawData.order.orderStatus);
   return {
     ...rawData,
