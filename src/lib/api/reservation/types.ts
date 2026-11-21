@@ -59,7 +59,7 @@ export interface BookingOrderResponse extends ApiResponse {
   shouldUpdateInfo: boolean;
   canExchange: boolean;
   exchangeSupported: boolean;
-  order: OrderData;
+  order: OrderData | null;
   errors: ReservationError[];
 }
 
@@ -73,7 +73,7 @@ export interface BookingTicketData {
   isDaily: boolean | undefined;
 }
 
-export interface BookingOrderUiData extends BookingTicketData {
+export interface BookingOrderUiData extends Partial<BookingTicketData>, BookingOrderResponse {
   hasOrder: boolean;
   bookingStartDate: Date;
   editBookEndDate: Date;

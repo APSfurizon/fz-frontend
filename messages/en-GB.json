@@ -266,7 +266,7 @@
       "title": "Reservation",
       "your_booking": "Your reservation",
       "countdown_days": "{days, plural, =1 {# day} other {# days}}",
-      "countdown_clock": "{hours, plural, =1 {# <b>hour</b>} other {# <b>hours</b>}}, {minutes, plural, =1 {# <b>minute</b>} other {# <b>minutes</b>}}, {seconds, plural, =1 {# <b>second</b>} other {# <b>seconds</b>}}",
+      "countdown_clock": "{hours, plural, =1 {<mono>#</mono> <b>hour</b>} other {<mono>#</mono> <b>hours</b>}} {minutes, plural, =1 {<mono>#</mono> <b>minute</b>} other {<mono>#</mono> <b>minutes</b>}} {seconds, plural, =1 {<mono>#</mono> <b>second</b>} other {<mono>#</mono> <b>seconds</b>}}",
       "book_now": "Book now",
       "review_info_first": "Review your personal information",
       "edit_booking": "Edit reservation",
@@ -274,7 +274,7 @@
       "messages": {
         "countdown": {
           "title": "Countdown",
-          "description": "Ticket sales will begin on {openingDate}"
+          "description": "Ticket sales will begin on {openingDate}."
         },
         "editing_locked_warning": {
           "title": "Editing lock memo",

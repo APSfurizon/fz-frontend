@@ -266,7 +266,7 @@
       "title": "Prenotazione",
       "your_booking": "La tua prenotazione",
       "countdown_days": "{days, plural, =1 {# giorno} other {# giorni}}",
-      "countdown_clock": "{hours, plural, =1 {# <b>ora</b>} other {# <b>ore</b>}}, {minutes, plural, =1 {# <b>minuto</b>} other {# <b>minuti</b>}}, {seconds, plural, =1 {# <b>secondo</b>} other {# <b>secondi</b>}}",
+      "countdown_clock": "{hours, plural, =1 {<mono>#</mono> <b>ora</b>} other {<mono>#</mono> <b>ore</b>}} {minutes, plural, =1 {<mono>#</mono> <b>minuto</b>} other {<mono>#</mono> <b>minuti</b>}} {seconds, plural, =1 {<mono>#</mono> <b>secondo</b>} other {<mono>#</mono> <b>secondi</b>}}",
       "book_now": "Prenota",
       "review_info_first": "Rivedi i tuoi dati personali",
       "edit_booking": "Modifica prenotazione",
@@ -274,7 +274,7 @@
       "messages": {
         "countdown": {
           "title": "Conto alla rovescia",
-          "description": "La vendita dei biglietti inizierà dal {openingDate}"
+          "description": "La vendita dei biglietti inizierà dal {openingDate}."
         },
         "editing_locked_warning": {
           "title": "Avviso blocco modifiche",

@@ -23,7 +23,8 @@ export function mapOrderStatusToStatusBox(s: OrderStatusType): StatusBoxStyle {
   }
 }
 
-export function calcTicketData(order: OrderData): BookingTicketData {
+export function calcTicketData(order: OrderData | null): BookingTicketData | null {
+  if (!order) return null;
   /**Order text and daily days*/
   let ticketType: TicketType;
   let dailyDays: Date[] | undefined;
@@ -42,16 +43,17 @@ export function calcTicketData(order: OrderData): BookingTicketData {
 }
 
 export function calculateReservationData(rawData?: BookingOrderResponse): BookingOrderUiData | null {
-  const hasOrder = rawData && rawData.order && ["PENDING", "PAID", "CANCELED"].includes(rawData.order.orderStatus);
-  if (!hasOrder) return null;
+  if (!rawData) return null;
+  const hasOrder = !!rawData.order && ["PENDING", "PAID", "CANCELED"].includes(rawData.order.orderStatus);
   return {
-    ...calcTicketData(rawData.order),
+    ...rawData,
+    ...(calcTicketData(rawData.order) ?? {}),
     hasOrder: hasOrder,
     bookingStartDate: new Date(rawData.bookingStartTime ?? 0),
     editBookEndDate: new Date(rawData.editBookEndTime ?? 0),
     showCountdown: rawData.shouldDisplayCountdown ?? true,
     shouldUpdateInfo: rawData.shouldUpdateInfo,
-    shouldRetry: ["PENDING", "CANCELED"].includes(rawData.order.orderStatus),
+    shouldRetry: !!rawData.order && ["PENDING", "CANCELED"].includes(rawData.order.orderStatus),
   };
 }
 

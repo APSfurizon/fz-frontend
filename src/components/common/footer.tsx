@@ -11,7 +11,7 @@ export default async function Footer() {
   const { user } = await getUser();
   const allCredits = await getCredits();
   return (
-    <footer className={"footer px-15 py-12"}>
+    <footer className={"footer mt-5 px-15 py-12"}>
       <div className="footer__container mx-auto max-w-7xl">
         <picture>
           <source srcSet="/images/logo_dark.svg" media="(prefers-color-scheme: dark)" />
@@ -19,8 +19,8 @@ export default async function Footer() {
             className="footer__logo -translate-x-9"
             src="/images/logo_light.svg"
             alt={t("common.header.alt_logo")}
-            width={256}
-            height={60}
+            width={200}
+            height={44}
             loading="eager"
           />
         </picture>
@@ -116,7 +116,7 @@ export default async function Footer() {
             {allCredits && (
               <div className="title mt-4">
                 <p className="bold text-xl">{t("common.footer.developers.title")}</p>
-                <p className="flex gap-2 text-base wrap-normal">
+                <p className="flex w-full flex-wrap gap-2 text-base">
                   {allCredits.credits.map((credit, index) => (
                     <a key={index} className={cn(credit.link ? "color-link" : "")} href={credit.link ?? undefined}>
                       {credit.name}

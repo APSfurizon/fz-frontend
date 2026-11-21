@@ -1,21 +1,21 @@
 "use client";
+import { Alert, AlertDescription, AlertTitle } from "@/components/common";
 import { useModalUpdate } from "@/components/context/modalProvider";
 import ErrorMessage from "@/components/errorMessage";
 import Icon from "@/components/icon";
 import FpButton from "@/components/input/fpButton";
-import LoadingPanel from "@/components/loadingPanel";
-import NoticeBox, { NoticeTheme } from "@/components/noticeBox";
 import { ApiErrorResponse } from "@/lib/api/networking";
 import { runRequest } from "@/lib/api/networking/main";
 import { BookingOrderUiData, ShopLinkApiAction } from "@/lib/api/reservation";
 import { EVENT_BANNER, EVENT_LOGO } from "@/lib/constants";
 import { getCountdown } from "@/lib/utils";
+import { Clock } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 // TODO: Fullscreen button on the countdown
-export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData }>) {
+export default function Countdown({ data }: Readonly<{ data: BookingOrderUiData }>) {
   const t = useTranslations();
   const formatter = useFormatter();
   const router = useRouter();
@@ -38,23 +38,27 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
       .finally(() => setActionLoading(false));
   };
 
-  return data ? (
+  return (
     <>
       {!isOpen && !data.hasOrder && (
-        <NoticeBox title={t("furpanel.booking.messages.countdown.title")} theme={NoticeTheme.FAQ}>
-          {t("furpanel.booking.messages.countdown.description", {
-            openingDate: formatter.dateTime(data.bookingStartDate),
-          })}
-        </NoticeBox>
+        <Alert title={t("furpanel.booking.messages.countdown.title")}>
+          <Clock />
+          <AlertTitle>{t("furpanel.booking.messages.countdown.title")}</AlertTitle>
+          <AlertDescription>
+            {t("furpanel.booking.messages.countdown.description", {
+              openingDate: formatter.dateTime(data.bookingStartDate),
+            })}
+          </AlertDescription>
+        </Alert>
       )}
       <div
-        className={`countdown-container rounded-s ${data.hasOrder ? "minimized" : ""}`}
+        className="countdown-container mt-3 rounded-md"
         style={{ backgroundImage: `url(${EVENT_BANNER})`, backgroundSize: "cover" }}
       >
         <img className="event-logo" alt={t("furpanel.booking.event_logo")} src={EVENT_LOGO} />
         {/* Countdown view */}
-        {!isOpen && data?.showCountdown && !data.hasOrder && countdown ? (
-          <p className="countdown title bold title large center rounded-s">
+        {!isOpen && data.showCountdown && !data.hasOrder && countdown ? (
+          <p className="countdown title bold title large center">
             {countdown[0] > 0
               ? t.rich("furpanel.booking.countdown_days", { days: countdown[0] })
               : t.rich("furpanel.booking.countdown_clock", {
@@ -62,6 +66,7 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
                   minutes: countdown[2],
                   seconds: countdown[3],
                   b: (chunks) => <b className="small">{chunks}</b>,
+                  mono: (chunks) => <span className="font-mono">{chunks}</span>,
                 })}
           </p>
         ) : (
@@ -91,7 +96,5 @@ export default function Countdown({ data }: Readonly<{ data?: BookingOrderUiData
         )}
       </div>
     </>
-  ) : (
-    <LoadingPanel />
   );
 }

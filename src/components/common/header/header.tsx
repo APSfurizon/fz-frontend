@@ -101,8 +101,8 @@ export default function Header(props: Readonly<HeaderProps>) {
           className="header-logo"
           src="/images/logo_light.svg"
           alt={t("header.alt_logo")}
-          width={130}
-          height={30}
+          width={150}
+          height={33}
           loading="eager"
         />
       </div>

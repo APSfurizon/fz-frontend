@@ -32,8 +32,8 @@ export default function HeaderDrawer(props: Readonly<{ userData?: UserDisplayRes
               className="header-logo"
               src="/images/logo_light.svg"
               alt={t("header.alt_logo")}
-              width={175}
-              height={40}
+              width={150}
+              height={33}
               loading="eager"
             />
           </picture>
@@ -56,7 +56,7 @@ export default function HeaderDrawer(props: Readonly<{ userData?: UserDisplayRes
                   <Image
                     className="app-badge"
                     src={appBadgeSrc}
-                    width={160}
+                    width={135}
                     height={40}
                     alt={t("header.alt_app_badge")}
                   ></Image>

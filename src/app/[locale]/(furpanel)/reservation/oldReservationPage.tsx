@@ -17,7 +17,7 @@ import "@/styles/furpanel/booking.css";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import OrderItem from "./components/orderItem";
-import Countdown from "./countdown";
+import Countdown from "./widgets/countdown/countdown";
 import QrCodeModal from "./widgets/reservation/components/qrCodeModal";
 
 export default async function ReservationPage() {

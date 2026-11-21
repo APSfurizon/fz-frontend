@@ -72,7 +72,8 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
 
   const query = useQuery({
     queryKey: ["reservation-widget"],
-    queryFn: ({ signal }) => runRequest({ action: new BookingOrderApiAction(), signal }),
+    queryFn: ({ signal }) =>
+      runRequest({ action: new BookingOrderApiAction(), signal }).then((result) => calculateReservationData(result)),
     staleTime: 10_000,
   });
 
@@ -104,12 +105,11 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
   /** First render time */
   const [now] = useState(new Date());
 
-  const pageData = calculateReservationData(query.data);
   /** Whether the current date is past the reservation editing threshold date */
-  const orderEditingLocked = !pageData || pageData.editBookEndDate.getTime() - now.getTime() < 0;
+  const orderEditingLocked = !query.data || query.data.editBookEndDate.getTime() - now.getTime() < 0;
 
   /**The formatted list of daily days the ticket includes */
-  const formattedDailyDays = pageData?.dailyDays
+  const formattedDailyDays = query.data?.dailyDays
     ?.map((dt) => formatter.dateTime(dt, { day: "2-digit", month: "short" }))
     .join(", ");
 
@@ -254,7 +254,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
               {!EVENT_LOGO && <h2>{EVENT_NAME}</h2>}
             </CardTitle>
             <CardDescription>
-              {loading ? (
+              {loading || !query.data || !query.data.order ? (
                 <>
                   <Skeleton className="h-6.5 w-30" />
                   <Skeleton className="h-5 w-20" />
@@ -263,7 +263,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                 <>
                   <div className="flex items-center gap-4">
                     <p className="text-secondary drop-shadow-l text-l xs:text-xl font-medium sm:text-2xl">
-                      {translateTicket(pageData!.ticketType)}
+                      {translateTicket(query.data?.ticketType ?? "NONE")}
                     </p>
                     <Badge variant={mapOrderStatusToBadgeVariant(query.data.order.orderStatus)}>
                       {translateOrderStatus(query.data.order.orderStatus)}
@@ -279,7 +279,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
               ) : (
                 <ButtonGroup orientation="horizontal" className="gap-1">
                   {/** Retry payment button */}
-                  {pageData?.shouldRetry && (
+                  {query.data?.shouldRetry && (
                     <Button
                       title={t("furpanel.booking.retry_payment")}
                       disabled={getRetryPaymentLinkMutation.isPending}
@@ -300,16 +300,16 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                       <Edit />
                     </Button>
                   )}
-                  <QrCodeModal secret={query.data.order.checkinSecret} />
+                  {query.data?.order && <QrCodeModal secret={query.data.order.checkinSecret} />}
                 </ButtonGroup>
               )}
             </CardAction>
           </CardHeader>
           <CardContent className="mt-6">
             {/** Reservation errors */}
-            {query.data?.errors && <ReservationErrors errors={query.data?.errors} />}
+            {query.data?.errors?.length && <ReservationErrors errors={query.data?.errors} />}
             {/** Edit lock notice */}
-            {pageData?.editBookEndDate && (
+            {query.data?.editBookEndDate && (
               <Alert>
                 <AlertCircleIcon />
                 <AlertTitle>
@@ -320,10 +320,10 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                 <AlertDescription>
                   {orderEditingLocked
                     ? t("furpanel.booking.messages.editing_locked.description", {
-                        lockDate: formatter.dateTime(pageData.editBookEndDate),
+                        lockDate: formatter.dateTime(query.data.editBookEndDate),
                       })
                     : t("furpanel.booking.messages.editing_locked_warning.description", {
-                        lockDate: formatter.dateTime(pageData.editBookEndDate),
+                        lockDate: formatter.dateTime(query.data.editBookEndDate),
                       })}
                 </AlertDescription>
               </Alert>
@@ -349,7 +349,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
             <div className="reservation-card__overview flex flex-col gap-3">
               <h2 className="font-heading text-l mb-3 font-bold">{t("furpanel.booking.information.title")}</h2>
               <div className="flex flex-col gap-3 sm:flex-row">
-                {query.data?.order.checkinDate && (
+                {query.data?.order?.checkinDate && (
                   <Item variant="outline">
                     <ItemMedia>
                       <ConciergeBell />
@@ -364,7 +364,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                     </ItemContent>
                   </Item>
                 )}
-                {query.data?.order.checkoutDate && (
+                {query.data?.order?.checkoutDate && (
                   <Item variant="outline">
                     <ItemMedia>
                       <HouseArrowRight />
@@ -405,7 +405,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                 {t("furpanel.booking.items.included_with_your_ticket")}
               </h2>
               {/** Daily days */}
-              {pageData?.isDaily && (
+              {query.data?.isDaily && (
                 <Item variant="outline">
                   <ItemMedia>
                     <TicketSlash />
@@ -427,7 +427,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                     <ItemTitle>
                       <span>
                         {t.rich("furpanel.booking.items.sponsorship_gadgets.title", {
-                          sponsortype: () => translateSponsorship(query.data!.order.sponsorship),
+                          sponsortype: () => translateSponsorship(query.data!.order!.sponsorship),
                         })}
                       </span>
                     </ItemTitle>
@@ -452,7 +452,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                   </ItemMedia>
                   <ItemContent>
                     <ItemTitle>{t("furpanel.booking.items.extra_days")}</ItemTitle>
-                    <ItemDescription>{translateExtraDays(query.data!.order.extraDays)}</ItemDescription>
+                    <ItemDescription>{translateExtraDays(query.data!.order!.extraDays)}</ItemDescription>
                   </ItemContent>
                 </Item>
               )}
@@ -463,12 +463,12 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                   </ItemMedia>
                   <ItemContent>
                     <ItemTitle>
-                      {translateNullable(query.data!.order.room.roomTypeNames, locale) ??
+                      {translateNullable(query.data!.order!.room.roomTypeNames, locale) ??
                         t("furpanel.booking.items.room")}
                     </ItemTitle>
                     <ItemDescription>
                       {t("furpanel.booking.items.room_capacity", {
-                        capacity: query.data!.order.room.roomCapacity,
+                        capacity: query.data!.order!.room.roomCapacity,
                       })}
                     </ItemDescription>
                   </ItemContent>
@@ -480,7 +480,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                     <Utensils />
                   </ItemMedia>
                   <ItemContent>
-                    <ItemTitle>{translateBoard(query.data!.order.board)}</ItemTitle>
+                    <ItemTitle>{translateBoard(query.data!.order!.board)}</ItemTitle>
                   </ItemContent>
                 </Item>
               )}
