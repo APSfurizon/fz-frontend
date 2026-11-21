@@ -1,12 +1,9 @@
+import { getTitleMetadata } from "@/lib/api/user/server";
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import React from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations();
-  return {
-    title: t("authentication.login.title") + " - Furpanel",
-  };
+  return await getTitleMetadata((t) => t("authentication.login.title"));
 }
 
 export default function LoginLayout({ children }: Readonly<{ children: React.ReactNode }>) {

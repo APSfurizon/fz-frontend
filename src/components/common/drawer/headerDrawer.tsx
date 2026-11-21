@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UserDisplayResponse } from "@/lib/api/user";
 import { APP_LINKS, SHOW_APP_BANNER } from "@/lib/constants";
+import { Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +23,7 @@ export default function HeaderDrawer(props: Readonly<{ userData?: UserDisplayRes
   return (
     <Drawer swipeDirection="right">
       <DrawerTrigger className="hamburger-menu" render={<Button variant="secondary" title={t("menu")} />}>
-        <Icon icon="MENU" />
+        <Menu />
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="flex flex-row">
@@ -39,7 +40,7 @@ export default function HeaderDrawer(props: Readonly<{ userData?: UserDisplayRes
           </picture>
           <div className="flex-auto"></div>
           <DrawerClose render={<Button variant="ghost" title={t("close")} />}>
-            <Icon icon="CLOSE" />
+            <X />
           </DrawerClose>
         </DrawerHeader>
         <div className="font-heading mt-5 pl-4">

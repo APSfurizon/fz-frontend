@@ -1311,7 +1311,8 @@
           "title": "Codice non trovato",
           "description": "Codice non trovato o scaduto"
         }
-      }
+      },
+      "success_toast_title": "Login effettuato"
     },
     "register": {
       "errors": {

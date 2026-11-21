@@ -96,7 +96,7 @@ export default function Header(props: Readonly<HeaderProps>) {
 
   return (
     <header ref={headerRef} className={cn("header", collapsed ? "collapsed" : "")}>
-      <div className="logo-container center sm:hidden lg:block">
+      <div className="logo-container center">
         <Image
           className="header-logo"
           src="/images/logo_light.svg"

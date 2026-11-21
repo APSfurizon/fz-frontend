@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import "server-only";
@@ -24,3 +26,12 @@ export const getUser: () => Promise<GetUserResult> = cache(async () => {
     error,
   };
 });
+
+export async function getTitleMetadata(
+  translationGetter: (t: Awaited<ReturnType<typeof getTranslations>>) => string
+): Promise<Metadata> {
+  const t = await getTranslations();
+  return {
+    title: translationGetter(t) + " - Furpanel",
+  };
+}

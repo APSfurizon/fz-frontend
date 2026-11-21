@@ -1312,7 +1312,8 @@
           "title": "Code not found",
           "description": "Code is not valid or expired."
         }
-      }
+      },
+      "success_toast_title": "Welcome"
     },
     "register": {
       "errors": {

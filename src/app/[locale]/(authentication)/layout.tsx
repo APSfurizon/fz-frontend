@@ -7,7 +7,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
   const { isOpen, icon, title, modalChildren, hideModal } = useModalUpdate();
   return (
     <>
-      <div className="mx-auto w-full max-w-80">{children}</div>
+      <div className="bg-background mx-auto w-full max-w-90 rounded-md p-6 drop-shadow-lg">{children}</div>
       <Modal icon={icon} title={title} open={isOpen} onClose={hideModal} zIndex={600}>
         {modalChildren}
       </Modal>

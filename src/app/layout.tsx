@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import "@/styles/global.css";
 import "flag-icons/css/flag-icons.min.css";
@@ -31,6 +32,7 @@ export default async function LocalizedLayout({ children }: Readonly<{ children:
       <body className="vertical-list">
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
+          <Toaster />
         </NextIntlClientProvider>
         <div id="portal-root"></div>
       </body>

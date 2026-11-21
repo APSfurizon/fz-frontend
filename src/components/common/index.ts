@@ -18,6 +18,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/colla
 import { ContextMenu } from "../ui/context-menu";
 import { Kbd } from "../ui/kbd";
 import { Separator } from "../ui/separator";
+import { Toast, toast } from "../ui/toast";
 import { Tooltip } from "../ui/tooltip";
 
 export {
@@ -52,5 +53,7 @@ export {
   Kbd,
   Separator,
   Skeleton,
+  Toast,
+  toast,
   Tooltip,
 };

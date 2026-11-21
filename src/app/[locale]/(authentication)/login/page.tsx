@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "@/components/common";
 import { useUser } from "@/components/context/userProvider";
 import { useAppForm } from "@/components/form";
 import Icon from "@/components/icon";
@@ -27,6 +28,12 @@ export default function Login() {
         body: data,
       }),
     onSuccess() {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      toast.add({
+        id: "welcome",
+        type: "success",
+        title: t("authentication.login.success_toast_title"),
+      });
       setUpdateUser(true);
       router.push("/reservation");
     },
@@ -52,7 +59,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="horizontal-list gap-4mm justify-content-center">
+      <div className="horizontal-list gap-4mm justify-content-center mb-6">
         <span className="title-pair">
           <Icon icon="DESIGN_SERVICES" />
           <span className="titular bold highlight">furpanel</span>
@@ -75,6 +82,7 @@ export default function Login() {
       )}
       <form
         id="login-form"
+        className="mb-6"
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -82,11 +90,13 @@ export default function Login() {
           loginForm.handleSubmit();
         }}
       >
-        <FieldGroup>
+        <FieldGroup className="mb-6">
           <loginForm.AppField
             name="email"
             children={(field) => (
               <field.TextField
+                type="email"
+                autoComplete="email"
                 label={t("authentication.login.label_email")}
                 placeholder={t("authentication.login.placeholder_email")}
               />
@@ -99,25 +109,27 @@ export default function Login() {
                 type="password"
                 label={t("authentication.login.label_password")}
                 placeholder={t("authentication.login.placeholder_password")}
+                autoComplete="current-password"
               />
             )}
           />
         </FieldGroup>
-        <loginForm.AppForm>
-          <loginForm.Button type="submit" form="login-form">
-            <Icon icon="KEY" data-icon="inline-end" />
-            Login
-          </loginForm.Button>
-        </loginForm.AppForm>
+        <div className="flex items-center justify-between">
+          <Link
+            style={{ width: "100%" }}
+            href={`/recover?${params.toString()}`}
+            className="suggestion title small color-subtitle underlined"
+          >
+            {t("authentication.login.recover")}
+          </Link>
+          <loginForm.AppForm>
+            <loginForm.Button type="submit" form="login-form" disabled={loginMutation.isPending}>
+              <Icon icon="KEY" data-icon="inline-end" />
+              Login
+            </loginForm.Button>
+          </loginForm.AppForm>
+        </div>
       </form>
-
-      <Link
-        style={{ width: "100%" }}
-        href={`/recover?${params.toString()}`}
-        className="suggestion title small center color-subtitle underlined"
-      >
-        {t("authentication.login.recover")}
-      </Link>
       <Link href={`/register?${params.toString()}`} className="suggestion title small center color-subtitle underlined">
         {t("authentication.login.create_an_account")}
       </Link>
