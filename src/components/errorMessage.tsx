@@ -23,14 +23,12 @@ export default function ErrorMessage({ error }: Readonly<{ error?: ApiErrorRespo
   const requestId = error?.requestId;
 
   return (
-    <div className="flex flex-col gap-2" aria-live="assertive">
-      <ul aria-relevant="additions text">
-        {errors.map((err, index) => (
-          <li key={index} className="text-sm">
-            {err.message} <kbd>{err.code ? `(${err.code})` : ""}</kbd>
-          </li>
-        ))}
-      </ul>
+    <span className="flex flex-col gap-2" aria-live="assertive">
+      {errors.map((err, index) => (
+        <span key={index} className="text-sm">
+          {err.message} <kbd>{err.code ? `(${err.code})` : ""}</kbd>
+        </span>
+      ))}
       {!isEmpty(requestId) && (
         <>
           <span className="text-xs">
@@ -45,6 +43,6 @@ export default function ErrorMessage({ error }: Readonly<{ error?: ApiErrorRespo
           </span>
         </>
       )}
-    </div>
+    </span>
   );
 }
