@@ -304,12 +304,7 @@
         "membership_card": "Membership card",
         "room": "Hotel room",
         "room_capacity": "Capacity: {capacity, plural, =1 {single} other {# guests}}",
-        "daily_ticket": "Daily ticket",
         "daily_days": "Days: {days}",
-        "none_ticket": "Regular ticket",
-        "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
-        "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
-        "ultra_sponsor_ticket": "<ultrasponsor>Explorer</ultrasponsor> ticket",
         "extra_days": "Extra days",
         "extra_days_BOTH": "Early & Late",
         "extra_days_EARLY": "Early",
@@ -320,6 +315,20 @@
         "sponsorship_gadgets": {
           "title": "<sponsortype></sponsortype>'s gadgets",
           "description": "Included with your sponsorship. Retrieve them during check in."
+        },
+        "ticket": {
+          "formatted": {
+            "sponsor_ticket": "<sponsor>Sponsor</sponsor> ticket",
+            "super_sponsor_ticket": "<supersponsor>Super sponsor</supersponsor> ticket",
+            "ultra_sponsor_ticket": "<ultrasponsor>Explorer</ultrasponsor> ticket"
+          },
+          "unformatted": {
+            "daily_ticket": "Daily ticket",
+            "none_ticket": "Regular ticket",
+            "sponsor_ticket": "Sponsor ticket",
+            "super_sponsor_ticket": "Super sponsor ticket",
+            "ultra_sponsor_ticket": "Explorer ticket"
+          }
         }
       },
       "input": {

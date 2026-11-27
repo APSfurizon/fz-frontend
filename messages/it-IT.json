@@ -304,12 +304,7 @@
         "membership_card": "Tessera associativa",
         "room": "Stanza d'albergo",
         "room_capacity": "Capacità: {capacity, plural, =1 {singola} other {# ospiti}}",
-        "daily_ticket": "Biglietto giornaliero",
         "daily_days": "Giorni: {days}",
-        "none_ticket": "Biglietto",
-        "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
-        "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
-        "ultra_sponsor_ticket": "Biglietto <ultrasponsor>Explorer</ultrasponsor>",
         "extra_days": "Giorni extra",
         "extra_days_BOTH": "Early & Late",
         "extra_days_EARLY": "Early",
@@ -320,6 +315,20 @@
         "sponsorship_gadgets": {
           "title": "Gadget <sponsortype></sponsortype>",
           "description": "Inclusi con il livello di sponsor. Ritirali durante il check-in."
+        },
+        "ticket": {
+          "formatted": {
+            "sponsor_ticket": "Biglietto <sponsor>sponsor</sponsor>",
+            "super_sponsor_ticket": "Biglietto <supersponsor>super sponsor</supersponsor>",
+            "ultra_sponsor_ticket": "Biglietto <ultrasponsor>Explorer</ultrasponsor>"
+          },
+          "unformatted": {
+            "daily_ticket": "Biglietto giornaliero",
+            "none_ticket": "Biglietto",
+            "sponsor_ticket": "Biglietto sponsor",
+            "super_sponsor_ticket": "Biglietto super sponsor",
+            "ultra_sponsor_ticket": "Biglietto Explorer"
+          }
         }
       },
       "input": {

@@ -1,6 +1,6 @@
-import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "../networking/types";
-import { ShopLinkResponse } from "../reservation";
-import { RoomData } from "../room";
+import { ApiAction, ApiErrorResponse, ApiResponse, RequestType } from "@/lib/api/networking";
+import { ShopLinkResponse } from "@/lib/api/reservation";
+import { RoomData } from "@/lib/api/room";
 
 export interface PretixItemQuota {
   available: boolean;

@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { JSX } from "react/jsx-runtime";
 import { UrlObject } from "url";
+import DrawerLanguageSelector from "./drawerLanguageSelector";
 
 type DrawerLinkProps = {
   icon?: JSX.Element;
@@ -89,6 +90,7 @@ export default function DrawerLinks(props: Readonly<{ userData?: UserDisplayResp
             </AccordionContent>
           </AccordionItem>
         )}
+        <DrawerLanguageSelector />
       </Accordion>
     </>
   );

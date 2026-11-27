@@ -26,12 +26,14 @@ import {
   Board,
   BookingOrderApiAction,
   calculateReservationData,
-  ExtraDaysType,
+  mapOrderStatusToBadgeVariant,
   OrderEditLinkApiAction,
   OrderRetryLinkApiAction,
-  OrderStatusType,
-  SponsorshipType,
   TicketType,
+  translateBoard,
+  translateExtraDays,
+  translateOrderStatus,
+  translateSponsorship,
 } from "@/lib/api/reservation";
 import { EVENT_BANNER, EVENT_LOGO, EVENT_MAIN_LOCATION_NAME, EVENT_NAME, GROUP_CHAT_URL } from "@/lib/constants";
 import { translateNullable } from "@/lib/translations";
@@ -117,19 +119,19 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
   const translateTicket = (type: TicketType) => {
     switch (type) {
       case "DAILY":
-        return t("furpanel.booking.items.daily_ticket");
+        return t("furpanel.booking.items.ticket.unformatted.daily_ticket");
       case "NONE":
-        return t("furpanel.booking.items.none_ticket");
+        return t("furpanel.booking.items.ticket.unformatted.none_ticket");
       case "SPONSOR":
-        return t.rich("furpanel.booking.items.sponsor_ticket", {
+        return t.rich("furpanel.booking.items.ticket.formatted.sponsor_ticket", {
           sponsor: (chunks) => <b className="sponsor-highlight">{chunks}</b>,
         });
       case "SUPER_SPONSOR":
-        return t.rich("furpanel.booking.items.super_sponsor_ticket", {
+        return t.rich("furpanel.booking.items.ticket.formatted.super_sponsor_ticket", {
           supersponsor: (chunks) => <b className="super-sponsor-highlight">{chunks}</b>,
         });
       case "ULTRA_SPONSOR":
-        return t.rich("furpanel.booking.items.ultra_sponsor_ticket", {
+        return t.rich("furpanel.booking.items.ticket.formatted.ultra_sponsor_ticket", {
           ultrasponsor: (chunks) => <b className="ultra-sponsor-highlight">{chunks}</b>,
         });
       default:
@@ -138,86 +140,14 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
     }
   };
 
-  /** Mapping order status types */
-  const translateOrderStatus = (type: OrderStatusType) => {
-    switch (type) {
-      case "CANCELED":
-        return t("common.order_status.CANCELED");
-      case "EXPIRED":
-        return t("common.order_status.EXPIRED");
-      case "PAID":
-        return t("common.order_status.PAID");
-      case "PENDING":
-        return t("common.order_status.PENDING");
-      default:
-        console.warn("No translation for order status type", type);
-        return type;
-    }
-  };
-
-  const mapOrderStatusToBadgeVariant = (type: OrderStatusType) => {
-    switch (type) {
-      case "CANCELED":
-      case "EXPIRED":
-        return "destructive";
-      case "PAID":
-        return "default";
-      case "PENDING":
-        return "outline";
-      default:
-        console.warn("No badge variant mapping for order status type", type);
-        return "default";
-    }
-  };
-
-  const translateSponsorship = (type: SponsorshipType) => {
-    switch (type) {
-      case "NONE":
-        return <></>;
-      case "SPONSOR":
-        return <b className="sponsor-highlight">{t("common.sponsorships.sponsor")}</b>;
-      case "SUPER_SPONSOR":
-        return <b className="super-sponsor-highlight">{t("common.sponsorships.super_sponsor")}</b>;
-      case "ULTRA_SPONSOR":
-        return <b className="ultra-sponsor-highlight">{t("common.sponsorships.ultra_sponsor")}</b>;
-      default:
-        console.warn("No translation for sponsorship type", type);
-        return type;
-    }
-  };
-
-  const translateExtraDays = (type: ExtraDaysType) => {
-    switch (type) {
-      case "NONE":
-        return "";
-      case "EARLY":
-        return t("furpanel.booking.items.extra_days_EARLY");
-      case "LATE":
-        return t("furpanel.booking.items.extra_days_LATE");
-      case "BOTH":
-        return t("furpanel.booking.items.extra_days_BOTH");
-      default:
-        console.warn("No translation for extra days type", type);
-        return type;
-    }
-  };
-
-  const translateBoard = (type: Board) => {
-    switch (type) {
-      case Board.NONE:
-        return "";
-      case Board.HALF:
-        return t("furpanel.booking.items.board_HALF");
-      case Board.FULL:
-        return t("furpanel.booking.items.board_FULL");
-      default:
-        console.warn("No translation for board type", type);
-        return type;
-    }
-  };
-
   /** The venue's location on google maps */
-  const geoLink = `https://www.google.com/maps/search/?api=1&query=${EVENT_MAIN_LOCATION_NAME},${query.data?.geoLatitude},${query.data?.geoLongitude}`;
+  const geoLink = new URL("/maps/search/", "https://www.google.com");
+  geoLink.searchParams.append("api", "1");
+  geoLink.searchParams.append(
+    "query",
+    `${EVENT_MAIN_LOCATION_NAME},${query.data?.geoLatitude},${query.data?.geoLongitude}`
+  );
+
   const hasGeoData = query.data?.geoLatitude && query.data?.geoLongitude;
 
   const hasExtraDays = query.data?.order && query.data.order.extraDays !== "NONE";
@@ -227,6 +157,8 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
   const hasBoard = query.data?.order && query.data.order.board && query.data.order.board !== Board.NONE;
 
   const hasSponsor = query.data?.order && query.data.order.sponsorship !== "NONE";
+
+  const hasErrors = !!query.data?.errors?.length;
 
   const loading = !query?.data?.order || query.isPending || query.isError;
 
@@ -266,7 +198,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                       {translateTicket(query.data?.ticketType ?? "NONE")}
                     </p>
                     <Badge variant={mapOrderStatusToBadgeVariant(query.data.order.orderStatus)}>
-                      {translateOrderStatus(query.data.order.orderStatus)}
+                      {translateOrderStatus(t, query.data.order.orderStatus)}
                     </Badge>
                   </div>
                   <p className="text-secondary drop-shadow-l font-mono">#{query.data.order.code}</p>
@@ -307,7 +239,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
           </CardHeader>
           <CardContent className="mt-6">
             {/** Reservation errors */}
-            {query.data?.errors?.length && <ReservationErrors errors={query.data?.errors} />}
+            {hasErrors && <ReservationErrors errors={query.data!.errors} />}
             {/** Edit lock notice */}
             {query.data?.editBookEndDate && (
               <Alert>
@@ -427,7 +359,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                     <ItemTitle>
                       <span>
                         {t.rich("furpanel.booking.items.sponsorship_gadgets.title", {
-                          sponsortype: () => translateSponsorship(query.data!.order!.sponsorship),
+                          sponsortype: () => translateSponsorship(t, query.data!.order!.sponsorship),
                         })}
                       </span>
                     </ItemTitle>
@@ -452,7 +384,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                   </ItemMedia>
                   <ItemContent>
                     <ItemTitle>{t("furpanel.booking.items.extra_days")}</ItemTitle>
-                    <ItemDescription>{translateExtraDays(query.data!.order!.extraDays)}</ItemDescription>
+                    <ItemDescription>{translateExtraDays(t, query.data!.order!.extraDays)}</ItemDescription>
                   </ItemContent>
                 </Item>
               )}
@@ -480,7 +412,7 @@ export default function ReservationWidget({}: Readonly<ReservationWidgetProps>) 
                     <Utensils />
                   </ItemMedia>
                   <ItemContent>
-                    <ItemTitle>{translateBoard(query.data!.order!.board)}</ItemTitle>
+                    <ItemTitle>{translateBoard(t, query.data!.order!.board)}</ItemTitle>
                   </ItemContent>
                 </Item>
               )}

@@ -95,7 +95,7 @@ export default function Header(props: Readonly<HeaderProps>) {
   }, [newScroll, collapsed]);
 
   return (
-    <header ref={headerRef} className={cn("header", collapsed ? "collapsed" : "")}>
+    <header ref={headerRef} className={cn("header z-10", collapsed ? "collapsed" : "")}>
       <div className="logo-container center">
         <Image
           className="header-logo"
